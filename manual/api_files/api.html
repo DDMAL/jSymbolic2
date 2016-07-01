@@ -1,0 +1,51 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+<head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252"><title>Using the API</title></head>
+
+<body text="#000000" bgcolor="#e4e4e4" link="#0033C4" vlink="#0033C4" alink="#0033C4">
+<a name="Top"></a>
+
+<table cellspacing="0" cellpadding="4" width="100%" bgcolor="#0033C4" border="0">
+    <tbody><tr><th align="left"><font face="Arial" color="#ffffff" size="+3">Using the API</font></th></tr></tbody>
+</table>
+
+<p><strong>EXPLANATION OF THIS SECTION</strong></p>
+
+<p>This section describes how jSymbolic's functionality may be accesed programmatically using its API.</p>
+
+<p><strong>OVERVIEW OF JSYMBOLIC'S API</strong></p>
+
+<p>jSymbolic's API (Application Programming Interface) allows programmers to carry out jSymbolic feature extractions directly from their own code, without needing to resort to using jSymbolic's via its <a href="../commandline_files/commandline.html">command line interface</a> (which, of course, is also an option). This can be done by calling certain public methods in the jSymbolic classes, as specified below, which have been specifically designed for this purpose. jSymbolic's API can be accessed by other <a href="http://www.java.com/" target="top">Java</a> code, or using other platforms that include functionality for accessing Java APIs, such as <a href="http://www.mathworks.com/products/matlab/" target="top">Matlab</a>.</p>
+
+<p><strong>USING JSYMBOLIC'S API</strong></p>
+
+<p>In order to use jSymbolic's API, a programmer need simply place the jSymbolic.jar file (and its associated lib folder) in the same directory, and then point their code to it (and potentially adding it to their variables such as CLASSPATH or PATH). It should be noted that Java 8 or higher should be used, as jSymbolic does use some functionality that was only implemented beginning in this version of Java.</p>
+
+<p>It is recommended that programmers download the development version of jSymbolic rather than the user version. Although the API is accessible from either distribution, the developer version has the substantial advantage of providing Javadoc documentation, as well as the well-commented jSymbolic source code itself.</p>
+
+<p>Potential users of the API are encouraged to first read the section of this manual on the <a href="../commandline_files/commandline.html">command line interface</a>, as this will familiarize them with how jSymbolic processing works in general. They may also wish to read the section of this manual on jSymbolic's <a href="../configuration_files/configuration.html">configruation settings file format</a>, if they wish to use this type of file in their processing (it is optional).</p>
+
+<p>In order to use the API, users should look at the Javadoc documentation or source code for the two classes in the <i>jsymbolic.api</i> package.</p> The first thing to do is to instantiate a <i>jSymbolicProcessor</i> object using the desired constructor. Which constructor is used depends on whether one wishes to provide extraction settings directly as arguments or using a <a href="../configuration_files/configuration.html">configruation settings file</a>, and on whether one wishes to manually specify features to be extracted or simply wishes to extract the default features. Feature extraction can then be carried by calling either this object's <i>computeJsymbolicData</i> method or its <i>computeJsymbolicDataDirectory</i> method, depending on whether one wishes to extract features from a single file at a time or from all appropriate files in a directory. Either way, the user will have a <i>jSybmolicData</i> object returned to them for each processed file, from which extracted features and other information can be accessed programatically. Note that some of this data is presented as objects belonging to classes from the related <a href="http://jmir.sourceforge.net/index_ACE.html" target="top">jMIR ACE</a> and <a href="https://github.com/DDMAL/jMei2Midi" target="top">jMei2Midi</a> code. Output files will also be generated, depending on what was passed to the <i>jSymbolicProcessor</i> constructor.</p>
+
+<p><strong>ADDITIONAL DETAILS ON JSYMBOLIC'S API</strong></p>
+
+<ul>
+	<li><strong>Instantiating a <i>jSymbolicProcessor</i> object by specifying extraction parameters as constructor arguments</strong></li>
+	<p>The requires constructor requires that the following be specified as arguments: whether to save features separately for analysis windows, whether to only save features for music files as a whole, the window size, the window overlap, a list of feature names to extract, the save path for the ACE XML Feature Values File, the save path for the ACE XML Feature Definitions File and whether to save extraced features in ARFF and/or CSV files as well as ACE XML files. There is one variant of this constructor that specifies the features to be extracted manually, and another which simply causes the default features to be extracted. Either windowed or overall features should be set to be extracted, but not both. If only overall file feature extraction is specified, then the specified window size and window overlap will have no effect on the processing. Each specified feature name must be a valid jSymbolic feature name, otherwise an exception will be thrown during instantiation.</p>
+
+	<li><strong>Instantiating a <i>jSymbolicProcessor</i> object by specifying a configuration settings file as a constructor argument</strong></li>
+	<p>The specified configuration settings file must exist and must contain all required information and be properly formatted. It is important to note that any input files specified in the configuration settings file will simply be ignored if the jSymbolic API is being used.</p>
+
+	<li><strong>Using the <i>jSymbolicProcessor.computeJsymbolicData</i> method to extract features from a single input file</strong></li>
+	<p>A single <i>jSymbolicData</i> object will be returned, which will hold an ACE <i>DataBoard</i> object, a jMei2MIDI <i>MEISpecificStorage</i> object and <i>File</i> pointers to the two output ACE XML files. Input files that are not valid are skipped and not processed. Such files are noted in the list of <i>String</i> objects passed to this method, and an indication is also printed to standard out. Output files are also saved as specified during <i>jSymbolicProcessor</i> instantiation.</p>
+
+	<li><strong>Using the <i>jSymbolicProcessor.computeJsymbolicDataDirectory</i> method to extract features from a directory containing music files</strong></li>
+	<p>This method will return a <i>Map</i> with the keys of input <i>File</i> objects and values of corresponding <i>jSymbolicData</i> objects resulting from feature extraction. They specific <i>File</i> keys can be obtained using the <i>Map.keySet</i> method.  Input files that are not valid are skipped and not processed. Such files are noted in the list of <i>String</i> objects passed to this method, and an indication is also printed to standard out. Output files are also saved as specified during <i>jSymbolicProcessor</i> instantiation.</p>
+</ul>
+
+<p></p>
+<table height="5" width="100%" bgcolor="#0033C4" border="0"><tbody><tr><th></th></tr></tbody></table>
+<p><tt><a href="./api.html#Top">-top of page-</a></tt></p>
+
+</body></html>

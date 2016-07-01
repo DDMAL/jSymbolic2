@@ -1,0 +1,62 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+	<title>Processing Sequence</title>
+</head>
+
+<body text="#000000" bgcolor="#e4e4e4" link="#0033C4" vlink="#0033C4" alink="#0033C4">
+<a name="Top"></a>
+
+<table cellspacing="0" cellpadding="4" width="100%" bgcolor="#0033C4" border="0">
+  <tbody><tr><th align="left"><font face="Arial" color="#ffffff" size="+3">Processing Sequence</font></th></tr></tbody>
+</table>
+
+<p><strong>EXPLANATION OF THIS SECTION</strong></p>
+
+<p>This section provides an overview of each of the major processing steps performed by jSymbolic during exectution and feature extraction, in the order that they occur.</p>
+
+<p><strong>JSYMBOLIC'S PROCESSING SEQUENCE</strong></p>
+
+<ol>
+	<li> Parse <a href="../commandline_files/commandline.html">command line arguments</a> (this is done implicity with no command line arguments if jSymbolic is run by double clicking its jSymbolic.jar file).
+		<ol>
+			<li>Command line arguments are checked for validity. If they are not valid, then an error is generated, proper usage is printed out to standard error and processing is terminated.</li>
+			<li>The <a href="../gui_files/gui.html">GUI</a> is launched if no command line arguments are specified, or if ones are specified indicating that the GUI should be run.</li>
+		</ol>
+	</li>
+	<li>Parse a <a href="../configuration_files/configuration.html">configuration settings file</a>.
+		<ol>
+			<li>If the user specifies a particular configuration settings file path at run-time, then the file at that location is parsed and validated. If no such valid configuration file can be found, then an error is generated, proper usage is printed out to standard error and processing is terminated.</li>
+			<li>If no configuration settings file is specified at run-time, then jSymbolic looks for one in the same folder as the jSymbolic.jar file with the file name <i>jSymbolicDefaultConfigs.txt</i>. If no such file exists, or if it is not a valid jSymbolic configuration settings file, then jSymbolic is run with hard-coded default settings.</li>
+		</ol>
+	</li>
+	<li>Process specified  <a href="https://www.midi.org/" target="top">MIDI</a> and/or <a href="http://music-encoding.org/" target="top">MEI</a> symbolic music files.
+		<ol>
+			<li>The specified symbolic file(s) or all files in the specified directory are parsed one-by-one.
+				<ol>
+					<li>Any files that are not valid compatible parsible symbolic music files are logged and then passed over.</li>
+					<li>An error is generated and execution is terminated if no valid compatible symbolic music files are found.</li>
+				</ol>
+			</li>
+			<li>Break each symbolic music file into analysis windows with the specified duration and overlap, if this option is selected by the user.</li>
+			<li>Features are extracted from each parsed symbolic music file (or its analysis windows, if this option is selected by the user) one-by-one.
+				<ol>
+					<li>MIDI files have all selected features extracted from them (except MEI-specific features).</li>
+					<li>Each MEI file has all selected MEI-specific features extracted from it. It is also converted to a MIDI stream, and all other features are then extracted from this MIDI stream.</li>
+				</ol>
+			</li>
+			<li>If a problem occurs while processing an individual file, then this problem is logged and execution continues to the next file.</li>
+		</ol>
+	</li>
+	<li>Format and save selected output files.
+		<ol>
+			<li>All extracted  features are always saved in an <a href="http://jmir.sourceforge.net/index_ACE_XML.html" target="top">ACE XML 1.1</a> Feature Values file.</li>
+			<li>Feature metadata is alwasy saved in an <a href="http://jmir.sourceforge.net/index_ACE_XML.html" target="top">ACE XML 1.1</a> Feature Definitions file.</li>
+			<li>Features are saved in a <a href="http://www.cs.waikato.ac.nz/ml/weka/arff.html" target="top">Weka ARFF</a> file if this option is selected by the user.</li>
+			<li>Features are saved in a <a href="https://en.wikipedia.org/wiki/Comma-separated_values" target="top">CSV text</a> file if this option is selected by the user.</li>
+		</ol>
+	</li>
+</ol>
+
+<table height="5" width="100%" bgcolor="#0033C4" border="0"><tbody><tr><th></th></tr></tbody></table>
+<p><tt><a href="./processingsequence.html#Top">-top of page-</a></tt></p>
+
+</body></html>

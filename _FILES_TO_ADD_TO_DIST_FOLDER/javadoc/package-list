@@ -1,0 +1,9 @@
+jsymbolic
+jsymbolic.api
+jsymbolic.commandline
+jsymbolic.configuration
+jsymbolic.configuration.txtimplementation
+jsymbolic.datatypes
+jsymbolic.features
+jsymbolic.gui
+jsymbolic.processing

@@ -1,0 +1,131 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+	<title>Using the Command Line Interface</title>
+</head>
+
+<body text="#000000" bgcolor="#e4e4e4" link="#0033C4" vlink="#0033C4" alink="#0033C4">
+<a name="Top"></a>
+
+<table cellspacing="0" cellpadding="4" width="100%" bgcolor="#0033C4" border="0">
+  <tbody><tr>
+      <th align="left"><font face="Arial" color="#ffffff" size="+3">Using the Command Line Interface</font></th>
+    </tr></tbody>
+</table>
+
+<p><strong>EXPLANATION OF THIS SECTION</strong></p>
+
+<p>This section of the manual explains all of the command line arguments that may be used with jSymbolic and provides usage examples.</p>
+
+<p><strong>RUNNING JSYMBOLIC GRAPHICALLY</strong></p>
+
+<p>The simplest way of using jSymbolic is to simply run the jSymbolic <a href="../gui_files/gui.html">GUI</a> by double clicking the jSymbolic.jar file's icon on a graphical disk interface, such as Windows or OS X. However, a greater range of options are made available by running jSymbolic through a terminal interface using command line arguments, as described below.</p>
+
+<p><strong>ACCESSING JSYMBOLIC VIA A TERMINAL INTERFACE</strong></p>
+
+<p>One way of using jSymbolic is via a terminal prompt, such as a Windows DOS command prompt, or a terminal prompt on OS X, Linux, UNIX, etc. Although such a command line approach can be less intuitive for some initially relative to using the jSymbolic GUI, it can also sometimes be faster and easier. If you are unsure how to access a terminal prompt on your computer, please consult instructions for your particular operating system on-line for details on how to access and use it.</p>
+
+<p>Once you have accessed a terminal prompt, navigate to the jSymbolic folder and locate the file named "jSymbolic.jar", which is included in the jSymbolic distribution. You must run this (using the Java Runtime Environment) in order to access jSymbolic's functionality. The particular arguments that you use when running jSymbolic in this way will determine exactly what jSymbolic does.</p>
+
+<p><strong>RUNNING JSYMBOLIC FROM A TERMINAL INTERFACE</strong></p>
+
+The simplest way to run jSymbolic from a terminal prompt is to type the following at your terminal prompt (after you have navigated to the directory containing the jSymbolic.jar file):
+
+<p><blockquote><pre>java -jar jSymbolic.jar</pre></blockquote></p>
+
+<p>This will run the <a href="../gui_files/gui.html">jSymbolic GUI</a> set up with default settings.</p>
+
+<p>One must add jSymbolic command line arguments if one wishes to instigate jSymbolic processing directly from the command line. Some of these command line arguments consist of flag/value pairs, where the flag comes first and is preceded with a "-". Essentially, the flag indicates the type of option, and the value indicates its particular setting.</p>
+
+<p>Other command line arguments simply consist of values, with no flags, of flags with no values. For example, a lone flag of "-help" will print to the terminal a list of valid flags with explanations of what they are. This can be run as follows:</p>
+
+<p><blockquote><pre>java -jar jSymbolic.jar -help</pre></blockquote></p>
+
+<p>Invalid command line arguments will also result in the list of legitimate command line arguments being printed out to the terminal.</p>
+
+<p><strong>Important Notes:</strong></p>
+<ul>
+	<li>The ordering of the command line arguments does matter in certain cases.</li>
+	<li>jSymbolic's operation can also be governed by its <a href="../configuration_files/configuration.html">configuration settings file</a>, as explained further below.</li>
+	<li>If the user does not specify a <a href="../configuration_files/configuration.html">configuration settings file</a> at runtime, then jSymboic will look for a default one in the same folder as the jSymbolic.jar file, and with the file name <i>jSymbolicDefaultConfigs.txt</i>. If no such file exists, or if it is not a valid jSymbolic configuration settings file, then the jSymbolic will simply run with hard-coded default settings.
+	<li>All file or directory paths specified in command line arguments must either be absolute or relative to the directory containing the jSymbolic.jar file.</li>
+	<li>Any errors that occur during batch processing of multiple files will be logged to the terminal. Processing of other files will not be interrupted..</li>
+	<li>jSymbolic can currently process the following kinds of symbolic music files: MIDI files and MEI files. Any files that cannot be parsed by jSymbolic will cause an error message to be generated.</li>
+	<li>If an MEI-specific feature (e.g. Number of Grace Notes) is set to be extracted, then it will only be extracted from MEI files. It will be ignored by other files, such as MIDI files.</li>
+	<li>It is no longer necessary to specify the default JRE heap size from the command line, for fear of running out of memory, as newer versions of jSymbolic automatically setsan appropriate heap size.</li>
+</ul>
+
+<p> <strong>JSYMBOLIC'S COMMAND LINE ARGUMENTS (WITH NO NON-DEFAULT CONFIGURATION FILE SPECIFIED)</strong></p>
+
+<ul>
+	<li><pre>java -jar jSymbolic.jar</pre>
+	<p>Runs the jSymbolic GUI using default settings pre-loaded.</li>
+
+	<li><pre>java -jar jSymbolic.jar -help</pre>
+	<p>Outputs valid command line arguments.</li>
+
+	<li><pre>java -jar jSymbolic.jar &ltSymbolicMusicFileInputPath&gt &ltAceXmlFeatureValuesOutputPath&gt &ltAceXmlFeatureDefinitionsOutputPath&gt</pre>
+	<p>Extracts features using default settings from the symbolic music file as a whole at the path specified by <i>SymbolicMusicFileInputPath</i>, and saves the extracted features as an <a href="http://jmir.sourceforge.net/index_ACE_XML.html" target="top">ACE XML 1.1</a> Features Values File to the path specified by <i>AceXmlFeatureValuesOutputPath</i>. An ACE XML Feature Definitions File is also saved to the path specified by <i>AceXmlFeatureDefinitionsOutputPath</i>. Since no <a href="../configuration_files/configuration.html">configuration settings file</a> is specified, feature extraction occurs under default settings. Note that <i>SymbolicMusicFileInputPath</i> may alternatively be a directory, in which case jSymbolic extracts features from the symbolic music files it contains.</p></li>
+	
+	<li><pre>java -jar jSymbolic.jar -window &ltSymbolicMusicFileInputPath&gt &ltAceXmlFeatureValuesOutputPath&gt &ltAceXmlFeatureDefinitionsOutputPath&gt &ltWindowLength&gt &ltWindowOverlapFraction&gt</pre>
+	<p>Processing here is similar to the above case, but now the input file is broken into a series of windows, and features are extracted from each of these windows separately. Each window is of equal temporal duration except for the last, which will have a duration corrsponding to the amount of remaining time in the piece. The features extracted from each of these windows are stored separately in a single output ACEM XML Feature Values file. The <i>WindowLength</i> value specifies the duration of each window in seconds. The <i>WindowOverlapFraction</i> value (which should have a value of 0 (for no overlap) or above and below 1) specifies the amount of overlap between consecutive windows. For example, for a <i>WindowLength</i> value of 10 and a <i>WindowOverlapFraction</i> value of 0.1, the windows will be from 0 sec to 10 sec, 9 sec to 19 sec, etc. Since no <a href="../configuration_files/configuration.html">configuration settings file</a> is specified, feature extraction occurs under default settings (aside from windowing, of course).</p></li>
+
+	<li><pre>java -jar jSymbolic.jar -arff &ltSymbolicMusicFileInputPath&gt &ltAceXmlFeatureValuesOutputPath&gt &ltAceXmlFeatureDefinitionsOutputPath&gt</pre></li>
+	<li><pre>java -jar jSymbolic.jar -arff -window &ltSymbolicMusicFileInputPath&gt &ltAceXmlFeatureValuesOutputPath&gt &ltAceXmlFeatureDefinitionsOutputPath&gt &ltWindowLength&gt &ltWindowOverlapFraction&gt</pre>
+	<p>The <i>-arff</i> switch can be added to save features as <a href="http://www.cs.waikato.ac.nz/ml/weka/arff.html" target="top">Weka ARFF</a> files (in addition to saving them as ACE XML files). The ARFF file is saved with the same name as the &ltAceXmlFeatureValuesOutputPath&gt file, but with the extension changed to ".arff". Note that this can be coupled with the <i>-csv</i> switch explained below as well.</p></li>
+
+	<li><pre>java -jar jSymbolic.jar -csv &ltSymbolicMusicFileInputPath&gt &ltAceXmlFeatureValuesOutputPath&gt &ltAceXmlFeatureDefinitionsOutputPath&gt</pre></li>
+	<li><pre>java -jar jSymbolic.jar -csv -window &ltSymbolicMusicFileInputPath&gt &ltAceXmlFeatureValuesOutputPath&gt &ltAceXmlFeatureDefinitionsOutputPath&gt &ltWindowLength&gt &ltWindowOverlapFraction&gt</pre>
+	<p>The <i>-csv</i> switch can be added to save features as <a href="https://en.wikipedia.org/wiki/Comma-separated_values" target="top">CSV</a> text files (in addition to saving them as ACE XML files). The CSV file is saved with the same name as the &ltAceXmlFeatureValuesOutputPath&gt file, but with the extension changed to ".csv". Note that this can be coupled with the <i>-arff</i> switch explained above as well.</p></li>
+</ul>
+
+<p><strong>JSYMBOLIC'S COMMAND LINE ARGUMENTS (WITH A NON-DEFAULT CONFIGURATION FILE SPECIFIED)</strong></p>
+
+<p>The following command line arguments can be used together with a jSymbolic <a href="../configuration_files/configuration.html">configuration settings file</a>:</p>
+
+<ul>
+	<li><pre>java -jar jSymbolic.jar -configgui &ltConfigurationFilePath&gt</pre>
+	<p>Runs the jSybmolic GUI with settings specified by the configuration file at the path specified by the <i>ConfigurationFilePath</i> value. An error message is printed to the terminal and execution terminated if this file is invalid or does not exist.</p>
+	
+	<li><pre>java -jar jSymbolic.jar -configrun &ltConfigurationFilePath&gt</pre>
+	<p>Runs jSymbolic directly (does not run the GUI) using the settings specified by the configuration file at the path specified by the <i>ConfigurationFilePath</i> value. This configuration file must specify the input and output paths to use. An error message is printed to the terminal and execution terminated if this file is invalid or does not exist.</p>
+	
+	<li><pre>java -jar jSymbolic.jar -configrun &ltConfigurationFilePath&gt &ltSymbolicMusicFileInputPath&gt &ltAceXmlFeatureValuesOutputPath&gt &ltAceXmlFeatureDefinitionsOutputPath&gt</pre>
+	<p>As in the above example, runs jSymbolic directly (does not run the GUI) using the settings specified by the configuration file at the path specified by the <i>ConfigurationFilePath</i> value. However, unlike the above example, the input and output paths must not be specified in the configuration settings file, and are instead specified directly in the provided command line arguments. An error message is printed to the terminal and execution terminated if this file is invalid or does not exist.</p>
+	
+	<li><pre>java -jar jSymbolic.jar -validateconfigallheaders &ltConfigurationFilePath&gt</pre>
+	<p>Check the configuration file at the specified <i>ConfigurationFilePath</i> path to see if it is valid and complete. In this case, it must specify both output files and input files in order to be considered valid. Results are output to the terminal.</p>
+	
+	<li><pre>java -jar jSymbolic.jar -validateconfigfeatureoption &ltConfigurationFilePath&gt</pre>
+	<p>Check the configuration file at the specified <i>ConfigurationFilePath</i> path to see if it is valid and complete. In this case, it may specify neither output files nor input files in order to be considered valid. Results are output to the terminal.</p>
+</ul>
+
+<p><strong>USAGE EXAMPLES</strong></p>
+
+<p>These examples demonstrate sample ways that jSymbolic can be run from the command line. These examples all make use of the flags and values explained above.</p>
+
+<blockquote>
+	<p><strong>Example 1:</strong> Run the jSymbolic GUI under default settings.</p>
+	<blockquote><p><pre>java -jar jSymbolic.jar</pre></p></blockquote>
+
+	<p><strong>Example 2:</strong> Extract features from a single music file called "test.mei" in the current directory, and output the results to "feature_values_1.xml" and "feature_descriptions_1.xml", to be created
+	in the current directory.</p>
+	<blockquote><p><pre>java -jar jSymbolic.jar ./test.mei ./feature_values_1.xml ./feature_descriptions_1.xml</pre></p></blockquote>
+	
+	<p><strong>Example 3:</strong> Extract features from all symbolic feature files in the directory called "test" in the current directory, and output the results to "feature_values_1.xml" and "feature_descriptions_1.xml" files, to be created in the current directory. A window size of 10 seconds will be used with an overlap fraction of 0.1 (i.e. 1 second, in this case).</p>
+	<blockquote><p><pre>java -jar jSymbolic.jar -window ./test/ ./feature_values_1.xml ./feature_descriptions_1.xml 10 0.1</pre></p></blockquote>
+	
+	<p><strong>Example 4:</strong> Extract features from a single music file called "test.midi" in the current directory, and output the results to "feature_values_1.xml" and "feature_descriptions_1.xml", to be created
+	in the current directory. Also output the extracted feature values in the form of a CSV file and an ARFF file, saved in the current directory as	as "feature_values_1.csv" and "feature_values_1.arff", respectively.</p>
+	<blockquote><p><pre>java -jar jSymbolic.jar -arff -csv ./test.midi ./feature_values_1.xml ./feature_descriptions_1.xml</pre></p></blockquote>
+	
+	<p><strong>Example 5:</strong> Extract features from all symbolic feature files in the directory called "test" in the current directory, and output the results to "feature_values_1.xml" and "feature_descriptions_1.xml" files, to be created in the current directory. The feature extraction is done using the configuration settings specified in the configuration file called "jsymbolic_configurations.txt" found in the current directory (and which should not itself specify input and output file paths).</p>
+	<blockquote><p><pre>java -configrun ./jsymbolic_configurations.txt ./test/ ./feature_values_1.xml ./feature_descriptions_1.xml</pre></p></blockquote>
+	
+	<p><strong>Example 6:</strong> Run the jSymbolic GUI pre-loaded with the settings specified in the configuration file called "jsymbolic_configurations.txt" in the current directory.</p>
+	<blockquote><p><pre>java -configgui ./jsymbolic_configuration.txt</pre></p></blockquote>
+</blockquote>
+
+<p></p>
+<table height="5" width="100%" bgcolor="#0033C4" border="0"><tbody><tr><th></th></tr></tbody></table>
+<p><tt><a href="./commandline.html#Top">-top of page-</a></tt></p>
+
+</body></html>

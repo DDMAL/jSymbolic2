@@ -1,0 +1,17 @@
+<features_to_extrac>
+AcousticGuitarFractionFeature
+DurationFeature
+BeatHistogramFeatue
+<input_files>
+./invalid.midi
+./test/jsymbolic/features/resources/Saint-Saens_LeCarnevalDesAnimmaux.mei
+<jSymbolic_options>
+window_size0
+window_overlap=0.1
+save_features_for_each_window=true
+save_overall_recording_features=false
+convert_to_arff=false
+convert_to_csv=false
+<output_files>
+feature_values_save_pathtest_value.xml
+feature_definitions_save_path=test_definition.xml

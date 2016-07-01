@@ -1,0 +1,75 @@
+<html>
+<head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+	<title>Using the Graphical User Interface</title>
+</head>
+
+<body text="#000000" bgcolor="#e4e4e4" link="#0033C4" vlink="#0033C4" alink="#0033C4">
+<a name="Top"></a>
+
+<table cellspacing="0" cellpadding="4" width="100%" bgcolor="#0033C4" border="0">
+  <tbody><tr><th align="left"><font face="Arial" color="#ffffff" size="+3">Using the Graphical User Interface</font></th></tr></tbody>
+</table>
+
+<p><strong>EXPLANATION OF THIS SECTION</strong></p>
+
+<p>This section explains how to use the jSymbolic GUI.</p>
+
+<p><strong>RUNNING THE JSYMBOLIC GUI</strong></p>
+
+<p>A file named "jSymbolic.jar" is included in the jSybmolic distribution. jSymbolic can be run simply by double clicking on this file.</p>
+
+<p>The jSybmolic GUI can alternatively be run or by typing the following at a terminal prompt (after navigating to the directory holding the jSymbolic.jar file):</p>
+
+<p><blockquote><pre>java -jar jSymbolic.jar</pre></blockquote></p>
+
+<p>Running jSymbolic like this (or double clicking on the jSymbolic.jar file) will cause the GUI to be loaded set up with default settings, as defined by a <a href="../configuration_files/configuration.html">configuration settings file</a> in the same folder as the jSymbolic.jar file, and with the file name <i>jSymbolicDefaultConfigs.txt</i>. If no such file exists, or if it is not a valid jSymbolic configuration settings file, then the GUI is loaded with hard-coded default settings.</p>
+
+<p>Users wishing to pre-load the GUI with alternative settings stored in any given <a href="../configuration_files/configuration.html">configuration settings file</a> they wish may enter the following at a terminal prompt (again, after navigating to the directory holding the jSymbolic.jar file:</p>
+
+<p><blockquote><pre>java -jar jSymbolic.jar -configgui &ltConfigurationFilePath&gt</pre></blockquote></p>
+
+<p>More information on using jSymbolic's command line interface is available <a href="../commandline_files/commandline.html">here</a>.
+
+<p><strong>OVERVIEW OF JSYMBOLIC'S GUI</strong></p>
+
+<p>The jSymbolic GUI consists of two primary panels:
+<ul>
+  <li><strong>Recording Selector Panel:</strong> This panel, on the left of the jSymbolic GUI and shown in Figure 1 below, allows users to select the symbolic music files they wish to extract features from. Users may view the recordings that they have selected to have features extracted from, as well as see metadata about them and play the music stored in them.</li>
+  <li><strong>Feature Selector Panel: </strong> This panel, on the right of the jSymbolic GUI and shown in Figure 2 below, allows users to choose the features they wish to extract from the files chosen on the Recording Selector Panel. Users can also specify: output file paths; the types of files to save features in; and whether windowed extraction is required and under what settings. Finally, feature extraction can be initiated from this panel.</li>
+</ul>
+
+<p><strong>THE RECORDING SELECTOR PANEL</strong></p>
+
+<p>MEI and MIDI recordings can be added and removed from the list of files to extract features from on this panel by clicking the <i>Add Recordings</i> and <i>Delete Recordings</i> buttons, respectively. If the <i>Validate Recordings</i> checkbox is checked, then the recordings will be validated immediately upon addition to this list in order to ensure that they are valid MEI and MIDI before feature extraction begins. It is highly recommended to leave this checkbox on. The <i>Store Sequence</i> checkbox causes MIDI sequences to be stored for all valid input files.</p>
+
+<p>The <i>Play Sequence</i> button and <i>Stop Playback</i> buttons can be used to sonify MIDI and MEI files (the latter of which is converted to a MIDI file using <a href="https://github.com/DDMAL/jMei2Midi" target="top">jMei2Midi</a> for playback).</p>
+
+<p>The <i>Fiew File Info</i> button displays metadata for input files. It currently only displays file information for MIDI files.</p>
+
+<p><img src="./recording_selector_panel.png" border=1></p>
+<p><em><strong>Figure 1: </strong></em>The Recording Selector Panel.</p>
+
+<p><strong>THE FEATURE SELECTOR PANEL</strong></p>
+
+<p>The top section of the Feature Selector Panel allows the user to use checkboxes to select the features they would like to extract from the input files specified in the Recording Selector Panel. The <i>Dimensions</i> column of this table indicates the number of dimenions assocuated with each feature (multi-dimensional features are at the end of this list).</p>
+
+<p>The <i>Save Features For Each Window</i> and <i>Save For Overall Recordings</i> radio buttons allow the user to choose whether input files should be broken into windows from which features will be extracted individually, or if only features for input files as a whole should be extracted. If the <i>Save Features For Each Window</i> option is selected, then the <i>Window Length (seconds)</i> text box must be used to specify the number of seconds each window should last, and the <i>Window Overlap (fraction)</i> text box must be used to specify the fractional overlap between consecutive windows. For example, for a window length value of 10 and an overlap value of 0.1, the windows will be from 0 sec to 10 sec, 9 sec to 19 sec, etc.</p>
+
+<p>The <i>Convert from ACE XML to ARFF</i> checkbox allows the user to decide whether feature values should be saved in a <a href="http://www.cs.waikato.ac.nz/ml/weka/arff.html" target="top">WEKA ARFF</a> file. Similarly, the <i>Convert from ACE XML to CSV</i> checkbox allows the user to decide whether feature values should be saved in a <a href="https://en.wikipedia.org/wiki/Comma-separated_values" target="top">CSV text</a> file. Features are also saved as <a href="http://jmir.sourceforge.net/index_ACE_XML.html" target="top">ACE XML</a> files, regardless of whether ARFF or CSV files are also generated.</p>
+
+<p>The <i>ACE XML Feature Values Save Path</i> button allows the user to open a browse dialog box to choose the path to save the ACE XML feature values to. This path may also be written in the accompanying text box by hand. If ARFF or CSV files are set to be saved, they will be given the same file name, but with a .arff or .csv extension, respectively.</p>
+
+<p>The <i>ACE XML Feature Definitions Save Path</i> button allows the user to open a browse dialog box to choose the path to save the ACE XML feature metadata to. This path may also be written in the accompanying text box by hand.</p>
+
+<p>The <i>Save GUI Configuration</i> allows the user to save the settings currently displayed in the jSymbolic GUI as a <a href="../configuration_files/configuration.html">configuration settings file</a> to the path specified in the accompanying text box.</p>
+
+<p>Finally, feature extraction is initiated by pressing the <i>Extract Features</i> button. Any invalid files will result in popup error message at the end of the processing. All valid files will still be processed and have features saved. If an MEI-specific feature (e.g. Number of Grace Notes) is set to be extracted, then it will only be extracted from MEI files (it will be ignored by other files, such as MIDI files).</p>
+
+<p><img src="./feature_selector_panel.png" border=1></p>
+<p><em><strong>Figure 2: </strong></em>The Feature Selector Panel.</p>
+
+<p></p>
+<table height="5" width="100%" bgcolor="#0033C4" border="0"><tbody><tr><th></th></tr></tbody></table>
+<p><tt><a href="../gui_files/gui.html#Top">-top of page-</a></tt></p>
+
+</body></html>

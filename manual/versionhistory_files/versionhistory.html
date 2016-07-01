@@ -1,0 +1,59 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+	<title>Version History</title>
+</head>
+
+<body text="#000000" bgcolor="#e4e4e4" link="#0033C4" vlink="#0033C4" alink="#0033C4">
+<a name="Top"></a>
+
+<table cellspacing="0" cellpadding="4" width="100%" bgcolor="#0033C4" border="0">
+  <tbody><tr>
+      <th align="left"><font face="Arial" color="#ffffff" size="+3">jSymbolic Version History</font></th>
+    </tr></tbody>
+</table>
+
+<p>All updates stated below are since jSymbolic 1.0</p>
+
+<p><strong>Currently Being Resolved:</strong></p>
+<ul>
+  <li>There is a known bug related to saving features as Weka ARFF or CSV files when windowed feature extraction is being used. Works when saving ACE XML windowed features, however, and Weka ARFF and CSV files can be correctly saved when full-song processing is used rather than windowed processing.</li>
+</ul>
+
+<p><strong>jSymbolic 2.0:</strong></p>
+<ul>
+  <li>Added the ability to extract features from <a href="http://music-encoding.org" target="top">MEI</a> files using our new custom-built <a href="https://github.com/DDMAL/jMei2Midi" target="top">jMei2Midi</a> project (which can convert MEI files to MIDI), and which in turn uses the  <a href="https://github.com/alastair/jmei/" target="top">jmei</a> library. Of course, as MEI itself is still being developed, new aspects of the MEI format incorporated after the publication of this code may not yet be implemented.</li>
+  <li>Added the ability to implement and extract specialized MEI-specific features (i.e. features that cannot be extracted from MIDI files). An MEIFeatureExtractor architecture similar to the MIDIFeatureExtractor has been added in order to accomplish this. More information can be found at <a href="../extendingsoftware_files/extendingsoftware.html">Extending Software page</a>.</li>
+  <li>The new R-36 Number of Grace Notes feature was implemented as an example of an MEI-specific feature.</li>
+  <li>The ability to extract features separately and individually from multiple windows in a piece was added (as opposed to only being able to extract features from pieces overall, which was previously the only option). The ability to use windows with or without offsets was included.</li>
+  <li>Extracted features may now be saved as basic CSV text files or as Weka ARFF files (previously ACE XML was the only output option).</li>
+  <li>Added a new configuration file format to facilitate saving and reuse of settings, as well as to facilitate batch processing still further. This configuration file can be used the GUI, command line interface and API. It can be edited directly with a text editor, or may be saved from the GUI. The configuration file is also designed to be easily extensible.</li>
+  <li>Added a relatively detailed HTML manual.</li>
+  <li>Implemented an easy-to-use API so that jSymbolic can be incorporated into external software without needing to resort to command line calls.</li>
+  <li>Improved the GUI design in order to make it easier to use.</li>
+  <li>Improved the command line interface implementation in order to enable access to more functionality and to make it more easily extensible.</li>
+  <li>Set up jSymbolic to run as a separate process to deal with potential issues associated with the Java heap size. The user thus no longer has to worry about JVM-specific command line switches.</li>
+  <li>Improved and streamlined error handling. Among other things, now logs files that cannot be processed during batch processing, and does not terminate execution unnecessarily when problems occur.</li>
+  <li>Added substantial unit testing.</li>
+  <li>Updated support libraries (ACE and UtilityClasses).</li>
+</ul>
+
+<p><strong>jSymbolic 1.2.1: </strong></p>
+
+<ul>
+  <li>Added a command line interface to complement the already-implemented GUI. This involved updating the FeatureSelectionPanel class with a new public getAllAvailableFeatureExtractors method to provide access to the available features, as well as updating the private populateFeatureExtractors method to now use this new method to set up features for the GUI internally. New features that were previously added using the populateFeatureExtractors method should now be added with the getAllAvailableFeatureExtractors method.</li>
+  <li>Updated support libraries (ACE and UtilityClasses).</li>
+</ul>
+
+<p><strong>jSymbolic 1.2: </strong></p>
+<ul>
+  <li>Updated support libraries (ACE and UtilityClasses).</li>
+</ul>
+
+<p><strong>jSymbolic 1.1: </strong></p>
+<ul>
+  <li>Imported jSymbolic into the NetBeans framework to assist further development.</li>
+</ul>
+
+<table height="5" width="100%" bgcolor="#0033C4" border="0"><tbody><tr><th></th></tr></tbody></table>
+<p><tt><a href="../versionhistory_files/versionhistory.html#Top">-top of page-</a></tt></p>
+
+</body></html>

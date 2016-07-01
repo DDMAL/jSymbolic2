@@ -1,0 +1,17 @@
+<features_to_extract>
+Acoustic Guitar Fraction
+Duration
+Beat Histogram
+<jSymbolic_options>
+window_size=1.5
+window_overlap=0.1
+save_features_for_each_window=false
+save_overall_recording_features=true
+convert_to_arff=true
+convert_to_csv=true
+<output_files>
+feature_values_save_path=./test/jsymbolic/api/resources/feature_values.xml
+feature_definitions_save_path=./test/jsymbolic/api/resources/feature_definitions.xml
+<input_files>
+./test/jsymbolic/api/resources/Saint-Saens_LeCarnevalDesAnimmaux.mei
+./test/jsymbolic/api/resources/Chopin_Mazurka.midi

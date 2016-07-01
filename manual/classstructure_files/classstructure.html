@@ -1,0 +1,127 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+	<title>Class Structure</title>
+</head>
+
+<body text="#000000" bgcolor="#e4e4e4" link="#0033C4" vlink="#0033C4" alink="#0033C4">
+<a name="Top"></a>
+
+<table cellspacing="0" cellpadding="4" width="100%" bgcolor="#0033C4" border="0">
+  <tbody><tr><th align="left"><font face="Arial" color="#ffffff" size="+3">Class Structure</font></th></tr></tbody>
+</table>
+
+<p><strong>EXPLANATION OF THIS SECTION</strong></p>
+
+<p>This section provides an overview of jSymbolic's <a href="http://www.java.com/" target="top">Java</a> class architecture.</p>
+
+<p><strong>OVERVIEW OF JSYMBOLIC'S CLASS STRUCTURE</strong></p>
+
+<p>jSymbolic is divided into nine main packages: <em>jsymbolic</em>, <em>jsymbolic.api</em>, <em>jsymbolic.commandline</em>, <em>jsymbolic.configuration</em>, <em>jsymbolic.configuration.txtimplementation</em>, <em>jsymbolic.datatypes</em>, <em>jsymbolic.features</em>, <em>jsymbolic.gui</em>, and <em>jsymbolic.processing</em>.</p>
+
+<p>More details are available in the jSymbolic Javadocs and in the source code itself, both of which may be downloaded from the  <a href="http://jmir.sourceforge.net/" target="top">jMIR</a> web page. The reader may also wish to review the <a href="../processingsequence_files/processingsequence.html">Processing Sequence</a> section of the manual in order to obtain an  overview of how the system operates. The <a href="../extendingsoftware_files/extendingsoftware.html">Extending the Software</a> section also includes information on how to extend jSymbolic.</p>
+
+<p><strong>CLASSES IN THE jsymbolic PACKAGE</strong></p>
+
+<ul>
+	<li><strong>Main:</strong> Runs the command line argument parsing and catches any high-level exceptions.</li>
+	<li><strong>jSymbolicRunner:</strong> Makes sure that jSymbolic has access to an appropriate JVM heap size.</li>
+</ul>
+
+<p><strong>CLASSES IN THE jsymbolic.api PACKAGE</strong></p>
+
+<ul>
+	<li><strong>jSymbolicData:</strong> Objects of this class can contain useful information produced by jSymbolic feature extractions, and are returned to users of the jSymbpolic protrammatic API.</li>
+	<li><strong>jSymbolicProcessor:</strong> Contains methods providing programmatic access to jSymbolic's API.</li>
+</ul>
+
+<p> <strong>CLASSES IN THE jsymbolic.commandline PACKAGE</strong></p>
+
+<blockquote><p>More details on jSymbolic's command ine interface can be found in the <a href="../commandline_files/commandline.html">section of the manual</a> on this topic.</p></blockquote>
+
+<ul>
+	<li><strong>CommandLineArgs:</strong> This class is used when non-configuration and non-gui commands are run using the command line.</li>
+	<li><strong>CommandLineConfig:</strong> This class is run when configuration file specific commands are run using the command line.</li>
+	<li><strong>CommandLineFeatureExtraction:</strong> A static class that can extract features from files or directories with or without configuration settings files.</li>
+	<li><strong>CommandLineSwitchEnum:</strong> An enum that contains all possible command line switches for jSymbolic. Command line error processing and validation are performed here. This class uses the strategy pattern to be easily extensible for the addition of future switches.</li>
+	<li><strong>CommandLineUtils:</strong> A general command line utilities class for common methods and data.</li>
+</ul>
+
+<p><strong>CLASSES IN THE jsymbolic.configuration PACKAGE</strong></p>
+
+<ul>
+	<li><strong>ConfigurationFileData:</strong> A general storage for all the data extracted from the specified configuration file.</li>
+	<li><strong>ConfigurationFileValidator:</strong> An abstract class that suggests the functions for configuration file validation and implements the validation sequence and error handling using the template method pattern. Therefore, on the use of a new configuration file, only the implementation of these methods would need to be reimplemented in sub-class of this class and the current architecture would handle the execution. Validation can be filtered by which headers should be in the configuration file.</li>
+	<li><strong>ConfigurationFileWriter:</strong> An abstract class that suggests functions for configuration file writing. Again, the template method pattern is used to perform the actual writing and error handling, but this class needs only be subclassed and re-implemented in order to write out a new configuration file format. Writing can be filtered by which headers to write out.</li>
+	<li><strong>ConfigurationInputFiles:</strong> Convenience class to hold all valid and invalid configuration files. To be used with the ConfigurationFileData class.</li>
+	<li><strong>ConfigurationOptionState:</strong> Convenience class to hold the state of the options from the configuration file. To be used with the ConfigurationFileData class.</li>
+	<li><strong>ConfigurationOutputFiles:</strong> Convenience class to hold all output file paths from the configuration file. To be used with the ConfigurationFileData class.</li>
+	<li><strong>HeaderEnum:</strong> Used for consistency of the header names used in configuration files.</li>
+	<li><strong>OptionsEnum:</strong> Used for consistency of option names that can be used in jSymbolic.</li>
+	<li><strong>OutputEnum:</strong> Used for consistency of output file path names used in configuration files.</li>
+</ul>
+
+<p><strong>CLASSES IN THE jsymbolic.configuration.txtimplementation PACKAGE</strong></p>
+
+<ul>
+	<li><strong>ConfigurationFileDelimiterEnum:</strong> Convenience class related to text associated with configuration settings files.</li>
+	<li><strong>ConfigurationFileExtensionEnum:</strong> Convenience class related to text associated with configuration settings files</li>
+	<li><strong>ConfigurationFileValidatorTxtImpl:</strong> An implementation of the ConfigurationFileValidator abstract class. It assumes that the format of the configuration file is the same as the one described on the Configuration Settings File page. It implements all of the validation functionality as described for each header on the <a href="../configuration_files/configuration.html">configuration settings file page</a> of this manual.</li>
+	<li><strong>ConfigurationFileWriterTxtImpl:</strong> An implementation of the ConfigurationFileWriter abstract class. It generates a configuration file as specified in the <a href="../configuration_files/configuration.html">configuration settings file page</a> of this manual given the appropriate ConfigurationFileData. This includes generating the txt format for writing out the configuration settings file options, features, input files and output files.</li>
+	<li><strong>ConfigurationOption:</strong> Convenience class related to text associated with configuration settings files.</li>
+</ul>
+
+<p> <strong>CLASSES IN THE jsymbolic.datatypes PACKAGE</strong></p>
+
+<ul>
+	<li><strong>RecordingInfo:</strong> A class used for holding references to a particular MIDI recording.</li>
+</ul>
+
+<p> <strong>CLASSES IN THE jsymbolic.features PACKAGE</strong></p>
+
+<blockquote>
+	<p>All jSymbolic features are constained in this package. Each feature is implemented as a single class. Information on implementing new features can be found on this on the <a href="../extendingsoftware_files/extendingsoftware.html">Extending the Software</a>  section of this manual.</p>
+
+	<p>For the sake of brevity, the individual feature descriptions are not included below. However, a brief description of the two classes which feature classes can extend is included here. More details on individual jSymbolic features can be found in the <a href="../featureexplanations_files/featureexplanations.html">Feature Explanations</a> section of this manual.</p>
+</blockquote>
+
+<ul>
+	<li><strong>MIDIFeatureExtractor: </strong>An abstract class used as a template for features to be extracted from MIDI files (or other file types after conversion to MIDI). It must subclassed and implemented by any feature.</li>
+	<li><strong>MEIFeatureExtractor: </strong>An abstract class used as a template for features to be extracted specifically from MEI files. It must subclassed and implemented by any MEI-specific feature.</li>
+</ul>
+
+<p><strong>CLASSES IN THE jsymbolic.gui PACKAGE</strong></p>
+
+<ul>
+	<li><strong>FeaturePanelEnum: </strong>A consistency class used to store all the default values for the GUI's Feature Panel.</li>
+	<li><strong>FeatureSelectorPanel: </strong>A Java GUI class which extends jPanel. This panel allows the user to select features and options to specify for extraction from the selected music files.</li>
+	<li><strong>FeatureSelectorTableModel: </strong>A table model for the features of jSymbolic, which extends the Java Swing DefaultTableModel.</li>
+	<li><strong>OuterFrame: </strong>A frame that extends the Java Swing JFrame. It is used as a panel for holding various components of the jSymbolic Feature Extractor GUI.</li>
+	<li><strong>RecordingSelectorPanel: </strong>A Java GUI class that extends jPanel. This panel allows the user to select input symbolic music files to be used by the jSymbolic sofwtare.</li>
+	<li><strong>RecordingSelectorTableModel: </strong>A table model for showing symbolic music files, and which extends the Java Swing DefaultTableModel.</li>
+</ul>
+
+<p><strong>CLASSES IN THE jsymbolic.processing PACKAGE</strong></p>
+
+<blockquote><p>This is a general-purpose package used to establish consistency with respect to the processing performed by the varioius components of the jSymbolic software (i.e. the GUI, command line interface and API).</p></blockquote>
+
+<ul>
+	<li><strong>AceToArffAndCsv: </strong>A static class used to convert ACE XML files to both ARFF and CSV files. This is done safely, meaning that errors and exceptions are dealt with appropriately. Exceptions are thrown in the case where files are not parsed properly.</li>
+	<li><strong>FeatureConversion:</strong> A convenience class for processing and converting feature information.</li>
+	<li><strong>FeatureExtractorAccess: </strong>A central access point to obtain all feature information, and from which features are accessible in the correct order with respect to the boolean array for features to save. This allows for consistent comparisons of all the input features from any source (i.e. command line, GUI or configuration file).</li>
+	<li><strong>FileValidator: </strong>Validates MIDI and MEI files and returns an appropriate MIDI Sequence object for either. This class comes equipped with an error log which can be easily outputted to the user to show which files were not valid.</li> 
+	<li><strong>MIDIFeatureProcessor: </strong>A state object used to obtain or store feature information. This is done by first populating the object with features and then calling the extractFeatures method on a particular file.</li>
+	<li><strong>MIDIIntermediateRepresentations: </strong>Objects of this class take in the path of a MIDI file when they are constructed and automatically parse the file. The fields are then filled with a number of different representations of the MIDI file and statistics about it. These fields can then be accessed by feature objects.</li>
+	<li><strong>MusicFileFilter: </strong>A consistency and convenience class used to check the extension of a given music file.</li>
+</ul>
+
+<p><strong>OTHER JMIR JAVA PACKAGES USED BY JSYMBOLIC</strong></p>
+
+<ul>
+  <li><strong>ACE:</strong> A metalearning tool. jSymbolic uses it to save ACE XML files.</li>
+  <li><strong>UtilityClasses:</strong> A set of utility classes providing a variety of general-purpose functionality. jSymbolic uses it to perform miscellaneous tasks, especially those relating to parsing audio files.</li>
+  <li><strong>jMei2Midi:</strong> Conversion software that converts MEI data to MIDI data. This includes an MEI pipeline which can extract and preserve MEI-specific features that would be lost in the conversion to MIDI. The software can be found at the <a href="https://github.com/DDMAL/jMei2Midi" target="top">jMei2Midi page</a> as a <a href="https://maven.apache.org/" target="top">Maven project</a>.</li>
+</ul>
+
+<table height="5" width="100%" bgcolor="#0033C4" border="0"><tbody><tr><th></th></tr></tbody></table>
+<p><tt><a href="../classstructure_files/classstructure.html#Top">-top of page-</a></tt></p>
+
+</body></html>

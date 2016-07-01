@@ -1,0 +1,274 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+	<title>Feature Explanations</title>
+</head>
+
+<body text="#000000" bgcolor="#e4e4e4" link="#0033C4" vlink="#0033C4" alink="#0033C4">
+<a name="Top"></a>
+
+<table cellspacing="0" cellpadding="4" width="100%" bgcolor="#0033C4" border="0">
+  <tbody><tr>
+      <th align="left"><font face="Arial" color="#ffffff" size="+3">Feature Explanations</font></th>
+    </tr></tbody>
+</table>
+
+<p><strong>EXPLANATION OF THIS SECTION</strong></p>
+
+<p>This section describes all of the features that jSymbolic extracts. It is drawn largely from Chapter 4 of <a href="http://www.music.mcgill.ca/~cmckay/papers/musictech/mckay10dissertation.pdf" target="top">Cory McKay's disseration</a>.</p>
+
+<p>An astute observer will note that not all the jSymbolic features proposed mentioned in Cory McKay's dissertation are present here. This is because implementation of the others is still in progress, and this manual only includes those features that have been implemented and tested already.</p>
+
+<p>Note that, although many of the feature descriptions below are MIDI-specific, they are generally easily adapted to alternative formats that jSymbolic can extract features from, such as MEI.</p>
+
+<p><strong>FEATURES BASED ON INSTRUMENTATION</strong></p>
+
+<p>Although there is a significant amount of literature on instrumentation with respect to composing and arranging, very few music analytical systems take instrumentation into consideration. This is a shame, as information on instrumentation can in fact be very helpful in discriminating between certain types of musical classes. </p>
+
+<p>The jSymbolic software capitalizes on the fact that the General MIDI (level 1) specification allows MIDI files to include 128 different pitched-instrument patches, and the MIDI Percussion Key Map permits a further 47 percussion instruments. Although these MID instruments are certainly much fewer in number than the full range of extant instruments, particularly with respect to non-Western musics, they are nonetheless diverse enough for a reasonable variety of musical types.</p>
+
+<p>MIDI instrumentation notation can be somewhat sensitive to encoding inconsistencies between different MIDI authors in some cases. In a few fortunately rare cases, authors fail to specify patch numbers, with the result that all notes are played using a piano patch by default. Another problem is the inconsistency in the choice of patches that are used to represent sung lines, since there is no good General MIDI patch for solo vocal lines. Similarly, there are some inconsistences in MEI with respect to how various instruments are specified.</p>
+
+<p>Despite these occasional problems, however, features based on instrumentation can still be highly characteristic of various musical categories, and the complementary use of other types of features can help to counterbalance inconsistencies in individual authors’ choices of patches.</p>
+
+<p>The jSymbolic feature catalogue includes the following instrumentation-related features:</p>
+
+<ul>
+  <li><strong>I-1 Pitched Instruments Present:</strong> A feature vector with one entry for each of the 128 General MIDI Instruments. Each value is set to 1 if at least one note is played using the corresponding patch, or to 0 if that patch is never used.</li>
+  <li><strong>I-2 Unpitched Instruments Present:</strong> A feature vector with one entry for each of the 47 MIDI Percussion Key Map instruments. Each value is set to 1 if at least one note is played using the corresponding patch, or to 0 if that patch is never used.</li>
+  <li><strong>I-3 Note Prevalence of Pitched Instruments:</strong> A feature vector with one entry for each of the 128 General MIDI Instruments. Each value is set to the number of Note Ons played with the corresponding MIDI patch, divided by the total number of Note Ons in the piece.</li>
+  <li><strong>I-4 Note Prevalence of Unpitched Instruments: </strong>A feature vector with one entry for each of the 47 MIDI Percussion Key Map instruments. Each value is set to the number of Note Ons played with the corresponding MIDI patch, divided by the total number of Note Ons in the piece.</li>
+  <li><strong>I-5 Time Prevalence of Pitched Instruments:</strong> A feature vector with one entry for each of the 128 General MIDI Instruments. Each value is set to the total time in seconds in a piece during which at least one note is being sounded with the corresponding MIDI patch, divided by the total length of the piece in seconds.</li>
+  <li><strong>I-6 Variability of Note Prevalence of Pitched Instruments:</strong> Standard deviation of the fraction of total notes in a piece played by each General MIDI instrument that is used to play at least one note.</li>
+  <li><strong>I-7 Variability of Note Prevalence of Unpitched Instruments:</strong> Standard deviation of the fraction of total notes played by each MIDI Percussion Key Map instrument that is used to play at least one note.</li>
+  <li><strong>I-8 Number of Pitched Instruments:</strong> Total number of General MIDI patches that are used to play at least one note.</li>
+  <li><strong>I-9 Number of Unpitched Instruments:</strong> Total number of MIDI Percussion Key Map patches that are used to play at least one note.</li>
+  <li><strong>I-10 Percussion Prevalence:</strong> Total number of Note Ons belonging to percussion patches divided by total number of Note Ons in the recording.</li>
+  <li><strong>I-11 String Keyboard Fraction:</strong> Fraction of Note Ons belonging to string keyboard patches (General MIDI patches 1 to 8).</li>
+  <li><strong>I-12 Acoustic Guitar Fraction:</strong> Fraction of Note Ons belonging to acoustic guitar patches (General MIDI patches 25 and 26).</li>
+  <li><strong>I-13 Electric Guitar Fraction:</strong> Fraction of Note Ons belonging to electric guitar patches (General MIDI patches 27 to 32).</li>
+  <li><strong>I-14 Violin Fraction:</strong> Fraction of Note Ons belonging to violin patches (General MIDI patches 41 or 111).</li>
+  <li><strong>I-15 Saxophone Fraction:</strong> Fraction of Note Ons belonging to saxophone patches (General MIDI patches 65 to 68).</li>
+  <li><strong>I-16 Brass Fraction:</strong> Fraction of Note Ons belonging to brass patches, including saxophones (General MIDI patches 57 to 68).</li>
+  <li><strong>I-17 Woodwinds Fraction:</strong> Fraction of Note Ons belonging to woodwind patches (General MIDI patches 69 to 76).</li>
+  <li><strong>I-18 Orchestral Strings Fraction:</strong> Fraction of Note Ons belonging to orchestral string patches (General MIDI patches 41 to 47).</li>
+  <li><strong>I-19 String Ensemble Fraction:</strong> Fraction of Note Ons belonging to orchestral string ensemble patches (General MIDI patches 49 to 52).</li>
+  <li><strong>I-20 Electric Instrument Fraction:</strong> Fraction of Note Ons belonging to electric non-“synth” patches (General MIDI patches 5, 6, 17, 19, 27 to 32, 34 to 40).</li>
+</ul>
+
+<p><strong>FEATURES BASED ON MUSICAL TEXTURE</strong></p>
+
+<p>Although the term texture is associated with several different musical meanings, the features falling into this category of the jSymbolic catalogue relate specifically to the number of independent voices in a piece and how these voices relate to one another.</p>
+
+<p>  jSymbolic takes advantage of the fact that MIDI notes can be assigned to different channels, thus making it possible to segregate the notes belonging to different voices. Although it might seem natural to use MIDI tracks instead of channels to distinguish between voices, since only a maximum of sixteen MIDI channels are available, this is an ineffective approach in practice. Using MIDI tracks would mean that it would be impossible to extract texture-based features from all Type 0 MIDI files, since this format only allow permits a single track to be represented. Even in the case of Type 1 files, which do allow tracks to be specified, it is still not unusual to find all MIDI data saved on a single track in practice. Almost all MIDI files do use different channels for different voices, however, and it is possible to take advantage of Program Change messages to multiplex multiple voices onto a single channel in order to avoid being restricted to only sixteen voices. It was therefore decided to use MIDI channels in order to distinguish between voices rather than MIDI tracks.</p>
+
+<p>This approach is not perfect, as it is possible to use a single channel to hold multiple voices even without regular program change messages. A piano could be used to play a four-voice chorale, for example, with all notes occurring on one MIDI channel. This problem is unavoidable, unfortunately, unless one implements a sophisticated voice partitioning pre-processing module to automatically segregate voices prior to feature extraction, something that is beyond the current scope of this work. Fortunately, this problem does not occur all that often in MIDI files.</p>
+
+<p>The jSymbolic feature catalogue includes the following texture-related features:</p>
+
+<ul>
+  <li><strong>T-1 Maximum Number of Independent Voices:</strong> Maximum number of different channels in which notes are sounded simultaneously.</li>
+  <li><strong>T-2 Average Number of Independent Voices:</strong> Average number of different channels in which notes are sounded simultaneously. Rests are not included in this calculation.</li>
+  <li><strong>T-3 Variability of Number of Independent Voices:</strong> Standard deviation of number of different channels in which notes are sounded simultaneously. Rests are not included in this calculation.</li>
+  <li><strong>T-4 Voice Equality – Number of Notes:</strong> Standard deviation of the total number of Note Ons in each channel that contains at least one note.</li>
+  <li><strong>T-5 Voice Equality – Note Duration:</strong> Standard deviation of the total duration of notes in each channel that contains at least one note.</li>
+  <li><strong>T-6 Voice Equality – Dynamics:</strong> Standard deviation of the average volume of notes in each channel that contains at least one note.</li>
+  <li><strong>T-7 Voice Equality – Melodic Leaps:</strong> Standard deviation of the average melodic leap distance for each channel that contains at least one note.</li>
+  <li><strong>T-8 Voice Equality – Range:</strong> Standard deviation of the differences between the highest and lowest pitches in each channel that contains at least one note.</li>
+  <li><strong>T-9 Importance of Loudest Voice:</strong> Difference between the average loudness of the loudest channel and the average loudness of the other channels that contain at least one note, divided by 64 (128 / 2).</li>
+  <li><strong>T-10 Relative Range of Loudest Voice:</strong> Difference between the highest note and the lowest note played in the channel with the highest average loudness divided by the difference between the highest note and the lowest note in the piece overall.</li>
+  <li><strong>T-12 Range of Highest Line:</strong> Difference between the highest note and the lowest note played in the channel with the highest average pitch divided by the difference between the highest note and the lowest note in the piece overall.</li>
+  <li><strong>T-13 Relative Note Density of Highest Line:</strong> Number of Note Ons in the channel with the highest average pitch divided by the average number of Note Ons in all channels that contain at least one note.</li>
+  <li><strong>T-15 Melodic Intervals in Lowest Line:</strong> Average melodic interval in semitones of the line with the lowest average pitch divided by the average melodic interval of all lines that contain at least two notes.</li>
+  <li><strong>T-20 Voice Separation:</strong> Average separation in semi-tones between the average pitches of consecutive channels (after sorting based on average pitch) that contain at least one note, divided by 6.
+  </li>
+</ul>
+
+<p><strong>FEATURES BASED ON RHYTHM</strong></p>
+
+<p>The two elementary pieces of information from which most rhythmic features can be calculated are the times at which notes begin (called note onsets) relative to one another, and the durations of notes. Note onsets can be extracted relatively reliably from audio data, at least in cases where note density is not too high, but durations are more difficult to extract reliably. In the case of symbolic data, however, both note onsets and durations are easily and precisely available. As one might expect, several of the rhythmic features that are based on note onsets in the jSymbolic catalogue are very similar to features that are often used in audio feature extraction systems. Duration-based features, in contrast, are very rarely currently used by audio feature extraction software, but can easily be extracted from symbolic data, and are thus included in the jSymbolic feature catalogue in order to allow their utility to be empirically evaluated.</p>
+
+<p>Before proceeding to discuss the details of the jSymbolic rhythmic feature catalogue, it is important to emphasize a detail of how MIDI encodes rhythmic information that must be considered when designing rhythmic features, whether for jSymbolic or for some other MIDI software. MIDI timings are affected by both the number of MIDI ticks that go by between Note On events and by tempo change meta-events that control the rate at which MIDI ticks go by. Tempo change meta-events must therefore be monitored by the feature extraction software, something which jSymbolic does of course do.</p>
+
+<p>One disadvantage of symbolic data is that some important rhythmic features are related to performance characteristics that are not always available in symbolic data, or available in only a very coarse sense. For example, musical scores may indicate that a piece should be played rubato or with a swing rhythm. There is a great deal of variety in the ways in which these rhythmic performance styles can be implemented, however, something that can be of essential importance for tasks such as performer identification. Although formats such as MIDI certainly can represent precise note onset timings, and many recorded MIDI performances do indeed take advantage of this, MIDI files that are generated using score writing software are often strictly quantized, which means that performance timing information is not always consistently available with the precision that would ideally be preferred.</p>
+
+<p>Nonetheless, even quantized rhythms can still result in very useful feature values. One of the nice things about MIDI is that it allows one to access timing information in terms of raw time of note onsets as well as in terms of rhythmic note values (i.e., half notes, quarter notes, etc.), thus providing both low-level and high-level rhythmic information. This information, along with time signature and tempo change meta-events, can potentially provide features with a high discriminating power.</p>
+
+<p>Of course, as mentioned above, MIDI rhythmic information is somewhat sensitive to MIDI encoding style. This inconsistency is precisely the reason why the jSymbolic feature catalogue places a particular emphasis on rhythmic features derived from beat histograms, as described below. This approach helps to statistically smooth over some inconsistencies due to encoding style.</p>
+
+<p>Beat histograms are an approach that was first applied to MIR research by Brown (1993), and was later publicized and used for automatic genre classification by Tzanetakis and his colleagues in a number of papers (Tzanetakis, Essl &amp; Cook 2001; Tzanetakis &amp; Cook 2002; Tzanetakis 2002).</p>
+
+<p>It is necessary to have some understanding of how autocorrelation works in order to understand how beat histograms are constructed. Autocorrelation essentially involves comparing a signal with versions of itself delayed by successive intervals. This technique is often used to find repeating patterns in signals of any kind, as it yields the relative strengths of different periodicities within a signal. In terms of musical data, autocorrelation allows one to find the relative strengths of different rhythmic pulses. jSymbolic constructs its rhythmic histograms by processing sequences of MIDI Note On events, with MIDI ticks comprising the time scale. The value is calculated to be proportional to the velocity of Note Ons in order to ensure that beats are weighted based on the strength with which notes are played.  The values of lag correspond to both rhythmic periodicities as well as, after processing, the bin labels of the beat histogram, and the autocorrelation values provide the magnitude value for each bin.</p>
+
+<p>Once the histogram is populated using all permissible values of lag for a given MIDI sequence, jSymbolic then downsamples and transforms it so that each bin corresponds to a rhythmic periodicity with units of beats per minute. The histogram is then normalized so that different MIDI sequences can be compared. The end result is a histogram whose bins correspond to rhythmic pulses with units of beats per minute and whose bin magnitudes indicate the relative strength of each such rhythmic pulse. In effect, a beat histogram portrays the relative strength of different beats and sub-beats within a piece.</p>
+
+<p>Consider, for example, the beat histograms extracted from MIDI representations of I Wanna Be Sedated, by the punk band The Ramones, and ’Round Midnight, by the jazz performer and composer Thelonious Monk, as shown below. It is clear that I Wanna Be Sedated has significant rhythmic looseness, as demonstrated by the spread around each peak, each of which represents a strong beat periodicity. I Wanna Be Sedated also has several clear strong beats, including ones centred at 55, 66, 82, 111 (the actual tempo of the song) and 164 beats per minute, the latter two of which are harmonics of 55 and 82 beats per minute. ’Round Midnight, in contrast, has one very strong beat at 76 beats per minute, the actual tempo of the piece, and a wide range of much lower-level beat strengths. This indicates that, as might be expected, ’Round Midnight is more rhythmically complex and is also performed more tightly.</p>
+
+<p><img src="I_Wanna_Be_Sedated.gif"></p>
+
+<p><img src="Round_Midnight.gif"></p>
+
+<p>This type of information can be very representative of different musical classes, such as genre. Techno, for example, often has very clearly defined beats, without any surrounding spread, because the beats are precisely generated electronically. Much modern Classical music, to provide a contrasting example, often has much less clearly defined beats.</p>
+
+<p>Part of the challenge of histogram-related features is that one must find a way to represent the information embedded in them as useful features. Although beat histograms certainly can be used directly as feature vectors, and they sometimes are in jSymbolic, experience has shown that machine learning algorithms can sometimes have trouble learning to extract useful information from them in this raw form if they are too large. Beat and other feature histograms are, however, very useful in providing an intermediate data structure from which other features can be extracted. Experience has shown informally that the two highest peaks of beat histograms tend to be of particular importance in extracting such information, as they are the most likely to represent the main beat of the music or one of its multiples or factors.</p>
+
+<p>The jSymbolic feature catalogue includes the following rhythm-related features:</p>
+
+<ul>
+  <li><strong>R-1 Strongest Rhythmic Pulse:</strong> Bin label of the bin of the beat histogram with the highest magnitude.</li>
+  <li><strong>R-2 Second Strongest Rhythmic Pulse:</strong> Bin label of the beat histogram peak with the second highest magnitude.</li>
+  <li><strong>R-3 Harmonicity of Two Strongest Rhythmic Pulses:</strong> Bin label of the higher (in terms of bin label) of the two beat histogram peaks with the highest magnitude divided by the bin label of the lower.</li>
+  <li><strong>R-4 Strength of Strongest Rhythmic Pulse:</strong> Magnitude of the beat histogram bin with the highest magnitude.</li>
+  <li><strong>R-5 Strength of Second Strongest Rhythmic Pulse:</strong> Magnitude of the beat histogram peak with the second highest magnitude.</li>
+  <li><strong>R-6 Strength Ratio of Two Strongest Rhythmic Pulses:</strong> Magnitude of the higher (in terms of magnitude) of the two beat histogram bins corresponding to the peaks with the highest magnitude divided by the magnitude of the lower.</li>
+  <li><strong>R-7 Combined Strength of Two Strongest Rhythmic Pulses: </strong>The sum of the magnitudes of the two beat histogram peaks with the highest magnitudes.</li>
+  <li><strong>R-8 Number of Strong Pulses:</strong> Number of beat histogram peaks with normalized magnitudes over 0.1.</li>
+  <li><strong>R-9 Number of Moderate Pulses:</strong> Number of beat histogram peaks with normalized magnitudes over 0.01.</li>
+  <li><strong>R-10 Number of Relatively Strong Pulses:</strong> Number of beat histogram peaks with magnitudes at least 30% as high as the magnitude of the peak with the highest magnitude.</li>
+  <li><strong>R-11 Rhythmic Looseness:</strong> Average width of beat histogram peaks (in beats per minute). Width is measured for all peaks with magnitudes at least 30% as high as the highest peak, and is defined by the distance between the points on the peak in question that have magnitudes closest to 30% of the height of the peak.</li>
+  <li><strong>R-12 Polyrhythms:</strong> Number of beat histogram peaks with magnitudes at least 30% of the highest magnitude whose bin labels are not integer multiples or factors (using only multipliers of 1, 2, 3, 4, 6 and 8, and with an accepted error of +/- 3 bins) of the bin label of the peak with the highest magnitude. This number is then divided by the total number of bins with frequencies over 30% of the highest magnitude.</li>
+  <li><strong>R-13 Rhythmic Variability:</strong> Standard deviation of the beat histogram bin magnitudes (excepting the first 40 empty ones).</li>
+  <li><strong>R-14 Beat Histogram:</strong> A feature vector consisting of the bin magnitudes of the beat histogram described above.</li>
+  <li><strong>R-15 Note Density:</strong> Average number of notes per second.</li>
+  <li><strong>R-17 Average Note Duration:</strong> Average duration of notes in seconds.</li>
+  <li><strong>R-18 Variability of Note Duration:</strong> Standard deviation of note durations in seconds.</li>
+  <li><strong>R-19 Maximum Note Duration: </strong>Duration of the longest note (in seconds).</li>
+  <li><strong>R-20 Minimum Note Duration:</strong> Duration of the shortest note (in seconds).</li>
+  <li><strong>R-21 Staccato Incidence:</strong> Number of notes with durations of less than 0.1 seconds divided by the total number of notes in the recording.</li>
+  <li><strong>R-22 Average Time Between Attacks:</strong> Average time in seconds between Note On events (regardless of channel).</li>
+  <li><strong>R-23 Variability of Time Between Attacks:</strong> Standard deviation of the times, in seconds, between Note On events (regardless of channel).</li>
+  <li><strong>R-24 Average Time Between Attacks For Each Voice:</strong> Average of the individual channel averages of times in seconds between Note On events. Only channels that contain at least one note are included in the average.</li>
+  <li><strong>R-25 Average Variability of Time Between Attacks For Each Voice:</strong> Average standard deviation, in seconds, of time between Note On events on individual channels that contain at least one note.</li>
+  <li><strong>R-30 Initial Tempo:</strong> Tempo in beats per minute at the start of a recording.</li>
+  <li><strong>R-31 Initial Time Signature:</strong> A feature vector consisting of two values. The first is the numerator of the first occurring time signature and the second is the denominator of the first occurring time signature. Both are set to 0 if no time signature is present.</li>
+  <li><strong>R-32 Compound Or Simple Meter:</strong> Set to 1 if the initial meter is compound (numerator of time signature is greater than or equal to 6 and is evenly divisible by 3) and to 0 if it is simple (if the above condition is not fulfilled).</li>
+  <li><strong>R-33 Triple Meter: </strong>Set to 1 if numerator of initial time signature is 3, set to 0 otherwise.</li>
+  <li><strong>R-34 Quintuple Meter:</strong> Set to 1 if numerator of initial time signature is 5, set to 0 otherwise. </li>
+  <li><strong>R-35 Changes of Meter:</strong> Set to 1 if the time signature is changed one or more times during the recording.</li>
+  <li><strong>R-36 Number of Grace Notes:</strong> The total number of grace notes in a piece (i.e. the number of notes indicated as grace notes in the MEI encoding).</li>
+</ul>
+
+<p><strong>FEATURES BASED ON DYNAMICS</strong></p>
+
+<p>The ways in which musical dynamics are used in a piece can also be characteristic of different types of musical classes. Once again, however, this information is only rarely used in traditional analytical systems, and is generally notated only very coarsely in musical scores. Fortunately, MIDI velocity values make it possible to annotate dynamics much more precisely, even though MIDI encodings generated by score editing software admittedly generally fail to take full advantage of this.</p>
+
+<p>One important point to consider with respect to MIDI dynamics is that, while MIDI velocities are generally used to indicate the strength with which notes are sounded, this is not the only way in which loudness is controlled. MIDI channel volume can also be changed independently. jSymbolic takes this into account by using the following formula to find loudness values used to calculate the features described in this sub-section:</p>
+
+<p>loudness = note velocity x (channel volume / 127)</p>
+
+<p>It should also be noted that all of the jSymbolic features related to dynamics use relative measures of loudness rather than absolute measures because the default volume and velocity values set by sequencers can vary.</p>
+
+<p>The jSymbolic feature catalogue includes the following features related to dynamics:</p>
+
+<ul>
+  <li><strong>D-1 Overall Dynamic Range: </strong>The maximum loudness value minus the minimum loudness value.</li>
+  <li><strong>D-2 Variation of Dynamics: </strong>Standard deviation of loudness levels of all notes.</li>
+  <li><strong>D-3 Variation of Dynamics in Each Voice:</strong> The average of the standard deviations of loudness levels within each channel that contains at least one note.</li>
+  <li><strong>D-4 Average Note To Note Dynamics Change:</strong> Average change of loudness from one note to the next note in the same channel.
+  </li>
+</ul>
+
+<p><strong>FEATURES BASED ON OVERALL PITCH STATISTICS</strong></p>
+
+<p>Just as beat histograms are useful for calculating a variety of rhythmic features, there are several histograms which can be used to calculate features related to pitch statistics. The jSymbolic feature catalogue uses slightly modified versions of the three pitch histograms implemented by Tzanetakis and his colleagues (Tzanetakis and Cook 2002; Tzanetakis, Ermolinskyi and Cook 2002; Tzanetakis 2002).</p>
+
+<p>The first type of histogram is a basic pitch histogram. It consists of 128 bins, one for each MIDI pitch. The magnitude of each bin is first set to the number of Note On messages in the piece with the corresponding pitch, and the histogram is normalized after all Note On messages have been accounted for. This type of histogram gives particular insights into the range and variety of pitches used in a piece.</p>
+
+<p>To provide practical examples, the first figure below shows the basic pitch histogram for a Duke Ellington jazz piece, and the secondshows the histogram for a Dr. Dre rap song. A number of genre-typical differences are immediately apparent from even a rough visual comparison of these two histograms, such as the fact that the rap song uses far fewer pitches than the jazz piece, for example.</p>
+
+<p><img src="Sophisticated_Lady.gif"></p>
+
+<p><img src="Forgot_About_Dre.gif"></p>
+
+<p>The second type of histogram is called a pitch class histogram. It has one bin for each of the twelve pitch classes, which means that it is essentially a version of the basic pitch histogram where octaves are collapsed for each of the pitch classes. The magnitude of each bin is set to the number of Note On messages with a MIDI pitch that can be wrapped to this pitch class, with enharmonic equivalents assigned to the same pitch class number. The histogram is normalized, and the bins are translated so that the first bin corresponds to the pitch class with the highest magnitude, with the successive bins ordered chromatically in semitone increments. This type of histogram provides insights into areas such as the types of scales used and the amount of transposition that is present, for example.</p>
+
+<p>The third type of histogram is called a folded fifths pitch histogram, and is derived directly from the pitch class histogram. This histogram is calculated by reordering the bins of the original unordered pitch class histogram such that adjacent bins are separated by perfect fifths rather than semitones. This is done using the following equation:</p>
+
+<p>B = (7a)mod(12)</p>
+
+<p>where B is the folded fifths pitch histogram bin and a is the corresponding pitch class histogram bin. The number seven is used because this is the number of semitones in a perfect fifth, and the number twelve is used because there are twelve pitch classes in total. This histogram is useful for measuring dominant tonic relationships and for looking at types of transpositions.	</p>
+
+<p>The utility of the folded fifths pitch histogram can be seen by comparing the first figure below, which shows the folded fifths pitch histogram for a Baroque Vivaldi concerto, with the second figure below, which shows the folded fifths pitch histogram for an atonal Schoenberg piano miniature. The Vivaldi piece never or rarely uses five of the twelve pitch classes, and the pitch classes that are used are clustered around one section of the circle of fifths. These are characteristics that one would typically expect of basic tonal music without many tonally distant modulations or significant use of chromaticism. In contrast, all of the pitch classes are used to a significant degree in the Schoenberg piece, and the most frequently used pitch classes are not clustered together on the circle of fifths, both of which are characteristics that one would expect of such an atonal piece.</p>
+
+<p><img src="Four_Seasons.gif"></p>
+
+<p><img src="Schoenberg.gif""></p>
+
+<p>All three of these histogram types are included directly as features in the jSymbolic feature catalogue, and are also used to calculate a number of other features. </p>
+
+<p>It should be mentioned that all notes occurring on MIDI channel ten are ignored for all of the features described in this section. This is because the “pitch” values on channel ten correspond to (mostly unpitched) percussion patches, not to pitches.</p>
+
+<p>Some of the features in this section are based on MIDI Pitch Bends. Although the use of Pitch Bends is somewhat variable from MIDI encoder to MIDI encoder, and therefore not entirely dependant on the music itself, features relating to Pitch Bends can nonetheless have a high discriminating power, so they are included here. Efforts were made to use features with as limited a sensitivity to non-musical factors as possible.</p>
+
+<p>The jSymbolic feature catalogue includes the following features related to overall pitch statistics:</p>
+
+<ul>
+  <li><strong>P-1 Most Common Pitch Prevalence:</strong> Fraction of Note Ons corresponding to the most common pitch.</li>
+  <li><strong>P-2 Most Common Pitch Class Prevalence:</strong> Fraction of Note Ons corresponding to the most common pitch class.</li>
+  <li><strong>P-3 Relative Strength of Top Pitches:</strong> The magnitude of the second most common pitch divided by the magnitude of the most common pitch.</li>
+  <li><strong>P-4 Relative Strength of Top Pitch Classes:</strong> The magnitude of the second most common pitch class divided by the magnitude of the most common pitch class.</li>
+  <li><strong>P-5 Interval Between Strongest Pitches:</strong> Absolute value of the difference in semitones between the pitches of the two most common pitches.</li>
+  <li><strong>P-6 Interval Between Strongest Pitch Classes:</strong> Absolute value of the difference in semitones between the pitches of the two most common pitch classes.</li>
+  <li><strong>P-7 Number of Common Pitches:</strong> Number of pitches that account individually for at least 9% of all notes.</li>
+  <li><strong>P-8 Pitch Variety:</strong> Number of pitches used at least once.</li>
+  <li><strong>P-9 Pitch Class Variety:</strong> Number of pitch classes used at least once.</li>
+  <li><strong>P-10 Range:</strong> Difference in semitones between the highest and lowest pitches.</li>
+  <li><strong>P-11 Most Common Pitch:</strong> MIDI pitch value of the most common pitch divided by the number of possible pitches.</li>
+  <li><strong>P-12 Primary Register:</strong> Average MIDI pitch.</li>
+  <li><strong>P-13 Importance of Bass Register:</strong> Fraction of Note Ons between MIDI pitches 0 and 54.</li>
+  <li><strong>P-14 Importance of Middle Register:</strong> Fraction of Note Ons between MIDI pitches 55 and 72.</li>
+  <li><strong>P-15 Importance of High Register:</strong> Fraction of Note Ons between MIDI pitches 73 and 127.</li>
+  <li><strong>P-16 Most Common Pitch Class:</strong> Bin label on the pitch class histogram of the most common pitch class.</li>
+  <li><strong>P-17 Dominant Spread:</strong> Largest number of consecutive pitch classes separated by perfect 5ths that accounted for at least 9% each of the notes.</li>
+  <li><strong>P-18 Strong Tonal Centres:</strong> Number of peaks in the fifths pitch histogram that each account for at least 9% of all notes.</li>
+  <li><strong>P-19 Basic Pitch Histogram:</strong> A feature vector consisting of the bin magnitudes of the basic pitch histogram described above.</li>
+  <li><strong>P-20 Pitch Class Distribution:</strong> A feature vector consisting of the bin magnitudes of the pitch class histogram described above.</li>
+  <li><strong>P-21 Fifths Pitch Histogram:</strong> A feature vector consisting of the bin magnitudes of the fifths pitch histogram described above.</li>
+  <li><strong>P-22 Quality:</strong> Set to 0 if the key signature indicates that a recording is major, set to 1 if it indicates that it is minor and set to 0 if the key signature is unknown.</li>
+  <li><strong>P-23 Glissando Prevalence:</strong> Number of Note Ons that have at least one MIDI Pitch Bend associated with them divided by the total number of pitched Note Ons.</li>
+  <li><strong>P-24 Average Range of Glissandos:</strong> Average range of MIDI Pitch Bends, where “range” is defined as the greatest value of the absolute difference between 64 and the second data byte of all MIDI Pitch Bend messages falling between the Note On and Note Off messages of any note.</li>
+  <li><strong>P-25 Vibrato Prevalence:</strong> Number of notes for which MIDI Pitch Bend messages change direction at least twice divided by total number of notes that have Pitch Bend messages associated with them.</li>
+</ul>
+
+<p><strong>FEATURES BASED ON MELODIC INTERVALS</strong></p>
+
+<p>Although features based on overall pitch statistics are often meaningful and useful, they do not reflect information relating to the order in which pitches occur. Melody is a very important part of how many humans hear and think about music, so features based on such sequential information are needed to complement features based on overall pitch statistics. Fortunately, ample theoretical work has been done that can be taken advantage of when designing melodic features, ranging from compositional resources like manuals on writing Baroque counterpoint, to more analytically formulated ideas like melodic contour.</p>
+
+<p>Unfortunately, the tasks of detecting and partitioning musical phrases and melodies, and of determining which notes belong to which phrases, are not trivial. Although expert humans can perform such tasks relatively easily, automatic systems for performing them have still achieved only limited general success, particularly in cases where the notes in a phrases are shared across voices. So, although a phrase detection pre-processing system would make many potentially useful melodic features accessible, such a system is not currently available.</p>
+
+<p>What one can do fairly easily, however, is collect basic statistics about melodic intervals and melodic motion. Although such statistics may be relatively rudimentary compared to expert melodic analyses, they can still potentially be very effective in performing classifications. One can also extract somewhat more sophisticated features related to melodic contour by making a few na&iuml;ve but often effective basic assumptions, such as the assumptions that all notes belonging to a phrase will be on the same MIDI channel and that phrases will each follow the overall shape of a basic concave or converse arc. Although such assumptions are clearly false, and certainly not acceptable for any wide-ranging analytical framework, they do make it possible to extract some potentially discriminating higher-level melodic features without a sophisticated phrase detection system.</p>
+
+<p>A melodic interval histogram is proposed here as a way of facilitating the extraction of certain basic features relating to melodic intervals. Each bin of this histogram represents a different melodic interval, and is labelled with a number indicating the number of semitones in the interval. The magnitude of each bin is set to the number of Note On messages in the piece that have a pitch interval from the preceding Note On message on the same MIDI channel corresponding to the bin label. The direction of the interval (i.e., up or down in pitch) is ignored in this histogram. The histogram is then normalized, so that the magnitude of each bin indicates the fraction of all melodic intervals that correspond to the melodic interval of the given bin.</p>
+
+<p>This histogram clearly has a few limitations. It treats all voices equally, for example, even though the highest line of a piece often carries the most significant melodic information. It is also problematic for polyphonic instruments such as pianos that can play harmonies or multiple melodies simultaneously. It is, however, a quick and easy approach that has been found experimentally to often be helpful in discriminating between classes.</p>
+
+<p>Another intermediate data structure is also used to help calculate some of the features listed below. This consists of an array where each indice corresponds to a MIDI channel and each entry consists of a list of all melodic intervals, in semitones, for the associated channel. The numbers representing the intervals in this second intermediate data structure are set to negative for downward motion and to positive for upward motion.</p>
+
+<p>Once again, all notes occurring on MIDI channel ten are ignored for all of the features described in this section. This is because the “pitch” values on channel ten correspond to percussion patches, not to pitches.</p>
+
+<p>The jSymbolic feature catalogue includes the following features related to melody and melodic intervals:</p>
+
+<ul>
+  <li><strong>M-1 Melodic Interval Histogram:</strong> A feature vector consisting of the bin magnitudes of the melodic interval histogram described above.</li>
+  <li><strong>M-2 Average Melodic Interval:</strong> The average melodic interval, in semitones.</li>
+  <li><strong>M-3 Most Common Melodic Interval:</strong> The most frequently occurring melodic interval, in semitones.</li>
+  <li><strong>M-4 Distance Between Most Common Melodic Intervals:</strong> Absolute value of the difference between the most common melodic interval and the second most common melodic interval, in semitones.</li>
+  <li><strong>M-5 Most Common Melodic Interval Prevalence:</strong> Fraction of melodic intervals that belong to the most common interval.</li>
+  <li><strong>M-6 Relative Strength of Most Common Intervals:</strong> Fraction of melodic intervals that belong to the second most common interval divided by the fraction of melodic intervals belonging to the most common interval.</li>
+  <li><strong>M-7 Number of Common Melodic Intervals:</strong> Number of melodic intervals that represent at least 9% of all melodic intervals.</li>
+  <li><strong>M-8 Amount of Arpeggiation:</strong> Fraction of melodic intervals that are repeated notes, minor thirds, major thirds, perfect fifths, minor sevenths, major sevenths, octaves, minor tenths or major tenths.</li>
+  <li><strong>M-9 Repeated Notes:</strong> Fraction of notes that are repeated melodically.</li>
+  <li><strong>M-10 Chromatic Motion:</strong> Fraction of melodic intervals that correspond to a semitone.</li>
+  <li><strong>M-11 Stepwise Motion:</strong> Fraction of melodic intervals that correspond to a minor or major second.</li>
+  <li><strong>M-12 Melodic Thirds:</strong> Fraction of melodic intervals that are major or minor thirds.</li>
+  <li><strong>M-13 Melodic Fifths:</strong> Fraction of melodic intervals that are perfect fifths.</li>
+  <li><strong>M-14 Melodic Tritones:</strong> Fraction of melodic intervals that are tritones.</li>
+  <li><strong>M-15 Melodic Octaves:</strong> Fraction of melodic intervals that are octaves.</li>
+  <li><strong>M-17 Direction of Motion:</strong> Fraction of melodic intervals that are rising rather than falling.</li>
+  <li><strong>M-18 Duration of Melodic Arcs:</strong> Average number of notes that separate melodic peaks and troughs in any channel.</li>
+  <li><strong>M-19 Size of Melodic Arcs:</strong> Average melodic interval separating the top note of melodic peaks and the bottom note of melodic troughs.</li>
+</ul>
+
+<p></p>
+<table height="5" width="100%" bgcolor="#0033C4" border="0"><tbody><tr><th></th></tr></tbody></table>
+<p><tt><a href="../featureexplanations_files/featureexplanations.html#Top">-top of page-</a></tt></p>
+
+</body></html>

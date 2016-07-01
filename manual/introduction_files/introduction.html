@@ -1,0 +1,61 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+
+<head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+	<title>Introduction</title>
+</head>
+
+<body text="#000000" bgcolor="#e4e4e4" link="#0033C4" vlink="#0033C4" alink="#0033C4">
+<a name="Top"></a>
+
+<table cellspacing="0" cellpadding="4" width="100%" bgcolor="#0033C4" border="0">
+  <tbody><tr>
+      <th align="left"><font face="Arial" color="#ffffff" size="+3">Introduction</font></th>
+    </tr></tbody>
+</table>
+
+<p><strong>EXPLANATION OF THIS SECTION</strong></p>
+
+<p>This section of the manual provides an introduction to and overview of jSymbolic. It also outlines the contents of each chapter of the jSymbolic manual. </p>
+
+<p> <strong>INTRODUCTION TO JSYMBOLIC</strong></p>
+
+<p>jSymbolic is a software application intended for conducting research in the fields of music information retrieval (MIR), music theory and musicology. Its primary purpose is to extract statistical information from musical data stored symbolically in file formats such as <a href="https://www.midi.org/" target="top">MIDI</a> or <a href="http://music-encoding.org/" target="top">MEI</a>. This statistical information is formulated as feature values, which may be fed directly into automatic classification systems, may be used to query large musical datasets, or may be used by musicologists and music theorists for conducting empirical musical research.</p>
+
+<p>jSymbolic includes an easy-to-use <a href="../gui_files/gui.html">graphical user interface</a>, and may also be used via the <a href="../commandline_files/commandline.html">command line</a>. It also has an <a href="../api_files/api.html">API</a> facilitating programmatic use. The software can be used either with its excellent general-purpose default settings, or advanced users can use it under a variety of settings (saved in a special <a href="../configuration_files/configuration.html">configuration settings file</a>).</p>
+
+<p>Extracted features can be saved in a variety of formats, including <a href="http://jmir.sourceforge.net/index_ACE_XML.html" target="top">ACE XML 1.1</a>, <a href="http://www.cs.waikato.ac.nz/ml/weka/arff.html" target="top">Weka ARFF</a> and basic <a href="https://en.wikipedia.org/wiki/Comma-separated_values" target="top">CSV text</a>. The Weka ARFF and CSV files are optional, but the ACE XML files are always generated, and consist of two file types: a Feature Values file that holds the extracted numerical feature values, and a Feature Definitions file that specifies explicative metadata about the extracted feature types.</p>
+
+<p>Some feature values each consist of single values, and some consist of multi-dimensional vectors of related values (these are primarily histograms). This manual includes detailed <a href="../featureexplanations_files/featureexplanations.html">explanations of each feature</a></font>.</p>
+
+<p>jSymbolic is free and open-source, and is designed to be used directly for conducting research as well as as a platform for iteratively developing new features that can then be shared amongst researchers. As such, jSymbolic emphasizes extensibility, and includes a modular design that facilitates the implementation and incorporation of new features, automatic provision of all other feature values to each new feature and dynamic feature extraction scheduling that automatically resolves feature dependencies. jSymbolic is implemented in <a href="http://www.java.com/" target="top">Java</a> in order to maximize cross-platform utilization. More information about this can be found on the <a href="../extendingsoftware_files/extendingsoftware.html">extending software</a> section of this manual.</p>
+
+<p>jSymbolic is part of the <a href="http://jmir.sourceforge.net/" target="top">jMIR</a> music classification research software suite, and may be used either as part of this suite or independently. In particular, jSymbolic is designed to integrate especially well with the <a href="http://jmir.sourceforge.net/index_ACE.html" target="top">ACE</a> meta-learning automtic classification research suite, as well as the external <a href="http://www.cs.waikato.ac.nz/ml/weka/" target="top">Weka</a> data-mining suite.</p>
+
+<p>jSymbolic is also part of the <a href="https://simssa.ca" target="top">SIMSSA</a> (Single Interface for Music Score Searching and Analysis) project, and is integrated with the music stored on the associated <a href="http://elvisproject.ca/" target="top">Elvis database</a>.</p>
+
+<p>Detailed information on jSymbolic 1.0, the first release version of the software, is available in Chapter 4 of <a href="http://www.music.mcgill.ca/~cmckay/papers/musictech/mckay10dissertation.pdf" target="top">Cory McKay's disseration</a>. This manual reviews aspects of that original version that are still present in the current version of jSymbolic, and also covers all new aspects implemented since then.</p>
+
+<p><strong>STRUCTURE OF THIS MANUAL </strong></p>
+
+<ol>
+  <li><strong>Introduction: </strong>This section provides an introduction to and overview of jSymbolic. It also outlines the contents of each chapter of the jSymbolic manual. </li>
+  <li><strong>Installation:</strong> This section describes how to access and install jSymbolic onto one's computer, and includes an outline of some of the files and resources included with the jSymbolic distribution package.</li>
+  <li><strong>Using the Graphical User Interface:</strong> This section explains how to use the jSymbolic GUI.</li>
+  <li><strong>Using the Command Line Interface:</strong> This section explains all of the command line arguments that may be used with jSymbolic and provides usage examples.</li>
+  <li><strong>Using the API:</strong> This section describes how jSymbolic's functionality may be accesed programmatically using its API.</li>
+  <li><strong>Configuration Settings File:</strong> This section describes the jSymbolic configuration file, which specifies various processing settings, and can be used with the GUI, command line interface and API. Sample valid and invalid configuration file transcripts are also provided.</li>
+  <li><strong>Feature Explanations:</strong> This section describes all of the features that jSymbolic extracts.</li>
+  <li><strong>Processing Sequence:</strong> This section provides an overview of each of the major processing steps performed by jSymbolic during exectution and feature extraction, in the order that they occur.</li>
+  <li><strong>Class Structure:</strong> This section provides an overview of jSymbolic's <a href="http://www.java.com/" target="top">Java</a> class architecture.</li>
+  <li><strong>Extending the Software:</strong> This section provides hints on how programmers can extend jSymbolic's functionality. A particular emphasis is placed on designing and adding new features.</li>
+  <li><strong>Licensing and Acknowledgements:</strong> This section describes the licensing under which jSymbolic is distributed, and highlights the associated liability waiver. It also specifies the libraries used by jSymbolic, and acknowledges the individuals and funding agencies that contributed to jSymbolic.</li>
+  <li><strong>Contact Information:</strong> This section describes how users, developers and researchers can acquire more information on jSymbolic.</li>
+  <li><strong>Version History:</strong> This section highlights various changes that have occurred since the first version of jSymbolic.</li>
+</ol>
+
+<p></p>
+<table height="5" width="100%" bgcolor="#0033C4" border="0"><tbody><tr><th></th></tr></tbody></table>
+<p><tt><a href="./introduction.html#Top">-top of page-</a></tt></p>
+
+</body></html>
