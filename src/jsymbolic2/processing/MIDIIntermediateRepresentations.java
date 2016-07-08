@@ -284,6 +284,14 @@ public class MIDIIntermediateRepresentations
       * value of 127.
       */
      public    double[][]     volumes;
+
+     /**
+      * A chart containing ticks in the first index and MIDI pitches in the second index
+      * Each tick corresponds to all 128 possible midi ticks.
+      * The cumulative velocities of each tick-pitch combination are stored in each
+      * array value for the given MIDI sequence.
+      */
+     public int[][] vertical_interval_chart;
      
      /**
       * Data loaded from a MIDI file
@@ -300,8 +308,8 @@ public class MIDIIntermediateRepresentations
       * Tempo change messages can cause variations, which is why this is a mean
       */
      private   double         mean_ticks_per_sec;
-     
-     
+
+
      /* CONSTRUCTORS **********************************************************/
      
      
@@ -532,7 +540,7 @@ for (int i = 0 ;i < melody_list.length; i++)
                 System.out.print(" " + ((Integer) melody_list[i].get(j)).intValue());
 }
  */
-          
+          generateVerticalIntervalChart();
      }
      
      
@@ -1585,6 +1593,80 @@ for (int i = 0 ;i < melody_list.length; i++)
                sum += melodic_histogram[i];
           for (int i = 0; i < melodic_histogram.length; i++)
                melodic_histogram[i] = melodic_histogram[i] / sum;
+     }
+
+    /**
+     * Generate the vertical interval chart described in the variable declarations.
+     */
+    private void generateVerticalIntervalChart() {
+         //TODO what if sequence tick length is larger than max integer?
+         // Get duration of piece in corresponding MIDI ticks
+         int tick_duration = (int)sequence.getTickLength() + 1;
+         // Get tracks to be parsed from sequence
+         Track[] tracks = sequence.getTracks();
+
+         // Maximum number of pitches possible in MIDI
+         int number_of_pitches = 128;
+
+         // Array for tracks by ticks by pitches and note off markers
+         // All arrays initialized to 0 according to Java language spec
+         int[][][] tracks_by_ticks_by_pitch = new int[tracks.length][tick_duration][number_of_pitches];
+         boolean[][][] note_off = new boolean[tracks.length][tick_duration][number_of_pitches];
+
+         // Go through each midi event in each track and verify them, tick by tick
+         for (int n_track = 0; n_track < tracks.length; n_track++) {
+              Track track = tracks[n_track];
+              // To keep track of velocities for separate pitches
+              for (int n_event = 0; n_event < track.size(); n_event++) {
+                   MidiEvent event = track.get(n_event);
+                   MidiMessage message = event.getMessage();
+                   if (message instanceof ShortMessage) {
+                        ShortMessage short_message = (ShortMessage) message;
+                        int current_tick = (int) event.getTick();
+                        // Clearly only true if this is a note on or off
+                        int current_pitch = short_message.getData1();
+                        int current_velocity = short_message.getData2();
+                        // If note off message then we mark it
+                        if (short_message.getCommand() == 0x80 && // note off
+                                short_message.getChannel() != 10 - 1) // not channel 10
+                        {
+                             note_off[n_track][current_tick][current_pitch] = true;
+                        }
+                        else if (short_message.getCommand() == 0x90 && // note on
+                                short_message.getChannel() != 10 - 1 && // not channel 10 (percussion)
+                                short_message.getData2() != 0) // not velocity 0
+                        {
+                             //add the velocity at this current tick and pitch
+                             tracks_by_ticks_by_pitch[n_track][current_tick][current_pitch] += current_velocity;
+                        }
+                   }
+              }
+         }
+
+         // Now copy over all events for each tick when the notes are still on for each track
+         // Turn them off whenever we find a note off check (i.e. set them back to 0 since no other notes played there)
+         // Then, Copy over all tick-pitch velocity values for each track to a global tick-pitch array
+         int[][] ticks_by_pitch = new int[tick_duration][number_of_pitches];
+         for(int track = 0; track < tracks_by_ticks_by_pitch.length; track++) {
+              for (int tick = 0; tick < tracks_by_ticks_by_pitch[track].length; tick++) {
+                   for (int pitch = 0; pitch < tracks_by_ticks_by_pitch[track][tick].length; pitch++) {
+                        boolean note_off_check = note_off[track][tick][pitch];
+                        if (note_off_check &&
+                                tracks_by_ticks_by_pitch[track][tick][pitch] > 0) {
+                             //do nothing since there was a note-on here because we have a velocity from before
+                        }
+                        else if (note_off_check) {
+                             tracks_by_ticks_by_pitch[track][tick][pitch] = 0;
+                        }
+                        else if (tick > 0) {
+                             int previous_value = tracks_by_ticks_by_pitch[track][tick - 1][pitch];
+                             tracks_by_ticks_by_pitch[track][tick][pitch] += previous_value;
+                        }
+                        ticks_by_pitch[tick][pitch] += tracks_by_ticks_by_pitch[track][tick][pitch];
+                   }
+              }
+         }
+         vertical_interval_chart = ticks_by_pitch;
      }
      
      
