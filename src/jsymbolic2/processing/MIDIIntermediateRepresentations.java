@@ -292,6 +292,15 @@ public class MIDIIntermediateRepresentations
       * array value for the given MIDI sequence.
       */
      public int[][] vertical_interval_chart;
+
+    /**
+     * The first index contains the track number of the given sequence.
+     * It contains ticks in the second index and MIDI pitches in the third index
+     * Each tick corresponds to all 128 possible midi ticks.
+     * The cumulative velocities of each tick-pitch combination are stored in each
+     * array value for the given MIDI sequence.
+     */
+    public int[][][] vertical_interval_track_chart;
      
      /**
       * Data loaded from a MIDI file
@@ -1599,7 +1608,6 @@ for (int i = 0 ;i < melody_list.length; i++)
      * Generate the vertical interval chart described in the variable declarations.
      */
     private void generateVerticalIntervalChart() {
-         //TODO what if sequence tick length is larger than max integer?
          // Get duration of piece in corresponding MIDI ticks
          int tick_duration = (int)sequence.getTickLength() + 1;
          // Get tracks to be parsed from sequence
@@ -1666,6 +1674,7 @@ for (int i = 0 ;i < melody_list.length; i++)
                    }
               }
          }
+         vertical_interval_track_chart = tracks_by_ticks_by_pitch;
          vertical_interval_chart = ticks_by_pitch;
      }
      

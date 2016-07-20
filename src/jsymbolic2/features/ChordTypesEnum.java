@@ -7,7 +7,7 @@ import java.util.List;
  * Created by dinamix on 7/6/16.
  */
 public enum ChordTypesEnum {
-    TWO_PITCHES(ChordTypesValidation.TWO_PITCHES_VALIDATION, 0),
+    PARTIAL_CHORD(ChordTypesValidation.PARTIAL_CHORD_VALIDATION, 0),
     MAJOR_TRIAD(ChordTypesValidation.MAJOR_TRIAD_VALIDATION, 1),
     MINOR_TRIAD(ChordTypesValidation.MINOR_TRIAD_VALIDATION, 2),
     AUGMENTED_TRIAD(ChordTypesValidation.AUGMENTED_TRIAD_VALIDATION, 3),
@@ -52,7 +52,7 @@ public enum ChordTypesEnum {
     }
 
     private enum ChordTypesValidation {
-        TWO_PITCHES_VALIDATION {
+        PARTIAL_CHORD_VALIDATION {
             @Override
             boolean validate(int[] chord) {
                 return check_chord_length(chord, 2);
