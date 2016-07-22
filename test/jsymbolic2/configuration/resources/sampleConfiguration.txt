@@ -13,4 +13,4 @@ convert_to_csv=false
 feature_values_save_path=test_value.xml
 feature_definitions_save_path=test_definition.xml
 <input_files>
-./test/jsymbolic/features/resources/Saint-Saens_LeCarnevalDesAnimmaux.mei
+./test/jsymbolic2/features/resources/Saint-Saens_LeCarnevalDesAnimmaux.mei

@@ -3,25 +3,24 @@ package jsymbolic2.features;
 import ace.datatypes.FeatureDefinition;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
-import javax.sound.midi.*;
+import javax.sound.midi.Sequence;
 import java.util.stream.DoubleStream;
 
 /**
  * A feature extractor that extracts a feature vector consisting of the bin magnitudes of the
- * vertical interval histogram.
+ * vertical interval histogram
  *
  * <p>No extracted feature values are stored in objects of this class.
  *
  * @author Tristano Tenaglia
  */
-public class VerticalIntervalsFeature extends MIDIFeatureExtractor {
+public class VariabilityOfNumberOfSimultaneousPitchClassesFeature extends MIDIFeatureExtractor {
 
     /**
      * Basic constructor that sets the definition and dependencies (and their
      * offsets) of this feature.
      */
-    public VerticalIntervalsFeature()
-    {
+    public VariabilityOfNumberOfSimultaneousPitchClassesFeature() {
         String name = "Vertical Interval Succession";
         String description = "A feature vector consisting of the bin magnitudes of the\n" +
                 "vertical interval histogram";
@@ -41,7 +40,7 @@ public class VerticalIntervalsFeature extends MIDIFeatureExtractor {
      * feature values.
      *
      * <p>In the case of this feature, the other_feature_values parameters
-     * are ignored.
+     * are null.
      *
      * @param sequence			The MIDI sequence to extract the feature
      *                                 from.
@@ -67,50 +66,36 @@ public class VerticalIntervalsFeature extends MIDIFeatureExtractor {
     {
         // Get the vertical interval intermediate representation chart
         int[][] vertical_interval_chart = sequence_info.vertical_interval_chart;
-        int[][][] tracks_ticks_pitch = sequence_info.vertical_interval_track_chart;
 
         // An array for all possible interval values
-        double[] all_intervals = new double[128];
-
-        // Compute unisons based on pitches that happen at the same tick on different tracks
-        for(int track = 0; track < tracks_ticks_pitch.length; track++) {
-            for(int tick = 0; tick < tracks_ticks_pitch[track].length; tick++) {
-                for(int pitch = 0; pitch < tracks_ticks_pitch[track][tick].length; pitch++) {
-                    for(int other_track = track + 1; other_track < tracks_ticks_pitch.length; other_track++) {
-                        int current_velocity = tracks_ticks_pitch[track][tick][pitch];
-                        try {
-                            //May get a null pointer exception if that tick and pitch dne on the other track
-                            int other_velocity = tracks_ticks_pitch[other_track][tick][pitch];
-                            if(other_velocity > 0 && current_velocity > 0) {
-                                all_intervals[0] += current_velocity + other_velocity;
-                            }
-                        } catch (Exception ex) {
-                            continue;
-                        }
-                    }
-                }
-            }
-        }
+        double[] simultaneous_count = new double[vertical_interval_chart.length];
 
         // Compute pitch interval frequency based on velocity for each tick
         for(int tick = 0; tick < vertical_interval_chart.length; tick++) {
             for(int pitch = 0; pitch < vertical_interval_chart[tick].length - 1; pitch++) {
-                for(int other_pitch = pitch + 1; other_pitch < vertical_interval_chart[tick].length; other_pitch++) {
-                    int interval = other_pitch - pitch;
-                    int pitch_velocity = vertical_interval_chart[tick][pitch];
-                    int other_pitch_velocity = vertical_interval_chart[tick][other_pitch];
-                    if(pitch_velocity != 0 && other_pitch_velocity != 0) {
-                        int total_velocity = pitch_velocity + other_pitch_velocity;
-                        all_intervals[interval] += total_velocity;
+                int pitch_velocity = vertical_interval_chart[tick][pitch];
+                // Once we find a pitch, then go through all other pitches to check pitch classes once
+                if(pitch_velocity != 0) {
+                    for (int other_pitch = pitch + 1; other_pitch < vertical_interval_chart[tick].length; other_pitch++) {
+                        int other_pitch_velocity = vertical_interval_chart[tick][other_pitch];
+                        if (simultaneous_count[tick] == 0 && pitch_velocity != 0) {
+                            simultaneous_count[tick]++;
+                        }
+                        if (pitch_velocity != 0 && other_pitch_velocity != 0) {
+                            simultaneous_count[tick]++;
+                        }
                     }
+                    break; // go to next tick
                 }
             }
         }
-
-        double normalize_sum = DoubleStream.of(all_intervals).sum();
-        double[] all_intervals_normalized = DoubleStream.of(all_intervals)
-                                                        .map((double d) -> d / normalize_sum)
-                                                        .toArray();
-        return all_intervals_normalized;
+        double simultaneous_sum = DoubleStream.of(simultaneous_count).sum();
+        double simultaneous_avg = simultaneous_sum / vertical_interval_chart.length;
+        double[] deviations = DoubleStream.of(simultaneous_count)
+                                .map((double d) -> Math.pow(d - simultaneous_avg, 2))
+                                .toArray();
+        double deviations_sum = DoubleStream.of(deviations).sum();
+        double standard_deviation = deviations_sum / deviations.length;
+        return new double[]{standard_deviation};
     }
 }

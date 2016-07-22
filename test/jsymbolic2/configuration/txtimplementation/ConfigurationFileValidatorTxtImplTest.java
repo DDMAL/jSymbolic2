@@ -24,16 +24,16 @@ public class ConfigurationFileValidatorTxtImplTest {
 
     private static File sampleConfiguration;
     private static List<String> rawSampleConfig;
-    private static String sampleConfigFileName = "./test/jsymbolic/configuration/resources/sampleConfiguration.txt";
+    private static String sampleConfigFileName = "./test/jsymbolic2/configuration/resources/sampleConfiguration.txt";
     private static File sampleConfiguration2;
     private static List<String> rawSampleConfig2;
-    private static String sampleConfigFileName2 = "./test/jsymbolic/configuration/resources/sampleConfiguration2.txt";
+    private static String sampleConfigFileName2 = "./test/jsymbolic2/configuration/resources/sampleConfiguration2.txt";
     private static File invalidConfiguration;
     private static List<String> rawInvalidConfig;
-    private static String invalidConfig = "./test/jsymbolic/configuration/resources/invalidConfiguration.txt";
+    private static String invalidConfig = "./test/jsymbolic2/configuration/resources/invalidConfiguration.txt";
     private static File noIOConfiguration;
     private static List<String> rawNoIOConfig;
-    private static String noIOConfig = "./test/jsymbolic/configuration/resources/noIOConfiguration.txt";
+    private static String noIOConfig = "./test/jsymbolic2/configuration/resources/noIOConfiguration.txt";
 
     @Before
     public void setUp() throws Exception {
@@ -72,7 +72,7 @@ public class ConfigurationFileValidatorTxtImplTest {
         List<String> featuresToSave = Arrays.asList("Duration", "Acoustic Guitar Fraction", "Beat Histogram");
         ConfigurationOptionState opt = new ConfigurationOptionState(1.5,0.1,true,false,false,false);
         ConfigurationInputFiles input = new ConfigurationInputFiles();
-        input.addValidFile(new File("./test/jsymbolic/features/resources/Saint-Saens_LeCarnevalDesAnimmaux.mei"));
+        input.addValidFile(new File("./test/jsymbolic2/features/resources/Saint-Saens_LeCarnevalDesAnimmaux.mei"));
         ConfigurationOutputFiles output = new ConfigurationOutputFiles("test_value.xml","test_definition.xml");
         ConfigurationFileData expecteddata = new ConfigurationFileData(featuresToSave,opt,output,sampleConfigFileName,input);
         ConfigurationFileData actualdata =
@@ -120,11 +120,11 @@ public class ConfigurationFileValidatorTxtImplTest {
     @Test
     public void checkForInvalidInputFiles() throws Exception {
         ConfigurationInputFiles input = new ConfigurationInputFiles();
-        input.addValidFile(new File("./test/jsymbolic/features/resources/Saint-Saens_LeCarnevalDesAnimmaux.mei"));
+        input.addValidFile(new File("./test/jsymbolic2/features/resources/Saint-Saens_LeCarnevalDesAnimmaux.mei"));
         assertEquals(input,validate.checkForInvalidInputFiles(rawSampleConfig,sampleConfiguration));
 
         ConfigurationInputFiles expectedInvalid = new ConfigurationInputFiles();
-        expectedInvalid.addValidFile(new File("./test/jsymbolic/features/resources/Saint-Saens_LeCarnevalDesAnimmaux.mei"));
+        expectedInvalid.addValidFile(new File("./test/jsymbolic2/features/resources/Saint-Saens_LeCarnevalDesAnimmaux.mei"));
         expectedInvalid.addInvalidFile(new File("./invalid.midi"));
 
         assertEquals(expectedInvalid,validate.checkForInvalidInputFiles(rawInvalidConfig,invalidConfiguration));
@@ -132,7 +132,7 @@ public class ConfigurationFileValidatorTxtImplTest {
 
     @Test
     public void checkConfigFile() throws Exception {
-        String meiFileName = "./test/jsymbolic/features/resources/Saint-Saens_LeCarnevalDesAnimmaux.mei";
+        String meiFileName = "./test/jsymbolic2/features/resources/Saint-Saens_LeCarnevalDesAnimmaux.mei";
 
         exception.expect(Exception.class);
         validate.checkConfigFile(meiFileName);

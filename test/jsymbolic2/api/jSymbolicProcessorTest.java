@@ -27,15 +27,15 @@ public class jSymbolicProcessorTest {
     private jSymbolicProcessor processor;
     private jSymbolicProcessor processorConfig;
     private jSymbolicProcessor processorConvert;
-    private String valuesPath = "./test/jsymbolic/api/resources/feature_values.xml";
-    private String definitionsPath = "./test/jsymbolic/api/resources/feature_definitions.xml";
+    private String valuesPath = "./test/jsymbolic2/api/resources/feature_values.xml";
+    private String definitionsPath = "./test/jsymbolic2/api/resources/feature_definitions.xml";
 
     @Before
     public void setUp() throws Exception {
         List<String> featureNames = Arrays.asList("Beat Histogram", "Acoustic Guitar Fraction", "Duration");
         processor = new jSymbolicProcessor(10, 0.1, featureNames, true, false, false, false, valuesPath, definitionsPath);
-        processorConfig = new jSymbolicProcessor("./test/jsymbolic/api/resources/sampleConfiguration.txt");
-        processorConvert = new jSymbolicProcessor("./test/jsymbolic/api/resources/sampleConfigConvert.txt");
+        processorConfig = new jSymbolicProcessor("./test/jsymbolic2/api/resources/sampleConfiguration.txt");
+        processorConvert = new jSymbolicProcessor("./test/jsymbolic2/api/resources/sampleConfigConvert.txt");
     }
 
     @After
@@ -46,7 +46,7 @@ public class jSymbolicProcessorTest {
 
     @Test
     public void getJsymbolicData() throws Exception {
-        File saintSaensTest = new File("./test/jsymbolic/api/resources/Saint-Saens_LeCarnevalDesAnimmaux.mei");
+        File saintSaensTest = new File("./test/jsymbolic2/api/resources/Saint-Saens_LeCarnevalDesAnimmaux.mei");
         List<String> errorLog = new ArrayList<>();
         jSymbolicData data = processor.computeJsymbolicData(saintSaensTest, errorLog);
         DataSet[] dataSets = data.getFeatureValuesDataBoard().getFeatureVectors();
@@ -85,7 +85,7 @@ public class jSymbolicProcessorTest {
 
     @Test
     public void getJsymbolicDataDirectory() throws Exception {
-        File dir = new File("./test/jsymbolic/api/resources/");
+        File dir = new File("./test/jsymbolic2/api/resources/");
         List<String> errorLog = new ArrayList<>();
         Map<File, jSymbolicData> dirMap = processorConfig.computeJsymbolicDataDirectory(dir, errorLog);
         File[] allFiles = dirMap.keySet().toArray(new File[1]);

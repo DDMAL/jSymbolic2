@@ -19,7 +19,7 @@ import static org.junit.Assert.*;
 public class AcousticGuitarFractionFeatureTest {
 
     double deviation = 0.0001;
-    String saintSaensFileName = "test/jsymbolic/features/resources/Saint-Saens_LeCarnevalDesAnimmaux.mei";
+    String saintSaensFileName = "test/jsymbolic2/features/resources/Saint-Saens_LeCarnevalDesAnimmaux.mei";
     Sequence saintSaensSequence;
 
     @Before
