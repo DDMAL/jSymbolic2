@@ -22,7 +22,7 @@ public class SeventhChordsFeature extends MIDIFeatureExtractor {
      * offsets) of this feature.
      */
     public SeventhChordsFeature() {
-        String name = "Dominant Seventh Chords";
+        String name = "Seventh Chords";
         String description = "Fraction of all chords that are dominant seventh, major\n" +
                 "seventh or minor seventh chords.";
         boolean is_sequential = true;

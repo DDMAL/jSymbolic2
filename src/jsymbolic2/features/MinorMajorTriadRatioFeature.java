@@ -22,7 +22,7 @@ public class MinorMajorTriadRatioFeature extends MIDIFeatureExtractor {
      * offsets) of this feature.
      */
     public MinorMajorTriadRatioFeature() {
-        String name = "Standard Triads";
+        String name = "Minor Major Triad Ratio";
         String description = "Number of minor triads divided by number of\n" +
                 "major triads.";
         boolean is_sequential = true;
