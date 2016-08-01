@@ -1,6 +1,7 @@
 package jsymbolic2.features;
 
 import ace.datatypes.FeatureDefinition;
+import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 import javax.sound.midi.Sequence;
@@ -21,11 +22,11 @@ public class VariabilityOfNumberOfSimultaneousPitchClassesFeature extends MIDIFe
      * offsets) of this feature.
      */
     public VariabilityOfNumberOfSimultaneousPitchClassesFeature() {
-        String name = "Vertical Interval Succession";
-        String description = "A feature vector consisting of the bin magnitudes of the\n" +
-                "vertical interval histogram";
+        String name = "Variability of Number of Simultaneous Pitch Classes";
+        String description = "Standard deviation\n" +
+                "of the number of different pitch classes sounding simultaneously.";
         boolean is_sequential = true;
-        int dimensions = 128; //for each possible MIDI pitch
+        int dimensions = 1;
         definition = new FeatureDefinition( name,
                 description,
                 is_sequential,
@@ -89,13 +90,15 @@ public class VariabilityOfNumberOfSimultaneousPitchClassesFeature extends MIDIFe
                 }
             }
         }
-        double simultaneous_sum = DoubleStream.of(simultaneous_count).sum();
-        double simultaneous_avg = simultaneous_sum / vertical_interval_chart.length;
+        double simultaneous_avg = DoubleStream.of(simultaneous_count)
+                .average()
+                .getAsDouble();
         double[] deviations = DoubleStream.of(simultaneous_count)
-                                .map((double d) -> Math.pow(d - simultaneous_avg, 2))
-                                .toArray();
-        double deviations_sum = DoubleStream.of(deviations).sum();
-        double standard_deviation = deviations_sum / deviations.length;
+                .map((double d) -> Math.pow(d - simultaneous_avg, 2))
+                .toArray();
+        double standard_deviation = DoubleStream.of(deviations)
+                .average()
+                .getAsDouble();
         return new double[]{standard_deviation};
     }
 }

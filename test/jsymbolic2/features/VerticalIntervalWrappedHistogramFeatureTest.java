@@ -1,5 +1,6 @@
 package jsymbolic2.features;
 
+import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 import org.ddmal.midiUtilities.MidiBuildEvent;
 import org.junit.After;
@@ -15,7 +16,7 @@ import static org.junit.Assert.*;
 /**
  * Created by dinamix on 7/6/16.
  */
-public class VerticalIntervalsWrappedFeatureTest {
+public class VerticalIntervalWrappedHistogramFeatureTest {
     @Before
     public void setUp() throws Exception {
 
@@ -46,7 +47,7 @@ public class VerticalIntervalsWrappedFeatureTest {
         t1_tracks.add(e_tracks5);
         t1_tracks.add(e_tracks6);
 
-        MIDIFeatureExtractor vertical = new VerticalIntervalsWrappedFeature();
+        MIDIFeatureExtractor vertical = new VerticalIntervalWrappedHistogramFeature();
         MIDIIntermediateRepresentations actual_representation_tracks = new MIDIIntermediateRepresentations(test_tracks);
         double[] actual_vertical = vertical.extractFeature(test_tracks, actual_representation_tracks, null);
 

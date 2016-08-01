@@ -2,6 +2,8 @@ package jsymbolic2.api;
 
 import jsymbolic2.configuration.ConfigurationFileData;
 import jsymbolic2.configuration.txtimplementation.ConfigurationFileValidatorTxtImpl;
+import jsymbolic2.featureutils.FeatureConversion;
+import jsymbolic2.featureutils.FeatureExtractorAccess;
 import jsymbolic2.processing.*;
 import mckay.utilities.staticlibraries.FileMethods;
 

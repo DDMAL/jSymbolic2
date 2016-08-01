@@ -1,6 +1,8 @@
 package jsymbolic2.features;
 
 import ace.datatypes.FeatureDefinition;
+import jsymbolic2.featureutils.ChordTypesEnum;
+import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 import javax.sound.midi.Sequence;
@@ -9,12 +11,12 @@ import java.util.stream.DoubleStream;
 /**
  * Created by dinamix on 7/6/16.
  */
-public class ChordTypesFeature extends MIDIFeatureExtractor {
+public class ChordTypesHistogramFeature extends MIDIFeatureExtractor {
 
     private final int number_of_chord_types = ChordTypesEnum.values().length;
 
-    public ChordTypesFeature() {
-        String name = "Chord Types";
+    public ChordTypesHistogramFeature() {
+        String name = "Chord Types Histogram";
         String description = "A feature vector consisting of the bin magnitudes of the\n" +
                 "chords of each type in each bin. These bin-chord numbers are specified" +
                 " in this classes Javadoc.";

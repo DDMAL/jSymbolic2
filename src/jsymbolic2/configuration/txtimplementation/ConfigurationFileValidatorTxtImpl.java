@@ -1,7 +1,7 @@
 package jsymbolic2.configuration.txtimplementation;
 
 import jsymbolic2.configuration.*;
-import jsymbolic2.processing.FeatureExtractorAccess;
+import jsymbolic2.featureutils.FeatureExtractorAccess;
 import jsymbolic2.processing.FileValidator;
 import jsymbolic2.processing.MusicFileFilter;
 import mckay.utilities.staticlibraries.FileMethods;

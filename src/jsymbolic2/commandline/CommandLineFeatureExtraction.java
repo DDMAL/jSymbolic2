@@ -1,8 +1,8 @@
 package jsymbolic2.commandline;
 
 import jsymbolic2.configuration.ConfigurationFileData;
-import jsymbolic2.features.MIDIFeatureExtractor;
-import jsymbolic2.processing.FeatureExtractorAccess;
+import jsymbolic2.featureutils.MIDIFeatureExtractor;
+import jsymbolic2.featureutils.FeatureExtractorAccess;
 import jsymbolic2.processing.FileValidator;
 import jsymbolic2.processing.MIDIFeatureProcessor;
 import jsymbolic2.processing.MusicFileFilter;

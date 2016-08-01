@@ -6,7 +6,7 @@
  * McGill University
  */
 
-package jsymbolic2.features;
+package jsymbolic2.featureutils;
 
 import javax.sound.midi.Sequence;
 import ace.datatypes.FeatureDefinition;

@@ -1,4 +1,4 @@
-package jsymbolic2.processing;
+package jsymbolic2.featureutils;
 
 import jsymbolic2.features.*;
 
@@ -192,7 +192,8 @@ public final class FeatureExtractorAccess {
 				new RatioOfPrevalenceOfTwoMostCommonVerticalIntervalsFeature(),
 				new AverageNumberOfSimultaneousPitchClassesFeature(),
 				new VariabilityOfNumberOfSimultaneousPitchClassesFeature(),
-				new MinorMajorRatioFeature(),
+				new FractionOfMinorVerticalIntervalsFeature(),
+				new FractionOfMajorVerticalIntervalsFeature(),
 				new UnisonsFeature(),
 				new VerticalMinorSecondsFeature(),
 				new VerticalThirdsFeature(),
@@ -209,6 +210,10 @@ public final class FeatureExtractorAccess {
 				new ComplexChordsFeature(),
 				new NonStandardChordsFeature(),
 				new ChordDurationFeature(),
+				new RelativeRangeIsolationOfLoudestVoiceFeature(),
+				new RelativeNoteDurationsOfLowestLineFeature(),
+				new SimultaneityFeature(),
+				new VariabilityOfSimultaneityFeature(),
 
                 // Add multi-dimensional sequential features
                 new BasicPitchHistogramFeature(),
@@ -222,9 +227,9 @@ public final class FeatureExtractorAccess {
                 new PitchedInstrumentsPresentFeature(),
                 new TimePrevalenceOfPitchedInstrumentsFeature(),
                 new UnpitchedInstrumentsPresentFeature(),
-				new VerticalIntervalsWrappedFeature(),
-				new VerticalIntervalsFeature(),
-				new ChordTypesFeature()
+				new VerticalIntervalWrappedHistogramFeature(),
+				new VerticalIntervalHistogramFeature(),
+				new ChordTypesHistogramFeature()
         };
 
         defaultFeaturesToSave = new boolean[]
@@ -343,7 +348,8 @@ public final class FeatureExtractorAccess {
 				false, //RatioOfPrevalenceOfTwoMostCommonVerticalIntervalsFeature
 				false, //AverageNumberOfSimultaneousPitchClassesFeature
 				false, //VariabilityOfNumberOfSimultaneousPitchClassesFeature
-				false, //MinorMajorRatioFeature
+				false, //FractionOfMinorVerticalIntervalsFeature
+				false, //FractionOfMajorVerticalIntervalsFeature
 				false, //UnisonsFeature
 				false, //VerticalMinorSecondsFeature
 				false, //VerticalThirdsFeature
@@ -360,6 +366,10 @@ public final class FeatureExtractorAccess {
 				false, //ComplexChordsFeature
 				false, //NonStandardChordsFeature
 				false, //ChordDurationFeature
+				false, //RelativeRangeIsolationOfLoudestVoiceFeature
+				false, //RelativeNoteDurationsOfLowestLineFeature
+				false, //SimultaneityFeature
+				false, //VariabilityOfSimultaneityFeature
 
                 // Add multi-dimensional sequential features
                 false, //BasicPitchHistogramFeature
@@ -373,9 +383,9 @@ public final class FeatureExtractorAccess {
                 false, //PitchedInstrumentsPresentFeature
                 false, //TimePrevalenceOfPitchedInstrumentsFeature
                 false, //UnpitchedInstrumentsPresentFeature
-				false, //VerticalIntervalsWrappedFeature
-				false, //VerticalIntervalsFeature
-				false //ChordTypesFeature
+				false, //VerticalIntervalWrappedHistogramFeature
+				false, //VerticalIntervalHistogramFeature
+				false //ChordTypesHistogramFeature
         };
 
 		//Setup the cleaned feature list

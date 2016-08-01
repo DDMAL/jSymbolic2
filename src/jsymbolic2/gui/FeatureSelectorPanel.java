@@ -23,9 +23,9 @@ import java.util.ArrayList;
 import jsymbolic2.configuration.*;
 import jsymbolic2.configuration.txtimplementation.ConfigurationFileWriterTxtImpl;
 import jsymbolic2.datatypes.RecordingInfo;
-import jsymbolic2.features.*;
+import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.AceConversion;
-import jsymbolic2.processing.FeatureExtractorAccess;
+import jsymbolic2.featureutils.FeatureExtractorAccess;
 import jsymbolic2.processing.FileValidator;
 import jsymbolic2.processing.MIDIFeatureProcessor;
 

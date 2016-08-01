@@ -1,5 +1,6 @@
 package jsymbolic2.features;
 
+import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 import org.ddmal.midiUtilities.MidiBuildEvent;
 import org.junit.Test;
@@ -34,7 +35,7 @@ public class MinorMajorTriadRatioFeatureTest {
         t1_tracks.add(e_tracks6);
 
         MIDIIntermediateRepresentations inter = new MIDIIntermediateRepresentations(test_tracks);
-        double[] vertical_intervals = new ChordTypesFeature().extractFeature(test_tracks, inter, null);
+        double[] vertical_intervals = new ChordTypesHistogramFeature().extractFeature(test_tracks, inter, null);
         double[][] other_features = new double[1][];
         other_features[0] = vertical_intervals;
         MIDIFeatureExtractor actual_common = new MinorMajorTriadRatioFeature();

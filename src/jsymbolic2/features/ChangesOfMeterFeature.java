@@ -11,6 +11,7 @@ package jsymbolic2.features;
 import java.util.LinkedList;
 import javax.sound.midi.*;
 import ace.datatypes.FeatureDefinition;
+import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 

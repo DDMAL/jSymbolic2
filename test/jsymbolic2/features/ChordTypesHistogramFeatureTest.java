@@ -1,5 +1,6 @@
 package jsymbolic2.features;
 
+import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 import org.ddmal.midiUtilities.MidiBuildEvent;
 import org.junit.Test;
@@ -13,7 +14,7 @@ import static org.junit.Assert.*;
 /**
  * Created by dinamix on 7/8/16.
  */
-public class ChordTypesFeatureTest {
+public class ChordTypesHistogramFeatureTest {
     @Test
     public void extractFeature() throws Exception {
         Sequence test_tracks = new Sequence(Sequence.PPQ, 256);
@@ -35,9 +36,9 @@ public class ChordTypesFeatureTest {
 
         MIDIIntermediateRepresentations inter = new MIDIIntermediateRepresentations(test_tracks);
 
-        MIDIFeatureExtractor actual_chordTypeFeature = new ChordTypesFeature();
+        MIDIFeatureExtractor actual_chordTypeFeature = new ChordTypesHistogramFeature();
         double[] actual_chord_type = actual_chordTypeFeature.extractFeature(test_tracks, inter, null);
-        double[] expected_chord_type = {0,1,0,0,0,0,0,0,0};
+        double[] expected_chord_type = {0,1,0,0,0,0,0,0,0,0,0};
         assertArrayEquals(expected_chord_type, actual_chord_type, 0.001);
     }
 

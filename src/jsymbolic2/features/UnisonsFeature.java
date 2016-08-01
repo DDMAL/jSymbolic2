@@ -1,6 +1,7 @@
 package jsymbolic2.features;
 
 import ace.datatypes.FeatureDefinition;
+import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 import javax.sound.midi.Sequence;
@@ -29,7 +30,7 @@ public class UnisonsFeature extends MIDIFeatureExtractor {
                 is_sequential,
                 dimensions );
 
-        dependencies = new String[]{"Vertical Interval Succession Wrapped"};
+        dependencies = new String[]{"Vertical Interval Wrapped Histogram"};
         offsets = null;
     }
 

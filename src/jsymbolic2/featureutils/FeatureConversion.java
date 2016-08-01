@@ -1,4 +1,4 @@
-package jsymbolic2.processing;
+package jsymbolic2.featureutils;
 
 import java.util.List;
 
@@ -45,5 +45,23 @@ public class FeatureConversion {
             tempSave[i] = false;
         }
         return tempSave;
+    }
+
+    /**
+     * Convenience function to check if all elements in array are equal to a value.
+     * @param pitches_at_tick Array to be checked.
+     * @param value Value that each element should be equal to.
+     * @return True if all elements are equal to value, otherwise false.
+     */
+    public static boolean allArrayEqual(int[] pitches_at_tick, int value)
+    {
+        if(pitches_at_tick == null) return false;
+
+        for(int i = 0; i < pitches_at_tick.length; i++) {
+            if(pitches_at_tick[i] != value) {
+                return false;
+            }
+        }
+        return true;
     }
 }

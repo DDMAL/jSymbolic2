@@ -1,7 +1,7 @@
 package jsymbolic2.configuration;
 
-import jsymbolic2.processing.FeatureConversion;
-import jsymbolic2.processing.FeatureExtractorAccess;
+import jsymbolic2.featureutils.FeatureConversion;
+import jsymbolic2.featureutils.FeatureExtractorAccess;
 
 import java.util.Arrays;
 import java.util.List;

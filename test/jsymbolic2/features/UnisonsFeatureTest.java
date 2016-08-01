@@ -1,5 +1,6 @@
 package jsymbolic2.features;
 
+import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 import org.ddmal.midiUtilities.MidiBuildEvent;
 import org.junit.Test;
@@ -36,7 +37,7 @@ public class UnisonsFeatureTest {
 
         MIDIIntermediateRepresentations actual_representation_unison = new MIDIIntermediateRepresentations(test_uni);
         MIDIFeatureExtractor interval = new VerticalMinorSecondsFeature();
-        double[] vertical_intervals = new VerticalIntervalsWrappedFeature().extractFeature(test_uni, actual_representation_unison, null);
+        double[] vertical_intervals = new VerticalIntervalWrappedHistogramFeature().extractFeature(test_uni, actual_representation_unison, null);
         double[][] other_features = new double[1][];
         other_features[0] = vertical_intervals;
         double[] actual_interval = interval.extractFeature(test_uni, actual_representation_unison, other_features);

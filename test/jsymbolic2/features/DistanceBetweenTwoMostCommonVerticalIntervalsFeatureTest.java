@@ -1,5 +1,6 @@
 package jsymbolic2.features;
 
+import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 import org.ddmal.midiUtilities.MidiBuildEvent;
 import org.junit.Test;
@@ -35,7 +36,7 @@ public class DistanceBetweenTwoMostCommonVerticalIntervalsFeatureTest {
 
         MIDIIntermediateRepresentations inter = new MIDIIntermediateRepresentations(test_tracks);
 
-        double[] vertical_intervals = new VerticalIntervalsWrappedFeature().extractFeature(test_tracks, inter, null);
+        double[] vertical_intervals = new VerticalIntervalWrappedHistogramFeature().extractFeature(test_tracks, inter, null);
         double[][] other_features = new double[2][];
         other_features[0] = vertical_intervals;
         MIDIFeatureExtractor common_interval_feature = new MostCommonVerticalIntervalFeature();

@@ -1,29 +1,28 @@
 package jsymbolic2.features;
 
 import ace.datatypes.FeatureDefinition;
+import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 import javax.sound.midi.Sequence;
 
 /**
- * A feature extractor that extracts the number of minor vertical intervals divided by number
- * of major vertical intervals.
+ * A feature extractor that extracts the fraction of all major third vertical intervals
+ * over the total number of vertical intervals.
  *
  * <p>No extracted feature values are stored in objects of this class.
  *
  * @author Tristano Tenaglia
  */
-public class MinorMajorRatioFeature extends MIDIFeatureExtractor {
+public class FractionOfMajorVerticalIntervalsFeature extends MIDIFeatureExtractor {
 
     /**
      * Basic constructor that sets the definition and dependencies (and their
      * offsets) of this feature.
      */
-    public MinorMajorRatioFeature()
-    {
-        String name = "Minor Major Ratio";
-        String description = "Number of minor vertical intervals divided by number\n" +
-                "of major vertical intervals.";
+    public FractionOfMajorVerticalIntervalsFeature() {
+        String name = "Fraction of Major Vertical Intervals";
+        String description = "A value between 0 and 1 indicating the fraction of all vertical intervals that contain a major third.";
         boolean is_sequential = true;
         int dimensions = 1;
         definition = new FeatureDefinition( name,
@@ -31,7 +30,7 @@ public class MinorMajorRatioFeature extends MIDIFeatureExtractor {
                 is_sequential,
                 dimensions );
 
-        dependencies = new String[]{"Vertical Interval Succession Wrapped"};
+        dependencies = new String[]{"Vertical Interval Wrapped Histogram"};
         offsets = null;
     }
 
@@ -40,7 +39,7 @@ public class MinorMajorRatioFeature extends MIDIFeatureExtractor {
      * feature values.
      *
      * <p>In the case of this feature, the other_feature_values parameters
-     * are the VerticalIntervalsWrapped output in other_feature_values[0].
+     * are the VerticalIntervals output in other_feature_values[0].
      *
      * @param sequence			The MIDI sequence to extract the feature
      *                                 from.
@@ -65,18 +64,12 @@ public class MinorMajorRatioFeature extends MIDIFeatureExtractor {
             throws Exception
     {
         double[] vertical_interval_histogram = other_feature_values[0];
-        double minor = 0;
-        double major = 0;
-        minor += vertical_interval_histogram[1]; // minor second
-        minor += vertical_interval_histogram[3]; // minor third
-        minor += vertical_interval_histogram[8]; // minor sixth
-        minor += vertical_interval_histogram[10]; // minor seventh
-        major += vertical_interval_histogram[2]; // major second
-        major += vertical_interval_histogram[4]; // major third
-        major += vertical_interval_histogram[9]; // major sixth
-        major += vertical_interval_histogram[11]; // major seventh
-        //TODO what if major is 0
-        double ratio = minor / major;
+        double major_third = vertical_interval_histogram[4]; // major third
+        double all_vertical_intervals = 0;
+        for(int vertical_interval = 0; vertical_interval < vertical_interval_histogram.length; vertical_interval++) {
+            all_vertical_intervals += vertical_interval_histogram[vertical_interval];
+        }
+        double ratio = major_third / all_vertical_intervals;
         return new double[]{ratio};
     }
 }

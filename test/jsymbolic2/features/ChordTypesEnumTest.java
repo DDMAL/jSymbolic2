@@ -1,5 +1,6 @@
 package jsymbolic2.features;
 
+import jsymbolic2.featureutils.ChordTypesEnum;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -68,6 +69,15 @@ public class ChordTypesEnumTest {
         ChordTypesEnum expected_diminished_triad = ChordTypesEnum.DIMINISHED_TRIAD;
         assertEquals(expected_diminished_triad, actual_diminished_triad);
 
+        // Other triad test
+        int[] other_triad = new int[number_of_intervals];
+        other_triad[1] = 64;
+        other_triad[4] = 64;
+        other_triad[11] = 64;
+        ChordTypesEnum actual_other_triad = ChordTypesEnum.getChordType(other_triad);
+        ChordTypesEnum expected_other_triad = ChordTypesEnum.OTHER_TRIAD;
+        assertEquals(expected_other_triad, actual_other_triad);
+
         // Dominant seventh chord test
         int[] dominant_seventh = new int[number_of_intervals];
         dominant_seventh[0] = 128;
@@ -97,6 +107,16 @@ public class ChordTypesEnumTest {
         ChordTypesEnum actual_minor_seventh = ChordTypesEnum.getChordType(minor_seventh);
         ChordTypesEnum expected_minor_seventh = ChordTypesEnum.MINOR_SEVENTH;
         assertEquals(expected_minor_seventh, actual_minor_seventh);
+
+        // Other four chord test
+        int[] other_four = new int[number_of_intervals];
+        other_four[0] = 128;
+        other_four[3] = 128;
+        other_four[7] = 128;
+        other_four[11] = 64;
+        ChordTypesEnum actual_other_four = ChordTypesEnum.getChordType(other_four);
+        ChordTypesEnum expected_other_four = ChordTypesEnum.OTHER_FOUR_CHORD;
+        assertEquals(expected_other_four, actual_other_four);
         
         // Complex chord test
         int[] complex_chord = new int[number_of_intervals];

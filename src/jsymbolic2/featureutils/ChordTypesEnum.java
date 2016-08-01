@@ -1,4 +1,4 @@
-package jsymbolic2.features;
+package jsymbolic2.featureutils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,10 +12,12 @@ public enum ChordTypesEnum {
     MINOR_TRIAD(ChordTypesValidation.MINOR_TRIAD_VALIDATION, 2),
     AUGMENTED_TRIAD(ChordTypesValidation.AUGMENTED_TRIAD_VALIDATION, 3),
     DIMINISHED_TRIAD(ChordTypesValidation.DIMINISHED_TRIAD_VALIDATION, 4),
-    DOMINANT_SEVENTH(ChordTypesValidation.DOMINANT_SEVENTH_VALIDATION, 5),
-    MAJOR_SEVENTH(ChordTypesValidation.MAJOR_SEVENTH_VALIDATION, 6),
-    MINOR_SEVENTH(ChordTypesValidation.MINOR_SEVENTH_VALIDATION, 7),
-    COMPLEX_CHORD(ChordTypesValidation.COMPLEX_CHORD_VALIDATION, 8);
+    OTHER_TRIAD(ChordTypesValidation.OTHER_TRIAD_VALIDATION, 5),
+    DOMINANT_SEVENTH(ChordTypesValidation.DOMINANT_SEVENTH_VALIDATION, 6),
+    MAJOR_SEVENTH(ChordTypesValidation.MAJOR_SEVENTH_VALIDATION, 7),
+    MINOR_SEVENTH(ChordTypesValidation.MINOR_SEVENTH_VALIDATION, 8),
+    OTHER_FOUR_CHORD(ChordTypesValidation.OTHER_FOUR_VALIDATION, 9),
+    COMPLEX_CHORD(ChordTypesValidation.COMPLEX_CHORD_VALIDATION, 10);
 
     private final ChordTypesValidation validator;
     private final int chord_number;
@@ -91,6 +93,12 @@ public enum ChordTypesEnum {
                 return generic_chord_with_inversion_validate(chord, augmented_triad_length, augmented_triad_intervals);
             }
         },
+        OTHER_TRIAD_VALIDATION {
+            @Override
+            boolean validate(int[] chord) {
+                return check_chord_length(chord, 3);
+            }
+        },
         DIMINISHED_TRIAD_VALIDATION {
             @Override
             boolean validate(int[] chord) {
@@ -136,6 +144,12 @@ public enum ChordTypesEnum {
                 int[] third_inversion = {2,3,4};
                 int[][] minor_seventh_intervals = {root_position,first_inversion,second_inversion,third_inversion};
                 return generic_chord_with_inversion_validate(chord, minor_seventh_length, minor_seventh_intervals);
+            }
+        },
+        OTHER_FOUR_VALIDATION {
+            @Override
+            boolean validate(int[] chord) {
+                return check_chord_length(chord, 4);
             }
         },
         COMPLEX_CHORD_VALIDATION {

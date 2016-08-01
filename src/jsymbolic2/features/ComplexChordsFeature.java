@@ -1,6 +1,8 @@
 package jsymbolic2.features;
 
 import ace.datatypes.FeatureDefinition;
+import jsymbolic2.featureutils.ChordTypesEnum;
+import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 import javax.sound.midi.Sequence;
@@ -13,7 +15,7 @@ import javax.sound.midi.Sequence;
  *
  * @author Tristano Tenaglia
  */
-public class ComplexChordsFeature extends MIDIFeatureExtractor{
+public class ComplexChordsFeature extends MIDIFeatureExtractor {
 
     /**
      * Basic constructor that sets the definition and dependencies (and their
@@ -30,7 +32,7 @@ public class ComplexChordsFeature extends MIDIFeatureExtractor{
                 is_sequential,
                 dimensions );
 
-        dependencies = new String[]{"Chord Types"};
+        dependencies = new String[]{"Chord Types Histogram"};
         offsets = null;
     }
 

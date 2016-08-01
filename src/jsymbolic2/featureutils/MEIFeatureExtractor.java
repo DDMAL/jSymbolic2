@@ -1,4 +1,4 @@
-package jsymbolic2.features;
+package jsymbolic2.featureutils;
 
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 import org.ddmal.jmei2midi.meielements.meispecific.MeiSpecificStorage;

@@ -1,6 +1,8 @@
 package jsymbolic2.features;
 
 import ace.datatypes.FeatureDefinition;
+import jsymbolic2.featureutils.ChordTypesEnum;
+import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 import javax.sound.midi.Sequence;
@@ -31,7 +33,7 @@ public class ChordDurationFeature extends MIDIFeatureExtractor {
                 is_sequential,
                 dimensions );
 
-        dependencies = new String[]{"Chord Types"};
+        dependencies = new String[]{"Chord Types Histogram"};
         offsets = null;
     }
 
@@ -72,6 +74,7 @@ public class ChordDurationFeature extends MIDIFeatureExtractor {
         int[] previous_chord = new int[total_intervals];
         ChordTypesEnum previous_chord_type = null;
         List<Double> chord_tick_duration = new ArrayList<>();
+        boolean[] chord_tick_array = new boolean[vertical_interval_chart.length];
         for(int tick = 0; tick < vertical_interval_chart.length; tick++) {
             //Get the chord at this tick
             int[] quantized_chord = new int[quantized_intervals];
@@ -90,6 +93,7 @@ public class ChordDurationFeature extends MIDIFeatureExtractor {
             {
                 // New chord
                 chord_tick_duration.add(1.0);
+                chord_tick_array[tick] = true;
             }
             else if(chord_type != null &&
                     tick > 0 &&
@@ -102,17 +106,22 @@ public class ChordDurationFeature extends MIDIFeatureExtractor {
                 current_chord_length++;
                 chord_tick_duration.remove(current_chord_index);
                 chord_tick_duration.add(current_chord_length);
+                chord_tick_array[tick] = true;
             }
             previous_chord = current_chord;
             previous_chord_type = ChordTypesEnum.getChordType(quantized_chord);
         }
 
         //Convert ticks to seconds and then get average duration length
+        double[] seconds_per_tick = sequence_info.seconds_per_tick;
+        for(int chord_tick = 0; chord_tick < chord_tick_duration.size(); chord_tick++) {
+            if(chord_tick_array[chord_tick] == true) {
+                double current_value = chord_tick_duration.get(chord_tick);
+                double new_value = current_value * seconds_per_tick[chord_tick];
+                chord_tick_duration.set(chord_tick, new_value);
+            }
+        }
         int number_of_chords = chord_tick_duration.size();
-        double second_length = sequence.getMicrosecondLength() / 1000000.0;
-        double tick_length = sequence.getTickLength();
-        double second_per_tick = second_length / tick_length;
-        chord_tick_duration.replaceAll(d -> d * second_per_tick);
         double chord_length_sum = chord_tick_duration.stream().mapToDouble(Double::doubleValue).sum();
         double chord_length_average = chord_length_sum / number_of_chords;
         return new double[]{chord_length_average};

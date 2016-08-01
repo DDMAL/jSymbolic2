@@ -1,6 +1,6 @@
 package jsymbolic2.configuration;
 
-import jsymbolic2.processing.FeatureExtractorAccess;
+import jsymbolic2.featureutils.FeatureExtractorAccess;
 import org.junit.Test;
 
 import java.io.File;

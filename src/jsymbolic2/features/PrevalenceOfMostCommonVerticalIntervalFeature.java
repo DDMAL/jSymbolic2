@@ -1,6 +1,7 @@
 package jsymbolic2.features;
 
 import ace.datatypes.FeatureDefinition;
+import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 import javax.sound.midi.Sequence;
@@ -30,7 +31,7 @@ public class PrevalenceOfMostCommonVerticalIntervalFeature extends MIDIFeatureEx
                 is_sequential,
                 dimensions );
 
-        dependencies = new String[]{"Vertical Interval Succession Wrapped", "Most Common Vertical Interval"};
+        dependencies = new String[]{"Vertical Interval Wrapped Histogram", "Most Common Vertical Interval"};
         offsets = null;
     }
 

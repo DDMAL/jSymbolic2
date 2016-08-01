@@ -1,6 +1,7 @@
 package jsymbolic2.features;
 
 import ace.datatypes.FeatureDefinition;
+import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 import javax.sound.midi.Sequence;
@@ -32,7 +33,7 @@ public class SecondMostCommonVerticalIntervalFeature extends MIDIFeatureExtracto
                 dimensions );
 
         dependencies = new String[2];
-        dependencies[0] = "Vertical Interval Succession Wrapped";
+        dependencies[0] = "Vertical Interval Wrapped Histogram";
         dependencies[1] = "Most Common Vertical Interval";
         offsets = null;
     }

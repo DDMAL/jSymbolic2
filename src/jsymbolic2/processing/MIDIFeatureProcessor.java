@@ -13,13 +13,13 @@ import java.util.LinkedList;
 import javax.sound.midi.*;
 
 import jsymbolic2.api.jSymbolicData;
-import jsymbolic2.features.MEIFeatureExtractor;
+import jsymbolic2.featureutils.MEIFeatureExtractor;
 import mckay.utilities.sound.midi.MIDIMethods;
 import ace.datatypes.FeatureDefinition;
 import ca.mcgill.music.ddmal.mei.MeiXmlReader.MeiXmlReadException;
 
 import java.util.List;
-import jsymbolic2.features.MIDIFeatureExtractor;
+import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import org.ddmal.jmei2midi.MeiSequence;
 import org.ddmal.jmei2midi.meielements.meispecific.MeiSpecificStorage;
 

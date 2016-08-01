@@ -8,7 +8,12 @@
 
 package jsymbolic2.processing;
 
+import jsymbolic2.featureutils.NoteInfo;
+import jsymbolic2.featureutils.NoteInfoList;
+
+import java.util.ArrayList;
 import	java.util.LinkedList;
+import java.util.List;
 import  javax.sound.midi.*;
 
 
@@ -109,6 +114,11 @@ public class MIDIIntermediateRepresentations
       * The length in seconds of the recording
       */
      public    int            recording_length;
+
+    /**
+     * The length in second of recording as a double
+     */
+    public double recording_length_double;
      
      /**
       * A table with rows (first indice) corresponding to MIDI ticks in the MIDI
@@ -301,6 +311,34 @@ public class MIDIIntermediateRepresentations
      * array value for the given MIDI sequence.
      */
     public int[][][] vertical_interval_track_chart;
+
+    /**
+     * The first index contains the different channel numbers.
+     * The second index contains the ticks for each specified channel.
+     * The third index contains the pitch that occurs at the given
+     * channel and tick.
+     * This is derived from the vertical_interval_track_chart and the
+     * channel_track arrays.
+     */
+    public int[][][] channel_tick_interval_chart;
+
+    /**
+     * The first index contains the channel number and the second index
+     * contains the track indices related to the specified channel.
+     * This can be used together with the vertical_interval_track_chart
+     * in order to find note pitches at specified ticks on a channel.
+     */
+    public boolean[][] channel_track;
+
+    /**
+     * The first list contains a list for each channel. 
+     * Each channel's list then contains the integer value of the
+     * pitches for each note in the given channel list.
+     * It is worth noting that order within each channel is not preserved.
+     */
+    public List<List<Integer>> channel_pitches;
+
+    public NoteInfoList all_note_info;
      
      /**
       * Data loaded from a MIDI file
@@ -418,6 +456,8 @@ for (int i = 0; i < pitched_instrumentation_tick_map.length; i++)
 //System.out.println(total_number_notes + " " + total_number_pitched_notes + " " + total_number_unpitched_notes);
           
           generateDurationIntermediateRepresentation();
+
+          generateDurationDoubleIntermediateRepresentation();
           
 //System.out.println(recording_length);
           
@@ -550,6 +590,9 @@ for (int i = 0 ;i < melody_list.length; i++)
 }
  */
           generateVerticalIntervalChart();
+
+          //Could be useful but not used right now
+          //generateChannelTickIntervalChart();
      }
      
      
@@ -947,6 +990,14 @@ for (int i = 0 ;i < melody_list.length; i++)
      {
           recording_length = (int) (sequence.getMicrosecondLength() / 1000000);
      }
+
+     /**
+      * Find the correct value for recording_length
+      */
+     private void generateDurationDoubleIntermediateRepresentation()
+     {
+          recording_length_double = sequence.getMicrosecondLength() / 1000000.0;
+     }
      
      
      /**
@@ -955,12 +1006,21 @@ for (int i = 0 ;i < melody_list.length; i++)
       */
      private void generateTextureIntermediateRepresentation()
      {
+          // All note info
+          all_note_info = new NoteInfoList();
+
           // Instantiate channel_tick_map and initialize entries to false
           channel_tick_map = new boolean[(int) sequence.getTickLength() + 1 ][16];
           for (int i = 0; i < channel_tick_map.length; i++)
                for (int j = 0; j < channel_tick_map[i].length; j++)
                     channel_tick_map[i][j] = false;
-          
+
+         // Instantiate channel_pitches with appropriate lists for each channel
+         channel_pitches = new ArrayList<>(16);
+         for(int channel = 0; channel < 16; channel++) {
+             channel_pitches.add(new ArrayList<>());
+         }
+         
           // Instantiate channel_statistics and initialize entries to 0
           channel_statistics = new int[16][7];
           for (int i = 0; i < channel_statistics.length; i++)
@@ -1024,13 +1084,18 @@ for (int i = 0 ;i < melody_list.length; i++)
                          {
                               if (short_message.getData2() != 0) // not velocity 0
                               {
+                                  // Add this note pitch to the channel_pitch list
+                                  int this_channel = short_message.getChannel();
+                                  int this_note_pitch = short_message.getData1();
+                                  channel_pitches.get(this_channel).add(this_note_pitch);
+
                                    // Total the number of note ons per channel and thereby fill out column 0
                                    // of channel_statistics
                                    channel_statistics[ short_message.getChannel() ][ 0 ]++;
-                                   
+
                                    // Total the loudnesses of Note Ons for each channel
                                    channel_statistics[ short_message.getChannel() ][ 2 ] += (int) (((double) short_message.getData2()) * volumes[ (int) event.getTick() ][ short_message.getChannel() ]);
-                                   
+
                                    // Total the melodic semitones for each channel and adjust previous_pitches
                                    int current_tick = (int) event.getTick();
                                    if (previous_pitches[ short_message.getChannel() ] != -1)
@@ -1046,18 +1111,18 @@ for (int i = 0 ;i < melody_list.length; i++)
                                    }
                                    last_tick[ short_message.getChannel() ] = current_tick;
                                    previous_pitches[ short_message.getChannel() ] = short_message.getData1();
-                                   
+
                                    // Update highest_pitches if appropriate
                                    if (short_message.getData1() > highest_pitches[short_message.getChannel()])
                                         highest_pitches[short_message.getChannel()] = short_message.getData1();
-                                   
+
                                    // Update lowest_pitches if appropriate
                                    if (short_message.getData1() < lowest_pitches[short_message.getChannel()])
                                         lowest_pitches[short_message.getChannel()] = short_message.getData1();
-                                   
+
                                    // Update sum_of_pitches
                                    sum_of_pitches[short_message.getChannel()] += short_message.getData1();
-                                   
+
                                    // Look ahead to find the corresponding note off for this note on
                                    int event_start_tick = (int) event.getTick();
                                    int event_end_tick = track.size(); // when the note off occurs (default to last tick)
@@ -1074,7 +1139,14 @@ for (int i = 0 ;i < melody_list.length; i++)
                                                   {
                                                        if (end_short_message.getData1() == short_message.getData1()) // same pitch
                                                        {
+                                                           int pitch = end_short_message.getData1();
                                                             event_end_tick = (int) end_event.getTick();
+                                                           NoteInfo this_note = new NoteInfo(pitch,
+                                                                   event_start_tick,
+                                                                   event_end_tick,
+                                                                   end_short_message.getChannel(),
+                                                                   n_track);
+                                                           all_note_info.addNote(this_note);
                                                             i = track.size() + 1; // exit loop
                                                        }
                                                   }
@@ -1082,13 +1154,20 @@ for (int i = 0 ;i < melody_list.length; i++)
                                                        if (end_short_message.getData2() == 0) // velocity 0
                                                             if (end_short_message.getData1() == short_message.getData1()) // same pitch
                                                             {
-                                                       event_end_tick = (int) end_event.getTick();
-                                                       i = track.size() + 1; // exit loop
+                                                                int pitch = end_short_message.getData1();
+                                                                event_end_tick = (int) end_event.getTick();
+                                                                NoteInfo this_note = new NoteInfo(pitch,
+                                                                        event_start_tick,
+                                                                        event_end_tick,
+                                                                        end_short_message.getChannel(),
+                                                                        n_track);
+                                                                all_note_info.addNote(this_note);
+                                                                i = track.size() + 1; // exit loop
                                                             }
                                              }
                                         }
                                    }
-                                   
+
                                    // Fill in channel_tick_map for all the ticks corresponding to this note
                                    for (int i = event_start_tick ; i < event_end_tick ; i++)
                                         channel_tick_map[ i ][ short_message.getChannel() ] = true;
@@ -1608,6 +1687,11 @@ for (int i = 0 ;i < melody_list.length; i++)
      * Generate the vertical interval chart described in the variable declarations.
      */
     private void generateVerticalIntervalChart() {
+
+        // Instantiate channel_tracks, automatically initialized to 0
+        int number_of_tracks = sequence.getTracks().length;
+        channel_track = new boolean[16][number_of_tracks];
+
          // Get duration of piece in corresponding MIDI ticks
          int tick_duration = (int)sequence.getTickLength() + 1;
          // Get tracks to be parsed from sequence
@@ -1631,6 +1715,7 @@ for (int i = 0 ;i < melody_list.length; i++)
                    if (message instanceof ShortMessage) {
                         ShortMessage short_message = (ShortMessage) message;
                         int current_tick = (int) event.getTick();
+                        channel_track[short_message.getChannel()][n_track] = true;
                         // Clearly only true if this is a note on or off
                         int current_pitch = short_message.getData1();
                         int current_velocity = short_message.getData2();
@@ -1677,8 +1762,26 @@ for (int i = 0 ;i < melody_list.length; i++)
          vertical_interval_track_chart = tracks_by_ticks_by_pitch;
          vertical_interval_chart = ticks_by_pitch;
      }
-     
-     
+
+    /**
+     * Generate the vertical channel tick interval chart.
+     */
+    private void generateChannelTickIntervalChart() {
+         for(int track = 0; track < vertical_interval_track_chart.length; track++) {
+             for(int tick = 0; tick < vertical_interval_track_chart[track].length; tick++) {
+                 for(int pitch = 0; pitch < vertical_interval_track_chart[track][tick].length; pitch++) {
+                     for(int channel = 0; channel < channel_track.length; channel++) {
+                         if(channel_track[channel][track]) {
+                             int current_velocity = vertical_interval_track_chart[track][tick][pitch];
+                             channel_tick_interval_chart[channel][tick][pitch] += current_velocity;
+                             break;
+                         }
+                     }
+                 }
+             }
+         }
+     }
+
      /**
       * Return the index of the highest value in data
       * @param data The data that is being checked.
