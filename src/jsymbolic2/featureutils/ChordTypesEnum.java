@@ -30,7 +30,7 @@ public enum ChordTypesEnum {
      * Obtain the corresponding enum chord type given a 12-interval integer array.
      * @param chord A 12-interval integer array which corresponds to the twelve main musical tones.
      *              The chord type will be computed based on the distance between the indices
-     *              of values in the array that are > 0. For example, a C-major chord can be represented
+     *              of values in the array that are &gt; 0. For example, a C-major chord can be represented
      *              as [10, 0, 0, 0, 20, 0, 0, 64, 0, 0, 0, 0].
      * @return The corresponding chord type if this is indeed a known chord of size 3 or more. Otherwise, this method
      * will return null if it does not know the given chord type. For example a chord array with only 2 notes
