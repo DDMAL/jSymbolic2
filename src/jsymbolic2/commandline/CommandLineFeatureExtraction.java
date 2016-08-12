@@ -65,7 +65,8 @@ public final class CommandLineFeatureExtraction {
                     "- The Java Runtime ran out of memory.\n " +
                     "- Please rerun this program with more memory assigned to the runtime heap.\n";
             // End execution
-            CommandLineUtils.printMessageAndTerminate(errorMessage, -1);
+            //TODO note that this will note terminate now and try to rerun jsymbolic with more memory from jSymbolicRunner
+            //CommandLineUtils.printMessageAndTerminate(errorMessage, -1);
         } catch (Exception e) {
             errorLog.add("Error found in file : " + input_MIDI_path + ". Error Message : " + e.getMessage() + ".");
         }
