@@ -68,12 +68,12 @@ public class VerticalIntervalHistogramFeature extends MIDIFeatureExtractor {
     {
         // Get the vertical interval intermediate representation chart
         int[][] vertical_interval_chart = sequence_info.vertical_interval_chart;
-        int[][][] tracks_ticks_pitch = sequence_info.vertical_interval_track_chart;
 
         // An array for all possible interval values
         double[] all_intervals = new double[128];
+        all_intervals[0] = sequence_info.total_unison_velocity;
 
-        // Compute unisons based on pitches that happen at the same tick on different tracks
+        /* Compute unisons based on pitches that happen at the same tick on different tracks
         for(int track = 0; track < tracks_ticks_pitch.length; track++) {
             for(int tick = 0; tick < tracks_ticks_pitch[track].length; tick++) {
                 for(int pitch = 0; pitch < tracks_ticks_pitch[track][tick].length; pitch++) {
@@ -91,7 +91,7 @@ public class VerticalIntervalHistogramFeature extends MIDIFeatureExtractor {
                     }
                 }
             }
-        }
+        }*/
 
         // Compute pitch interval frequency based on velocity for each tick
         for(int tick = 0; tick < vertical_interval_chart.length; tick++) {

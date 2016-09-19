@@ -709,8 +709,13 @@ public class MIDIFeatureProcessor
                               for (int i = 0; i < feature_extractor_dependencies[feat].length; i++)
                               {
                                    int feature_indice = feature_extractor_dependencies[feat][i];
-                                   int offset = feature.getDepenedencyOffsets()[i];
-                                   other_feature_values[i] = results[win + offset][feature_indice];
+                                   //TODO Check if this is a correct bug fix
+                                   if(feature.getDepenedencyOffsets() == null) {
+                                        other_feature_values[i] = results[win][feature_indice];
+                                   } else {
+                                        int offset = feature.getDepenedencyOffsets()[i];
+                                        other_feature_values[i] = results[win + offset][feature_indice];
+                                   }
                               }
                          }
 

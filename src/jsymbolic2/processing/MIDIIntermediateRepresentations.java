@@ -304,6 +304,20 @@ public class MIDIIntermediateRepresentations
      public int[][] vertical_interval_chart;
 
     /**
+     * Total number of unisons notes where the first index is the tick and
+     * the second is the pitch. A value of 1 means on note is playing.
+     * A value of 2 means 2 notes are playing and thus 1 unison.
+     * A value of 3 means 3 notes are playing and thus 2 unisons...
+     */
+    public int[][] unison;
+
+    /**
+     * Total velocity for all unisons in the entire piece.
+     */
+    public int total_unison_velocity;
+
+    /**
+     * TODO NOT USED CURRENTLY TO MUCH HEAP SPACE
      * The first index contains the track number of the given sequence.
      * It contains ticks in the second index and MIDI pitches in the third index
      * Each tick corresponds to all 128 possible midi ticks.
@@ -313,6 +327,7 @@ public class MIDIIntermediateRepresentations
     public int[][][] vertical_interval_track_chart;
 
     /**
+     * TODO NOTE USED CURRENTLY TO MUCH HEAP SPACE
      * The first index contains the different channel numbers.
      * The second index contains the ticks for each specified channel.
      * The third index contains the pitch that occurs at the given
@@ -589,7 +604,8 @@ for (int i = 0 ;i < melody_list.length; i++)
                 System.out.print(" " + ((Integer) melody_list[i].get(j)).intValue());
 }
  */
-          generateVerticalIntervalChart();
+          //generateVerticalIntervalChart();
+          generateLowSpaceVerticalIntervalChart();
 
           //Could be useful but not used right now
           //generateChannelTickIntervalChart();
@@ -1687,7 +1703,6 @@ for (int i = 0 ;i < melody_list.length; i++)
      * Generate the vertical interval chart described in the variable declarations.
      */
     private void generateVerticalIntervalChart() {
-
         // Instantiate channel_tracks, automatically initialized to 0
         int number_of_tracks = sequence.getTracks().length;
         channel_track = new boolean[16][number_of_tracks];
@@ -1763,6 +1778,104 @@ for (int i = 0 ;i < melody_list.length; i++)
          vertical_interval_chart = ticks_by_pitch;
      }
 
+    /**
+     * Generate the vertical interval chart described in the variable declarations.
+     */
+    private void generateLowSpaceVerticalIntervalChart() {
+        // Instantiate channel_tracks, automatically initialized to 0
+        int number_of_tracks = sequence.getTracks().length;
+        channel_track = new boolean[16][number_of_tracks];
+
+        // Get duration of piece in corresponding MIDI ticks
+        int tick_duration = (int)sequence.getTickLength() + 1;
+        // Get tracks to be parsed from sequence
+        Track[] tracks = sequence.getTracks();
+
+        // Maximum number of pitches possible in MIDI
+        int number_of_pitches = 128;
+
+        unison = new int[tick_duration][number_of_pitches];
+        int[][] ticks_by_pitch = new int[tick_duration][number_of_pitches];
+        
+        // Go through each midi event in each track and verify them, tick by tick
+        for (int n_track = 0; n_track < tracks.length; n_track++) {
+            Track track = tracks[n_track];
+            // To keep track of velocities for separate pitches
+            for (int on_event_index = 0; on_event_index < track.size(); on_event_index++) {
+                MidiEvent on_event = track.get(on_event_index);
+                MidiMessage on_message = on_event.getMessage();
+                if (on_message instanceof ShortMessage) {
+                    ShortMessage short_on_message = (ShortMessage) on_message;
+                    int on_tick = (int) on_event.getTick();
+                    // Clearly only true if this is a note on or off
+                    int on_pitch = short_on_message.getData1();
+                    int on_velocity = short_on_message.getData2();
+                    int on_channel = short_on_message.getChannel();
+                    if (short_on_message.getCommand() == 0x90 && // note on
+                            short_on_message.getChannel() != 10 - 1 && // not channel 10 (percussion)
+                            short_on_message.getData2() != 0) // not velocity 0
+                    {
+                        //lookahead for note offs here and add velocity to each pitch accordingly
+                        lookAheadToNoteOffAndFill(on_event_index,
+                                                    track,
+                                                    on_pitch,
+                                                    on_channel,
+                                                    on_velocity,
+                                                    on_tick,
+                                                    ticks_by_pitch);
+                    }
+                }
+            }
+        }
+        vertical_interval_chart = ticks_by_pitch;
+    }
+
+    private void lookAheadToNoteOffAndFill(int on_event_index,
+                                  Track track,
+                                  int on_pitch,
+                                  int on_channel,
+                                  int on_velocity,
+                                  int on_tick,
+                                  int[][] ticks_by_pitch) {
+        //Lookahead and add velocities until we find corresponding note off event
+        for(int off_event_index = on_event_index; off_event_index < track.size(); off_event_index++) {
+            MidiEvent off_event = track.get(off_event_index);
+            MidiMessage off_message = off_event.getMessage();
+            if(off_message instanceof ShortMessage) {
+                ShortMessage short_off_message = (ShortMessage) off_message;
+                int off_tick = (int) off_event.getTick();
+                int off_pitch = short_off_message.getData1();
+                int off_channel = short_off_message.getChannel();
+                if (short_off_message.getCommand() == 0x80 && // note off
+                        short_off_message.getChannel() != 10 - 1 && // not channel 10
+                        off_pitch == on_pitch && // pitches are the same
+                        off_channel == on_channel) // channel is the same
+                {
+                    //This note has ended so fill up chart and stop lookahead
+                    for(int tick = on_tick; tick < off_tick; tick++) {
+                        //Check for unisons
+                        if(ticks_by_pitch[tick][on_pitch] > 0 &&
+                                on_velocity > 0) {
+                            int number_of_unisons = unison[tick][on_pitch];
+                            if(number_of_unisons == 1) {
+                                unison[tick][on_pitch]++;
+                                total_unison_velocity += ticks_by_pitch[tick][on_pitch] + on_velocity;
+                            } else if(number_of_unisons > 1) {
+                                unison[tick][on_pitch]++;
+                                total_unison_velocity += on_velocity;
+                            }
+                        } else if (ticks_by_pitch[tick][on_pitch] == 0 &&
+                                on_velocity > 0){
+                            unison[tick][on_pitch]++;
+                        }
+                       ticks_by_pitch[tick][on_pitch] += on_velocity;
+                    }
+                    break; //reached off of note so we dont need to add velocities anymore and return
+                }
+            }
+        }
+    }
+    
     /**
      * Generate the vertical channel tick interval chart.
      */

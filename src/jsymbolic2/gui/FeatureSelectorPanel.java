@@ -578,7 +578,7 @@ public class FeatureSelectorPanel
             }
         } catch (OutOfMemoryError o) {
             // React to the Java Runtime running out of memory
-            JOptionPane.showMessageDialog(null, "The Java Runtime ran out of memory. Please rerun this program\n" +
+                JOptionPane.showMessageDialog(null, "The Java Runtime ran out of memory. Please rerun this program\n" +
                         "with a higher maximum amount of memory assignable to the Java\n" +
                         "Runtime heap.", "ERROR", JOptionPane.ERROR_MESSAGE);
         } catch (Exception e) {

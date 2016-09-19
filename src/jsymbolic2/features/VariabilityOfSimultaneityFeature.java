@@ -33,7 +33,7 @@ public class VariabilityOfSimultaneityFeature extends MIDIFeatureExtractor {
                                    double[][] other_feature_values)
             throws Exception
     {
-        int[][][] tracks_ticks_pitch = sequence_info.vertical_interval_track_chart;
+        int[][] ticks_pitch = sequence_info.vertical_interval_chart;
 
         // An array for number of notes at each tick
         int total_length = (int) sequence.getTickLength();
@@ -41,18 +41,16 @@ public class VariabilityOfSimultaneityFeature extends MIDIFeatureExtractor {
         int[] simultaneous_ticks = new int[total_length];
 
         // Compute unisons based on pitches that happen at the same tick on different tracks
-        for(int track = 0; track < tracks_ticks_pitch.length; track++) {
-            for(int tick = 0; tick < tracks_ticks_pitch[track].length - 1; tick++) {
-                for(int pitch = 0; pitch < tracks_ticks_pitch[track][tick].length; pitch++) {
-                    int current_velocity = tracks_ticks_pitch[track][tick][pitch];
-                    // add a note count if we have it
-                    if(current_velocity > 0) {
-                        notes_on_tick[tick] += 1.0;
-                    }
-                    // add a tick count if we have more than 1 note on a tick
-                    if(notes_on_tick[tick] > 1) {
-                        simultaneous_ticks[tick] = 1;
-                    }
+        for(int tick = 0; tick < ticks_pitch.length - 1; tick++) {
+            for(int pitch = 0; pitch < ticks_pitch[tick].length; pitch++) {
+                int current_velocity = ticks_pitch[tick][pitch];
+                // add a note count if we have it
+                if(current_velocity > 0) {
+                    notes_on_tick[tick] += 1.0;
+                }
+                // add a tick count if we have more than 1 note on a tick
+                if(notes_on_tick[tick] > 1) {
+                    simultaneous_ticks[tick] = 1;
                 }
             }
         }

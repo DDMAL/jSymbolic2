@@ -11,7 +11,7 @@ import java.io.IOException;
  */
 public class jSymbolicRunner {
     private final static int MIN_HEAP_SIZE = 511;
-    private final static int RECOMMENDED_HEAP_SIZE = 2047;
+    private final static int RECOMMENDED_HEAP_SIZE = 2048;
 
     public static void main(String[] args) throws IOException {
         double heapSizeMegs = (Runtime.getRuntime().maxMemory()/1024)/1024;
@@ -19,21 +19,23 @@ public class jSymbolicRunner {
             try {
                 Main.main(args);
             } catch (OutOfMemoryError e) {
-                newProcess();
+                newProcess(args);
             }
         } else {
-                newProcess();
+                newProcess(args);
         }
     }
 
     /**
      * Start jSymbolic as a new process in case Java heap space is not enough.
      * @throws IOException Thrown here in case appropriate OS system files are not found
-    *                       or if working directory does not exist or is not accessible
+     *                       or if working directory does not exist or is not accessible
      */
-    private static void newProcess() throws IOException {
+    public static void newProcess(String[] args) throws IOException {
         String classPath = System.getProperty("java.class.path");
-        ProcessBuilder pb = new ProcessBuilder("java","-Xmx" + RECOMMENDED_HEAP_SIZE + "m", "-classpath", classPath, "jsymbolic2.Main");
+        ProcessBuilder pb = new ProcessBuilder(
+                "java","-Xmx" + RECOMMENDED_HEAP_SIZE + "m", "-classpath",
+                classPath, "jsymbolic2.Main " + args);
         //Exception thrown here in case appropriate OS system files are not found
         //or if working directory does not exist or is not accessible
         pb.start();

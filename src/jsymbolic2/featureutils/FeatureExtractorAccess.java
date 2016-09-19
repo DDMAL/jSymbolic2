@@ -214,6 +214,7 @@ public final class FeatureExtractorAccess {
 				new RelativeNoteDurationsOfLowestLineFeature(),
 				new SimultaneityFeature(),
 				new VariabilityOfSimultaneityFeature(),
+				new ParallelMotionFeature(),
 
                 // Add multi-dimensional sequential features
                 new BasicPitchHistogramFeature(),
@@ -370,6 +371,7 @@ public final class FeatureExtractorAccess {
 				false, //RelativeNoteDurationsOfLowestLineFeature
 				false, //SimultaneityFeature
 				false, //VariabilityOfSimultaneityFeature
+				false, //ParallelMotionFeature
 
                 // Add multi-dimensional sequential features
                 false, //BasicPitchHistogramFeature
