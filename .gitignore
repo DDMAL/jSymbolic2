@@ -6,3 +6,6 @@ bin/
 build.xml
 jSymbolic.iml
 out/
+/nbproject/private/
+/build/
+/dist/
