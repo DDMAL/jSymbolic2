@@ -35,10 +35,10 @@ public class RelativeNoteDurationsOfLowestLineFeature extends MIDIFeatureExtract
         int[][] channel_stats = sequence_info.channel_statistics;
 
         // Get the lowest average pitch
-        int lowest_average_pitch = 0;
+        int lowest_average_pitch = 128;
         int lowest_average_pitch_channel = 0;
-        int total_note_duration = 0;
-        int total_number_notes = 0;
+        double total_note_duration = 0;
+        double total_number_notes = 0;
         for(int channel = 0; channel < channel_stats.length; channel++) {
             // Get lowest average pitch that is > 0 since 0 means no pitches
             int average_pitch = channel_stats[channel][6];
@@ -52,8 +52,8 @@ public class RelativeNoteDurationsOfLowestLineFeature extends MIDIFeatureExtract
         }
 
         // Get average note duration for lowest average pitch
-        int total_lowest_duration = channel_stats[lowest_average_pitch_channel][1];
-        int total_lowest_notes = channel_stats[lowest_average_pitch_channel][0];
+        double total_lowest_duration = channel_stats[lowest_average_pitch_channel][1];
+        double total_lowest_notes = channel_stats[lowest_average_pitch_channel][0];
         double average_lowest_duration = total_lowest_duration / total_lowest_notes;
         double average_total_duration = total_note_duration / total_number_notes;
         double melodic_interval_lowest_line = average_lowest_duration / average_total_duration;

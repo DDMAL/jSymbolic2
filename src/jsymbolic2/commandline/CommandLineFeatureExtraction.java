@@ -10,9 +10,14 @@ import mckay.utilities.staticlibraries.FileMethods;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * A general class that deals with the feature extraction process to be used from the command line.
@@ -109,11 +114,21 @@ public final class CommandLineFeatureExtraction {
     private static void extractFeaturesFromFolder(File folder,
                                                   MIDIFeatureProcessor processor,
                                                   List<String> errorLog) {
-        FileFilter filter = new MusicFileFilter();
-        File[] fileArray = FileMethods.getAllFilesInDirectory(folder, true, filter, null);
+        List<Path> meiList;
+        String filename = folder.getAbsolutePath();
+        try {
+            meiList = Files.walk(Paths.get(filename))
+                    .filter(name -> new MusicFileFilter().accept(name.toFile()))
+                    .collect(Collectors.toList());
+        }
+        catch(IOException ioe) {
+            //Exception will only be thrown at the start of Paths.get()
+            errorLog.add("Error with starting file in : " + folder);
+            meiList = new ArrayList<>();
+        }
 
-        for (File file : fileArray) {
-            extractFeatures(file.getPath(),
+        for (Path path : meiList) {
+            extractFeatures(path.toAbsolutePath().toString(),
                     true,
                     processor,
                     errorLog);
