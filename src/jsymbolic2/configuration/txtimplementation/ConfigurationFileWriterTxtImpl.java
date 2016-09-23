@@ -80,7 +80,7 @@ public class ConfigurationFileWriterTxtImpl extends ConfigurationFileWriter {
         rawConfigFile.add(HeaderEnum.INPUT_FILE_HEADER.toString());
 
         for(File file : inputFiles.getValidFiles()) {
-            rawConfigFile.add(file.getName());
+            rawConfigFile.add(file.getPath());
         }
 
         return rawConfigFile;

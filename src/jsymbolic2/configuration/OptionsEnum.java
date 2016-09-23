@@ -67,7 +67,7 @@ public enum OptionsEnum {
                 return value.matches("\\d*\\.?\\d*") && (Double.parseDouble(value) > 0.1);
             case window_overlap:
                 //Between 0 and 1 (not inclusive) as per the GUI checks
-                return value.matches("0?.\\d*") && (Double.parseDouble(value) > 0) && (Double.parseDouble(value) < 1.0);
+                return value.matches("0?.\\d*") && (Double.parseDouble(value) >= 0) && (Double.parseDouble(value) < 1.0);
             case save_features_for_each_window:
                 return isBoolean(value);
             case save_overall_recording_features:
