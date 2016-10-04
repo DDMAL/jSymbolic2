@@ -341,37 +341,37 @@ public final class FeatureExtractorAccess {
         		true, //VoiceEqualityRangeFeature
         		true, //VoiceSeparationFeature
         		true, //WoodwindsFractionFeature
-				false, //MostCommonVerticalIntervalFeature
-				false, //SecondMostCommonVerticalIntervalFeature
-				false, //DistanceBetweenTwoMostCommonVerticalIntervalsFeature
-				false, //PrevalenceOfMostCommonVerticalIntervalFeature
-				false, //PrevalenceOfSecondMostCommonVerticalIntervalFeature
-				false, //RatioOfPrevalenceOfTwoMostCommonVerticalIntervalsFeature
-				false, //AverageNumberOfSimultaneousPitchClassesFeature
-				false, //VariabilityOfNumberOfSimultaneousPitchClassesFeature
-				false, //FractionOfMinorVerticalIntervalsFeature
-				false, //FractionOfMajorVerticalIntervalsFeature
-				false, //UnisonsFeature
-				false, //VerticalMinorSecondsFeature
-				false, //VerticalThirdsFeature
-				false, //VerticalFifthsFeature
-				false, //VerticalTritonesFeature
-				false, //VerticalOctavesFeature
-				false, //VerticalDissonanceRatioFeature
-				false, //PartialChordsFeature
-				false, //MinorMajorTriadRatioFeature
-				false, //StandardTriadsFeature
-				false, //DiminishedAndAugmentedTriadsFeature
-				false, //DominantSeventhChordsFeature
-				false, //SeventhChordsFeature
-				false, //ComplexChordsFeature
-				false, //NonStandardChordsFeature
-				false, //ChordDurationFeature
-				false, //RelativeRangeIsolationOfLoudestVoiceFeature
-				false, //RelativeNoteDurationsOfLowestLineFeature
-				false, //SimultaneityFeature
-				false, //VariabilityOfSimultaneityFeature
-				false, //ParallelMotionFeature
+				true, //MostCommonVerticalIntervalFeature
+				true, //SecondMostCommonVerticalIntervalFeature
+				true, //DistanceBetweenTwoMostCommonVerticalIntervalsFeature
+				true, //PrevalenceOfMostCommonVerticalIntervalFeature
+				true, //PrevalenceOfSecondMostCommonVerticalIntervalFeature
+				true, //RatioOfPrevalenceOfTwoMostCommonVerticalIntervalsFeature
+				true, //AverageNumberOfSimultaneousPitchClassesFeature
+				true, //VariabilityOfNumberOfSimultaneousPitchClassesFeature
+				true, //FractionOfMinorVerticalIntervalsFeature
+				true, //FractionOfMajorVerticalIntervalsFeature
+				true, //UnisonsFeature
+				true, //VerticalMinorSecondsFeature
+				true, //VerticalThirdsFeature
+				true, //VerticalFifthsFeature
+				true, //VerticalTritonesFeature
+				true, //VerticalOctavesFeature
+				true, //VerticalDissonanceRatioFeature
+				true, //PartialChordsFeature
+				true, //MinorMajorTriadRatioFeature
+				true, //StandardTriadsFeature
+				true, //DiminishedAndAugmentedTriadsFeature
+				true, //DominantSeventhChordsFeature
+				true, //SeventhChordsFeature
+				true, //ComplexChordsFeature
+				true, //NonStandardChordsFeature
+				true, //ChordDurationFeature
+				true, //RelativeRangeIsolationOfLoudestVoiceFeature
+				true, //RelativeNoteDurationsOfLowestLineFeature
+				true, //SimultaneityFeature
+				true, //VariabilityOfSimultaneityFeature
+				true, //ParallelMotionFeature
 
                 // Add multi-dimensional sequential features
                 false, //BasicPitchHistogramFeature

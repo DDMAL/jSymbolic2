@@ -182,9 +182,9 @@ public class MIDIFeatureProcessor
           if (window_overlap < 0.0 || window_overlap >= 1.0)
                throw new Exception( "Window overlap fraction is " + window_overlap + ".\n" +
                     "This value must be 0.0 or above and less than 1.0.");
-          if (window_size < 0.1)
+          if (window_size < 0.0)
                throw new Exception( "Window size is " + window_size + ".\n" +
-                    "This value must be above 0.1 seconds." );
+                    "This value must be at or above 0.0 seconds." );
           boolean one_selected = false;
           for (int i = 0; i < features_to_save_among_all.length; i++)
                if (features_to_save_among_all[i])
