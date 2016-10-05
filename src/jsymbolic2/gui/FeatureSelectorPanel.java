@@ -274,10 +274,10 @@ public class FeatureSelectorPanel
         // Set up buttons and text area
         JPanel control_panel = new JPanel(new GridLayout(8, 2, horizontal_gap, vertical_gap));
         control_panel.add(save_window_features_radio_button);
-        weka_arff_check_box = new JCheckBox(FeaturePanelEnum.convert_arff_label.toString());
+        weka_arff_check_box = new JCheckBox(FeaturePanelEnum.convert_arff_label.toString(), Boolean.parseBoolean(FeaturePanelEnum.convert_arff_default.toString()));
         control_panel.add(weka_arff_check_box);
         control_panel.add(save_overall_file_features_radio_button);
-        csv_check_box = new JCheckBox(FeaturePanelEnum.convert_csv_label.toString());
+        csv_check_box = new JCheckBox(FeaturePanelEnum.convert_csv_label.toString(), Boolean.parseBoolean(FeaturePanelEnum.convert_csv_default.toString()));
         control_panel.add(csv_check_box);
         control_panel.add(new JLabel(FeaturePanelEnum.window_length_label.toString()));
         window_length_text_field = new JTextArea(FeaturePanelEnum.window_length_default.toString(), 1, 20);
