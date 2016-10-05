@@ -1846,8 +1846,11 @@ for (int i = 0 ;i < melody_list.length; i++)
                 int off_tick = (int) off_event.getTick();
                 int off_pitch = short_off_message.getData1();
                 int off_channel = short_off_message.getChannel();
-                if (short_off_message.getCommand() == 0x80 && // note off
-                        short_off_message.getChannel() != 10 - 1 && // not channel 10
+                if (((short_off_message.getCommand() == 0x80 && // note off
+                        short_off_message.getChannel() != 10 - 1) || // not channel 10
+                        (short_off_message.getCommand() == 0x90 && // note off
+                         short_off_message.getChannel() != 10 - 1 && // not channel 10
+                         short_off_message.getData2() == 0)) && //note on with velocity 0
                         off_pitch == on_pitch && // pitches are the same
                         off_channel == on_channel) // channel is the same
                 {
