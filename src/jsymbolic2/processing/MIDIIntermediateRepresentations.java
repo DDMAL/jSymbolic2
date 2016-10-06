@@ -301,7 +301,7 @@ public class MIDIIntermediateRepresentations
       * The cumulative velocities of each tick-pitch combination are stored in each
       * array value for the given MIDI sequence.
       */
-     public int[][] vertical_interval_chart;
+     public short[][] vertical_interval_chart;
 
     /**
      * Total number of unisons notes where the first index is the tick and
@@ -309,7 +309,7 @@ public class MIDIIntermediateRepresentations
      * A value of 2 means 2 notes are playing and thus 1 unison.
      * A value of 3 means 3 notes are playing and thus 2 unisons...
      */
-    public int[][] unison;
+    public short[][] unison;
 
     /**
      * Total velocity for all unisons in the entire piece.
@@ -1754,7 +1754,7 @@ for (int i = 0 ;i < melody_list.length; i++)
          // Now copy over all events for each tick when the notes are still on for each track
          // Turn them off whenever we find a note off check (i.e. set them back to 0 since no other notes played there)
          // Then, Copy over all tick-pitch velocity values for each track to a global tick-pitch array
-         int[][] ticks_by_pitch = new int[tick_duration][number_of_pitches];
+         short[][] ticks_by_pitch = new short[tick_duration][number_of_pitches];
          for(int track = 0; track < tracks_by_ticks_by_pitch.length; track++) {
               for (int tick = 0; tick < tracks_by_ticks_by_pitch[track].length; tick++) {
                    for (int pitch = 0; pitch < tracks_by_ticks_by_pitch[track][tick].length; pitch++) {
@@ -1794,8 +1794,8 @@ for (int i = 0 ;i < melody_list.length; i++)
         // Maximum number of pitches possible in MIDI
         int number_of_pitches = 128;
 
-        unison = new int[tick_duration][number_of_pitches];
-        int[][] ticks_by_pitch = new int[tick_duration][number_of_pitches];
+        unison = new short[tick_duration][number_of_pitches];
+        vertical_interval_chart = new short[tick_duration][number_of_pitches];
         
         // Go through each midi event in each track and verify them, tick by tick
         for (int n_track = 0; n_track < tracks.length; n_track++) {
@@ -1822,12 +1822,11 @@ for (int i = 0 ;i < melody_list.length; i++)
                                                     on_channel,
                                                     on_velocity,
                                                     on_tick,
-                                                    ticks_by_pitch);
+                                                    vertical_interval_chart);
                     }
                 }
             }
         }
-        vertical_interval_chart = ticks_by_pitch;
     }
 
     private void lookAheadToNoteOffAndFill(int on_event_index,
@@ -1836,7 +1835,7 @@ for (int i = 0 ;i < melody_list.length; i++)
                                   int on_channel,
                                   int on_velocity,
                                   int on_tick,
-                                  int[][] ticks_by_pitch) {
+                                  short[][] ticks_by_pitch) {
         //Lookahead and add velocities until we find corresponding note off event
         for(int off_event_index = on_event_index; off_event_index < track.size(); off_event_index++) {
             MidiEvent off_event = track.get(off_event_index);

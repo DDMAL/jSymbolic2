@@ -66,7 +66,7 @@ public class ChordDurationFeature extends MIDIFeatureExtractor {
                                    double[][] other_feature_values)
             throws Exception
     {
-        int[][] vertical_interval_chart = sequence_info.vertical_interval_chart;
+        short[][] vertical_interval_chart = sequence_info.vertical_interval_chart;
         int total_intervals = 128;
         int quantized_intervals = 12;
 

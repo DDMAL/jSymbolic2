@@ -66,7 +66,7 @@ public class VariabilityOfNumberOfSimultaneousPitchClassesFeature extends MIDIFe
             throws Exception
     {
         // Get the vertical interval intermediate representation chart
-        int[][] vertical_interval_chart = sequence_info.vertical_interval_chart;
+        short[][] vertical_interval_chart = sequence_info.vertical_interval_chart;
 
         // An array for all possible interval values
         double[] simultaneous_count = new double[vertical_interval_chart.length];

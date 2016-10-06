@@ -66,7 +66,7 @@ public class MaximumCompleteRestDurationFeature extends MIDIFeatureExtractor {
                                     double[][] other_feature_values )
             throws Exception
     {
-        int[][] vertical_chart = sequence_info.vertical_interval_chart;
+        short[][] vertical_chart = sequence_info.vertical_interval_chart;
 
         // Find the longest streak of ticks with no valid pitches on them
         double rest_streak = 0;
@@ -76,7 +76,7 @@ public class MaximumCompleteRestDurationFeature extends MIDIFeatureExtractor {
         int max_start_tick = 0;
         int max_end_tick = 0;
         for(int tick = 0; tick < vertical_chart.length; tick++) {
-            int[] tick_array = vertical_chart[tick];
+            short[] tick_array = vertical_chart[tick];
             // Check if nothing occurs at this tick
             if(FeatureConversion.allArrayEqual(tick_array, 0)) {
                 rest_streak++;

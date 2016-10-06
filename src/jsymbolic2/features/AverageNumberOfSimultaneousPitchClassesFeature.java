@@ -67,7 +67,7 @@ public class AverageNumberOfSimultaneousPitchClassesFeature extends MIDIFeatureE
             throws Exception
     {
         // Get the vertical interval intermediate representation chart
-        int[][] vertical_interval_chart = sequence_info.vertical_interval_chart;
+        short[][] vertical_interval_chart = sequence_info.vertical_interval_chart;
 
         // An array for all possible interval values
         int[] simultaneous_count = new int[vertical_interval_chart.length];

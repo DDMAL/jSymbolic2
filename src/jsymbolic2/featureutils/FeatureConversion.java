@@ -53,7 +53,7 @@ public class FeatureConversion {
      * @param value Value that each element should be equal to.
      * @return True if all elements are equal to value, otherwise false.
      */
-    public static boolean allArrayEqual(int[] pitches_at_tick, int value)
+    public static boolean allArrayEqual(short[] pitches_at_tick, int value)
     {
         if(pitches_at_tick == null) return false;
 

@@ -36,7 +36,7 @@ public class ChordTypesHistogramFeature extends MIDIFeatureExtractor {
                                    double[][] other_feature_values)
             throws Exception
     {
-        int[][] vertical_interval_chart = sequence_info.vertical_interval_chart;
+        short[][] vertical_interval_chart = sequence_info.vertical_interval_chart;
         double[] chord_types = new double[number_of_chord_types];
         int total_intervals = 12;
         for(int tick = 0; tick < vertical_interval_chart.length; tick++) {

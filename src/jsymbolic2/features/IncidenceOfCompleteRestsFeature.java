@@ -67,13 +67,13 @@ public class IncidenceOfCompleteRestsFeature extends MIDIFeatureExtractor {
                                     double[][] other_feature_values )
             throws Exception
     {
-        int[][] vertical_chart = sequence_info.vertical_interval_chart;
+        short[][] vertical_chart = sequence_info.vertical_interval_chart;
         double[] seconds_per_tick = sequence_info.seconds_per_tick;
         // Minus 1 since java doesnt count last tick in tick length
         int tick_count = vertical_chart.length - 1;
         double[] rest_ticks = new double[tick_count];
         for(int tick = 0; tick < tick_count; tick++) {
-            int[] tick_array = vertical_chart[tick];
+            short[] tick_array = vertical_chart[tick];
             if(FeatureConversion.allArrayEqual(tick_array, 0)) {
                 rest_ticks[tick] = seconds_per_tick[tick];
             }

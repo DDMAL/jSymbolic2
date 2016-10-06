@@ -33,7 +33,7 @@ public class VariabilityOfSimultaneityFeature extends MIDIFeatureExtractor {
                                    double[][] other_feature_values)
             throws Exception
     {
-        int[][] ticks_pitch = sequence_info.vertical_interval_chart;
+        short[][] ticks_pitch = sequence_info.vertical_interval_chart;
 
         // An array for number of notes at each tick
         int total_length = (int) sequence.getTickLength();
