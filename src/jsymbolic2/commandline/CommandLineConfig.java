@@ -1,7 +1,7 @@
 package jsymbolic2.commandline;
 
 import jsymbolic2.configuration.ConfigurationFileData;
-import jsymbolic2.processing.AceConversion;
+import jsymbolic2.processing.AceXmlConverter;
 
 import java.io.File;
 import java.util.List;
@@ -46,7 +46,7 @@ public class CommandLineConfig {
 
         //Convert to arff and csv if necessary
         try {
-            AceConversion.outputArffandCsvFormats(featureValueSavePath,
+            AceXmlConverter.saveAsArffOrCsvFiles(featureValueSavePath, featureDefinitionSavePath,
                     configFileData.convertToArff(), configFileData.convertToCsv());
         } catch (Exception ex) {
             //ex.printStackTrace();

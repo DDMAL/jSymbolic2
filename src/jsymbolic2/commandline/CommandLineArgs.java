@@ -10,7 +10,7 @@ package jsymbolic2.commandline;
 import java.util.ArrayList;
 import java.util.List;
 
-import jsymbolic2.processing.AceConversion;
+import jsymbolic2.processing.AceXmlConverter;
 
 /**
  * Allows jSymbolic's functionality to be accessed from the command line.
@@ -30,30 +30,37 @@ public class CommandLineArgs {
     public CommandLineArgs(String[] args) {
         String window_size_pattern = "\\d*.?\\d*";
         String window_offset_pattern = "0?.\\d*";
-        String ace_xml_file = "";
+        String ace_xml_feature_values_file = "";
+		String ace_xml_feature_definitions_file = "";
 
         String[] tempArgs = checkFileTypes(args);
         args = (tempArgs == null) ? args : tempArgs;
 
         // If there are a proper number of command line arguments
-        if (args.length == 3) {
+        if (args.length == 3)
+		{
             checkArgParameters(args, 3);
-            ace_xml_file = args[1];
-        } else if (args.length == 6 && args[0].equals("-window")
-                && args[4].matches(window_size_pattern)
-                && args[5].matches(window_offset_pattern)) {
+            ace_xml_feature_values_file = args[1];
+			ace_xml_feature_definitions_file = args[2];
+        }
+		else if (args.length == 6 && args[0].equals("-window") &&
+                 args[4].matches(window_size_pattern) &&
+                 args[5].matches(window_offset_pattern) )
+		{
             checkArgParameters(args, 6);
-            ace_xml_file = args[2];
+            ace_xml_feature_values_file = args[2];
+			ace_xml_feature_definitions_file = args[3];
         }
-        // If invalid command line arguments are used
-        else {
+		else // if invalid command line arguments are used
             CommandLineUtils.printMessageAndTerminate(CommandLineUtils.getUsageMessage(), -1);
-        }
 
-        try {
-            AceConversion.outputArffandCsvFormats(ace_xml_file, ARFFcheck, CSVcheck);
-        } catch (Exception ex) {
-            String errorMessage = "Error converting " + ace_xml_file + " to ARFF/CSV.\n";
+        try
+		{
+            AceXmlConverter.saveAsArffOrCsvFiles(ace_xml_feature_values_file, ace_xml_feature_definitions_file, ARFFcheck, CSVcheck);
+        }
+		catch (Exception ex)
+		{
+            String errorMessage = "Error converting " + ace_xml_feature_values_file + " to ARFF/CSV.\n";
             CommandLineUtils.printMessageAndTerminate(errorMessage, -1);
         }
     }

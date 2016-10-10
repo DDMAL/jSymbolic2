@@ -24,7 +24,7 @@ import jsymbolic2.configuration.*;
 import jsymbolic2.configuration.txtimplementation.ConfigurationFileWriterTxtImpl;
 import jsymbolic2.datatypes.RecordingInfo;
 import jsymbolic2.featureutils.MIDIFeatureExtractor;
-import jsymbolic2.processing.AceConversion;
+import jsymbolic2.processing.AceXmlConverter;
 import jsymbolic2.featureutils.FeatureExtractorAccess;
 import jsymbolic2.processing.FileValidator;
 import jsymbolic2.processing.MIDIFeatureProcessor;
@@ -561,7 +561,8 @@ public class FeatureSelectorPanel
 
             //Check for other csv or arff output here
             try {
-                AceConversion.outputArffandCsvFormats(feature_values_save_path,
+                AceXmlConverter.saveAsArffOrCsvFiles(feature_values_save_path,
+						feature_definitions_save_path,
                         arff_check,
                         csv_check);
             } catch (Exception ex) {

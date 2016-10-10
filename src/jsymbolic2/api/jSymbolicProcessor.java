@@ -217,7 +217,7 @@ public class jSymbolicProcessor {
      */
     private void createFileConversions(jSymbolicData featureState) throws Exception {
         AceConversionPaths conversionPaths =
-                AceConversion.outputArffandCsvFormats(feature_values_save_path, convert_to_arff, convert_to_csv);
+                AceXmlConverter.saveAsArffOrCsvFiles(feature_values_save_path, feature_definitions_save_path, convert_to_arff, convert_to_csv);
         File arffFile = new File(conversionPaths.getArff_file_path());
         File csvFile = new File(conversionPaths.getCsv_arff_file_path());
         featureState.setArffFile(arffFile);
