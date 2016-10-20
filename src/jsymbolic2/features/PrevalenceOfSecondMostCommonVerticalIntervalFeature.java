@@ -22,7 +22,8 @@ public class PrevalenceOfSecondMostCommonVerticalIntervalFeature extends MIDIFea
      */
     public PrevalenceOfSecondMostCommonVerticalIntervalFeature()
     {
-        String name = "Prevalence Of Second Most Common Vertical Interval";
+		code = "C-10";
+        String name = "Prevalence of Second Most Common Vertical Interval";
         String description = "The fraction of vertical intervals corresponding to the second most common vertical interval.";
         boolean is_sequential = true;
         int dimensions = 1;
@@ -31,7 +32,7 @@ public class PrevalenceOfSecondMostCommonVerticalIntervalFeature extends MIDIFea
                 is_sequential,
                 dimensions );
 
-        dependencies = new String[]{"Vertical Interval Wrapped Histogram", "Second Most Common Vertical Interval"};
+        dependencies = new String[]{"Wrapped Vertical Interval Histogram", "Second Most Common Vertical Interval"};
         offsets = null;
     }
 

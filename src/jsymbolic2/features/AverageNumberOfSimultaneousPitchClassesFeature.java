@@ -23,6 +23,7 @@ public class AverageNumberOfSimultaneousPitchClassesFeature extends MIDIFeatureE
      */
     public AverageNumberOfSimultaneousPitchClassesFeature()
     {
+		code = "C-4";
         String name = "Average Number of Simultaneous Pitch Classes";
         String description = "Average number of\n" +
                 "different pitch classes sounding simultaneously.";
@@ -67,7 +68,7 @@ public class AverageNumberOfSimultaneousPitchClassesFeature extends MIDIFeatureE
             throws Exception
     {
         // Get the vertical interval intermediate representation chart
-        short[][] vertical_interval_chart = sequence_info.vertical_interval_chart;
+        short[][] vertical_interval_chart = sequence_info.pitch_strength_by_tick_chart;
 
         // An array for all possible interval values
         int[] simultaneous_count = new int[vertical_interval_chart.length];

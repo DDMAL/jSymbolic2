@@ -1,105 +1,91 @@
 package jsymbolic2.features;
 
+import java.util.List;
+import javax.sound.midi.Sequence;
 import ace.datatypes.FeatureDefinition;
+import mckay.utilities.sound.midi.MIDIMethods;
 import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
-import mckay.utilities.sound.midi.MIDIMethods;
-
-import javax.sound.midi.Sequence;
-import java.util.List;
-import java.util.stream.DoubleStream;
 
 /**
- * A feature extractor that extracts the recording is broken into windows with 5
- * second durations. The note density is then calculated for each window, and the
- * standard deviation of these windows is then calculated.
+ * A feature calculator that calculates how much the note density (average number of notes per second) varies
+ * throughout the piece. In order to calculate this, the piece is broken into windows of 5 second duration,
+ * and the note density of each window is calculated. The final value of this feature is then found by
+ * calculating the standard deviation of the note densities of these windows.
  *
- * <p>No extracted feature values are stored in objects of this class.
- *
- * @author Tristano Tenaglia
+ * @author Tristano Tenaglia and Cory McKay
  */
-public class NoteDensityVariabilityFeature extends MIDIFeatureExtractor {
+public class NoteDensityVariabilityFeature extends MIDIFeatureExtractor
+{
+	/* CONSTRUCTOR ******************************************************************************************/
 
-    /**
-     * Basic constructor that sets the definition and dependencies (and their
-     * offsets) of this feature.
-     */
-    public NoteDensityVariabilityFeature() {
-        String name = "Note Density Variability";
-        String description = "The recording is broken into windows with 5\n" +
-                "second durations. The note density is then calculated for each window, and the\n" +
-                "standard deviation of these windows is then calculated.";
-        boolean is_sequential = true;
-        int dimensions = 1;
-        definition = new FeatureDefinition( name,
-                description,
-                is_sequential,
-                dimensions );
+	
+	/**
+	 * Basic constructor that sets the values of the fields inherited from this class' superclass.
+	 */
+	public NoteDensityVariabilityFeature()
+	{
+		code = "R-16";
+		String name = "Note Density Variability";
+		String description = "How much the note density (average number of notes per second) varies throughout the piece. In order to calculate this, the piece is broken into windows of 5 second duration, and the note density of each window is calculated. The final value of this feature is then found by calculating the standard deviation of the note densities of these windows.";
+		boolean is_sequential = true;
+		int dimensions = 1;
+		definition = new FeatureDefinition(name, description, is_sequential, dimensions);
+		dependencies = null;
+		offsets = null;
+	}
+	
 
-        dependencies = null;
+	/* PUBLIC METHODS ***************************************************************************************/
+	
+	
+	/**
+	 * Extract this feature from the given sequence of MIDI data and its associated information.
+	 *
+	 * @param sequence				The MIDI data to extract the feature from.
+	 * @param sequence_info			Additional data already extracted from the the MIDI sequence.
+	 * @param other_feature_values	The values of other features that may be needed to calculate this feature. 
+	 *								The order and offsets of these features must be the same as those returned
+	 *								by this class' getDependencies and getDependencyOffsets methods, 
+	 *								respectively. The first indice indicates the feature/window, and the 
+	 *								second indicates the value.
+	 * @return						The extracted feature value(s).
+	 * @throws Exception			Throws an informative exception if the feature cannot be calculated.
+	 */
+	@Override
+	public double[] extractFeature( Sequence sequence,
+									MIDIIntermediateRepresentations sequence_info,
+									double[][] other_feature_values )
+	throws Exception
+	{
+		double value;
+		if (sequence_info != null)
+		{	
+			// Break MIDI sequence into 5 second MIDI windows
+			int window_size = 5;
+			int window_overlap = 0;
+			double[] seconds_per_tick = MIDIMethods.getSecondsPerTick(sequence);
+			List<int[]> startEndTickArrays = MIDIMethods.getStartEndTickArrays(sequence, window_size, window_overlap, seconds_per_tick);
+			int[] start_ticks = startEndTickArrays.get(0);
+			int[] end_ticks = startEndTickArrays.get(1);
+			Sequence[] windows = MIDIMethods.breakSequenceIntoWindows(sequence, window_size, window_overlap, start_ticks, end_ticks);
 
-        offsets = null;
-    }
+			// Compute the note density for each window, using the NoteDensityFeature class
+			double[] note_density_of_each_window = new double[windows.length];
+			for (int window = 0; window < windows.length; window++)
+			{
+				Sequence this_window = windows[window];
+				MIDIIntermediateRepresentations window_info = new MIDIIntermediateRepresentations(this_window);
+				note_density_of_each_window[window] = new NoteDensityFeature().extractFeature(this_window, window_info, null)[0];
+			}
 
-    /**
-     * Extracts this feature from the given MIDI sequence given the other
-     * feature values.
-     *
-     * <p>In the case of this feature, the other_feature_values parameters
-     * are ignored.
-     *
-     * @param sequence			The MIDI sequence to extract the feature
-     *                                 from.
-     * @param sequence_info		Additional data about the MIDI sequence.
-     * @param other_feature_values	The values of other features that are
-     *					needed to calculate this value. The
-     *					order and offsets of these features
-     *					must be the same as those returned by
-     *					this class's getDependencies and
-     *					getDependencyOffsets methods
-     *                                 respectively. The first indice indicates
-     *                                 the feature/window and the second
-     *                                 indicates the value.
-     * @return				The extracted feature value(s).
-     * @throws Exception		Throws an informative exception if the
-     *					feature cannot be calculated.
-     */
-    @Override
-    public double[] extractFeature( Sequence sequence,
-                                    MIDIIntermediateRepresentations sequence_info,
-                                    double[][] other_feature_values )
-            throws Exception
-    {
-        // Break up sequence into 5 second MIDI windows
-        int window_size = 5;
-        int window_overlap = 0;
-        double[] seconds_per_tick = MIDIMethods.getSecondsPerTick(sequence);
-        List<int[]> startEndTickArrays = MIDIMethods.getStartEndTickArrays(sequence, window_size, window_overlap, seconds_per_tick);
-        int[] start_ticks = startEndTickArrays.get(0);
-        int[] end_ticks = startEndTickArrays.get(1);
-        Sequence[] windows = MIDIMethods.breakSequenceIntoWindows(sequence, window_size, window_overlap, start_ticks, end_ticks);
+			// Compute the standard deviation of the note densities
+			value = mckay.utilities.staticlibraries.MathAndStatsMethods.getStandardDeviation(note_density_of_each_window);
+		}
+		else value = -1.0;
 
-        // Compute the note density for each window using the note density feature
-        // Need to recompute intermediate representation for each sequence and
-        // so we extract feature from scratch without a dependency
-        double[] note_density_windows = new double[windows.length];
-        for(int window = 0; window < windows.length; window++) {
-            Sequence this_window = windows[window];
-            MIDIIntermediateRepresentations window_info = new MIDIIntermediateRepresentations(this_window);
-            note_density_windows[window] = new NoteDensityFeature().extractFeature(this_window, window_info, null)[0];
-        }
-
-        // Compute the standard deviation between all note density windows
-        double note_density_avg = DoubleStream.of(note_density_windows)
-                .average()
-                .getAsDouble();
-        double[] deviations = DoubleStream.of(note_density_windows)
-                .map((double d) -> Math.pow(d - note_density_avg, 2))
-                .toArray();
-        double standard_deviation = DoubleStream.of(deviations)
-                .average()
-                .getAsDouble();
-
-        return new double[]{standard_deviation};
-    }
+		double[] result = new double[1];
+		result[0] = value;
+		return result;
+	}
 }

@@ -36,7 +36,7 @@ public class DistanceBetweenTwoMostCommonVerticalIntervalsFeatureTest {
 
         MIDIIntermediateRepresentations inter = new MIDIIntermediateRepresentations(test_tracks);
 
-        double[] vertical_intervals = new VerticalIntervalWrappedHistogramFeature().extractFeature(test_tracks, inter, null);
+        double[] vertical_intervals = new WrappedVerticalIntervalHistogramFeature().extractFeature(test_tracks, inter, null);
         double[][] other_features = new double[2][];
         other_features[0] = vertical_intervals;
         MIDIFeatureExtractor common_interval_feature = new MostCommonVerticalIntervalFeature();

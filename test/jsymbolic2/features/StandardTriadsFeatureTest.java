@@ -39,7 +39,7 @@ public class StandardTriadsFeatureTest {
         t2_tracks.add(e_tracks8);
 
         MIDIIntermediateRepresentations inter = new MIDIIntermediateRepresentations(test_tracks);
-        double[] vertical_intervals = new ChordTypesHistogramFeature().extractFeature(test_tracks, inter, null);
+        double[] vertical_intervals = new ChordTypeHistogramFeature().extractFeature(test_tracks, inter, null);
         double[][] other_features = new double[1][];
         other_features[0] = vertical_intervals;
         MIDIFeatureExtractor actual_common = new StandardTriadsFeature();

@@ -384,7 +384,7 @@ public class FeatureSelectorPanel
      * @return A List of the appropriate feature names to save.
      */
     private List<String> featureNamesToSave(boolean[] featuresToSave) {
-        List<String> allFeatureList = FeatureExtractorAccess.getFeatureNameList();
+        List<String> allFeatureList = FeatureExtractorAccess.getNamesOfAllImplementedFeatures();
         List<String> featureNamesToSave = new ArrayList<>();
         for (int i = 0; i < featuresToSave.length; i++) {
             if (featuresToSave[i] == true) {
@@ -654,7 +654,7 @@ public class FeatureSelectorPanel
         for (boolean b : defaultArray) {
             defaults.add(b);
         }
-        return FeatureExtractorAccess.getAllFeatureExtractors();
+        return FeatureExtractorAccess.getAllImplementedFeatureExtractors();
     }
 
     /**
@@ -664,7 +664,7 @@ public class FeatureSelectorPanel
      *                                features from {@link FeatureExtractorAccess} are used.
      */
     private void populateFeatureExtractors(ConfigurationFileData configuration_file_data) {
-        feature_extractors = FeatureExtractorAccess.getAllFeatureExtractors();
+        feature_extractors = FeatureExtractorAccess.getAllImplementedFeatureExtractors();
 
         if (configuration_file_data != null) {
             feature_save_defaults = configuration_file_data.getFeaturesToSaveBoolean();

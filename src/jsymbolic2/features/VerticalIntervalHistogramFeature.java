@@ -23,6 +23,7 @@ public class VerticalIntervalHistogramFeature extends MIDIFeatureExtractor {
      */
     public VerticalIntervalHistogramFeature()
     {
+		code = "C-1";
         String name = "Vertical Interval Histogram";
         String description = "A feature vector consisting of the bin magnitudes of the\n" +
                 "vertical interval histogram";
@@ -67,11 +68,11 @@ public class VerticalIntervalHistogramFeature extends MIDIFeatureExtractor {
             throws Exception
     {
         // Get the vertical interval intermediate representation chart
-        short[][] vertical_interval_chart = sequence_info.vertical_interval_chart;
+        short[][] vertical_interval_chart = sequence_info.pitch_strength_by_tick_chart;
 
         // An array for all possible interval values
         double[] all_intervals = new double[128];
-        all_intervals[0] = sequence_info.total_unison_velocity;
+        all_intervals[0] = sequence_info.total_vertical_unison_velocity;
 
         /* Compute unisons based on pitches that happen at the same tick on different tracks
         for(int track = 0; track < tracks_ticks_pitch.length; track++) {

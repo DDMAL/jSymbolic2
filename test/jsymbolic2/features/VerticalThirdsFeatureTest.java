@@ -37,7 +37,7 @@ public class VerticalThirdsFeatureTest {
 
         MIDIIntermediateRepresentations actual_representation_unison = new MIDIIntermediateRepresentations(test_uni);
         MIDIFeatureExtractor unison = new VerticalThirdsFeature();
-        double[] vertical_intervals = new VerticalIntervalWrappedHistogramFeature().extractFeature(test_uni, actual_representation_unison, null);
+        double[] vertical_intervals = new WrappedVerticalIntervalHistogramFeature().extractFeature(test_uni, actual_representation_unison, null);
         double[][] other_features = new double[1][];
         other_features[0] = vertical_intervals;
         double[] actual_unison = unison.extractFeature(test_uni, actual_representation_unison, other_features);

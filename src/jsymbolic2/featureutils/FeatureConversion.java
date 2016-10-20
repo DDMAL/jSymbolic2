@@ -22,7 +22,7 @@ public class FeatureConversion {
     public static boolean[] processFeaturesToSave(List<String> saveFeatures)
             throws Exception
     {
-        List<String> allFeatures = FeatureExtractorAccess.getFeatureNameList();
+        List<String> allFeatures = FeatureExtractorAccess.getNamesOfAllImplementedFeatures();
         boolean[] tempSave = new boolean[allFeatures.size()];
         tempSave = initializeArrayFalse(tempSave);
         for(String feature : saveFeatures) {

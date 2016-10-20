@@ -37,7 +37,7 @@ public class VerticalDissonanceRatioFeatureTest {
         MIDIIntermediateRepresentations inter = new MIDIIntermediateRepresentations(test_tracks);
 
         MIDIFeatureExtractor actual_common = new VerticalDissonanceRatioFeature();
-        double[] vertical_intervals = new VerticalIntervalWrappedHistogramFeature().extractFeature(test_tracks, inter, null);
+        double[] vertical_intervals = new WrappedVerticalIntervalHistogramFeature().extractFeature(test_tracks, inter, null);
         double[][] other_features = new double[2][];
         other_features[0] = vertical_intervals;
         double[] vertical = new VerticalIntervalHistogramFeature().extractFeature(test_tracks, inter, null);

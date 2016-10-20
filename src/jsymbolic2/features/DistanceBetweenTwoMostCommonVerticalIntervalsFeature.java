@@ -22,6 +22,7 @@ public class DistanceBetweenTwoMostCommonVerticalIntervalsFeature extends MIDIFe
      */
     public DistanceBetweenTwoMostCommonVerticalIntervalsFeature()
     {
+		code = "C-8";
         String name = "Distance Between Two Most Common Vertical Intervals";
         String description = "The difference between the bin labels of the two most common vertical intervals.";
         boolean is_sequential = true;

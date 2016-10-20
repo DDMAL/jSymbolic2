@@ -33,7 +33,7 @@ public class NumberOfSlurNotesFeatureTest {
 
     @Test
     public void extractMEIFeature() throws Exception {
-        MEIFeatureExtractor slurNotesFeature = new NumberOfSlurNotesFeature();
+        MEIFeatureExtractor slurNotesFeature = new NumberOfSlursMeiFeature();
         MIDIIntermediateRepresentations minter = new MIDIIntermediateRepresentations(sequence.getSequence());
         double[] actualSlurNotes = slurNotesFeature.extractMEIFeature(specificStorage, sequence.getSequence(), minter, null);
         double[] expectedSlurNotes = new double[]{98};

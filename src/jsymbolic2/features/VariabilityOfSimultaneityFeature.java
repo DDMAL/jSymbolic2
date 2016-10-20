@@ -1,75 +1,109 @@
 package jsymbolic2.features;
 
+import java.util.stream.DoubleStream;
+import java.util.stream.IntStream;
+import javax.sound.midi.Sequence;
 import ace.datatypes.FeatureDefinition;
 import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
-import javax.sound.midi.Sequence;
-import java.util.stream.DoubleStream;
-import java.util.stream.IntStream;
-
 /**
- * Created by dinamix on 7/22/16.
+ * A feature calculator that finds the standard deviation of the number of notes sounding simultaneously.
+ *
+ * @author Tristano Tenaglia and Cory McKay
  */
-public class VariabilityOfSimultaneityFeature extends MIDIFeatureExtractor {
-    public VariabilityOfSimultaneityFeature() {
-        String name = "Variability of Simultaneity";
-        String description = "Standard deviation of the number of notes\n" +
-                "sounding simultaneously.";
-        boolean is_sequential = true;
-        int dimensions = 1;
-        definition = new FeatureDefinition( name,
-                description,
-                is_sequential,
-                dimensions );
+public class VariabilityOfSimultaneityFeature
+		extends MIDIFeatureExtractor
+{
+	/* CONSTRUCTOR ******************************************************************************************/
 
-        dependencies = null;
-        offsets = null;
-    }
+	
+	/**
+	 * Basic constructor that sets the values of the fields inherited from this class' superclass.
+	 */
+	public VariabilityOfSimultaneityFeature()
+	{
+		code = "T-17";
+		String name = "Variability of Simultaneity";
+		String description = "Standard deviation of the number of notes sounding simultaneously.";
+		boolean is_sequential = true;
+		int dimensions = 1;
+		definition = new FeatureDefinition(name, description, is_sequential, dimensions);
+		dependencies = null;
+		offsets = null;
+	}
+	
 
-    @Override
-    public double[] extractFeature(Sequence sequence,
-                                   MIDIIntermediateRepresentations sequence_info,
-                                   double[][] other_feature_values)
-            throws Exception
-    {
-        short[][] ticks_pitch = sequence_info.vertical_interval_chart;
+	/* PUBLIC METHODS ***************************************************************************************/
+	
+	
+	/**
+	 * Extract this feature from the given sequence of MIDI data and its associated information.
+	 *
+	 * @param sequence				The MIDI data to extract the feature from.
+	 * @param sequence_info			Additional data already extracted from the the MIDI sequence.
+	 * @param other_feature_values	The values of other features that may be needed to calculate this feature. 
+	 *								The order and offsets of these features must be the same as those returned
+	 *								by this class' getDependencies and getDependencyOffsets methods, 
+	 *								respectively. The first indice indicates the feature/window, and the 
+	 *								second indicates the value.
+	 * @return						The extracted feature value(s).
+	 * @throws Exception			Throws an informative exception if the feature cannot be calculated.
+	 */
+	@Override
+	public double[] extractFeature( Sequence sequence,
+									MIDIIntermediateRepresentations sequence_info,
+									double[][] other_feature_values )
+	throws Exception
+	{
 
-        // An array for number of notes at each tick
-        int total_length = (int) sequence.getTickLength();
-        double[] notes_on_tick = new double[total_length];
-        int[] simultaneous_ticks = new int[total_length];
+		double value;
+		if (sequence_info != null)
+		{
+			// A chart containing ticks in the first index and MIDI pitches in the second index.
+			// Each tick corresponds to all 128 possible MIDI ticks.
+			// The cumulative velocities of each tick-pitch combination are stored in each array value for the
+			// given MIDI sequence.
+			short[][] ticks_pitch = sequence_info.pitch_strength_by_tick_chart;
 
-        // Compute unisons based on pitches that happen at the same tick on different tracks
-        for(int tick = 0; tick < ticks_pitch.length - 1; tick++) {
-            for(int pitch = 0; pitch < ticks_pitch[tick].length; pitch++) {
-                int current_velocity = ticks_pitch[tick][pitch];
-                // add a note count if we have it
-                if(current_velocity > 0) {
-                    notes_on_tick[tick] += 1.0;
-                }
-                // add a tick count if we have more than 1 note on a tick
-                if(notes_on_tick[tick] > 1) {
-                    simultaneous_ticks[tick] = 1;
-                }
-            }
-        }
+			// An array for number of notes at each tick
+			int total_length = (int) sequence.getTickLength();
+			double[] notes_on_tick = new double[total_length];
+			int[] simultaneous_ticks = new int[total_length];
 
-        // Sum up all simultaneous note ticks
-        double total_simultaneous_notes = 0;
-        for(double notes: notes_on_tick) {
-            if (notes > 1) {
-                total_simultaneous_notes += notes;
-            }
-        }
-        double total_simultaneous_ticks = IntStream.of(simultaneous_ticks).sum();
-        double simultaneous_avg = total_simultaneous_notes / total_simultaneous_ticks;
-        double[] deviations = DoubleStream.of(notes_on_tick)
-                .map((double d) -> Math.pow(d - simultaneous_avg, 2))
-                .toArray();
-        double standard_deviation = DoubleStream.of(deviations)
-                .average()
-                .getAsDouble();
-        return new double[]{standard_deviation};
-    }
+			// Compute unisons based on pitches that happen at the same tick on different tracks
+			for (int tick = 0; tick < ticks_pitch.length - 1; tick++)
+			{
+				for (int pitch = 0; pitch < ticks_pitch[tick].length; pitch++)
+				{
+					int current_velocity = ticks_pitch[tick][pitch];
+
+					// Add a note count if we have it
+					if (current_velocity > 0)
+						notes_on_tick[tick] += 1.0;
+
+					// Add a tick count if we have more than 1 note on a tick
+					if (notes_on_tick[tick] > 1)
+						simultaneous_ticks[tick] = 1;
+				}
+			}
+
+			// Sum up all simultaneous note ticks
+			double total_simultaneous_notes = 0;
+			for (double notes : notes_on_tick)
+				if (notes > 1)
+					total_simultaneous_notes += notes;
+			double total_simultaneous_ticks = IntStream.of(simultaneous_ticks).sum();
+			double simultaneous_avg = total_simultaneous_notes / total_simultaneous_ticks;
+			double[] deviations = DoubleStream.of(notes_on_tick)
+					.map((double d) -> Math.pow(d - simultaneous_avg, 2))
+					.toArray();
+			value = DoubleStream.of(deviations).average().getAsDouble();
+		}
+		else value = -1.0;
+
+		double[] result = new double[1];
+		result[0] = value;
+		return result;
+	}
 }

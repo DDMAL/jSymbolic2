@@ -22,6 +22,7 @@ public class MostCommonVerticalIntervalFeature extends MIDIFeatureExtractor {
      */
     public MostCommonVerticalIntervalFeature()
     {
+		code = "C-6";
         String name = "Most Common Vertical Interval";
         String description = "The interval in semitones corresponding\n" +
                     "to the vertical interval histogram bin with the highest magnitude.";
@@ -33,7 +34,7 @@ public class MostCommonVerticalIntervalFeature extends MIDIFeatureExtractor {
                 dimensions );
 
         dependencies = new String[1];
-        dependencies[0] = "Vertical Interval Wrapped Histogram";
+        dependencies[0] = "Wrapped Vertical Interval Histogram";
         offsets = null;
     }
 

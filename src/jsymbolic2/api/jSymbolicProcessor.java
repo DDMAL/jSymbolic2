@@ -101,7 +101,7 @@ public class jSymbolicProcessor {
     {
         this(window_size,
                 window_overlap,
-                FeatureExtractorAccess.getDefaultFeatureNamesToSave(),
+                FeatureExtractorAccess.getNamesOfDefaultFeaturesToSave(),
                 save_features_for_each_window,
                 save_overall_recording_features,
                 convert_to_arff,
@@ -140,7 +140,7 @@ public class jSymbolicProcessor {
     private MIDIFeatureProcessor buildNewProcessor() throws Exception {
         return new MIDIFeatureProcessor(window_size,
                 window_overlap,
-                FeatureExtractorAccess.getAllFeatureExtractors(),
+                FeatureExtractorAccess.getAllImplementedFeatureExtractors(),
                 boolean_feature_names,
                 save_features_for_each_window,
                 save_overall_recording_features,

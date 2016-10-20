@@ -22,6 +22,7 @@ public class ComplexChordsFeature extends MIDIFeatureExtractor {
      * offsets) of this feature.
      */
     public ComplexChordsFeature() {
+		code = "C-24";
         String name = "Complex Chords";
         String description = "Fraction of all chords that contain more that four pitch\n" +
                 "classes.";
@@ -32,7 +33,7 @@ public class ComplexChordsFeature extends MIDIFeatureExtractor {
                 is_sequential,
                 dimensions );
 
-        dependencies = new String[]{"Chord Types Histogram"};
+        dependencies = new String[]{"Chord Type Histogram"};
         offsets = null;
     }
 

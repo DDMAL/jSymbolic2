@@ -22,7 +22,8 @@ public class PrevalenceOfMostCommonVerticalIntervalFeature extends MIDIFeatureEx
      */
     public PrevalenceOfMostCommonVerticalIntervalFeature()
     {
-        String name = "Prevalence Of Most Common Vertical Interval";
+		code = "C-9";
+        String name = "Prevalence of Most Common Vertical Interval";
         String description = "The fraction of vertical intervals corresponding to the most common vertical interval.";
         boolean is_sequential = true;
         int dimensions = 1;
@@ -31,7 +32,7 @@ public class PrevalenceOfMostCommonVerticalIntervalFeature extends MIDIFeatureEx
                 is_sequential,
                 dimensions );
 
-        dependencies = new String[]{"Vertical Interval Wrapped Histogram", "Most Common Vertical Interval"};
+        dependencies = new String[]{"Wrapped Vertical Interval Histogram", "Most Common Vertical Interval"};
         offsets = null;
     }
 

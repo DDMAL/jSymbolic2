@@ -9,7 +9,6 @@ import jsymbolic2.processing.MusicFileFilter;
 import mckay.utilities.staticlibraries.FileMethods;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -74,7 +73,8 @@ public final class CommandLineFeatureExtraction {
             CommandLineUtils.printMessageAndTerminate(errorMessage, -1);
         } catch (Exception e) {
             errorLog.add("Error found in file : " + input_MIDI_path + ". Error Message : " + e.getMessage() + ".");
-        }
+			//e.printStackTrace();
+		}
     }
 
     /**
@@ -176,7 +176,7 @@ public final class CommandLineFeatureExtraction {
                                                        String featureValueSavePath,
                                                        String featureDefinitionSavePath) {
         // Get all available features
-        MIDIFeatureExtractor[] feature_extractors = FeatureExtractorAccess.getAllFeatureExtractors();
+        MIDIFeatureExtractor[] feature_extractors = FeatureExtractorAccess.getAllImplementedFeatureExtractors();
 
         // Extract appropriate features specified by config file
         boolean[] features_to_save = configFileData.getFeaturesToSaveBoolean();
@@ -221,11 +221,10 @@ public final class CommandLineFeatureExtraction {
                                                                double window_size,
                                                                double window_overlap) {
         // Get all available features
-        MIDIFeatureExtractor[] feature_extractors = FeatureExtractorAccess.getAllFeatureExtractors();
+        MIDIFeatureExtractor[] feature_extractors = FeatureExtractorAccess.getAllImplementedFeatureExtractors();
 
         // Choose to extract all features
         boolean[] features_to_save = FeatureExtractorAccess.getDefaultFeaturesToSave();
-
         MIDIFeatureProcessor processor = null;
         try {
             // Prepare to extract features

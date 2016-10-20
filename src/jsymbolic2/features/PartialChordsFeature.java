@@ -22,7 +22,8 @@ public class PartialChordsFeature extends MIDIFeatureExtractor {
      * offsets) of this feature.
      */
     public PartialChordsFeature() {
-        String name = "Partial Chords";
+		code = "C-23";
+		String name = "Partial Chords";
         String description = "Fraction of simultaneously sounding pitch groups that\n" +
                         "consist of only two pitch classes.";
         boolean is_sequential = true;
@@ -32,7 +33,7 @@ public class PartialChordsFeature extends MIDIFeatureExtractor {
                 is_sequential,
                 dimensions );
 
-        dependencies = new String[]{"Chord Types Histogram"};
+        dependencies = new String[]{"Chord Type Histogram"};
         offsets = null;
     }
 

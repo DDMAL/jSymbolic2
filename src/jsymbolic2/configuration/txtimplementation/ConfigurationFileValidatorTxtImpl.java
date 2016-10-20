@@ -39,7 +39,7 @@ public class ConfigurationFileValidatorTxtImpl extends ConfigurationFileValidato
         int nextHeaderIndex = nextHeaderIndex(rawConfigFile,featureHeader);
 
         //Look for each feature one by one and verify
-        List<String> extractorName = FeatureExtractorAccess.getFeatureNameList();
+        List<String> extractorName = FeatureExtractorAccess.getNamesOfAllImplementedFeatures();
         List<String> featuresToSave = rawConfigFile.subList(featureHeaderIndex + 1, nextHeaderIndex);
         int lineNumber = featureHeaderIndex + 1;
         for(String featureLine : featuresToSave){

@@ -23,6 +23,7 @@ public class RatioOfPrevalenceOfTwoMostCommonVerticalIntervalsFeature extends MI
      */
     public RatioOfPrevalenceOfTwoMostCommonVerticalIntervalsFeature()
     {
+		code = "C-11";
         String name = "Ratio of Prevalence of Two Most Common Vertical Intervals";
         String description = "The fraction of vertical intervals corresponding to the second most common vertical\n" +
                 "interval divided by the fraction of vertical intervals corresponding to the most\n" +
@@ -34,8 +35,8 @@ public class RatioOfPrevalenceOfTwoMostCommonVerticalIntervalsFeature extends MI
                 is_sequential,
                 dimensions );
 
-        dependencies = new String[]{"Prevalence Of Most Common Vertical Interval",
-                                    "Prevalence Of Second Most Common Vertical Interval"};
+        dependencies = new String[]{"Prevalence of Most Common Vertical Interval",
+                                    "Prevalence of Second Most Common Vertical Interval"};
         offsets = null;
     }
 

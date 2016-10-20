@@ -28,7 +28,9 @@ public class jSymbolicRunner {
 
     /**
      * Start jSymbolic as a new process in case Java heap space is not enough.
-     * @throws IOException Thrown here in case appropriate OS system files are not found
+     
+	 * @param	args	Command line arguments.
+	 * @throws IOException Thrown here in case appropriate OS system files are not found
      *                       or if working directory does not exist or is not accessible
      */
     public static void newProcess(String[] args) throws IOException {

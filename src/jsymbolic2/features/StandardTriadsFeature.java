@@ -22,6 +22,7 @@ public class StandardTriadsFeature extends MIDIFeatureExtractor {
      * offsets) of this feature.
      */
     public StandardTriadsFeature() {
+		code = "C-25";
         String name = "Standard Triads";
         String description = "Fraction of all chords that are either major or minor\n" +
                 "triads.";
@@ -32,7 +33,7 @@ public class StandardTriadsFeature extends MIDIFeatureExtractor {
                 is_sequential,
                 dimensions );
 
-        dependencies = new String[]{"Chord Types Histogram"};
+        dependencies = new String[]{"Chord Type Histogram"};
         offsets = null;
     }
 

@@ -1,62 +1,103 @@
 package jsymbolic2.features;
 
+import javax.sound.midi.Sequence;
 import ace.datatypes.FeatureDefinition;
 import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
-import javax.sound.midi.Sequence;
-
 /**
- * Created by dinamix on 7/20/16.
+ * A feature calculator that finds the average duration of notes (in seconds) in the channel with the lowest
+ * average pitch, divided by the average duration of notes in all channels that contain at least one note.
+ *
+ * @author Tristano Tenaglia and Cory McKay
  */
-public class RelativeNoteDurationsOfLowestLineFeature extends MIDIFeatureExtractor {
-    public RelativeNoteDurationsOfLowestLineFeature() {
-        String name = "Relative Note Durations of Lowest Line";
-        String description = "Average duration of notes (in\n" +
-                "seconds) in the channel with the lowest average pitch divided by the average\n" +
-                "duration of notes in all channels that contain at least one note.";
-        boolean is_sequential = true;
-        int dimensions = 1;
-        definition = new FeatureDefinition( name,
-                description,
-                is_sequential,
-                dimensions );
+public class RelativeNoteDurationsOfLowestLineFeature
+		extends MIDIFeatureExtractor
+{
+	/* CONSTRUCTOR ******************************************************************************************/
 
-        dependencies = null;
-        offsets = null;
-    }
+	
+	/**
+	 * Basic constructor that sets the values of the fields inherited from this class' superclass.
+	 */
+	public RelativeNoteDurationsOfLowestLineFeature()
+	{
+		code = "T-14";
+		String name = "Relative Note Durations of Lowest Line";
+		String description = "Average duration of notes (in seconds) in the channel with the lowest average pitch, divided by the average duration of notes in all channels that contain at least one note.";
+		boolean is_sequential = true;
+		int dimensions = 1;
+		definition = new FeatureDefinition(name, description, is_sequential, dimensions);
+		dependencies = null;
+		offsets = null;
+	}
+	
 
-    @Override
-    public double[] extractFeature(Sequence sequence,
-                                   MIDIIntermediateRepresentations sequence_info,
-                                   double[][] other_feature_values)
-            throws Exception
-    {
-        int[][] channel_stats = sequence_info.channel_statistics;
+	/* PUBLIC METHODS ***************************************************************************************/
+	
+	
+	/**
+	 * Extract this feature from the given sequence of MIDI data and its associated information.
+	 *
+	 * @param sequence				The MIDI data to extract the feature from.
+	 * @param sequence_info			Additional data already extracted from the the MIDI sequence.
+	 * @param other_feature_values	The values of other features that may be needed to calculate this feature. 
+	 *								The order and offsets of these features must be the same as those returned
+	 *								by this class' getDependencies and getDependencyOffsets methods, 
+	 *								respectively. The first indice indicates the feature/window, and the 
+	 *								second indicates the value.
+	 * @return						The extracted feature value(s).
+	 * @throws Exception			Throws an informative exception if the feature cannot be calculated.
+	 */
+	@Override
+	public double[] extractFeature( Sequence sequence,
+									MIDIIntermediateRepresentations sequence_info,
+									double[][] other_feature_values )
+	throws Exception
+	{
+		double value;
+		if (sequence_info != null)
+		{
+			// Access pre-calculated information in sequence_info
+			int[][] channel_stats = sequence_info.channel_statistics;
 
-        // Get the lowest average pitch
-        int lowest_average_pitch = 128;
-        int lowest_average_pitch_channel = 0;
-        double total_note_duration = 0;
-        double total_number_notes = 0;
-        for(int channel = 0; channel < channel_stats.length; channel++) {
-            // Get lowest average pitch that is > 0 since 0 means no pitches
-            int average_pitch = channel_stats[channel][6];
-            if(average_pitch < lowest_average_pitch && average_pitch > 0) {
-                lowest_average_pitch = average_pitch;
-                lowest_average_pitch_channel = channel;
-            }
-            // Get total note and numbers
-            total_note_duration += channel_stats[channel][1];
-            total_number_notes += channel_stats[channel][0];
-        }
+			// Find the channel with the lowest average pitch, while also accumulating note counts and note
+			// durations across channels
+			int lowest_average_pitch = 128;
+			int lowest_average_pitch_channel = 0;
+			double total_note_durations = 0;
+			double total_number_notes = 0;
+			for (int channel = 0; channel < channel_stats.length; channel++)
+			{
+				if (channel_stats[channel][0] != 0 && channel != (10 - 1))
+				{
+					// Get lowest average pitch that is > 0 (since 0 means no notes)
+					int average_pitch = channel_stats[channel][6];
 
-        // Get average note duration for lowest average pitch
-        double total_lowest_duration = channel_stats[lowest_average_pitch_channel][1];
-        double total_lowest_notes = channel_stats[lowest_average_pitch_channel][0];
-        double average_lowest_duration = total_lowest_duration / total_lowest_notes;
-        double average_total_duration = total_note_duration / total_number_notes;
-        double melodic_interval_lowest_line = average_lowest_duration / average_total_duration;
-        return new double[]{melodic_interval_lowest_line};
-    }
+					// Take note if this is the lowest voice
+					if (average_pitch < lowest_average_pitch)
+					{
+						lowest_average_pitch = average_pitch;
+						lowest_average_pitch_channel = channel;
+					}
+
+					// Count total durations and numbers of notes
+					total_note_durations += channel_stats[channel][1];
+					total_number_notes += channel_stats[channel][0];
+				}
+			}
+
+			// Get average note duration for lowest average pitch
+			double total_durations_in_lowest_channel = channel_stats[lowest_average_pitch_channel][1];
+			double total_number_notes_in_lowest_channel = channel_stats[lowest_average_pitch_channel][0];
+			double average_duration_of_notes_in_lowest_channel = total_durations_in_lowest_channel / total_number_notes_in_lowest_channel;
+			double average_duration_of_notes_in_all_channels = total_note_durations / total_number_notes;
+			value = average_duration_of_notes_in_lowest_channel / average_duration_of_notes_in_all_channels;
+		}
+		else value = -1.0;
+
+		double[] result = new double[1];
+		result[0] = value;
+		return result;
+	}
 }

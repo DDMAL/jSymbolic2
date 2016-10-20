@@ -33,7 +33,7 @@ public class NumberOfGraceNotesFeatureTest {
 
     @Test
     public void extractMEIFeature() throws Exception {
-        MEIFeatureExtractor graceNotesFeature = new NumberOfGraceNotesFeature();
+        MEIFeatureExtractor graceNotesFeature = new NumberOfGraceNotesMeiFeature();
         MIDIIntermediateRepresentations minter = new MIDIIntermediateRepresentations(sequence.getSequence());
         double[] actualGraceNotes = graceNotesFeature.extractMEIFeature(specificStorage, sequence.getSequence(), minter, null);
         double[] expectedGraceNotes = new double[]{0};

@@ -22,7 +22,8 @@ public class PerfectVerticalIntervalsFeature extends MIDIFeatureExtractor {
      */
     public PerfectVerticalIntervalsFeature()
     {
-        String name = "Perfect Vertical Intervals";
+ 		code = "C-20";
+       String name = "Perfect Vertical Intervals";
         String description = "Fraction of all vertical intervals that are perfect\n" +
                 "intervals.";
         boolean is_sequential = true;
@@ -32,7 +33,7 @@ public class PerfectVerticalIntervalsFeature extends MIDIFeatureExtractor {
                 is_sequential,
                 dimensions );
 
-        dependencies = new String[]{"Vertical Interval Wrapped Histogram"};
+        dependencies = new String[]{"Wrapped Vertical Interval Histogram"};
         offsets = null;
     }
 
