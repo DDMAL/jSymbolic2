@@ -358,29 +358,6 @@ public final class FeatureExtractorAccess
 			true, // MetricalDiversityFeature
 			true, // DurationFeature
 
-<<<<<<< HEAD
-                // Add multi-dimensional sequential features
-                new BasicPitchHistogramFeature(),
-                new BeatHistogramFeature(),
-                new FifthsPitchHistogramFeature(),
-                new InitialTimeSignatureFeature(),
-                new MelodicIntervalHistogramFeature(),
-                new NotePrevalenceOfPitchedInstrumentsFeature(),
-                new NotePrevalenceOfUnpitchedInstrumentsFeature(),
-                new PitchClassDistributionFeature(),
-                new PitchedInstrumentsPresentFeature(),
-                new TimePrevalenceOfPitchedInstrumentsFeature(),
-                new UnpitchedInstrumentsPresentFeature(),
-				new VerticalIntervalWrappedHistogramFeature(),
-				new VerticalIntervalHistogramFeature(),
-				new ChordTypesHistogramFeature()
-        };
-
-        defaultFeaturesToSave = new boolean[]
-         {
-                // Add non-sequential features
-                true, //DurationFeature
-=======
 			// Fatures based on instrumentation
 			false, // PitchedInstrumentsPresentFeature
 			false, // UnpitchedInstrumentsPresentFeature
@@ -402,7 +379,6 @@ public final class FeatureExtractorAccess
 			true, // OrchestralStringsPrevalenceFeature
 			true, // StringEnsemblePrevalenceFeature
 			true, // ElectricInstrumentPrevalenceFeature
->>>>>>> 1fa0a080a1fb8414d18ec27f8855e713b5db1bd6
 
 			// Features based on musical texture
 			true, // MaximumNumberOfIndependentVoicesFeature

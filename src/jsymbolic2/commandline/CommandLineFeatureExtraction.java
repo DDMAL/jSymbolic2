@@ -94,6 +94,13 @@ public final class CommandLineFeatureExtraction {
                 true,
                 processor,
                 errorLog);
+
+        try {
+            // Finalize saved XML files
+            processor.finalize();
+        } catch (Exception ex) {
+            errorLog.add(ex + "- " + ex.getMessage());
+        }
     }
 
     /**
@@ -152,12 +159,6 @@ public final class CommandLineFeatureExtraction {
             } else {
                 CommandLineFeatureExtraction.extractFeaturesFromFile(file, processor, errorLog);
             }
-        }
-        try {
-            // Finalize saved XML files
-            processor.finalize();
-        } catch (Exception ex) {
-            errorLog.add(ex + "- " + ex.getMessage());
         }
         FileValidator.printErrorLog(errorLog);
     }
