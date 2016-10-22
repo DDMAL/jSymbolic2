@@ -24,6 +24,7 @@ public class ChordDurationFeature extends MIDIFeatureExtractor {
      * offsets) of this feature.
      */
     public ChordDurationFeature() {
+ 		code = "C-22";
         String name = "Chord Duration";
         String description = "Average duration of a chord in seconds.";
         boolean is_sequential = true;
@@ -33,7 +34,7 @@ public class ChordDurationFeature extends MIDIFeatureExtractor {
                 is_sequential,
                 dimensions );
 
-        dependencies = new String[]{"Chord Types Histogram"};
+        dependencies = new String[]{"Chord Type Histogram"};
         offsets = null;
     }
 
@@ -66,7 +67,7 @@ public class ChordDurationFeature extends MIDIFeatureExtractor {
                                    double[][] other_feature_values)
             throws Exception
     {
-        short[][] vertical_interval_chart = sequence_info.vertical_interval_chart;
+        short[][] vertical_interval_chart = sequence_info.pitch_strength_by_tick_chart;
         int total_intervals = 128;
         int quantized_intervals = 12;
 

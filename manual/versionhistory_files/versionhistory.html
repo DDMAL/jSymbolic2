@@ -22,7 +22,18 @@
 <ul>
   <li>Added the ability to extract features from <a href="http://music-encoding.org" target="top">MEI</a> files using our new custom-built <a href="https://github.com/DDMAL/jMei2Midi" target="top">jMei2Midi</a> project (which can convert MEI files to MIDI), and which in turn uses the  <a href="https://github.com/alastair/jmei/" target="top">jmei</a> library. Of course, as MEI itself is still being developed, new aspects of the MEI format incorporated after the publication of this code may not yet be implemented.</li>
   <li>Added the ability to implement and extract specialized MEI-specific features (i.e. features that cannot be extracted from MIDI files). An MEIFeatureExtractor architecture similar to the MIDIFeatureExtractor has been added in order to accomplish this. More information can be found at <a href="../extendingsoftware_files/extendingsoftware.html">Extending Software page</a>.</li>
-  <li>The new R-36 Number of Grace Notes feature was implemented as an example of an MEI-specific feature.</li>
+  <li>Implemented features that had previously been proposed but not implemented:
+    <ul>
+      <li>T-11, 14, 16, 17, 18, 19</li>
+      <li>
+        	R-16, 26, 27, 28, 29, 36</li>
+      <li>P-26</li>
+      <li>M-16, 20</li>
+      <li>C-1 to C-29</li>
+      <li>S-1, 2 <em>(these two are actually entirely new features implemented as examples of MEI-specific features)</em></li>
+    </ul>
+  </li>
+  <li>Numerous helper classes and methods were added to support the new features.</li>
   <li>The ability to extract features separately and individually from multiple windows in a piece was added (as opposed to only being able to extract features from pieces overall, which was previously the only option). The ability to use windows with or without offsets was included.</li>
   <li>Extracted features may now be saved as basic CSV text files or as Weka ARFF files (previously ACE XML was the only output option).</li>
   <li>Added a new configuration file format to facilitate saving and reuse of settings, as well as to facilitate batch processing still further. This configuration file can be used the GUI, command line interface and API. It can be edited directly with a text editor, or may be saved from the GUI. The configuration file is also designed to be easily extensible.</li>
@@ -33,6 +44,8 @@
   <li>Set up jSymbolic to run as a separate process to deal with potential issues associated with the Java heap size. The user thus no longer has to worry about JVM-specific command line switches.</li>
   <li>Improved and streamlined error handling. Among other things, now logs files that cannot be processed during batch processing, and does not terminate execution unnecessarily when problems occur.</li>
   <li>Added substantial unit testing.</li>
+  <li>Cleaned up code and documentation in general.</li>
+  <li>Numerous miscellaneous bug fixes.</li>
   <li>Updated support libraries (ACE and UtilityClasses).</li>
 </ul>
 

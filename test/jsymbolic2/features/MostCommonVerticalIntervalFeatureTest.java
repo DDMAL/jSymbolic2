@@ -49,7 +49,7 @@ public class MostCommonVerticalIntervalFeatureTest {
         MIDIIntermediateRepresentations inter = new MIDIIntermediateRepresentations(test_tracks);
 
         MIDIFeatureExtractor actual_common = new MostCommonVerticalIntervalFeature();
-        double[] vertical_intervals = new VerticalIntervalWrappedHistogramFeature().extractFeature(test_tracks, inter, null);
+        double[] vertical_intervals = new WrappedVerticalIntervalHistogramFeature().extractFeature(test_tracks, inter, null);
         double[][] other_features = new double[1][];
         other_features[0] = vertical_intervals;
         double[] actual_chord_type = actual_common.extractFeature(test_tracks, inter, other_features);

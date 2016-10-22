@@ -37,7 +37,7 @@ public class UnisonsFeatureTest {
 
         MIDIIntermediateRepresentations actual_representation_unison = new MIDIIntermediateRepresentations(test_uni);
         MIDIFeatureExtractor interval = new VerticalMinorSecondsFeature();
-        double[] vertical_intervals = new VerticalIntervalWrappedHistogramFeature().extractFeature(test_uni, actual_representation_unison, null);
+        double[] vertical_intervals = new WrappedVerticalIntervalHistogramFeature().extractFeature(test_uni, actual_representation_unison, null);
         double[][] other_features = new double[1][];
         other_features[0] = vertical_intervals;
         double[] actual_interval = interval.extractFeature(test_uni, actual_representation_unison, other_features);

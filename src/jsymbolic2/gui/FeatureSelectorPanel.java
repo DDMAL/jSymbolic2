@@ -24,7 +24,7 @@ import jsymbolic2.configuration.*;
 import jsymbolic2.configuration.txtimplementation.ConfigurationFileWriterTxtImpl;
 import jsymbolic2.datatypes.RecordingInfo;
 import jsymbolic2.featureutils.MIDIFeatureExtractor;
-import jsymbolic2.processing.AceConversion;
+import jsymbolic2.processing.AceXmlConverter;
 import jsymbolic2.featureutils.FeatureExtractorAccess;
 import jsymbolic2.processing.FileValidator;
 import jsymbolic2.processing.MIDIFeatureProcessor;
@@ -384,7 +384,7 @@ public class FeatureSelectorPanel
      * @return A List of the appropriate feature names to save.
      */
     private List<String> featureNamesToSave(boolean[] featuresToSave) {
-        List<String> allFeatureList = FeatureExtractorAccess.getFeatureNameList();
+        List<String> allFeatureList = FeatureExtractorAccess.getNamesOfAllImplementedFeatures();
         List<String> featureNamesToSave = new ArrayList<>();
         for (int i = 0; i < featuresToSave.length; i++) {
             if (featuresToSave[i] == true) {
@@ -561,7 +561,8 @@ public class FeatureSelectorPanel
 
             //Check for other csv or arff output here
             try {
-                AceConversion.outputArffandCsvFormats(feature_values_save_path,
+                AceXmlConverter.saveAsArffOrCsvFiles(feature_values_save_path,
+						feature_definitions_save_path,
                         arff_check,
                         csv_check);
             } catch (Exception ex) {
@@ -653,7 +654,7 @@ public class FeatureSelectorPanel
         for (boolean b : defaultArray) {
             defaults.add(b);
         }
-        return FeatureExtractorAccess.getAllFeatureExtractors();
+        return FeatureExtractorAccess.getAllImplementedFeatureExtractors();
     }
 
     /**
@@ -663,7 +664,7 @@ public class FeatureSelectorPanel
      *                                features from {@link FeatureExtractorAccess} are used.
      */
     private void populateFeatureExtractors(ConfigurationFileData configuration_file_data) {
-        feature_extractors = FeatureExtractorAccess.getAllFeatureExtractors();
+        feature_extractors = FeatureExtractorAccess.getAllImplementedFeatureExtractors();
 
         if (configuration_file_data != null) {
             feature_save_defaults = configuration_file_data.getFeaturesToSaveBoolean();

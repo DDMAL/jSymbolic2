@@ -101,7 +101,7 @@ public class jSymbolicProcessor {
     {
         this(window_size,
                 window_overlap,
-                FeatureExtractorAccess.getDefaultFeatureNamesToSave(),
+                FeatureExtractorAccess.getNamesOfDefaultFeaturesToSave(),
                 save_features_for_each_window,
                 save_overall_recording_features,
                 convert_to_arff,
@@ -140,7 +140,7 @@ public class jSymbolicProcessor {
     private MIDIFeatureProcessor buildNewProcessor() throws Exception {
         return new MIDIFeatureProcessor(window_size,
                 window_overlap,
-                FeatureExtractorAccess.getAllFeatureExtractors(),
+                FeatureExtractorAccess.getAllImplementedFeatureExtractors(),
                 boolean_feature_names,
                 save_features_for_each_window,
                 save_overall_recording_features,
@@ -217,7 +217,7 @@ public class jSymbolicProcessor {
      */
     private void createFileConversions(jSymbolicData featureState) throws Exception {
         AceConversionPaths conversionPaths =
-                AceConversion.outputArffandCsvFormats(feature_values_save_path, convert_to_arff, convert_to_csv);
+                AceXmlConverter.saveAsArffOrCsvFiles(feature_values_save_path, feature_definitions_save_path, convert_to_arff, convert_to_csv);
         File arffFile = new File(conversionPaths.getArff_file_path());
         File csvFile = new File(conversionPaths.getCsv_arff_file_path());
         featureState.setArffFile(arffFile);

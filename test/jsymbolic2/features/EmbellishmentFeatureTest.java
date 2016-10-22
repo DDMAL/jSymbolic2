@@ -35,7 +35,7 @@ public class EmbellishmentFeatureTest {
         t1_tracks.add(e_tracks6);
 
         MIDIIntermediateRepresentations inter = new MIDIIntermediateRepresentations(test_tracks);
-        MIDIFeatureExtractor actual_common = new EmbellishmentFeature();
+        MIDIFeatureExtractor actual_common = new MelodicEmbellishmentsFeature();
         double[] actual_chord_type = actual_common.extractFeature(test_tracks, inter, null);
         double[] expected_chord_type = {0.3333};
         assertArrayEquals(expected_chord_type, actual_chord_type, 0.0001);

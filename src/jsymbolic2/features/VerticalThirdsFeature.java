@@ -20,6 +20,7 @@ public class VerticalThirdsFeature extends MIDIFeatureExtractor {
      * offsets) of this feature.
      */
     public VerticalThirdsFeature() {
+		code = "C-14";
         String name = "Vertical Thirds";
         String description = "Fraction of all vertical intervals that are thirds.";
         boolean is_sequential = true;
@@ -29,7 +30,7 @@ public class VerticalThirdsFeature extends MIDIFeatureExtractor {
                 is_sequential,
                 dimensions );
 
-        dependencies = new String[]{"Vertical Interval Wrapped Histogram"};
+        dependencies = new String[]{"Wrapped Vertical Interval Histogram"};
         offsets = null;
     }
 

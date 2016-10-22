@@ -41,7 +41,7 @@ import org.ddmal.jmei2midi.meielements.meispecific.MeiSpecificStorage;
  * and standard deviation of each of these features is extracted for each
  * recording.
  *
- * @author Cory McKay
+ * @author Cory McKay and Tristano Tenaglia
  */
 public class MIDIFeatureProcessor
 {
@@ -60,7 +60,8 @@ public class MIDIFeatureProcessor
      private   double			window_overlap_offset;
      
      /**
-      * The features that are to be extracted.
+      * The features that are to be extracted (including dependencies of features to be saved, not just the
+	  * features to be saved themselves).
       */
      private   MIDIFeatureExtractor[]   feature_extractors;
      
@@ -158,7 +159,9 @@ public class MIDIFeatureProcessor
       *                                           feature definitions to.
       * @throws	Exception                         Throws an informative
       *                                           exception if the input
-      *                                           parameters are invalid.
+      *                                           parameters are invalid, including if any of the feature
+	  *											  in all_feature_extractors have dependencies that do not
+	  *											  exist in all_feature_extractors.
       */
      public MIDIFeatureProcessor( double window_size,
           double window_overlap,
@@ -170,7 +173,7 @@ public class MIDIFeatureProcessor
           String feature_definitions_save_path )
           throws Exception
      {
-          // Throw an exception if the control parameters are invalid
+		  // Throw an exception if the control parameters are invalid
           if (!save_features_for_each_window && !save_overall_recording_features)
                throw new Exception( "You must save at least one of the windows-based\n" +
                     "features and the overall file-based features if\n" +
@@ -191,7 +194,39 @@ public class MIDIFeatureProcessor
                     one_selected = true;
           if (!one_selected)
                throw new Exception("No features have been set to be saved.");
-          
+		  
+		  /* DEBUGGING: Print a list of all features and their dependencies to standard out
+		  for (int feat = 0; feat < all_feature_extractors.length; feat++)
+		  {
+			  String[] this_feature_dependencies = all_feature_extractors[feat].getDepenedencies();
+			  if (this_feature_dependencies != null)
+				for (int dep = 0; dep < this_feature_dependencies.length; dep++)
+					System.out.println("- " + (feat + 1) + " " + all_feature_extractors[feat].getFeatureCode() + " " + all_feature_extractors[feat].getFeatureDefinition().name + " -> " + this_feature_dependencies[dep]);
+		  }*/
+		  
+		  // Verify that feature names referred to by all dependencies actually exist.
+		  for (int feat = 0; feat < all_feature_extractors.length; feat++)
+		  {
+			  String[] this_feature_dependencies = all_feature_extractors[feat].getDepenedencies();
+			  if (this_feature_dependencies != null)
+			  {
+				boolean found_dependency = false;
+				for (int dep = 0; dep < this_feature_dependencies.length; dep++)
+				{
+					for (int i = 0; i < all_feature_extractors.length; i++)
+					{
+						if (this_feature_dependencies[dep].equals(all_feature_extractors[i].getFeatureDefinition().name))
+						{
+							found_dependency = true;
+							break;
+						}
+					}
+					if (!found_dependency)
+						throw new Exception("The " + all_feature_extractors[feat].getFeatureDefinition().name + " feature needs the " + this_feature_dependencies[dep] + " feature in order to be calculated, yet no feature with the latter name could be found.");
+				}
+			  }
+		  }
+
           // Prepare the files for writing
           feature_values_save_file = new File(feature_values_save_path);
           feature_definitions_save_file = new File(feature_definitions_save_path);
@@ -497,10 +532,10 @@ public class MIDIFeatureProcessor
           String[] all_feature_names = new String[all_feature_extractors.length];
           for (int feat = 0; feat < all_feature_extractors.length; feat++)
                all_feature_names[feat] = all_feature_extractors[feat].getFeatureDefinition().name;
-          
-          // Find dependencies of all features marked to be extracted.
-          // Mark as null if features are not to be extracted. Note that will also
-          // be null if there are no dependencies.
+
+          // Find the dependencies of each feature marked to be extracted.
+          // Mark an entry as null if that entry's matching feature is not set to be extracted.
+		  // Note that an entry will also be null if the corresponding feature has no dependencies.
           String[][] dependencies = new String[all_feature_extractors.length][];
           for (int feat = 0; feat < all_feature_extractors.length; feat++)
           {
@@ -510,118 +545,130 @@ public class MIDIFeatureProcessor
                     dependencies[feat] = null;
           }
           
-          // Add dependencies to dependencies and if any features are not marked for
-          // saving but are marked as a dependency of a feature that is marked to be
-          // saved. Also fill features_to_extract in order to know what features to
-          // extract(but not necessarily save).
+		  // Start off the array of which features to extract by making sure to extract all those features
+		  // whose values are marked to be saved.
+          boolean[] features_to_extract_including_dependencies = new boolean[all_feature_extractors.length];
+          for (int feat = 0; feat < all_feature_extractors.length; feat++)
+			  features_to_extract_including_dependencies[feat] = features_to_save_among_all[feat];
+
+		  // Update features_to_extract_including_dependencies to ALSO include those features that are not
+		  // marked to be saved, but are needed as dependencies in order to calculate features that are 
+		  // marked to be saved. Also update dependencies to include any new dependencies that are introduced
+		  // by scheduling new features to be extracted because they themselves are dependencies of other 
+		  // features.
           boolean done = false;
-          boolean[] features_to_extract = new boolean[dependencies.length];
-          for (int feat = 0; feat < features_to_extract.length; feat++)
-          {
-               if (features_to_save_among_all[feat])
-                    features_to_extract[feat] = true;
-               else
-                    features_to_extract[feat] = false;
-          }
           while (!done)
           {
                done = true;
-               for (int feat = 0; feat < dependencies.length; feat++)
+               for (int feat = 0; feat < all_feature_extractors.length; feat++)
+			   {
                     if (dependencies[feat] != null)
-                         for (int i = 0; i < dependencies[feat].length; i++)
-                         {
-                    String name = dependencies[feat][i];
-                    for (int j = 0; j < all_feature_names.length; j++)
-                    {
-                         if (name.equals(all_feature_names[j]))
-                         {
-                              if (!features_to_extract[j])
-                              {
-                                   features_to_extract[j] = true;
-                                   dependencies[j] = all_feature_extractors[j].getDepenedencies();
-                                   if (dependencies[j] != null)
-                                        done = false;
-                              }
-                              j = all_feature_names.length;
-                         }
-                    }
-                         }
-          }
-          
-          // Find the correct order to extract features in by filling the
-          // feature_extractors field
-          int number_features_to_extract = 0;
-          for (int i = 0; i < features_to_extract.length; i++)
-               if (features_to_extract[i])
-                    number_features_to_extract++;
-          feature_extractors = new MIDIFeatureExtractor[number_features_to_extract];
-          features_to_save = new boolean[number_features_to_extract];
-          for (int i = 0; i < features_to_save.length; i++)
-               features_to_save[i] = false;
-          boolean[] feature_added = new boolean[dependencies.length];
-          for (int i = 0; i < feature_added.length; i++)
-               feature_added[i] = false;
-          int current_position = 0;
-          done = false;
-          while (!done)
-          {
-               done = true;
-               
-               // Add all features that have no remaining dependencies and remove
-               // their dependencies from all unadded features
-               for (int feat = 0; feat < dependencies.length; feat++)
-               {
-                    if (features_to_extract[feat] && !feature_added[feat])
-                         if (dependencies[feat] == null) // add feature if it has no dependencies
-                         {
-                         feature_added[feat] = true;
-                         feature_extractors[current_position] = all_feature_extractors[feat];
-                         features_to_save[current_position] = features_to_save_among_all[feat];
-                         current_position++;
-                         done = false;
-                         
-                         // Remove this dependency from all features that have
-                         // it as a dependency and are marked to be extracted
-                         for (int i = 0; i < dependencies.length; i++)
-                              if (features_to_extract[i] && dependencies[i] != null)
-                              {
-                              int num_defs = dependencies[i].length;
-                              for (int j = 0; j < num_defs; j++)
-                              {
-                                   if (dependencies[i][j].equals(all_feature_names[feat]))
-                                   {
-                                        if (dependencies[i].length == 1)
-                                        {
-                                             dependencies[i] = null;
-                                             j = num_defs;
-                                        }
-                                        else
-                                        {
-                                             String[] temp = new String[dependencies[i].length - 1];
-                                             int m = 0;
-                                             for (int k = 0; k < dependencies[i].length; k++)
-                                             {
-                                                  if (k != j)
-                                                  {
-                                                       temp[m] = dependencies[i][k];
-                                                       m++;
-                                                  }
-                                             }
-                                             dependencies[i] = temp;
-                                             j--;
-                                             num_defs--;
-                                        }
-                                   }
-                              }
-                              }
-                         }
-               }
-          }
-          
+					{
+						for (int dep = 0; dep < dependencies[feat].length; dep++)
+                        {
+							 String this_depency_name = dependencies[feat][dep];
+							for (int j = 0; j < all_feature_extractors.length; j++)
+							{
+								 if (this_depency_name.equals(all_feature_names[j]))
+								 {
+									  if (!features_to_extract_including_dependencies[j])
+									  {
+										   features_to_extract_including_dependencies[j] = true;
+										   dependencies[j] = all_feature_extractors[j].getDepenedencies();
+										   if (dependencies[j] != null)
+												done = false;
+									  }
+									  j = all_feature_extractors.length;
+								 }
+							}
+                        }
+					}
+			   }	
+           } 
+         
+		 // Begin the process of finding the correct order to extract features in by filling the
+		 // feature_extractors field with all features that are to be extracted (i.e. the combination of
+		 // those features whose values are marked to be saved and those features that are needed in order
+		 // to calculate those features marked to be saved). The ordering consists of the originally
+		 // specified feature order, with dependent features added in before they are needed.
+		 // Also note which of these have values that are actually to be saved by filling in
+		 // features_to_save.
+		 int number_features_to_extract = 0;
+		 for (int i = 0; i < features_to_extract_including_dependencies.length; i++)
+			 if (features_to_extract_including_dependencies[i])
+				 number_features_to_extract++;
+		 feature_extractors = new MIDIFeatureExtractor[number_features_to_extract];
+		 features_to_save = new boolean[number_features_to_extract];
+		 for (int i = 0; i < features_to_save.length; i++)
+			 features_to_save[i] = false;
+		 boolean[] feature_added = new boolean[all_feature_extractors.length];
+		 for (int i = 0; i < feature_added.length; i++)
+			 feature_added[i] = false;
+		 int current_position = 0;
+		 done = false;
+		 while (!done)
+		 {
+			 done = true;
+
+			 // Add all features that have no remaining dependencies and remove
+			 // their dependencies from all unadded features
+			 for (int feat = 0; feat < all_feature_extractors.length; feat++)
+			 {
+				 if (features_to_extract_including_dependencies[feat] && !feature_added[feat])
+				 {
+					 if (dependencies[feat] == null) // add feature if it has no dependencies
+					 {
+						 feature_added[feat] = true;
+						 feature_extractors[current_position] = all_feature_extractors[feat];
+						 features_to_save[current_position] = features_to_save_among_all[feat];
+						 current_position++;
+						 done = false;
+
+						 // Remove this dependency from all features that have
+						 // it as a dependency and are marked to be extracted
+						 for (int i = 0; i < all_feature_extractors.length; i++)
+						 {
+							 if (features_to_extract_including_dependencies[i] && dependencies[i] != null)
+							 {
+								 int num_defs = dependencies[i].length;
+								 for (int j = 0; j < num_defs; j++)
+								 {
+									 if (dependencies[i][j].equals(all_feature_names[feat]))
+									 {
+										 if (dependencies[i].length == 1)
+										 {
+											 dependencies[i] = null;
+											 j = num_defs;
+										 }
+										 else
+										 {
+											 String[] temp = new String[dependencies[i].length - 1];
+											 int m = 0;
+											 for (int k = 0; k < dependencies[i].length; k++)
+											 {
+												 if (k != j)
+												 {
+													 temp[m] = dependencies[i][k];
+													 m++;
+												 }
+											 }
+											 dependencies[i] = temp;
+											 j--;
+											 num_defs--;
+										 }
+									 }
+								 }
+							 }
+						 }
+					 }
+				 }
+			 }
+		 }
+
           // Find the indices of the feature extractor dependencies for each feature
           // extractor
           feature_extractor_dependencies = new int[feature_extractors.length][];
-          String[] feature_names = new String[feature_extractors.length];
+		  String[] feature_names = new String[feature_extractors.length];
           for (int feat = 0; feat < feature_names.length; feat++)
                feature_names[feat] = feature_extractors[feat].getFeatureDefinition().name;
           String[][] feature_dependencies_str = new String[feature_extractors.length][];
@@ -652,11 +699,15 @@ public class MIDIFeatureProcessor
                               max_feature_offsets[i] = Math.abs(these_offsets[k]);
                }
           }
+		  
+		  // DEBUGGING: Print all features set to be extracted in the order they are set to be extracted
+		  //for (int i = 0; i < feature_extractors.length; i++)
+		  //	System.out.println(feature_extractors[i].getFeatureCode() + " " + feature_extractors[i].getFeatureDefinition().name);
      }
      
      
      /**
-      * Exxtracts features from each window of the given MIDI sequences. If the
+      * Extracts features from each window of the given MIDI sequences. If the
       * passed windows paramter consists of only one window, then this could
       * be a whole unwindowed MIDI file.
       *
@@ -752,8 +803,8 @@ public class MIDIFeatureProcessor
      /**
       * Calculates the averages and standard deviations over a whole recording
       * of each of the windows-based features. Generates a feature definition
-      * for each such feature. If only one value is present (i.e. only one
-      * window) then this value is stored without any standard deviation.
+	  * for each such feature. If only one value is present (dep.e. only one
+	  * window) then this value is stored without any standard deviation.
       *
       * @param	window_feature_values        The extracted window feature values
       *                                      for this recording. The first

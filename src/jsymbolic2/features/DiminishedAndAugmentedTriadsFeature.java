@@ -22,6 +22,7 @@ public class DiminishedAndAugmentedTriadsFeature extends MIDIFeatureExtractor {
      * offsets) of this feature.
      */
     public DiminishedAndAugmentedTriadsFeature() {
+		code = "C-26";
         String name = "Diminished and Augmented Triads";
         String description = "Fraction of all chords that are either\n" +
                 "diminished or augmented triads.";
@@ -32,7 +33,7 @@ public class DiminishedAndAugmentedTriadsFeature extends MIDIFeatureExtractor {
                 is_sequential,
                 dimensions );
 
-        dependencies = new String[]{"Chord Types Histogram"};
+        dependencies = new String[]{"Chord Type Histogram"};
         offsets = null;
     }
 

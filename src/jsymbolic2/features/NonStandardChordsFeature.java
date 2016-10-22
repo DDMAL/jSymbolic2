@@ -23,6 +23,7 @@ public class NonStandardChordsFeature extends MIDIFeatureExtractor {
      * offsets) of this feature.
      */
     public NonStandardChordsFeature() {
+		code = "C-29";
         String name = "Non-Standard Chords";
         String description = "Fraction of all simultaneously sounding pitches\n" +
                 "that consist of more than two pitch class chords and are not major or minor triads\n" +
@@ -34,7 +35,7 @@ public class NonStandardChordsFeature extends MIDIFeatureExtractor {
                 is_sequential,
                 dimensions );
 
-        dependencies = new String[]{"Chord Types Histogram"};
+        dependencies = new String[]{"Chord Type Histogram"};
         offsets = null;
     }
 

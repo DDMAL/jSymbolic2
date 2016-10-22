@@ -35,7 +35,7 @@ public class AverageRestDurationPerVoiceFeatureTest {
         t1_tracks.add(e_tracks6);
 
         MIDIIntermediateRepresentations inter = new MIDIIntermediateRepresentations(test_tracks);
-        MIDIFeatureExtractor actual_common = new AverageRestDurationPerVoiceFeature();
+        MIDIFeatureExtractor actual_common = new AverageRestFractionPerVoiceFeature();
         double[] actual_chord_type = actual_common.extractFeature(test_tracks, inter, null);
         double[] expected_chord_type = {0.333};
         assertArrayEquals(expected_chord_type, actual_chord_type, 0.001);

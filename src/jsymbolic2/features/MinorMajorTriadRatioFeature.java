@@ -21,7 +21,9 @@ public class MinorMajorTriadRatioFeature extends MIDIFeatureExtractor {
      * Basic constructor that sets the definition and dependencies (and their
      * offsets) of this feature.
      */
-    public MinorMajorTriadRatioFeature() {
+    public MinorMajorTriadRatioFeature()
+	{
+		code = "C-30";
         String name = "Minor Major Triad Ratio";
         String description = "Number of minor triads divided by number of\n" +
                 "major triads.";
@@ -32,7 +34,7 @@ public class MinorMajorTriadRatioFeature extends MIDIFeatureExtractor {
                 is_sequential,
                 dimensions );
 
-        dependencies = new String[]{"Chord Types Histogram"};
+        dependencies = new String[]{"Chord Type Histogram"};
         offsets = null;
     }
 

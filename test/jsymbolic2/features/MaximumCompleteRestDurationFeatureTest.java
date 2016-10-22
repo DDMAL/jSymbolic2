@@ -35,7 +35,7 @@ public class MaximumCompleteRestDurationFeatureTest {
         t1_tracks.add(e_tracks6);
 
         MIDIIntermediateRepresentations inter = new MIDIIntermediateRepresentations(test_tracks);
-        MIDIFeatureExtractor actual_common = new MaximumCompleteRestDurationFeature();
+        MIDIFeatureExtractor actual_common = new LongestCompleteRestFeature();
         double[] actual_chord_type = actual_common.extractFeature(test_tracks, inter, null);
         double[] expected_chord_type = {0.003906};
         assertArrayEquals(expected_chord_type, actual_chord_type, 0.000001);

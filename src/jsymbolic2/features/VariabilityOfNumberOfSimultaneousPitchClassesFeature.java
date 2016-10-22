@@ -22,7 +22,8 @@ public class VariabilityOfNumberOfSimultaneousPitchClassesFeature extends MIDIFe
      * offsets) of this feature.
      */
     public VariabilityOfNumberOfSimultaneousPitchClassesFeature() {
-        String name = "Variability of Number of Simultaneous Pitch Classes";
+		code = "C-5";
+		String name = "Variability of Number of Simultaneous Pitch Classes";
         String description = "Standard deviation\n" +
                 "of the number of different pitch classes sounding simultaneously.";
         boolean is_sequential = true;
@@ -66,7 +67,7 @@ public class VariabilityOfNumberOfSimultaneousPitchClassesFeature extends MIDIFe
             throws Exception
     {
         // Get the vertical interval intermediate representation chart
-        short[][] vertical_interval_chart = sequence_info.vertical_interval_chart;
+        short[][] vertical_interval_chart = sequence_info.pitch_strength_by_tick_chart;
 
         // An array for all possible interval values
         double[] simultaneous_count = new double[vertical_interval_chart.length];

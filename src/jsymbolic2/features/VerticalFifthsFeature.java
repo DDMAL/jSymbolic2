@@ -20,6 +20,7 @@ public class VerticalFifthsFeature extends MIDIFeatureExtractor {
      * offsets) of this feature.
      */
     public VerticalFifthsFeature() {
+		code = "C-16";
         String name = "Vertical Fifths";
         String description = "Fraction of all vertical intervals that are fifths.";
         boolean is_sequential = true;
@@ -29,7 +30,7 @@ public class VerticalFifthsFeature extends MIDIFeatureExtractor {
                 is_sequential,
                 dimensions );
 
-        dependencies = new String[]{"Vertical Interval Wrapped Histogram"};
+        dependencies = new String[]{"Wrapped Vertical Interval Histogram"};
         offsets = null;
     }
 

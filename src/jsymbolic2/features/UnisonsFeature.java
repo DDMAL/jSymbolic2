@@ -21,6 +21,7 @@ public class UnisonsFeature extends MIDIFeatureExtractor {
      */
     public UnisonsFeature()
     {
+		code = "C-12";
         String name = "Unisons";
         String description = "Fraction of all vertical intervals that are unisons.";
         boolean is_sequential = true;
@@ -30,7 +31,7 @@ public class UnisonsFeature extends MIDIFeatureExtractor {
                 is_sequential,
                 dimensions );
 
-        dependencies = new String[]{"Vertical Interval Wrapped Histogram"};
+        dependencies = new String[]{"Wrapped Vertical Interval Histogram"};
         offsets = null;
     }
 

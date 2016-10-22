@@ -22,6 +22,7 @@ public class VerticalDissonanceRatioFeature extends MIDIFeatureExtractor {
      * offsets) of this feature.
      */
     public VerticalDissonanceRatioFeature() {
+ 		code = "C-21";
         String name = "Vertical Dissonance Ratio";
         String description = "Total number of vertical 2nds, tritones, 7ths\n" +
                 "and 9ths divided by the total number of vertical unisons, 4ths, 5ths, 6ths, octaves\n" +
@@ -33,7 +34,7 @@ public class VerticalDissonanceRatioFeature extends MIDIFeatureExtractor {
                 is_sequential,
                 dimensions );
 
-        dependencies = new String[]{"Vertical Interval Histogram", "Vertical Interval Wrapped Histogram"};
+        dependencies = new String[]{"Vertical Interval Histogram", "Wrapped Vertical Interval Histogram"};
         offsets = null;
     }
 

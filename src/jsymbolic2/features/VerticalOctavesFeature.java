@@ -21,6 +21,7 @@ public class VerticalOctavesFeature extends MIDIFeatureExtractor {
      * offsets) of this feature.
      */
     public VerticalOctavesFeature() {
+		code = "C-17";
         String name = "Vertical Octaves";
         String description = "Fraction of all vertical intervals that are octaves.";
         boolean is_sequential = true;

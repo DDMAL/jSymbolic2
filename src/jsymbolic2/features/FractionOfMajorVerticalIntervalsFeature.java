@@ -21,6 +21,7 @@ public class FractionOfMajorVerticalIntervalsFeature extends MIDIFeatureExtracto
      * offsets) of this feature.
      */
     public FractionOfMajorVerticalIntervalsFeature() {
+		code = "C-19";
         String name = "Fraction of Major Vertical Intervals";
         String description = "A value between 0 and 1 indicating the fraction of all vertical intervals that contain a major third.";
         boolean is_sequential = true;
@@ -30,7 +31,7 @@ public class FractionOfMajorVerticalIntervalsFeature extends MIDIFeatureExtracto
                 is_sequential,
                 dimensions );
 
-        dependencies = new String[]{"Vertical Interval Wrapped Histogram"};
+        dependencies = new String[]{"Wrapped Vertical Interval Histogram"};
         offsets = null;
     }
 

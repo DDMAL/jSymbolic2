@@ -17,7 +17,7 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 /**
- * Unit Tests for the AceConversion class.
+ * Unit Tests for the AceXmlConverter class.
  * 
  * @author Tristano Tenaglia
  */
@@ -31,19 +31,18 @@ public class AceToArffAndCsvTest {
     }
     
     /**
-     * Test of convertACEXMLtoARFF method, of class AceConversion.
+     * Test of convertACEXMLtoARFF method, of class AceXmlConverter.
      * @throws java.io.IOException test
      */
     @Test
     public void testConvertACEXMLtoARFF() 
             throws Exception {
         String ACEname = "./test/jsymbolic2/processing/resources/feature_values_1.xml";
-        File testACE = new File(ACEname);
         String ARFFname = "./test/jsymbolic2/processing/resources/feature_values_1.arff";
         File testARFF = new File(ARFFname);
         
         File tempARFF = tempFolder.newFile();
-        AceConversion.convertACEXMLtoARFF(ACEname, tempARFF.getPath());
+        AceXmlConverter.saveAsArffOrCsvFiles(ACEname, null, true, false);
         
         try(Scanner inACE = new Scanner(testARFF);
             Scanner inARFF = new Scanner(tempARFF))
@@ -59,7 +58,7 @@ public class AceToArffAndCsvTest {
     }
 
     /**
-     * Test of convertARFFtoCSV method, of class AceConversion.
+     * Test of convertARFFtoCSV method, of class AceXmlConverter.
      * @throws java.lang.Exception test
      */
     @Test
@@ -67,11 +66,10 @@ public class AceToArffAndCsvTest {
             throws Exception {
         String CSVname = "./test/jsymbolic2/processing/resources/feature_values_noxml.csv";
         File testCSV = new File(CSVname);
-        String ARFFname = "./test/jsymbolic2/processing/resources/feature_values_noxml.arff";
-        File testARFF = new File(ARFFname);
+        String ACEname = "./test/jsymbolic2/processing/resources/feature_values_1.xml";
         
         File tempCSV = tempFolder.newFile();
-        AceConversion.convertARFFtoCSV(ARFFname, tempCSV.getPath());
+        AceXmlConverter.saveAsArffOrCsvFiles(ACEname, null, false, true);
         
         try(Scanner inACE = new Scanner(testCSV);
             Scanner inCSV = new Scanner(tempCSV))
@@ -87,7 +85,7 @@ public class AceToArffAndCsvTest {
     }
 
     /**
-     * Test of convertACEtoCSVwithARFF method, of class AceConversion.
+     * Test of convertACEtoCSVwithARFF method, of class AceXmlConverter.
      * @throws Exception test
      */
     @Test
@@ -95,10 +93,9 @@ public class AceToArffAndCsvTest {
         String CSVname = "./test/jsymbolic2/processing/resources/feature_values_1.csv";
         File testCSV = new File(CSVname);
         String ACEname = "./test/jsymbolic2/processing/resources/feature_values_1.xml";
-        File testACE = new File(ACEname);
         
         File tempCSV = tempFolder.newFile();
-        AceConversion.convertACEtoCSVwithARFF(ACEname, tempCSV.getPath());
+        AceXmlConverter.saveAsArffOrCsvFiles(ACEname, null, true, true);
         
         try(Scanner inACE = new Scanner(testCSV);
             Scanner inCSV = new Scanner(tempCSV))
@@ -114,7 +111,7 @@ public class AceToArffAndCsvTest {
     }
 
     /**
-     * Test of outputArffandCsvFormats method, of class AceConversion.
+     * Test of saveAsArffOrCsvFiles method, of class AceXmlConverter.
      * @throws java.lang.Exception Test
      */
     @Test
@@ -135,7 +132,7 @@ public class AceToArffAndCsvTest {
             Files.delete(csvFile.toPath());
         }
 
-        AceConversion.outputArffandCsvFormats(ACEname, true, true);
+        AceXmlConverter.saveAsArffOrCsvFiles(ACEname, null, true, true);
         assertTrue(arffFile.exists());
         assertTrue(csvFile.exists());
         
@@ -154,7 +151,7 @@ public class AceToArffAndCsvTest {
             Files.delete(csvnoXMLFile.toPath());
         }
 
-        AceConversion.outputArffandCsvFormats(noXML, true, true);
+        AceXmlConverter.saveAsArffOrCsvFiles(noXML, null, true, true);
         assertTrue(arffnoXMLFile.exists());
         assertTrue(csvnoXMLFile.exists());
     }

@@ -23,7 +23,7 @@ public class ConfigurationFileDataTest {
         String configFilePath = "/workspace/ddmal/jSymbolic/test/jsymbolic/configuration/resources/sampleConfiguration.txt";
         ConfigurationFileData data = new ConfigurationFileData(inputFeatures,optionState,outputFiles,configFilePath,inputFiles);
 
-        boolean[] expectedSave = new boolean[FeatureExtractorAccess.getFeatureNameList().size()];
+        boolean[] expectedSave = new boolean[FeatureExtractorAccess.getNamesOfAllImplementedFeatures().size()];
         expectedSave = initializeArrayFalse(expectedSave);
         expectedSave[0] = true; //Duration feature
         expectedSave[11] = true; //Brass Fraction feature

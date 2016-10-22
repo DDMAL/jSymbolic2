@@ -20,7 +20,7 @@ public class PrevalenceOfMicroTonesFeatureTest {
         Sequence test_tracks = MidiSystem.getSequence(britten);
         MIDIIntermediateRepresentations inter = new MIDIIntermediateRepresentations(test_tracks);
 
-        MIDIFeatureExtractor common_interval_feature = new PrevalenceOfMicroTonesFeature();
+        MIDIFeatureExtractor common_interval_feature = new MicrotonePrevalenceFeature();
         double[] actual_prevalence = common_interval_feature.extractFeature(test_tracks, inter, null);
         double[] expected_prevalence = {0.5273};
         assertArrayEquals(expected_prevalence, actual_prevalence, 0.0001);

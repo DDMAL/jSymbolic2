@@ -20,6 +20,7 @@ public class VerticalTritonesFeature extends MIDIFeatureExtractor {
      * offsets) of this feature.
      */
     public VerticalTritonesFeature() {
+		code = "C-15";
         String name = "Vertical Tritones";
         String description = "Fraction of all vertical intervals that are tritones.";
         boolean is_sequential = true;
@@ -29,7 +30,7 @@ public class VerticalTritonesFeature extends MIDIFeatureExtractor {
                 is_sequential,
                 dimensions );
 
-        dependencies = new String[]{"Vertical Interval Wrapped Histogram"};
+        dependencies = new String[]{"Wrapped Vertical Interval Histogram"};
         offsets = null;
     }
 
