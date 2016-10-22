@@ -208,7 +208,7 @@ public abstract class ConfigurationFileValidator {
 
         try {
             //Try with all headers
-            parseConfigFile(configurationFileName);
+            configurationFileData = parseConfigFile(configurationFileName);
         } catch (Exception ex) {
             //continue
         }

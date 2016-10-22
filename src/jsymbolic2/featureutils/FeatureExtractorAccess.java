@@ -232,7 +232,7 @@ public final class FeatureExtractorAccess {
 				new VerticalIntervalHistogramFeature(),
 				new ChordTypesHistogramFeature()
         };
-        
+
         defaultFeaturesToSave = new boolean[]
          {
                 // Add non-sequential features
