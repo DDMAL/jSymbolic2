@@ -50,6 +50,8 @@ public final class FeatureExtractorAccess
 	 */
 	private static final List<String> names_of_default_features_to_save;
 
+	private static final List<String> names_of_mei_specific_features;
+
 	
 	/* STATIC INITIALIZATION BLOCK **************************************************************************/
 
@@ -415,13 +417,24 @@ public final class FeatureExtractorAccess
 
 		names_of_all_implemented_features = new ArrayList<>();
 		List<MIDIFeatureExtractor> all_extractors = Arrays.asList(all_implemented_feature_extractors);
-		for (MIDIFeatureExtractor fe : all_extractors)
+		for (MIDIFeatureExtractor fe : all_extractors) {
 			names_of_all_implemented_features.add(fe.getFeatureDefinition().name);
+		}
 
 		names_of_default_features_to_save = new ArrayList<>();
-		for (int i = 0; i < default_features_to_save.length; i++)
-			if (default_features_to_save[i] == true)
+		for (int i = 0; i < default_features_to_save.length; i++) {
+			if (default_features_to_save[i] == true) {
 				names_of_default_features_to_save.add(names_of_all_implemented_features.get(i));
+			}
+		}
+
+		names_of_mei_specific_features = new ArrayList<>();
+		for(MIDIFeatureExtractor feature : all_implemented_feature_extractors) {
+			if(feature instanceof MEIFeatureExtractor) {
+				String meiFeatureName = feature.getFeatureDefinition().name;
+				names_of_mei_specific_features.add(meiFeatureName);
+			}
+		}
 	}
 	
 
@@ -467,5 +480,13 @@ public final class FeatureExtractorAccess
 	public static List<String> getNamesOfDefaultFeaturesToSave()
 	{
 		return names_of_default_features_to_save;
+	}
+
+	/**
+	 * @return	A List consisting of the feature names of every feature implemented as a MEIFeatureExtractor.
+	 * 			These are ordered in the same order in which they are presented in the jSymbolic manual.
+	 */
+	public static List<String> getNamesOfMeiSpecificFeatures() {
+		return names_of_mei_specific_features;
 	}
 }

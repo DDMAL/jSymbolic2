@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import jsymbolic2.configuration.*;
 import jsymbolic2.configuration.txtimplementation.ConfigurationFileWriterTxtImpl;
 import jsymbolic2.datatypes.RecordingInfo;
+import jsymbolic2.featureutils.FeatureConversion;
 import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.AceXmlConverter;
 import jsymbolic2.featureutils.FeatureExtractorAccess;
@@ -534,6 +535,7 @@ public class FeatureSelectorPanel
                 throw new Exception("No recordings available to extract features from.");
 
             boolean[] features_to_save = featuresToSave();
+            validateMEIFeatureFiles(features_to_save, recordings);
 
             // Prepare to extract features
             MIDIFeatureProcessor processor = new MIDIFeatureProcessor(window_size,
@@ -584,6 +586,48 @@ public class FeatureSelectorPanel
                         "Runtime heap.", "ERROR", JOptionPane.ERROR_MESSAGE);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    /**
+     * Verify that MEI-specific features are only coupled with MEI files.
+     * @param features_to_save Features to be saved.
+     * @param recordings Recording info of files of features to be extracted from.
+     * @throws Exception Thrown if a non-MEI file is found and MEI-specific features
+     * are requested to be extracted.
+     */
+    private void validateMEIFeatureFiles(boolean[] features_to_save, RecordingInfo[] recordings)
+            throws Exception
+    {
+        List<String> featureNames = FeatureConversion.featureBooleanToNames(features_to_save);
+        List<String> meiSpecificFeatures = FeatureExtractorAccess.getNamesOfMeiSpecificFeatures();
+        boolean meiFeatureCheck = false;
+        String invalidFeatureName = null;
+        for(String featureName : featureNames) {
+            if(meiSpecificFeatures.contains(featureName)) {
+                meiFeatureCheck = true;
+                invalidFeatureName = featureName;
+                break;
+            }
+        }
+
+        boolean nonMeiFileCheck = false;
+        RecordingInfo invalidFile = null;
+        for(RecordingInfo recording : recordings) {
+            File recordingFile = new File(recording.file_path);
+            if(!FileValidator.validMeiFile(recordingFile)) {
+                nonMeiFileCheck = true;
+                invalidFile = recording;
+                break;
+            }
+        }
+
+        if(meiFeatureCheck && nonMeiFileCheck) {
+            //TODO is this an informative exception???
+            throw new Exception("Cannot extract MEI-specific features with non-MEI files present.\n\n" +
+                    "For example " + invalidFeatureName + " is an MEI-specific feature and\n" +
+                    invalidFile.file_path + " is a non-MEI file.\n\n" +
+                    "Please only include MEI files if MEI-specific features are to be extracted.");
         }
     }
 

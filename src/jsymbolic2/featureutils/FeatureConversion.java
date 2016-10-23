@@ -1,5 +1,6 @@
 package jsymbolic2.featureutils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,6 +34,19 @@ public class FeatureConversion {
             tempSave[featureIndex] = true;
         }
         return tempSave;
+    }
+
+    public static List<String> featureBooleanToNames(boolean[] booleanFeatures) {
+        List<String> featureNames = new ArrayList<>();
+        List<String> allFeatures = FeatureExtractorAccess.getNamesOfAllImplementedFeatures();
+        for(int feature = 0; feature < allFeatures.size(); feature++) {
+            boolean thisFeature = booleanFeatures[feature];
+            if(thisFeature) {
+                String thisFeatureName = allFeatures.get(feature);
+                featureNames.add(thisFeatureName);
+            }
+        }
+        return featureNames;
     }
 
     /**

@@ -1,6 +1,8 @@
 package jsymbolic2.commandline;
 
 import jsymbolic2.configuration.ConfigurationFileData;
+import jsymbolic2.datatypes.RecordingInfo;
+import jsymbolic2.featureutils.FeatureConversion;
 import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.featureutils.FeatureExtractorAccess;
 import jsymbolic2.processing.FileValidator;
@@ -69,7 +71,6 @@ public final class CommandLineFeatureExtraction {
                     "- The Java Runtime ran out of memory.\n " +
                     "- Please rerun this program with more memory assigned to the runtime heap.\n";
             // End execution
-            //TODO note that this will note terminate now and try to rerun jsymbolic with more memory from jSymbolicRunner
             CommandLineUtils.printMessageAndTerminate(errorMessage, -1);
         } catch (Exception e) {
             errorLog.add("Error found in file : " + input_MIDI_path + ". Error Message : " + e.getMessage() + ".");
@@ -94,13 +95,6 @@ public final class CommandLineFeatureExtraction {
                 true,
                 processor,
                 errorLog);
-
-        try {
-            // Finalize saved XML files
-            processor.finalize();
-        } catch (Exception ex) {
-            errorLog.add(ex + "- " + ex.getMessage());
-        }
     }
 
     /**
@@ -153,6 +147,7 @@ public final class CommandLineFeatureExtraction {
     public static void extractFeaturesFromAllFiles(List<File> fileList,
                                                    MIDIFeatureProcessor processor,
                                                    List<String> errorLog) {
+        verifyFeatureFiles(fileList, processor, errorLog);
         for (File file : fileList) {
             if (file.isDirectory()) {
                 CommandLineFeatureExtraction.extractFeaturesFromFolder(file, processor, errorLog);
@@ -160,7 +155,46 @@ public final class CommandLineFeatureExtraction {
                 CommandLineFeatureExtraction.extractFeaturesFromFile(file, processor, errorLog);
             }
         }
+        try {
+            // Finalize saved XML files
+            processor.finalize();
+        } catch (Exception ex) {
+            errorLog.add(ex + "- " + ex.getMessage());
+        }
         FileValidator.printErrorLog(errorLog);
+    }
+
+    private static void verifyFeatureFiles(List<File> fileList,
+                                           MIDIFeatureProcessor processor,
+                                           List<String> errorLog) {
+        MIDIFeatureExtractor[] featureExtractors = processor.getFeature_extractors();
+        List<String> meiSpecificFeatures = FeatureExtractorAccess.getNamesOfMeiSpecificFeatures();
+        boolean meiFeatureCheck = false;
+        List<String> invalidFeatureNames = new ArrayList<>();
+        for(MIDIFeatureExtractor extractor : featureExtractors) {
+            String extractorName = extractor.getFeatureDefinition().name;
+            if(meiSpecificFeatures.contains(extractorName)) {
+                meiFeatureCheck = true;
+                invalidFeatureNames.add(extractorName);
+            }
+        }
+
+        boolean nonMeiFileCheck = false;
+        List<File> invalidFiles = new ArrayList<>();
+        for(File file : fileList) {
+            if(!FileValidator.validMeiFile(file)) {
+                nonMeiFileCheck = true;
+                invalidFiles.add(file);
+            }
+        }
+
+        if(meiFeatureCheck && nonMeiFileCheck) {
+            //TODO is this an informative exception???
+            CommandLineUtils.printMessageAndTerminate("Cannot extract MEI-specific features with non-MEI files present.\n\n" +
+                    Arrays.toString(invalidFeatureNames.toArray()) + " are an MEI-specific feature and\n" +
+                    Arrays.toString(invalidFiles.toArray()) + " are non-MEI files.\n\n" +
+                    "Please only include MEI files if MEI-specific features are to be extracted.", 1);
+        }
     }
 
     /**
