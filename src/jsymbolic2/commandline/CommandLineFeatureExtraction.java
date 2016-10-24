@@ -146,8 +146,10 @@ public final class CommandLineFeatureExtraction {
      */
     public static void extractFeaturesFromAllFiles(List<File> fileList,
                                                    MIDIFeatureProcessor processor,
-                                                   List<String> errorLog) {
-        verifyFeatureFiles(fileList, processor, errorLog);
+                                                   List<String> errorLog)
+	{
+        verifyNoMeiFeaturesAndNonMeiFiles(fileList, processor);
+		
         for (File file : fileList) {
             if (file.isDirectory()) {
                 CommandLineFeatureExtraction.extractFeaturesFromFolder(file, processor, errorLog);
@@ -164,10 +166,18 @@ public final class CommandLineFeatureExtraction {
         FileValidator.printErrorLog(errorLog);
     }
 
-    private static void verifyFeatureFiles(List<File> fileList,
-                                           MIDIFeatureProcessor processor,
-                                           List<String> errorLog) {
-        MIDIFeatureExtractor[] featureExtractors = processor.getFeature_extractors();
+    /**
+     * Verify that MEI-specific features are not set to be extracted from non-MEI files. If they are, print
+	 * error message and terminate execution.
+	 * 
+     * @param fileList Files to extract features from.
+     * @param processor Includes info relating to files from which features are to be extracted.
+	 * 
+     */
+	private static void verifyNoMeiFeaturesAndNonMeiFiles(List<File> fileList,
+                                           MIDIFeatureProcessor processor)
+	{
+        MIDIFeatureExtractor[] featureExtractors = processor.getFinalFeaturesToBeExtracted();
         List<String> meiSpecificFeatures = FeatureExtractorAccess.getNamesOfMeiSpecificFeatures();
         boolean meiFeatureCheck = false;
         List<String> invalidFeatureNames = new ArrayList<>();
@@ -189,11 +199,7 @@ public final class CommandLineFeatureExtraction {
         }
 
         if(meiFeatureCheck && nonMeiFileCheck) {
-            //TODO is this an informative exception???
-            CommandLineUtils.printMessageAndTerminate("Cannot extract MEI-specific features with non-MEI files present.\n\n" +
-                    Arrays.toString(invalidFeatureNames.toArray()) + " are an MEI-specific feature and\n" +
-                    Arrays.toString(invalidFiles.toArray()) + " are non-MEI files.\n\n" +
-                    "Please only include MEI files if MEI-specific features are to be extracted.", 1);
+            CommandLineUtils.printMessageAndTerminate("Cannot extract MEI-specific features from non-MEI files. Current settings have, for example, the following MEI-specific features set to be extracted: " + Arrays.toString(invalidFeatureNames.toArray()) + " and the following non-MEI file included in the list of files to extract features from: " + Arrays.toString(invalidFiles.toArray()) + ". Please only include MEI-specific features if features will only be extracted from MEI files exclusively.\n", 1);
         }
     }
 

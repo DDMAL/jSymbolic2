@@ -535,7 +535,7 @@ public class FeatureSelectorPanel
                 throw new Exception("No recordings available to extract features from.");
 
             boolean[] features_to_save = featuresToSave();
-            validateMEIFeatureFiles(features_to_save, recordings);
+            verifyNoMeiFeaturesAndNonMeiFiles(features_to_save, recordings);
 
             // Prepare to extract features
             MIDIFeatureProcessor processor = new MIDIFeatureProcessor(window_size,
@@ -590,16 +590,16 @@ public class FeatureSelectorPanel
     }
 
     /**
-     * Verify that MEI-specific features are only coupled with MEI files.
-     * @param features_to_save Features to be saved.
-     * @param recordings Recording info of files of features to be extracted from.
-     * @throws Exception Thrown if a non-MEI file is found and MEI-specific features
-     * are requested to be extracted.
+     * Verify that MEI-specific features are not set to be extracted from non-MEI files.
+	 * 
+     * @param features_to_extract Features set to be extracted..
+     * @param recordings Recording info relating to files from which features are to be extracted.
+     * @throws Exception Thrown if a non-MEI file is found and an MEI-specific feature is set to be extracted.
      */
-    private void validateMEIFeatureFiles(boolean[] features_to_save, RecordingInfo[] recordings)
+    private void verifyNoMeiFeaturesAndNonMeiFiles(boolean[] features_to_extract, RecordingInfo[] recordings)
             throws Exception
     {
-        List<String> featureNames = FeatureConversion.featureBooleanToNames(features_to_save);
+        List<String> featureNames = FeatureConversion.featureBooleanToNames(features_to_extract);
         List<String> meiSpecificFeatures = FeatureExtractorAccess.getNamesOfMeiSpecificFeatures();
         boolean meiFeatureCheck = false;
         String invalidFeatureName = null;
@@ -622,13 +622,11 @@ public class FeatureSelectorPanel
             }
         }
 
-        if(meiFeatureCheck && nonMeiFileCheck) {
-            //TODO is this an informative exception???
-            throw new Exception("Cannot extract MEI-specific features with non-MEI files present.\n\n" +
-                    "For example " + invalidFeatureName + " is an MEI-specific feature and\n" +
-                    invalidFile.file_path + " is a non-MEI file.\n\n" +
-                    "Please only include MEI files if MEI-specific features are to be extracted.");
-        }
+        if(meiFeatureCheck && nonMeiFileCheck)
+            throw new Exception( "Cannot extract MEI-specific features from non-MEI files.\n"
+							   + "Current settings have, for example, the following MEI-specific feature set to be extracted: " + invalidFeatureName + ",\n"
+					           + "and the following non-MEI file included in the list of files to extract features from: " + invalidFile.file_path + ".\n"
+							   + "Please only include MEI-specific features if features will only be extracted from MEI files exclusively.\n");
     }
 
     /**

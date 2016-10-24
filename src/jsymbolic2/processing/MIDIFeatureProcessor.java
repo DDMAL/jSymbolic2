@@ -270,12 +270,14 @@ public class MIDIFeatureProcessor
      
      /* PUBLIC METHODS ********************************************************/
 
-    /**
-     * @return The features that are to be extracted by this processor.
-     */
-    public MIDIFeatureExtractor[] getFeature_extractors() {
-         return feature_extractors;
-     }
+	/**
+	 * @return	The features that are to be extracted (including dependencies of features to be saved, not 
+	 *			just the features to be saved themselves).
+	 */
+	public MIDIFeatureExtractor[] getFinalFeaturesToBeExtracted()
+	{
+		return feature_extractors;
+	}
 
      /**
       * Extract the features from the provided MIDI file. This may involve
