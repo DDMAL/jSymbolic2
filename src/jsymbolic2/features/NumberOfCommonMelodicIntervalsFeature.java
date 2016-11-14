@@ -60,8 +60,8 @@ public class NumberOfCommonMelodicIntervalsFeature
 		{
 			// Find the number of pitches
 			int count = 0;
-			for (int bin = 0; bin < sequence_info.melodic_histogram.length; bin++)
-				if (sequence_info.melodic_histogram[bin] >= 0.09)
+			for (int bin = 0; bin < sequence_info.melodic_interval_histogram.length; bin++)
+				if (sequence_info.melodic_interval_histogram[bin] >= 0.09)
 					count++;
 
 			// Formulate the feature value

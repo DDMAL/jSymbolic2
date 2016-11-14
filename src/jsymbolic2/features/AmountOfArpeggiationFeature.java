@@ -58,15 +58,15 @@ public class AmountOfArpeggiationFeature
 		double value;
 		if (sequence_info != null)
 		{
-			value =   sequence_info.melodic_histogram[0]
-					+ sequence_info.melodic_histogram[3]
-					+ sequence_info.melodic_histogram[4]
-					+ sequence_info.melodic_histogram[7]
-					+ sequence_info.melodic_histogram[10]
-					+ sequence_info.melodic_histogram[11]
-					+ sequence_info.melodic_histogram[12]
-					+ sequence_info.melodic_histogram[15]
-					+ sequence_info.melodic_histogram[16];
+			value =   sequence_info.melodic_interval_histogram[0]
+					+ sequence_info.melodic_interval_histogram[3]
+					+ sequence_info.melodic_interval_histogram[4]
+					+ sequence_info.melodic_interval_histogram[7]
+					+ sequence_info.melodic_interval_histogram[10]
+					+ sequence_info.melodic_interval_histogram[11]
+					+ sequence_info.melodic_interval_histogram[12]
+					+ sequence_info.melodic_interval_histogram[15]
+					+ sequence_info.melodic_interval_histogram[16];
 		}
 		else value = -1.0;
 

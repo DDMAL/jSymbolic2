@@ -62,7 +62,7 @@ public class RelativeRangeIsolationOfLoudestVoiceFeature
 		{
 			// Get information from sequence_info 
 			int[][] channel_stats = sequence_info.channel_statistics;
-			List<List<Integer>> channel_pitch = sequence_info.channel_pitches;
+			List<List<Integer>> channel_pitch = sequence_info.list_of_note_on_pitches_by_channel;
 
 			// Find the loudest channel and its average loudness
 			int index_of_loudest_channel = 0;

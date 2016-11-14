@@ -1,6 +1,6 @@
 package jsymbolic2.features;
 
-import jsymbolic2.featureutils.ChordTypesEnum;
+import jsymbolic2.featureutils.ChordTypeEnum;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,8 +29,8 @@ public class ChordTypesEnumTest {
         int[] two_pitch = new int[number_of_intervals];
         two_pitch[0] = 5;
         two_pitch[11] = 4;
-        ChordTypesEnum actual_two_pitch = ChordTypesEnum.getChordType(two_pitch);
-        ChordTypesEnum expected_two_pitch = ChordTypesEnum.PARTIAL_CHORD;
+        ChordTypeEnum actual_two_pitch = ChordTypeEnum.getChordType(two_pitch);
+        ChordTypeEnum expected_two_pitch = ChordTypeEnum.PARTIAL_CHORD;
         assertEquals(expected_two_pitch, actual_two_pitch);
 
         // Major triad test
@@ -38,8 +38,8 @@ public class ChordTypesEnumTest {
         major_triad_root[2] = 64;
         major_triad_root[6] = 64;
         major_triad_root[9] = 64;
-        ChordTypesEnum actual_major_triad_root = ChordTypesEnum.getChordType(major_triad_root);
-        ChordTypesEnum expected_major_triad_root = ChordTypesEnum.MAJOR_TRIAD;
+        ChordTypeEnum actual_major_triad_root = ChordTypeEnum.getChordType(major_triad_root);
+        ChordTypeEnum expected_major_triad_root = ChordTypeEnum.MAJOR_TRIAD;
         assertEquals(expected_major_triad_root, actual_major_triad_root);
         
         // Minor triad test
@@ -47,8 +47,8 @@ public class ChordTypesEnumTest {
         minor_triad_root[2] = 64;
         minor_triad_root[6] = 64;
         minor_triad_root[11] = 64;
-        ChordTypesEnum actual_minor_triad_root = ChordTypesEnum.getChordType(minor_triad_root);
-        ChordTypesEnum expected_minor_triad_root = ChordTypesEnum.MINOR_TRIAD;
+        ChordTypeEnum actual_minor_triad_root = ChordTypeEnum.getChordType(minor_triad_root);
+        ChordTypeEnum expected_minor_triad_root = ChordTypeEnum.MINOR_TRIAD;
         assertEquals(expected_minor_triad_root, actual_minor_triad_root);
         
         // Augmented triad test
@@ -56,8 +56,8 @@ public class ChordTypesEnumTest {
         augmented_triad[2] = 64;
         augmented_triad[6] = 64;
         augmented_triad[10] = 64;
-        ChordTypesEnum actual_augmented_triad = ChordTypesEnum.getChordType(augmented_triad);
-        ChordTypesEnum expected_augmented_triad = ChordTypesEnum.AUGMENTED_TRIAD;
+        ChordTypeEnum actual_augmented_triad = ChordTypeEnum.getChordType(augmented_triad);
+        ChordTypeEnum expected_augmented_triad = ChordTypeEnum.AUGMENTED_TRIAD;
         assertEquals(expected_augmented_triad, actual_augmented_triad);
 
         // Diminished triad test
@@ -65,8 +65,8 @@ public class ChordTypesEnumTest {
         diminished_triad[1] = 64;
         diminished_triad[4] = 64;
         diminished_triad[10] = 64;
-        ChordTypesEnum actual_diminished_triad = ChordTypesEnum.getChordType(diminished_triad);
-        ChordTypesEnum expected_diminished_triad = ChordTypesEnum.DIMINISHED_TRIAD;
+        ChordTypeEnum actual_diminished_triad = ChordTypeEnum.getChordType(diminished_triad);
+        ChordTypeEnum expected_diminished_triad = ChordTypeEnum.DIMINISHED_TRIAD;
         assertEquals(expected_diminished_triad, actual_diminished_triad);
 
         // Other triad test
@@ -74,8 +74,8 @@ public class ChordTypesEnumTest {
         other_triad[1] = 64;
         other_triad[4] = 64;
         other_triad[11] = 64;
-        ChordTypesEnum actual_other_triad = ChordTypesEnum.getChordType(other_triad);
-        ChordTypesEnum expected_other_triad = ChordTypesEnum.OTHER_TRIAD;
+        ChordTypeEnum actual_other_triad = ChordTypeEnum.getChordType(other_triad);
+        ChordTypeEnum expected_other_triad = ChordTypeEnum.OTHER_TRIAD;
         assertEquals(expected_other_triad, actual_other_triad);
 
         // Dominant seventh chord test
@@ -84,8 +84,8 @@ public class ChordTypesEnumTest {
         dominant_seventh[4] = 128;
         dominant_seventh[7] = 128;
         dominant_seventh[10] = 64;
-        ChordTypesEnum actual_dominant_seventh = ChordTypesEnum.getChordType(dominant_seventh);
-        ChordTypesEnum expected_dominant_seventh = ChordTypesEnum.DOMINANT_SEVENTH;
+        ChordTypeEnum actual_dominant_seventh = ChordTypeEnum.getChordType(dominant_seventh);
+        ChordTypeEnum expected_dominant_seventh = ChordTypeEnum.DOMINANT_SEVENTH;
         assertEquals(expected_dominant_seventh, actual_dominant_seventh);
 
         // Major seventh chord test
@@ -94,8 +94,8 @@ public class ChordTypesEnumTest {
         major_seventh[4] = 128;
         major_seventh[7] = 128;
         major_seventh[11] = 64;
-        ChordTypesEnum actual_major_seventh = ChordTypesEnum.getChordType(major_seventh);
-        ChordTypesEnum expected_major_seventh = ChordTypesEnum.MAJOR_SEVENTH;
+        ChordTypeEnum actual_major_seventh = ChordTypeEnum.getChordType(major_seventh);
+        ChordTypeEnum expected_major_seventh = ChordTypeEnum.MAJOR_SEVENTH;
         assertEquals(expected_major_seventh, actual_major_seventh);
 
         // Minor seventh chord test
@@ -104,8 +104,8 @@ public class ChordTypesEnumTest {
         minor_seventh[3] = 128;
         minor_seventh[7] = 128;
         minor_seventh[10] = 64;
-        ChordTypesEnum actual_minor_seventh = ChordTypesEnum.getChordType(minor_seventh);
-        ChordTypesEnum expected_minor_seventh = ChordTypesEnum.MINOR_SEVENTH;
+        ChordTypeEnum actual_minor_seventh = ChordTypeEnum.getChordType(minor_seventh);
+        ChordTypeEnum expected_minor_seventh = ChordTypeEnum.MINOR_SEVENTH;
         assertEquals(expected_minor_seventh, actual_minor_seventh);
 
         // Other four chord test
@@ -114,8 +114,8 @@ public class ChordTypesEnumTest {
         other_four[3] = 128;
         other_four[7] = 128;
         other_four[11] = 64;
-        ChordTypesEnum actual_other_four = ChordTypesEnum.getChordType(other_four);
-        ChordTypesEnum expected_other_four = ChordTypesEnum.OTHER_FOUR_CHORD;
+        ChordTypeEnum actual_other_four = ChordTypeEnum.getChordType(other_four);
+        ChordTypeEnum expected_other_four = ChordTypeEnum.OTHER_FOUR_NOTE_CHORD;
         assertEquals(expected_other_four, actual_other_four);
         
         // Complex chord test
@@ -125,8 +125,8 @@ public class ChordTypesEnumTest {
         complex_chord[7] = 128;
         complex_chord[10] = 64;
         complex_chord[11] = 70;
-        ChordTypesEnum actual_complex_chord = ChordTypesEnum.getChordType(complex_chord);
-        ChordTypesEnum expected_complex_chord = ChordTypesEnum.COMPLEX_CHORD;
+        ChordTypeEnum actual_complex_chord = ChordTypeEnum.getChordType(complex_chord);
+        ChordTypeEnum expected_complex_chord = ChordTypeEnum.COMPLEX_CHORD;
         assertEquals(expected_complex_chord, actual_complex_chord);
     }
 

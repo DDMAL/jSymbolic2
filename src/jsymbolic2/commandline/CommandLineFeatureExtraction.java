@@ -1,8 +1,6 @@
 package jsymbolic2.commandline;
 
 import jsymbolic2.configuration.ConfigurationFileData;
-import jsymbolic2.datatypes.RecordingInfo;
-import jsymbolic2.featureutils.FeatureConversion;
 import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.featureutils.FeatureExtractorAccess;
 import jsymbolic2.processing.FileValidator;

@@ -4,7 +4,6 @@ import java.util.stream.DoubleStream;
 import javax.sound.midi.Sequence;
 import ace.datatypes.FeatureDefinition;
 import jsymbolic2.featureutils.MIDIFeatureExtractor;
-import jsymbolic2.featureutils.FeatureConversion;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
@@ -63,7 +62,7 @@ public class CompleteRestsFeature
 		{	
 			// Get information from sequence_info
 			short[][] pitch_strength_by_tick_chart = sequence_info.pitch_strength_by_tick_chart;
-			double[] seconds_per_tick = sequence_info.seconds_per_tick;
+			double[] seconds_per_tick = sequence_info.duration_of_ticks_in_seconds;
 			
 			// The number of ticks to examine (the minus 1 is because Java doesn't count the last tick
 			int ticks_to_test = pitch_strength_by_tick_chart.length - 1;
@@ -73,7 +72,7 @@ public class CompleteRestsFeature
 			for (int tick = 0; tick < ticks_to_test; tick++)
 			{
 				short[] pitch_velocities = pitch_strength_by_tick_chart[tick];
-				if (FeatureConversion.allArrayEqual(pitch_velocities, 0))
+				if (mckay.utilities.staticlibraries.ArrayMethods.doesArrayContainOnlyThisValue(pitch_velocities, 0))
 					seconds_of_rest_per_tick[tick] = seconds_per_tick[tick];
 			}
 			
@@ -81,7 +80,7 @@ public class CompleteRestsFeature
 			double total_complete_rests = DoubleStream.of(seconds_of_rest_per_tick).sum();
 			
 			// Divide by the length of the piece
-			value = total_complete_rests / sequence_info.recording_length_double;
+			value = total_complete_rests / sequence_info.sequence_duration_precise;
 		}
 		else value = -1.0;
 

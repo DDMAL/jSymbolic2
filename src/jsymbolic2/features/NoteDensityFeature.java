@@ -63,7 +63,7 @@ public class NoteDensityFeature
 				count += sequence_info.channel_statistics[chan][0];
 
 			// Calculate the feature value
-			value = (double) count / (double) sequence_info.recording_length;
+			value = (double) count / (double) sequence_info.sequence_duration;
 		}
 		else value = -1.0;
 

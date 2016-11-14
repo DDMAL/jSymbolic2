@@ -70,7 +70,7 @@ public class VariabilityAcrossVoicesOfTotalRestsPerVoice extends MIDIFeatureExtr
 				if (total_notes_on_this_channel > 0)
 				{
 					int total_non_silence_this_channel = channel_stats[channel][1];
-					total_rest_time_per_channel.add(sequence_info.recording_length_double - total_non_silence_this_channel);
+					total_rest_time_per_channel.add(sequence_info.sequence_duration_precise - total_non_silence_this_channel);
 				}
 			}
 			

@@ -73,8 +73,8 @@ public class AverageTimeBetweenAttacksForEachVoiceFeature
 				{
 					// Find number of intervals
 					int number_of_intervals = -1;
-					for (int tick = 0; tick < sequence_info.note_beginnings_map.length; tick++)
-						if (sequence_info.note_beginnings_map[tick][chan])
+					for (int tick = 0; tick < sequence_info.note_attack_tick_map.length; tick++)
+						if (sequence_info.note_attack_tick_map[tick][chan])
 							number_of_intervals++;
 
 					// Fill in the array of intervals
@@ -82,15 +82,15 @@ public class AverageTimeBetweenAttacksForEachVoiceFeature
 					number_of_intervals = 0;
 					double time_so_far = 0.0;
 					int tick_of_last_attack = -1;
-					for (int tick = 0; tick < sequence_info.note_beginnings_map.length; tick++)
+					for (int tick = 0; tick < sequence_info.note_attack_tick_map.length; tick++)
 					{
 						// Check if an attack occured on this tick
 						boolean attack = false;
-						if (sequence_info.note_beginnings_map[tick][chan])
+						if (sequence_info.note_attack_tick_map[tick][chan])
 							attack = true;
 
 						if (!attack)
-							time_so_far += sequence_info.seconds_per_tick[tick];
+							time_so_far += sequence_info.duration_of_ticks_in_seconds[tick];
 						else
 						{
 							if (tick_of_last_attack != -1)

@@ -1,7 +1,7 @@
 package jsymbolic2.features;
 
 import ace.datatypes.FeatureDefinition;
-import jsymbolic2.featureutils.ChordTypesEnum;
+import jsymbolic2.featureutils.ChordTypeEnum;
 import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
@@ -13,7 +13,7 @@ import java.util.stream.DoubleStream;
  */
 public class ChordTypeHistogramFeature extends MIDIFeatureExtractor {
 
-    private final int number_of_chord_types = ChordTypesEnum.values().length;
+    private final int number_of_chord_types = ChordTypeEnum.values().length;
 
     public ChordTypeHistogramFeature()
 	{
@@ -38,20 +38,20 @@ public class ChordTypeHistogramFeature extends MIDIFeatureExtractor {
                                    double[][] other_feature_values)
             throws Exception
     {
-        short[][] vertical_interval_chart = sequence_info.pitch_strength_by_tick_chart;
+        short[][] pitch_strength_by_tick_chart = sequence_info.pitch_strength_by_tick_chart;
         double[] chord_types = new double[number_of_chord_types];
         int total_intervals = 12;
-        for(int tick = 0; tick < vertical_interval_chart.length; tick++) {
+        for(int tick = 0; tick < pitch_strength_by_tick_chart.length; tick++) {
             //Get the chord at this tick
             int[] tick_chord = new int[total_intervals];
-            for(int pitch = 0; pitch < vertical_interval_chart[tick].length - 1; pitch++) {
+            for(int pitch = 0; pitch < pitch_strength_by_tick_chart[tick].length - 1; pitch++) {
                 int quantized_pitch = pitch % total_intervals;
-                tick_chord[quantized_pitch] += vertical_interval_chart[tick][pitch];
+                tick_chord[quantized_pitch] += pitch_strength_by_tick_chart[tick][pitch];
             }
-            ChordTypesEnum chord_type = ChordTypesEnum.getChordType(tick_chord);
+            ChordTypeEnum chord_type = ChordTypeEnum.getChordType(tick_chord);
             if(chord_type != null) {
                 double added_velocity = computeAverageVelocity(tick_chord);
-                chord_types[chord_type.getChord_number()] += added_velocity;
+                chord_types[chord_type.getChordTypeCode()] += added_velocity;
             }
         }
 

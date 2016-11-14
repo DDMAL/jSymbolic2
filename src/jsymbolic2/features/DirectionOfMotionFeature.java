@@ -59,12 +59,12 @@ public class DirectionOfMotionFeature
 		{
 			int ups = 0;
 			int downs = 0;
-			for (int chan = 0; chan < sequence_info.melody_list.length; chan++)
+			for (int chan = 0; chan < sequence_info.melodic_intervals_by_channel.length; chan++)
 			{
 				if (chan != (10 - 1)) // Note Channel 10 unpitched instruments
 				{
 					// Convert to array
-					Object[] list_contents = sequence_info.melody_list[chan].toArray();
+					Object[] list_contents = sequence_info.melodic_intervals_by_channel[chan].toArray();
 					int[] intervals = new int[list_contents.length];
 					for (int i = 0; i < intervals.length; i++)
 						intervals[i] = ((Integer) list_contents[i]).intValue();

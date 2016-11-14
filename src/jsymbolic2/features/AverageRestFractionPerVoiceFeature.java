@@ -76,12 +76,12 @@ public class AverageRestFractionPerVoiceFeature
 				// Note there are notes this channel and accumulate the total amount of rest time
 				number_channels_with_notes++;
 				int total_non_silence_this_channel = channel_stats[channel][1];
-				total_rest_time_all_channels_combined += (sequence_info.recording_length_double - total_non_silence_this_channel);
+				total_rest_time_all_channels_combined += (sequence_info.sequence_duration_precise - total_non_silence_this_channel);
 			}
 			
 			// Find the average across channels, and then scale by duration
 			value = total_rest_time_all_channels_combined / (double) number_channels_with_notes;
-			value = value / sequence_info.recording_length_double;
+			value = value / sequence_info.sequence_duration_precise;
 		}
 		else value = -1.0;
 

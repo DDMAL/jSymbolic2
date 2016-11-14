@@ -63,16 +63,16 @@ public class PolyrhythmsFeature
 		{
 			// Find the number of sufficiently large peaks
 			int count = 0;
-			for (int bin = 0; bin < sequence_info.rhythmic_histogram_table.length; bin++)
-				if (sequence_info.rhythmic_histogram_table[bin][2] > 0.001)
+			for (int bin = 0; bin < sequence_info.beat_histogram_thresholded_table.length; bin++)
+				if (sequence_info.beat_histogram_thresholded_table[bin][2] > 0.001)
 					count++;
 
 			// Store the peak bins
 			int[] peak_bins = new int[count];
 			int so_far = 0;
-			for (int bin = 0; bin < sequence_info.rhythmic_histogram_table.length; bin++)
+			for (int bin = 0; bin < sequence_info.beat_histogram_thresholded_table.length; bin++)
 			{
-				if (sequence_info.rhythmic_histogram_table[bin][2] > 0.001)
+				if (sequence_info.beat_histogram_thresholded_table[bin][2] > 0.001)
 				{
 					peak_bins[so_far] = bin;
 					so_far++;
@@ -84,9 +84,9 @@ public class PolyrhythmsFeature
 			double max_so_far = 0.0;
 			for (int bin = 0; bin < peak_bins.length; bin++)
 			{
-				if (sequence_info.rhythmic_histogram_table[peak_bins[bin]][2] > max_so_far)
+				if (sequence_info.beat_histogram_thresholded_table[peak_bins[bin]][2] > max_so_far)
 				{
-					max_so_far = sequence_info.rhythmic_histogram_table[peak_bins[bin]][2];
+					max_so_far = sequence_info.beat_histogram_thresholded_table[peak_bins[bin]][2];
 					highest_index = peak_bins[bin];
 				}
 			}
@@ -100,8 +100,8 @@ public class PolyrhythmsFeature
 					left_limit = 0;
 
 				int right_limit = peak_bins[i] + 4;
-				if (right_limit > sequence_info.rhythmic_histogram_table.length)
-					right_limit = sequence_info.rhythmic_histogram_table.length;
+				if (right_limit > sequence_info.beat_histogram_thresholded_table.length)
+					right_limit = sequence_info.beat_histogram_thresholded_table.length;
 
 				int[] multipliers = { 1, 2, 3, 4, 6, 8 };
 				for (int j = left_limit; j < right_limit; j++)

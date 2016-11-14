@@ -56,7 +56,7 @@ public class MelodicTritonesFeature
 	{
 		double value;
 		if (sequence_info != null)
-			value = sequence_info.melodic_histogram[6];
+			value = sequence_info.melodic_interval_histogram[6];
 		else value = -1.0;
 
 		double[] result = new double[1];

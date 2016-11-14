@@ -59,10 +59,10 @@ public class PrevalenceOfMostCommonMelodicInterval
 		if (sequence_info != null)
 		{
 			// Find the highest bin
-			int max_index = mckay.utilities.staticlibraries.MathAndStatsMethods.getIndexOfLargest(sequence_info.melodic_histogram);
+			int max_index = mckay.utilities.staticlibraries.MathAndStatsMethods.getIndexOfLargest(sequence_info.melodic_interval_histogram);
 
 			// Calculate the feature value
-			value = sequence_info.melodic_histogram[max_index];
+			value = sequence_info.melodic_interval_histogram[max_index];
 		} 
 		else value = -1.0;
 

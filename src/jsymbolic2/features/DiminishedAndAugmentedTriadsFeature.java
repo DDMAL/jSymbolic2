@@ -1,7 +1,7 @@
 package jsymbolic2.features;
 
 import ace.datatypes.FeatureDefinition;
-import jsymbolic2.featureutils.ChordTypesEnum;
+import jsymbolic2.featureutils.ChordTypeEnum;
 import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
@@ -67,8 +67,8 @@ public class DiminishedAndAugmentedTriadsFeature extends MIDIFeatureExtractor {
             throws Exception
     {
         double[] chord_type_values = other_feature_values[0];
-        int augmented_triad_number = ChordTypesEnum.AUGMENTED_TRIAD.getChord_number();
-        int diminished_triad_number = ChordTypesEnum.DIMINISHED_TRIAD.getChord_number();
+        int augmented_triad_number = ChordTypeEnum.AUGMENTED_TRIAD.getChordTypeCode();
+        int diminished_triad_number = ChordTypeEnum.DIMINISHED_TRIAD.getChordTypeCode();
         double triad_fraction = chord_type_values[augmented_triad_number] + chord_type_values[diminished_triad_number];
         return new double[]{triad_fraction};
     }

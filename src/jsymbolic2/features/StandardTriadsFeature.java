@@ -1,7 +1,7 @@
 package jsymbolic2.features;
 
 import ace.datatypes.FeatureDefinition;
-import jsymbolic2.featureutils.ChordTypesEnum;
+import jsymbolic2.featureutils.ChordTypeEnum;
 import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
@@ -67,8 +67,8 @@ public class StandardTriadsFeature extends MIDIFeatureExtractor {
             throws Exception
     {
         double[] chord_type_values = other_feature_values[0];
-        int major_triad_number = ChordTypesEnum.MAJOR_TRIAD.getChord_number();
-        int minor_triad_number = ChordTypesEnum.MINOR_TRIAD.getChord_number();
+        int major_triad_number = ChordTypeEnum.MAJOR_TRIAD.getChordTypeCode();
+        int minor_triad_number = ChordTypeEnum.MINOR_TRIAD.getChordTypeCode();
         double triad_fraction = chord_type_values[major_triad_number] + chord_type_values[minor_triad_number];
         return new double[]{triad_fraction};
     }

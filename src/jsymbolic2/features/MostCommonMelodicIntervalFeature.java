@@ -58,7 +58,7 @@ public class MostCommonMelodicIntervalFeature
 		double value;
 		if (sequence_info != null)
 		{
-			int max_index = mckay.utilities.staticlibraries.MathAndStatsMethods.getIndexOfLargest(sequence_info.melodic_histogram);
+			int max_index = mckay.utilities.staticlibraries.MathAndStatsMethods.getIndexOfLargest(sequence_info.melodic_interval_histogram);
 			value = (double) max_index;
 		}
 		else value = -1.0;

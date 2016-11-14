@@ -1,7 +1,7 @@
 package jsymbolic2.features;
 
 import ace.datatypes.FeatureDefinition;
-import jsymbolic2.featureutils.ChordTypesEnum;
+import jsymbolic2.featureutils.ChordTypeEnum;
 import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
@@ -67,7 +67,7 @@ public class DominantSeventhChordsFeature extends MIDIFeatureExtractor {
             throws Exception
     {
         double[] chord_type_values = other_feature_values[0];
-        int dominant_seventh = ChordTypesEnum.DOMINANT_SEVENTH.getChord_number();
+        int dominant_seventh = ChordTypeEnum.DOMINANT_SEVENTH.getChordTypeCode();
         double dominant_fraction = chord_type_values[dominant_seventh];
         return new double[]{dominant_fraction};
     }

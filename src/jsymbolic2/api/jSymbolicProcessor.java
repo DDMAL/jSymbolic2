@@ -2,7 +2,6 @@ package jsymbolic2.api;
 
 import jsymbolic2.configuration.ConfigurationFileData;
 import jsymbolic2.configuration.txtimplementation.ConfigurationFileValidatorTxtImpl;
-import jsymbolic2.featureutils.FeatureConversion;
 import jsymbolic2.featureutils.FeatureExtractorAccess;
 import jsymbolic2.processing.*;
 import mckay.utilities.staticlibraries.FileMethods;
@@ -62,7 +61,7 @@ public class jSymbolicProcessor {
     {
         this.window_size = window_size;
         this.window_overlap = window_overlap;
-        this.boolean_feature_names = FeatureConversion.processFeaturesToSave(feature_names);
+        this.boolean_feature_names = FeatureExtractorAccess.findSpecifiedFeatures(feature_names);
         this.save_features_for_each_window = save_features_for_each_window;
         this.save_overall_recording_features = save_overall_recording_features;
         this.convert_to_arff = convert_to_arff;

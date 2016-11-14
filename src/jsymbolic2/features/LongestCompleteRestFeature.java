@@ -3,7 +3,6 @@ package jsymbolic2.features;
 import javax.sound.midi.Sequence;
 import ace.datatypes.FeatureDefinition;
 import jsymbolic2.featureutils.MIDIFeatureExtractor;
-import jsymbolic2.featureutils.FeatureConversion;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
@@ -72,7 +71,7 @@ public class LongestCompleteRestFeature
 			for (int tick = 0; tick < pitch_strength_by_tick_chart.length; tick++)
 			{
 				// If no pitches are sounding
-				if (FeatureConversion.allArrayEqual(pitch_strength_by_tick_chart[tick], 0))
+				if (mckay.utilities.staticlibraries.ArrayMethods.doesArrayContainOnlyThisValue(pitch_strength_by_tick_chart[tick], 0))
 				{
 					this_streak_length++;
 					if (this_streak_length == 1)
@@ -98,7 +97,7 @@ public class LongestCompleteRestFeature
 			}
 
 			// Calculate the duration in seconds of the longest rest
-			double[] seconds_per_tick = sequence_info.seconds_per_tick;
+			double[] seconds_per_tick = sequence_info.duration_of_ticks_in_seconds;
 			for (int tick = max_streak_start_tick; tick < max_streak_end_tick; tick++)
 				value += seconds_per_tick[tick];
 		}
