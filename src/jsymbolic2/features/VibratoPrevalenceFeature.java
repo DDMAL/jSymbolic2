@@ -109,7 +109,7 @@ public class VibratoPrevalenceFeature
 				}
 
 				// Calculate the value
-				value = (double) notes_with_vibrato / (double) sequence_info.total_number_pitched_notes;
+				value = (double) notes_with_vibrato / (double) sequence_info.total_number_pitched_note_ons;
 			}
 		}
 		else value = -1.0;

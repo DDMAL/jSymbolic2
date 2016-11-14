@@ -1,6 +1,5 @@
 package jsymbolic2.configuration;
 
-import jsymbolic2.featureutils.FeatureConversion;
 import jsymbolic2.featureutils.FeatureExtractorAccess;
 
 import java.util.Arrays;
@@ -66,7 +65,7 @@ public class ConfigurationFileData {
         this.outputFileList = outputFileList;
         this.configurationFilePath = configurationFilePath;
         this.inputFileList = inputFileList;
-        this.featuresToSaveBoolean = FeatureConversion.processFeaturesToSave(featuresToSave);
+        this.featuresToSaveBoolean = FeatureExtractorAccess.findSpecifiedFeatures(featuresToSave);
     }
 
     /**

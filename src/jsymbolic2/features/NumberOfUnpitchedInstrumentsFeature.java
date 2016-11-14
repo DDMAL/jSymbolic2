@@ -62,7 +62,7 @@ public class NumberOfUnpitchedInstrumentsFeature
 			int total_number_instruments_played = 0;
 			for (int instrument = 35; instrument < 82; instrument++)
 			{
-				if (sequence_info.non_pitched_instrumentation_frequencies[instrument] > 0)
+				if (sequence_info.non_pitched_instrument_prevalence[instrument] > 0)
 					total_number_instruments_played++;
 			}
 

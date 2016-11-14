@@ -1,7 +1,7 @@
 package jsymbolic2.features;
 
 import ace.datatypes.FeatureDefinition;
-import jsymbolic2.featureutils.ChordTypesEnum;
+import jsymbolic2.featureutils.ChordTypeEnum;
 import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
@@ -67,7 +67,7 @@ public class PartialChordsFeature extends MIDIFeatureExtractor {
             throws Exception
     {
         double[] chord_type_values = other_feature_values[0];
-        int partial_chord_number = ChordTypesEnum.PARTIAL_CHORD.getChord_number();
+        int partial_chord_number = ChordTypeEnum.PARTIAL_CHORD.getChordTypeCode();
         double partial_chord_fraction = chord_type_values[partial_chord_number];
         return new double[]{partial_chord_fraction};
     }

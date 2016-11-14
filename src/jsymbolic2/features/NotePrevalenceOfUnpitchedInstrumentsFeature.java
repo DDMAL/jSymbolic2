@@ -65,8 +65,8 @@ public class NotePrevalenceOfUnpitchedInstrumentsFeature
 			result = new double[47];
 			for (int instrument = 35; instrument < 82; instrument++)
 			{
-				result[instrument - 35] = sequence_info.non_pitched_instrumentation_frequencies[instrument]
-						/ (double) sequence_info.total_number_notes;
+				result[instrument - 35] = sequence_info.non_pitched_instrument_prevalence[instrument]
+						/ (double) sequence_info.total_number_note_ons;
 			}
 		}
 		return result;

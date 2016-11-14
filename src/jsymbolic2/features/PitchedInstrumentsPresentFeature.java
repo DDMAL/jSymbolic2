@@ -62,7 +62,7 @@ public class PitchedInstrumentsPresentFeature
 			result = new double[128];
 			for (int instrument = 0; instrument < result.length; instrument++)
 			{
-				if (sequence_info.pitched_instrumentation_frequencies[instrument][0] > 0)
+				if (sequence_info.pitched_instrument_prevalence[instrument][0] > 0)
 					result[instrument] = 1.0;
 				else result[instrument] = 0.0;
 			}

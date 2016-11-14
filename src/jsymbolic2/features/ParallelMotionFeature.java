@@ -5,7 +5,7 @@ import javax.sound.midi.Sequence;
 import ace.datatypes.FeatureDefinition;
 import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.featureutils.NoteInfo;
-import jsymbolic2.featureutils.NoteInfoList;
+import jsymbolic2.featureutils.CollectedNoteInfo;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
@@ -66,9 +66,9 @@ public class ParallelMotionFeature
 			double parallel_notes = 0;
 
 			// Set up the appropriate tick note maps
-			List<NoteInfo> all_notes = sequence_info.all_note_info.getAllNotes();
-			all_notes.sort((n1, n2) -> ((Integer) n1.getStart_tick()).compareTo(n2.getStart_tick()));
-			Map<Integer, List<NoteInfo>> tickNoteMap = sequence_info.all_note_info.getTickNoteMap();
+			List<NoteInfo> all_notes = sequence_info.all_notes.getNoteList();
+			all_notes.sort((n1, n2) -> ((Integer) n1.getStartTick()).compareTo(n2.getStartTick()));
+			Map<Integer, List<NoteInfo>> tickNoteMap = sequence_info.all_notes.getStartTickNoteMap();
 			Integer[] ticks = tickNoteMap.keySet().toArray(new Integer[0]);
 			Arrays.sort(ticks);
 
@@ -80,7 +80,7 @@ public class ParallelMotionFeature
 
 				// Get shortest note duration for this tick
 				int current_tick = ticks[current_tick_index];
-				NoteInfo short_note = getShortestNoteInChannelAtTick(sequence_info.all_note_info, current_tick);
+				NoteInfo short_note = getShortestNoteInChannelAtTick(sequence_info.all_notes, current_tick);
 				int short_duration = short_note.getDuration();
 
 				// Compare the voice motion in each voice(channel) w.r.t. the shortest duration
@@ -89,8 +89,8 @@ public class ParallelMotionFeature
 					if (channel == 10 - 1)  // Skip over the percussion channel
 						continue;
 
-					List<NoteInfo> channel_notes = sequence_info.all_note_info.getChannelNotes(channel);
-					Map<Integer, List<NoteInfo>> current_tick_notes = sequence_info.all_note_info.channelListToTickMap(channel_notes);
+					List<NoteInfo> channel_notes = sequence_info.all_notes.getNotesOnChannel(channel);
+					Map<Integer, List<NoteInfo>> current_tick_notes = sequence_info.all_notes.noteListToStartTickNoteMap(channel_notes);
 					Set<Integer> channel_ticks = current_tick_notes.keySet();
 					List<Integer> channel_ticks_list = new ArrayList<>(channel_ticks);
 					channel_ticks_list.sort((i1, i2) -> i1.compareTo(i2));
@@ -166,17 +166,17 @@ public class ParallelMotionFeature
 	 * @param current_tick	The tick at which to check the channels from.
 	 * @return				The shortest note with the highest pitch of any channel at the given current tick.
 	 */
-	private NoteInfo getShortestNoteInChannelAtTick(NoteInfoList all_note_info, int current_tick)
+	private NoteInfo getShortestNoteInChannelAtTick(CollectedNoteInfo all_note_info, int current_tick)
 	{
 		int shortest_duration = Integer.MAX_VALUE;
-		NoteInfo shortest_note = all_note_info.getAllNotes().get(0); // to initialize to non-null value
+		NoteInfo shortest_note = all_note_info.getNoteList().get(0); // to initialize to non-null value
 		for (int channel = 0; channel < 16; channel++)
 		{
 			if (channel == 10 - 1) // Ignore notes in channel 10
 				continue;
 
-			List<NoteInfo> channel_notes = all_note_info.getChannelNotes(channel);
-			Map<Integer, List<NoteInfo>> channel_tick_notes = all_note_info.channelListToTickMap(channel_notes);
+			List<NoteInfo> channel_notes = all_note_info.getNotesOnChannel(channel);
+			Map<Integer, List<NoteInfo>> channel_tick_notes = all_note_info.noteListToStartTickNoteMap(channel_notes);
 			if (channel_tick_notes.containsKey(current_tick))
 			{
 				List<NoteInfo> current_tick_notes = channel_tick_notes.get(current_tick);

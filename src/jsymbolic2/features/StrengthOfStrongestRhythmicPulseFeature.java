@@ -59,9 +59,9 @@ public class StrengthOfStrongestRhythmicPulseFeature
 		{
 			// Find the highest bin
 			double max = 0.0;
-			for (int bin = 0; bin < sequence_info.rhythmic_histogram.length; bin++)
-				if (sequence_info.rhythmic_histogram[bin] > max)
-					max = sequence_info.rhythmic_histogram[bin];
+			for (int bin = 0; bin < sequence_info.beat_histogram.length; bin++)
+				if (sequence_info.beat_histogram[bin] > max)
+					max = sequence_info.beat_histogram[bin];
 			value = max;
 		}
 		else value = -1.0;

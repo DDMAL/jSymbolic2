@@ -60,11 +60,11 @@ public class StrongestRhythmicPulseFeature
 			// Find the bin with the highest magnitude
 			double max = 0;
 			int max_index = 0;
-			for (int bin = 0; bin < sequence_info.rhythmic_histogram.length; bin++)
+			for (int bin = 0; bin < sequence_info.beat_histogram.length; bin++)
 			{
-				if (sequence_info.rhythmic_histogram[bin] > max)
+				if (sequence_info.beat_histogram[bin] > max)
 				{
-					max = sequence_info.rhythmic_histogram[bin];
+					max = sequence_info.beat_histogram[bin];
 					max_index = bin;
 				}
 			}

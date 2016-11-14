@@ -59,22 +59,22 @@ public class RelativePrevalenceOfMostCommonMelodicIntervals
 		if (sequence_info != null)
 		{
 			// Find the bin with the highest magnitude
-			int max_index = mckay.utilities.staticlibraries.MathAndStatsMethods.getIndexOfLargest(sequence_info.melodic_histogram);
+			int max_index = mckay.utilities.staticlibraries.MathAndStatsMethods.getIndexOfLargest(sequence_info.melodic_interval_histogram);
 
 			// Find the second highest bin
 			double second_max = 0;
 			int second_max_index = 0;
-			for (int bin = 0; bin < sequence_info.melodic_histogram.length; bin++)
+			for (int bin = 0; bin < sequence_info.melodic_interval_histogram.length; bin++)
 			{
-				if ( sequence_info.melodic_histogram[bin] > second_max && bin != max_index )
+				if ( sequence_info.melodic_interval_histogram[bin] > second_max && bin != max_index )
 				{
-					second_max = sequence_info.melodic_histogram[bin];
+					second_max = sequence_info.melodic_interval_histogram[bin];
 					second_max_index = bin;
 				}
 			}
 
 			// Calculate the value
-			value = sequence_info.melodic_histogram[second_max_index] / sequence_info.melodic_histogram[max_index];
+			value = sequence_info.melodic_interval_histogram[second_max_index] / sequence_info.melodic_interval_histogram[max_index];
 		} 
 		else value = -1.0;
 

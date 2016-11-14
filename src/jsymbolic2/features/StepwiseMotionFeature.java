@@ -57,7 +57,7 @@ public class StepwiseMotionFeature
 	{
 		double value;
 		if (sequence_info != null)
-			value = sequence_info.melodic_histogram[1] + sequence_info.melodic_histogram[2];
+			value = sequence_info.melodic_interval_histogram[1] + sequence_info.melodic_interval_histogram[2];
 		else value = -1.0;
 
 		double[] result = new double[1];

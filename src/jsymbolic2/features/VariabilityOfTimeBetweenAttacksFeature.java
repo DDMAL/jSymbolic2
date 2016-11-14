@@ -60,13 +60,13 @@ public class VariabilityOfTimeBetweenAttacksFeature
 		{
 			// Find number of intervals
 			int number_of_intervals = -1;
-			for (int tick = 0; tick < sequence_info.note_beginnings_map.length; tick++)
+			for (int tick = 0; tick < sequence_info.note_attack_tick_map.length; tick++)
 			{
 				// Check if an attack occured on this tick
 				boolean attack = false;
 				for (int chan = 0; chan < 16; chan++)
 				{
-					if (sequence_info.note_beginnings_map[tick][chan])
+					if (sequence_info.note_attack_tick_map[tick][chan])
 					{
 						attack = true;
 						chan = 17; // exit the loop
@@ -87,13 +87,13 @@ public class VariabilityOfTimeBetweenAttacksFeature
 			number_of_intervals = 0;
 			double time_so_far = 0.0;
 			int tick_of_last_attack = -1;
-			for (int tick = 0; tick < sequence_info.note_beginnings_map.length; tick++)
+			for (int tick = 0; tick < sequence_info.note_attack_tick_map.length; tick++)
 			{
 				// Check if an attack occured on this tick
 				boolean attack = false;
 				for (int chan = 0; chan < 16; chan++)
 				{
-					if (sequence_info.note_beginnings_map[tick][chan])
+					if (sequence_info.note_attack_tick_map[tick][chan])
 					{
 						attack = true;
 						chan = 17; // Exit the loop
@@ -101,7 +101,7 @@ public class VariabilityOfTimeBetweenAttacksFeature
 				}
 
 				if (!attack)
-					time_so_far += sequence_info.seconds_per_tick[tick];
+					time_so_far += sequence_info.duration_of_ticks_in_seconds[tick];
 				else
 				{
 					if (tick_of_last_attack != -1)

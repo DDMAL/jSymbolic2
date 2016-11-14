@@ -1,7 +1,7 @@
 package jsymbolic2.features;
 
 import ace.datatypes.FeatureDefinition;
-import jsymbolic2.featureutils.ChordTypesEnum;
+import jsymbolic2.featureutils.ChordTypeEnum;
 import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
@@ -69,18 +69,18 @@ public class NonStandardChordsFeature extends MIDIFeatureExtractor {
             throws Exception
     {
         double[] chord_type_values = other_feature_values[0];
-        int number_non_standard_chords = ChordTypesEnum.values().length - 6;
+        int number_non_standard_chords = ChordTypeEnum.values().length - 6;
         int[] non_standard_numbers = new int[number_non_standard_chords];
-        for(ChordTypesEnum chordType : ChordTypesEnum.values()) {
+        for(ChordTypeEnum chordType : ChordTypeEnum.values()) {
             int index = 0;
-            if(!chordType.equals(ChordTypesEnum.PARTIAL_CHORD) &&
-                    !chordType.equals(ChordTypesEnum.MAJOR_TRIAD) &&
-                    !chordType.equals(ChordTypesEnum.MINOR_TRIAD) &&
-                    !chordType.equals(ChordTypesEnum.DOMINANT_SEVENTH) &&
-                    !chordType.equals(ChordTypesEnum.MAJOR_SEVENTH) &&
-                    !chordType.equals(ChordTypesEnum.MINOR_SEVENTH))
+            if(!chordType.equals(ChordTypeEnum.PARTIAL_CHORD) &&
+                    !chordType.equals(ChordTypeEnum.MAJOR_TRIAD) &&
+                    !chordType.equals(ChordTypeEnum.MINOR_TRIAD) &&
+                    !chordType.equals(ChordTypeEnum.DOMINANT_SEVENTH) &&
+                    !chordType.equals(ChordTypeEnum.MAJOR_SEVENTH) &&
+                    !chordType.equals(ChordTypeEnum.MINOR_SEVENTH))
             {
-                non_standard_numbers[index] = chordType.getChord_number();
+                non_standard_numbers[index] = chordType.getChordTypeCode();
                 index++;
             }
         }

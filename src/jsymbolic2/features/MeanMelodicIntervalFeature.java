@@ -59,8 +59,8 @@ public class MeanMelodicIntervalFeature
 		if (sequence_info != null)
 		{
 			value = 0.0;
-			for (int i = 0; i < sequence_info.melodic_histogram.length; i++)
-				value += (double) i * sequence_info.melodic_histogram[i];
+			for (int i = 0; i < sequence_info.melodic_interval_histogram.length; i++)
+				value += (double) i * sequence_info.melodic_interval_histogram[i];
 		}
 		else value = -1.0;
 

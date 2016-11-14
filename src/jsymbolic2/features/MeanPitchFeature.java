@@ -69,7 +69,7 @@ public class MeanPitchFeature
 			}
 
 			// Calculate the feature value
-			value = cumulative_pitch_values / (double) sequence_info.total_number_pitched_notes;
+			value = cumulative_pitch_values / (double) sequence_info.total_number_pitched_note_ons;
 		}
 		else value = -1.0;
 

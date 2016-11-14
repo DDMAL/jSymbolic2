@@ -1,7 +1,7 @@
 package jsymbolic2.features;
 
 import ace.datatypes.FeatureDefinition;
-import jsymbolic2.featureutils.ChordTypesEnum;
+import jsymbolic2.featureutils.ChordTypeEnum;
 import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
@@ -67,7 +67,7 @@ public class ComplexChordsFeature extends MIDIFeatureExtractor {
             throws Exception
     {
         double[] chord_type_values = other_feature_values[0];
-        int complex_chords = ChordTypesEnum.COMPLEX_CHORD.getChord_number();
+        int complex_chords = ChordTypeEnum.COMPLEX_CHORD.getChordTypeCode();
         double complex_fraction = chord_type_values[complex_chords];
         return new double[]{complex_fraction};
     }

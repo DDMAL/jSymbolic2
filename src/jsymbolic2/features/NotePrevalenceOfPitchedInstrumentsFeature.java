@@ -62,8 +62,8 @@ public class NotePrevalenceOfPitchedInstrumentsFeature
 			result = new double[128];
 			for (int instrument = 0; instrument < result.length; instrument++)
 			{
-				result[instrument] = sequence_info.pitched_instrumentation_frequencies[instrument][0]
-						/ (double) sequence_info.total_number_notes;
+				result[instrument] = sequence_info.pitched_instrument_prevalence[instrument][0]
+						/ (double) sequence_info.total_number_note_ons;
 			}
 		}
 		return result;

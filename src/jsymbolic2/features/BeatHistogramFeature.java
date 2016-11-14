@@ -61,9 +61,9 @@ public class BeatHistogramFeature
 		double[] result = null;
 		if (sequence_info != null)
 		{
-			result = new double[sequence_info.rhythmic_histogram.length - 40];
+			result = new double[sequence_info.beat_histogram.length - 40];
 			for (int i = 0; i < result.length; i++)
-				result[i] = sequence_info.rhythmic_histogram[i + 40];
+				result[i] = sequence_info.beat_histogram[i + 40];
 		}
 		return result;
 	}
