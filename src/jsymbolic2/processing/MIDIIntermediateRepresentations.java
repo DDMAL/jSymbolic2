@@ -1145,7 +1145,7 @@ public class MIDIIntermediateRepresentations
 	 */
 	private void generateAllNotes()
 	{
-		CollectedNoteInfo all_notes = new CollectedNoteInfo(tracks);
+		all_notes = new CollectedNoteInfo(tracks);
 	}
 	
 	

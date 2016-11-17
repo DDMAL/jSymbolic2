@@ -135,7 +135,7 @@ public class CollectedNoteInfo
 	 *
 	 * @param this_note	The note to be stored.
 	 */
-	public void addNote(NoteInfo this_note)
+	public final void addNote(NoteInfo this_note)
 	{
 		note_list.add(this_note);
 		

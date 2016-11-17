@@ -110,7 +110,8 @@ public enum ChordTypeEnum
 	 * @throws Exception			An informative exception is thrown if pitch_classes_present is null or is
 	 *								not size 12. 
 	 */
-	public static ChordTypeEnum getChordType(int[] pitch_class_strengths) throws Exception
+	public static ChordTypeEnum getChordType(int[] pitch_class_strengths)
+			throws Exception
 	{
 		if (pitch_class_strengths == null || pitch_class_strengths.length != 12)
 			throw new Exception("The specified set of pitch classes is null or does not correspond to a known chord type.\n");

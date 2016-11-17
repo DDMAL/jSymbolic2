@@ -1,7 +1,7 @@
 @relation Converted_from_ACE_XML
 
 @attribute Duration numeric
-@attribute Acoustic_Guitar_Fraction numeric
+@attribute Acoustic_Guitar_Prevalence numeric
 @attribute Amount_of_Arpeggiation numeric
 @attribute Average_Melodic_Interval numeric
 @attribute Average_Note_Duration numeric

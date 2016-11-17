@@ -553,8 +553,8 @@ public class FeatureSelectorPanel
                 try {
                     processor.extractFeatures(load_file, errorLog);
                 } catch (Exception ex) {
-                    //ex.printStackTrace();
                     errorLog.add("Error found in : " + recordings[i].identifier + ". Error Message : " + ex.getMessage() + ".");
+					//ex.printStackTrace();
                 }
             }
             // Finalize saved XML files
