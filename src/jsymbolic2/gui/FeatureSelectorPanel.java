@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import jsymbolic2.configuration.*;
 import jsymbolic2.configuration.txtimplementation.ConfigurationFileWriterTxtImpl;
 import jsymbolic2.datatypes.RecordingInfo;
-import jsymbolic2.featureutils.FeatureConversion;
 import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.AceXmlConverter;
 import jsymbolic2.featureutils.FeatureExtractorAccess;
@@ -554,8 +553,8 @@ public class FeatureSelectorPanel
                 try {
                     processor.extractFeatures(load_file, errorLog);
                 } catch (Exception ex) {
-                    //ex.printStackTrace();
                     errorLog.add("Error found in : " + recordings[i].identifier + ". Error Message : " + ex.getMessage() + ".");
+					//ex.printStackTrace();
                 }
             }
             // Finalize saved XML files
@@ -599,7 +598,7 @@ public class FeatureSelectorPanel
     private void verifyNoMeiFeaturesAndNonMeiFiles(boolean[] features_to_extract, RecordingInfo[] recordings)
             throws Exception
     {
-        List<String> featureNames = FeatureConversion.featureBooleanToNames(features_to_extract);
+        List<String> featureNames = FeatureExtractorAccess.getNamesOfFeaturesToExtract(features_to_extract);
         List<String> meiSpecificFeatures = FeatureExtractorAccess.getNamesOfMeiSpecificFeatures();
         boolean meiFeatureCheck = false;
         String invalidFeatureName = null;

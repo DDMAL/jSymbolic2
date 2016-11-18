@@ -60,8 +60,8 @@ public class NumberOfRelativelyStrongRhythmicPulsesFeature
 		{
 			// Find the number of sufficiently large peaks
 			int count = 0;
-			for (int bin = 0; bin < sequence_info.rhythmic_histogram_table.length; bin++)
-				if (sequence_info.rhythmic_histogram_table[bin][2] > 0.001)
+			for (int bin = 0; bin < sequence_info.beat_histogram_thresholded_table.length; bin++)
+				if (sequence_info.beat_histogram_thresholded_table[bin][2] > 0.001)
 					count++;
 
 			// Calculate the value

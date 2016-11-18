@@ -78,7 +78,7 @@ public class MicrotonePrevalenceFeature
 					if (bends_associated_with_this_note.size() == 1)
 						number_note_ons++;
 				}
-				value = number_note_ons / sequence_info.total_number_pitched_notes;
+				value = number_note_ons / sequence_info.total_number_pitched_note_ons;
 			}
 		}
 		else value = -1.0;

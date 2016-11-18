@@ -66,16 +66,16 @@ public class MelodicEmbellishmentsFeature
 			// For each channel get all the notes in the channel
 			for (int channel = 0; channel < 16; channel++)
 			{
-				List<NoteInfo> all_notes_in_this_channel = sequence_info.all_note_info.getChannelNotes(channel);
-				all_notes_in_this_channel.sort((n1, n2) -> ((Integer) n1.getStart_tick()).compareTo(n2.getStart_tick()));
-				Map<Integer, List<NoteInfo>> channelTickNotes = sequence_info.all_note_info.channelListToTickMap(all_notes_in_this_channel);
+				List<NoteInfo> all_notes_in_this_channel = sequence_info.all_notes.getNotesOnChannel(channel);
+				all_notes_in_this_channel.sort((n1, n2) -> ((Integer) n1.getStartTick()).compareTo(n2.getStartTick()));
+				Map<Integer, List<NoteInfo>> channelTickNotes = sequence_info.all_notes.noteListToStartTickNoteMap(all_notes_in_this_channel);
 				Integer[] channelTicks = channelTickNotes.keySet().toArray(new Integer[0]);
 				Arrays.sort(channelTicks);
 				
 				// For each note in this channel, compare with all other notes up to 16 notes away
 				for (NoteInfo current_note : all_notes_in_this_channel)
 				{
-					int current_tick = current_note.getStart_tick();
+					int current_tick = current_note.getStartTick();
 					int current_tick_index = 0;
 					for (int tick_index = 0; tick_index < channelTicks.length; tick_index++)
 					{
@@ -106,7 +106,7 @@ public class MelodicEmbellishmentsFeature
 				}
 			}
 			
-			value = embellish_notes / sequence_info.total_number_notes;
+			value = embellish_notes / sequence_info.total_number_note_ons;
 		}
 		else value = -1.0;
 

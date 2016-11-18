@@ -60,9 +60,9 @@ public class VariabilityOfNotePrevalenceOfPitchedInstrumentsFeature
 		{
 			// Find the number of pitched instruments used to play at least one note
 			int instruments_present = 0;
-			for (int instrument = 0; instrument < sequence_info.pitched_instrumentation_frequencies.length; instrument++)
+			for (int instrument = 0; instrument < sequence_info.pitched_instrument_prevalence.length; instrument++)
 			{
-				if (sequence_info.pitched_instrumentation_frequencies[instrument][0] != 0)
+				if (sequence_info.pitched_instrument_prevalence[instrument][0] != 0)
 				{
 					instruments_present++;
 				}
@@ -71,11 +71,11 @@ public class VariabilityOfNotePrevalenceOfPitchedInstrumentsFeature
 			// Calculate the feature value
 			double[] instrument_frequencies = new double[instruments_present];
 			int count = 0;
-			for (int instrument = 0; instrument < sequence_info.pitched_instrumentation_frequencies.length; instrument++)
+			for (int instrument = 0; instrument < sequence_info.pitched_instrument_prevalence.length; instrument++)
 			{
-				if (sequence_info.pitched_instrumentation_frequencies[instrument][0] != 0)
+				if (sequence_info.pitched_instrument_prevalence[instrument][0] != 0)
 				{
-					instrument_frequencies[count] = (double) sequence_info.pitched_instrumentation_frequencies[instrument][0];
+					instrument_frequencies[count] = (double) sequence_info.pitched_instrument_prevalence[instrument][0];
 					count++;
 				}
 			}

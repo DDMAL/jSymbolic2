@@ -67,11 +67,11 @@ public class MelodicPitchVarietyFeature
 			for (int channel = 0; channel < 16; channel++)
 			{
 				// Get and sort all notes in this channel
-				List<NoteInfo> notes_in_this_channel = sequence_info.all_note_info.getChannelNotes(channel);
-				notes_in_this_channel.sort((n1, n2) -> ((Integer) n1.getStart_tick()).compareTo(n2.getStart_tick()));
+				List<NoteInfo> notes_in_this_channel = sequence_info.all_notes.getNotesOnChannel(channel);
+				notes_in_this_channel.sort((n1, n2) -> ((Integer) n1.getStartTick()).compareTo(n2.getStartTick()));
 				
 				// A Map of playing notes in this channel indexed by tick
-				Map<Integer, List<NoteInfo>> notes_in_this_channel_by_tick = sequence_info.all_note_info.channelListToTickMap(notes_in_this_channel);
+				Map<Integer, List<NoteInfo>> notes_in_this_channel_by_tick = sequence_info.all_notes.noteListToStartTickNoteMap(notes_in_this_channel);
 				Set<Integer> channelTicks = notes_in_this_channel_by_tick.keySet();
 
 				double channel_notes_by = 0;
@@ -80,7 +80,7 @@ public class MelodicPitchVarietyFeature
 				// For each note in this channel, compare with all other notes up to 16 notes away
 				for (NoteInfo current_note : notes_in_this_channel)
 				{
-					int current_tick = current_note.getStart_tick();
+					int current_tick = current_note.getStartTick();
 					int note_tick_count = 0;
 					for (Integer tick : channelTicks)
 					{

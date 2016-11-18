@@ -56,7 +56,7 @@ public class MelodicThirdsFeature
 	{
 		double value;
 		if (sequence_info != null)
-			value = sequence_info.melodic_histogram[3] + sequence_info.melodic_histogram[4];
+			value = sequence_info.melodic_interval_histogram[3] + sequence_info.melodic_interval_histogram[4];
 		else value = -1.0;
 
 		double[] result = new double[1];

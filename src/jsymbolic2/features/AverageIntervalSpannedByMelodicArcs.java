@@ -61,12 +61,12 @@ public class AverageIntervalSpannedByMelodicArcs
 		{
 			int total_intervals = 0;
 			int number_intervals = 0;
-			for (int chan = 0; chan < sequence_info.melody_list.length; chan++)
+			for (int chan = 0; chan < sequence_info.melodic_intervals_by_channel.length; chan++)
 			{
 				if (chan != (10 - 1)) // Exclude unpitched Channel 10 notes
 				{
 					// Convert the list of melodic intervals in this channel to an array
-					Object[] list_contents = sequence_info.melody_list[chan].toArray();
+					Object[] list_contents = sequence_info.melodic_intervals_by_channel[chan].toArray();
 					int[] intervals = new int[list_contents.length];
 					for (int i = 0; i < intervals.length; i++)
 						intervals[i] = ((Integer) list_contents[i]).intValue();

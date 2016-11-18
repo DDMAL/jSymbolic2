@@ -59,12 +59,12 @@ public class MaximumNumberOfIndependentVoicesFeature
 		if (sequence_info != null)
 		{
 			int max_so_far = 0;
-			for (int tick = 0; tick < sequence_info.channel_tick_map.length; tick++)
+			for (int tick = 0; tick < sequence_info.notes_sounding_tick_map.length; tick++)
 			{
 				int count = 0;
-				for (int chan = 0; chan < sequence_info.channel_tick_map[tick].length; chan++)
+				for (int chan = 0; chan < sequence_info.notes_sounding_tick_map[tick].length; chan++)
 				{
-					if (sequence_info.channel_tick_map[tick][chan])
+					if (sequence_info.notes_sounding_tick_map[tick][chan])
 						count++;
 				}
 

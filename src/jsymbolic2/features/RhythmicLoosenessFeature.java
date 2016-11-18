@@ -61,16 +61,16 @@ public class RhythmicLoosenessFeature
 		{
 			// Find the number of sufficiently large peaks
 			int count = 0;
-			for (int bin = 0; bin < sequence_info.rhythmic_histogram_table.length; bin++)
-				if (sequence_info.rhythmic_histogram_table[bin][2] > 0.001)
+			for (int bin = 0; bin < sequence_info.beat_histogram_thresholded_table.length; bin++)
+				if (sequence_info.beat_histogram_thresholded_table[bin][2] > 0.001)
 					count++;
 
 			// Store the peak bins
 			int[] peak_bins = new int[count];
 			int so_far = 0;
-			for (int bin = 0; bin < sequence_info.rhythmic_histogram_table.length; bin++)
+			for (int bin = 0; bin < sequence_info.beat_histogram_thresholded_table.length; bin++)
 			{
-				if (sequence_info.rhythmic_histogram_table[bin][2] > 0.001)
+				if (sequence_info.beat_histogram_thresholded_table[bin][2] > 0.001)
 				{
 					peak_bins[so_far] = bin;
 					so_far++;
@@ -82,14 +82,14 @@ public class RhythmicLoosenessFeature
 			for (int peak = 0; peak < peak_bins.length; peak++)
 			{
 				// 30% of this peak
-				double limit_value = 0.3 * sequence_info.rhythmic_histogram[peak_bins[peak]];
+				double limit_value = 0.3 * sequence_info.beat_histogram[peak_bins[peak]];
 
 				// Find left limit
 				int i = peak_bins[peak];
 				int left_index = 0;
 				while (i >= 0)
 				{
-					if (sequence_info.rhythmic_histogram[i] < limit_value)
+					if (sequence_info.beat_histogram[i] < limit_value)
 						i = -1;
 					else
 					{
@@ -101,10 +101,10 @@ public class RhythmicLoosenessFeature
 				// Find right limit
 				i = peak_bins[peak];
 				int right_index = 0;
-				while (i < sequence_info.rhythmic_histogram.length)
+				while (i < sequence_info.beat_histogram.length)
 				{
-					if (sequence_info.rhythmic_histogram[i] < limit_value)
-						i = sequence_info.rhythmic_histogram.length + 1;
+					if (sequence_info.beat_histogram[i] < limit_value)
+						i = sequence_info.beat_histogram.length + 1;
 					else
 					{
 						right_index = i;

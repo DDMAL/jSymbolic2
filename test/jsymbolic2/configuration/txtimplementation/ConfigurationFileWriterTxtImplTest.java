@@ -36,7 +36,7 @@ public class ConfigurationFileWriterTxtImplTest {
     public void addFormattedFeatures() throws Exception {
         List<String> expectedList = Arrays.asList(
                 HeaderEnum.FEATURE_HEADER.toString(),
-                "Acoustic Guitar Fraction",
+                "Acoustic Guitar Prevalence",
                 "Duration",
                 "Beat Histogram"
         );
@@ -45,7 +45,7 @@ public class ConfigurationFileWriterTxtImplTest {
         List<String> actualList = new ArrayList<>();
         actualList = writer.addFormattedFeatures(
                 actualList,
-                Arrays.asList("Acoustic Guitar Fraction",
+                Arrays.asList("Acoustic Guitar Prevalence",
                                 "Duration",
                                 "Beat Histogram")
         );

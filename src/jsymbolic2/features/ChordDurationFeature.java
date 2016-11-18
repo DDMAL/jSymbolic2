@@ -1,7 +1,7 @@
 package jsymbolic2.features;
 
 import ace.datatypes.FeatureDefinition;
-import jsymbolic2.featureutils.ChordTypesEnum;
+import jsymbolic2.featureutils.ChordTypeEnum;
 import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
@@ -73,7 +73,7 @@ public class ChordDurationFeature extends MIDIFeatureExtractor {
 
         // Keep data of previous chord for comparison
         int[] previous_chord = new int[total_intervals];
-        ChordTypesEnum previous_chord_type = null;
+        ChordTypeEnum previous_chord_type = null;
         List<Double> chord_tick_duration = new ArrayList<>();
         boolean[] chord_tick_array = new boolean[vertical_interval_chart.length];
         for(int tick = 0; tick < vertical_interval_chart.length; tick++) {
@@ -88,7 +88,7 @@ public class ChordDurationFeature extends MIDIFeatureExtractor {
                     current_chord[pitch]++;
                 }
             }
-            ChordTypesEnum chord_type = ChordTypesEnum.getChordType(quantized_chord);
+            ChordTypeEnum chord_type = ChordTypeEnum.getChordType(quantized_chord);
             if(chord_type != null &&
                     !Arrays.equals(current_chord, previous_chord))
             {
@@ -110,11 +110,11 @@ public class ChordDurationFeature extends MIDIFeatureExtractor {
                 chord_tick_array[tick] = true;
             }
             previous_chord = current_chord;
-            previous_chord_type = ChordTypesEnum.getChordType(quantized_chord);
+            previous_chord_type = ChordTypeEnum.getChordType(quantized_chord);
         }
 
         //Convert ticks to seconds and then get average duration length
-        double[] seconds_per_tick = sequence_info.seconds_per_tick;
+        double[] seconds_per_tick = sequence_info.duration_of_ticks_in_seconds;
         for(int chord_tick = 0; chord_tick < chord_tick_duration.size(); chord_tick++) {
             if(chord_tick_array[chord_tick] == true) {
                 double current_value = chord_tick_duration.get(chord_tick);

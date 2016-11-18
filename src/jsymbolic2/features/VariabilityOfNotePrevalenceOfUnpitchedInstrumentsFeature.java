@@ -64,7 +64,7 @@ public class VariabilityOfNotePrevalenceOfUnpitchedInstrumentsFeature
 			int instruments_present = 0;
 			for (int instrument = 35; instrument < 82; instrument++)
 			{
-				if (sequence_info.non_pitched_instrumentation_frequencies[instrument] != 0)
+				if (sequence_info.non_pitched_instrument_prevalence[instrument] != 0)
 				{
 					instruments_present++;
 				}
@@ -75,9 +75,9 @@ public class VariabilityOfNotePrevalenceOfUnpitchedInstrumentsFeature
 			int count = 0;
 			for (int instrument = 35; instrument < 82; instrument++)
 			{
-				if (sequence_info.non_pitched_instrumentation_frequencies[instrument] != 0)
+				if (sequence_info.non_pitched_instrument_prevalence[instrument] != 0)
 				{
-					instrument_frequencies[count] = (double) sequence_info.non_pitched_instrumentation_frequencies[instrument];
+					instrument_frequencies[count] = (double) sequence_info.non_pitched_instrument_prevalence[instrument];
 					count++;
 				}
 			}

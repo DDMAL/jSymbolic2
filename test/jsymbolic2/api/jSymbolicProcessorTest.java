@@ -32,7 +32,7 @@ public class jSymbolicProcessorTest {
 
     @Before
     public void setUp() throws Exception {
-        List<String> featureNames = Arrays.asList("Beat Histogram", "Acoustic Guitar Fraction", "Duration");
+        List<String> featureNames = Arrays.asList("Beat Histogram", "Acoustic Guitar Prevalence", "Duration");
         processor = new jSymbolicProcessor(10, 0.1, featureNames, true, false, false, false, valuesPath, definitionsPath);
         processorConfig = new jSymbolicProcessor("./test/jsymbolic2/api/resources/sampleConfiguration.txt");
         processorConvert = new jSymbolicProcessor("./test/jsymbolic2/api/resources/sampleConfigConvert.txt");
@@ -52,7 +52,7 @@ public class jSymbolicProcessorTest {
         DataSet[] dataSets = data.getFeatureValuesDataBoard().getFeatureVectors();
         DataSet dataSet = dataSets[0].sub_sets[0];
         assertEquals("Duration", dataSet.feature_names[0]);
-        assertEquals("Acoustic Guitar Fraction", dataSet.feature_names[1]);
+        assertEquals("Acoustic Guitar Prevalence", dataSet.feature_names[1]);
         assertEquals("Beat Histogram", dataSet.feature_names[2]);
 
         //Do it a 2nd time to test 1 processor can work on more than one file
@@ -60,7 +60,7 @@ public class jSymbolicProcessorTest {
         DataSet[] dataSets2 = data2.getFeatureValuesDataBoard().getFeatureVectors();
         DataSet dataSet2 = dataSets2[0].sub_sets[0];
         assertEquals("Duration", dataSet2.feature_names[0]);
-        assertEquals("Acoustic Guitar Fraction", dataSet2.feature_names[1]);
+        assertEquals("Acoustic Guitar Prevalence", dataSet2.feature_names[1]);
         assertEquals("Beat Histogram", dataSet2.feature_names[2]);
 
         //Test that CSV and ARFF conversion is successful
@@ -97,13 +97,13 @@ public class jSymbolicProcessorTest {
         DataSet[] dataSetsSaint = chopinData.getFeatureValuesDataBoard().getFeatureVectors();
         DataSet dataSetSaint = dataSetsSaint[0].sub_sets[0];
         assertEquals("Duration", dataSetSaint.feature_names[0]);
-        assertEquals("Acoustic Guitar Fraction", dataSetSaint.feature_names[1]);
+        assertEquals("Acoustic Guitar Prevalence", dataSetSaint.feature_names[1]);
         assertEquals("Beat Histogram", dataSetSaint.feature_names[2]);
 
         DataSet[] dataSetsChopin = saintSaensData.getFeatureValuesDataBoard().getFeatureVectors();
         DataSet dataSetChopin = dataSetsChopin[0].sub_sets[0];
         assertEquals("Duration", dataSetChopin.feature_names[0]);
-        assertEquals("Acoustic Guitar Fraction", dataSetChopin.feature_names[1]);
+        assertEquals("Acoustic Guitar Prevalence", dataSetChopin.feature_names[1]);
         assertEquals("Beat Histogram", dataSetChopin.feature_names[2]);
 
         //Check for non existing files

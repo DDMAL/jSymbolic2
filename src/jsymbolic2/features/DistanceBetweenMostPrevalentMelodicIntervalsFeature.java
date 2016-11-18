@@ -59,16 +59,16 @@ public class DistanceBetweenMostPrevalentMelodicIntervalsFeature
 		if (sequence_info != null)
 		{
 			// Find the bin with the highest magnitude
-			int max_index = mckay.utilities.staticlibraries.MathAndStatsMethods.getIndexOfLargest(sequence_info.melodic_histogram);
+			int max_index = mckay.utilities.staticlibraries.MathAndStatsMethods.getIndexOfLargest(sequence_info.melodic_interval_histogram);
 
 			// Find the bin with the second highest magnitude
 			double second_max = 0;
 			int second_max_index = 0;
-			for (int bin = 0; bin < sequence_info.melodic_histogram.length; bin++)
+			for (int bin = 0; bin < sequence_info.melodic_interval_histogram.length; bin++)
 			{
-				if ( sequence_info.melodic_histogram[bin] > second_max && bin != max_index )
+				if ( sequence_info.melodic_interval_histogram[bin] > second_max && bin != max_index )
 				{
-					second_max = sequence_info.melodic_histogram[bin];
+					second_max = sequence_info.melodic_interval_histogram[bin];
 					second_max_index = bin;
 				}
 			}

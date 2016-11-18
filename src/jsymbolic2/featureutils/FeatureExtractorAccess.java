@@ -441,7 +441,7 @@ public final class FeatureExtractorAccess
 	}
 	
 
-	/* PUBLIC METHODS ***************************************************************************************/
+	/* PUBLIC STATIC METHODS ********************************************************************************/
 	
 	
 	/**
@@ -492,5 +492,55 @@ public final class FeatureExtractorAccess
 	public static List<String> getNamesOfMeiSpecificFeatures()
 	{
 		return names_of_mei_specific_features;
+	}
+			
+	/**
+	 * Given a list of which features should be extracted, return the names of those features that are set to
+	 * be extracted by this list.
+	 * 
+	 * @param features_to_extract	Which features should be extracted. This must correspond in size to the 
+	 *								total number of features implemented, and must be ordered in the same 
+	 *								order in which they are presented in the jSymbolic manual.
+	 * @return						The names of the features to extract.
+	 */
+	public static List<String> getNamesOfFeaturesToExtract(boolean[] features_to_extract)
+	{
+		List<String> names_of_all_features = FeatureExtractorAccess.getNamesOfAllImplementedFeatures();
+		List<String> feature_names_to_return = new ArrayList<>();
+		for (int f = 0; f < names_of_all_features.size(); f++)
+			if (features_to_extract[f])
+				feature_names_to_return.add(names_of_all_features.get(f));
+		return feature_names_to_return;
+	}
+		
+	/**
+	 * Take the specified list of feature names and return a boolean array indicating which amongst all the
+	 * features jSymbolic can extract have their names included in the specified list.
+	 *
+	 * @param chosen_feature_names	A list of names of features that should be marked as true in the returned
+	 *								array.
+	 * @return						An array sized to match the complete list of features that jSymbolic
+	 *								can extract, in the order that they are specified in the manual. A given
+	 *								entry is set to true if the name of the corresponding feature is contained
+	 *								in chosen_feature_names, and to false otherwise.
+	 * @throws Exception			An informative Exception is thrown if one of the feature names in
+	 *								chosen_feature_names does not correspond to the name of an implemented
+	 *								feature.
+	 */
+	public static boolean[] findSpecifiedFeatures(List<String> chosen_feature_names)
+			throws Exception
+	{
+		List<String> names_of_all_features = FeatureExtractorAccess.getNamesOfAllImplementedFeatures();
+		boolean[] chosen_features = new boolean[names_of_all_features.size()];
+		for (int i = 0; i < chosen_features.length; i++)
+			chosen_features[i] = false;
+		for (String this_feature_name : chosen_feature_names)
+		{
+			if (!names_of_all_features.contains(this_feature_name))
+				throw new Exception(this_feature_name + " is not the name of a feature implemented in this version of jSymbolic.");
+			int feature_index = names_of_all_features.lastIndexOf(this_feature_name);
+			chosen_features[feature_index] = true;
+		}
+		return chosen_features;
 	}
 }

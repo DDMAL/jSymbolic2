@@ -62,11 +62,11 @@ public class HarmonicityOfTwoStrongestRhythmicPulsesFeature
 			// Find the bin with the highest magnitude
 			double max = 0.0;
 			int max_index = 1; //changed from 0 -> 1 for / by zero error
-			for (int bin = 0; bin < sequence_info.rhythmic_histogram.length; bin++)
+			for (int bin = 0; bin < sequence_info.beat_histogram.length; bin++)
 			{
-				if (sequence_info.rhythmic_histogram[bin] > max)
+				if (sequence_info.beat_histogram[bin] > max)
 				{
-					max = sequence_info.rhythmic_histogram[bin];
+					max = sequence_info.beat_histogram[bin];
 					max_index = bin;
 				}
 			}
@@ -74,12 +74,12 @@ public class HarmonicityOfTwoStrongestRhythmicPulsesFeature
 			// Find the bin with the second highest magnitude
 			double second_highest_bin_magnitude = 0.0;
 			int second_hidgest_bin_index = 1; // changed from 0 -> 1 to avoid divide by zero error
-			for (int bin = 0; bin < sequence_info.rhythmic_histogram_table.length; bin++)
+			for (int bin = 0; bin < sequence_info.beat_histogram_thresholded_table.length; bin++)
 			{
-				if ( sequence_info.rhythmic_histogram_table[bin][1] > second_highest_bin_magnitude && 
+				if ( sequence_info.beat_histogram_thresholded_table[bin][1] > second_highest_bin_magnitude && 
 				     bin != max_index )
 				{
-					second_highest_bin_magnitude = sequence_info.rhythmic_histogram_table[bin][1];
+					second_highest_bin_magnitude = sequence_info.beat_histogram_thresholded_table[bin][1];
 					second_hidgest_bin_index = bin;
 				}
 			}

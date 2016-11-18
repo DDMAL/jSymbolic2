@@ -59,17 +59,17 @@ public class VariabilityOfNumberOfIndependentVoicesFeature
 		if (sequence_info != null)
 		{
 			// Instantiate of the variable holding the number of voices sounding at each tick
-			int[] number_sounding = new int[sequence_info.channel_tick_map.length];
+			int[] number_sounding = new int[sequence_info.notes_sounding_tick_map.length];
 			for (int i = 0; i < number_sounding.length; i++)
 				number_sounding[i] = 0;
 
 			// Find the number of voices sounding at each tick
 			int rest_count = 0;
-			for (int tick = 0; tick < sequence_info.channel_tick_map.length; tick++)
+			for (int tick = 0; tick < sequence_info.notes_sounding_tick_map.length; tick++)
 			{
-				for (int chan = 0; chan < sequence_info.channel_tick_map[tick].length; chan++)
+				for (int chan = 0; chan < sequence_info.notes_sounding_tick_map[tick].length; chan++)
 				{
-					if (sequence_info.channel_tick_map[tick][chan])
+					if (sequence_info.notes_sounding_tick_map[tick][chan])
 						number_sounding[tick]++;
 				}
 
