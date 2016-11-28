@@ -1,130 +1,116 @@
 package jsymbolic2.features;
 
-import ace.datatypes.FeatureDefinition;
-import jsymbolic2.featureutils.ChordTypeEnum;
-import jsymbolic2.featureutils.MIDIFeatureExtractor;
-import jsymbolic2.processing.MIDIIntermediateRepresentations;
-
 import javax.sound.midi.Sequence;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+import ace.datatypes.FeatureDefinition;
+import jsymbolic2.featureutils.MIDIFeatureExtractor;
+import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature extractor that extracts the average duration of a chord in seconds.
+ * A feature calculator that finds the average duration in seconds of a chord. A "chord" here is considered to
+ * stay the same as long as no new pitch classes are added, and no pitch classes are taken away. This "chord"
+ * may consist of any number of pitch classes, even only one. A "chord" is not considered to end if it is
+ * split by one or more rests (although the rests themselves are not counted in the duration of the "chord").
  *
- * <p>No extracted feature values are stored in objects of this class.
- *
- * @author Tristano Tenaglia
+ * @author Cory McKay and Tristano Tenaglia
  */
-public class ChordDurationFeature extends MIDIFeatureExtractor {
+public class ChordDurationFeature
+		extends MIDIFeatureExtractor
+{
+	/* CONSTRUCTOR ******************************************************************************************/
 
-    /**
-     * Basic constructor that sets the definition and dependencies (and their
-     * offsets) of this feature.
-     */
-    public ChordDurationFeature() {
- 		code = "C-22";
-        String name = "Chord Duration";
-        String description = "Average duration of a chord in seconds.";
-        boolean is_sequential = true;
-        int dimensions = 1;
-        definition = new FeatureDefinition( name,
-                description,
-                is_sequential,
-                dimensions );
+	
+	/**
+	 * Basic constructor that sets the values of the fields inherited from this class' superclass.
+	 */
+	public ChordDurationFeature()
+	{
+		code = "C-27";
+		String name = "Chord Duration";
+		String description = "Average duration in seconds of a chord. A \"chord\" here is considered to stay the same as long as no new pitch classes are added, and no pitch classes are taken away. This \"chord\" may consist of any number of pitch classes, even only one. A \"chord\" is not considered to end if it is split by one or more rests (although the rests themselves are not counted in the duration of the \"chord\").";
+		boolean is_sequential = true;
+		int dimensions = 1;
+		definition = new FeatureDefinition(name, description, is_sequential, dimensions);
+		dependencies = null;
+		offsets = null;
+	}
+	
 
-        dependencies = new String[]{"Chord Type Histogram"};
-        offsets = null;
-    }
+	/* PUBLIC METHODS ***************************************************************************************/
+	
+	
+	/**
+	 * Extract this feature from the given sequence of MIDI data and its associated information.
+	 *
+	 * @param sequence				The MIDI data to extract the feature from.
+	 * @param sequence_info			Additional data already extracted from the the MIDI sequence.
+	 * @param other_feature_values	The values of other features that may be needed to calculate this feature. 
+	 *								The order and offsets of these features must be the same as those returned
+	 *								by this class' getDependencies and getDependencyOffsets methods, 
+	 *								respectively. The first indice indicates the feature/window, and the 
+	 *								second indicates the value.
+	 * @return						The extracted feature value(s).
+	 * @throws Exception			Throws an informative exception if the feature cannot be calculated.
+	 */
+	@Override
+	public double[] extractFeature( Sequence sequence,
+									MIDIIntermediateRepresentations sequence_info,
+									double[][] other_feature_values )
+	throws Exception
+	{
+		double value;
+		if (sequence_info != null)
+		{
+			// A data structure indicating all pitch classes sounding at each MIDI tick. However, all ticks 
+			// during which no notes are playing are excluded from this data structure. The first dimension
+			// indicates the MIDI tick (after removal of rest ticks) and the second dimension indicates the 
+			// note index (there will be one entry for each pitch class sounding during the given MIDI tick).
+			// Each entry indicates the pitch class (0 to 11, where 0 is C) of one of the sounding notes.
+			short[][] pitch_classes_present_by_tick_excluding_rests = sequence_info.pitch_classes_present_by_tick_excluding_rests;
 
-    /**
-     * Extracts this feature from the given MIDI sequence given the other
-     * feature values.
-     *
-     * <p>In the case of this feature, the other_feature_values parameters
-     * are ignored.
-     *
-     * @param sequence			The MIDI sequence to extract the feature
-     *                                 from.
-     * @param sequence_info		Additional data about the MIDI sequence.
-     * @param other_feature_values	The values of other features that are
-     *					needed to calculate this value. The
-     *					order and offsets of these features
-     *					must be the same as those returned by
-     *					this class's getDependencies and
-     *					getDependencyOffsets methods
-     *                                 respectively. The first indice indicates
-     *                                 the feature/window and the second
-     *                                 indicates the value.
-     * @return				The extracted feature value(s).
-     * @throws Exception		Throws an informative exception if the
-     *					feature cannot be calculated.
-     */
-    @Override
-    public double[] extractFeature(Sequence sequence,
-                                   MIDIIntermediateRepresentations sequence_info,
-                                   double[][] other_feature_values)
-            throws Exception
-    {
-        short[][] vertical_interval_chart = sequence_info.pitch_strength_by_tick_chart;
-        int total_intervals = 128;
-        int quantized_intervals = 12;
+			// The duration in ticks of each chord
+			ArrayList<Integer> chord_durations_in_ticks = new ArrayList<>();
+			
+			// Iterate through ticks, looking for chords
+			int duration_this_chord_in_ticks = 0;
+			for (int tick = 0; tick < pitch_classes_present_by_tick_excluding_rests.length; tick++)
+			{
+				if (tick == 0)
+					duration_this_chord_in_ticks = 1;
+				else
+				{
+					short[] pitch_classes_previous_tick = pitch_classes_present_by_tick_excluding_rests[tick - 1];
+					short[] pitch_classes_this_tick = pitch_classes_present_by_tick_excluding_rests[tick];
+					
+					if (Arrays.equals(pitch_classes_previous_tick, pitch_classes_this_tick))
+						duration_this_chord_in_ticks++;
+					else
+					{
+						chord_durations_in_ticks.add(duration_this_chord_in_ticks);
+						duration_this_chord_in_ticks = 0;
+					}
+				}
+			}
+			chord_durations_in_ticks.add(duration_this_chord_in_ticks);
 
-        // Keep data of previous chord for comparison
-        int[] previous_chord = new int[total_intervals];
-        ChordTypeEnum previous_chord_type = null;
-        List<Double> chord_tick_duration = new ArrayList<>();
-        boolean[] chord_tick_array = new boolean[vertical_interval_chart.length];
-        for(int tick = 0; tick < vertical_interval_chart.length; tick++) {
-            //Get the chord at this tick
-            int[] quantized_chord = new int[quantized_intervals];
-            int[] current_chord = new int[total_intervals];
-            for(int pitch = 0; pitch < vertical_interval_chart[tick].length - 1; pitch++) {
-                int quantized_pitch = pitch % quantized_intervals;
-                int velocity = vertical_interval_chart[tick][pitch];
-                quantized_chord[quantized_pitch] += velocity;
-                if(velocity > 0) {
-                    current_chord[pitch]++;
-                }
-            }
-            ChordTypeEnum chord_type = ChordTypeEnum.getChordType(quantized_chord);
-            if(chord_type != null &&
-                    !Arrays.equals(current_chord, previous_chord))
-            {
-                // New chord
-                chord_tick_duration.add(1.0);
-                chord_tick_array[tick] = true;
-            }
-            else if(chord_type != null &&
-                    tick > 0 &&
-                    Arrays.equals(current_chord, previous_chord) &&
-                    chord_type.equals(previous_chord_type))
-            {
-                // Same as old chord
-                int current_chord_index = chord_tick_duration.size() - 1;
-                Double current_chord_length = chord_tick_duration.get(current_chord_index);
-                current_chord_length++;
-                chord_tick_duration.remove(current_chord_index);
-                chord_tick_duration.add(current_chord_length);
-                chord_tick_array[tick] = true;
-            }
-            previous_chord = current_chord;
-            previous_chord_type = ChordTypeEnum.getChordType(quantized_chord);
-        }
+			// Find the average duration of a chord in ticks
+			double average_ticks_per_chord = 0.0;
+			int total_number_chords = chord_durations_in_ticks.size();
+			for (int i = 0; i < total_number_chords; i++)
+				average_ticks_per_chord += chord_durations_in_ticks.get(i);
+			average_ticks_per_chord = average_ticks_per_chord / (double) total_number_chords;
 
-        //Convert ticks to seconds and then get average duration length
-        double[] seconds_per_tick = sequence_info.duration_of_ticks_in_seconds;
-        for(int chord_tick = 0; chord_tick < chord_tick_duration.size(); chord_tick++) {
-            if(chord_tick_array[chord_tick] == true) {
-                double current_value = chord_tick_duration.get(chord_tick);
-                double new_value = current_value * seconds_per_tick[chord_tick];
-                chord_tick_duration.set(chord_tick, new_value);
-            }
-        }
-        int number_of_chords = chord_tick_duration.size();
-        double chord_length_sum = chord_tick_duration.stream().mapToDouble(Double::doubleValue).sum();
-        double chord_length_average = chord_length_sum / number_of_chords;
-        return new double[]{chord_length_average};
-    }
+			// Convert from ticks to seconds
+			// NOTE: This is imperfect, because it does not take into account tempo change messages. Rather,
+			// it assumes the tick duration is the same everywhere as on the same tick.
+			double initial_duration_of_a_tick_in_seconds = sequence_info.duration_of_ticks_in_seconds[0];
+			value = average_ticks_per_chord * initial_duration_of_a_tick_in_seconds;
+		}
+		else value = -1.0;
+
+		double[] result = new double[1];
+		result[0] = value;
+		return result;
+	}
 }

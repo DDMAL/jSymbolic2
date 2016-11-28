@@ -123,30 +123,35 @@ public final class FeatureExtractorAccess
 			new ChordTypeHistogramFeature(),
 			new AverageNumberOfSimultaneousPitchClassesFeature(),
 			new VariabilityOfNumberOfSimultaneousPitchClassesFeature(),
+			new AverageNumberOfSimultaneousPitchesFeature(),
+			new VariabilityOfNumberOfSimultaneousPitchesFeature(),
 			new MostCommonVerticalIntervalFeature(),
 			new SecondMostCommonVerticalIntervalFeature(),
 			new DistanceBetweenTwoMostCommonVerticalIntervalsFeature(),
 			new PrevalenceOfMostCommonVerticalIntervalFeature(),
 			new PrevalenceOfSecondMostCommonVerticalIntervalFeature(),
-			new RatioOfPrevalenceOfTwoMostCommonVerticalIntervalsFeature(),
-			new UnisonsFeature(),
+			new PrevalenceRatioOfTwoMostCommonVerticalIntervalsFeature(),
+			new VerticalUnisonsFeature(),
 			new VerticalMinorSecondsFeature(),
 			new VerticalThirdsFeature(),
 			new VerticalTritonesFeature(),
-			new VerticalFifthsFeature(),
+			new VerticalPerfectFourthsFeature(),
+			new VerticalPerfectFifthsFeature(),
+			new VerticalSixthsFeature(),
+			new VerticalSeventhsFeature(),
 			new VerticalOctavesFeature(),
-			new FractionOfMinorVerticalIntervalsFeature(),
-			new FractionOfMajorVerticalIntervalsFeature(),
 			new PerfectVerticalIntervalsFeature(),
 			new VerticalDissonanceRatioFeature(),
+			new VerticalMinorThirdPrevalenceFeature(),
+			new VerticalMajorThirdPrevalenceFeature(),
 			new ChordDurationFeature(),
 			new PartialChordsFeature(),
-			new ComplexChordsFeature(),
 			new StandardTriadsFeature(),
 			new DiminishedAndAugmentedTriadsFeature(),
 			new DominantSeventhChordsFeature(),
 			new SeventhChordsFeature(),
 			new NonStandardChordsFeature(),
+			new ComplexChordsFeature(),
 			new MinorMajorTriadRatioFeature(),
 			
 			// Add features based on rhythm
@@ -300,30 +305,35 @@ public final class FeatureExtractorAccess
 			false, // ChordTypeHistogramFeature			
 			true, // AverageNumberOfSimultaneousPitchClassesFeature
 			true, // VariabilityOfNumberOfSimultaneousPitchClassesFeature
+			true, // AverageNumberOfSimultaneousPitchesFeature
+			true, // VariabilityOfNumberOfSimultaneousPitchesFeature
 			true, // MostCommonVerticalIntervalFeature
 			true, // SecondMostCommonVerticalIntervalFeature
 			true, // DistanceBetweenTwoMostCommonVerticalIntervalsFeature
 			true, // PrevalenceOfMostCommonVerticalIntervalFeature
 			true, // PrevalenceOfSecondMostCommonVerticalIntervalFeature
-			true, // RatioOfPrevalenceOfTwoMostCommonVerticalIntervalsFeature
-			true, // UnisonsFeature
+			true, // PrevalenceRatioOfTwoMostCommonVerticalIntervalsFeature
+			true, // VerticalUnisonsFeature
 			true, // VerticalMinorSecondsFeature
 			true, // VerticalThirdsFeature
 			true, // VerticalTritonesFeature
-			true, // VerticalFifthsFeature
+			true, // VerticalPerfectFourthsFeature
+			true, // VerticalPerfectFifthsFeature
+			true, // VerticalSixthsFeature
+			true, // VerticalSeventhsFeature
 			true, // VerticalOctavesFeature
-			true, // FractionOfMinorVerticalIntervalsFeature
-			true, // FractionOfMajorVerticalIntervalsFeature
 			true, // PerfectVerticalIntervalsFeature
 			true, // VerticalDissonanceRatioFeature
+			true, // VerticalMinorThirdPrevalenceFeature
+			true, // VerticalMajorThirdPrevalenceFeature
 			true, // ChordDurationFeature
 			true, // PartialChordsFeature
-			true, // ComplexChordsFeature
 			true, // StandardTriadsFeature
 			true, // DiminishedAndAugmentedTriadsFeature
 			true, // DominantSeventhChordsFeature
 			true, // SeventhChordsFeature
 			true, // NonStandardChordsFeature
+			true, // ComplexChordsFeature
 			true, // MinorMajorTriadRatioFeature
 
 			// Features based on rhythm
@@ -542,5 +552,18 @@ public final class FeatureExtractorAccess
 			chosen_features[feature_index] = true;
 		}
 		return chosen_features;
+	}
+	
+	
+	/**
+	 * Print the total number of implemented features, including the code and name of each feature, in the
+	 * correct listed order.
+	 */
+	public static void printAllFeatures()
+	{
+		System.out.println("ALL " + all_implemented_feature_extractors.length + " IMPLEMENTED FEATURES:");
+		for (int i = 0; i < all_implemented_feature_extractors.length; i++)
+			System.out.println( (i+1) + ":\t" + all_implemented_feature_extractors[i].getFeatureCode() + "\t" +
+			                    all_implemented_feature_extractors[i].definition.name);
 	}
 }

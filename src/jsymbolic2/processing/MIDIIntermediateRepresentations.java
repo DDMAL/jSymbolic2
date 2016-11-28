@@ -313,6 +313,27 @@ public class MIDIIntermediateRepresentations
 	public int total_vertical_unison_velocity;
 
 	/**
+	 * A data structure indicating all MIDI pitches (NOT including Channel 10 unpitched notes) sounding at
+	 * each MIDI tick. However, all ticks during which no notes are playing are excluded from this data
+	 * structure, so the tick index will most likely not correspond to the actual MIDI ticks in the MIDI
+	 * stream. The first dimension indicates the MIDI tick (after removal of rest ticks) and the second
+	 * dimension indicates the note index (there will be one entry for each MIDI pitch sounding during the
+	 * given MIDI tick). Each entry indicates the MIDI pitch number (0 to 127) of one of the sounding notes.
+	 */	
+	public short[][] pitches_present_by_tick_excluding_rests;
+	
+	/**
+	 * A data structure indicating all pitch classes (NOT including Channel 10 unpitched notes) sounding at
+	 * each MIDI tick. However, all ticks during which no notes are playing are excluded from this data
+	 * structure, so the tick index will most likely not correspond to the actual MIDI ticks in the MIDI
+	 * stream. The first dimension indicates the MIDI tick (after removal of rest ticks) and the second
+	 * dimension indicates the note index (there will be one entry for each pitch class sounding during the
+	 * given MIDI tick). Each entry indicates the pitch class (0 to 11, where 0 is C) of one of the sounding
+	 * notes.
+	 */
+	public short[][] pitch_classes_present_by_tick_excluding_rests;
+	
+	/**
 	 * A table with rows (first index) corresponding to MIDI channel number, and columns (second index)
 	 * corresponding to separate notes (in the temporal order that the Note On for each note occurred). Each
 	 * entry specifies the velocity of the Note On scaled by the channel volume at the time of the Note On,
@@ -508,17 +529,28 @@ public class MIDIIntermediateRepresentations
 			System.out.print("\n");
 		}*/
 
+		generatePitchStrengthByTickChartAndCalculateTotalVerticalUnsionVelocity();
+
+		generatePitchesAndPitchClassesPresentByTickExcludingRests();
+		/*for (int i = 0; i < pitches_present_by_tick_excluding_rests.length; i++)
+		{
+			System.out.print("\nTICK " + i + ": ");
+			for (int j = 0; j < pitches_present_by_tick_excluding_rests[i].length; j++)
+				System.out.print(pitches_present_by_tick_excluding_rests[i][j] + " ");
+		}
+		for (int i = 0; i < pitch_classes_present_by_tick_excluding_rests.length; i++)
+		{
+			System.out.print("\nTICK: " + i + ": ");
+			for (int j = 0; j < pitch_classes_present_by_tick_excluding_rests[i].length; j++)
+				System.out.print(pitch_classes_present_by_tick_excluding_rests[i][j] + " ");
+		}*/	
+
 		generateNoteLoudnesses();
 		/*for (int i = 0; i < note_loudnesses.length; i++)
 			System.out.print("\nCHAN: " + i + "  ");
 			for (int j = 0; j < note_loudnesses[i].length; j++)
 				System.out.print("   " + note_loudnesses[i][j]);
 		System.out.println("\n");*/
-
-		generatePitchStrengthByTickChartAndCalculateTotalVerticalUnsionVelocity();
-
-		// CURRENTLY DEPRECATED DUE TO LARGE HEAP SPACE REQUIREMENT
-		//generateChannelTickIntervalChart();
 	}
 
 	
@@ -1594,6 +1626,71 @@ public class MIDIIntermediateRepresentations
 				}
 			}
 		}
+	}
+	
+	
+	/**
+	 * Calculate the values of the pitches_present_by_tick_excluding_rests and 
+	 * pitches_classes_present_by_tick_excluding_rests fields.
+	 */
+	private void generatePitchesAndPitchClassesPresentByTickExcludingRests()
+	{
+		// An ArrayList version of pitches_present_by_tick_excluding_rests
+		ArrayList<short[]> pitches_present_by_tick_excluding_rests_arli = new ArrayList<>();
+		
+		// An ArrayList version of pitch_classes_present_by_tick_excluding_rests
+		ArrayList<short[]> pitch_classes_present_by_tick_excluding_rests_arli = new ArrayList<>();
+		
+		// Fill in number_pitch_classes_by_tick tick by tick 
+		for (int tick = 0; tick < pitch_strength_by_tick_chart.length; tick++)
+		{
+			// Find the MIDI pitch numbers of all pitches found this tick
+			ArrayList<Short> pitches_this_tick = new ArrayList<>();
+			for (int pitch = 0; pitch < pitch_strength_by_tick_chart[tick].length - 1; pitch++)
+				if (pitch_strength_by_tick_chart[tick][pitch] != 0)
+					pitches_this_tick.add((short) pitch);
+
+			// If not a rest
+			if (!pitches_this_tick.isEmpty())
+			{
+				// Store pitches present this tick
+				short[] these_pitches = new short[pitches_this_tick.size()];
+				for (int i = 0; i < these_pitches.length; i++)
+					these_pitches[i] = pitches_this_tick.get(i);
+				pitches_present_by_tick_excluding_rests_arli.add(these_pitches);
+				
+				// Store pitch classes present this tick
+				ArrayList<Short> pitch_classes_this_tick = new ArrayList<>();
+				for (int i = 0; i < these_pitches.length; i++)
+				{
+					short pitch_class = (short) (these_pitches[i] % 12);
+					if (i == 0)
+						pitch_classes_this_tick.add(pitch_class);
+					else
+					{
+						boolean repeated_pitch_class = false;
+						for (int j = 0; j < pitch_classes_this_tick.size(); j++)
+						{
+							if (pitch_classes_this_tick.get(j) == pitch_class)
+							{
+								repeated_pitch_class = true;
+								break;
+							}
+						}
+						if (!repeated_pitch_class)
+							pitch_classes_this_tick.add(pitch_class);
+					}
+				}
+				short[] these_pitch_classes = new short[pitch_classes_this_tick.size()];
+				for (int i = 0; i < these_pitch_classes.length; i++)
+					these_pitch_classes[i] = pitch_classes_this_tick.get(i);
+				pitch_classes_present_by_tick_excluding_rests_arli.add(these_pitch_classes);
+			}
+		}
+
+		// Convert ArrayLists to arrays
+		pitches_present_by_tick_excluding_rests = pitches_present_by_tick_excluding_rests_arli.toArray(new short[pitches_present_by_tick_excluding_rests_arli.size()][]);
+		pitch_classes_present_by_tick_excluding_rests = pitch_classes_present_by_tick_excluding_rests_arli.toArray(new short[pitch_classes_present_by_tick_excluding_rests_arli.size()][]);
 	}
 
 

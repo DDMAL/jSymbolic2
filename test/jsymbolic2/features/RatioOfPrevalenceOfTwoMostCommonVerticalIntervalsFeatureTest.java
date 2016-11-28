@@ -62,7 +62,7 @@ public class RatioOfPrevalenceOfTwoMostCommonVerticalIntervalsFeatureTest {
         double[] second_prevalence_value = second_prevalence_feature.extractFeature(test_tracks, inter, other_features);
         other_features[0] = prevalence_value;
         other_features[1] = second_prevalence_value;
-        MIDIFeatureExtractor actual_common = new RatioOfPrevalenceOfTwoMostCommonVerticalIntervalsFeature();
+        MIDIFeatureExtractor actual_common = new PrevalenceRatioOfTwoMostCommonVerticalIntervalsFeature();
         double[] actual_prevalence = actual_common.extractFeature(test_tracks, inter, other_features);
         double[] expected_prevalence = {0.3333};
         assertArrayEquals(expected_prevalence, actual_prevalence, 0.0001);

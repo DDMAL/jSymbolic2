@@ -38,7 +38,7 @@ public class FractionOfMajorVerticalIntervalsFeatureTest {
         double[] vertical_intervals = new WrappedVerticalIntervalHistogramFeature().extractFeature(test_tracks, inter, null);
         double[][] other_features = new double[1][];
         other_features[0] = vertical_intervals;
-        MIDIFeatureExtractor actual_common = new FractionOfMajorVerticalIntervalsFeature();
+        MIDIFeatureExtractor actual_common = new VerticalMajorThirdPrevalenceFeature();
         double[] actual_chord_type = actual_common.extractFeature(test_tracks, inter, other_features);
         double[] expected_chord_type = {0.4};
         assertArrayEquals(expected_chord_type, actual_chord_type, 0.01);

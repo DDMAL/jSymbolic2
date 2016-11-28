@@ -6,12 +6,14 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature extractor that finds the average number of different pitch classes sounding simultaneously. Rests
- * are excluded from this calculation.
+ * A feature calculator that finds the fraction of the music by time where at least one wrapped vertical minor
+ * third is sounding (regardless of whatever other vertical intervals may or may not be sounding at the same
+ * time). Only that part of the music where one or more pitched notes is sounding is included in this
+ * calculation (rests and sections containing only unpitched notes are ignored).
  *
  * @author Cory McKay and Tristano Tenaglia
  */
-public class AverageNumberOfSimultaneousPitchClassesFeature
+public class VerticalMinorThirdPrevalenceFeature
 		extends MIDIFeatureExtractor
 {
 	/* CONSTRUCTOR ******************************************************************************************/
@@ -20,11 +22,11 @@ public class AverageNumberOfSimultaneousPitchClassesFeature
 	/**
 	 * Basic constructor that sets the values of the fields inherited from this class' superclass.
 	 */
-	public AverageNumberOfSimultaneousPitchClassesFeature()
+	public VerticalMinorThirdPrevalenceFeature()
 	{
-		code = "C-4";
-		String name = "Average Number of Simultaneous Pitch Classes";
-		String description = "Average number of different pitch classes sounding simultaneously. Rests are excluded from this calculation.";
+		code = "C-25";
+		String name = "Vertical Minor Third Prevalence";
+		String description = "Fraction of the music by time where at least one wrapped vertical minor third is sounding (regardless of whatever other vertical intervals may or may not be sounding at the same time). Only that part of the music where one or more pitched notes is sounding is included in this calculation (rests and sections containing only unpitched notes are ignored).";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, description, is_sequential, dimensions);
@@ -56,25 +58,43 @@ public class AverageNumberOfSimultaneousPitchClassesFeature
 	throws Exception
 	{
 		double value;
-		
 		if (sequence_info != null)
 		{
 			// All MIDI pitches (NOT including Channel 10 unpitched notes sounding at each MIDI tick, with
 			// ticks with no sounding notes excluded.
-			short[][] pitch_classes_present_by_tick_excluding_rests = sequence_info.pitch_classes_present_by_tick_excluding_rests;
-			
-			// Will hold the number of pitches sounding each tick
-			short[] number_pitch_classes_by_tick = new short[pitch_classes_present_by_tick_excluding_rests.length];
+			short[][] pitches_present_by_tick_excluding_rests = sequence_info.pitches_present_by_tick_excluding_rests;
 
-			// Fill in number_pitches_by_tick tick by tick 
-			for (int tick = 0; tick < pitch_classes_present_by_tick_excluding_rests.length; tick++)
-				number_pitch_classes_by_tick[tick] = (short) pitch_classes_present_by_tick_excluding_rests[tick].length;
+			double ticks_with_minor_third = 0.0;
 			
-			// Find the average of the number of pitches sounding simultaneously
-			value = mckay.utilities.staticlibraries.MathAndStatsMethods.getAverage(number_pitch_classes_by_tick);		
+			for (int tick = 0; tick < pitches_present_by_tick_excluding_rests.length; tick++)
+			{
+				// The MIDI pitch numbers of all pitches found this tick
+				short[] pitches_this_tick = pitches_present_by_tick_excluding_rests[tick];
+				
+				// Update ticks_with_minor_third to find the number of ticks that contain a wrapped minor
+				// third
+				if (pitches_this_tick.length > 1)
+				{
+					for (int i = 0; i < pitches_this_tick.length; i++)
+					{
+						for (int j = 0; j < i; j++)
+						{
+							if ( (pitches_this_tick[i] - pitches_this_tick[j]) % 12 == 3 )
+							{
+								ticks_with_minor_third++;
+								i = pitches_this_tick.length;
+								j = i;
+							}
+						}
+					}
+				}
+			}
+
+			// Calculate the fraction
+			value = ticks_with_minor_third / (double) pitches_present_by_tick_excluding_rests.length; 
 		}
 		else value = -1.0;
-		
+
 		double[] result = new double[1];
 		result[0] = value;
 		return result;
