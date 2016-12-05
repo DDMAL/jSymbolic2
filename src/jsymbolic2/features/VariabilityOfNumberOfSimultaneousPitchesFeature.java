@@ -7,7 +7,8 @@ import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
  * A feature extractor that finds the standard deviation of the number of pitches sounding simultaneously.
- * Rests are excluded from this calculation.
+ * Rests are excluded from this calculation. Unisons are also excluded from this calculation, but octave
+ * multiples are included in it.
  *
  * @author Cory McKay
  */
@@ -24,7 +25,7 @@ public class VariabilityOfNumberOfSimultaneousPitchesFeature
 	{
 		code = "C-7";
 		String name = "Variability of Number of Simultaneous Pitches";
-		String description = "Standard deviation of the number of pitches sounding simultaneously. Rests are excluded from this calculation.";
+		String description = "Standard deviation of the number of pitches sounding simultaneously. Rests are excluded from this calculation. Unisons are also excluded from this calculation, but octave multiples are included in it.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, description, is_sequential, dimensions);

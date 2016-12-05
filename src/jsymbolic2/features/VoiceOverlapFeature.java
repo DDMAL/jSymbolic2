@@ -23,7 +23,7 @@ public class VoiceOverlapFeature
 	 */
 	public VoiceOverlapFeature()
 	{
-		code = "T-18";
+		code = "T-16";
 		String name = "Voice Overlap";
 		String description = "Number of notes played within the range of another channel, divided by the total number of notes in the piece as a whole.";
 		boolean is_sequential = true;
