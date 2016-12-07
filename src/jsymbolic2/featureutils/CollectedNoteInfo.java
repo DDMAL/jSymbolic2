@@ -226,4 +226,24 @@ public class CollectedNoteInfo
 		}
 		return this_map;
 	}
+
+
+	/**
+	 * Return a copy of the the given list of notes sorted in increasing order by start tick. Note that the
+	 * original list is not changed in any way.
+	 *
+	 * @param note_list	The list of notes to sort.
+	 * @return			The sorted copy.
+	 */
+	public static List<NoteInfo> noteListToSortedNoteList(List<NoteInfo> note_list)
+	{
+		// Copy note_list
+		List<NoteInfo> sorted_list = new ArrayList<>(note_list.size());
+		for (NoteInfo note : note_list)
+			sorted_list.add(note);
+		
+		// Sort and return the copy of note_list
+		sorted_list.sort((s1, s2) -> ((Integer) s1.getStartTick()).compareTo(s2.getStartTick()));
+		return sorted_list;
+	}
 }

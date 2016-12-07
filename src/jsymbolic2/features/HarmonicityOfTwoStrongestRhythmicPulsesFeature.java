@@ -85,10 +85,12 @@ public class HarmonicityOfTwoStrongestRhythmicPulsesFeature
 			}
 
 			// Calculate the featurevalue
-			if (max_index > second_hidgest_bin_index)
-				value = max_index / second_hidgest_bin_index;
-			 else
-				value = second_hidgest_bin_index / max_index;
+			if (second_hidgest_bin_index == 0 || max_index == 0)
+				value = 0.0;
+			else if (max_index > second_hidgest_bin_index)
+				value = (double) max_index / (double) second_hidgest_bin_index;
+			else
+				value = (double) second_hidgest_bin_index / (double) max_index;
 		}
 		else value = -1.0;
 

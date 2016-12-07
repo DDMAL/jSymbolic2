@@ -7,8 +7,9 @@ import javax.sound.midi.Sequence;
 import java.util.LinkedList;
 
 /**
- * A feature calculator that finds the number of pitched notes that are preceded by isolated MIDI Pitch Bend
- * messages, divided by the total number of pitched Note Ons in the piece.
+ * A feature calculator that finds the number of pitched notes that are each associated with exactly one MIDI
+ * Pitch Bend message, divided by the total number of pitched Note Ons in the piece. Set to 0 if there are no
+ * pitched Note Ons in the piece.
  *
  * @author Tristano Tenaglia and Cory McKay
  */
@@ -25,7 +26,7 @@ public class MicrotonePrevalenceFeature
 	{
 		code = "P-26";
 		String name = "Microtone Prevalence";
-		String description = "Number of pitched notes that are preceded by isolated MIDI Pitch Bend messages, divided by the total number of pitched Note Ons in the piece.";
+		String description = "Number of pitched notes that are each associated with exactly one MIDI Pitch Bend message, divided by the total number of pitched Note Ons in the piece. Set to 0 if there are no pitched Note Ons in the piece.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, description, is_sequential, dimensions);
@@ -65,20 +66,21 @@ public class MicrotonePrevalenceFeature
 			// an Integer) associated with the note, in the order that they occurred.
 			LinkedList pitch_bends_list = sequence_info.pitch_bends_list;
 			
-			if (pitch_bends_list.isEmpty()) // if there are no pitchbend messages
+			if ( sequence_info.total_number_pitched_note_ons == 0 || // if there are no pitched notes
+			     pitch_bends_list.isEmpty() ) // if there are no pitchbend messages
 				value = 0.0;
 			else
 			{
-				double number_note_ons = 0;
+				double number_single_pitchbend_notes = 0;
 				for (Object pitch_bend_note : pitch_bends_list)
 				{
 					LinkedList bends_associated_with_this_note = (LinkedList) pitch_bend_note;
 					
 					// Only count if a single pitch bend is associated with this Note On
 					if (bends_associated_with_this_note.size() == 1)
-						number_note_ons++;
+						number_single_pitchbend_notes++;
 				}
-				value = number_note_ons / sequence_info.total_number_pitched_note_ons;
+				value = number_single_pitchbend_notes / sequence_info.total_number_pitched_note_ons;
 			}
 		}
 		else value = -1.0;

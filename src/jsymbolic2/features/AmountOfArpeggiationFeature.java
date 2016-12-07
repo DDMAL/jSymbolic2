@@ -7,7 +7,8 @@ import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
  * A feature calculator that finds the fraction of melodic intervals that are repeated notes, minor thirds,
- * major thirds, perfect fifths, minor sevenths, major sevenths, octaves, minor tenths or major tenths.
+ * major thirds, perfect fifths, minor sevenths, major sevenths, octaves, minor tenths or major tenths. This
+ * is only a very approximate measure of the amount of arpeggiation in the music, of course.
  *
  * @author Cory McKay
  */
@@ -24,7 +25,7 @@ public class AmountOfArpeggiationFeature
 	{
 		code = "M-8";
 		String name = "Amount of Arpeggiation";
-		String description = "Fraction of melodic intervals that are repeated notes, minor thirds, major thirds, perfect fifths, minor sevenths, major sevenths, octaves, minor tenths or major tenths.";
+		String description = "Fraction of melodic intervals that are repeated notes, minor thirds, major thirds, perfect fifths, minor sevenths, major sevenths, octaves, minor tenths or major tenths. This is only a very approximate measure of the amount of arpeggiation in the music, of course.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, description, is_sequential, dimensions);

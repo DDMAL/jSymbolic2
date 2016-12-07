@@ -79,7 +79,10 @@ public class VoiceEqualityMelodicLeapsFeature
 			}
 
 			// Calculate the standard deviation
-			value = mckay.utilities.staticlibraries.MathAndStatsMethods.getStandardDeviation(leap);
+			if (leap == null || leap.length == 0)
+				value = 0.0;
+			else
+				value = mckay.utilities.staticlibraries.MathAndStatsMethods.getStandardDeviation(leap);
 		}
 		else value = -1.0;
 

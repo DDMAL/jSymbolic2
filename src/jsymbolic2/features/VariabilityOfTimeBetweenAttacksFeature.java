@@ -115,7 +115,10 @@ public class VariabilityOfTimeBetweenAttacksFeature
 				}
 			}
 
-			value = mckay.utilities.staticlibraries.MathAndStatsMethods.getStandardDeviation(intervals);
+			if (intervals == null || intervals.length == 0)
+				value = 0.0;
+			else 
+				value = mckay.utilities.staticlibraries.MathAndStatsMethods.getStandardDeviation(intervals);
 		}
 		else value = -1.0;
 

@@ -79,7 +79,10 @@ public class VoiceEqualityDynamicsFeature
 			}
 
 			// Calculate the standard deviation
-			value = mckay.utilities.staticlibraries.MathAndStatsMethods.getStandardDeviation(dynamics);
+			if (dynamics == null || dynamics.length == 0)
+				value = 0.0;
+			else 
+				value = mckay.utilities.staticlibraries.MathAndStatsMethods.getStandardDeviation(dynamics);
 		}
 		else value = -1.0;
 

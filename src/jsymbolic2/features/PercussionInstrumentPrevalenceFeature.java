@@ -65,7 +65,10 @@ public class PercussionInstrumentPrevalenceFeature
 
 			int number_unpitched_note_ons = sequence_info.channel_statistics[10 - 1][0];
 
-			value = (double) number_unpitched_note_ons / (double) total_number_note_ons;
+			if (total_number_note_ons == 0)
+				value = 0.0;
+			else 
+				value = (double) number_unpitched_note_ons / (double) total_number_note_ons;
 		}
 		else value = -1.0;
 

@@ -79,7 +79,10 @@ public class VoiceEqualityNumberOfNotesFeature
 			}
 
 			// Calculate the standard deviation
-			value = mckay.utilities.staticlibraries.MathAndStatsMethods.getStandardDeviation(number_note_ons);
+			if (number_note_ons == null || number_note_ons.length == 0)
+				value = 0.0;
+			else 
+				value = mckay.utilities.staticlibraries.MathAndStatsMethods.getStandardDeviation(number_note_ons);
 		}
 		else value = -1.0;
 

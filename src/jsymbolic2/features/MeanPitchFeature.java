@@ -7,7 +7,7 @@ import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
  * A feature calculator that finds the mean MIDI pitch value, averaged across all pitched notes in the piece.
- *
+ * Set to 0 if there are no pitched notes.
  * @author Cory McKay
  */
 public class MeanPitchFeature
@@ -23,7 +23,7 @@ public class MeanPitchFeature
 	{
 		code = "P-15";
 		String name = "Mean Pitch";
-		String description = "Mean MIDI pitch value, averaged across all pitched notes in the piece.";
+		String description = "Mean MIDI pitch value, averaged across all pitched notes in the piece. Set to 0 if there are no pitched notes.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, description, is_sequential, dimensions);
@@ -69,7 +69,10 @@ public class MeanPitchFeature
 			}
 
 			// Calculate the feature value
-			value = cumulative_pitch_values / (double) sequence_info.total_number_pitched_note_ons;
+			if (sequence_info.total_number_pitched_note_ons == 0)
+				value = 0.0;
+			else 
+				value = cumulative_pitch_values / (double) sequence_info.total_number_pitched_note_ons;
 		}
 		else value = -1.0;
 

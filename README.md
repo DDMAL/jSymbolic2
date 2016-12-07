@@ -1,5 +1,5 @@
 ==================================================================================
- jSymbolic 2
+ jSymbolic 2.0
 ==================================================================================
  by Cory McKay
  Copyright (C) 2016 (GNU GPL)
@@ -61,13 +61,28 @@ Please Cory McKay (cory.mckay@mail.mcgill.ca) with any bug reports or
 questions relating to the software. 
 
 
+### LICENSING AND LIABILITY
+
+This program is free software; you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation.
+
+This program is distributed in the hope that it will be useful, but WITHOUT 
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with 
+this program; if not, write to the Free Software Foundation, Inc., 675 
+Mass Ave, Cambridge, MA 02139, USA.
+
+
 ### COMPATIBILITY
 
 The jSymbolic software is written in Java, which means that it can in
 principle be run on any system that has the Java Runtime Environment (JRE)
 installed on it. It is particularly recommended that this software be used
-with Linux, as it was developed and tested primarily under this operating 
-systems. Although the software should still run perfectly well on Windows,
+with Windows or Linus, as it was developed and tested primarily under these
+operating systems. Although the software should still run perfectly well on
 OS X, Solaris or any other operating system with the JRE installed on it, 
 users should be advised that jSymbolic has not yet been fully tested on these
 platforms, so difficulties may be encountered.

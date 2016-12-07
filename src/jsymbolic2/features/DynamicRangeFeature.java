@@ -58,8 +58,8 @@ public class DynamicRangeFeature
 		double value;
 		if (sequence_info != null)
 		{
-			int max = 0;
-			int min = 127;
+			int max = -1;
+			int min = 128;
 			for (int i = 0; i < sequence_info.note_loudnesses.length; i++)
 			{
 				for (int j = 0; j < sequence_info.note_loudnesses[i].length; j++)
@@ -70,8 +70,11 @@ public class DynamicRangeFeature
 						min = sequence_info.note_loudnesses[i][j];
 				}
 			}
-
-			value = ((double) (max - min));
+			
+			if (max == -1 || min == 128)
+				value = 0.0;
+			else
+				value = ((double) (max - min));
 		}
 		else value = -1.0;
 

@@ -117,7 +117,10 @@ public class RhythmicLoosenessFeature
 			}
 
 			// Calculate the feature value
-			value = mckay.utilities.staticlibraries.MathAndStatsMethods.getAverage(widths);
+			if (widths == null || widths.length == 0)
+				value = 0.0;
+			else 
+				value = mckay.utilities.staticlibraries.MathAndStatsMethods.getAverage(widths);
 		}
 		else value = -1.0;
 

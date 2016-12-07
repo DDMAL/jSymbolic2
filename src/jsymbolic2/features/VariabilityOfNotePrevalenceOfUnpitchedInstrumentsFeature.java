@@ -81,7 +81,10 @@ public class VariabilityOfNotePrevalenceOfUnpitchedInstrumentsFeature
 					count++;
 				}
 			}
-			value = mckay.utilities.staticlibraries.MathAndStatsMethods.getStandardDeviation(instrument_frequencies);
+			if (instrument_frequencies == null || instrument_frequencies.length == 0)
+				value = 0.0;
+			else 
+				value = mckay.utilities.staticlibraries.MathAndStatsMethods.getStandardDeviation(instrument_frequencies);
 		} 
 		else value = -1.0;
 

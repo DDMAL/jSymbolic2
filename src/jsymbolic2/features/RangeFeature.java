@@ -58,18 +58,21 @@ public class RangeFeature
 		if (sequence_info != null)
 		{
 			// Find the lowest and highest pitches
-			int lowest = 127;
-			int highest = 0;
+			int lowest = 128;
+			int highest = -1;
 			for (int bin = 0; bin < sequence_info.basic_pitch_histogram.length; bin++)
 			{
-				if (sequence_info.basic_pitch_histogram[bin] > 0.0 && lowest == 127)
+				if (sequence_info.basic_pitch_histogram[bin] > 0.0 && lowest == 128)
 					lowest = bin;
 				if (sequence_info.basic_pitch_histogram[bin] > 0.0)
 					highest = bin;
 			}
 
 			// Calculate the feature value
-			value = (double) (highest - lowest);
+			if (lowest == 128 || highest == -1)
+				value = 0.0;
+			else
+				value = (double) (highest - lowest);
 		} 
 		else value = -1.0;
 

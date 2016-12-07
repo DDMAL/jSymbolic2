@@ -79,7 +79,10 @@ public class VoiceEqualityNoteDurationFeature
 			}
 
 			// Calculate the standard deviation
-			value = mckay.utilities.staticlibraries.MathAndStatsMethods.getStandardDeviation(durations);
+			if (durations == null || durations.length == 0)
+				value = 0.0;
+			else 
+				value = mckay.utilities.staticlibraries.MathAndStatsMethods.getStandardDeviation(durations);
 		}
 		else value = -1.0;
 

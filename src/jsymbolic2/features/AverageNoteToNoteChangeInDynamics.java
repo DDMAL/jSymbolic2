@@ -80,7 +80,10 @@ public class AverageNoteToNoteChangeInDynamics
 			}
 
 			// Calculate the average
-			value = mckay.utilities.staticlibraries.MathAndStatsMethods.getAverage(loudness_intervals);
+			if (loudness_intervals == null || loudness_intervals.length == 0)
+				value = 0.0;
+			else
+				value = mckay.utilities.staticlibraries.MathAndStatsMethods.getAverage(loudness_intervals);
 		}
 		else value = -1.0;
 

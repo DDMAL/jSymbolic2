@@ -36,7 +36,7 @@ public class VerticalMinorSecondsFeatureTest {
         uni1_tracks.add(uni_tracks6);
 
         MIDIIntermediateRepresentations actual_representation_unison = new MIDIIntermediateRepresentations(test_uni);
-        MIDIFeatureExtractor unison = new UnisonsFeature();
+        MIDIFeatureExtractor unison = new VerticalUnisonsFeature();
         double[] vertical_intervals = new WrappedVerticalIntervalHistogramFeature().extractFeature(test_uni, actual_representation_unison, null);
         double[][] other_features = new double[1][];
         other_features[0] = vertical_intervals;

@@ -76,7 +76,10 @@ public class AmountOfStaccatoFeature
 				count += sequence_info.channel_statistics[chan][0];
 
 			// Calculate feautre value
-			value = (double) short_count / (double) count;
+			if (short_count == 0.0 || count == 0)
+				value = 0.0;
+			else
+				value = (double) short_count / (double) count;
 		}
 		else value = -1.0;
 

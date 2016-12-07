@@ -22,7 +22,7 @@ public class VoiceSeparationFeature
 	 */
 	public VoiceSeparationFeature()
 	{
-		code = "T-20";
+		code = "T-18";
 		String name = "Voice Separation";
 		String description = "Average separation in semitones between the average pitches of consecutive channels (after sorting based on average pitch) that contain at least one note. ";
 		boolean is_sequential = true;
@@ -90,7 +90,10 @@ public class VoiceSeparationFeature
 					intervals[i] = average_pitches[i + 1] - average_pitches[i];
 
 				// Find the average interval
-				value = mckay.utilities.staticlibraries.MathAndStatsMethods.getAverage(intervals);
+				if (intervals == null || intervals.length == 0)
+					value = 0.0;
+				else
+					value = mckay.utilities.staticlibraries.MathAndStatsMethods.getAverage(intervals);
 			}
 		}
 		else value = -1.0;

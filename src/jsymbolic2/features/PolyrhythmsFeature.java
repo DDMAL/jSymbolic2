@@ -115,7 +115,10 @@ public class PolyrhythmsFeature
 			}
 
 			// Calculate the feature value
-			value = (double) hits / (double) peak_bins.length;
+			if (peak_bins.length == 0)
+				value = 0.0;
+			else 
+				value = (double) hits / (double) peak_bins.length;
 		}
 		else value = -1.0;
 

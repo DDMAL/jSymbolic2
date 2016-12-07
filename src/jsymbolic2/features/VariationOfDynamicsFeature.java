@@ -68,7 +68,10 @@ public class VariationOfDynamicsFeature
 				}
 			}
 
-			value = mckay.utilities.staticlibraries.MathAndStatsMethods.getStandardDeviation(loudnesses);
+			if (loudnesses == null || loudnesses.length == 0)
+				value = 0.0;
+			else 
+				value = mckay.utilities.staticlibraries.MathAndStatsMethods.getStandardDeviation(loudnesses);
 		} 
 		else value = -1.0;
 

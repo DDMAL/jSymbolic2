@@ -58,8 +58,11 @@ public class GlissandoPrevalenceFeature
 		double value;
 		if (sequence_info != null)
 		{
-			value = (double) sequence_info.pitch_bends_list.size() /
-					(double) sequence_info.total_number_pitched_note_ons;
+			if (sequence_info.total_number_pitched_note_ons == 0)
+				value = 0.0;
+			else
+				value = (double) sequence_info.pitch_bends_list.size() /
+				        (double) sequence_info.total_number_pitched_note_ons;
 		}
 		else value = -1.0;
 

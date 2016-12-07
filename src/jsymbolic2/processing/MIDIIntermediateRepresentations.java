@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import javax.sound.midi.*;
 import jsymbolic2.featureutils.CollectedNoteInfo;
+import mckay.utilities.staticlibraries.MathAndStatsMethods;
 
 /**
  * An object of this class is instantiated with a MIDI sequence. The constructor parses this sequence and
@@ -175,9 +176,9 @@ public class MIDIIntermediateRepresentations
 	public boolean[][] note_attack_tick_map;
 
 	/**
-	 * Information on the pitch, start, end, track and channel of every note (including Channel 10 unpitched
-	 * notes). The notes can be accessed simply as a List of notes, or a query can be made (using the
-	 * getNotesStartingOnTick method) to find all notes starting on a particular MIDI tick. Additional
+	 * Information on the pitch, start tick, end tick, track and channel of every note (including Channel 10
+	 * unpitched notes). The notes can be accessed simply as a List of notes, or a query can be made (using
+	 * the getNotesStartingOnTick method) to find all notes starting on a particular MIDI tick. Additional
 	 * information is also available, such as a list of all notes on a particular channel (via the
 	 * getNotesOnChannel method).
 	 */
@@ -220,32 +221,38 @@ public class MIDIIntermediateRepresentations
 	public LinkedList<LinkedList<Integer>> pitch_bends_list;
 
 	/**
-	 * A normalized histogram with each bin index indicating a melodic interval, measured in number of
-	 * semitones. The magnitude of each bin is proportional to the fraction of all melodic intervals in the
-	 * sequence that are of the size corresponding to the bin. Rising and falling intervals are treated as
-	 * identical. Notes on Channel 10 (non-pitched percussion instruments) are ignored. It is assumed that
-	 * there is only one melody per channel (notes occurring simultaneously on on the same MIDI tick are not
-	 * counted in this histogram, but other than that all notes on the same channel are treated as if they are
-	 * part of a single melody). It is also assumed that melodies do not cross MIDI channels (i.e. that they
-	 * are each separately contained to their own channel). The histogram accounts for intervals from 0 to 127
-	 * semitones.
+	 * Each bin corresponds to a melodic interval, and the bin index indicates the number of semitones
+	 * comprising the interval associated with the bin (there are 128 bins in all). For example, bin 0
+	 * corresponds to repeated pitches, bin 1 to a melodic interval of one semitone, bin 2 to a melodic
+	 * interval of 2 semitones, etc. The magnitude of each bin is proportional to the fraction of melodic
+	 * intervals in the piece that are of the kind associated with the bin (this histogram is normalized).
+	 * Rising and falling intervals are treated as identical. Melodies are assumed to be contained within
+	 * individual MIDI tracks and channels, so melodic intervals are found separately for each track and
+	 * channel before being combined in this histogram. It is also assumed that there is only one melody at a
+	 * time per MIDI channel (if multiple notes occur simultaneously on the same MIDI tick on the same MIDI
+	 * track and channel, then all notes but the first note on that tick are ignored). Other than this, all
+	 * notes on the same track and the same channel are treated as if they are part of a single melody. It is
+	 * also assumed that melodies do not cross MIDI tracks or channels (i.e. that they are each separately
+	 * contained in their own track and channel). Only pitched notes are considered, so all notes on the
+	 * unpitched MIDI Channel 10 are ignored.
 	 */
 	public double[] melodic_interval_histogram;
 
 	/**
-	 * An array where the index corresponds to MIDI channel, and each entry consists of a list of all melodic
-	 * intervals that occurred in that channel. Each entry in a list is an Integer that indicates the number
-	 * of semitones comprising the interval, with positive values for upwards motion and negative values for
-	 * downwards motion. Any notes on Channel 10 (non-pitched percussion) are ignored. The order of melodic
-	 * intervals in each list is based on an iteration through tracks, and then through MIDI events on that
-	 * track; this means that the order of the melodic intervals may not necessarily be in the temporal order
-	 * that they occur. It is assumed that there is only one melody per channel (notes occurring
-	 * simultaneously on on the same MIDI tick are not counted in this histogram, but other than that all
-	 * notes on the same channel are treated as if they are part of a single melody). It is also assumed that
-	 * melodies do not cross MIDI channels (i.e. that they are each separately contained to their own
-	 * channel).
+	 * A list of data structures, where the outer list contains a separate entry for each MIDI track. The
+	 * inner structure is an array of lists where the array index corresponds to MIDI channel, and each entry
+	 * in the array consists of a list of all melodic intervals that occurred in that channel on that track,
+	 * in the order that they occurred. Each entry in these lists of melodic intervals is an Integer that
+	 * indicates the number of semitones comprising the melodic interval, with positive values indicating
+	 * upwards motion and negative values indicating downwards motion. Any notes on Channel 10 (non-pitched
+	 * percussion) are ignored (i.e. the Channel 10 entry on the array is left empty). It is assumed that
+	 * there is only one melody per channel (if multiple notes occur simultaneously on the same MIDI tick on
+	 * the same MIDI track and channel, then all notes but the first note on that tick are ignored). Other
+	 * than this, all notes on the same track and the same channel are treated as if they are part of a single
+	 * melody. It is also assumed that melodies do not cross MIDI tracks or channels (i.e. that they are each
+	 * separately contained in their own track and channel).
 	 */
-	public LinkedList<Integer>[] melodic_intervals_by_channel;
+	public LinkedList<LinkedList<Integer>[]> melodic_intervals_by_track_and_channel;
 
 	/**
 	 * A table with rows (first index) corresponding to MIDI channels and column (second index) designations
@@ -276,6 +283,8 @@ public class MIDIIntermediateRepresentations
 	 *
 	 * <p>NOTE: This data includes MIDI Channel 10, even though it is understood that notes on Channel 10 are
 	 * in fact unpitched percussion patches.
+	 *
+	 * <p>NOTE: This data combines data in all MIDI tracks.
 	 */
 	public int[][] channel_statistics;
 	
@@ -297,7 +306,7 @@ public class MIDIIntermediateRepresentations
 	 * <p>NOTE: This data includes MIDI Channel 10, even though it is understood that notes on Channel 10 are
 	 * in fact unpitched percussion patches.
 	 */
-	public boolean[][] notes_sounding_tick_map;
+	public boolean[][] note_sounding_on_a_channel_tick_map;
 	
 	/**
 	 * A table indicating what pitches are sounding during each MIDI tick. The first index indicates tick and
@@ -313,10 +322,32 @@ public class MIDIIntermediateRepresentations
 	public int total_vertical_unison_velocity;
 
 	/**
+	 * A data structure indicating all MIDI pitches (NOT including Channel 10 unpitched notes) sounding at
+	 * each MIDI tick. However, all ticks during which no notes are playing are excluded from this data
+	 * structure, so the tick index will most likely not correspond to the actual MIDI ticks in the MIDI
+	 * stream. The first dimension indicates the MIDI tick (after removal of rest ticks) and the second
+	 * dimension indicates the note index (there will be one entry for each MIDI pitch sounding during the
+	 * given MIDI tick). Each entry indicates the MIDI pitch number (0 to 127) of one of the sounding notes.
+	 */	
+	public short[][] pitches_present_by_tick_excluding_rests;
+	
+	/**
+	 * A data structure indicating all pitch classes (NOT including Channel 10 unpitched notes) sounding at
+	 * each MIDI tick. However, all ticks during which no notes are playing are excluded from this data
+	 * structure, so the tick index will most likely not correspond to the actual MIDI ticks in the MIDI
+	 * stream. The first dimension indicates the MIDI tick (after removal of rest ticks) and the second
+	 * dimension indicates the note index (there will be one entry for each pitch class sounding during the
+	 * given MIDI tick). Each entry indicates the pitch class (0 to 11, where 0 is C) of one of the sounding
+	 * notes.
+	 */
+	public short[][] pitch_classes_present_by_tick_excluding_rests;
+	
+	/**
 	 * A table with rows (first index) corresponding to MIDI channel number, and columns (second index)
 	 * corresponding to separate notes (in the temporal order that the Note On for each note occurred). Each
 	 * entry specifies the velocity of the Note On scaled by the channel volume at the time of the Note On,
-	 * such that each value ranges from 0 to 127.
+	 * such that each value ranges from 0 to 127. Note that the order of the notes may not always  precisely
+	 * reflect the temporal order in which they occurred (because the outer iteration is by MIDI track).
 	 */
 	public int[][] note_loudnesses;
 	
@@ -483,13 +514,19 @@ public class MIDIIntermediateRepresentations
 		System.out.print("\n\n--\n\n");*/
 		 	
 		generateMelodicIntermediateRepresentations();
-		/*for (int i = 0; i < melodic_interval_histogram.length; i++)
+		/*
+		for (int i = 0; i < melodic_interval_histogram.length; i++)
 			System.out.println(i + ": " + melodic_interval_histogram[i]);
-		for (int i = 0; i < melodic_intervals_by_channel.length; i++)
+		for (int t = 0; t < melodic_intervals_by_track_and_channel.size(); t++)
 		{
-			System.out.print("\nChannel: " + i + "     ");
-			for (int j = 0; j < melodic_intervals_by_channel[i].size(); j++)
-				System.out.print(" " + ((Integer) melodic_intervals_by_channel[i].get(j)).intValue());
+			System.out.print("\nTrack: " + t + "     ");
+			LinkedList<Integer>[] melodic_intervals_by_channel = melodic_intervals_by_track_and_channel.get(t);
+			for (int i = 0; i < melodic_intervals_by_channel.length; i++)
+			{
+				System.out.print("\nChannel: " + i + "     ");
+				for (int j = 0; j < melodic_intervals_by_channel[i].size(); j++)
+					System.out.print(" " + ((Integer) melodic_intervals_by_channel[i].get(j)).intValue());
+			}
 		}*/
 		
 		generateChannelNoteOnIntermediateRepresentations();
@@ -500,13 +537,29 @@ public class MIDIIntermediateRepresentations
 				System.out.print(channel_statistics[i][j] + "    ");
 			System.out.print("\n");
 		}
-		for (int i = 0; i < notes_sounding_tick_map.length; i++)
+		for (int i = 0; i < note_sounding_on_a_channel_tick_map.length; i++)
 		{
 			System.out.print("Tick: " + i + " - ");
-			for (int j = 0; j < notes_sounding_tick_map[i].length; j++)
-				System.out.print("Channel " + j + ": " + notes_sounding_tick_map[i][j] + "  |  ");
+			for (int j = 0; j < note_sounding_on_a_channel_tick_map[i].length; j++)
+				System.out.print("Channel " + j + ": " + note_sounding_on_a_channel_tick_map[i][j] + "  |  ");
 			System.out.print("\n");
 		}*/
+
+		generatePitchStrengthByTickChartAndCalculateTotalVerticalUnsionVelocity();
+
+		generatePitchesAndPitchClassesPresentByTickExcludingRests();
+		/*for (int i = 0; i < pitches_present_by_tick_excluding_rests.length; i++)
+		{
+			System.out.print("\nTICK " + i + ": ");
+			for (int j = 0; j < pitches_present_by_tick_excluding_rests[i].length; j++)
+				System.out.print(pitches_present_by_tick_excluding_rests[i][j] + " ");
+		}
+		for (int i = 0; i < pitch_classes_present_by_tick_excluding_rests.length; i++)
+		{
+			System.out.print("\nTICK: " + i + ": ");
+			for (int j = 0; j < pitch_classes_present_by_tick_excluding_rests[i].length; j++)
+				System.out.print(pitch_classes_present_by_tick_excluding_rests[i][j] + " ");
+		}*/	
 
 		generateNoteLoudnesses();
 		/*for (int i = 0; i < note_loudnesses.length; i++)
@@ -514,11 +567,6 @@ public class MIDIIntermediateRepresentations
 			for (int j = 0; j < note_loudnesses[i].length; j++)
 				System.out.print("   " + note_loudnesses[i][j]);
 		System.out.println("\n");*/
-
-		generatePitchStrengthByTickChartAndCalculateTotalVerticalUnsionVelocity();
-
-		// CURRENTLY DEPRECATED DUE TO LARGE HEAP SPACE REQUIREMENT
-		//generateChannelTickIntervalChart();
 	}
 
 	
@@ -540,7 +588,10 @@ public class MIDIIntermediateRepresentations
 		int notes_played = 0;
 		for (int i = 0; i < instruments.length; i++)
 			notes_played += sequence_info.pitched_instrument_prevalence[instruments[i]][0];
-		return ((double) notes_played) / ((double) sequence_info.total_number_note_ons);
+		if (sequence_info.total_number_note_ons == 0)
+			return 0.0;
+		else
+			return ((double) notes_played) / ((double) sequence_info.total_number_note_ons);
 	}
 
 	
@@ -966,11 +1017,7 @@ public class MIDIIntermediateRepresentations
 		}
 
 		// Normalize beat_histogram
-		double sum = 0;
-		for (int i = 0; i < beat_histogram.length; i++)
-			sum += beat_histogram[i];
-		for (int i = 0; i < beat_histogram.length; i++)
-			beat_histogram[i] = beat_histogram[i] / sum;
+		beat_histogram = MathAndStatsMethods.normalize(beat_histogram);
 	}
 
 
@@ -1182,11 +1229,7 @@ public class MIDIIntermediateRepresentations
 		}
 
 		// Normalize basic_pitch_histogram
-		double sum = 0.0;
-		for (int i = 0; i < basic_pitch_histogram.length; i++)
-			sum += basic_pitch_histogram[i];
-		for (int i = 0; i < basic_pitch_histogram.length; i++)
-			basic_pitch_histogram[i] = basic_pitch_histogram[i] / sum;
+		basic_pitch_histogram = MathAndStatsMethods.normalize(basic_pitch_histogram);
 
 		// Generate pitch_class_histogram
 		pitch_class_histogram = new double[12];
@@ -1235,19 +1278,17 @@ public class MIDIIntermediateRepresentations
 						// If message is a pitch bend
 						if (short_message.getCommand() == 0xe0)
 						{
+							int pitch_bend_value = short_message.getData2();
+							
 							// If a pitch bend has already been given for this note
 							if (going[short_message.getChannel()] != null)
-							{
-								int pitch_bend_value = short_message.getData2();
-								going[short_message.getChannel()].add(new Integer(pitch_bend_value));
-							}
+								going[short_message.getChannel()].add(pitch_bend_value);
 
 							// If a pitch bend has not already been given for this note
 							else
 							{
-								int pitch_bend_value = short_message.getData2();
 								LinkedList this_note = new LinkedList();
-								this_note.add(new Integer(pitch_bend_value));
+								this_note.add(pitch_bend_value);
 								pitch_bends_list.add(this_note);
 
 								going[short_message.getChannel()] = this_note;
@@ -1270,35 +1311,42 @@ public class MIDIIntermediateRepresentations
 
 	
 	/**
-	 * Calculate the values of the melodic_interval_histogram and melodic_intervals_by_channel fields.
+	 * Calculate the values of the melodic_interval_histogram and melodic_intervals_by_track_and_channel
+	 * fields.
 	 */
 	private void generateMelodicIntermediateRepresentations()
 	{
+		// Initialize the melodic_intervals_by_track_and_channel field
+		melodic_intervals_by_track_and_channel = new LinkedList<>();
+				
 		// Initialize melodic_interval_histogram
 		melodic_interval_histogram = new double[128];
 		for (int i = 0; i < melodic_interval_histogram.length; i++)
 			melodic_interval_histogram[i] = 0.0;
 
-		// Initialize melodic_intervals_by_channel
-		melodic_intervals_by_channel = new LinkedList[16];
-		for (int i = 0; i < melodic_intervals_by_channel.length; i++)
-			melodic_intervals_by_channel[i] = new LinkedList<>();
-
-		// The last MIDI pitch encountered on each channel
-		// -1 means none was encountered yet
-		int[] previous_pitches = new int[16];
-		for (int i = 0; i < previous_pitches.length; i++)
-			previous_pitches[i] = -1;
-
-		// The last tick on which a note on was encountered for each channel
-		// -1 means none was encountered yet
-		int[] last_tick = new int[16];
-		for (int i = 0; i < last_tick.length; i++)
-			last_tick[i] = -1;
-
-		// Fill melodic_interval_histogram and melodic_intervals_by_channel
+		// Fill melodic_interval_histogram and melodic_intervals_by_track_and_channel
 		for (int n_track = 0; n_track < tracks.length; n_track++)
 		{
+			// Prepare melodic_intervals_by_channel for this channel, and add it to
+			// melodic_intervals_by_track_and_channel
+			LinkedList<Integer>[] melodic_intervals_by_channel = new LinkedList[16];
+			for (int i = 0; i < melodic_intervals_by_channel.length; i++)
+				melodic_intervals_by_channel[i] = new LinkedList<>();
+			melodic_intervals_by_track_and_channel.add(melodic_intervals_by_channel);
+
+			// The last MIDI pitch encountered on each channel
+			// -1 means none was encountered yet
+			int[] previous_pitches = new int[16];
+			for (int i = 0; i < previous_pitches.length; i++)
+				previous_pitches[i] = -1;
+
+			// The last tick on which a note on was encountered for each channel
+			// -1 means none was encountered yet
+			int[] last_tick = new int[16];
+			for (int i = 0; i < last_tick.length; i++)
+				last_tick[i] = -1;
+
+			// Go through all MIDI events on this track
 			Track track = tracks[n_track];
 			for (int n_event = 0; n_event < track.size(); n_event++)
 			{
@@ -1323,7 +1371,7 @@ public class MIDIIntermediateRepresentations
 									{
 										int interval = short_message.getData1() - previous_pitches[short_message.getChannel()];
 										melodic_interval_histogram[Math.abs(interval)]++;
-										melodic_intervals_by_channel[short_message.getChannel()].add(new Integer(interval));
+										melodic_intervals_by_channel[short_message.getChannel()].add(interval);
 									}
 								}
 								last_tick[short_message.getChannel()] = current_tick;
@@ -1336,17 +1384,13 @@ public class MIDIIntermediateRepresentations
 		}
 
 		// Normalize melodic_interval_histogram
-		double sum = 0.0;
-		for (int i = 0; i < melodic_interval_histogram.length; i++)
-			sum += melodic_interval_histogram[i];
-		for (int i = 0; i < melodic_interval_histogram.length; i++)
-			melodic_interval_histogram[i] = melodic_interval_histogram[i] / sum;
+		melodic_interval_histogram = MathAndStatsMethods.normalize(melodic_interval_histogram);
 	}
 
 
 	/**
-	 * Calculate the values of the channel_statistics, list_of_note_on_pitches_by_channel and 
-	 * notes_sounding_tick_map fields.
+	 * Calculate the values of the channel_statistics, list_of_note_on_pitches_by_channel and
+	 * note_sounding_on_a_channel_tick_map fields.
 	 */
 	private void generateChannelNoteOnIntermediateRepresentations()
 	{
@@ -1361,21 +1405,16 @@ public class MIDIIntermediateRepresentations
 		for (int channel = 0; channel < 16; channel++)
 			list_of_note_on_pitches_by_channel.add(new ArrayList<>());
 
-		// Instantiate notes_sounding_tick_map and initialize entries to false
-		notes_sounding_tick_map = new boolean[(int) sequence.getTickLength() + 1][16];
-		for (int i = 0; i < notes_sounding_tick_map.length; i++)
-			for (int j = 0; j < notes_sounding_tick_map[i].length; j++)
-				notes_sounding_tick_map[i][j] = false;
+		// Instantiate note_sounding_on_a_channel_tick_map and initialize entries to false
+		note_sounding_on_a_channel_tick_map = new boolean[(int) sequence.getTickLength() + 1][16];
+		for (int i = 0; i < note_sounding_on_a_channel_tick_map.length; i++)
+			for (int j = 0; j < note_sounding_on_a_channel_tick_map[i].length; j++)
+				note_sounding_on_a_channel_tick_map[i][j] = false;
 
 		// Last MIDI tick on which a Note On was encountered, by channel, initialized to -1 for none
 		int[] tick_of_last_note_on = new int[16];
 		for (int i = 0; i < tick_of_last_note_on.length; i++)
 			tick_of_last_note_on[i] = -1;
-
-		// The MIDI pitch of the last Note On encountered on each channel, initialized to -1 for none
-		int[] previous_pitch = new int[16];
-		for (int i = 0; i < previous_pitch.length; i++)
-			previous_pitch[i] = -1;
 
 		// Total sum of the MIDI pitches of al Note Ons encountered, by channel
 		int[] sum_of_pitches = new int[16];
@@ -1405,6 +1444,12 @@ public class MIDIIntermediateRepresentations
 		// Go through all MIDI tracks, and all MIDI events on each track, searching for Notes Ons and Off
 		for (int track_i = 0; track_i < tracks.length; track_i++)
 		{
+			// The MIDI pitch of the last Note On encountered on each channel, initialized to -1 for none
+			int[] previous_pitch = new int[16];
+			for (int i = 0; i < previous_pitch.length; i++)
+				previous_pitch[i] = -1;
+
+			// Go through all the MIDI events on this track
 			Track this_track = tracks[track_i];
 			for (int event_i = 0; event_i < this_track.size(); event_i++)
 			{
@@ -1489,9 +1534,9 @@ public class MIDIIntermediateRepresentations
 								}
 							}
 
-							// Fill in notes_sounding_tick_map for all the ticks corresponding to this note
+							// Fill in note_sounding_on_a_channel_tick_map for all the ticks corresponding to this note
 							for (int i = on_tick; i < end_tick; i++)
-								notes_sounding_tick_map[i][on_channel] = true;
+								note_sounding_on_a_channel_tick_map[i][on_channel] = true;
 						}
 					}
 				}
@@ -1503,9 +1548,9 @@ public class MIDIIntermediateRepresentations
 		double[] total_seconds = new double[channel_statistics.length];
 		for (int ch = 0; ch < total_seconds.length; ch++)
 			total_seconds[ch] = 0.0;
-		for (int ti = 0; ti < notes_sounding_tick_map.length; ti++)
-			for (int ch = 0; ch < notes_sounding_tick_map[ti].length; ch++)
-				if (notes_sounding_tick_map[ti][ch])
+		for (int ti = 0; ti < note_sounding_on_a_channel_tick_map.length; ti++)
+			for (int ch = 0; ch < note_sounding_on_a_channel_tick_map[ti].length; ch++)
+				if (note_sounding_on_a_channel_tick_map[ti][ch])
 					total_seconds[ch] += duration_of_ticks_in_seconds[ti];
 		for (int ch = 0; ch < channel_statistics.length; ch++)
 			channel_statistics[ch][1] = (int) total_seconds[ch];
@@ -1595,6 +1640,71 @@ public class MIDIIntermediateRepresentations
 			}
 		}
 	}
+	
+	
+	/**
+	 * Calculate the values of the pitches_present_by_tick_excluding_rests and 
+	 * pitches_classes_present_by_tick_excluding_rests fields.
+	 */
+	private void generatePitchesAndPitchClassesPresentByTickExcludingRests()
+	{
+		// An ArrayList version of pitches_present_by_tick_excluding_rests
+		ArrayList<short[]> pitches_present_by_tick_excluding_rests_arli = new ArrayList<>();
+		
+		// An ArrayList version of pitch_classes_present_by_tick_excluding_rests
+		ArrayList<short[]> pitch_classes_present_by_tick_excluding_rests_arli = new ArrayList<>();
+		
+		// Fill in number_pitch_classes_by_tick tick by tick 
+		for (int tick = 0; tick < pitch_strength_by_tick_chart.length; tick++)
+		{
+			// Find the MIDI pitch numbers of all pitches found this tick
+			ArrayList<Short> pitches_this_tick = new ArrayList<>();
+			for (int pitch = 0; pitch < pitch_strength_by_tick_chart[tick].length - 1; pitch++)
+				if (pitch_strength_by_tick_chart[tick][pitch] != 0)
+					pitches_this_tick.add((short) pitch);
+
+			// If not a rest
+			if (!pitches_this_tick.isEmpty())
+			{
+				// Store pitches present this tick
+				short[] these_pitches = new short[pitches_this_tick.size()];
+				for (int i = 0; i < these_pitches.length; i++)
+					these_pitches[i] = pitches_this_tick.get(i);
+				pitches_present_by_tick_excluding_rests_arli.add(these_pitches);
+				
+				// Store pitch classes present this tick
+				ArrayList<Short> pitch_classes_this_tick = new ArrayList<>();
+				for (int i = 0; i < these_pitches.length; i++)
+				{
+					short pitch_class = (short) (these_pitches[i] % 12);
+					if (i == 0)
+						pitch_classes_this_tick.add(pitch_class);
+					else
+					{
+						boolean repeated_pitch_class = false;
+						for (int j = 0; j < pitch_classes_this_tick.size(); j++)
+						{
+							if (pitch_classes_this_tick.get(j) == pitch_class)
+							{
+								repeated_pitch_class = true;
+								break;
+							}
+						}
+						if (!repeated_pitch_class)
+							pitch_classes_this_tick.add(pitch_class);
+					}
+				}
+				short[] these_pitch_classes = new short[pitch_classes_this_tick.size()];
+				for (int i = 0; i < these_pitch_classes.length; i++)
+					these_pitch_classes[i] = pitch_classes_this_tick.get(i);
+				pitch_classes_present_by_tick_excluding_rests_arli.add(these_pitch_classes);
+			}
+		}
+
+		// Convert ArrayLists to arrays
+		pitches_present_by_tick_excluding_rests = pitches_present_by_tick_excluding_rests_arli.toArray(new short[pitches_present_by_tick_excluding_rests_arli.size()][]);
+		pitch_classes_present_by_tick_excluding_rests = pitch_classes_present_by_tick_excluding_rests_arli.toArray(new short[pitch_classes_present_by_tick_excluding_rests_arli.size()][]);
+	}
 
 
 	/**
@@ -1611,7 +1721,7 @@ public class MIDIIntermediateRepresentations
 		int[] notes_so_far = new int[16];
 		for (int i = 0; i < notes_so_far.length; i++)
 			notes_so_far[i] = 0;
-
+		
 		// Fill in note_loudnesses
 		for (int n_track = 0; n_track < tracks.length; n_track++)
 		{

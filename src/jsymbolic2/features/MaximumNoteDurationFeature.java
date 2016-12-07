@@ -63,16 +63,14 @@ public class MaximumNoteDurationFeature
 			for (int i = 0; i < durations.length; i++)
 				durations[i] = ((Double) durations_obj[i]).doubleValue();
 
-			// Added null check for durations[]
-			if (durations.length == 0)
-			{
-				durations = new double[1];
-				durations[0] = -1;
-			}
-
 			// Calculate feature value
-			int index = mckay.utilities.staticlibraries.MathAndStatsMethods.getIndexOfLargest(durations);
-			value = durations[index];
+			if (durations.length == 0)
+				value = 0.0;
+			else
+			{
+				int index = mckay.utilities.staticlibraries.MathAndStatsMethods.getIndexOfLargest(durations);
+				value = durations[index];
+			}
 		}
 		else value = -1.0;
 
