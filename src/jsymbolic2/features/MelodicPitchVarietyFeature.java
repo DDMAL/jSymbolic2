@@ -30,7 +30,7 @@ public class MelodicPitchVarietyFeature
 	 */
 	public MelodicPitchVarietyFeature()
 	{
-		code = "M-20";
+		code = "M-25";
 		String name = "Melodic Pitch Variety";
 		String description = "Average number of notes that go by in a MIDI channel before a note's pitch is repeated. This is calculated across each channel individually before being combined. Notes that occur simultaneously on the same MIDI tick are only counted as one note for the purpose of this calculation. Notes that do not recur after 16 notes in the same channel are not included in this calculation. Set to 0 if there are no qualifying repeated notes in the piece.";
 		boolean is_sequential = true;
@@ -76,7 +76,7 @@ public class MelodicPitchVarietyFeature
 			// Go through channel by channel
 			for (int channel = 0; channel < 16; channel++)
 			{
-				if (channel == 10 - 1)  // Skip over the unpitched percussion channel
+				if (channel != (10 - 1))  // Skip over the unpitched percussion channel
 				{
 					// The maximum number of notes that can go by before a note is discounted for the purposes
 					// of this feature

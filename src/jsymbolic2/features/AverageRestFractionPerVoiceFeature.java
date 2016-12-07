@@ -80,8 +80,13 @@ public class AverageRestFractionPerVoiceFeature
 			}
 			
 			// Find the average across channels, and then scale by duration
-			value = total_rest_time_all_channels_combined / (double) number_channels_with_notes;
-			value = value / sequence_info.sequence_duration_precise;
+			if (number_channels_with_notes == 0 || sequence_info.sequence_duration_precise == 0.0)
+				value = 0.0;
+			else
+			{
+				value = total_rest_time_all_channels_combined / (double) number_channels_with_notes;
+				value = value / sequence_info.sequence_duration_precise;
+			}
 		}
 		else value = -1.0;
 

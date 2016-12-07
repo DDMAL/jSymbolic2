@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import javax.sound.midi.*;
 import jsymbolic2.featureutils.CollectedNoteInfo;
+import mckay.utilities.staticlibraries.MathAndStatsMethods;
 
 /**
  * An object of this class is instantiated with a MIDI sequence. The constructor parses this sequence and
@@ -587,7 +588,10 @@ public class MIDIIntermediateRepresentations
 		int notes_played = 0;
 		for (int i = 0; i < instruments.length; i++)
 			notes_played += sequence_info.pitched_instrument_prevalence[instruments[i]][0];
-		return ((double) notes_played) / ((double) sequence_info.total_number_note_ons);
+		if (sequence_info.total_number_note_ons == 0)
+			return 0.0;
+		else
+			return ((double) notes_played) / ((double) sequence_info.total_number_note_ons);
 	}
 
 	
@@ -1013,11 +1017,7 @@ public class MIDIIntermediateRepresentations
 		}
 
 		// Normalize beat_histogram
-		double sum = 0;
-		for (int i = 0; i < beat_histogram.length; i++)
-			sum += beat_histogram[i];
-		for (int i = 0; i < beat_histogram.length; i++)
-			beat_histogram[i] = beat_histogram[i] / sum;
+		beat_histogram = MathAndStatsMethods.normalize(beat_histogram);
 	}
 
 
@@ -1229,11 +1229,7 @@ public class MIDIIntermediateRepresentations
 		}
 
 		// Normalize basic_pitch_histogram
-		double sum = 0.0;
-		for (int i = 0; i < basic_pitch_histogram.length; i++)
-			sum += basic_pitch_histogram[i];
-		for (int i = 0; i < basic_pitch_histogram.length; i++)
-			basic_pitch_histogram[i] = basic_pitch_histogram[i] / sum;
+		basic_pitch_histogram = MathAndStatsMethods.normalize(basic_pitch_histogram);
 
 		// Generate pitch_class_histogram
 		pitch_class_histogram = new double[12];
@@ -1388,11 +1384,7 @@ public class MIDIIntermediateRepresentations
 		}
 
 		// Normalize melodic_interval_histogram
-		double sum = 0.0;
-		for (int i = 0; i < melodic_interval_histogram.length; i++)
-			sum += melodic_interval_histogram[i];
-		for (int i = 0; i < melodic_interval_histogram.length; i++)
-			melodic_interval_histogram[i] = melodic_interval_histogram[i] / sum;
+		melodic_interval_histogram = MathAndStatsMethods.normalize(melodic_interval_histogram);
 	}
 
 

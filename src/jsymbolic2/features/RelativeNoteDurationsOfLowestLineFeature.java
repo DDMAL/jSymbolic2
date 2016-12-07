@@ -87,12 +87,20 @@ public class RelativeNoteDurationsOfLowestLineFeature
 				}
 			}
 
-			// Get average note duration for lowest average pitch
+			// Calculate the average note duration for lowest average pitch
 			double total_durations_in_lowest_channel = channel_stats[lowest_average_pitch_channel][1];
 			double total_number_notes_in_lowest_channel = channel_stats[lowest_average_pitch_channel][0];
-			double average_duration_of_notes_in_lowest_channel = total_durations_in_lowest_channel / total_number_notes_in_lowest_channel;
-			double average_duration_of_notes_in_all_channels = total_note_durations / total_number_notes;
-			value = average_duration_of_notes_in_lowest_channel / average_duration_of_notes_in_all_channels;
+			if ( total_durations_in_lowest_channel == 0.0 ||
+			     total_number_notes_in_lowest_channel == 0. ||
+			     total_note_durations == 0.0 ||
+			     total_number_notes == 0.0 )
+				value = 0.0;
+			else
+			{
+				double average_duration_of_notes_in_lowest_channel = total_durations_in_lowest_channel / total_number_notes_in_lowest_channel;
+				double average_duration_of_notes_in_all_channels = total_note_durations / total_number_notes;
+				value = average_duration_of_notes_in_lowest_channel / average_duration_of_notes_in_all_channels;
+			}
 		}
 		else value = -1.0;
 

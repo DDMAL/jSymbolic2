@@ -81,7 +81,10 @@ public class StrengthRatioOfTwoStrongestRhythmicPulsesFeature
 				}
 
 			// Calculate the feature value
-			value = highest_magnitude / second_highest_magnitude;
+			if (second_highest_magnitude == 0.0)
+				value = 0.0;
+			else 
+				value = highest_magnitude / second_highest_magnitude;
 		}
 		else value = -1.0;
 

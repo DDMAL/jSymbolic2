@@ -6,7 +6,8 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the duration of the shortest note in the piece (in seconds).
+ * A feature calculator that finds the duration of the shortest note in the piece (in seconds). Set to 0 if
+ * there are no notes.
  *
  * @author Cory McKay
  */
@@ -23,7 +24,7 @@ public class MinimumNoteDurationFeature
 	{
 		code = "R-20";
 		String name = "Minimum Note Duration";
-		String description = "Duration of the shortest note in the piece (in seconds).";
+		String description = "Duration of the shortest note in the piece (in seconds). Set to 0 if there are no notes.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, description, is_sequential, dimensions);
@@ -63,16 +64,14 @@ public class MinimumNoteDurationFeature
 			for (int i = 0; i < durations.length; i++)
 				durations[i] = ((Double) durations_obj[i]).doubleValue();
 
-			// Added null check for durations[]
-			if (durations.length == 0)
-			{
-				durations = new double[1];
-				durations[0] = -1;
-			}
-
 			// Calculate feature value
-			int index = mckay.utilities.staticlibraries.MathAndStatsMethods.getIndexOfSmallest(durations);
-			value = durations[index];
+			if (durations.length == 0)
+				value = 0.0;
+			else
+			{
+				int index = mckay.utilities.staticlibraries.MathAndStatsMethods.getIndexOfSmallest(durations);
+				value = durations[index];
+			}
 		}
 		else value = -1.0;
 

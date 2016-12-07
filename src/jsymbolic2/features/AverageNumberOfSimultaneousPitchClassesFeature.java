@@ -71,7 +71,10 @@ public class AverageNumberOfSimultaneousPitchClassesFeature
 				number_pitch_classes_by_tick[tick] = (short) pitch_classes_present_by_tick_excluding_rests[tick].length;
 			
 			// Find the average of the number of pitches sounding simultaneously
-			value = mckay.utilities.staticlibraries.MathAndStatsMethods.getAverage(number_pitch_classes_by_tick);		
+			if (number_pitch_classes_by_tick == null || number_pitch_classes_by_tick.length == 0)
+				value = 0.0;
+			else
+				value = mckay.utilities.staticlibraries.MathAndStatsMethods.getAverage(number_pitch_classes_by_tick);		
 		}
 		else value = -1.0;
 		

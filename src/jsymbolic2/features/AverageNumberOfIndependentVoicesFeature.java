@@ -91,7 +91,10 @@ public class AverageNumberOfIndependentVoicesFeature
 			}
 
 			// Calculate the average
-			value = mckay.utilities.staticlibraries.MathAndStatsMethods.getAverage(final_number_sounding);
+			if (final_number_sounding == null || final_number_sounding.length == 0)
+				value = 0.0;
+			else
+				value = mckay.utilities.staticlibraries.MathAndStatsMethods.getAverage(final_number_sounding);
 		}
 		else value = -1.0;
 

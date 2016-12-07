@@ -71,8 +71,11 @@ public class VariabilityOfNumberOfSimultaneousPitchesFeature
 			for (int tick = 0; tick < pitches_present_by_tick_excluding_rests.length; tick++)
 				number_pitches_by_tick[tick] = (short) pitches_present_by_tick_excluding_rests[tick].length;
 			
-			// Find the average of the number of pitches sounding simultaneously
-			value = mckay.utilities.staticlibraries.MathAndStatsMethods.getStandardDeviation(number_pitches_by_tick);	
+			// Find the standard deviation of the number of pitches sounding simultaneously
+			if (number_pitches_by_tick == null || number_pitches_by_tick.length == 0)
+				value = 0.0;
+			else
+				value = mckay.utilities.staticlibraries.MathAndStatsMethods.getStandardDeviation(number_pitches_by_tick);	
 		}
 		else value = -1.0;
 		

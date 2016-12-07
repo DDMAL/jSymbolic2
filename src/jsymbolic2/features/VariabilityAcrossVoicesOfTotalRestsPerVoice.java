@@ -80,7 +80,10 @@ public class VariabilityAcrossVoicesOfTotalRestsPerVoice extends MIDIFeatureExtr
 				total_rest_time_per_channel_array[i] = total_rest_time_per_channel.get(i);
 
 			// Calculate the standard deviation
-			value = mckay.utilities.staticlibraries.MathAndStatsMethods.getStandardDeviation(total_rest_time_per_channel_array);
+			if (total_rest_time_per_channel_array.length == 0)
+				value = 0.0;
+			else 
+				value = mckay.utilities.staticlibraries.MathAndStatsMethods.getStandardDeviation(total_rest_time_per_channel_array);
 		}
 		else value = -1.0;
 

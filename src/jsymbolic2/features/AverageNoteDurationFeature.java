@@ -64,7 +64,10 @@ public class AverageNoteDurationFeature
 				durations[i] = ((Double) durations_obj[i]).doubleValue();
 
 			// Calculate feature value
-			value = mckay.utilities.staticlibraries.MathAndStatsMethods.getAverage(durations);
+			if (durations.length == 0)
+				value = 0.0;
+			else
+				value = mckay.utilities.staticlibraries.MathAndStatsMethods.getAverage(durations);
 		}
 		else value = -1.0;
 

@@ -80,7 +80,10 @@ public class CompleteRestsFeature
 			double total_complete_rests = DoubleStream.of(seconds_of_rest_per_tick).sum();
 			
 			// Divide by the length of the piece
-			value = total_complete_rests / sequence_info.sequence_duration_precise;
+			if (sequence_info.sequence_duration_precise == 0.0)
+				value = 0.0;
+			else
+				value = total_complete_rests / sequence_info.sequence_duration_precise;
 		}
 		else value = -1.0;
 

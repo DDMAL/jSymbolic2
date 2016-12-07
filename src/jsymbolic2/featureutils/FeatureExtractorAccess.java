@@ -108,11 +108,16 @@ public final class FeatureExtractorAccess
 			new ChromaticMotionFeature(),
 			new StepwiseMotionFeature(),
 			new MelodicThirdsFeature(),
-			new MelodicFifthsFeature(),
+			new MelodicPerfectFourthsFeature(),
 			new MelodicTritonesFeature(),
+			new MelodicPerfectFifthsFeature(),
+			new MelodicSixthsFeature(),
+			new MelodicSeventhsFeature(),
 			new MelodicOctavesFeature(),
+			new MelodicLargeIntervalsFeature(),
+			new MinorMajorMelodicThirdlRatioFeature(),
 			new MelodicEmbellishmentsFeature(),
-			new DirectionOfMotionFeature(),
+			new DirectionOfMelodicMotionFeature(),
 			new AverageLengthOfMelodicArcsFeature(),
 			new AverageIntervalSpannedByMelodicArcs(),
 			new MelodicPitchVarietyFeature(),
@@ -233,6 +238,7 @@ public final class FeatureExtractorAccess
 			new VoiceOverlapFeature(),
 			new SimilarMotionFeature(),
 			new VoiceSeparationFeature(),
+			new VariabilityOfVoiceSeparationFeature(),
 			
 			// Add features based on dynamics
 			new DynamicRangeFeature(),
@@ -288,11 +294,16 @@ public final class FeatureExtractorAccess
 			true, // ChromaticMotionFeature
 			true, // StepwiseMotionFeature
 			true, // MelodicThirdsFeature
-			true, // MelodicFifthsFeature
+			true, // MelodicPerfectFourthsFeature
 			true, // MelodicTritonesFeature
+			true, // MelodicPerfectFifthsFeature
+			true, // MelodicSixthsFeature
+			true, // MelodicSeventhsFeature
 			true, // MelodicOctavesFeature
+			true, // MelodicLargeIntervalsFeature
+			true, // MinorMajorMelodicThirdlRatioFeature
 			true, // MelodicEmbellishmentsFeature
-			true, // DirectionOfMotionFeature
+			true, // DirectionOfMelodicMotionFeature
 			true, // AverageLengthOfMelodicArcsFeature
 			true, // AverageIntervalSpannedByMelodicArcs
 			true, // MelodicPitchVarietyFeature
@@ -413,7 +424,8 @@ public final class FeatureExtractorAccess
 			true, // VoiceOverlapFeature
 			true, // SimilarMotionFeature
 			true, // VoiceSeparationFeature
-
+			true, // VariabilityOfVoiceSeparationFeature
+			
 			// Features based on dynamics
 			true, // DynamicRangeFeature
 			true, // VariationOfDynamicsFeature

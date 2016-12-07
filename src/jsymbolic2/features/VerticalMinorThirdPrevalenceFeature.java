@@ -91,7 +91,10 @@ public class VerticalMinorThirdPrevalenceFeature
 			}
 
 			// Calculate the fraction
-			value = ticks_with_minor_third / (double) pitches_present_by_tick_excluding_rests.length; 
+			if (pitches_present_by_tick_excluding_rests.length == 0)
+				value = 0.0;
+			else 
+				value = ticks_with_minor_third / (double) pitches_present_by_tick_excluding_rests.length; 
 		}
 		else value = -1.0;
 

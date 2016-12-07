@@ -24,7 +24,7 @@ public class AverageIntervalSpannedByMelodicArcs
 	 */
 	public AverageIntervalSpannedByMelodicArcs()
 	{
-		code = "M-19";
+		code = "M-24";
 		String name = "Average Interval Spanned by Melodic Arcs";
 		String description = "Average melodic interval (in semitones) separating the top note of melodic peaks and the bottom note of adjacent melodic troughs. Similar assumptions are made in the calculation of this feature as for the Melodic Interval Histogram.";
 		boolean is_sequential = true;
@@ -130,7 +130,10 @@ public class AverageIntervalSpannedByMelodicArcs
 			}
 
 			// Calculate the value
-			value = (double) total_intervals / (double) number_intervals;
+			if (number_intervals == 0)
+				value = 0.0;
+			else
+				value = (double) total_intervals / (double) number_intervals;
 		}
 		else value = -1.0;
 

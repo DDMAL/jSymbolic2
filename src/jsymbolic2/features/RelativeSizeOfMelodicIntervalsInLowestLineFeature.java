@@ -90,10 +90,15 @@ public class RelativeSizeOfMelodicIntervalsInLowestLineFeature
 					count++;
 				}
 			}
-			double average = mckay.utilities.staticlibraries.MathAndStatsMethods.getAverage(intervals);
-
+			
 			// Set value
-			value = ((double) sequence_info.channel_statistics[lowest_chan][3]) / ((double) average);
+			if (intervals == null || intervals.length == 0 || sequence_info.channel_statistics[lowest_chan][3] == 0)
+				value = 0.0;
+			else
+			{
+				double average = mckay.utilities.staticlibraries.MathAndStatsMethods.getAverage(intervals);
+				value = ((double) sequence_info.channel_statistics[lowest_chan][3]) / ((double) average);
+			}
 		}
 		else value = -1.0;
 

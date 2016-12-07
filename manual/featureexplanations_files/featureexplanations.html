@@ -53,7 +53,7 @@
   <li><strong>P-12 Pitch Class Variety:</strong> Number of pitch classes that occur at least once in the piece. Enharmonic equivalents are grouped together for the purpose of this calculation.</li>
   <li><strong>P-13 Range:</strong> Difference in semitones between the highest and lowest pitches.</li>
   <li><strong>P-14 Most Common Pitch:</strong> MIDI pitch value of the most frequently occurring pitch.</li>
-  <li><strong>P-15 Mean Pitch:</strong> Mean MIDI pitch value, averaged across all pitched notes in the piece.</li>
+  <li><strong>P-15 Mean Pitch:</strong> Mean MIDI pitch value, averaged across all pitched notes in the piece.  Set to 0 if there are no pitched notes.</li>
   <li><strong>P-16 Importance of Bass Register:</strong> Fraction of notes between MIDI pitches 0 and 54.</li>
   <li><strong>P-17 Importance of Middle Register:</strong> Fraction of notes between MIDI pitches 55 and 72.</li>
   <li><strong>P-18 Importance of High Register:</strong> Fraction of notes between MIDI pitches 73 and 127.</li>
@@ -88,14 +88,19 @@
   <li><strong>M-10 Chromatic Motion:</strong> Fraction of melodic intervals that correspond to a semitone.</li>
   <li><strong>M-11 Stepwise Motion:</strong> Fraction of melodic intervals that correspond to a minor or major second.</li>
   <li><strong>M-12 Melodic Thirds:</strong> Fraction of melodic intervals that are major or minor thirds.</li>
-  <li><strong>M-13 Melodic Fifths:</strong> Fraction of melodic intervals that are perfect fifths.</li>
+  <li><strong>M-13 Melocid Perfect Fourths:</strong> Fraction of melodic intervals that are perfect fourths.</li>
   <li><strong>M-14 Melodic Tritones:</strong> Fraction of melodic intervals that are tritones.</li>
-  <li><strong>M-15 Melodic Octaves:</strong> Fraction of melodic intervals that are octaves.</li>
-  <li><strong>M-16 Melodic Embellishments:</strong> Fraction of all notes that are surrounded on both sides by MIDI Note Ons on the same MIDI channel that have durations at least three times as long as the central note. Set to 0 if there are no notes in the piece.</li>
-  <li><strong>M-17 Direction of Motion:</strong> Fraction of melodic intervals that are rising  in pitch.</li>
-  <li><strong>M-18 Average Length of Melodic Arcs:</strong> Average number of notes that separate melodic peaks and troughs. Similar assumptions are made in the calculation of this feature as for the Melodic Interval Histogram.</li>
-  <li><strong>M-19 Average Interval Spanned by Melodic Arcs:</strong> Average melodic interval (in semitones) separating the top note of melodic peaks and the bottom note of adjacent melodic troughs. Similar assumptions are made in the calculation of this feature as for the Melodic Interval Histogram.</li>
-  <li><strong>M-20 Melodic Pitch Variety:</strong> Average number of notes that go by in a MIDI channel before a note's pitch is repeated. This is calculated across each channel individually before being combined. Notes that occur simultaneously on the same MIDI tick are only counted as one note for the purpose of this calculation. Notes that do not recur after 16 notes in the same channel are not included in this calculation.
+  <li><strong>M-15 Melodic Fifths:</strong> Fraction of melodic intervals that are perfect fifths.</li>
+  <li><strong>M-16 Melodic Sixths:</strong> Fraction of melodic intervals that are major or minor sixths.</li>
+  <li><strong>M-17 Melodic Sevenths:</strong> Fraction of melodic intervals that are major or minor sevenths.</li>
+  <li><strong>M-18 Melodic Octaves:</strong> Fraction of melodic intervals that are octaves.</li>
+  <li><strong>M-19 Melodic Large Intervals:</strong> Fraction of melodic intervals greater than one octave.</li>
+  <li><strong>M-20 Minor Major Melodic Third Ratio:</strong> Combined fraction of all melodic intervals that are minor thirds, divided by the combined fraction of all melodic intervals that are major thirds. Set to 0 if there are no melodic minor thirds or melodic major thirds.</li>
+  <li><strong>M-21 Melodic Embellishments:</strong> Fraction of all notes that are surrounded on both sides by MIDI Note Ons on the same MIDI channel that have durations at least three times as long as the central note. Set to 0 if there are no notes in the piece.</li>
+  <li><strong>M-22 Direction of Melodic Motion:</strong> Fraction of melodic intervals that are rising  in pitch. Set to zero if no rising or falling melodic intervals are found.</li>
+  <li><strong>M-23 Average Length of Melodic Arcs:</strong> Average number of notes that separate melodic peaks and troughs. Similar assumptions are made in the calculation of this feature as for the Melodic Interval Histogram.  Set to 0 if no melodic arcs are found.</li>
+  <li><strong>M-24 Average Interval Spanned by Melodic Arcs:</strong> Average melodic interval (in semitones) separating the top note of melodic peaks and the bottom note of adjacent melodic troughs. Similar assumptions are made in the calculation of this feature as for the Melodic Interval Histogram.</li>
+  <li><strong>M-25 Melodic Pitch Variety:</strong> Average number of notes that go by in a MIDI channel before a note's pitch is repeated. This is calculated across each channel individually before being combined. Notes that occur simultaneously on the same MIDI tick are only counted as one note for the purpose of this calculation. Notes that do not recur after 16 notes in the same channel are not included in this calculation.
  Set to 0 if there are no qualifying repeated notes in the piece.    </li>
 </ul>
 <p><strong>FEATURES BASED ON CHORDS AND VERTICAL INTERVALS</strong></p>
@@ -176,13 +181,13 @@
   <li><strong>R-13 Polyrhythms:</strong> Number of beat histogram peaks with magnitudes at least 30% as high as the magnitude of the highest peak, and whose bin labels are not integer multiples or factors (using only multipliers of 1, 2, 3, 4, 6 and 8, and with an accepted error of +/- 3 bins) of the bin label of the peak with the highest magnitude. This number is then divided by the total number of bins with frequencies over 30% of the highest magnitude.</li>
   <li><strong>R-14 Rhythmic Variability:</strong> Standard deviation of the beat histogram bin magnitudes.</li>
   <li><strong>R-15 Note Density:</strong> Average number of notes per second.</li>
-  <li><strong>	R-16 Note Density Variability:</strong> How much the note density (average number of notes per second) varies throughout the piece. In order to calculate this, the piece is broken into windows of 5 second duration, and the note density of each window is calculated. The final value of this feature is then found by calculating the standard deviation of the note densities of  these windows.</li>
+  <li><strong>	R-16 Note Density Variability:</strong> How much the note density (average number of notes per second) varies throughout the piece. In order to calculate this, the piece is broken into windows of 5 second duration, and the note density of each window is calculated. The final value of this feature is then found by calculating the standard deviation of the note densities of  these windows. Set to 0 if there is insufficient music for more than one window.</li>
   <li><strong>R-17 Average Note Duration:</strong> Average duration of notes (in seconds).</li>
   <li><strong>R-18 Variability of Note Durations:</strong> Standard deviation of note durations (in seconds).</li>
   <li><strong>R-19 Maximum Note Duration: </strong>Duration of the longest note in the piece (in seconds).</li>
-  <li><strong>R-20 Minimum Note Duration:</strong> Duration of the shortest note in the piece (in seconds).</li>
+  <li><strong>R-20 Minimum Note Duration:</strong> Duration of the shortest note in the piece (in seconds).  Set to 0 if there are no notes.</li>
   <li><strong>R-21 Amount of Staccato:</strong> Number of notes with a duration less than 0.1 seconds, divided by the total number of notes in the piece.</li>
-  <li><strong>R-22 Average Time Between Attacks:</strong> Average time (in seconds) between Note On events (regardless of MIDI channel).</li>
+  <li><strong>R-22 Average Time Between Attacks:</strong> Average time (in seconds) between Note On events (regardless of MIDI channel). Set to 0 if there are less than two attacks.</li>
   <li><strong>R-23 Variability of Time Between Attacks:</strong> Standard deviation of the times (in seconds) between Note On events (regardless of MIDI channel).</li>
   <li><strong>R-24 Average Time Between Attacks for Each Voice:</strong> Average of the individual channel averages of time (in seconds) between Note On events in each given MIDI channel. Only channels that contain at least one note are included in this calculation.</li>
   <li><strong>R-25 Average Variability of Time Between Attacks for Each Voice:</strong> Average of the standard deviations (in seconds) of each individual MIDI channel's time between Note On events. Only channels that contain at least one note are included in this calculation.</li>
@@ -254,16 +259,16 @@
   <li><strong>T-7 Voice Equality – Melodic Leaps:</strong> Standard deviation of the average melodic leap distance of each channel that contains at least one note.</li>
   <li><strong>T-8 Voice Equality – Range:</strong> Standard deviation of the differences between the highest and lowest pitches in each channel that contains at least one note.</li>
   <li><strong>T-9 Importance of Loudest Voice:</strong> Difference between the average loudness (MIDI velocity) of the loudest channel and the average loudness of the other channels that contain at least one note.</li>
-  <li><strong>T-10 Relative Range of Loudest Voice:</strong> Difference between the highest note and the lowest note played in the channel with the highest average loudness (MIDI velocity), divided by the difference between the highest note and the lowest note in the piece as a whole.</li>
+  <li><strong>T-10 Relative Range of Loudest Voice:</strong> Difference between the highest note and the lowest note played in the channel with the highest average loudness (MIDI velocity), divided by the difference between the highest note and the lowest note in the piece as a whole. Set to 0 if there if there are fewer than 2 pitches in the music.</li>
   <li><strong>T-11 Relative Range Isolation of Loudest Voice:</strong> Number of pitched notes in the MIDI channel with the highest average loudness that fall outside the range of any other pitched channel, divided by the total number of notes in the channel with the highest average loudness. Set to 0 if there are only 0 or 1 channels containing pitched notes.</li>
-  <li><strong>T-12 Relative Range of Highest Line:</strong> Pitch difference in semitones between the highest note and the lowest note played in the channel with the highest average pitch, divided by the difference between the highest note and the lowest note in the piece overall.</li>
+  <li><strong>T-12 Relative Range of Highest Line:</strong> Pitch difference in semitones between the highest note and the lowest note played in the channel with the highest average pitch, divided by the difference between the highest note and the lowest note in the piece overall. Set to 0 if there if there are fewer than 2 pitches in the music.</li>
   <li><strong>T-13 Relative Note Density of Highest Line:</strong> Number of Note Ons in the channel with the highest average pitch, divided by the average number of Note Ons in all channels that contain at least one note.</li>
   <li><strong>T-14 Relative Note Durations of Lowest Line:</strong> Average duration of notes (in seconds) in the channel with the lowest average pitch, divided by the average duration of notes in all channels that contain at least one note.</li>
   <li><strong>T-15 Relative Size of Melodic Intervals in Lowest Line:</strong> Average melodic interval in semitones in the channel with the lowest average pitch, divided by the average melodic interval in all channels that contain at least two notes.</li>
   <li><strong>T-16 Voice Overlap:</strong> Number of notes played within the range of another channel, divided by the total number of notes in the piece as a whole.</li>
   <li><strong>T-17 Similar Motion:</strong> Fraction of all pitched notes that move together in the same direction within 10% of the duration of the shorter note. If multiple notes are sounding within a single channel (e.g. a piano chord), only the highest pitched note in each such channel is considered for the purposes of this feature. Set to 0 if there are no pitched notes.</li>
-  <li><strong>T-18 Voice Separation:</strong> Average separation in semitones between the average pitches of consecutive channels (after sorting based on average pitch) that contain at least one note.
-  </li>
+  <li><strong>T-18 Voice Separation:</strong> Average separation in semitones between the average pitches of consecutive channels (after sorting based on average pitch) that contain at least one note.</li>
+  <li><strong>T-19 Variability of Voice Separation:</strong> Average separation in semi-tones between the average pitches of consecutive channels (after sorting based on average pitch) that contain at least one note.</li>
 </ul>
 
 <p><strong>FEATURES BASED ON DYNAMICS</strong></p>
@@ -292,8 +297,8 @@
 <p>MEI-specific features rely on information that is available in MEI files, but cannot be encoded in MIDI files. These features should  only be used when extracting features from a musical collection consisting exclusively of MEI files, as a feature set extracted from a mixture of MIDI and MEI files would be inconsistent if MEI-specific features are made available for MEI instances but not for MIDI instances.</p>
 <p>The jSymbolic feature catalogue includes the following MEI-specific features:</p>
 <ul>
-  <li><strong>S-1 Number of Grace Notes:</strong> The total number of grace notes in a piece (i.e. the number of notes indicated as grace notes in the MEI encoding).</li>
-  <li><strong>S-2 Number of Slurs:</strong> The total number of notes marked with slurs in the piece (i.e. the number of notes indicated as notes with slurs in the MEI encoding).</li>
+  <li><strong>S-1 Number of Grace Notes:</strong> The total number of grace notes in a piece (i.e. the number of notes indicated as grace notes in the MEI encoding) divided by the total number of pitched notes in the music.</li>
+  <li><strong>S-2 Number of Slurs:</strong> The total number of notes marked with slurs in the piece (i.e. the number of notes indicated as notes with slurs in the MEI encoding) divided by the total number of pitched notes in the music.</li>
 </ul>
 <p></p>
 <table height="5" width="100%" bgcolor="#0033C4" border="0"><tbody><tr><th></th></tr></tbody></table>

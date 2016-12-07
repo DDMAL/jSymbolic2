@@ -91,7 +91,10 @@ public class AverageRangeOfGlissandosFeature
 				}
 
 				// Calculate the feature value
-				value = mckay.utilities.staticlibraries.MathAndStatsMethods.getAverage(greatest_differences);
+				if (greatest_differences.length == 0)
+					value = 0.0;
+				else
+					value = mckay.utilities.staticlibraries.MathAndStatsMethods.getAverage(greatest_differences);
 			}
 		}
 		else value = -1.0;

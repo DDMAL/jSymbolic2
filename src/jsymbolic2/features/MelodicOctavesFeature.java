@@ -21,7 +21,7 @@ public class MelodicOctavesFeature
 	 */
 	public MelodicOctavesFeature()
 	{
-		code = "M-15";
+		code = "M-18";
 		String name = "Melodic Octaves";
 		String description = "Fraction of melodic intervals that are octaves.";
 		boolean is_sequential = true;

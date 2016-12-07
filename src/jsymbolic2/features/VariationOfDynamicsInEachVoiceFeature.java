@@ -81,7 +81,10 @@ public class VariationOfDynamicsInEachVoiceFeature
 			}
 
 			// Calculate the average standard deviation
-			value = mckay.utilities.staticlibraries.MathAndStatsMethods.getAverage(standard_deviations);
+			if (standard_deviations == null || standard_deviations.length == 0)
+				value = 0.0;
+			else 
+				value = mckay.utilities.staticlibraries.MathAndStatsMethods.getAverage(standard_deviations);
 		}
 		else value = -1.0;
 

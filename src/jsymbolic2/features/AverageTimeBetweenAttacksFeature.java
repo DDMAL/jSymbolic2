@@ -7,7 +7,7 @@ import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
  * A feature calculator that finds the average time (in seconds) between Note On events (regardless of MIDI
- * channel).
+ * channel). Set to 0 if there are less than two attacks.
  *
  * @author Cory McKay
  */
@@ -24,7 +24,7 @@ public class AverageTimeBetweenAttacksFeature
 	{
 		code = "R-22";
 		String name = "Average Time Between Attacks";
-		String description = "Average time (in seconds) between Note On events (regardless of MIDI channel).";
+		String description = "Average time (in seconds) between Note On events (regardless of MIDI channel). Set to 0 if there are less than two attacks.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, description, is_sequential, dimensions);
@@ -82,7 +82,10 @@ public class AverageTimeBetweenAttacksFeature
 				}
 			}
 
-			value = total_of_intervals / (double) number_of_intervals;
+			if (number_of_intervals == 0)
+				value = 0.0;
+			else
+				value = total_of_intervals / (double) number_of_intervals;
 		}
 		else value = -1.0;
 

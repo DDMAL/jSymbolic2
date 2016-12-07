@@ -123,7 +123,10 @@ public class AverageTimeBetweenAttacksForEachVoiceFeature
 			}
 
 			// Calculate average of standard deviations
-			value = mckay.utilities.staticlibraries.MathAndStatsMethods.getAverage(averages);
+			if (averages == null || averages.length == 0)
+				value = 0.0;
+			else
+				value = mckay.utilities.staticlibraries.MathAndStatsMethods.getAverage(averages);
 		}
 		else value = -1.0;
 

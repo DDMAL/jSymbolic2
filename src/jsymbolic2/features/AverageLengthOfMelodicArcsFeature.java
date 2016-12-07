@@ -8,7 +8,8 @@ import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
  * A feature calculator that finds the average number of notes that separate melodic peaks and troughs.
- * Similar assumptions are made in the calculation of this feature as for the Melodic Interval Histogram.
+ * Similar assumptions are made in the calculation of this feature as for the Melodic Interval Histogram. Set
+ * to 0 if no melodic arcs are found.
  *
  * @author Cory McKay
  */
@@ -23,9 +24,9 @@ public class AverageLengthOfMelodicArcsFeature
 	 */
 	public AverageLengthOfMelodicArcsFeature()
 	{
-		code = "M-18";
+		code = "M-23";
 		String name = "Average Length of Melodic Arcs";
-		String description = "Average number of notes that separate melodic peaks and troughs. Similar assumptions are made in the calculation of this feature as for the Melodic Interval Histogram.";
+		String description = "Average number of notes that separate melodic peaks and troughs. Similar assumptions are made in the calculation of this feature as for the Melodic Interval Histogram. Set to 0 if no melodic arcs are found.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, description, is_sequential, dimensions);
@@ -126,7 +127,10 @@ public class AverageLengthOfMelodicArcsFeature
 			}
 			
 			// Calculate the value
-			value = (double) total_number_intervening_intervals / (double) number_arcs;
+			if (number_arcs == 0)
+				value = 0.0;
+			else
+				value = (double) total_number_intervening_intervals / (double) number_arcs;
 		} 
 		else value = -1.0;
 

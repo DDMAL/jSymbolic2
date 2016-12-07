@@ -62,11 +62,14 @@ public class TimePrevalenceOfPitchedInstrumentsFeature
 		if (sequence_info != null)
 		{
 			result = new double[128];
-			for (int instrument = 0; instrument < result.length; instrument++)
-			{
-				result[instrument] = sequence_info.pitched_instrument_prevalence[instrument][1]
-						/ (double) sequence_info.sequence_duration;
-			}
+			
+			if (sequence_info.sequence_duration == 0)
+				for (int instrument = 0; instrument < result.length; instrument++)
+					result[instrument] = 0.0;
+			else
+				for (int instrument = 0; instrument < result.length; instrument++)
+					result[instrument] = sequence_info.pitched_instrument_prevalence[instrument][1] /
+					                     (double) sequence_info.sequence_duration;
 		}
 		return result;
 	}

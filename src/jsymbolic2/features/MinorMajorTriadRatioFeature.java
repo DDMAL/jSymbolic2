@@ -63,9 +63,8 @@ public class MinorMajorTriadRatioFeature
 		{
 			double[] chord_type_histogram = other_feature_values[0];
 			
-			if (chord_type_histogram[ChordTypeEnum.MINOR_TRIAD.getChordTypeCode()] == 0.0)
-				value = 0.0;
-			else if (chord_type_histogram[ChordTypeEnum.MINOR_TRIAD.getChordTypeCode()] == 0.0)
+			if ( chord_type_histogram[ChordTypeEnum.MINOR_TRIAD.getChordTypeCode()] == 0.0 || 
+			     chord_type_histogram[ChordTypeEnum.MAJOR_TRIAD.getChordTypeCode()] == 0.0 )
 				value = 0.0;
 			else
 				value = chord_type_histogram[ChordTypeEnum.MINOR_TRIAD.getChordTypeCode()] /

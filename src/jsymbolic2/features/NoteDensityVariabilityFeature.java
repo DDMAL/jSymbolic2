@@ -11,7 +11,8 @@ import jsymbolic2.processing.MIDIIntermediateRepresentations;
  * A feature calculator that calculates how much the note density (average number of notes per second) varies
  * throughout the piece. In order to calculate this, the piece is broken into windows of 5 second duration,
  * and the note density of each window is calculated. The final value of this feature is then found by
- * calculating the standard deviation of the note densities of these windows.
+ * calculating the standard deviation of the note densities of these windows. Set to 0 if there is 
+ * insufficient music for more than one window.
  *
  * @author Tristano Tenaglia and Cory McKay
  */
@@ -27,7 +28,7 @@ public class NoteDensityVariabilityFeature extends MIDIFeatureExtractor
 	{
 		code = "R-16";
 		String name = "Note Density Variability";
-		String description = "How much the note density (average number of notes per second) varies throughout the piece. In order to calculate this, the piece is broken into windows of 5 second duration, and the note density of each window is calculated. The final value of this feature is then found by calculating the standard deviation of the note densities of these windows.";
+		String description = "How much the note density (average number of notes per second) varies throughout the piece. In order to calculate this, the piece is broken into windows of 5 second duration, and the note density of each window is calculated. The final value of this feature is then found by calculating the standard deviation of the note densities of these windows. Set to 0 if there is insufficient music for more than one window.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, description, is_sequential, dimensions);
@@ -80,7 +81,10 @@ public class NoteDensityVariabilityFeature extends MIDIFeatureExtractor
 			}
 
 			// Compute the standard deviation of the note densities
-			value = mckay.utilities.staticlibraries.MathAndStatsMethods.getStandardDeviation(note_density_of_each_window);
+			if (windows.length < 2)
+				value = 0.0;
+			else 
+				value = mckay.utilities.staticlibraries.MathAndStatsMethods.getStandardDeviation(note_density_of_each_window);
 		}
 		else value = -1.0;
 

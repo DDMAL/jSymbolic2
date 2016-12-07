@@ -88,7 +88,10 @@ public class VoiceOverlapFeature
 			}
 
 			double total_notes = sequence_info.total_number_note_ons;
-			value = notes_inside_range / total_notes;
+			if (total_notes == 0.0)
+				value = 0.0;
+			else 
+				value = notes_inside_range / total_notes;
 		}
 		else value = -1.0;
 

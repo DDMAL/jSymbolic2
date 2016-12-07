@@ -90,7 +90,10 @@ public class VoiceSeparationFeature
 					intervals[i] = average_pitches[i + 1] - average_pitches[i];
 
 				// Find the average interval
-				value = mckay.utilities.staticlibraries.MathAndStatsMethods.getAverage(intervals);
+				if (intervals == null || intervals.length == 0)
+					value = 0.0;
+				else
+					value = mckay.utilities.staticlibraries.MathAndStatsMethods.getAverage(intervals);
 			}
 		}
 		else value = -1.0;

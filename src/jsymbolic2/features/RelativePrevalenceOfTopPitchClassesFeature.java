@@ -75,8 +75,11 @@ public class RelativePrevalenceOfTopPitchClassesFeature
 			}
 
 			// Calculate the value
-			value = sequence_info.pitch_class_histogram[second_max_index]
-					/ sequence_info.pitch_class_histogram[max_index];
+			if (sequence_info.pitch_class_histogram[max_index] == 0.0)
+				value = 0.0;
+			else 
+				value = sequence_info.pitch_class_histogram[second_max_index] /
+				        sequence_info.pitch_class_histogram[max_index];
 		}
 		else value = -1.0;
 

@@ -8,7 +8,7 @@ import org.ddmal.jmei2midi.meielements.meispecific.MeiSpecificStorage;
 
 /**
  * A feature calculator that finds the total number of grace notes in a piece (i.e. the number of notes
- * indicated as grace notes in the MEI encoding).
+ * indicated as grace notes in the MEI encoding) divided by the total number of pitched notes in the music.
  *
  * <p>Since this is an MEI-specific feature, the feature information is obtained from the
  * {@link MeiSpecificStorage} class. The associated code can be found
@@ -30,7 +30,7 @@ public class NumberOfGraceNotesMeiFeature
 	{
 		code = "S-1";
 		String name = "Number of Grace Notes";
-		String description = "The total number of grace notes in a piece (i.e. the number of notes indicated as grace notes in the MEI encoding).";
+		String description = "The total number of grace notes in a piece (i.e. the number of notes indicated as grace notes in the MEI encoding) divided by the total number of pitched notes in the music.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, description, is_sequential, dimensions);
@@ -66,7 +66,21 @@ public class NumberOfGraceNotesMeiFeature
 									   double[][] other_feature_values )
 	throws Exception
 	{
-		double[] number_of_grace_notes = { (double) meiSpecificStorage.getGraceNoteList().size() };
-		return number_of_grace_notes;
+		double value;
+		if (sequence_info != null)
+		{
+			double total_number_pitched_note_ons = (double) sequence_info.total_number_pitched_note_ons;
+			double number_of_grace_notes = (double) meiSpecificStorage.getGraceNoteList().size();
+
+			if (total_number_pitched_note_ons == 0.0 || number_of_grace_notes == 0.0)
+				value = 0.0;
+			else
+				value = number_of_grace_notes / total_number_pitched_note_ons;
+		}
+		else value = -1.0;
+
+		double[] result = new double[1];
+		result[0] = value;
+		return result;
 	}
 }
