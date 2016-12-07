@@ -29,6 +29,7 @@ public class Main
 		try {
 			CommandLineSwitchEnum.runCommand(args);
 		} catch (Exception e) {
+			//Top level error checking and termination
 			e.printStackTrace();
 			CommandLineUtils.printMessageAndTerminate(CommandLineUtils.getUsageMessage(),-1);
 		}
