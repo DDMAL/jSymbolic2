@@ -1,37 +1,30 @@
-/*
- * Main.java
- * Version 2.0
- *
- * Last modified on June 6, 2016.
- * McGill University and the University of Waikato
- */
-
 package jsymbolic2;
 
-
 import jsymbolic2.commandline.CommandLineSwitchEnum;
-import jsymbolic2.commandline.CommandLineUtils;
 
 /**
- * Runs the jSymbolic Feature Extractor in GUI or Command Line mode
- * depending on the command line arguments given.
+ * The jSymbolic runnable class. See the README or manual for more details on jSymbolic.
  *
  * @author Cory McKay and Tristano Tenaglia
  */
 public class Main
 {
 	/**
-	 * Runs jSymbolic based on command line arguments.
+	 * Runs the jSymbolic Feature Extractor. Operation will take place either in GUI or entirely via command
+	 * line processing, depending on the provided command line arguments.
+	 *
 	 * @param args Command line input parameter arguments.
 	 */
 	public static void main(String[] args)
 	{
-		try {
-			CommandLineSwitchEnum.runCommand(args);
-		} catch (Exception e) {
-			//Top level error checking and termination
+		try { CommandLineSwitchEnum.runCommandLine(args); }
+
+		// Note that this should never need to be executed, since internal processing should catch all errors.
+		catch (Exception e)
+		{
+			System.err.println(e.getMessage());
 			e.printStackTrace();
-			CommandLineUtils.printMessageAndTerminate(CommandLineUtils.getUsageMessage(),-1);
+			// CommandLineUtils.printMessageAndTerminate(CommandLineUtils.getCommandLineCorrectUsage(), -1);
 		}
 	}
 }

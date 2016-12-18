@@ -29,7 +29,7 @@
 
 The simplest way to run jSymbolic from a terminal prompt is to type the following at your terminal prompt (after you have navigated to the directory containing the jSymbolic2.jar file):
 
-<p><blockquote><pre>java -jar jSymbolic2.jar</pre></blockquote></p>
+<p><blockquote><pre>java -jar jSymbolic2.jar</pre></blockquote><p></p>
 
 <p>This will run the <a href="../gui_files/gui.html">jSymbolic GUI</a> set up with default settings.</p>
 
@@ -37,7 +37,7 @@ The simplest way to run jSymbolic from a terminal prompt is to type the followin
 
 <p>Other command line arguments simply consist of values, with no flags, of flags with no values. For example, a lone flag of "-help" will print to the terminal a list of valid flags with explanations of what they are. This can be run as follows:</p>
 
-<p><blockquote><pre>java -jar jSymbolic2.jar -help</pre></blockquote></p>
+<p><blockquote><pre>java -jar jSymbolic2.jar -help</pre></blockquote><p></p>
 
 <p>Invalid command line arguments will also result in the list of legitimate command line arguments being printed out to the terminal.</p>
 
@@ -56,25 +56,35 @@ The simplest way to run jSymbolic from a terminal prompt is to type the followin
 <p> <strong>JSYMBOLIC'S COMMAND LINE ARGUMENTS (WITH NO NON-DEFAULT CONFIGURATION FILE SPECIFIED)</strong></p>
 
 <ul>
-	<li><pre>java -jar jSymbolic2.jar</pre>
-	<p>Runs the jSymbolic GUI using default settings pre-loaded.</li>
-
-	<li><pre>java -jar jSymbolic2.jar -help</pre>
-	<p>Outputs valid command line arguments.</li>
-
-	<li><pre>java -jar jSymbolic2.jar &ltSymbolicMusicFileInputPath&gt &ltAceXmlFeatureValuesOutputPath&gt &ltAceXmlFeatureDefinitionsOutputPath&gt</pre>
-	<p>Extracts features using default settings from the symbolic music file as a whole at the path specified by <i>SymbolicMusicFileInputPath</i>, and saves the extracted features as an <a href="http://jmir.sourceforge.net/index_ACE_XML.html" target="top">ACE XML 1.1</a> Features Values File to the path specified by <i>AceXmlFeatureValuesOutputPath</i>. An ACE XML Feature Definitions File is also saved to the path specified by <i>AceXmlFeatureDefinitionsOutputPath</i>. Since no <a href="../configuration_files/configuration.html">configuration settings file</a> is specified, feature extraction occurs under default settings. Note that <i>SymbolicMusicFileInputPath</i> may alternatively be a directory, in which case jSymbolic extracts features from the symbolic music files it contains.</p></li>
 	
-	<li><pre>java -jar jSymbolic2.jar -window &ltSymbolicMusicFileInputPath&gt &ltAceXmlFeatureValuesOutputPath&gt &ltAceXmlFeatureDefinitionsOutputPath&gt &ltWindowLength&gt &ltWindowOverlapFraction&gt</pre>
-	<p>Processing here is similar to the above case, but now the input file is broken into a series of windows, and features are extracted from each of these windows separately. Each window is of equal temporal duration except for the last, which will have a duration corrsponding to the amount of remaining time in the piece. The features extracted from each of these windows are stored separately in a single output ACEM XML Feature Values file. The <i>WindowLength</i> value specifies the duration of each window in seconds. The <i>WindowOverlapFraction</i> value (which should have a value of 0 (for no overlap) or above and below 1) specifies the amount of overlap between consecutive windows. For example, for a <i>WindowLength</i> value of 10 and a <i>WindowOverlapFraction</i> value of 0.1, the windows will be from 0 sec to 10 sec, 9 sec to 19 sec, etc. Since no <a href="../configuration_files/configuration.html">configuration settings file</a> is specified, feature extraction occurs under default settings (aside from windowing, of course).</p></li>
-
-	<li><pre>java -jar jSymbolic2.jar -arff &ltSymbolicMusicFileInputPath&gt &ltAceXmlFeatureValuesOutputPath&gt &ltAceXmlFeatureDefinitionsOutputPath&gt</pre></li>
-	<li><pre>java -jar jSymbolic2.jar -arff -window &ltSymbolicMusicFileInputPath&gt &ltAceXmlFeatureValuesOutputPath&gt &ltAceXmlFeatureDefinitionsOutputPath&gt &ltWindowLength&gt &ltWindowOverlapFraction&gt</pre>
-	<p>The <i>-arff</i> switch can be added to save features as <a href="http://www.cs.waikato.ac.nz/ml/weka/arff.html" target="top">Weka ARFF</a> files (in addition to saving them as ACE XML files). The ARFF file is saved with the same name as the &ltAceXmlFeatureValuesOutputPath&gt file, but with the extension changed to ".arff". Note that this can be coupled with the <i>-csv</i> switch explained below as well.</p></li>
-
-	<li><pre>java -jar jSymbolic2.jar -csv &ltSymbolicMusicFileInputPath&gt &ltAceXmlFeatureValuesOutputPath&gt &ltAceXmlFeatureDefinitionsOutputPath&gt</pre></li>
-	<li><pre>java -jar jSymbolic2.jar -csv -window &ltSymbolicMusicFileInputPath&gt &ltAceXmlFeatureValuesOutputPath&gt &ltAceXmlFeatureDefinitionsOutputPath&gt &ltWindowLength&gt &ltWindowOverlapFraction&gt</pre>
-	<p>The <i>-csv</i> switch can be added to save features as <a href="https://en.wikipedia.org/wiki/Comma-separated_values" target="top">CSV</a> text files (in addition to saving them as ACE XML files). The CSV file is saved with the same name as the &ltAceXmlFeatureValuesOutputPath&gt file, but with the extension changed to ".csv". Note that this can be coupled with the <i>-arff</i> switch explained above as well.</p></li>
+  <li>
+    <pre>java -jar jSymbolic2.jar</pre>
+    <p>Runs the jSymbolic GUI using default settings pre-loaded.</li>
+  <li>
+    <pre>java -jar jSymbolic2.jar -help</pre>
+    <p>Outputs valid command line arguments.</li>
+  <li>
+    <pre>java -jar jSymbolic2.jar &ltSymbolicMusicFileInputPath&gt &ltAceXmlFeatureValuesOutputPath&gt &ltAceXmlFeatureDefinitionsOutputPath&gt</pre>
+    <p>Extracts features using default settings from the symbolic music file as a whole at the path specified by <i>SymbolicMusicFileInputPath</i>, and saves the extracted features as an <a href="http://jmir.sourceforge.net/index_ACE_XML.html" target="top">ACE XML 1.1</a> Features Values File to the path specified by <i>AceXmlFeatureValuesOutputPath</i>. An ACE XML Feature Definitions File is also saved to the path specified by <i>AceXmlFeatureDefinitionsOutputPath</i>. Note that <i>SymbolicMusicFileInputPath</i> may alternatively be a directory, in which case jSymbolic extracts features from the symbolic music files it contains. Since no <a href="../configuration_files/configuration.html">configuration settings file</a> is specified, jSymbolic first checks for a  configurations file in the jSymbolic home directory with the default <i>jSymbolicDefaultConfigs.txt</i> file name If it exists, and it does not specify input or output paths, then feature extraction occurs under its settings. If it does not exist, or if it specifies input or output paths, then feature extraction occurs under default settings.</p>
+  </li>
+  <li>
+    <pre>java -jar jSymbolic2.jar -window &ltSymbolicMusicFileInputPath&gt &ltAceXmlFeatureValuesOutputPath&gt &ltAceXmlFeatureDefinitionsOutputPath&gt &ltWindowLength&gt &ltWindowOverlapFraction&gt</pre>
+    <p>Processing here is similar to the above case, but now the input file is broken into a series of windows, and features are extracted from each of these windows separately. Each window is of equal temporal duration except for the last, which will have a duration corrsponding to the amount of remaining time in the piece. The features extracted from each of these windows are stored separately in a single output ACEM XML Feature Values file. The <i>WindowLength</i> value specifies the duration of each window in seconds. The <i>WindowOverlapFraction</i> value (which should have a value of 0 (for no overlap) or above and below 1) specifies the amount of overlap between consecutive windows. For example, for a <i>WindowLength</i> value of 10 and a <i>WindowOverlapFraction</i> value of 0.1, the windows will be from 0 sec to 10 sec, 9 sec to 19 sec, etc. Since no <a href="../configuration_files/configuration.html">configuration settings file</a> is specified, feature extraction occurs under default settings (aside from windowing, of course). Note that under these settings, even if a valid default <i>jSymbolicDefaultConfigs.txt</i> file exists, it is still ignored.</p>
+  </li>
+  <li>
+    <pre>java -jar jSymbolic2.jar -arff &ltSymbolicMusicFileInputPath&gt &ltAceXmlFeatureValuesOutputPath&gt &ltAceXmlFeatureDefinitionsOutputPath&gt</pre>
+  </li>
+  <li>
+    <pre>java -jar jSymbolic2.jar -arff -window &ltSymbolicMusicFileInputPath&gt &ltAceXmlFeatureValuesOutputPath&gt &ltAceXmlFeatureDefinitionsOutputPath&gt &ltWindowLength&gt &ltWindowOverlapFraction&gt</pre>
+    <p>The <i>-arff</i> switch can be added to save features as <a href="http://www.cs.waikato.ac.nz/ml/weka/arff.html" target="top">Weka ARFF</a> files (in addition to saving them as ACE XML files). The ARFF file is saved with the same name as the &ltAceXmlFeatureValuesOutputPath&gt file, but with the extension changed to ".arff". Note that this can be coupled with the <i>-csv</i> switch explained below as well. Note that under these settings, even if a valid default <i>jSymbolicDefaultConfigs.txt</i> file exists, it is still ignored.</p>
+  </li>
+  <li>
+    <pre>java -jar jSymbolic2.jar -csv &ltSymbolicMusicFileInputPath&gt &ltAceXmlFeatureValuesOutputPath&gt &ltAceXmlFeatureDefinitionsOutputPath&gt</pre>
+  </li>
+  <li>
+    <pre>java -jar jSymbolic2.jar -csv -window &ltSymbolicMusicFileInputPath&gt &ltAceXmlFeatureValuesOutputPath&gt &ltAceXmlFeatureDefinitionsOutputPath&gt &ltWindowLength&gt &ltWindowOverlapFraction&gt</pre>
+    <p>The <i>-csv</i> switch can be added to save features as <a href="https://en.wikipedia.org/wiki/Comma-separated_values" target="top">CSV</a> text files (in addition to saving them as ACE XML files). The CSV file is saved with the same name as the &ltAceXmlFeatureValuesOutputPath&gt file, but with the extension changed to ".csv". Note that this can be coupled with the <i>-arff</i> switch explained above as well. Note that under these settings, even if a valid default <i>jSymbolicDefaultConfigs.txt</i> file exists, it is still ignored.</p>
+  </li>
 </ul>
 
 <p><strong>JSYMBOLIC'S COMMAND LINE ARGUMENTS (WITH A NON-DEFAULT CONFIGURATION FILE SPECIFIED)</strong></p>
@@ -104,24 +114,24 @@ The simplest way to run jSymbolic from a terminal prompt is to type the followin
 
 <blockquote>
 	<p><strong>Example 1:</strong> Run the jSymbolic GUI under default settings.</p>
-	<blockquote><p><pre>java -jar jSymbolic2.jar</pre></p></blockquote>
+	<blockquote><p><pre>java -jar jSymbolic2.jar</pre><p></p></blockquote>
 
 	<p><strong>Example 2:</strong> Extract features from a single music file called "test.mei" in the current directory, and output the results to "feature_values_1.xml" and "feature_descriptions_1.xml", to be created
 	in the current directory.</p>
-	<blockquote><p><pre>java -jar jSymbolic2.jar ./test.mei ./feature_values_1.xml ./feature_descriptions_1.xml</pre></p></blockquote>
+	<blockquote><p><pre>java -jar jSymbolic2.jar ./test.mei ./feature_values_1.xml ./feature_descriptions_1.xml</pre><p></p></blockquote>
 	
 	<p><strong>Example 3:</strong> Extract features from all symbolic feature files in the directory called "test" in the current directory, and output the results to "feature_values_1.xml" and "feature_descriptions_1.xml" files, to be created in the current directory. A window size of 10 seconds will be used with an overlap fraction of 0.1 (i.e. 1 second, in this case).</p>
-	<blockquote><p><pre>java -jar jSymbolic2.jar -window ./test/ ./feature_values_1.xml ./feature_descriptions_1.xml 10 0.1</pre></p></blockquote>
+	<blockquote><p><pre>java -jar jSymbolic2.jar -window ./test/ ./feature_values_1.xml ./feature_descriptions_1.xml 10 0.1</pre><p></p></blockquote>
 	
 	<p><strong>Example 4:</strong> Extract features from a single music file called "test.midi" in the current directory, and output the results to "feature_values_1.xml" and "feature_descriptions_1.xml", to be created
 	in the current directory. Also output the extracted feature values in the form of a CSV file and an ARFF file, saved in the current directory as	as "feature_values_1.csv" and "feature_values_1.arff", respectively.</p>
-	<blockquote><p><pre>java -jar jSymbolic2.jar -arff -csv ./test.midi ./feature_values_1.xml ./feature_descriptions_1.xml</pre></p></blockquote>
+	<blockquote><p><pre>java -jar jSymbolic2.jar -arff -csv ./test.midi ./feature_values_1.xml ./feature_descriptions_1.xml</pre><p></p></blockquote>
 	
 	<p><strong>Example 5:</strong> Extract features from all symbolic feature files in the directory called "test" in the current directory, and output the results to "feature_values_1.xml" and "feature_descriptions_1.xml" files, to be created in the current directory. The feature extraction is done using the configuration settings specified in the configuration file called "jsymbolic_configurations.txt" found in the current directory (and which should not itself specify input and output file paths).</p>
-	<blockquote><p><pre>java -jar jSymbolic2.jar -configrun ./jsymbolic_configurations.txt ./test/ ./feature_values_1.xml ./feature_descriptions_1.xml</pre></p></blockquote>
+	<blockquote><p><pre>java -jar jSymbolic2.jar -configrun ./jsymbolic_configurations.txt ./test/ ./feature_values_1.xml ./feature_descriptions_1.xml</pre><p></p></blockquote>
 	
 	<p><strong>Example 6:</strong> Run the jSymbolic GUI pre-loaded with the settings specified in the configuration file called "jsymbolic_configurations.txt" in the current directory.</p>
-	<blockquote><p><pre>java -jar jSymbolic2.jar -configgui ./jsymbolic_configuration.txt</pre></p></blockquote>
+	<blockquote><p><pre>java -jar jSymbolic2.jar -configgui ./jsymbolic_configuration.txt</pre><p></p></blockquote>
 </blockquote>
 
 <p></p>

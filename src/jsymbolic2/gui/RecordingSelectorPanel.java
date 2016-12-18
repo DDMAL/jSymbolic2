@@ -128,7 +128,9 @@ public class RecordingSelectorPanel
           setLayout(new BorderLayout(horizontal_gap, vertical_gap));
           
           // Add an overall title for this panel
-          add(new JLabel("RECORDINGS:"), BorderLayout.NORTH);
+		JLabel panel_label = new JLabel("SYMBOLIC FILES TO PROCESS:");
+		OuterFrame.formatLabel(panel_label);
+		add(panel_label, BorderLayout.NORTH);
           
           // Set up the list of recordings (initially blank)
           recordings_panel = null;

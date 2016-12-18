@@ -34,7 +34,7 @@ public class ConfigurationFileValidatorTxtImpl extends ConfigurationFileValidato
      */
     @Override
     public List<String> validateFeatureSyntax(List<String> rawConfigFile, File configurationFile) throws Exception {
-        String featureHeader = HeaderEnum.FEATURE_HEADER.toString();
+        String featureHeader = ConfigFileHeaderEnum.FEATURE_HEADER.toString();
         int featureHeaderIndex = rawConfigFile.indexOf(featureHeader);
         int nextHeaderIndex = nextHeaderIndex(rawConfigFile,featureHeader);
 
@@ -79,7 +79,7 @@ public class ConfigurationFileValidatorTxtImpl extends ConfigurationFileValidato
      */
     @Override
     public ConfigurationOptionState validateOptionSyntax(List<String> rawConfigFile, File configurationFile) throws Exception {
-        String optionHeader = HeaderEnum.OPTION_HEADER.toString();
+        String optionHeader = ConfigFileHeaderEnum.OPTION_HEADER.toString();
         int currentHeaderIndex = rawConfigFile.indexOf(optionHeader);
         int nextHeaderIndex = nextHeaderIndex(rawConfigFile,optionHeader);
 
@@ -93,7 +93,7 @@ public class ConfigurationFileValidatorTxtImpl extends ConfigurationFileValidato
 
         if(nextHeaderIndex - currentHeaderIndex - 1 != OptionsEnum.values().length) {
             throw new Exception("Configuration file for jSymbolic " + configurationFile.getName() + " does not " +
-                    "contain all possible options. It is required that all of " + Arrays.toString(HeaderEnum.values())
+                    "contain all possible options. It is required that all of " + Arrays.toString(ConfigFileHeaderEnum.values())
                     + " must be options under " + optionHeader + " in configuration file.");
         }
 
@@ -137,7 +137,7 @@ public class ConfigurationFileValidatorTxtImpl extends ConfigurationFileValidato
             return new ConfigurationOptionState(windowSize,windowOverlap,saveWindow,saveOverall,convertToArff,convertToCsv);
         } else {
             throw new Exception("Configuration file for jSymbolic " + configurationFile.getName() + " does not " +
-                    "contain all possible options. It is required that all of " + Arrays.toString(HeaderEnum.values())
+                    "contain all possible options. It is required that all of " + Arrays.toString(ConfigFileHeaderEnum.values())
                     + " must be options under " + optionHeader + " in configuration file.");
         }
     }
@@ -225,7 +225,7 @@ public class ConfigurationFileValidatorTxtImpl extends ConfigurationFileValidato
     @Override
     public ConfigurationInputFiles checkForInvalidInputFiles(List<String> rawConfigFile, File configurationFile) throws Exception {
         ConfigurationInputFiles inputFileList = new ConfigurationInputFiles();
-        String inputHeader = HeaderEnum.INPUT_FILE_HEADER.toString();
+        String inputHeader = ConfigFileHeaderEnum.INPUT_FILE_HEADER.toString();
         int currentHeaderIndex = rawConfigFile.indexOf(inputHeader);
         int nextHeaderIndex = nextHeaderIndex(rawConfigFile,inputHeader);
         List<String> inputFiles = rawConfigFile.subList(currentHeaderIndex + 1, nextHeaderIndex);
@@ -252,7 +252,7 @@ public class ConfigurationFileValidatorTxtImpl extends ConfigurationFileValidato
      */
     @Override
     public ConfigurationOutputFiles checkForInvalidOutputFiles(List<String> rawConfigFile, File configurationFile) throws Exception {
-        String outputHeader = HeaderEnum.OUTPUT_FILE_HEADER.toString();
+        String outputHeader = ConfigFileHeaderEnum.OUTPUT_FILE_HEADER.toString();
         String valueSavePath = OutputEnum.feature_values_save_path.name();
         String definitionSavePath = OutputEnum.feature_definitions_save_path.name();
 
@@ -330,18 +330,18 @@ public class ConfigurationFileValidatorTxtImpl extends ConfigurationFileValidato
      * do not need to be checked are found in the configuration file.
      */
     @Override
-    public void validateHeaders(List<String> rawConfigFile, File configurationFile, List<HeaderEnum> headersToCheck)
+    public void validateHeaders(List<String> rawConfigFile, File configurationFile, List<ConfigFileHeaderEnum> headersToCheck)
             throws Exception
     {
-        for(HeaderEnum header : headersToCheck) {
+        for(ConfigFileHeaderEnum header : headersToCheck) {
             if(Collections.frequency(rawConfigFile,header.toString()) != 1) {
                 throw new Exception(configurationFile.getName() + " is not a valid configuration file " +
                         "as it does not contain 1 of the following header : " + header.toString());
             }
         }
 
-        List<HeaderEnum> headersNotToCheck = headersNotToCheck(headersToCheck);
-        for(HeaderEnum header : headersNotToCheck) {
+        List<ConfigFileHeaderEnum> headersNotToCheck = headersNotToCheck(headersToCheck);
+        for(ConfigFileHeaderEnum header : headersNotToCheck) {
             if(rawConfigFile.contains(header.toString())) {
                 throw new Exception("jSymbolic configuration file " + configurationFile.getName() + " contains " +
                         header.toString() + " which has already been specified in the command line.\n Either " +
@@ -355,10 +355,10 @@ public class ConfigurationFileValidatorTxtImpl extends ConfigurationFileValidato
      * @param headersToCheck List of headers that need to be checked.
      * @return List of headers that do not need to be checked.
      */
-    private List<HeaderEnum> headersNotToCheck(List<HeaderEnum> headersToCheck) {
-        List<HeaderEnum> allHeaders = Arrays.asList(HeaderEnum.values());
-        List<HeaderEnum> headersNotToCheck = new ArrayList<>();
-        for(HeaderEnum header : allHeaders) {
+    private List<ConfigFileHeaderEnum> headersNotToCheck(List<ConfigFileHeaderEnum> headersToCheck) {
+        List<ConfigFileHeaderEnum> allHeaders = Arrays.asList(ConfigFileHeaderEnum.values());
+        List<ConfigFileHeaderEnum> headersNotToCheck = new ArrayList<>();
+        for(ConfigFileHeaderEnum header : allHeaders) {
             if(!headersToCheck.contains(header)) {
                 headersNotToCheck.add(header);
             }
@@ -376,7 +376,7 @@ public class ConfigurationFileValidatorTxtImpl extends ConfigurationFileValidato
         int currentHeaderIndex = rawData.indexOf(header);
         for(int nextIndex = currentHeaderIndex + 1; nextIndex < rawData.size(); nextIndex++) {
             String nextLine = rawData.get(nextIndex);
-            if(HeaderEnum.contains(nextLine)) {
+            if(ConfigFileHeaderEnum.contains(nextLine)) {
                 return nextIndex;
             }
         }

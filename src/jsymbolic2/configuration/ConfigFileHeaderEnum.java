@@ -7,7 +7,7 @@ import java.util.*;
  *
  * @author Tristano Tenaglia
  */
-public enum HeaderEnum {
+public enum ConfigFileHeaderEnum {
     FEATURE_HEADER ("<features_to_extract>"),
     OPTION_HEADER ("<jSymbolic_options>"),
     INPUT_FILE_HEADER ("<input_files>"),
@@ -19,7 +19,7 @@ public enum HeaderEnum {
     private static final Set<String> headerNames = new HashSet<>();
 
     static {
-        for (HeaderEnum value : EnumSet.allOf(HeaderEnum.class)) {
+        for (ConfigFileHeaderEnum value : EnumSet.allOf(ConfigFileHeaderEnum.class)) {
             headerNames.add(value.toString());
         }
     }
@@ -36,7 +36,7 @@ public enum HeaderEnum {
 
     private final String text;
 
-    private HeaderEnum(final String text) {
+    private ConfigFileHeaderEnum(final String text) {
         this.text = text;
     }
 
@@ -44,7 +44,7 @@ public enum HeaderEnum {
      *
      * @return All the enums in this class in a list.
      */
-    public static List<HeaderEnum> asList() {
+    public static List<ConfigFileHeaderEnum> asList() {
         return Arrays.asList(values());
     }
 
