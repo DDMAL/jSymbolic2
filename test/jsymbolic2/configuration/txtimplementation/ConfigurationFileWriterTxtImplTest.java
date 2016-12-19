@@ -16,7 +16,7 @@ import static org.junit.Assert.*;
 public class ConfigurationFileWriterTxtImplTest {
     @Test
     public void addFormattedOptions() throws Exception {
-        List<String> expectedList = Arrays.asList(HeaderEnum.OPTION_HEADER.toString(),
+        List<String> expectedList = Arrays.asList(ConfigFileHeaderEnum.OPTION_HEADER.toString(),
                 OptionsEnum.window_size.name() + ConfigurationFileDelimiterEnum.EQUAL + "1.5",
                 OptionsEnum.window_overlap.name() + ConfigurationFileDelimiterEnum.EQUAL + "0.1",
                 OptionsEnum.save_features_for_each_window.name() + ConfigurationFileDelimiterEnum.EQUAL + "true",
@@ -35,7 +35,7 @@ public class ConfigurationFileWriterTxtImplTest {
     @Test
     public void addFormattedFeatures() throws Exception {
         List<String> expectedList = Arrays.asList(
-                HeaderEnum.FEATURE_HEADER.toString(),
+                ConfigFileHeaderEnum.FEATURE_HEADER.toString(),
                 "Acoustic Guitar Prevalence",
                 "Duration",
                 "Beat Histogram"
@@ -58,7 +58,7 @@ public class ConfigurationFileWriterTxtImplTest {
         String fileName = "test.mei";
 
         List<String> expectedList = Arrays.asList(
-                HeaderEnum.INPUT_FILE_HEADER.toString(),
+                ConfigFileHeaderEnum.INPUT_FILE_HEADER.toString(),
                 fileName
         );
 
@@ -76,7 +76,7 @@ public class ConfigurationFileWriterTxtImplTest {
         String definition = "test_definition.xml";
 
         List<String> expectedList = Arrays.asList(
-                HeaderEnum.OUTPUT_FILE_HEADER.toString(),
+                ConfigFileHeaderEnum.OUTPUT_FILE_HEADER.toString(),
                 OutputEnum.feature_values_save_path.name() + ConfigurationFileDelimiterEnum.EQUAL + value,
                 OutputEnum.feature_definitions_save_path.name() + ConfigurationFileDelimiterEnum.EQUAL + definition
         );

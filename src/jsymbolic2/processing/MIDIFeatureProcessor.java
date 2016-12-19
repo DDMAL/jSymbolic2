@@ -12,7 +12,7 @@ import java.io.*;
 import java.util.LinkedList;
 import javax.sound.midi.*;
 
-import jsymbolic2.api.jSymbolicData;
+import jsymbolic2.api.JsymbolicData;
 import jsymbolic2.featureutils.MEIFeatureExtractor;
 import mckay.utilities.sound.midi.MIDIMethods;
 import ace.datatypes.FeatureDefinition;
@@ -303,7 +303,7 @@ public class MIDIFeatureProcessor
           // Extract the data from the file and check for exceptions
           Sequence full_sequence;
           MeiSequence mei_sequence = null;
-          if(FileValidator.validMeiFile(recording_file)) {
+          if(FileValidator.isValidMeiFile(recording_file)) {
                mei_sequence = FileValidator.getValidMeiSequence(recording_file,errorLog);
                full_sequence = mei_sequence.getSequence();
           }
@@ -394,13 +394,14 @@ public class MIDIFeatureProcessor
      * Extract and return all possible data and features the jSymbolic processes.
      * @param recording_file  The music file to extract features from.
      * @param errorLog  A List(String) that holds all the files with errors.
+	 * @param error_print_stream	A stream to print error messages to if necessary.
      * @return An object that contains all the appropriate jSymbolicData.
      * @throws InvalidMidiDataException Thrown if the MIDI data is invalid.
      * @throws IOException Thrown if there is a problem reading from the inputted file.
      * @throws MeiXmlReadException Thrown if there is a problem reading in the MEI XML from the inputted file.
      * @throws Exception When an unforeseen runtime exception occurs.
      */
-     public jSymbolicData extractAndReturnFeatures(File recording_file, List<String> errorLog)
+     public JsymbolicData extractAndReturnFeatures(File recording_file, List<String> errorLog, PrintStream error_print_stream)
              throws InvalidMidiDataException, MeiXmlReadException, IOException, Exception
      {
           if(window_overlap_offset > window_size)
@@ -409,7 +410,7 @@ public class MIDIFeatureProcessor
           // Extract the data from the file and check for exceptions
           Sequence full_sequence;
           MeiSequence mei_sequence = null;
-          if(FileValidator.validMeiFile(recording_file)) {
+          if(FileValidator.isValidMeiFile(recording_file)) {
                mei_sequence = FileValidator.getValidMeiSequence(recording_file,errorLog);
                full_sequence = mei_sequence.getSequence();
           }
@@ -492,13 +493,13 @@ public class MIDIFeatureProcessor
                   seconds_per_tick);
 
           // Write ending tags for
-          finalize();
+          finalizeFeatureValuesFile();
 
           // Save the feature definitions
           if (!definitions_written)
                saveFeatureDefinitions(window_feature_values, overall_feature_definitions[0]);
 
-          return new jSymbolicData(meiSpecificStorage, feature_values_save_file, feature_definitions_save_file, null, null);
+          return new JsymbolicData(meiSpecificStorage, feature_values_save_file, feature_definitions_save_file, null, null, error_print_stream);
      }
      
      
@@ -511,7 +512,7 @@ public class MIDIFeatureProcessor
       * @throws	Exception	Throws an exception if cannot write or close the
       *						output streams.
       */
-     public void finalize()
+     public void finalizeFeatureValuesFile()
      throws Exception
      {
           values_writer.writeBytes("</feature_vector_file>");

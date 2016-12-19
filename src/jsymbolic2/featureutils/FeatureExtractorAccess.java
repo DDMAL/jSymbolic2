@@ -564,8 +564,8 @@ public final class FeatureExtractorAccess
 	
 	
 	/**
-	 * Print the total number of implemented features, including the code and name of each feature, in the
-	 * correct listed order.
+	 * Debugging method that prints the total number of implemented features, including the code and name of
+	 * each feature, in the correct listed order.
 	 */
 	public static void printAllFeatures()
 	{

@@ -67,7 +67,7 @@ public class FileValidator
             throws InvalidMidiDataException, IOException, MeiXmlReadException 
     {
         Sequence sequence;
-        if (validMeiFile(file)) 
+        if (isValidMeiFile(file)) 
         {
             sequence = getMEISequence(file, errorLog);
         } 
@@ -84,7 +84,7 @@ public class FileValidator
      * @param file mei file to be checked
      * @return true if it is valid or else false
      */
-    public static boolean validMeiFile(File file)
+    public static boolean isValidMeiFile(File file)
     {
         try
         {
@@ -190,22 +190,8 @@ public class FileValidator
         return Files.exists(p);
     }
 
-    /**
-     * Print out error log to the command line.
-     *
-     * @param errorLog List(string) to be printed to console.
-     */
-    public static void printErrorLog(List<String> errorLog) 
-    {
-        if (errorLog != null && !errorLog.isEmpty()) 
-        {
-            for (String error : errorLog) 
-            {
-                System.err.println(error);
-            }
-        }
-    }
-     /**
+
+	/**
       * Print out error log to a JOptionPane window.
       * @param errorLog List(String) to be printed to window.
       */

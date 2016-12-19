@@ -20,7 +20,7 @@ public class ConfigurationFileWriterTxtImpl extends ConfigurationFileWriter {
      */
     @Override
     public List<String> addFormattedOptions(List<String> rawConfigFile, ConfigurationOptionState optionState) {
-        rawConfigFile.add(HeaderEnum.OPTION_HEADER.toString());
+        rawConfigFile.add(ConfigFileHeaderEnum.OPTION_HEADER.toString());
 
         double windowSize = optionState.getWindow_size();
         String formattedWindowSize =
@@ -64,7 +64,7 @@ public class ConfigurationFileWriterTxtImpl extends ConfigurationFileWriter {
      */
     @Override
     public List<String> addFormattedFeatures(List<String> rawConfigFile, List<String> featuresToSave) {
-        rawConfigFile.add(HeaderEnum.FEATURE_HEADER.toString());
+        rawConfigFile.add(ConfigFileHeaderEnum.FEATURE_HEADER.toString());
         rawConfigFile.addAll(featuresToSave);
         return rawConfigFile;
     }
@@ -77,7 +77,7 @@ public class ConfigurationFileWriterTxtImpl extends ConfigurationFileWriter {
      */
     @Override
     public List<String> addFormattedInputFiles(List<String> rawConfigFile, ConfigurationInputFiles inputFiles) {
-        rawConfigFile.add(HeaderEnum.INPUT_FILE_HEADER.toString());
+        rawConfigFile.add(ConfigFileHeaderEnum.INPUT_FILE_HEADER.toString());
 
         for(File file : inputFiles.getValidFiles()) {
             rawConfigFile.add(file.getPath());
@@ -94,7 +94,7 @@ public class ConfigurationFileWriterTxtImpl extends ConfigurationFileWriter {
      */
     @Override
     public List<String> addFormattedOutputFiles(List<String> rawConfigFile, ConfigurationOutputFiles outputFiles) {
-        rawConfigFile.add(HeaderEnum.OUTPUT_FILE_HEADER.toString());
+        rawConfigFile.add(ConfigFileHeaderEnum.OUTPUT_FILE_HEADER.toString());
 
         String featureValue = FileValidator.correctFileExtension(outputFiles.getFeature_values_save_path(), "xml");
         String formattedValue =

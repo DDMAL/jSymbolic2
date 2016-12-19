@@ -2,8 +2,10 @@ package jsymbolic2.configuration;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.util.Arrays;
 import java.util.List;
+import jsymbolic2.processing.UserFeedbackGenerator;
 
 /**
  * <p>
@@ -17,7 +19,7 @@ import java.util.List;
  * the appropriate file object, with the data that jSymbolic requires from the configuration file.
  * </p>
  * <p>
- * In particular, the {@link #parseConfigFile(String, List)} method is not abstract and uses the template method pattern
+ * In particular, the {@link #parseConfigFile(String, List, PrintStream)} method is not abstract and uses the template method pattern
  * to return an object the contains all the appropriate configuration file data. This method runs
  * the abstract functions in the correct order and also deals with exception handling.
  * Exception handling is dealt with by printing the particular error to console and then exiting
@@ -39,7 +41,7 @@ public abstract class ConfigurationFileValidator {
 
     /**
      * Validate the features logic specified in the configuration file.
-     * This occurs after the feature syntax validation in the {@link #parseConfigFile(String, List)} function.
+     * This occurs after the feature syntax validation in the {@link #parseConfigFile(String, List, PrintStream)} function.
      * @param rawConfigFile A list of strings containing the line by line raw configuration file.
      * @param configurationFile The configuration file for file information.
      * @return A list of string containing the line by line raw configuration file with feature logic validated.
@@ -58,7 +60,7 @@ public abstract class ConfigurationFileValidator {
 
     /**
      * Validate the options logic specified in the configuration file.
-     * This occurs after the option syntax validation in the {@link #parseConfigFile(String, List)} function.
+     * This occurs after the option syntax validation in the {@link #parseConfigFile(String, List, PrintSteram)} function.
      * @param configOption The syntax validated configuration option data.
      * @param configurationFile The configuration file for file information.
      * @return ConfigurationOptionState The fully validated state of the configuration options from the configuration file.
@@ -93,7 +95,7 @@ public abstract class ConfigurationFileValidator {
      * @throws Exception Thrown when configuration file is missing a header or has wrong header syntax on the headers
      * that it needs to check.
      */
-    public abstract void validateHeaders(List<String> rawConfigFile, File configurationFile, List<HeaderEnum> headersToCheck) throws Exception;
+    public abstract void validateHeaders(List<String> rawConfigFile, File configurationFile, List<ConfigFileHeaderEnum> headersToCheck) throws Exception;
 
     /**
      * Extract from the configuration file a list of strings containing the line by line raw configuration file.
@@ -128,12 +130,15 @@ public abstract class ConfigurationFileValidator {
      * @param headersToCheck Headers that need to be validated in configuration file.
      *                       Any headers not specified here will result in an exception and thus
      *                       this method will print usage on error and then terminate the jSymbolic program.
+	 * @param error_stream	A print stream to write errors to.	
      * @return ConfigurationFileData object which contains all the appropriate data extracted and validated
      * from the specified configuration file. Only headers that need to be checked will return appropriate data.
      * All headers that need not be checked will be returned as null in the ConfigurationFileData return object.
      * @throws Exception Thrown if configuration file is not valid.
      */
-    public ConfigurationFileData parseConfigFile(String configurationFileName, List<HeaderEnum> headersToCheck)
+    public ConfigurationFileData parseConfigFile(String configurationFileName,
+			List<ConfigFileHeaderEnum> headersToCheck,
+			PrintStream error_stream )
             throws Exception
     {
         //TODO could also have a function that takes in different config data and places it appropriately
@@ -148,31 +153,32 @@ public abstract class ConfigurationFileValidator {
 
         //Verify config file syntax and logic for options
         ConfigurationOptionState configOptions = null;
-        if(headersToCheck.contains(HeaderEnum.OPTION_HEADER)) {
+        if(headersToCheck.contains(ConfigFileHeaderEnum.OPTION_HEADER)) {
             configOptions = validateOptionLogic(validateOptionSyntax(rawConfigData, configFile), configFile);
         }
 
         //Verify config file syntax and logic for features
         List<String> featuresToSave = null;
-        if(headersToCheck.contains(HeaderEnum.FEATURE_HEADER)) {
+        if(headersToCheck.contains(ConfigFileHeaderEnum.FEATURE_HEADER)) {
             featuresToSave = validateFeatureLogic(validateFeatureSyntax(rawConfigData, configFile), configFile);
         }
 
         //Verify config file for invalid input files
         ConfigurationInputFiles invalidInputFiles = null;
-        if(headersToCheck.contains(HeaderEnum.INPUT_FILE_HEADER))
+        if(headersToCheck.contains(ConfigFileHeaderEnum.INPUT_FILE_HEADER))
         {
             invalidInputFiles = checkForInvalidInputFiles(rawConfigData, configFile);
             //Print out all invalid files to console
-            for (File invalid : invalidInputFiles.getInvalidFiles()) {
-                System.err.println(invalid + " is not a valid file in the jSymbolic configuration file : " +
-                        configurationFileName);
+            for (File invalid : invalidInputFiles.getInvalidFiles()) 
+			{
+				String error_message = "The " + configurationFileName + " configuration file refers to an invalid file path: " + invalid.getAbsolutePath() + ".";
+                UserFeedbackGenerator.printWarningMessage(error_stream, error_message);
             }
         }
 
         //Verify specified output files
         ConfigurationOutputFiles outputFiles = null;
-        if(headersToCheck.contains(HeaderEnum.OUTPUT_FILE_HEADER))
+        if(headersToCheck.contains(ConfigFileHeaderEnum.OUTPUT_FILE_HEADER))
         {
             outputFiles = checkForInvalidOutputFiles(rawConfigData, configFile);
         }
@@ -187,28 +193,32 @@ public abstract class ConfigurationFileValidator {
     /**
      * Parse and validate the configuration file, assuming that all headers need to validated.
      * @param configurationFileName The configuration file name that needs to be validated.
-     * @return ConfigurationFileData object which contains all the appropriate data extracted and validated
+	 * @param error_stream	A print stream to write errors to.	
+	 * @return ConfigurationFileData object which contains all the appropriate data extracted and validated
      * from the specified configuration file. In this case, all jSymbolic data is specified in the
      * configuration file itself.
      * @throws Exception Thrown if configuration file is not valid.
      */
-    public ConfigurationFileData parseConfigFile(String configurationFileName) throws Exception {
-        return parseConfigFile(configurationFileName, Arrays.asList(HeaderEnum.values()));
+    public ConfigurationFileData parseConfigFileAllHeaders(String configurationFileName, PrintStream error_stream) throws Exception {
+        return parseConfigFile(configurationFileName, Arrays.asList(ConfigFileHeaderEnum.values()), error_stream);
     }
 
     /**
-     * Parse and validate the configuration file with both all headers or feature and option headers.
+     * Parse and validate the configuration file with both all headers and, if this doesn't work, feature and
+	 * option headers.
      * @param configurationFileName The configuration file name that needs to be validated.
+	 * @param error_stream	A print stream to write errors to.
      * @return ConfigurationFileData object which contains all the appropriate data extracted and validated
      * from the specified configuration file. In this case, all jSymbolic data is specified in the
      * @throws Exception Thrown if configuration file is not valid.
      */
-    public ConfigurationFileData parseConfigFileAllWays(String configurationFileName) throws Exception {
+    public ConfigurationFileData parseConfigFileAllOrFeatOpt(String configurationFileName, PrintStream error_stream)
+			throws Exception {
         ConfigurationFileData configurationFileData = null;
 
         try {
             //Try with all headers
-            configurationFileData = parseConfigFile(configurationFileName);
+            configurationFileData = parseConfigFileAllHeaders(configurationFileName, error_stream);
         } catch (Exception ex) {
             //continue
         }
@@ -219,8 +229,55 @@ public abstract class ConfigurationFileValidator {
         }
 
         //Otherwise try with only feature and option header and return it if valid
-        List<HeaderEnum> headersToCheck = Arrays.asList(HeaderEnum.FEATURE_HEADER, HeaderEnum.OPTION_HEADER);
-        configurationFileData = parseConfigFile(configurationFileName, headersToCheck);
+        List<ConfigFileHeaderEnum> headersToCheck = Arrays.asList(ConfigFileHeaderEnum.FEATURE_HEADER, ConfigFileHeaderEnum.OPTION_HEADER);
+        configurationFileData = parseConfigFile(configurationFileName, headersToCheck, error_stream);
         return configurationFileData;
     }
+
+	/**
+	 * Parse and validate the configuration file with both all headers or, if this doesn't work, all headers
+	 * except input files, all headers except output files and just feature and option headers.
+	 *
+	 * @param config_file_name The configuration file name that needs to be validated.
+	 * @param error_stream	A print stream to write errors to.
+	 * @return ConfigurationFileData object which contains all the appropriate data extracted and validated
+	 * from the specified configuration file. In this case, all jSymbolic data is specified in the
+	 * @throws Exception Thrown if configuration file is not valid.
+	 */
+	public ConfigurationFileData parseConfigFileTwoThreeOrFour(String config_file_name, PrintStream error_stream)
+			throws Exception
+	{
+		ConfigurationFileData configuration_file_data = null;
+
+		// Try with all four headers
+		try
+		{
+			configuration_file_data = parseConfigFileAllHeaders(config_file_name, error_stream);
+			return configuration_file_data;
+		}
+		catch (Exception e) {}
+
+		// Try with FEATURE_HEADER, OPTION_HEADER and INPUT_FILE_HEADER
+		try
+		{
+			List<ConfigFileHeaderEnum> headersToCheck = Arrays.asList(ConfigFileHeaderEnum.FEATURE_HEADER, ConfigFileHeaderEnum.OPTION_HEADER, ConfigFileHeaderEnum.INPUT_FILE_HEADER);
+			configuration_file_data = parseConfigFile(config_file_name, headersToCheck, error_stream);
+			return configuration_file_data;
+		}
+		catch (Exception e) {}		
+		
+		// Try with FEATURE_HEADER, OPTION_HEADER and OUTPUT_FILE_HEADER
+		try
+		{
+			List<ConfigFileHeaderEnum> headersToCheck = Arrays.asList(ConfigFileHeaderEnum.FEATURE_HEADER, ConfigFileHeaderEnum.OPTION_HEADER, ConfigFileHeaderEnum.OUTPUT_FILE_HEADER);
+			configuration_file_data = parseConfigFile(config_file_name, headersToCheck, error_stream);
+			return configuration_file_data;
+		}
+		catch (Exception e) {}
+		
+		//Otherwise try with only FEATURE_HEADER and OPTION_HEADER, and return it if valid
+		List<ConfigFileHeaderEnum> headersToCheck = Arrays.asList(ConfigFileHeaderEnum.FEATURE_HEADER, ConfigFileHeaderEnum.OPTION_HEADER);
+		configuration_file_data = parseConfigFile(config_file_name, headersToCheck, error_stream);
+		return configuration_file_data;
+	}
 }

@@ -59,11 +59,11 @@ public class ConfigurationFileValidatorTxtImplTest {
     @Test
     public void validateHeaders() throws Exception {
         exception.expect(Exception.class);
-        validate.validateHeaders(rawInvalidConfig,invalidConfiguration,Arrays.asList(HeaderEnum.values()));
+        validate.validateHeaders(rawInvalidConfig,invalidConfiguration,Arrays.asList(ConfigFileHeaderEnum.values()));
 
         //Exception thrown when IO should not be but is in fact in the configuration file
         exception.expect(Exception.class);
-        validate.validateHeaders(rawSampleConfig,sampleConfiguration,Arrays.asList(HeaderEnum.FEATURE_HEADER,HeaderEnum.OPTION_HEADER));
+        validate.validateHeaders(rawSampleConfig,sampleConfiguration,Arrays.asList(ConfigFileHeaderEnum.FEATURE_HEADER,ConfigFileHeaderEnum.OPTION_HEADER));
     }
 
     @Test
@@ -76,7 +76,7 @@ public class ConfigurationFileValidatorTxtImplTest {
         ConfigurationOutputFiles output = new ConfigurationOutputFiles("test_value.xml","test_definition.xml");
         ConfigurationFileData expecteddata = new ConfigurationFileData(featuresToSave,opt,output,sampleConfigFileName,input);
         ConfigurationFileData actualdata =
-                validate.parseConfigFile(sampleConfigFileName);
+                validate.parseConfigFileAllHeaders(sampleConfigFileName, System.err);
         assertEquals(expecteddata,actualdata);
 
         //Validate configuration files with no IO
@@ -84,7 +84,7 @@ public class ConfigurationFileValidatorTxtImplTest {
         ConfigurationOptionState ioOpt = new ConfigurationOptionState(1.5,0.1,true,false,false,false);
         ConfigurationFileData expectedIOData = new ConfigurationFileData(ioToSave,ioOpt,null,noIOConfig,null);
         ConfigurationFileData actualIOData =
-                validate.parseConfigFile(noIOConfig, Arrays.asList(HeaderEnum.FEATURE_HEADER, HeaderEnum.OPTION_HEADER));
+                validate.parseConfigFile(noIOConfig, Arrays.asList(ConfigFileHeaderEnum.FEATURE_HEADER, ConfigFileHeaderEnum.OPTION_HEADER), System.err);
         assertEquals(expectedIOData,actualIOData);
     }
 
