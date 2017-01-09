@@ -1,7 +1,7 @@
 ==========================================================================
  jSymbolic 2.0
  by Cory McKay
- Copyright (C) 2016 (GNU GPL)
+ Copyright (C) 2017 (GNU GPL)
 ==========================================================================
 
 
@@ -87,7 +87,7 @@ Menu, select Run and type "cmd". Then use the "cd" command to move to
 the directory that contains the jSymbolic.jar file. In that directory, 
 type:
 
-	java -jar jSymbolic.jar
+	java -Xmx3072m -jar jSymbolic.jar
 
 Updated commands since the release of jMei2Midi:
 
@@ -95,13 +95,13 @@ Window mode allows for the music to be split up into windows (given as window si
 is given as a fractional value and can make processing more accurate. The SourceFilePath can be either a single file
 or a directory:
 
-	java -jar jSymbolic.jar -window SourceFilePath FeatureValuesOutputPath FeatureDescriptionsOutputPath WindowSize WindowOverlapOffset
+	java -Xmx3072m -jar jSymbolic.jar -window SourceFilePath FeatureValuesOutputPath FeatureDescriptionsOutputPath WindowSize WindowOverlapOffset
 
 CSV and ARFF file formats can be obtained by adding the -arff and -csv switches to the beginning of the command.
 This will output the given file format alongside the ACE xml document:
 
-	java -jar jSymbolic.jar -csv -arff SourceFileP…
-	java -jar jSymbolic.jar -csv -arff -window SourceFileP…
+	java -Xmx3072m -jar jSymbolic.jar -csv -arff SourceFileP…
+	java -Xmx3072m -jar jSymbolic.jar -csv -arff -window SourceFileP…
 
 It should be noted that the JRE does not always allocate sufficient
 memory for jSymbolic to process large music collections. Running 
@@ -109,11 +109,11 @@ jSymbolic using either of the above two methods could therefore result
 in an out of memory error (although this is relatively rare).
 
 It is therefore sometimes preferable to manually allocate a greater
-amount of memory to jSymbolic before running it. 250 MB should be more
+amount of memory to jSymbolic before running it. 3 GB should be more
 than enough for most situations. This can be done by entering the 
 following at the command prompt:
 
-	java -ms16M -mx250M -jar jSymbolic.jar
+	java -Xmx3072m -jar jSymbolic.jar
 
 If jSymbolic is run without any command line arguments, then the GUI
 will be run. Alternatively, jSymbolic may be run directly from the
@@ -127,20 +127,20 @@ Updated commands for configuration file release :
 The following 2 commands will startup jSymbolic through the gui or the command line using the specified
 configuration file:
 
-    java -jar jSymbolic.jar -configgui ConfigurationFilePath
-    java -jar jSymbolic.jar -configrun ConfigurationFilePath
+    java -Xmx3072m -jar jSymbolic.jar -configgui ConfigurationFilePath
+    java -Xmx3072m -jar jSymbolic.jar -configrun ConfigurationFilePath
 
 Configuration file options switches for the command line can also be run with input files and output save paths as follows
 (Therefore jSymbolic options and features are stored in the configuration file):
 
-    java -jar jSymbolic.jar -configrun ConfigurationFilePath SourceFilePath FeatureValuesOutputPath FeatureDescriptionsOutputPath
+    java -Xmx3072m -jar jSymbolic.jar -configrun ConfigurationFilePath SourceFilePath FeatureValuesOutputPath FeatureDescriptionsOutputPath
 
 -- GUI RUNNING OF SOFTWARE --
 
 The following commands can run the GUI :
 
-    java -jar jSymbolic.jar
-    java -jar jSymbolic.jar -configgui ConfigurationFilePath
+    java -Xmx3072m -jar jSymbolic.jar
+    java -Xmx3072m -jar jSymbolic.jar -configgui ConfigurationFilePath
 
 The first command will run jSymbolic, initialized with the default settings. Adding the -configgui switch will
 initialize the jSymbolic GUI with the settings specified in the configuration file denoted by the input of the
@@ -205,7 +205,7 @@ run. This allows jSymbolic to run as a separate process with enough heap space a
 -- LICENSING AND LIABILITY -- 
 
 jSymbolic 2.0
-Copyright (C) 2016 Cory McKay
+Copyright (C) 2017 Cory McKay
 
 This program is free software; you can redistribute it
 and/or modify it under the terms of the GNU General 
@@ -260,8 +260,3 @@ jSymbolic 1.2:
 
 jSymbolic 1.1:
 - Imported into the NetBeans framework to assist further development.
-
-In Progress
-===========
-- Problem saving Weka ARFF and CSV when windowed (works when full songs, though)
-	- I will need to look into ACE if the problem is an ACE XML parsing one rather than an ACE XML saving one

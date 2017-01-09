@@ -12,7 +12,7 @@ import java.io.*;
 import java.util.LinkedList;
 import javax.sound.midi.*;
 
-import jsymbolic2.api.JsymbolicData;
+import jsymbolic2.api.deprecated.JsymbolicData;
 import jsymbolic2.featureutils.MEIFeatureExtractor;
 import mckay.utilities.sound.midi.MIDIMethods;
 import ace.datatypes.FeatureDefinition;

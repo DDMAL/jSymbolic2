@@ -1,0 +1,334 @@
+C:\Git\jSymbolic2\manual\api_files>javac -classpath "./jSymbolic2.jar;" jSymbolicApiDemo.java
+
+C:\Git\jSymbolic2\manual\api_files>java -classpath "./jSymbolic2.jar;" jSymbolicApiDemo
+>>> Saving feature metadata as an ACE XML Feature Definitions file: ./FeatureDefinitions.xml.
+
+>>> Extracting features from 2 input files, one file at at time:
+
+        >>> 1/2 Testing: C:\Git\jSymbolic2\manual\api_files\.\MySymbolicMusicFiles\Bach J S - Cello Suite No 1 Prelude.mid  . . .
+        >>> 1/2 Extracting features: C:\Git\jSymbolic2\manual\api_files\.\MySymbolicMusicFiles\Bach J S - Cello Suite No 1 Prelude.mid  . . .
+        >>> 1/2 Successfully extracted: C:\Git\jSymbolic2\manual\api_files\.\MySymbolicMusicFiles\Bach J S - Cello Suite No 1 Prelude.mid.
+        >>> 2/2 Testing: C:\Git\jSymbolic2\manual\api_files\.\MySymbolicMusicFiles\Buxtehude - Herr Jesu Christ, ich weiss gar wohl.mid  . . .
+        >>> 2/2 Extracting features: C:\Git\jSymbolic2\manual\api_files\.\MySymbolicMusicFiles\Buxtehude - Herr Jesu Christ, ich weiss gar wohl.mid  . . .
+        >>> 2/2 Successfully extracted: C:\Git\jSymbolic2\manual\api_files\.\MySymbolicMusicFiles\Buxtehude - Herr Jesu Christ, ich weiss gar wohl.mid.
+
+>>> Saving extracted features as an ACE XML Feature Values file: ./ExtractedFeatureValues.xml.
+
+>>> Feature extraction complete.
+
+        >>> Features succesfully extracted and saved from 2 of 2 attempted files.
+
+>>> Saving extracted features as a Weka ARFF file: ./ExtractedFeatureValues.arff.
+
+>>> Saving extracted features as a CSV file: ./ExtractedFeatureValues.csv.
+
+>>> ALL PROCESSING COMPLETE. EXECUTION ENDED.
+
+INSTANCE ID: C:\Git\jSymbolic2\manual\api_files\.\MySymbolicMusicFiles\Bach J S - Cello Suite No 1 Prelude.mid
+Prevalence of Most Common Pitch: 0.1707
+Prevalence of Most Common Pitch Class: 0.1951
+Relative Prevalence of Top Pitches: 0.7143
+Relative Prevalence of Top Pitch Classes: 0.7656
+Interval Between Most Prevalent Pitches: 7.0
+Interval Between Most Prevalent Pitch Classes: 7.0
+Number of Common Pitches: 3.0
+Pitch Variety: 28.0
+Pitch Class Variety: 12.0
+Range: 31.0
+Most Common Pitch: 57.0
+Mean Pitch: 53.0
+Importance of Bass Register: 0.5168
+Importance of Middle Register: 0.4832
+Importance of High Register: 0.0
+Most Common Pitch Class: 9.0
+Dominant Spread: 7.0
+Strong Tonal Centres: 2.0
+Major or Minor: 0.0
+Glissando Prevalence: 0.0
+Average Range of Glissandos: 0.0
+Vibrato Prevalence: 0.0
+Microtone Prevalence: 0.0
+Most Common Melodic Interval: 2.0
+Mean Melodic Interval: 4.321
+Number of Common Melodic Intervals: 3.0
+Distance Between Most Prevalent Melodic Intervals: 1.0
+Prevalence of Most Common Melodic Interval: 0.2844
+Relative Prevalence of Most Common Melodic Intervals: 0.4892
+Amount of Arpeggiation: 0.3287
+Repeated Notes: 0.02599
+Chromatic Motion: 0.1391
+Stepwise Motion: 0.4235
+Melodic Thirds: 0.1774
+Melodic Perfect Fourths: 0.05963
+Melodic Tritones: 0.07645
+Melodic Perfect Fifths: 0.05046
+Melodic Sixths: 0.09633
+Melodic Sevenths: 0.05505
+Melodic Octaves: 0.009174
+Melodic Large Intervals: 0.02599
+Minor Major Melodic Third Ratio: 1.974
+Melodic Embellishments: 0.0
+Direction of Melodic Motion: 0.4835
+Average Length of Melodic Arcs: 1.561
+Average Interval Spanned by Melodic Arcs: 6.887
+Melodic Pitch Variety: 4.663
+Average Number of Simultaneous Pitch Classes: 1.018
+Variability of Number of Simultaneous Pitch Classes: 0.1324
+Average Number of Simultaneous Pitches: 1.03
+Variability of Number of Simultaneous Pitches: 0.2295
+Most Common Vertical Interval: 8.0
+Second Most Common Vertical Interval: 0.0
+Distance Between Two Most Common Vertical Intervals: 8.0
+Prevalence of Most Common Vertical Interval: 0.4286
+Prevalence of Second Most Common Vertical Interval: 0.2857
+Prevalence Ratio of Two Most Common Vertical Intervals: 0.6667
+Vertical Unisons: 0.0
+Vertical Minor Seconds: 0.0
+Vertical Thirds: 0.2857
+Vertical Tritones: 0.0
+Vertical Perfect Fourths: 0.0
+Vertical Perfect Fifths: 0.0
+Vertical Sixths: 0.4286
+Vertical Sevenths: 0.0
+Vertical Octaves: 0.2857
+Perfect Vertical Intervals: 0.2857
+Vertical Dissonance Ratio: 0.0
+Vertical Minor Third Prevalence: 0.0
+Vertical Major Third Prevalence: 0.0119
+Chord Duration: 0.1983
+Partial Chords: 1.0
+Standard Triads: 0.0
+Diminished and Augmented Triads: 0.0
+Dominant Seventh Chords: 0.0
+Seventh Chords: 0.0
+Non-Standard Chords: 0.0
+Complex Chords: 0.0
+Minor Major Triad Ratio: 0.0
+Strongest Rhythmic Pulse: 80.0
+Second Strongest Rhythmic Pulse: 160.0
+Harmonicity of Two Strongest Rhythmic Pulses: 2.0
+Strength of Strongest Rhythmic Pulse: 0.1432
+Strength of Second Strongest Rhythmic Pulse: 0.1432
+Strength Ratio of Two Strongest Rhythmic Pulses: 1.0
+Combined Strength of Two Strongest Rhythmic Pulses: 0.2864
+Number of Strong Rhythmic Pulses: 7.0
+Number of Moderate Rhythmic Pulses: 7.0
+Number of Relatively Strong Rhythmic Pulses: 7.0
+Rhythmic Looseness: 0.0
+Polyrhythms: 0.4286
+Rhythmic Variability: 0.02922
+Note Density: 5.206
+Note Density Variability: 1.786
+Average Note Duration: 0.1978
+Variability of Note Durations: 0.1402
+Maximum Note Duration: 2.25
+Minimum Note Duration: 0.1875
+Amount of Staccato: 0.0
+Average Time Between Attacks: 0.1884
+Variability of Time Between Attacks: 0.0274
+Average Time Between Attacks for Each Voice: 0.1884
+Average Variability of Time Between Attacks for Each Voice: 0.0274
+Complete Rests: 0.0
+Longest Complete Rest: 126.0
+Average Rest Fraction Per Voice: 0.0
+Variability Across Voices of Total Rests Per Voice: 0.0
+Initial Tempo: 80.0
+Compound Or Simple Meter: 0.0
+Triple Meter: 0.0
+Quintuple Meter: 0.0
+Metrical Diversity: 0.0
+Duration: 126.0
+Variability of Note Prevalence of Pitched Instruments: 0.0
+Variability of Note Prevalence of Unpitched Instruments: 0.0
+Number of Pitched Instruments: 1.0
+Number of Unpitched Instruments: 0.0
+Percussion Instrument Prevalence: 0.0
+String Keyboard Prevalence: 0.0
+Acoustic Guitar Prevalence: 0.0
+Electric Guitar Prevalence: 0.0
+Violin Prevalence: 0.0
+Saxophone Prevalence: 0.0
+Brass Prevalence: 0.0
+Woodwinds Prevalence: 0.0
+Orchestral Strings Prevalence: 1.0
+String Ensemble Prevalence: 0.0
+Electric Instrument Prevalence: 0.0
+Maximum Number of Independent Voices: 1.0
+Average Number of Independent Voices: 1.0
+Variability of Number of Independent Voices: 0.0
+Voice Equality - Number of Notes: 0.0
+Voice Equality - Note Duration: 0.0
+Voice Equality - Dynamics: 0.0
+Voice Equality - Melodic Leaps: 0.0
+Voice Equality - Range: 0.0
+Importance of Loudest Voice: 0.0
+Relative Range of Loudest Voice: 1.0
+Relative Range Isolation of Loudest Voice: 0.0
+Relative Range of Highest Line: 1.0
+Relative Note Density of Highest Line: 0.08079
+Relative Note Durations of Lowest Line: 1.0
+Relative Size of Melodic Intervals in Lowest Line: 1.0
+Voice Overlap: 0.0
+Similar Motion: 0.0
+Voice Separation: 0.0
+Variability of Voice Separation: 0.0
+Dynamic Range: 0.0
+Variation of Dynamics: 0.0
+Variation of Dynamics In Each Voice: 0.0
+Average Note to Note Change in Dynamics: 0.0
+
+INSTANCE ID: C:\Git\jSymbolic2\manual\api_files\.\MySymbolicMusicFiles\Buxtehude - Herr Jesu Christ, ich weiss gar wohl.mid
+Prevalence of Most Common Pitch: 0.08408
+Prevalence of Most Common Pitch Class: 0.1521
+Relative Prevalence of Top Pitches: 0.9362
+Relative Prevalence of Top Pitch Classes: 1.0
+Interval Between Most Prevalent Pitches: 2.0
+Interval Between Most Prevalent Pitch Classes: 2.0
+Number of Common Pitches: 0.0
+Pitch Variety: 35.0
+Pitch Class Variety: 11.0
+Range: 41.0
+Most Common Pitch: 64.0
+Mean Pitch: 61.41
+Importance of Bass Register: 0.1807
+Importance of Middle Register: 0.7639
+Importance of High Register: 0.05546
+Most Common Pitch Class: 2.0
+Dominant Spread: 6.0
+Strong Tonal Centres: 3.0
+Major or Minor: 0.0
+Glissando Prevalence: 0.007156
+Average Range of Glissandos: 0.0
+Vibrato Prevalence: 0.0
+Microtone Prevalence: 0.007156
+Most Common Melodic Interval: 2.0
+Mean Melodic Interval: 2.049
+Number of Common Melodic Intervals: 2.0
+Distance Between Most Prevalent Melodic Intervals: 1.0
+Prevalence of Most Common Melodic Interval: 0.4216
+Relative Prevalence of Most Common Melodic Intervals: 0.7863
+Amount of Arpeggiation: 0.191
+Repeated Notes: 0.08468
+Chromatic Motion: 0.3315
+Stepwise Motion: 0.7532
+Melodic Thirds: 0.07027
+Melodic Perfect Fourths: 0.04505
+Melodic Tritones: 0.001802
+Melodic Perfect Fifths: 0.02162
+Melodic Sixths: 0.009009
+Melodic Sevenths: 0.0
+Melodic Octaves: 0.01441
+Melodic Large Intervals: 0.0
+Minor Major Melodic Third Ratio: 1.786
+Melodic Embellishments: 0.0
+Direction of Melodic Motion: 0.4626
+Average Length of Melodic Arcs: 2.032
+Average Interval Spanned by Melodic Arcs: 4.496
+Melodic Pitch Variety: 4.909
+Average Number of Simultaneous Pitch Classes: 2.893
+Variability of Number of Simultaneous Pitch Classes: 0.7135
+Average Number of Simultaneous Pitches: 3.426
+Variability of Number of Simultaneous Pitches: 0.7905
+Most Common Vertical Interval: 3.0
+Second Most Common Vertical Interval: 7.0
+Distance Between Two Most Common Vertical Intervals: 4.0
+Prevalence of Most Common Vertical Interval: 0.1816
+Prevalence of Second Most Common Vertical Interval: 0.1519
+Prevalence Ratio of Two Most Common Vertical Intervals: 0.8364
+Vertical Unisons: 6.737E-4
+Vertical Minor Seconds: 0.004582
+Vertical Thirds: 0.3243
+Vertical Tritones: 0.03542
+Vertical Perfect Fourths: 0.105
+Vertical Perfect Fifths: 0.1519
+Vertical Sixths: 0.171
+Vertical Sevenths: 0.03462
+Vertical Octaves: 0.1209
+Perfect Vertical Intervals: 0.3784
+Vertical Dissonance Ratio: 0.1445
+Vertical Minor Third Prevalence: 0.6051
+Vertical Major Third Prevalence: 0.4824
+Chord Duration: 0.4044
+Partial Chords: 0.1816
+Standard Triads: 0.4334
+Diminished and Augmented Triads: 0.06953
+Dominant Seventh Chords: 0.0478
+Seventh Chords: 0.07394
+Non-Standard Chords: 0.311
+Complex Chords: 0.0
+Minor Major Triad Ratio: 0.8966
+Strongest Rhythmic Pulse: 68.0
+Second Strongest Rhythmic Pulse: 46.0
+Harmonicity of Two Strongest Rhythmic Pulses: 1.478
+Strength of Strongest Rhythmic Pulse: 0.3633
+Strength of Second Strongest Rhythmic Pulse: 0.2542
+Strength Ratio of Two Strongest Rhythmic Pulses: 1.429
+Combined Strength of Two Strongest Rhythmic Pulses: 0.6174
+Number of Strong Rhythmic Pulses: 3.0
+Number of Moderate Rhythmic Pulses: 5.0
+Number of Relatively Strong Rhythmic Pulses: 3.0
+Rhythmic Looseness: 0.0
+Polyrhythms: 0.6667
+Rhythmic Variability: 0.04024
+Note Density: 3.803
+Note Density Variability: 3.313
+Average Note Duration: 0.8992
+Variability of Note Durations: 1.007
+Maximum Note Duration: 10.54
+Minimum Note Duration: 0.1071
+Amount of Staccato: 0.0
+Average Time Between Attacks: 0.4275
+Variability of Time Between Attacks: 0.2021
+Average Time Between Attacks for Each Voice: 0.9808
+Average Variability of Time Between Attacks for Each Voice: 1.182
+Complete Rests: 0.01166
+Longest Complete Rest: 147.7
+Average Rest Fraction Per Voice: 0.1537
+Variability Across Voices of Total Rests Per Voice: 11.4
+Initial Tempo: 70.0
+Compound Or Simple Meter: 0.0
+Triple Meter: 0.0
+Quintuple Meter: 0.0
+Metrical Diversity: 0.0
+Duration: 147.7
+Variability of Note Prevalence of Pitched Instruments: 106.2
+Variability of Note Prevalence of Unpitched Instruments: 0.0
+Number of Pitched Instruments: 3.0
+Number of Unpitched Instruments: 0.0
+Percussion Instrument Prevalence: 0.0
+String Keyboard Prevalence: 0.0
+Acoustic Guitar Prevalence: 0.0
+Electric Guitar Prevalence: 0.0
+Violin Prevalence: 0.0
+Saxophone Prevalence: 0.0
+Brass Prevalence: 0.0
+Woodwinds Prevalence: 0.0
+Orchestral Strings Prevalence: 0.0
+String Ensemble Prevalence: 0.0
+Electric Instrument Prevalence: 0.2236
+Maximum Number of Independent Voices: 4.0
+Average Number of Independent Voices: 3.422
+Variability of Number of Independent Voices: 0.7756
+Voice Equality - Number of Notes: 18.1
+Voice Equality - Note Duration: 11.4
+Voice Equality - Dynamics: 0.0
+Voice Equality - Melodic Leaps: 0.5
+Voice Equality - Range: 6.055
+Importance of Loudest Voice: 0.0
+Relative Range of Loudest Voice: 0.5854
+Relative Range Isolation of Loudest Voice: 0.776
+Relative Range of Highest Line: 0.3171
+Relative Note Density of Highest Line: 0.5081
+Relative Note Durations of Lowest Line: 1.136
+Relative Size of Melodic Intervals in Lowest Line: 0.0
+Voice Overlap: 0.7156
+Similar Motion: 0.4597
+Voice Separation: 7.0
+Variability of Voice Separation: 1.732
+Dynamic Range: 0.0
+Variation of Dynamics: 0.0
+Variation of Dynamics In Each Voice: 0.0
+Average Note to Note Change in Dynamics: 0.0
+
+
+C:\Git\jSymbolic2\manual\api_files>

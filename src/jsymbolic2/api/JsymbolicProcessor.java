@@ -3,10 +3,9 @@ package jsymbolic2.api;
 import java.io.File;
 import java.io.PrintStream;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import mckay.utilities.staticlibraries.FileMethods;
+import ace.datatypes.DataBoard;
+import ace.datatypes.DataSet;
 import jsymbolic2.configuration.ConfigFileHeaderEnum;
 import jsymbolic2.configuration.ConfigurationFileData;
 import jsymbolic2.configuration.txtimplementation.ConfigurationFileValidatorTxtImpl;
@@ -16,7 +15,7 @@ import jsymbolic2.processing.*;
 /**
  * This class provides an API for programmatic access to jSymbolic's functionality. The constructor allows the
  * programmer to specify feature extraction settings, after which the methods of this class can be called to
- * extract features. Extracted feature values and associated metadata are saved to disk, and may also be
+ * extract features. Extracted feature values and associated metadata are saved to files, and may also be
  * returned in the form of a JsymbolicData object, depending on the particular method called.
  *
  * @author Tristano Tenaglia and Cory McKay
@@ -292,7 +291,7 @@ public class JsymbolicProcessor
 	
 	/**
 	 * Extracts and saves features from the specified path_of_file_or_folder_to_parse. Carries out these
-	 * operations using the settings with which this JsymbolicProcessor object instantiated. If
+	 * operations using the settings with which this JsymbolicProcessor object was instantiated. If
 	 * path_of_file_or_folder_to_parse refers to a folder rather than a file, then all qualifying files (i.e.
 	 * MIDI or MEI) in it have their features extracted. Provides status updates as processing continues. Any
 	 * errors occurring during processing are reported on error_print_stream, and are also collected for
@@ -410,120 +409,85 @@ public class JsymbolicProcessor
 																				 error_print_stream,
 		                                                                         false );
 		else return null;
-	}	
+	}
 	
 	
 	/**
-	 * Extract features from a specified input file.
+	 * Parse saved extracted feature values and associated metadata (e.g. feature definitions) and return them
+	 * in the form of an ace.datatypes.DataBoard object. Note that this method should only be called after
+	 * features have been successfully extracted and saved as an ACE XML feature values file at the
+	 * feature_values_save_path specified when the constructor of this object was called. Such a feature
+	 * extraction would typically have been performed using one of this object's extractAndSaveFeatures
+	 * methods. Note that problems encountered are written to error_print_stream and also result in a thrown
+	 * exception.
 	 *
-	 * @param	input_file	The symbolic music file to extract features from.
-	 * @param	error_log	An empty list. Will be populated during processing with an entry for each error
-	 *						that may occur during processing.
-	 * @return				The extracted feature values and related metadata.
-	 * @throws Exception	An informative exception is thrown if invalid arguments are provided, or if an
-	 *						error occurs during processing.
-	 */
-	public JsymbolicData extractReturnAndSaveFeaturesFromFile( File input_file,
-	                                                           List<String> error_log)
+	 * @return				An ace.datatypes.DataBoard object holding the extracted feature values as well
+	 *						as associated feature definitions (which are parsed from the ACE XML feature
+	 *						definitions file saved at the path specified by this object's
+	 *						feature_definitions_save_path field). See the ACE project's documentation for more
+	 *						details.
+	 * @throws Exception	An informative exception is thrown if a valid ACE XML file holding extracted 
+	 *						feature values cannot be found at the path specified by this object's
+	 *						feature_values_save_path field.
+	 */	
+	public DataBoard getCompleteExtractedFeatureInformation()
 		throws Exception
 	{
-		if (input_file == null)
-			throw new Exception("Cannot extract features from null file.");
-		if (input_file.exists())
+		// Verify that a file exists at feature_values_save_path. Throw an exception if it does not.
+		if (feature_values_save_path == null)
 		{
-			MIDIFeatureProcessor processor = buildNewProcessor();
-			JsymbolicData extracted_data = processor.extractAndReturnFeatures(input_file, error_log, error_print_stream);
-			createFileConversions(extracted_data);
-			
-			//Print out all errors to console, they will also be returned inherently by the error log
-			error_print_stream.println(Arrays.toString(error_log.toArray()));
-			
-			return extracted_data;
+			String error_message = "No save path for extracted feature valuse has been specified, so cannot access saved extracted feature values.";
+			UserFeedbackGenerator.printErrorMessage(error_print_stream, error_message);
+			throw new Exception(error_message);
 		}
-		else throw new Exception(" Input file " + input_file + "  does not exist");
+		try 
+		{
+			mckay.utilities.staticlibraries.FileMethods.validateFile(new File(feature_values_save_path), true, false);
+		}
+		catch (Exception e)
+		{
+			String error_message = "Cannot access the ACE XML file containing extracted features: " + feature_values_save_path + ". Perhaps features have not been extracted yet?";
+			UserFeedbackGenerator.printErrorMessage(error_print_stream, error_message);
+			throw new Exception(error_message);
+		}
+		
+		// Parse the ACE XML feature values and feature definitions file.
+		String[] feature_values_paths = {feature_values_save_path};
+		DataBoard feature_values_and_definitions = new DataBoard( null,
+		                                                          feature_definitions_save_path,
+		                                                          feature_values_paths,
+		                                                          null );
+		
+		// Return the results
+		return feature_values_and_definitions;
 	}
-
-	
-	/**
-	 * Obtain a jSymbolic data object given a directory of music files. This will also check subdirectories
-	 * all with valid file extension. Currently, the valid file extensions are .mei and .midi.
-	 *
-	 * @param directory The directory to obtain the files from.
-	 * @param errorLog The error log to see if any files are invalid. This will be printed out to console
-	 * after processing and any invalid files will be outputted.
-	 * @return A Map with a File as a key and jSymbolicData as a value. They specific File keys can be
-	 * obtained using the keySet() function of the Map object. This is recommended as then the appropriate
-	 * jSymbolicData value can be obtained to get the corresponding desired data.
-	 * @throws Exception Thrown if the directory is not valid.
-	 */
-	public Map<File, JsymbolicData> extractAndReturnSavedFeaturesFromDirectory(File directory, List<String> errorLog) throws Exception
-	{
-		if (directory == null)
-		{
-			throw new Exception("The passed in directory to jSymbolicProcessor is null.");
-		}
-		if (!directory.isDirectory())
-		{
-			throw new Exception(directory.getName() + " is not an existing directory.");
-		}
-
-		Map<File, JsymbolicData> featureMap = new HashMap<>();
-		File[] allFile = FileMethods.getAllFilesInDirectory(directory, true, new MusicFileFilter(), null);
-		for (File file : allFile)
-		{
-			MIDIFeatureProcessor processor = buildNewProcessor();
-			try
-			{
-				JsymbolicData featureState = processor.extractAndReturnFeatures(file, errorLog, error_print_stream);
-				featureMap.put(file, featureState);
-				//Create file conversion only if no exception is thrown
-				createFileConversions(featureState);
-			} catch (Exception e)
-			{
-				errorLog.add("Error found in file : " + file.getName() + ". Error Message : " + e.getMessage() + ".");
-			}
-		}
-		//Print out all errors to console, they will also be returned inherently by the error log
-		status_print_stream.println(Arrays.toString(errorLog.toArray()));
-		return featureMap;
-	}
-	
-	
-	/* PRIVATE METHODS **************************************************************************************/
 	
 	
 	/**
-	 * This is necessary as each time new data is obtained a new processor must be made to avoid IOExceptions.
-	 *
-	 * @return A new Midi Feature Processor with the original data passed into the constructor.
-	 * @throws Exception Thrown when the MIDIFeatureProcessor is not well formed.
+	 * Parse saved extracted feature values and return them in the form of an array of ace.datatypes.DataSet
+	 * objects. Note that this method should only be called after features have been successfully extracted
+	 * and saved as an ACE XML feature values file at the feature_values_save_path specified when the
+	 * constructor of this object was called. Such a feature extraction would typically have been performed
+	 * using one of this object's extractAndSaveFeatures methods. Note that problems encountered are written
+	 * to error_print_stream and also result in a thrown exception.
+	 * 
+	 * @return				An array of ace.datatypes.DataSet objects holding the extracted feature values.		
+	 *						Each DataSet object corresponds to a different piece of music from which features
+	 *						were extracted. If windowed extraction was performed, then each DataSet object in
+	 *						the returned array will also hold its own array of DataSet objects, one for each
+	 *						extracted window. Feature values are contained in the feature_values field of
+	 *						each DataSet object (both single and multi-dimensional features), feature names
+	 *						are contained in the feature_names field, and an identifier for each instance
+	 *						is stored in the identifier field. See the ACE project's documentation for more
+	 *						details.
+	 * @throws Exception	An informative exception is thrown if a valid ACE XML file holding extracted 
+	 *						feature values cannot be found at the path specified by this object's
+	 *						feature_values_save_path field.
 	 */
-	private MIDIFeatureProcessor buildNewProcessor() throws Exception
+	public DataSet[] getExtractedFeatureValues()
+		throws Exception
 	{
-		return new MIDIFeatureProcessor(analysis_window_size,
-				analysis_window_overlap,
-				FeatureExtractorAccess.getAllImplementedFeatureExtractors(),
-				features_to_extract,
-				save_features_for_each_window,
-				save_features_for_overall_pieces,
-				feature_values_save_path,
-				feature_definitions_save_path);
-	}
-
-	
-	/**
-	 * Convert files if it is required by the corresponding constructor input parameters.
-	 *
-	 * @param featureState The state of the feature data that may need to be changed.
-	 * @throws Exception Thrown if there are errors that occur with conversion.
-	 */
-	private void createFileConversions(JsymbolicData featureState) throws Exception
-	{
-		AceXmlConverter.AceConversionPaths conversionPaths
-				= AceXmlConverter.saveAsArffOrCsvFiles(feature_values_save_path, feature_definitions_save_path, save_arff_file, save_csv_file, status_print_stream);
-		File arffFile = new File(conversionPaths.getArffFilePath());
-		File csvFile = new File(conversionPaths.getCsvFilePath());
-		featureState.setSavedWekaArffFile(arffFile);
-		featureState.setSavedCsvFile(csvFile);
-	}
+		DataBoard feature_values_and_definitions = getCompleteExtractedFeatureInformation();
+		return feature_values_and_definitions.getFeatureVectors();
+	}	
 }

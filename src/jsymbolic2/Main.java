@@ -23,7 +23,7 @@ public class Main
 		catch (Exception e)
 		{
 			System.err.println(e.getMessage());
-			e.printStackTrace();
+			e.printStackTrace(System.err);
 			// CommandLineUtils.printMessageAndTerminate(CommandLineUtils.getCommandLineCorrectUsage(), -1);
 		}
 	}
