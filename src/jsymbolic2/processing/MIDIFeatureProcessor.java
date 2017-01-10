@@ -510,13 +510,23 @@ public class MIDIFeatureProcessor
       * <p>This method should be called when all features have been extracted.
       *
       * @throws	Exception	Throws an exception if cannot write or close the
-      *						output streams.
+      *						output streams properly. Not thrown if stream is
+      *					    already closed.
       */
      public void finalizeFeatureValuesFile()
      throws Exception
      {
-          values_writer.writeBytes("</feature_vector_file>");
-          values_writer.close();
+          try {
+              values_writer.writeBytes("</feature_vector_file>");
+              values_writer.close();
+          }
+          catch (IOException e) {
+              //Squelch the already closed stream since its already closed
+              //since no other errors will occur
+              if(!e.getMessage().equals("Stream Closed")) {
+                  throw e;
+              }
+          }
      }
      
      

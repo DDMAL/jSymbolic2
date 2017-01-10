@@ -821,39 +821,8 @@ public class MIDIIntermediateRepresentations
 
 								// Look ahead to find the corresponding note off for this note on
 								int event_start_tick = (int) event.getTick();
-								int event_end_tick = track.size(); // when the note off occurs (default to last tick)
-								for (int i = n_event + 1; i < track.size(); i++)
-								{
-									MidiEvent end_event = track.get(i);
-									MidiMessage end_message = end_event.getMessage();
-									if (end_message instanceof ShortMessage)
-									{
-										ShortMessage end_short_message = (ShortMessage) end_message;
-										if (end_short_message.getChannel() == short_message.getChannel()) // must be on same channel
-										{
-											if (end_short_message.getCommand() == 0x80) // note off
-											{
-												if (end_short_message.getData1() == short_message.getData1()) // same pitch
-												{
-													event_end_tick = (int) end_event.getTick();
-													i = track.size() + 1; // exit loop
-												}
-											}
-											if (end_short_message.getCommand() == 0x90) // note on (with vel 0 is equiv to note off)
-											{
-												if (end_short_message.getData2() == 0) // velocity 0
-												{
-													if (end_short_message.getData1() == short_message.getData1()) // same pitch
-													{
-														event_end_tick = (int) end_event.getTick();
-														i = track.size() + 1; // exit loop
-													}
-												}
-											}
-										}
-									}
-								}
-
+								// when the note off occurs (default to last tick)
+								int event_end_tick = findCorrespondingNoteOffEndTick(n_event, track, short_message, sequence);
 								// Fill in pitched_instrumentation_tick_map for all the ticks corresponding to this note
 								for (int i = event_start_tick; i < event_end_tick; i++)
 									pitched_instrumentation_tick_map[i][current_patch_numbers[short_message.getChannel()]] = true;
@@ -1090,39 +1059,8 @@ public class MIDIIntermediateRepresentations
 						{
 							// Look ahead to find the corresponding note off for this note on
 							int event_start_tick = (int) event.getTick();
-							int event_end_tick = track.size(); // when the note off occurs (default to last tick)
-							for (int i = n_event + 1; i < track.size(); i++)
-							{
-								MidiEvent end_event = track.get(i);
-								MidiMessage end_message = end_event.getMessage();
-								if (end_message instanceof ShortMessage)
-								{
-									ShortMessage end_short_message = (ShortMessage) end_message;
-									if (end_short_message.getChannel() == short_message.getChannel()) // must be on same channel
-									{
-										if (end_short_message.getCommand() == 0x80) // note off
-										{
-											if (end_short_message.getData1() == short_message.getData1()) // same pitch
-											{
-												event_end_tick = (int) end_event.getTick();
-												i = track.size() + 1; // exit loop
-											}
-										}
-										if (end_short_message.getCommand() == 0x90) // note on with velocity 0 is equivalent to note off
-										{
-											if (end_short_message.getData2() == 0) // velocity 0
-											{
-												if (end_short_message.getData1() == short_message.getData1()) // same pitch
-												{
-													event_end_tick = (int) end_event.getTick();
-													i = track.size() + 1; // exit loop
-												}
-											}
-										}
-									}
-								}
-							}
-
+							// when the note off occurs (default to last tick)
+							int event_end_tick = findCorrespondingNoteOffEndTick(n_event,track,short_message,sequence);
 							// Calculate duration of note
 							double duration = 0;
 							for (int i = event_start_tick; i < event_end_tick; i++)
@@ -1502,7 +1440,7 @@ public class MIDIIntermediateRepresentations
 							previous_pitch[on_channel] = on_pitch;
 							
 							// Look ahead to find the Note Off corresponding to this Note On
-							int end_tick = this_track.size(); // When the Note Off occurs, defaulted to the last tick
+							int end_tick = (int) sequence.getTickLength(); // When the Note Off occurs, defaulted to the last tick
 							for (int i = event_i + 1; i < this_track.size(); i++)
 							{
 								MidiEvent end_event = this_track.get(i);
@@ -1516,7 +1454,7 @@ public class MIDIIntermediateRepresentations
 											if (end_message.getData1() == on_pitch) // Pitch must match
 											{
 												end_tick = (int) end_event.getTick();
-												i = this_track.size() + 1; // Exit loop
+												break;
 											}
 										}
 										if (end_message.getCommand() == 0x90) // Note On (with velocity 0 is equivalent to Note Off)
@@ -1526,7 +1464,7 @@ public class MIDIIntermediateRepresentations
 												if (end_message.getData1() == on_pitch) //Pitch must match
 												{
 													end_tick = (int) end_event.getTick();
-													i = this_track.size() + 1; // Exit loop
+													break;
 												}
 											}
 										}
@@ -1891,5 +1829,52 @@ public class MIDIIntermediateRepresentations
 		for (int i = lag; i < data.length; i++)
 			result += (double) (data[i] * data[i - lag]);
 		return result / (double) data.length; // divide by N
+	}
+
+	/**
+	 * Find the note off end tick for the corresponding note on (n_event)
+	 * start tick. This function is used for convenience to erase duplicate code.
+	 * @param n_event Note on start event tick.
+	 * @param track Current track that notes are on.
+	 * @param short_message Short message associated to note on event.
+	 * @param sequence Current sequence being played.
+	 * @return Note off event tick of corresponding note on. If the note off never occurs,
+	 *         then default to last tick in whole sequence is the note off event tick.
+	 */
+	private static int findCorrespondingNoteOffEndTick(int n_event,
+													   Track track,
+													   ShortMessage short_message,
+													   Sequence sequence)
+	{
+		for (int i = n_event + 1; i < track.size(); i++)
+		{
+			MidiEvent end_event = track.get(i);
+			MidiMessage end_message = end_event.getMessage();
+			if (end_message instanceof ShortMessage)
+			{
+				ShortMessage end_short_message = (ShortMessage) end_message;
+				if (end_short_message.getChannel() == short_message.getChannel()) // must be on same channel
+				{
+					if (end_short_message.getCommand() == 0x80) // note off
+					{
+						if (end_short_message.getData1() == short_message.getData1()) // same pitch
+						{
+							return (int) end_event.getTick();
+						}
+					}
+					if (end_short_message.getCommand() == 0x90) // note on (with vel 0 is equiv to note off)
+					{
+						if (end_short_message.getData2() == 0) // velocity 0
+						{
+							if (end_short_message.getData1() == short_message.getData1()) // same pitch
+							{
+								return (int) end_event.getTick();
+							}
+						}
+					}
+				}
+			}
+		}
+		return (int) sequence.getTickLength();
 	}
 }
