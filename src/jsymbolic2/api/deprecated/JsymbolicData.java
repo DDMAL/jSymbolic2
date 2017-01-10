@@ -1,4 +1,4 @@
-package jsymbolic2.api;
+package jsymbolic2.api.deprecated;
 
 import java.io.File;
 import java.io.PrintStream;
@@ -8,7 +8,10 @@ import jsymbolic2.processing.UserFeedbackGenerator;
 
 /**
  * An object holding information associated with the results of a feature extraction job, typically performed
- * through the jSymbolic API.
+ * through the JsymbolicProcessorDeprecated API. Although this code should still work, it is not associated
+ * with the newer unified FeatureExtractionJobProcessor and UserFeedbackGenerator infrastructure, and has
+ * therefore been deprecated. Also, this code is no longer maintained, so it is possible that errors might
+ * occur.
  *
  * @author Tristano Tenaglia and Cory McKay
  */
@@ -60,9 +63,9 @@ public class JsymbolicData
 	
 	/**
 	 * Instantiate an object of this class holding the results of a jSymbolic feature extraction, typically
-	 * performed through the jSymbolic API. Parses and stores the contents of  saved_ace_xml_feature_values_file
-	 * and saved_ace_xml_feature_definitions_file (writes an error message to error_print_stream and throws
-	 * an Exception if this does not work).
+	 * performed through the jSymbolic API. Parses and stores the contents of
+	 * saved_ace_xml_feature_values_file and saved_ace_xml_feature_definitions_file (writes an error message
+	 * to error_print_stream and throws an Exception if this does not work).
 	 *
 	 * @param	mei_specific_data						A jMei2Midi MeiSpecificStorage object holding 
 	 *													information extracted from MEI files processed (if 

@@ -1,5 +1,7 @@
 package jsymbolic2.api;
 
+import jsymbolic2.api.deprecated.JsymbolicData;
+import jsymbolic2.api.deprecated.JsymbolicProcessorDeprecated;
 import ace.datatypes.DataSet;
 import org.junit.After;
 import org.junit.Before;
@@ -24,18 +26,18 @@ public class jSymbolicProcessorTest {
     public ExpectedException exception = ExpectedException.none();
 
     //Try testing with both raw data processor and configuration file processor
-    private JsymbolicProcessor processor;
-    private JsymbolicProcessor processorConfig;
-    private JsymbolicProcessor processorConvert;
+    private JsymbolicProcessorDeprecated processor;
+    private JsymbolicProcessorDeprecated processorConfig;
+    private JsymbolicProcessorDeprecated processorConvert;
     private String valuesPath = "./test/jsymbolic2/api/resources/feature_values.xml";
     private String definitionsPath = "./test/jsymbolic2/api/resources/feature_definitions.xml";
 
     @Before
     public void setUp() throws Exception {
         List<String> featureNames = Arrays.asList("Beat Histogram", "Acoustic Guitar Prevalence", "Duration");
-        processor = new JsymbolicProcessor(valuesPath, definitionsPath, false, false, featureNames, false, true, 10, 0.1, System.out, System.err);
-        processorConfig = new JsymbolicProcessor("./test/jsymbolic2/api/resources/sampleConfiguration.txt", System.out, System.err);
-        processorConvert = new JsymbolicProcessor("./test/jsymbolic2/api/resources/sampleConfigConvert.txt", System.out, System.err);
+        processor = new JsymbolicProcessorDeprecated(valuesPath, definitionsPath, false, false, featureNames, false, true, 10, 0.1, System.out, System.err);
+        processorConfig = new JsymbolicProcessorDeprecated("./test/jsymbolic2/api/resources/sampleConfiguration.txt", System.out, System.err);
+        processorConvert = new JsymbolicProcessorDeprecated("./test/jsymbolic2/api/resources/sampleConfigConvert.txt", System.out, System.err);
     }
 
     @After

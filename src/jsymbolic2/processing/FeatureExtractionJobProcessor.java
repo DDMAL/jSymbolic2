@@ -539,7 +539,7 @@ public final class FeatureExtractionJobProcessor
 			                       "\n\tDetailed error message: " + e + ": " + e.getMessage();
 			UserFeedbackGenerator.printErrorMessage(error_print_stream, error_message);
 			error_log.add(error_message);
-			//e.printStackTrace();
+			//e.printStackTrace(error_print_stream);
 		}
 	}
 

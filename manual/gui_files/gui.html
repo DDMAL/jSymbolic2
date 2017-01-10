@@ -16,17 +16,21 @@
 
 <p><strong>RUNNING THE JSYMBOLIC GUI</strong></p>
 
-<p>A file named "jSymbolic.jar" is included in the jSybmolic distribution. jSymbolic can be run simply by double clicking on this file.</p>
+<p>A file named "jSymbolic.jar" is included in the jSybmolic distribution. jSymbolic can be run simply by double clicking on this file. However, running jSymbolic simply by double clicking its icon could result in running out of memory in the case of particularly large and complex files (see the section of the manual on the <a href="../commandline_files/commandline.html">command line interface</a>), so in such cases it may be safer to run jSymbolic from the command line, as shown below.</p>
 
-<p>The jSybmolic GUI can alternatively be run or by typing the following at a terminal prompt (after navigating to the directory holding the jSymbolic.jar file):</p>
+<p>The jSybmolic GUI can alternatively be run  by typing the following at a terminal prompt (after navigating to the directory holding the jSymbolic.jar file):</p>
 
-<p><blockquote><pre>java -jar jSymbolic.jar</pre></blockquote></p>
+<p><blockquote>
+  <pre>java -Xmx3072m -jar jSymbolic.jar</pre>
+</blockquote><p></p>
 
 <p>Running jSymbolic like this (or double clicking on the jSymbolic.jar file) will cause the GUI to be loaded set up with default settings, as defined by a <a href="../configuration_files/configuration.html">configuration settings file</a> in the same folder as the jSymbolic.jar file, and with the file name <i>jSymbolicDefaultConfigs.txt</i>. If no such file exists, or if it is not a valid jSymbolic configuration settings file, then the GUI is loaded with hard-coded default settings.</p>
 
 <p>Users wishing to pre-load the GUI with alternative settings stored in any given <a href="../configuration_files/configuration.html">configuration settings file</a> they wish may enter the following at a terminal prompt (again, after navigating to the directory holding the jSymbolic.jar file:</p>
 
-<p><blockquote><pre>java -jar jSymbolic.jar -configgui &ltConfigurationFilePath&gt</pre></blockquote></p>
+<p><blockquote>
+  <pre>java -Xmx3072m -jar jSymbolic.jar -configgui &ltConfigurationFilePath&gt</pre>
+</blockquote><p></p>
 
 <p>More information on using jSymbolic's command line interface is available <a href="../commandline_files/commandline.html">here</a>.
 
