@@ -25,8 +25,8 @@ public class ConfigurationFileDataTest {
 
         boolean[] expectedSave = new boolean[FeatureExtractorAccess.getNamesOfAllImplementedFeatures().size()];
         expectedSave = initializeArrayFalse(expectedSave);
-        expectedSave[0] = true; //Duration feature
-        expectedSave[11] = true; //Brass Fraction feature
+        expectedSave[121] = true; //Duration feature
+        expectedSave[137] = true; //Brass Fraction feature
         assertArrayEquals(expectedSave,data.getFeaturesToSaveBoolean());
     }
 

@@ -34,11 +34,12 @@ public class ConfigurationOptionsEnumTest {
     @Test
     public void checkValue() throws Exception {
         assertTrue(OptionsEnum.window_size.checkValue("5"));
-        assertFalse(OptionsEnum.window_size.checkValue("0"));
+        assertTrue(OptionsEnum.window_size.checkValue("0"));
         assertTrue(OptionsEnum.window_overlap.checkValue("0.1"));
-        assertFalse(OptionsEnum.window_overlap.checkValue("0"));
+        assertTrue(OptionsEnum.window_overlap.checkValue("0"));
         assertFalse(OptionsEnum.window_overlap.checkValue("1.1"));
         assertTrue(OptionsEnum.convert_to_arff.checkValue("false"));
+        assertFalse(OptionsEnum.window_size.checkValue("-1"));
     }
 
 }
