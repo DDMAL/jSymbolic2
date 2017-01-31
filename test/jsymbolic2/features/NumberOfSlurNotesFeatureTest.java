@@ -36,7 +36,7 @@ public class NumberOfSlurNotesFeatureTest {
         MEIFeatureExtractor slurNotesFeature = new NumberOfSlursMeiFeature();
         MIDIIntermediateRepresentations minter = new MIDIIntermediateRepresentations(sequence.getSequence());
         double[] actualSlurNotes = slurNotesFeature.extractMEIFeature(specificStorage, sequence.getSequence(), minter, null);
-        double[] expectedSlurNotes = new double[]{98};
+        double[] expectedSlurNotes = new double[]{0.1154};
         assertArrayEquals(expectedSlurNotes, actualSlurNotes, 0.001);
     }
 

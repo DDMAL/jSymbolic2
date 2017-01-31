@@ -59,9 +59,9 @@ public class VerticalOctavesFeature
 		double value;
 		if (sequence_info != null)
 		{
-			double[] wrappped_vertical_interval_histogram = other_feature_values[0];
+			double[] wrapped_vertical_interval_histogram = other_feature_values[0];
 			double[] vertical_interval_histogram = other_feature_values[1];
-			value = wrappped_vertical_interval_histogram[0] - vertical_interval_histogram[0];
+			value = wrapped_vertical_interval_histogram[0] - vertical_interval_histogram[0];
 		}
 		else value = -1.0;
 

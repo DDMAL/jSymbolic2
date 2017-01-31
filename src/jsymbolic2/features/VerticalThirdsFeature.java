@@ -60,8 +60,8 @@ public class VerticalThirdsFeature
 		double value;
 		if (sequence_info != null)
 		{
-			double[] wrappped_vertical_interval_histogram = other_feature_values[0];
-			value = wrappped_vertical_interval_histogram[3] + wrappped_vertical_interval_histogram[4];
+			double[] wrapped_vertical_interval_histogram = other_feature_values[0];
+			value = wrapped_vertical_interval_histogram[3] + wrapped_vertical_interval_histogram[4];
 		}
 		else value = -1.0;
 
