@@ -70,7 +70,7 @@ public class MelodicEmbellishmentsFeature
 			// For each channel get all the notes in the channel
 			for (int channel = 0; channel < 16; channel++)
 			{
-				if (channel == 10 - 1)  // Skip over the unpitched percussion channel
+				if (channel != 10 - 1)  // Skip over the unpitched percussion channel
 				{
 					// Prepare a list of all notes on this channel sorted by start tick
 					List<NoteInfo> all_notes_in_this_channel = sequence_info.all_notes.getNotesOnChannel(channel);

@@ -52,14 +52,18 @@ public class AcousticGuitarFractionFeatureTest {
         Sequence[] saintSaensWindows = MIDIMethods.breakSequenceIntoWindows(saintSaensSequence,
                 10, 0, saintSaens_start_ticks, saintSaens_end_ticks);
 
-        double[] expectedGuitarFractionArray = {0.9091,0.8194,0.8824,0.8169,0.8548,0.8507,0.8644,0.8545,0.8548,
-                                                0.8406,0.8676,0.8113,0.8421,0.9487};
-        for(int i = 0; i < saintSaensWindows.length; i++)  {
+        double[] expectedGuitarFractionArray = {0.9091,0.8108,0.8732,0.8108,0.8438,0.8406,0.8525,0.8421,0.8438,
+                                                0.8333,0.8571,0.8,0.8205,0.9268};
+        double[] actualGuitarFractionArray = new double[expectedGuitarFractionArray.length];
+        for(int i = 0; i < saintSaensWindows.length; i++) {
             Sequence s = saintSaensWindows[i];
             MIDIIntermediateRepresentations mirwindow = new MIDIIntermediateRepresentations(s);
             double[] actualArrayWindow = agff.extractFeature(s, mirwindow, null);
-            double actualGuitarFractionWindow = actualArrayWindow[0];
+            actualGuitarFractionArray[i] = actualArrayWindow[0];
+        }
+        for(int i = 0; i < saintSaensWindows.length; i++)  {
             double expectedGuitarFractionWindow = expectedGuitarFractionArray[i];
+            double actualGuitarFractionWindow = actualGuitarFractionArray[i];
             assertEquals(expectedGuitarFractionWindow,actualGuitarFractionWindow,deviation);
         }
     }

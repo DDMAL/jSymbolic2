@@ -37,7 +37,7 @@ public class NoteDensityVariabilityFeatureTest {
         MIDIIntermediateRepresentations inter = new MIDIIntermediateRepresentations(test_tracks);
         MIDIFeatureExtractor actual_common = new NoteDensityVariabilityFeature();
         double[] actual_chord_type = actual_common.extractFeature(test_tracks, inter, null);
-        double[] expected_chord_type = {0.5625};
+        double[] expected_chord_type = {1.06066};
         assertArrayEquals(expected_chord_type, actual_chord_type, 0.0001);
     }
 

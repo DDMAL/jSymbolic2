@@ -25,8 +25,8 @@ public class VerticalOctavesFeatureTest {
         MidiEvent e_tracks4 = MidiBuildEvent.createNoteOffEvent(2, 3, 0);
         MidiEvent e_tracks1 = MidiBuildEvent.createNoteOnEvent(8, 0, 0);
         MidiEvent e_tracks2 = MidiBuildEvent.createNoteOffEvent(8, 1, 0);
-        MidiEvent e_tracks5 = MidiBuildEvent.createNoteOnEvent(16, 0, 0);
-        MidiEvent e_tracks6 = MidiBuildEvent.createNoteOffEvent(16, 3, 0);
+        MidiEvent e_tracks5 = MidiBuildEvent.createNoteOnEvent(14, 0, 0);
+        MidiEvent e_tracks6 = MidiBuildEvent.createNoteOffEvent(14, 3, 0);
         t1_tracks.add(e_tracks3);
         t2_tracks.add(e_tracks2);
         t1_tracks.add(e_tracks4);
@@ -35,13 +35,15 @@ public class VerticalOctavesFeatureTest {
         t1_tracks.add(e_tracks6);
 
         MIDIIntermediateRepresentations inter = new MIDIIntermediateRepresentations(test_tracks);
-
+        double[] unwrapped_vertical_intervals = new VerticalIntervalHistogramFeature().extractFeature(test_tracks, inter, null);
+        double[][] other_features = new double[2][];
+        other_features[0] = unwrapped_vertical_intervals;
         MIDIFeatureExtractor actual_common = new VerticalOctavesFeature();
-        double[] vertical_intervals = new WrappedVerticalIntervalHistogramFeature().extractFeature(test_tracks, inter, null);
-        double[][] other_features = new double[1][];
+        double[] vertical_intervals = new WrappedVerticalIntervalHistogramFeature().extractFeature(test_tracks, inter, other_features);
         other_features[0] = vertical_intervals;
+        other_features[1] = unwrapped_vertical_intervals;
         double[] actual_chord_type = actual_common.extractFeature(test_tracks, inter, other_features);
-        double[] expected_chord_type = {0.2};
+        double[] expected_chord_type = {0.6};
         assertArrayEquals(expected_chord_type, actual_chord_type, 0.001);
     }
 

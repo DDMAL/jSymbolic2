@@ -47,7 +47,10 @@ public class PerfectVerticalIntervalsFeatureTest {
         t1_tracks.add(e_tracks6);
 
         MIDIIntermediateRepresentations inter = new MIDIIntermediateRepresentations(test_tracks);
-        double[] vertical_intervals = new WrappedVerticalIntervalHistogramFeature().extractFeature(test_tracks, inter, null);
+        double[] unwrapped_vertical_intervals = new VerticalIntervalHistogramFeature().extractFeature(test_tracks, inter, null);
+        double[][] vertical_interval_other_features = new double[1][];
+        vertical_interval_other_features[0] = unwrapped_vertical_intervals;
+        double[] vertical_intervals = new WrappedVerticalIntervalHistogramFeature().extractFeature(test_tracks, inter, vertical_interval_other_features);
         double[][] other_features = new double[1][];
         other_features[0] = vertical_intervals;
         MIDIFeatureExtractor actual_common = new PerfectVerticalIntervalsFeature();

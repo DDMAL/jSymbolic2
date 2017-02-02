@@ -14,7 +14,7 @@ import static org.junit.Assert.*;
 /**
  * Created by dinamix on 7/29/16.
  */
-public class FractionOfMajorVerticalIntervalsFeatureTest {
+public class VerticalMajorThirdPrevalenceFeatureTest {
     @Test
     public void extractFeature() throws Exception {
         Sequence test_tracks = new Sequence(Sequence.PPQ, 256);
@@ -35,12 +35,15 @@ public class FractionOfMajorVerticalIntervalsFeatureTest {
         t1_tracks.add(e_tracks6);
 
         MIDIIntermediateRepresentations inter = new MIDIIntermediateRepresentations(test_tracks);
-        double[] vertical_intervals = new WrappedVerticalIntervalHistogramFeature().extractFeature(test_tracks, inter, null);
+        double[] unwrapped_vertical_intervals = new VerticalIntervalHistogramFeature().extractFeature(test_tracks, inter, null);
+        double[][] vertical_interval_other_features = new double[1][];
+        vertical_interval_other_features[0] = unwrapped_vertical_intervals;
+        double[] vertical_intervals = new WrappedVerticalIntervalHistogramFeature().extractFeature(test_tracks, inter, vertical_interval_other_features);
         double[][] other_features = new double[1][];
         other_features[0] = vertical_intervals;
         MIDIFeatureExtractor actual_common = new VerticalMajorThirdPrevalenceFeature();
         double[] actual_chord_type = actual_common.extractFeature(test_tracks, inter, other_features);
-        double[] expected_chord_type = {0.4};
+        double[] expected_chord_type = {0.333};
         assertArrayEquals(expected_chord_type, actual_chord_type, 0.01);
     }
 

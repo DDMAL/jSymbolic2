@@ -37,7 +37,7 @@ public class AverageNumberOfSimultaneousPitchClassesFeatureTest {
         MIDIIntermediateRepresentations inter = new MIDIIntermediateRepresentations(test_tracks);
         MIDIFeatureExtractor actual_common = new AverageNumberOfSimultaneousPitchClassesFeature();
         double[] actual_chord_type = actual_common.extractFeature(test_tracks, inter, null);
-        double[] expected_chord_type = {1.666};
+        double[] expected_chord_type = {2.5};
         assertArrayEquals(expected_chord_type, actual_chord_type, 0.001);
     }
 

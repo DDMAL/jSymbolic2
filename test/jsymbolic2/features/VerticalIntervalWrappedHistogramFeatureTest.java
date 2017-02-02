@@ -49,7 +49,10 @@ public class VerticalIntervalWrappedHistogramFeatureTest {
 
         MIDIFeatureExtractor vertical = new WrappedVerticalIntervalHistogramFeature();
         MIDIIntermediateRepresentations actual_representation_tracks = new MIDIIntermediateRepresentations(test_tracks);
-        double[] actual_vertical = vertical.extractFeature(test_tracks, actual_representation_tracks, null);
+        double[] unwrapped_vertical_intervals = new VerticalIntervalHistogramFeature().extractFeature(test_tracks, actual_representation_tracks, null);
+        double[][] vertical_interval_other_features = new double[1][];
+        vertical_interval_other_features[0] = unwrapped_vertical_intervals;
+        double[] actual_vertical = vertical.extractFeature(test_tracks, actual_representation_tracks, vertical_interval_other_features);
 
         double[] expected_vertical = new double[12];
         expected_vertical[2] = 0.8;

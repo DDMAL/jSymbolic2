@@ -271,7 +271,8 @@ public class JsymbolicProcessorDeprecated
 			UserFeedbackGenerator.printParsingConfigFileMessage(status_print_stream, configuration_file_path);
 			List<ConfigFileHeaderEnum> config_file_headers_to_check = Arrays.asList( ConfigFileHeaderEnum.FEATURE_HEADER,
 			                                                                         ConfigFileHeaderEnum.OPTION_HEADER,
-			                                                                         ConfigFileHeaderEnum.OUTPUT_FILE_HEADER );
+			                                                                         ConfigFileHeaderEnum.OUTPUT_FILE_HEADER,
+																					 ConfigFileHeaderEnum.INPUT_FILE_HEADER);
 			config_data = new ConfigurationFileValidatorTxtImpl().parseConfigFile( configuration_file_path,
 			                                                                       config_file_headers_to_check,
 			                                                                       error_print_stream );
@@ -405,9 +406,13 @@ public class JsymbolicProcessorDeprecated
 	private void createFileConversions(JsymbolicData featureState) throws Exception
 	{
 		AceXmlConverter.AceConversionPaths conversionPaths = AceXmlConverter.saveAsArffOrCsvFiles(feature_values_save_path, feature_definitions_save_path, save_arff_file, save_csv_file, status_print_stream);
-		File arffFile = new File(conversionPaths.getArffFilePath());
-		File csvFile = new File(conversionPaths.getCsvFilePath());
-		featureState.setSavedWekaArffFile(arffFile);
-		featureState.setSavedCsvFile(csvFile);
+		if(save_arff_file) {
+			File arffFile = new File(conversionPaths.getArffFilePath());
+			featureState.setSavedWekaArffFile(arffFile);
+		}
+		if(save_csv_file) {
+			File csvFile = new File(conversionPaths.getCsvFilePath());
+			featureState.setSavedCsvFile(csvFile);
+		}
 	}
 }
