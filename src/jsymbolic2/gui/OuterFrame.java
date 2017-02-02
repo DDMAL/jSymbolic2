@@ -9,6 +9,7 @@ import javax.swing.text.DefaultCaret;
 import jsymbolic2.commandline.CommandLineSwitchEnum;
 import jsymbolic2.configuration.ConfigurationFileData;
 import jsymbolic2.configuration.txtimplementation.ConfigurationFileValidatorTxtImpl;
+import jsymbolic2.featureutils.FeatureExtractorAccess;
 import jsymbolic2.processing.UserFeedbackGenerator;
 
 /**
@@ -109,7 +110,7 @@ public class OuterFrame
 		status_text_area.setEditable(false);
 		status_text_area.setTabSize(2);
 		status_text_area.setText("");
-		JLabel status_text_panel_label = new JLabel("PROCESSING STATUS UPDATES:");
+		JLabel status_text_panel_label = new JLabel("PROCESSING INFORMATION:");
 		formatLabel(status_text_panel_label);
 		status_text_panel.add(status_text_panel_label, BorderLayout.NORTH);
 		JScrollPane status_text_area_scrollpane = new JScrollPane(status_text_area);
@@ -150,6 +151,20 @@ public class OuterFrame
 			}
 			catch (Exception e) {}
 		}
+		
+		// Print out basic welcome information for the user
+		status_print_stream.println("Welcome to jSymbolic!\n");
+        try
+        {
+            status_print_stream.println("SUMMARY INFORMATION ON FEATURES SELECTED FOR EXTRACTION AT STARTUP:");
+            status_print_stream.println(FeatureExtractorAccess.getFeatureCatalogueOverviewReport(feature_selector_panel.getFeaturesToSave()));
+        }
+        catch (Exception e)
+        {
+            status_print_stream.println("Unable to summarize this information.\n");
+        }
+		status_print_stream.println("SUMMARY INFORMATION ON ALL IMPLEMENTED FEATURES:");
+        status_print_stream.println(FeatureExtractorAccess.getFeatureCatalogueOverviewReport(null));
 		
 		// Set up the combined_text_panels
 		JPanel combined_text_panels = new JPanel(new GridLayout(1, 2, horizontal_gap, vertical_gap));

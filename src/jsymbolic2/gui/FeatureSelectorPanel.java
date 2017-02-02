@@ -1,29 +1,22 @@
-/*
- * FeatureSelectorPanel.java
- * Version 2.0
- *
- * Last modified on June 24, 2010.
- * McGill University and the University of Waikato
- */
 package jsymbolic2.gui;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import java.io.*;
-
-import ace.datatypes.FeatureDefinition;
-
+import java.io.File;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ArrayList;
-
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.table.*;
+import mckay.utilities.gui.tables.TableMethods;
+import ace.datatypes.FeatureDefinition;
 import jsymbolic2.configuration.*;
 import jsymbolic2.configuration.txtimplementation.ConfigurationFileWriterTxtImpl;
 import jsymbolic2.datatypes.RecordingInfo;
-import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.featureutils.FeatureExtractorAccess;
+import jsymbolic2.featureutils.MEIFeatureExtractor;
+import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.FeatureExtractionJobProcessor;
 import jsymbolic2.processing.FileValidator;
 
@@ -32,57 +25,52 @@ import jsymbolic2.processing.FileValidator;
  * these features. These parameters include the window length to use for analyses and the amount of overlap
  * between analysis windows. The user may also see the features that can be extracted and some details about
  * them.
- * <p>
- * The resulting feature values and the features used are saved to the specified feature_vector_file and a
- * feature_key_file respectively.
+ *
+ * <p>The resulting feature values and the features used are saved to the specified feature_vector_file and a
+ * feature_key_file respectively.</p>
+ *
+ * <p>Note that some features need other features in order to be extracted. Even if a feature is not checked 
+ * for saving, it will be extracted (but not saved) if another feature that needs it is checked for saving.
  * </p>
- * <p>
- * Note that some features need other features in order to be extracted. Even if a feature is not checked for
- * saving, it will be extracted (but not saved) if another feature that needs it is checked for saving.
- * </p>
- * <p>
- * The table allows the user to view all features which are possible to extract. The click box indicates
+ * 
+ * <p>The table allows the user to view all features which are possible to extract. The click box indicates
  * whether this feature is to be saved during feature extraction. The Dimensions indicate how many values are
  * produced for a given feature each time that it is extracted. Double clicking on a feature brings up a
- * window describing it.
- * </p>
- * <p>
- * The Do Not Use Windows checkbox allows the user to decide whether features are to be extracted for the
+ * window describing it.</p>
+ *
+ * <p>The Do Not Use Windows checkbox allows the user to decide whether features are to be extracted for the
  * recording overall or in individual windows. The Save Features For Each Window and Save For Overall
  * Recordings check boxes apply only to windowed feature extraction. The former allows features to be saved
  * for each window and the latter causes the averages and standard deviations of each feature across all
- * windows in each recording to be saved.
+ * windows in each recording to be saved.</p>
+ *
+ * <p>The Window Size indicates the duration in seconds of each window that features are to be extracted for.
  * </p>
- * <p>
- * The Window Size indicates the duration in seconds of each window that features are to be extracted for.
+ * 
+ * <p>The Window Size indicates the duration in seconds of each window that features are to be extracted for.
  * </p>
- * <p>
- * The Window Size indicates the duration in seconds of each window that features are to be extracted for.
+ * 
+ * <p>The Window Overlap indicates the fraction, from 0 to 1, of overlap between adjacent analysis windows.
  * </p>
- * <p>
- * The Window Overlap indicates the fraction, from 0 to 1, of overlap between adjacent analysis windows.
- * </p>
- * <p>
- * The Feature Values Save Path and Feature Definitions Save Path allow the user to choose what paths to save
- * extracted feature values and feature definitions respectively.
- * </p>
- * <p>
- * The Extract Features button extracts all appropriate features and from the loaded recordings, and saves the
- * results to disk.
- * <p>
- * The Save Configuration File buttons saves a configuration based on the current configuration of the
- * jSymbolic GUI.
- * </p>
+ * 
+ * <p>The Feature Values Save Path and Feature Definitions Save Path allow the user to choose what paths to 
+ * save extracted feature values and feature definitions respectively.</p>
+ * 
+ * <p>The Extract Features button extracts all appropriate features and from the loaded recordings, and saves
+ * the results to disk.<p>
+ * 
+ * <p>The Save Configuration File buttons saves a configuration based on the current configuration of the
+ * jSymbolic GUI.</p>
  *
  * @author Cory McKay and Tristano Tenaglia
  */
 public class FeatureSelectorPanel
-		extends JPanel
-		implements ActionListener
+	extends JPanel
+	implements ActionListener
 {
-
-	/* FIELDS ****************************************************************/
-
+	/* FIELDS ***********************************************************************************************/
+	
+	
 	/**
 	 * Holds a reference to the JPanel that holds objects of this class.
 	 */
@@ -95,7 +83,7 @@ public class FeatureSelectorPanel
 
 	/**
 	 * The default as to whether each feature is to be saved after feature extraction. Indices correspond to
- those of all_feature_extractors.
+	 * those of all_feature_extractors.
 	 */
 	private boolean[] feature_save_defaults;
 
@@ -145,13 +133,16 @@ public class FeatureSelectorPanel
 	 */
 	private JFileChooser save_file_chooser;
 
-	/* CONSTRUCTORS **********************************************************/
+	
+	/* CONSTRUCTOR ******************************************************************************************/
+	
+	
 	/**
 	 * Set up frame.
 	 *
-	 * @param outer_frame The GUI element that contains this object.
-	 * @param configuration_file_data The configuration file data that could be used to set up this panel
-	 * with. If it is null then the default settings are used.
+	 * @param outer_frame				The GUI element that contains this object.
+	 * @param configuration_file_data	The configuration file data that could be used to set up this panel
+	 *									with. If it is null then the default settings are used.
 	 */
 	public FeatureSelectorPanel(OuterFrame outer_frame, ConfigurationFileData configuration_file_data)
 	{
@@ -179,21 +170,93 @@ public class FeatureSelectorPanel
 
 		//Check if we need to setup with config file or not and do so
 		if (configuration_file_data != null)
-		{
 			configurationSetup(configuration_file_data);
-		} else
-		{
-			noConfigurationSetup();
-		}
+		else noConfigurationSetup();
 
 		// Cause the table to respond to double clicks
 		addTableMouseListener();
 	}
 
+	
+	/* PUBLIC METHODS ***************************************************************************************/
+	
+	
 	/**
-	 * Setup the GUI based on the configuration_file_data.
+	 * Helper method to get current features that need to be saved.
 	 *
-	 * @param configuration_file_data The configuration file data that will be setup on the GUI.
+	 * @return				Features that need to be saved in the boolean array where the array numbers 
+	 *						correspond to the appropriate feature name.
+	 * @throws Exception	An informative exception is thrown if no features have been selected.
+	 */
+	public boolean[] getFeaturesToSave()
+		throws Exception
+	{
+		boolean[] features_to_save = new boolean[all_feature_extractors.length];
+		for (int i = 0; i < features_to_save.length; i++)
+			features_to_save[i] = ((Boolean) features_table_model.getValueAt(i, 0));
+		return features_to_save;
+	}
+
+
+	/**
+	 * Returns an array of all the available feature extractors. An empty LinkedList may also be provided
+	 * specifying whether or not each feature is to be extracted by default.
+	 *
+	 * @param defaults	An <b>empty</b> Linked list that will be filled with whether or not each feature is to
+	 *					be extracted by default. Entries will be in the same order as the features in the
+	 *					returned array. If this is not needed, then null can be specified for this argument.
+	 * @return			An array of all the available features.
+	 */
+	public static MIDIFeatureExtractor[] getAllAvailableFeatureExtractors(LinkedList<Boolean> defaults)
+	{
+		if (defaults == null)
+			defaults = new LinkedList<>();
+		boolean[] defaultArray = FeatureExtractorAccess.getDefaultFeaturesToSave();
+		for (boolean b : defaultArray)
+			defaults.add(b);
+		return FeatureExtractorAccess.getAllImplementedFeatureExtractors();
+	}
+
+	
+	/**
+	 * Calls the appropriate methods when the buttons are pressed.
+	 *
+	 * @param event	The event that is to be reacted to.
+	 */
+	@Override
+	public void actionPerformed(ActionEvent event)
+	{
+		// React to the values_save_path_button
+		if (event.getSource().equals(values_save_path_button))
+			browseFeatureValuesSavePath();
+
+		// React to the definitions_save_path_button
+		else
+		{
+			if (event.getSource().equals(definitions_save_path_button))
+				browseFeatureDefinitionsSavePath();
+			
+			// React to the extract_features_button
+			else
+			{
+				if (event.getSource().equals(extract_features_button))
+					extractAndSaveFeatures();
+				
+				// React to the save_configuration_file_button button
+				else if (event.getSource().equals(save_configuration_file_button))
+					saveConfigurationFile();
+			}
+		}
+	}
+
+	
+	/* PRIVATE METHODS **************************************************************************************/
+	
+	
+	/**
+	 * Set up the GUI based on the configuration_file_data.
+	 *
+	 * @param configuration_file_data	The configuration file data that will be setup on the GUI.
 	 */
 	private void configurationSetup(ConfigurationFileData configuration_file_data)
 	{
@@ -260,8 +323,9 @@ public class FeatureSelectorPanel
 		add(control_panel, BorderLayout.SOUTH);
 	}
 
+	
 	/**
-	 * Setup the default GUI.
+	 * Set up the default GUI.
 	 */
 	private void noConfigurationSetup()
 	{
@@ -315,43 +379,6 @@ public class FeatureSelectorPanel
 	}
 
 
-	/* PUBLIC METHODS ********************************************************/
-	/**
-	 * Calls the appropriate methods when the buttons are pressed.
-	 *
-	 * @param event The event that is to be reacted to.
-	 */
-	public void actionPerformed(ActionEvent event)
-	{
-		// React to the values_save_path_button
-		if (event.getSource().equals(values_save_path_button))
-		{
-			browseFeatureValuesSavePath();
-		} // React to the definitions_save_path_button
-		else
-		{
-			if (event.getSource().equals(definitions_save_path_button))
-			{
-				browseFeatureDefinitionsSavePath();
-			} // React to the extract_features_button
-			else
-			{
-				if (event.getSource().equals(extract_features_button))
-				{
-					extractAndSaveFeatures();
-				} // React to the save_configuration_file_button button
-				else
-				{
-					if (event.getSource().equals(save_configuration_file_button))
-					{
-						saveConfigurationFile();
-					}
-				}
-			}
-		}
-	}
-
-	/* PRIVATE METHODS *******************************************************/
 	/**
 	 * Allow the user to choose a save path for the feature_vector_file XML file where feature values are to
 	 * be saved. The selected path is entered in the values_save_path_text_field.
@@ -360,11 +387,10 @@ public class FeatureSelectorPanel
 	{
 		String path = chooseSavePath();
 		if (path != null)
-		{
 			values_save_path_text_field.setText(path);
-		}
 	}
 
+	
 	/**
 	 * Allow the user to choose a save path for the feature_key_file XML file where feature values are to be
 	 * saved. The selected path is entered in the definitions_save_path_text_field.
@@ -373,37 +399,17 @@ public class FeatureSelectorPanel
 	{
 		String path = chooseSavePath();
 		if (path != null)
-		{
 			definitions_save_path_text_field.setText(path);
-		}
 	}
 
-	/**
-	 * Helper method to get current features that need to be saved.
-	 *
-	 * @return features that need to be saved in the boolean array where the array numbers correspond to the
-	 * appropriate feature name
-	 * @throws Exception if no features have been selected
-	 */
-	private boolean[] featuresToSave() throws Exception
-	{
-		boolean[] features_to_save = new boolean[all_feature_extractors.length];
-
-		for (int i = 0; i < features_to_save.length; i++)
-		{
-			features_to_save[i] = ((Boolean) features_table_model.getValueAt(i, 0)).booleanValue();
-		}
-
-		return features_to_save;
-	}
 
 	/**
 	 * This is a helper method to save feature names to a configuration file from the GUI. Given an array of
 	 * booleans, an appropriate feature name list will be returned, in the order used globally by
 	 * FeatureExtractorAccess.
 	 *
-	 * @param featuresToSave The boolean array to check to save features from.
-	 * @return A List of the appropriate feature names to save.
+	 * @param featuresToSave	The boolean array to check to save features from.
+	 * @return					A List of the appropriate feature names to save.
 	 */
 	private List<String> featureNamesToSave(boolean[] featuresToSave)
 	{
@@ -420,6 +426,7 @@ public class FeatureSelectorPanel
 		return featureNamesToSave;
 	}
 
+	
 	/**
 	 * Save configuration file according to the data input into the GUI. This event occurs when
 	 * save_configuration_file_button button is pressed and the file name is saved as
@@ -439,34 +446,29 @@ public class FeatureSelectorPanel
 		boolean convert_to_csv = csv_check_box.isSelected();
 
 		//Get the configuration format required to write configuration file
-		ConfigurationOptionState optionState = new ConfigurationOptionState(
-				window_size,
-				window_overlap,
-				save_features_for_each_window,
-				save_overall_recording_features,
-				convert_to_arff,
-				convert_to_csv
-		);
+		ConfigurationOptionState optionState = new ConfigurationOptionState( window_size,
+		                                                                     window_overlap,
+		                                                                     save_features_for_each_window,
+		                                                                     save_overall_recording_features,
+		                                                                     convert_to_arff,
+		                                                                     convert_to_csv );
 		ConfigurationOutputFiles outputFiles = new ConfigurationOutputFiles(feature_values_save_path, feature_definitions_save_path);
 		try
 		{
 			// Get features that need to be saved
 			RecordingInfo[] recordings = outer_frame.recording_selector_panel.recording_list;
-			boolean[] features_to_save = featuresToSave();
+			boolean[] features_to_save = getFeaturesToSave();
 			ConfigurationFileData configFileData;
 			if (recordings == null)
-			{
 				configFileData = writeConfigFileNoIO(optionState, features_to_save, configuration_save_path);
-			} else
-			{
-				//If there are input recordings to extract features from
+			else // If there are input recordings to extract features from
 				configFileData = writeConfigFileAll(optionState, features_to_save, outputFiles, recordings, configuration_save_path);
-			}
+
 			//On success
 			JOptionPane.showConfirmDialog(null, "Configuration file successfully saved as " + configFileData.getConfigurationFilePath(), "SUCCESS", JOptionPane.PLAIN_MESSAGE);
-		} catch (Exception e)
+		}
+		catch (Exception e) // On failure
 		{
-			//On failure
 			JOptionPane.showMessageDialog(null, e.getMessage(), "ERROR", JOptionPane.OK_OPTION);
 		}
 	}
@@ -474,66 +476,64 @@ public class FeatureSelectorPanel
 	/**
 	 * Write out the configuration file with no input or output files specified.
 	 *
-	 * @param optionState The option state of the configuration file.
-	 * @param configuration_save_path The configuration save path specified from the GUI.
-	 * @param features_to_save Correct ordering for features to save.
-	 * @return The configuration file data for further processing with input and output file objects set to
-	 * null.
-	 * @throws Exception Thrown if problems with the configuration file data reading/writing occurs.
+	 * @param optionState				The option state of the configuration file.
+	 * @param configuration_save_path	The configuration save path specified from the GUI.
+	 * @param features_to_save			Correct ordering for features to save.
+	 * @return							The configuration file data for further processing with input and
+	 *									output file objects set to null.
+	 * @throws Exception				Thrown if problems with the configuration file data reading/writing 
+	 *									occurs.
 	 */
-	private ConfigurationFileData writeConfigFileNoIO(ConfigurationOptionState optionState,
-			boolean[] features_to_save,
-			String configuration_save_path)
-			throws Exception
+	private ConfigurationFileData writeConfigFileNoIO( ConfigurationOptionState optionState,
+	                                                   boolean[] features_to_save,
+	                                                   String configuration_save_path )
+		throws Exception
 	{
 		List<String> featureNames = featureNamesToSave(features_to_save);
-		ConfigurationFileData configFileData = new ConfigurationFileData(
-				featureNames,
-				optionState,
-				null, //no output files
-				configuration_save_path,
-				null //no input files
-		);
+		ConfigurationFileData configFileData = new ConfigurationFileData( featureNames,
+		                                                                  optionState,
+		                                                                  null, //no output files
+		                                                                  configuration_save_path,
+		                                                                  null); //no input files
 		ConfigurationFileWriter writer = new ConfigurationFileWriterTxtImpl();
+		
 		//Only want to write out feature names and options
 		List<ConfigFileHeaderEnum> featureoptions = Arrays.asList(ConfigFileHeaderEnum.FEATURE_HEADER, ConfigFileHeaderEnum.OPTION_HEADER);
 		writer.write(configFileData, featureoptions);
 		return configFileData;
 	}
 
+	
 	/**
 	 * Write out the configuration file with all headers specified.
 	 *
-	 * @param optionState The option state of the configuration file.
-	 * @param outputFiles Specified output files paths from the GUI.
-	 * @param recordings The specified recording info form the GUI.
-	 * @param configuration_save_path THe configuration save path specified from the GUI.
-	 * @param features_to_save Correct ordering for features to save.
-	 * @return The configuration file data for further processing.
-	 * @throws Exception Thrown if problems with the configuration file data reading/writing occurs.
+	 * @param optionState				The option state of the configuration file.
+	 * @param outputFiles				Specified output files paths from the GUI.
+	 * @param recordings				The specified recording info form the GUI.
+	 * @param configuration_save_path	The configuration save path specified from the GUI.
+	 * @param features_to_save			Correct ordering for features to save.
+	 * @return							The configuration file data for further processing.
+	 * @throws Exception				Thrown if problems with the configuration file data reading/writing 
+	 *									occurs.
 	 */
-	private ConfigurationFileData writeConfigFileAll(ConfigurationOptionState optionState,
-			boolean[] features_to_save,
-			ConfigurationOutputFiles outputFiles,
-			RecordingInfo[] recordings,
-			String configuration_save_path)
-			throws Exception
+	private ConfigurationFileData writeConfigFileAll( ConfigurationOptionState optionState,
+	                                                  boolean[] features_to_save,
+	                                                  ConfigurationOutputFiles outputFiles,
+	                                                  RecordingInfo[] recordings,
+	                                                  String configuration_save_path)
+		throws Exception
 	{
 		ConfigurationInputFiles inputFiles = new ConfigurationInputFiles();
 		for (RecordingInfo recording : recordings)
-		{
 			inputFiles.addValidFile(new File(recording.file_path));
-		}
 
 		//Setup data that needs to be in configuration file and write it out
 		List<String> featureNames = featureNamesToSave(features_to_save);
-		ConfigurationFileData configFileData = new ConfigurationFileData(
-				featureNames,
-				optionState,
-				outputFiles,
-				configuration_save_path,
-				inputFiles
-		);
+		ConfigurationFileData configFileData = new ConfigurationFileData( featureNames,
+		                                                                  optionState,
+		                                                                  outputFiles,
+		                                                                  configuration_save_path,
+		                                                                  inputFiles );
 		ConfigurationFileWriter writer = new ConfigurationFileWriterTxtImpl();
 		writer.write(configFileData, ConfigFileHeaderEnum.asList());
 		return configFileData;
@@ -560,7 +560,7 @@ public class FeatureSelectorPanel
 
 			// Note the features to extract, and throw an exception if they are incompatible with the 
 			// recordings
-			boolean[] features_to_save = featuresToSave();
+			boolean[] features_to_save = getFeaturesToSave();
 			verifyNoMeiFeaturesAndNonMeiFiles(features_to_save, recordings);
 
 			// Clear the GUI display text areas
@@ -568,42 +568,46 @@ public class FeatureSelectorPanel
 
 			// Extract and save features. Update the text areas as progress continues.
 			List<String> error_log = FeatureExtractionJobProcessor.extractAndSaveSpecificFeatures( files_to_extract_from,
-			                                                                                       FileValidator.correctFileExtension(values_save_path_text_field.getText(), "xml"),
-			                                                                                       FileValidator.correctFileExtension(definitions_save_path_text_field.getText(), "xml"),
-			                                                                                       features_to_save,
-			                                                                                       save_window_features_radio_button.isSelected(),
-			                                                                                       save_overall_file_features_radio_button.isSelected(),
-			                                                                                       Double.parseDouble(window_length_text_field.getText()),
-			                                                                                       Double.parseDouble(window_overlap_fraction_text_field.getText()),
-			                                                                                       weka_arff_check_box.isSelected(),
-			                                                                                       csv_check_box.isSelected(),
-			                                                                                       outer_frame.status_print_stream,
-			                                                                                       outer_frame.error_print_stream,
-			                                                                                       true );
+					FileValidator.correctFileExtension(values_save_path_text_field.getText(), "xml"),
+					FileValidator.correctFileExtension(definitions_save_path_text_field.getText(), "xml"),
+					features_to_save,
+					save_window_features_radio_button.isSelected(),
+					save_overall_file_features_radio_button.isSelected(),
+					Double.parseDouble(window_length_text_field.getText()),
+					Double.parseDouble(window_overlap_fraction_text_field.getText()),
+					weka_arff_check_box.isSelected(),
+					csv_check_box.isSelected(),
+					outer_frame.status_print_stream,
+					outer_frame.error_print_stream,
+					true );
 
 			// Beep when processing is finished, and show a dialog box indicating summary of results
 			java.awt.Toolkit.getDefaultToolkit().beep();
 			if (error_log.isEmpty())
+			{
 				JOptionPane.showMessageDialog( null,
 				                               "Feature extraction complete with no errors.",
 				                               "FINISHED PROCESSING",
 				                               JOptionPane.INFORMATION_MESSAGE);
+			} 
 			else
+			{
 				JOptionPane.showMessageDialog( null,
 				                               "Feature processing complete with " + error_log.size() + " errors.\n" +
 				                               "Features were still saved for any files that could be succesfully processed.\n" +
 				                               "Features were not saved for files for which errors were reported.\n",
 				                               "FINISHED PROCESSING",
-				                               JOptionPane.WARNING_MESSAGE );
+				                               JOptionPane.WARNING_MESSAGE);
+			}
 		}
-		
+
 		// Display an error dialog box if a problem is found with the GUI settings before processing occurs.
 		// Note that processing errors should never reach here, as they should be fully handled internally by
 		// the FeatureExtractionJobProcessor.extractAndSaveSpecificFeatures method..
 		catch (Exception e)
 		{
 			java.awt.Toolkit.getDefaultToolkit().beep();
-			JOptionPane.showMessageDialog( null, e.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, e.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 
@@ -611,12 +615,13 @@ public class FeatureSelectorPanel
 	/**
 	 * Verify that MEI-specific features are not set to be extracted from non-MEI files.
 	 *
-	 * @param features_to_extract Features set to be extracted..
-	 * @param recordings Recording info relating to files from which features are to be extracted.
-	 * @throws Exception Thrown if a non-MEI file is found and an MEI-specific feature is set to be extracted.
+	 * @param features_to_extract	Features set to be extracted..
+	 * @param recordings			Recording info relating to files from which features are to be extracted.
+	 * @throws Exception			Thrown if a non-MEI file is found and an MEI-specific feature is set to be
+	 *								extracted.
 	 */
 	private void verifyNoMeiFeaturesAndNonMeiFiles(boolean[] features_to_extract, RecordingInfo[] recordings)
-			throws Exception
+		throws Exception
 	{
 		List<String> featureNames = FeatureExtractorAccess.getNamesOfFeaturesToExtract(features_to_extract);
 		List<String> meiSpecificFeatures = FeatureExtractorAccess.getNamesOfMeiSpecificFeatures();
@@ -647,14 +652,18 @@ public class FeatureSelectorPanel
 
 		if (meiFeatureCheck && nonMeiFileCheck)
 		{
+			String file_path = "UNKNOWN";
+			if (invalidFile != null)
+				file_path = invalidFile.file_path;
 			throw new Exception("Cannot extract MEI-specific features from non-MEI files.\n"
 					+ "Current settings have, for example, the following MEI-specific feature set to be extracted: " + invalidFeatureName + ",\n"
-					+ "and the following non-MEI file included in the list of files to extract features from: " + invalidFile.file_path + ".\n"
+					+ "and the following non-MEI file included in the list of files to extract features from: " + file_path + ".\n"
 					+ "These are only a sampling, and there may be additional incompatible features and files as well.\n"
 					+ "Please only include MEI-specific features if features will only be extracted from MEI files exclusively.\n");
 		}
 	}
 
+	
 	/**
 	 * Initialize the table displaying the features which can be extracted.
 	 */
@@ -670,13 +679,27 @@ public class FeatureSelectorPanel
 		// Initialize features_table and features_table_model
 		Object[] column_names =
 		{
-			new String("Save"),
-			new String("Feature"),
-			new String("Dimensions")
+			"Save",
+			"Feature",
+			"Code",
+			"Values",
+			"MEI-Only",
+			"Sequential"
 		};
-		features_table_model = new FeatureSelectorTableModel(column_names, feature_definitions.length);
-		features_table_model.fillTable(feature_definitions, feature_save_defaults);
+		features_table_model = new FeatureSelectorTableModel(column_names, all_feature_extractors.length);
+		features_table_model.fillTable(all_feature_extractors, feature_save_defaults);
 		features_table = new JTable(features_table_model);
+
+		// Right-justify features_table columns
+		DefaultTableCellRenderer right_column_renderer = new DefaultTableCellRenderer();
+		right_column_renderer.setHorizontalAlignment(JLabel.RIGHT);
+		features_table.getColumnModel().getColumn(2).setCellRenderer(right_column_renderer);
+		features_table.getColumnModel().getColumn(3).setCellRenderer(right_column_renderer);
+		features_table.getColumnModel().getColumn(4).setCellRenderer(right_column_renderer);
+		features_table.getColumnModel().getColumn(5).setCellRenderer(right_column_renderer);
+		
+		// Resize features_table columns to fit data
+		TableMethods.sizeTableColumnsToFit(features_table, false);
 
 		// Set up and display the table
 		features_scroll_pane = new JScrollPane(features_table);
@@ -688,14 +711,16 @@ public class FeatureSelectorPanel
 		outer_frame.repaint();
 	}
 
+	
 	/**
 	 * Makes it so that if a row is double clicked on, a description of the corresponding feature is displayed
 	 * along with its dependencies.
 	 */
-	public void addTableMouseListener()
+	private void addTableMouseListener()
 	{
 		features_table.addMouseListener(new MouseAdapter()
 		{
+			@Override
 			public void mouseClicked(MouseEvent event)
 			{
 				if (event.getClickCount() == 2)
@@ -703,70 +728,61 @@ public class FeatureSelectorPanel
 					int[] row_clicked = new int[1];
 					row_clicked[0] = features_table.rowAtPoint(event.getPoint());
 					FeatureDefinition definition = all_feature_extractors[row_clicked[0]].getFeatureDefinition();
+					boolean mei_specific = all_feature_extractors[row_clicked[0]] instanceof MEIFeatureExtractor;
+					
 					String text
 							= "NAME: " + definition.name + "\n"
+							+ "CODE: " + all_feature_extractors[row_clicked[0]].getFeatureCode() + "\n"
 							+ "DESCRIPTION: " + definition.description + "\n"
-							+ "IS SEQUENTIAL: " + definition.is_sequential + "\n"
-							+ "DIMENSIONS: " + definition.dimensions;
+							+ "DIMENSIONS: " + definition.dimensions + "\n"
+							+ "MEI-SPECIFIC: " + mei_specific + "\n"
+							+ "IS SEQUENTIAL: " + definition.is_sequential + "\n";
+					
+					String[] dependencies = all_feature_extractors[row_clicked[0]].getDepenedencies();
+					if (dependencies == null)
+						text += "DEPENDENCIES: none";
+					else
+					{
+						for (int dep = 0; dep < dependencies.length; dep++)
+						{
+							text += "DEPENDENCY: " + dependencies[dep];
+							if (dep != dependencies.length - 1)
+								text += "\n";
+						}
+					}
+					
 					JOptionPane.showMessageDialog(null, text, "FEATURE DETAILS", JOptionPane.INFORMATION_MESSAGE);
-
 				}
 			}
 		});
 	}
-
-	/**
-	 * Returns an array of all the available feature extractors. An empty LinkedList may also be provided
-	 * specifying whether or not each feature is to be extracted by default.
-	 *
-	 * @param defaults An <b>empty</b> Linked list that will be filled with whether or not each feature is to
-	 * be extracted by default. Entries will be in the same order as the features in the returned array. If
-	 * this is not needed, then null can be specified for this argument.
-	 * @return An array of all the available features.
-	 */
-	public static MIDIFeatureExtractor[] getAllAvailableFeatureExtractors(LinkedList<Boolean> defaults)
-	{
-		if (defaults == null)
-		{
-			defaults = new LinkedList<Boolean>();
-		}
-		boolean[] defaultArray = FeatureExtractorAccess.getDefaultFeaturesToSave();
-		for (boolean b : defaultArray)
-		{
-			defaults.add(b);
-		}
-		return FeatureExtractorAccess.getAllImplementedFeatureExtractors();
-	}
+	
 
 	/**
 	 * Populates with feature extractors that are currently available.
 	 *
-	 * @param configuration_file_data Uses the configuration file specified features to save if the
-	 * configuration file is not null. If it is null then the default features from
-	 * {@link FeatureExtractorAccess} are used.
+	 * @param configuration_file_data	Uses the configuration file specified features to save if the
+	 *									configuration file is not null. If it is null then the default
+	 *									features from {@link FeatureExtractorAccess} are used.
 	 */
 	private void populateFeatureExtractors(ConfigurationFileData configuration_file_data)
 	{
 		all_feature_extractors = FeatureExtractorAccess.getAllImplementedFeatureExtractors();
 
 		if (configuration_file_data != null)
-		{
 			feature_save_defaults = configuration_file_data.getFeaturesToSaveBoolean();
-		} else
-		{
-			feature_save_defaults = FeatureExtractorAccess.getDefaultFeaturesToSave();
-		}
+		else feature_save_defaults = FeatureExtractorAccess.getDefaultFeaturesToSave();
 	}
 
+	
 	/**
 	 * Allows the user to select or enter a file path using a JFileChooser. If the selected path does not have
 	 * an extension of .XML, it is given this extension. If the chosen path refers to a file that already
-	 * exists, then the user is asked if s/he wishes to overwrite the selected file.
-	 * <p>
-	 * No file is actually saved or overwritten by this method. The selected path is simply returned.
+	 * exists, then the user is asked if s/he wishes to overwrite the selected file. No file is actually saved
+	 * or overwritten by this method. The selected path is simply returned.
 	 *
-	 * @return The path of the selected or entered file. A value of null is returned if the user presses the
-	 * cancel button or chooses not to overwrite a file.
+	 * @return	The path of the selected or entered file. A value of null is returned if the user presses the
+	 *			cancel button or chooses not to overwrite a file.
 	 */
 	private String chooseSavePath()
 	{
@@ -775,10 +791,7 @@ public class FeatureSelectorPanel
 		{
 			save_file_chooser = new JFileChooser();
 			save_file_chooser.setCurrentDirectory(new File("."));
-			String[] accepted_extensions =
-			{
-				"xml"
-			};
+			String[] accepted_extensions = {"xml"};
 			save_file_chooser.setFileFilter(new mckay.utilities.general.FileFilterImplementation(accepted_extensions));
 		}
 
@@ -797,26 +810,22 @@ public class FeatureSelectorPanel
 			{
 				path += ".xml";
 				to_save_to = new File(path);
-			} else
+			}
+			else if (!ext.equals(".xml"))
 			{
-				if (!ext.equals(".xml"))
-				{
-					path = mckay.utilities.staticlibraries.StringMethods.removeExtension(path) + ".xml";
-					to_save_to = new File(path);
-				}
+				path = mckay.utilities.staticlibraries.StringMethods.removeExtension(path) + ".xml";
+				to_save_to = new File(path);
 			}
 
 			// See if user wishes to overwrite if a file with the same name exists
 			if (to_save_to.exists())
 			{
-				int overwrite = JOptionPane.showConfirmDialog(null,
-						"This file already exists.\nDo you wish to overwrite it?",
-						"WARNING",
-						JOptionPane.YES_NO_OPTION);
+				int overwrite = JOptionPane.showConfirmDialog( null,
+				                                               "This file already exists.\nDo you wish to overwrite it?",
+				                                               "WARNING",
+				                                               JOptionPane.YES_NO_OPTION );
 				if (overwrite != JOptionPane.YES_OPTION)
-				{
 					path = null;
-				}
 			}
 		}
 
