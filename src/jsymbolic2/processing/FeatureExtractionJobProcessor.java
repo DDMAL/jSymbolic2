@@ -522,14 +522,18 @@ public final class FeatureExtractionJobProcessor
 		}
 		catch (OutOfMemoryError e) // Terminate execution if this happens
 		{
-			String error_message = "The Java Runtime ran out of memory while processing " + input_file_path + 
-			                       ".\nPlease rerun jSymbolic with more memory assigned to the Java runtime heap.\n\n";
+			String error_message = "The Java Runtime ran out of memory while processing:\n" +
+			                       "     " + input_file_path + "\n" +
+			                       "Please rerun jSymbolic with more memory assigned to the Java runtime heap.\n\n";
 			UserFeedbackGenerator.printErrorMessage(error_print_stream, error_message);
 			if (gui_processing)
 			{
 				System.err.println(error_message);
 				java.awt.Toolkit.getDefaultToolkit().beep();
-				JOptionPane.showMessageDialog(null, error_message, "ERROR", JOptionPane.ERROR_MESSAGE);				
+				JOptionPane.showMessageDialog( null,
+				                               error_message,
+				                               "Error",
+				                               JOptionPane.ERROR_MESSAGE );				
 			}
 			System.exit(-1);
 		}

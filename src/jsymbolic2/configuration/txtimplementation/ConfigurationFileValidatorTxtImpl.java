@@ -427,11 +427,10 @@ public class ConfigurationFileValidatorTxtImpl extends ConfigurationFileValidato
         File configFile = new File(configurationFile);
         String configFileName = ".*\\." + ConfigurationFileExtensionEnum.txt.name();
         if(configFile == null || !configFile.exists()) {
-            throw new Exception("Configuration file for jSymbolic " + configurationFile + " does not exist.");
+            throw new Exception("The configuration file specified at " + configurationFile + " does not exist.");
         }
         if(!configurationFile.matches(configFileName)) {
-            throw new Exception("Configuration file for jSymbolic " + configurationFile + " format is not correct." +
-                    " Should be txt format file.");
+            throw new Exception("The file " + configurationFile + " does not have a txt extension.");
         }
         return configFile;
     }
