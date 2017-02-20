@@ -12,13 +12,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.List;
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.Sequence;
-import javax.swing.JOptionPane;
-import javax.swing.JTextArea;
 import org.ddmal.jmei2midi.MeiSequence;
 
 /**
@@ -67,7 +64,7 @@ public class FileValidator
             throws InvalidMidiDataException, IOException, MeiXmlReadException 
     {
         Sequence sequence;
-        if (validMeiFile(file)) 
+        if (isValidMeiFile(file)) 
         {
             sequence = getMEISequence(file, errorLog);
         } 
@@ -84,7 +81,7 @@ public class FileValidator
      * @param file mei file to be checked
      * @return true if it is valid or else false
      */
-    public static boolean validMeiFile(File file)
+    public static boolean isValidMeiFile(File file)
     {
         try
         {
@@ -106,7 +103,7 @@ public class FileValidator
      * @throws IOException Thrown if the input file is not valid.
      * @throws InvalidMidiDataException Thrown if the input file does not contain valid MIDI.
      */
-    private static Sequence getMIDISequence(File file, List<String> errorLog)
+    public static Sequence getMIDISequence(File file, List<String> errorLog)
             throws IOException, InvalidMidiDataException 
     {
         Sequence sequence = null;
@@ -121,7 +118,7 @@ public class FileValidator
         } 
         catch (InvalidMidiDataException e) 
         {
-            errorLog.add("The specified file, " + file + ", is not a valid MIDI/MEI file.");
+            errorLog.add("The specified file, " + file + ", is not a valid MIDI or MEI file.");
             throw e;
         }
         return sequence;
@@ -147,7 +144,7 @@ public class FileValidator
         }
         catch (InvalidMidiDataException e) 
         {
-            errorLog.add("The specified file, " + file + ", is not a valid MIDI/MEI file.");
+            errorLog.add("The specified file, " + file + ", is not a valid MIDI or MEI file.");
             throw e;
         }
         return sequence;
@@ -188,37 +185,5 @@ public class FileValidator
         String path = absolutePath.substring(0, absolutePath.lastIndexOf(File.separator));
         Path p = Paths.get(path);
         return Files.exists(p);
-    }
-
-    /**
-     * Print out error log to the command line.
-     *
-     * @param errorLog List(string) to be printed to console.
-     */
-    public static void printErrorLog(List<String> errorLog) 
-    {
-        if (errorLog != null && !errorLog.isEmpty()) 
-        {
-            for (String error : errorLog) 
-            {
-                System.err.println(error);
-            }
-        }
-    }
-     /**
-      * Print out error log to a JOptionPane window.
-      * @param errorLog List(String) to be printed to window.
-      */
-    public static void windowErrorLog(List<String> errorLog) 
-    {
-        if(errorLog != null && !errorLog.isEmpty())
-        {
-            JTextArea textArea = new JTextArea(Arrays.toString(errorLog.toArray(new String[0])));
-            textArea.setEditable(false); //Selectable but not editable
-            JOptionPane.showMessageDialog(null,
-                                          textArea, 
-                                          "INVALID FILES", 
-                                          JOptionPane.ERROR_MESSAGE);
-        }
     }
 }

@@ -80,24 +80,24 @@ public abstract class ConfigurationFileWriter {
      * @param headersToWrite The headers and corresponding sections that need to be written to the configuration file.
      * @throws IOException Thrown if any writing problems occur on the local system.
      */
-    public void write(ConfigurationFileData configurationFileData, List<HeaderEnum> headersToWrite)
+    public void write(ConfigurationFileData configurationFileData, List<ConfigFileHeaderEnum> headersToWrite)
             throws IOException
     {
         List<String> rawConfigFile = new ArrayList<>();
 
-        if(headersToWrite.contains(HeaderEnum.OPTION_HEADER)) {
+        if(headersToWrite.contains(ConfigFileHeaderEnum.OPTION_HEADER)) {
             addFormattedOptions(rawConfigFile,configurationFileData.getOptionState());
         }
 
-        if(headersToWrite.contains(HeaderEnum.FEATURE_HEADER)) {
+        if(headersToWrite.contains(ConfigFileHeaderEnum.FEATURE_HEADER)) {
             addFormattedFeatures(rawConfigFile,configurationFileData.getFeaturesToSave());
         }
 
-        if(headersToWrite.contains(HeaderEnum.INPUT_FILE_HEADER)) {
+        if(headersToWrite.contains(ConfigFileHeaderEnum.INPUT_FILE_HEADER)) {
             addFormattedInputFiles(rawConfigFile,configurationFileData.getInputFileList());
         }
 
-        if(headersToWrite.contains(HeaderEnum.OUTPUT_FILE_HEADER)) {
+        if(headersToWrite.contains(ConfigFileHeaderEnum.OUTPUT_FILE_HEADER)) {
             addFormattedOutputFiles(rawConfigFile,configurationFileData.getOutputFileList());
         }
 

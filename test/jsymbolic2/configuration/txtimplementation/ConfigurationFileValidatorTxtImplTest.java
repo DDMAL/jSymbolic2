@@ -24,16 +24,16 @@ public class ConfigurationFileValidatorTxtImplTest {
 
     private static File sampleConfiguration;
     private static List<String> rawSampleConfig;
-    private static String sampleConfigFileName = "./test/jsymbolic/configuration/resources/sampleConfiguration.txt";
+    private static String sampleConfigFileName = "./test/jsymbolic2/configuration/resources/sampleConfiguration.txt";
     private static File sampleConfiguration2;
     private static List<String> rawSampleConfig2;
-    private static String sampleConfigFileName2 = "./test/jsymbolic/configuration/resources/sampleConfiguration2.txt";
+    private static String sampleConfigFileName2 = "./test/jsymbolic2/configuration/resources/sampleConfiguration2.txt";
     private static File invalidConfiguration;
     private static List<String> rawInvalidConfig;
-    private static String invalidConfig = "./test/jsymbolic/configuration/resources/invalidConfiguration.txt";
+    private static String invalidConfig = "./test/jsymbolic2/configuration/resources/invalidConfiguration.txt";
     private static File noIOConfiguration;
     private static List<String> rawNoIOConfig;
-    private static String noIOConfig = "./test/jsymbolic/configuration/resources/noIOConfiguration.txt";
+    private static String noIOConfig = "./test/jsymbolic2/configuration/resources/noIOConfiguration.txt";
 
     @Before
     public void setUp() throws Exception {
@@ -59,32 +59,32 @@ public class ConfigurationFileValidatorTxtImplTest {
     @Test
     public void validateHeaders() throws Exception {
         exception.expect(Exception.class);
-        validate.validateHeaders(rawInvalidConfig,invalidConfiguration,Arrays.asList(HeaderEnum.values()));
+        validate.validateHeaders(rawInvalidConfig,invalidConfiguration,Arrays.asList(ConfigFileHeaderEnum.values()));
 
         //Exception thrown when IO should not be but is in fact in the configuration file
         exception.expect(Exception.class);
-        validate.validateHeaders(rawSampleConfig,sampleConfiguration,Arrays.asList(HeaderEnum.FEATURE_HEADER,HeaderEnum.OPTION_HEADER));
+        validate.validateHeaders(rawSampleConfig,sampleConfiguration,Arrays.asList(ConfigFileHeaderEnum.FEATURE_HEADER,ConfigFileHeaderEnum.OPTION_HEADER));
     }
 
     @Test
     public void parseConfigFile() throws Exception {
         //Validate normal configuration files
-        List<String> featuresToSave = Arrays.asList("Duration", "Acoustic Guitar Fraction", "Beat Histogram");
+        List<String> featuresToSave = Arrays.asList("Duration", "Acoustic Guitar Prevalence", "Beat Histogram");
         ConfigurationOptionState opt = new ConfigurationOptionState(1.5,0.1,true,false,false,false);
         ConfigurationInputFiles input = new ConfigurationInputFiles();
-        input.addValidFile(new File("./test/jsymbolic/features/resources/Saint-Saens_LeCarnevalDesAnimmaux.mei"));
+        input.addValidFile(new File("./test/jsymbolic2/features/resources/Saint-Saens_LeCarnevalDesAnimmaux.mei"));
         ConfigurationOutputFiles output = new ConfigurationOutputFiles("test_value.xml","test_definition.xml");
         ConfigurationFileData expecteddata = new ConfigurationFileData(featuresToSave,opt,output,sampleConfigFileName,input);
         ConfigurationFileData actualdata =
-                validate.parseConfigFile(sampleConfigFileName);
+                validate.parseConfigFileAllHeaders(sampleConfigFileName, System.err);
         assertEquals(expecteddata,actualdata);
 
         //Validate configuration files with no IO
-        List<String> ioToSave = Arrays.asList("Duration", "Acoustic Guitar Fraction", "Beat Histogram");
+        List<String> ioToSave = Arrays.asList("Duration", "Acoustic Guitar Prevalence", "Beat Histogram");
         ConfigurationOptionState ioOpt = new ConfigurationOptionState(1.5,0.1,true,false,false,false);
         ConfigurationFileData expectedIOData = new ConfigurationFileData(ioToSave,ioOpt,null,noIOConfig,null);
         ConfigurationFileData actualIOData =
-                validate.parseConfigFile(noIOConfig, Arrays.asList(HeaderEnum.FEATURE_HEADER, HeaderEnum.OPTION_HEADER));
+                validate.parseConfigFile(noIOConfig, Arrays.asList(ConfigFileHeaderEnum.FEATURE_HEADER, ConfigFileHeaderEnum.OPTION_HEADER), System.err);
         assertEquals(expectedIOData,actualIOData);
     }
 
@@ -99,7 +99,7 @@ public class ConfigurationFileValidatorTxtImplTest {
 
     @Test
     public void validateFeatureSyntax() throws Exception {
-        List<String> expectedFeatures = Arrays.asList("Acoustic Guitar Fraction",
+        List<String> expectedFeatures = Arrays.asList("Acoustic Guitar Prevalence",
                 "Duration", "Beat Histogram");
         assertEquals(expectedFeatures,validate.validateFeatureSyntax(rawSampleConfig,sampleConfiguration));
 
@@ -120,11 +120,11 @@ public class ConfigurationFileValidatorTxtImplTest {
     @Test
     public void checkForInvalidInputFiles() throws Exception {
         ConfigurationInputFiles input = new ConfigurationInputFiles();
-        input.addValidFile(new File("./test/jsymbolic/features/resources/Saint-Saens_LeCarnevalDesAnimmaux.mei"));
+        input.addValidFile(new File("./test/jsymbolic2/features/resources/Saint-Saens_LeCarnevalDesAnimmaux.mei"));
         assertEquals(input,validate.checkForInvalidInputFiles(rawSampleConfig,sampleConfiguration));
 
         ConfigurationInputFiles expectedInvalid = new ConfigurationInputFiles();
-        expectedInvalid.addValidFile(new File("./test/jsymbolic/features/resources/Saint-Saens_LeCarnevalDesAnimmaux.mei"));
+        expectedInvalid.addValidFile(new File("./test/jsymbolic2/features/resources/Saint-Saens_LeCarnevalDesAnimmaux.mei"));
         expectedInvalid.addInvalidFile(new File("./invalid.midi"));
 
         assertEquals(expectedInvalid,validate.checkForInvalidInputFiles(rawInvalidConfig,invalidConfiguration));
@@ -132,7 +132,7 @@ public class ConfigurationFileValidatorTxtImplTest {
 
     @Test
     public void checkConfigFile() throws Exception {
-        String meiFileName = "./test/jsymbolic/features/resources/Saint-Saens_LeCarnevalDesAnimmaux.mei";
+        String meiFileName = "./test/jsymbolic2/features/resources/Saint-Saens_LeCarnevalDesAnimmaux.mei";
 
         exception.expect(Exception.class);
         validate.checkConfigFile(meiFileName);

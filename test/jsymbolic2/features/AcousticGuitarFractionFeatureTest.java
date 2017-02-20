@@ -19,7 +19,7 @@ import static org.junit.Assert.*;
 public class AcousticGuitarFractionFeatureTest {
 
     double deviation = 0.0001;
-    String saintSaensFileName = "test/jsymbolic/features/resources/Saint-Saens_LeCarnevalDesAnimmaux.mei";
+    String saintSaensFileName = "test/jsymbolic2/features/resources/Saint-Saens_LeCarnevalDesAnimmaux.mei";
     Sequence saintSaensSequence;
 
     @Before
@@ -36,7 +36,7 @@ public class AcousticGuitarFractionFeatureTest {
     @Test
     public void extractFeature() throws Exception {
         //Checking entire midi file
-        AcousticGuitarFractionFeature agff = new AcousticGuitarFractionFeature();
+        AcousticGuitarPrevalenceFeature agff = new AcousticGuitarPrevalenceFeature();
         MIDIIntermediateRepresentations mir = new MIDIIntermediateRepresentations(saintSaensSequence);
         double[] actualArray = agff.extractFeature(saintSaensSequence, mir, null);
         double actualGuitarFraction = actualArray[0];

@@ -27,13 +27,13 @@
 	<li>Output file paths for saving extracted feature values and feature metadata.</li>
 </ul>
 
-<p>The input file paths and output file paths are optional, and may be omitted if desired.</p>
+<p>The input file paths and output file paths are optional, and may be omitted if desired. However, if one is to be used, then both must be present (only having input paths without output paths is considered invalid, and vice versa).</p>
 
 <p>In fact, the configuration settings file itself is entirely optional. jSymbolic's functionality may be accessed via the GUI, command line interface or API without a configuration file if desired. In such a case, default feature extraction settings will be used, unless otherwise specified by the user (e.g. the user may still certainly enable or disable certain features for extraction without a configuration file using the GUI). However, a configuration file is required if the user wishes to use the command line interface or API with any selection of features other than the default.</p>
 
 <p><strong>USING THE CONFIGURATION SETTINGS FILE</strong></p>
 
-<p>The user may place a configuration settings file anywhere and name it anything he or she chooses (with a .txt extension). This file can then be loaded into the <a href="../gui_files/gui.html">GUI</a>, either during execution or as a pre-loaded file using <a href="../commandline_files/commandline.html">command line arguments</a>. The path to a configuration settings file may also be specified using the pure <a href="../commandline_files/commandline.html">command line interface</a>, and can also be specified functionally using the <a href="../api_files/api.html">API</a>.</p>
+<p>The user may place a configuration settings file anywhere and name it anything he or she chooses (although it <em>must</em> have a .txt extension in order to work). This file can then be loaded into the <a href="../gui_files/gui.html">GUI</a>, either during execution or as a pre-loaded file using <a href="../commandline_files/commandline.html">command line arguments</a>. The path to a configuration settings file may also be specified using the pure <a href="../commandline_files/commandline.html">command line interface</a>, and can also be specified functionally using the <a href="../api_files/api.html">API</a>.</p>
 
 <p><strong>CREATING AND EDITING A CONFIGURATION SETTINGS FILE</strong></p>
 
@@ -56,14 +56,14 @@
 		<li><strong>save_overall_recording_features:</strong> Whether or not to save the feature for entire indput files only (i.e. no windowing is used). Must have a value of either "true" or "false"</li>
 		<li><strong>convert_to_arff:</strong> Whether or not to save extracted features in a <a href="http://www.cs.waikato.ac.nz/ml/weka/arff.html" target="top">Weka ARFF</a> file, in addition to saving them as an <a href="http://jmir.sourceforge.net/index_ACE_XML.html" target="top">ACE XML 1.1</a> Features Values File. Must have a value of either "true" or "false".</li>
 		<li><strong>convert_to_csv:</strong> Whether or not to save extracted features in a <a href="https://en.wikipedia.org/wiki/Comma-separated_values" target="top">CSV</a> text file, in addition to saving them as an <a href="http://jmir.sourceforge.net/index_ACE_XML.html" target="top">ACE XML 1.1</a> Features Values File. Must have a value of either "true" or "false".</li>
-	</ul></p>
+	</ul><p></p>
 		
 	<strong>Output File Section</strong>
 	<p>This section specifies the paths to save extracted feature values and feature metadata to. All file paths must be absolute or relative to the directory holding the jSymbolic.jar file. Only file paths for the two ACE XML output files are specified here; if Weka ARFF or CSV files are selected to be saved as well, they will be given the same path and file name as the ACE XML Feature Values File, but with the extension changed automatically. As mentioned above, this section may optionally be omitted from valid configuration files. This section includes the following two settings which should be specified.
 	<ul>
 		<li><strong>feature_values_save_path:</strong> The path of the ACE XML Feature Values File to save extracted feature values to.</li>
 		<li><strong>feature_definitions_save_path:</strong> The path of the ACE XML Feature Definitions File to save feature metadata to.</li>
-	</ul></p>
+	</ul><p></p>
 
 	<strong>Input File Section</strong>
 	<p>A list of input files to extract features from. All file paths must be absolute or relative to the directory holding the jSymbolic.jar file. These files must currently be either MIDI or MEI files. As mentioned above, this section may optionally be omitted from valid configuration files.</p>
@@ -78,7 +78,7 @@
 	<ul>
 		<li>Feature names are validated to make sure they match existing implemented jSymbolic feature names. An incorrect feature name will result in a system error and will terminate jSymbolic execution.</li>
 		<li>Each feature name checked to make sure it is only listed once. Duplicate feature names in the configuration settings file are removed silently.</li>
-	</ul></p>
+	</ul>
 
 	<p><strong>&lt;jSymbolic_options&gt;</strong>
 	<ul>
@@ -96,20 +96,20 @@
 		</ul>
 		<li>If any formatting or spelling is missing or incorrect then a system error will occur and jSymbolic execution will terminate. If any options are missing, then a system error will result and jSymbolic will terminate execution.</li>
 		<li>The save_features_for_each_window and save_overall_recording_features options cannot both have the same boolean value. If they do, then a system error will occur and jSymbolic will terminate execution.</li>
-	</ul></p>
+	</ul>
 
 	<p><strong>&lt;output_files&gt;</strong>
 	<ul>
 		<li>Output files must be of the form outputFileVariable=outputFileName. An incorrect format will result in a system error and termination of execution.</li>
 		<li>If a path is specified, then it will be verified that a this is a valid path. An invalid path will result in a system error and termination of execution.</li>
 		<li>An output file name without a .xml extension will simply silently have .xml added to the end of it.</li>
-	</ul></p>
+	</ul>
 
 	<p><strong>&lt;input_files&gt;</strong>
 	<ul>
 		<li>Only single input files may be specified in the configuration file, not directories.</li>
 		<li>All paths files are validated for existence before feature extraction begins. Invalid file paths are skipped and a log is printed out to the terminal. System exectution will not be interrupted, however, and features will be extracted and saved for valid files.</li>
-	</ul></p>
+	</ul>
 </blockquote>
 
 <p><strong>NOTES ON USING A CONFIGURATION SETTINGS FILE AND THE COMMAND LINE INTERFACE</strong></p>
@@ -118,11 +118,11 @@
 
 <p>For example, the following command line and configuration file transcript combination is valid:</p>
 
-<p><blockquote><pre>java -jar jSymbolic.jar -configrun &ltConfigurationFilePath&gt &ltSymbolicMusicFileInputPath&gt &ltAceXmlFeatureValuesOutputPath&gt &ltAceXmlFeatureDefinitionsOutputPath&gt</pre></blockquote></p>
+<blockquote><pre>java -jar jSymbolic.jar -configrun &ltConfigurationFilePath&gt &ltSymbolicMusicFileInputPath&gt &ltAceXmlFeatureValuesOutputPath&gt &ltAceXmlFeatureDefinitionsOutputPath&gt</pre></blockquote>
 
-<p><blockquote><i>
+<blockquote><i>
 &lt;features_to_extract&gt;<br>
-Acoustic Guitar Fraction<br>
+Acoustic Guitar Prevalence<br>
 Duration<br>
 Beat Histogram<br>
 &lt;jSymbolic_options&gt;<br>
@@ -132,13 +132,13 @@ save_features_for_each_window=true<br>
 save_overall_recording_features=false<br>
 convert_to_arff=false<br>
 convert_to_csv=false<br>
-</i></blockquote></p>
+</i></blockquote>
 
 <p><strong>TRANSCRIPT OF A SAMPLE VALID CONFIGURATION SETTINGS FILE</strong></p>
 
-<p><blockquote><i>
+<blockquote><i>
 &lt;features_to_extract&gt;<br>
-Acoustic Guitar Fraction <br>
+Acoustic Guitar Prevalence <br>
 Duration<br>
 Beat Histogram<br>
 &lt;jSymbolic_options&gt;<br>
@@ -153,13 +153,13 @@ feature_values_save_path=test_value.xml<br>
 feature_definitions_save_path=test_definition.xml<br>
 &lt;input_files&gt;<br>
 ./test/jsymbolic/features/resources/Saint-Saens_LeCarnevalDesAnimmaux.mei<br>
-</i></blockquote></p>
+</i></blockquote>
 
 <p><strong>TRANSCRIPT OF A SAMPLE <i>INVALID</i> CONFIGURATION SETTINGS FILE</strong></p>
 
-<p>The following is an example of an invalid configuration settings file with several errors. The &lt;features_to_extract&gt; header is mispelled, and so is the Acoustic Guitar Fraction feature. Also, the window_size option is missing and the feature_value_save_path variable is missing an = sign. Any one of these problems would generate an error.</p>
+<p>The following is an example of an invalid configuration settings file with several errors. The &lt;features_to_extract&gt; header is mispelled, and so is the Acoustic Guitar Prevalence feature. Also, the window_size option is missing and the feature_value_save_path variable is missing an = sign. Any one of these problems would generate an error.</p>
 
-<p><blockquote><i>
+<blockquote><i>
 &lt;features_to_extrac&gt;<br>
 Acoustic Guitar Fractio<br>
 Duration<br>
@@ -176,7 +176,7 @@ convert_to_csv=false<br>
 &lt;output_files&gt;<br>
 feature_values_save_pathtest_value.xml<br>
 feature_definitions_save_path=test_definition.xml<br>
-</i></blockquote></p>
+</i></blockquote>
 
 <p></p>
 <table height="5" width="100%" bgcolor="#0033C4" border="0"><tbody><tr><th></th></tr></tbody></table>
