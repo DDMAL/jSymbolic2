@@ -64,8 +64,9 @@ public class MusicFileSelectorPanel
 
 	/**
 	 * A button for adding symbolic music files to the the table of files from which features will eventually
-	 * be parsed. Brings up a file chooser dialog box for doing so. An error message will be displayed if
-	 * invalid or nonexistent files are chosen. Files chosen are already on the table will be ignored.
+	 * be extracted. Brings up a file chooser dialog box for doing so. An error message will be displayed if
+	 * invalid or nonexistent files are chosen. Files chosen are already on the table will be ignored. If any
+	 * files are selected, then a report will be written to the Processing Information text area.
 	 */
 	private JButton add_files_button;
 	
@@ -102,12 +103,8 @@ public class MusicFileSelectorPanel
 	 * Set up this MusicFileSelector's fields and GUI elements.
 	 *
 	 * @param outer_frame				The JFrame element that contains this JPanel.
-	 * @param configuration_file_data	The configuration file data that will be used to initialize the 
-	 *									files to extract features from. If null is provided here, then no
-	 *									files will be set to have features extracted from them at 
-	 *									instantiation.
 	 */
-	public MusicFileSelectorPanel(OuterFrame outer_frame, ConfigurationFileData configuration_file_data)
+	public MusicFileSelectorPanel(OuterFrame outer_frame)
 	{
 		// Store a reference to the containing JFrame
 		this.outer_frame = outer_frame;
@@ -122,10 +119,7 @@ public class MusicFileSelectorPanel
 		formatAndAddGuiElements();
 				
 		// Cause the table to respond to double clicks
-		addTableMouseListener();	
-		
-		// Add symbolic music files to the table if any are specified in the configuration_file_data
-		setupGuiWithConfigInputFiles(configuration_file_data);
+		addTableMouseListener();
 	}
 
 	
@@ -159,6 +153,25 @@ public class MusicFileSelectorPanel
 	
 	
 	/**
+	 * Load references to files from the provided information parsed from a configuration settings file and
+	 * add them to the symbolic_music_files_table.
+	 *
+	 * @param configuration_file_data	Data parsed from a configuration settings file, potentially holding
+	 *									references to symbolic music files that should be referenced by the
+	 *									symbolic_music_files_table. Do nothing if this is null.
+	 */
+	public void addMusicFilesParsedFromConfigFile(ConfigurationFileData configuration_file_data)
+	{
+		if (configuration_file_data != null)
+		{
+			ConfigurationInputFiles input_files = configuration_file_data.getInputFileList();
+			if (input_files != null)
+				addSymbolicMusicFilesToTable(input_files.getValidFiles().toArray(new File[0]));
+		}
+	}
+
+	
+	/**
 	 * Get an array indicating all symbolic music files which are currently displayed on this object's
 	 * symbolic_music_files_table, in the order that they are displayed on this table.
 	 * 
@@ -179,6 +192,34 @@ public class MusicFileSelectorPanel
 		}
 		
 		return files_to_extract_features_from;
+	}
+	
+	
+	/* STATIC METHODS ***************************************************************************************/
+
+	
+	/**
+	 * Find the total number of MIDI files and MEI files in the given music_files.
+	 * 
+	 * @param midi_mei_counts	An array of size 2, where the 0th entry corresponds to the number of MIDI
+	 *							files and the 1st entry corresponds to the number of MEI files. Both are
+	 *							typically initially 0, but do not have to be. This method adds the respective
+	 *							totals from music_files to these two entries.
+	 * @param music_files		The symbolic music files to count.
+	 */
+	private static void findNumberMeiAndMidiFile(int[] midi_mei_counts, SymbolicMusicFile[] music_files)
+	{
+		for (SymbolicMusicFile this_music_file : music_files)
+		{
+			if (FileValidator.isValidMeiFile(new File(this_music_file.file_path)))
+				midi_mei_counts[1]++;
+			else try
+			{
+				FileValidator.getMIDISequence(new File(this_music_file.file_path), new ArrayList<String>());
+				midi_mei_counts[0]++;
+			}
+			catch (Exception e) {}
+		}
 	}
 	
 	
@@ -309,30 +350,12 @@ public class MusicFileSelectorPanel
 	
 	
 	/**
-	 * Load references to files from the provided information parsed from a configuration settings file and
-	 * add them to the symbolic_music_files_table.
-	 *
-	 * @param configuration_file_data	Data parsed from a configuration settings file, potentially holding
-	 *									references to symbolic music files that should be referenced by the
-	 *									symbolic_music_files_table. Do nothing if this is null.
-	 */
-	private void setupGuiWithConfigInputFiles(ConfigurationFileData configuration_file_data)
-	{
-		if (configuration_file_data != null)
-		{
-			ConfigurationInputFiles input_files = configuration_file_data.getInputFileList();
-			if (input_files != null)
-				addSymbolicMusicFilesToTable(input_files.getValidFiles().toArray(new File[0]));
-		}
-	}
-
-	
-	/**
 	 * Instantiates a JFileChooser for the load_symbolic_music_file_chooser field if one does not already
 	 * exist. This dialog box allows the user to choose one or more files to add to the
 	 * symbolic_music_files_table list of references of symbolic music files. Only symbolic music files of
 	 * known types are displayed in this JFileChooser by default. If an entered file path corresponds to a
-	 * file that does not exist, then an error message dialog box is displayed.
+	 * file that does not exist, then an error message dialog box is displayed. Prints a report to the
+	 * status_print_stream.
 	 */
 	private void addSymbolicMusicFilesToTableWithJFileChooser()
 	{
@@ -361,7 +384,7 @@ public class MusicFileSelectorPanel
 	/**
 	 * Adds the given files to the symbolic_music_files_table, after first verifying that they exist and that
 	 * they are files that can be parsed. Displays an error dialog box for each file that cannot be added.
-	 * Ignores files that have already been added to the table.
+	 * Ignores files that have already been added to the table. Prints a report to the status_print_stream.
 	 *
 	 * @param	files_to_add	The files to add to the table. These files should all exist, and should all
 	 *							be symbolic music files of types accepted by jSymbolic.
@@ -447,6 +470,19 @@ public class MusicFileSelectorPanel
 
 		// Update the table to display the new symbolic music files
 		symbolic_music_files_table_model.resetAndFillTable(music_files_already_on_table);
+		
+		// Add a report to the status_print_stream
+		int[] midi_mei_counts = new int[2];
+		findNumberMeiAndMidiFile(midi_mei_counts, getSymbolicMusicFilesToExtractFeaturesFrom());
+		String report = ">>> Adding to the list of symbolic music files from which features are to be extracted . . . \n";
+		for (int i = 0; i < number_music_files_to_add; i++)
+			if (music_files_to_add[i] != null)
+				report += "\t\t>>> " + music_files_to_add[i].file_path + "\n";
+		report += "\t>>> " + number_music_files_to_add + " files were selected to be added to the existing list of " + number_music_files_already_on_table + " files.\n";
+		report += "\t>>> Of these, " + (final_combined_and_cleaned_music_files.length - number_music_files_already_on_table) + " files were valid non-duplicate files, and were added to the list.\n";
+		report += "\t>>> There are now a total of " + final_combined_and_cleaned_music_files.length + " files ready to have features extracted from them.\n";
+		report += "\t>>> This total includes " + midi_mei_counts[0] + " MIDI files and " + midi_mei_counts[1] + " MEI files.\n";
+		outer_frame.status_print_stream.println(report);
 	}
 
 	

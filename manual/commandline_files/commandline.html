@@ -44,9 +44,9 @@ In the very unlikely event that an out-of-memory error does occur, jSymbolic sho
 <p><strong>RUNNING JSYMBOLIC FROM A TERMINAL INTERFACE</strong></p>
 The simplest way to run jSymbolic from a terminal prompt is to type the following at your terminal prompt (after you have navigated to the directory containing the jSymbolic2.jar file):
 
-<p><blockquote>
+<blockquote>
   <pre>java -Xmx3072m -jar jSymbolic2.jar</pre>
-</blockquote><p></p>
+</blockquote>
 
 <p>This will run the <a href="../gui_files/gui.html">jSymbolic GUI</a> set up with default settings.</p>
 
@@ -54,7 +54,7 @@ The simplest way to run jSymbolic from a terminal prompt is to type the followin
 
 <p>Other command line arguments simply consist of values, with no flags, of flags with no values. For example, a lone flag of "-help" will print to the terminal a list of valid flags with explanations of what they are. This can be run as follows:</p>
 
-<p><blockquote><pre>java -jar jSymbolic2.jar -help</pre></blockquote><p></p>
+<blockquote><pre>java -jar jSymbolic2.jar -help</pre></blockquote>
 
 <p>Invalid command line arguments will also result in the list of legitimate command line arguments being printed out to the terminal.</p>
 
@@ -133,36 +133,24 @@ The simplest way to run jSymbolic from a terminal prompt is to type the followin
 
 <blockquote>
 	<p><strong>Example 1:</strong> Run the jSymbolic GUI under default settings.</p>
-	<blockquote><p>
-    <pre>java -Xmx3072m -jar jSymbolic2.jar</pre>
-    <p></p></blockquote>
+	<blockquote><pre>java -Xmx3072m -jar jSymbolic2.jar</pre></blockquote>
 
 	<p><strong>Example 2:</strong> Extract features from a single music file called "test.mei" in the current directory, and output the results to "feature_values_1.xml" and "feature_descriptions_1.xml", to be created
 	in the current directory.</p>
-	<blockquote><p>
-    <pre>java -Xmx3072m -jar jSymbolic2.jar ./test.mei ./feature_values_1.xml ./feature_descriptions_1.xml</pre>
-    <p></p></blockquote>
+	<blockquote><pre>java -Xmx3072m -jar jSymbolic2.jar ./test.mei ./feature_values_1.xml ./feature_descriptions_1.xml</pre></blockquote>
 	
 	<p><strong>Example 3:</strong> Extract features from all symbolic feature files in the directory called "test" in the current directory, and output the results to "feature_values_1.xml" and "feature_descriptions_1.xml" files, to be created in the current directory. A window size of 10 seconds will be used with an overlap fraction of 0.1 (i.e. 1 second, in this case).</p>
-	<blockquote><p>
-    <pre>java -Xmx3072m -jar jSymbolic2.jar -window ./test/ ./feature_values_1.xml ./feature_descriptions_1.xml 10 0.1</pre>
-    <p></p></blockquote>
+	<blockquote><pre>java -Xmx3072m -jar jSymbolic2.jar -window ./test/ ./feature_values_1.xml ./feature_descriptions_1.xml 10 0.1</pre></blockquote>
 	
 	<p><strong>Example 4:</strong> Extract features from a single music file called "test.midi" in the current directory, and output the results to "feature_values_1.xml" and "feature_descriptions_1.xml", to be created
 	in the current directory. Also output the extracted feature values in the form of a CSV file and an ARFF file, saved in the current directory as	as "feature_values_1.csv" and "feature_values_1.arff", respectively.</p>
-	<blockquote><p>
-    <pre>java -Xmx3072m -jar jSymbolic2.jar -arff -csv ./test.midi ./feature_values_1.xml ./feature_descriptions_1.xml</pre>
-    <p></p></blockquote>
+	<blockquote><pre>java -Xmx3072m -jar jSymbolic2.jar -arff -csv ./test.midi ./feature_values_1.xml ./feature_descriptions_1.xml</pre></blockquote>
 	
 	<p><strong>Example 5:</strong> Extract features from all symbolic feature files in the directory called "test" in the current directory, and output the results to "feature_values_1.xml" and "feature_descriptions_1.xml" files, to be created in the current directory. The feature extraction is done using the configuration settings specified in the configuration file called "jsymbolic_configurations.txt" found in the current directory (and which should not itself specify input and output file paths).</p>
-	<blockquote><p>
-    <pre>java -Xmx3072m -jar jSymbolic2.jar -configrun ./jsymbolic_configurations.txt ./test/ ./feature_values_1.xml ./feature_descriptions_1.xml</pre>
-    <p></p></blockquote>
+	<blockquote><pre>java -Xmx3072m -jar jSymbolic2.jar -configrun ./jsymbolic_configurations.txt ./test/ ./feature_values_1.xml ./feature_descriptions_1.xml</pre></blockquote>
 	
 	<p><strong>Example 6:</strong> Run the jSymbolic GUI pre-loaded with the settings specified in the configuration file called "jsymbolic_configurations.txt" in the current directory.</p>
-	<blockquote><p>
-    <pre>java -Xmx3072m -jar jSymbolic2.jar -configgui ./jsymbolic_configuration.txt</pre>
-    <p></p></blockquote>
+	<blockquote><pre>java -Xmx3072m -jar jSymbolic2.jar -configgui ./jsymbolic_configuration.txt</pre></blockquote>
 </blockquote>
 
 <p></p>

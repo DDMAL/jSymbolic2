@@ -103,7 +103,7 @@ public class FileValidator
      * @throws IOException Thrown if the input file is not valid.
      * @throws InvalidMidiDataException Thrown if the input file does not contain valid MIDI.
      */
-    private static Sequence getMIDISequence(File file, List<String> errorLog)
+    public static Sequence getMIDISequence(File file, List<String> errorLog)
             throws IOException, InvalidMidiDataException 
     {
         Sequence sequence = null;

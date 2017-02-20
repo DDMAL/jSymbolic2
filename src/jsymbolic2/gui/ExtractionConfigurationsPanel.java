@@ -19,22 +19,23 @@ import mckay.utilities.staticlibraries.StringMethods;
 
 /**
  * A GUI panel that allows the user to specify all feature extraction and configuration file settings other
- than the particular symbolic files from which features are to be extracted (this is set in the
- MusicFileSelectorPanel) and the particular features that are to be extracted and saved from them (this is
- set in the FeatureSelectorPanel). The user may use buttons on this panel to initiate feature extraction and
+ * than the particular symbolic files from which features are to be extracted (this is set in the
+ * MusicFileSelectorPanel) and the particular features that are to be extracted and saved from them (this is
+ * set in the FeatureSelectorPanel). The user may use buttons on this panel to initiate feature extraction and
  * saving, to save the settings currently entered on the GUI in a configuration file, or to load a new GUI
  * based on the contents of a configuration file.
  * 
- * <p>The Load New Settings from a Configuration File button allows the user to load the contents of a 
- * specified jSymbolic configuration settings file into the GUI. Note that any settings currently entered on
- * the GUI will be lost.</p>
+ * <p>The Load New Settings from a Configuration File button brings up a file chooser dialog box that allows
+ * the user to load the contents of a specified jSymbolic configuration settings file into the GUI. Note that
+ * any settings currently entered on the GUI will be lost.</p>
  * 
- * <p>The Save These Settings to a Configuration file button causes all the settings currently entered on the
- * GUI to be saved to a jSymbolic configuration settings file. Note that this file must be saved with a .txt
- * extension (it will be given one automatically if it does not already have one). The default path specified
- * will be a file in the jSymbolic working directory called jSymbolicDefaultConfigs.txt (jSymbolic looks for
- * such a file at startup, and automatically loads settings from it). Alternative save paths may be used, of
- * course, and internal default settings are used if such a file is not available at startup.</p>
+ * <p>The Save These Settings to a Configuration File button brings up a file chooser dialog that allows the 
+ * user to select a path to save a configuration settings file holding all the settings currently entered on
+ * the GUI. Note that this file must be saved with a .txt extension (it will be given one automatically if one
+ * is not specified). The default path specified will be a file in the jSymbolic working directory called
+ * jSymbolicDefaultConfigs.txt (jSymbolic looks for such a file at startup, and automatically loads settings
+ * from it). Alternative save paths may be used, of * course, and internal default settings are used if such a
+ * file is not available at startup.</p>
  * 
  * <p>The Extract Features from Files in Their Entirety radio button causes features to only be extracted from
  * symbolic files in their entirety (i.e. without windowing). Selecting this option will grey out the Window
@@ -48,32 +49,34 @@ import mckay.utilities.staticlibraries.StringMethods;
  * 19 sec, etc.</p>
  * 
  * <p>The Set ACE XML Feature Values Save Path button brings up a dialog box allowing the user to select a
- * path to save extracted feature values to as a ACE XML Feature Values file after feature extraction is 
- * complete. This path must have a .xml extension (it will automatically be given one if it is not specified). 
- * The selected path will be entered in the text area to the right of this button. Users may enter or change 
- * the save path directly in this text box if they prefer, rather than using the button.</p>
+ * path to save extracted feature values to as an ACE XML Feature Values file after feature extraction is 
+ * complete. This path must have a .xml extension (it will automatically be given one if one is not 
+ * specified). The selected path will automatically be entered in the text area to the right of this button.
+ * Users may enter or change the save path directly in this text box if they prefer, rather than using the 
+ * button.</p>
  * 
  * <p>The Set ACE XML Feature Definitions Save Path button brings up a dialog box allowing the user to select
  * a path to save extracted feature definitions to as an ACE XML Feature Definition file after feature
- * extraction is complete. This path must have a .xml extension (it will automatically be given one if it is 
- * not specified). The selected path will be entered in the text area to the right of this button. Users may
- * enter or change the save path directly in this text box if they prefer, rather than using the button.</p>
+ * extraction is complete. This path must have a .xml extension (it will automatically be given one if one is 
+ * not specified). The selected path will be automatically entered in the text area to the right of this
+ * button. Users may enter or change the save path directly in this text box if they prefer, rather than using 
+ * the button.</p>
  * 
  * <p>The Also Save Features in a Weka ARFF File check box will, if selected, cause features to be saved as a
  * Weka ARFF file after feature extraction is complete (features will still also be saved as ACE XML Feature
  * Values file as well). The path of this ARFF file will be the same as that entered in the Feature Values
- * file text area, but the extension will be changed from .xml to .arff.</p>
+ * File text area, but the extension will be changed from .xml to .arff.</p>
  * 
  * <p>The Also Save Features in a CSV File check box will, if selected, cause features to be saved as a
  * CSV file after feature extraction is complete (features will still also be saved as ACE XML Feature
- * Values file as well). The path of this CSV file will be the same as that entered in the Feature Values
+ * Values File as well). The path of this CSV file will be the same as that entered in the Feature Values
  * file text area, but the extension will be changed from .xml to .csv.</p>
  * 
  * <p>The EXTRACT AND SAVE FEATURES button will cause feature extraction to be carried out (and features 
  * saved) based on the settings specified on all components of the GUI. The PROCESSING INFORMATION and ERROR
  * REPORTS text areas will be updated to indicate progress. A beep will sound and a confirmation dialog box
  * will appear when feature extraction is complete (the GUI settings may not be changed while feature 
- * extraction is occurring.</p>
+ * extraction is occurring).</p>
  * 
  * <p>This class also includes an internal enum (DefaultSettingsEnum) that specifies the default settings for
  * all the above GUI components. These are used if the GUI is instantiated without a configuration file.</p>
@@ -639,7 +642,7 @@ public class ExtractionConfigurationsPanel
 
 	/**
 	 * Extract and save the features selected on the FeatureSelectorPanel from all the symbolic music files
- selected on the MusicFileSelectorPanel. Use the extraction settings entered on this
+	 * selected on the MusicFileSelectorPanel. Use the extraction settings entered on this
 	 * ExtractionConfigurationsPanel, and save the extracted features to the paths specified on this
 	 * ExtractionConfigurationsPanel. The GUI text areas are updated as progress continues. Beeps when
 	 * processing is finished and shows a dialog box indicating whether or not any problems occurred during

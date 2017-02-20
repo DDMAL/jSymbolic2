@@ -19,7 +19,7 @@ public final class AceXmlConverter
 	 * Does nothing if ace_xml_feature_values_file_path is null or empty, or if both save_ARFF and save_CSV
 	 * are false (null is returned in any of these cases).
 	 *
-	 * <p>The ARFF file will have a relation name of Converted_from_ACE_XML.</p
+	 * <p>The ARFF file will have a relation name of Converted_from_ACE_XML.</p>
 	 *
 	 * <p> The first row of the CSV file will list the feature names (multi-dimensional features will have a
 	 * feature index number appended to the end of their feature name). Each other row will consist of, first,

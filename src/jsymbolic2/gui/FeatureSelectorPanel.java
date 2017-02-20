@@ -18,8 +18,8 @@ import ace.datatypes.FeatureDefinition;
  * A JPanel containing a table containing one row for each implemented feature, and whose first column
  * contains check boxes allowing users to select which features to save during feature extraction. This
  * feature table also allows users to view additional metadata about each feature, and still further metadata
- * can be seen for a feature (including its feature dependencies) by double clicking on its row. Buttons are
- * included for auto-selecting all features, no features or just the default features.
+ * can be seen for a feature (including its description and feature dependencies) by double clicking on its
+ * row. Buttons are included for auto-selecting all features, no features or just the default features.
  * 
  * <p>The Feature Name column indicates the unique name of each feature, the Code column indicates its unique
  * code (feature group letter followed by the numerical identifier within the group), the Values column
@@ -31,9 +31,10 @@ import ace.datatypes.FeatureDefinition;
  * be extracted from either complete pieces or from individual windows, and a Value of No indicates that it
  * can only be extracted from complete pieces).</p>
  *
- * <p>Note that some features need other features to first be calculated in order to be extracted themselves.
- * Even if a given feature is not selected for saving on this table, it will still be extracted (but not 
- * saved) if another feature that is calculated based on it is in fact selected for saving.</p>
+ * <p>Note that some features need other features to first be calculated in order to be extracted themselves. 
+ * So, even if a given feature is not explicitly selected for saving on this table, it will still be 
+ * automatically extracted (but not saved) if another feature that is calculated based on it is in fact
+ * selected for saving.</p>
  * 
  * @author Cory McKay and Tristano Tenaglia
  */

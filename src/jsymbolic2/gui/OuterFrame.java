@@ -136,7 +136,7 @@ public class OuterFrame
 	public OuterFrame(ConfigurationFileData config_file_data)
 	{
 		// Position the GUI window at the left corner of the screen with a size of 1280 x 1024
-		setBounds (0, 0, 1280, 1024);
+		setBounds (0, 0, 1200, 900);
 		
 		// Set the GUI window title
 		setTitle("jSymbolic 2");
@@ -165,7 +165,7 @@ public class OuterFrame
 		
 		// Set up the music_file_selector_panel and feature_selector_panel
 		JPanel music_and_feature_panel = new JPanel(new GridLayout(1, 2, HORIZONTAL_GAP, VERTICAL_GAP));
-		music_file_selector_panel = new MusicFileSelectorPanel(this, config_file_data);
+		music_file_selector_panel = new MusicFileSelectorPanel(this);
 		addFormattedBorder(music_file_selector_panel);
 		feature_selector_panel = new FeatureSelectorPanel(this, config_file_data);
 		addFormattedBorder(feature_selector_panel);
@@ -243,6 +243,9 @@ public class OuterFrame
         }
 		status_print_stream.println("SUMMARY INFORMATION ON ALL IMPLEMENTED FEATURES:");
         status_print_stream.println(FeatureExtractorAccess.getFeatureCatalogueOverviewReport(null));
+		
+		// Load references to any potential symbolic music files from a config file
+		music_file_selector_panel.addMusicFilesParsedFromConfigFile(config_file_data);
 		
 		// Set up the combined_text_panels
 		JPanel combined_text_panels = new JPanel(new GridLayout(1, 2, HORIZONTAL_GAP, VERTICAL_GAP));
