@@ -250,7 +250,7 @@ public enum CommandLineSwitchEnum
 				// Run without configuration file if does not exist at default path
 				else if (args.length == 3)
 				{
-					UserFeedbackGenerator.simplePrintln(System.out, "NON-CRITICAL WARNING: Could not find a valid a configurations file called " + default_config_file_path + "  in the jSymbolic home directory that is valid under current settings. As a result, processing will continue using standard settings (unless specified manually). Although a default configurations file is by no means necessary to use jSymbolic, it is often convenient. You can save one at anytime either manually or using the jSymbolic GUI, if you wish (see the manual for more details).\n");
+					UserFeedbackGenerator.simplePrintln(System.out, "NON-CRITICAL WARNING: Could not find a configurations file called " + default_config_file_path + " in the jSymbolic home directory that is valid under current settings. As a result, processing will continue using standard settings (unless specified manually). Although a default configurations file is by no means necessary to use jSymbolic, it is often convenient. You can save one at anytime either manually or using the jSymbolic GUI, if you wish (see the manual for more details).\n");
 					CommandLineUtilities.parseNoConfigFileCommandLineAndExtractAndSaveFeatures(args);
 				}
 				

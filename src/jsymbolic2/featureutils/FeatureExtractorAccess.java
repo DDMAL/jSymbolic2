@@ -564,6 +564,116 @@ public final class FeatureExtractorAccess
 	
 	
 	/**
+	 * Prepare a formatted report outlining statistics about the breakdown of all features, as well as of only
+	 * those features selected as defaults.
+     * 
+     * @param   features_to_include An array corresponding in size and order to the contents of the
+     *                              all_implemented_feature_extractors field of this class. Values of true
+     *                              indicate that that feature should be included in this report, and false
+     *                              indicate that it should not. If this is null, then a report is generated
+     *                              for all implemented features.
+	 * @return                      The formatted report.
+	 */
+	public static String getFeatureCatalogueOverviewReport(boolean[] features_to_include)
+	{
+        // Set to report on all feautures if no specific features are specified.
+        if (features_to_include == null)
+        {
+            features_to_include = new boolean[all_implemented_feature_extractors.length];
+            for (int i = 0; i < features_to_include.length; i++)
+                features_to_include[i] = true;
+        }
+        
+		// Information relating to feature dimensions
+		int total_unique_features = 0;
+        int total_feature_dimensions = 0;
+		int total_one_dimensional_features = 0;
+		int total_multi_dimensional_features = 0;
+		
+		// Information relating to sequential features
+		int total_sequential_features = 0;
+		
+		// Information relating to feature types
+		String[] feature_type_labels = {"Overall Pitch Statistics", "Melodic Intervals", "Chords and Vertical Intervals", "Rhythm", "Instrumentation", "Musical Texture", "Dynamics", "MEI-Specific"};
+		int[] unique_features_by_type = new int[feature_type_labels.length];
+		int[] total_dimensions_by_type = new int[feature_type_labels.length];
+        for (int i = 0; i < feature_type_labels.length; i++)
+        {
+            unique_features_by_type[i] = 0;
+            total_dimensions_by_type[i] = 0;
+        }
+		
+		// Collect feature stats by going through features one by one
+		for (int i = 0; i <  all_implemented_feature_extractors.length; i++)
+		{
+            if (features_to_include[i])
+            {
+                MIDIFeatureExtractor feat = all_implemented_feature_extractors[i];
+
+                total_unique_features++;
+                
+                total_feature_dimensions += feat.getFeatureDefinition().dimensions;
+                if (feat.getFeatureDefinition().dimensions == 1)
+                    total_one_dimensional_features++;
+                else total_multi_dimensional_features++;
+
+                if (feat.getFeatureDefinition().is_sequential)
+                    total_sequential_features++;
+
+                char code = feat.getFeatureCode().charAt(0);
+                switch (code)
+                {
+                    case 'P':
+                        unique_features_by_type[0]++;
+                        total_dimensions_by_type[0] += feat.getFeatureDefinition().dimensions;
+                        break;
+                    case 'M':
+                        unique_features_by_type[1]++;
+                        total_dimensions_by_type[1] += feat.getFeatureDefinition().dimensions;
+                        break;
+                    case 'C':
+                        unique_features_by_type[2]++;
+                        total_dimensions_by_type[2] += feat.getFeatureDefinition().dimensions;
+                        break;
+                    case 'R':
+                        unique_features_by_type[3]++;
+                        total_dimensions_by_type[3] += feat.getFeatureDefinition().dimensions;
+                        break;
+                    case 'I':
+                        unique_features_by_type[4]++;
+                        total_dimensions_by_type[4] += feat.getFeatureDefinition().dimensions;
+                        break;
+                    case 'T':
+                        unique_features_by_type[5]++;
+                        total_dimensions_by_type[5] += feat.getFeatureDefinition().dimensions;
+                        break;
+                    case 'D':
+                        unique_features_by_type[6]++;
+                        total_dimensions_by_type[6] += feat.getFeatureDefinition().dimensions;
+                        break;
+                    case 'S':
+                        unique_features_by_type[7]++;
+                        total_dimensions_by_type[7] += feat.getFeatureDefinition().dimensions;
+                        break;
+                }
+            }
+		}
+		
+		// Prepare the part of the report relating to all features
+		String report = total_unique_features + " unique features\n";
+		report += total_feature_dimensions + " combined feature dimensions\n";
+		report += total_one_dimensional_features + " unique one-dimensional features\n";
+		report += total_multi_dimensional_features + " unique multi-dimensional features\n";
+		report += total_sequential_features + " sequential features\n";
+		report += "Feature breakdown by type:\n";
+		for (int i = 0; i < feature_type_labels.length; i++)
+			report += "\t" + unique_features_by_type[i] + " unique " + feature_type_labels[i] + " features (" + total_dimensions_by_type[i] + " total dimensions)\n";
+
+		// Return the report
+		return report;
+	}
+	
+	/**
 	 * Debugging method that prints the total number of implemented features, including the code and name of
 	 * each feature, in the correct listed order.
 	 */

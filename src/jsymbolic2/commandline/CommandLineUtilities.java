@@ -30,8 +30,8 @@ public final class CommandLineUtilities
 	public static void parseNoConfigFileCommandLineAndExtractAndSaveFeatures(String[] args)
 	{
 		// To hold feature extraction settings
-		boolean convert_to_arff = false;
-		boolean convert_to_csv = false;
+		boolean convert_to_arff = true;
+		boolean convert_to_csv = true;
 		PrintStream status_print_stream = System.out;
 		PrintStream error_print_stream = System.err;
 

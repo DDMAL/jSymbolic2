@@ -2,7 +2,7 @@
  jSymbolic 2.0
 ==================================================================================
  by Cory McKay
- Copyright (C) 2016 (GNU GPL)
+ Copyright (C) 2017 (GNU GPL)
 
 
 ### OVERVIEW
@@ -33,8 +33,8 @@ primarily histograms).
 
 jSymbolic is free and open-source, and is designed to be used directly for
 conducting research as well as as a platform for iteratively developing new 
-features that can then be shared amongst researchers. As such, jSymboli
-c emphasizes extensibility, and includes a modular design that facilitates 
+features that can then be shared amongst researchers. As such, jSymbolis
+emphasizes extensibility, and includes a modular design that facilitates 
 the implementation and incorporation of new features, automatic provision
 of all other feature values to each new feature and dynamic feature extraction
 scheduling that automatically resolves feature dependencies. jSymbolic is 
@@ -55,7 +55,7 @@ the associated Elvis database.
 
 More information on jMIR (and the software itself) is available at
 http://jmir.sourceforge.net. jSymbolic includes a detailed HTML manual,
-which is packaged with the code and also posted on the jMIR web sit.
+which is packaged with the code and also posted on the jMIR web site.
 
 Please Cory McKay (cory.mckay@mail.mcgill.ca) with any bug reports or
 questions relating to the software. 
@@ -159,7 +159,7 @@ The simplest way to run jSymbolic from a terminal prompt is to type the followin
 your terminal prompt (after you have navigated to the directory containing the
 jSymbolic.jar file):
 
-    java -jar jSymbolic.jar
+    java -Xmx3072m -jar jSymbolic2.jar
 
 This will run the jSymbolic GUI set up with default settings.
 
@@ -173,7 +173,7 @@ Other command line arguments simply consist of values, with no flags, of flags w
 no values. For example, a lone flag of "-help" will print to the terminal a list of 
 valid flags with explanations of what they are. This can be run as follows:
 
-    java -jar jSymbolic.jar -help
+    java -jar jSymbolic2.jar -help
 
 Invalid command line arguments will also result in the list of legitimate command line 
 arguments being printed out to the terminal.
@@ -207,69 +207,38 @@ appropriate heap size.
 
 ### USING THE JSYMBOLIC GUI
 
-The jSymbolic GUI consists of two primary panels:
+The jSymbolic GUI makes it quite easy to use jSymbolic. Users are advised to read the 
+section of the jSymbolic manual on the GUI for more details, but a brief overview is
+provided here. The jSymbolic GUI consists of several component panels:
 
-- Recording Selector Panel: This panel, on the left of the jSymbolic GUI allows users to
-select the symbolic music files they wish to extract features from. Users may view the
-recordings that they have selected to have features extracted from, as well as see
-metadata about them and play the music stored in them.
-- Feature Selector Panel: This panel, on the right of the jSymbolic GUI, allows users to
-choose the features they wish to extract from the files chosen on the Recording Selector
-Panel. Users can also specify: output file paths; the types of files to save features in;
-and whether windowed extraction is required and under what settings. Finally, feature 
-extraction can be initiated from this panel.
-
-With respect to the Recording Selector Panel, MEI and MIDI recordings can be added and 
-removed from the list of files to extract features from on this panel by clicking the Add 
-Recordings and Delete Recordings buttons, respectively. If the Validate Recordings
-checkbox is checked, then the recordings will be validated immediately upon addition to
-this list in order to ensure that they are valid MEI and MIDI before feature extraction
-begins. It is highly recommended to leave this checkbox on. The Store Sequence checkbox
-causes MIDI sequences to be stored for all valid input files. The Play Sequence button 
-and Stop Playback buttons can be used to sonify MIDI and MEI files (the latter of which
-is converted to a MIDI file using jMei2Midi for playback). The Fiew File Info button 
-displays metadata for input files. It currently only display file information for MIDI
-files.
-
-With respect to the Feature Selector Panel, the top section of this panel allows the
-user to use checkboxes to select the features they would like to extract from the input
-files specified in the Recording Selector Panel. The Dimensions column of this table
-indicates the number of dimenions assocuated with each feature (multi-dimensional features
-are at the end of this list).
-
-The Save Features For Each Window and Save For Overall Recordings radio buttons allow 
-the user to choose whether input files should be broken into windows from which features
-will be extracted individually, or if only features for input files as a whole should be 
-extracted. If the Save Features For Each Window option is selected, then the Window Length
-(seconds) text box must be used to specify the number of seconds each window should last,
-and the Window Overlap (fraction) text box must be used to specify the fractional overlap
-between consecutive windows. For example, for a window length value of 10 and an overlap 
-value of 0.1, the windows will be from 0 sec to 10 sec, 9 sec to 19 sec, etc.
-
-The Convert from ACE XML to ARFF checkbox allows the user to decide whether feature values 
-should be saved in a WEKA ARFF file. Similarly, the Convert from ACE XML to CSV checkbox 
-allows the user to decide whether feature values should be saved in a CSV text file. 
-Features are also saved as ACE XML files, regardless of whether ARFF or CSV files are also
-generated.
-
-The ACE XML Feature Values Save Path button allows the user to open a browse dialog box to
-choose the path to save the ACE XML feature values to. This path may also be written in
-the accompanying text box by hand. If ARFF or CSV files are set to be saved, they will be 
-given the same file name, but with a .arff or .csv extension, respectively.
-
-The ACE XML Feature Definitions Save Path button allows the user to open a browse dialog 
-box to choose the path to save the ACE XML feature metadata to. This path may also be
-written in the accompanying text box by hand.
-
-The Save GUI Configuration allows the user to save the settings currently displayed in
-the jSymbolic GUI as a configuration settings file to the path specified in the 
-accompanying text box.
-
-Finally, feature extraction is initiated by pressing the Extract Features button. Any 
-invalid files will result in popup error message at the end of the processing. All valid
-files will still be processed and have features saved. If an MEI-specific feature (e.g.
-Number of Grace Notes) is set to be extracted, then it will only be extracted from MEI
-files (it will be ignored by other files, such as MIDI files).
+- Music File Selector Panel: This panel, on the top left of the jSymbolic GUI, contains
+a table listing all symbolic music files from which features are to be extracted. The first
+column indicates the name of each file, and the second indicates its file path. Double
+clicking on a given row provides additional metadata about its associated file. Buttons are
+included for adding or removing files from the table, as well as for sonifying them. The
+table may be sorted by clicking on either of the column headings.
+- Feature Selector Panel: This panel, on the top right of the jSymbolic GUI, contains a
+table containing one row for each feature, and whose first column contains check boxes
+allowing users to select which features to save during feature extraction. This feature
+table also allows users to view additional metadata about each feature, and still further
+metadata can be seen for a feature (including its feature dependencies) by double clicking
+on its row. Buttons are included for auto-selecting all features, no features or just the
+default features.
+- Processing Information Panel: This panel, on the middle left of the jSymbolic GUI, is a
+space where processing updates are posted during feature extraction. Summary information is
+also posted here at startup relating to feature breakdowns, and additional updates ar
+e written here relating to configuration files and symbolic music files selected to have
+features extracted from them.
+- Error Reports Panel: This panel, on the middle right of the jSymbolic GUI, is a space
+where any problems encountered during feature extraction processing are posted (such
+problems typically relate to invalid files).
+- Configuration File and Windowing Settings Panel: This panel, on the bottom left of the
+jSymbolic GUI, allows the user to save and load configuration settings files. The user can
+also specify settings related to windowed feature extraction.
+- Feature Extraction and Saving Settings Panel: This panel, on the bottom right of the
+jSymbolic GUI, allows the user to specify the kinds and paths of output files to be
+generated by jSymbolic when feature extraction is complete, and to initiate feature
+extraction.
 
 
 ### THE JSYMBOLIC CONFIGURATION SETTINGS FILE
@@ -291,6 +260,8 @@ and overlap.
 - Output file paths for saving extracted feature values and feature metadata.
 
 The input file paths and output file paths are optional, and may be omitted if desired.
+However, if one is to be used, then both must be present (only having input paths without
+output paths is considered invalid, and vice versa).
 
 In fact, the configuration settings file itself is entirely optional. jSymbolic's 
 functionality may be accessed via the GUI, command line interface or API without a 
@@ -322,7 +293,7 @@ See the jSymbolic manual for more information on this topic.
 ### LICENSING AND LIABILITY 
 
 jSymbolic 2
-Copyright (C) 2016
+Copyright (C) 2017
 Cory McKay
 
 This program is free software; you can redistribute it and/or modify it under the terms

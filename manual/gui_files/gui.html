@@ -16,63 +16,86 @@
 
 <p><strong>RUNNING THE JSYMBOLIC GUI</strong></p>
 
-<p>A file named "jSymbolic.jar" is included in the jSybmolic distribution. jSymbolic can be run simply by double clicking on this file. However, running jSymbolic simply by double clicking its icon could result in running out of memory in the case of particularly large and complex files (see the section of the manual on the <a href="../commandline_files/commandline.html">command line interface</a>), so in such cases it may be safer to run jSymbolic from the command line, as shown below.</p>
+<p>A file named "jSymbolic.jar" is included in the jSybmolic distribution. jSymbolic can be run simply by double clicking on this file. However, running jSymbolic simply by double clicking its icon could result in running out of memory when features are extracted from particularly large and complex files (see the section of the manual on the <a href="../commandline_files/commandline.html">command line interface</a>), so in such cases it may be safer to run jSymbolic from the command line, as shown below.</p>
 
-<p>The jSybmolic GUI can alternatively be run  by typing the following at a terminal prompt (after navigating to the directory holding the jSymbolic.jar file):</p>
+<p>The jSybmolic GUI can also be run  by typing the following at a terminal prompt (after navigating to the directory holding the jSymbolic.jar file):</p>
 
-<p><blockquote>
-  <pre>java -Xmx3072m -jar jSymbolic.jar</pre>
-</blockquote><p></p>
+<blockquote>
+  <pre>java -Xmx3072m -jar jSymbolic2.jar</pre>
+</blockquote>
 
-<p>Running jSymbolic like this (or double clicking on the jSymbolic.jar file) will cause the GUI to be loaded set up with default settings, as defined by a <a href="../configuration_files/configuration.html">configuration settings file</a> in the same folder as the jSymbolic.jar file, and with the file name <i>jSymbolicDefaultConfigs.txt</i>. If no such file exists, or if it is not a valid jSymbolic configuration settings file, then the GUI is loaded with hard-coded default settings.</p>
+<p>Running jSymbolic like this (or double clicking on the jSymbolic.jar file) will cause the GUI to be loaded set up with default settings, as defined by a <a href="../configuration_files/configuration.html">configuration settings file</a> in the same folder as the jSymbolic2.jar file, and with the file name <i>jSymbolicDefaultConfigs.txt</i>. If no such file exists, or if it is not a valid jSymbolic configuration settings file, then the GUI is loaded with hard-coded default settings.</p>
 
-<p>Users wishing to pre-load the GUI with alternative settings stored in any given <a href="../configuration_files/configuration.html">configuration settings file</a> they wish may enter the following at a terminal prompt (again, after navigating to the directory holding the jSymbolic.jar file:</p>
+<p>Users wishing to pre-load the GUI with alternative settings stored in any given <a href="../configuration_files/configuration.html">configuration settings file</a> they wish may enter the following at a terminal prompt (again, after navigating to the directory holding the jSymbolic.jar file):</p>
 
-<p><blockquote>
-  <pre>java -Xmx3072m -jar jSymbolic.jar -configgui &ltConfigurationFilePath&gt</pre>
-</blockquote><p></p>
+<blockquote>
+  <pre>java -Xmx3072m -jar jSymbolic2.jar -configgui &ltConfigurationFilePath&gt</pre>
+</blockquote>
 
 <p>More information on using jSymbolic's command line interface is available <a href="../commandline_files/commandline.html">here</a>.
 
 <p><strong>OVERVIEW OF JSYMBOLIC'S GUI</strong></p>
 
-<p>The jSymbolic GUI consists of two primary panels:
+<p>The jSymbolic GUI consists of several component panels, all of which can be seen on Figure 1 below:
 <ul>
-  <li><strong>Recording Selector Panel:</strong> This panel, on the left of the jSymbolic GUI and shown in Figure 1 below, allows users to select the symbolic music files they wish to extract features from. Users may view the recordings that they have selected to have features extracted from, as well as see metadata about them and play the music stored in them.</li>
-  <li><strong>Feature Selector Panel: </strong> This panel, on the right of the jSymbolic GUI and shown in Figure 2 below, allows users to choose the features they wish to extract from the files chosen on the Recording Selector Panel. Users can also specify: output file paths; the types of files to save features in; and whether windowed extraction is required and under what settings. Finally, feature extraction can be initiated from this panel.</li>
+  <li><strong>Music File Selector Panel:</strong> This panel, on the top left of the jSymbolic GUI shown in Figure 1 below, contains a table listing all symbolic music files from which features are to be extracted. The first column indicates the name of each file, and the second indicates its file path. Double clicking on a given row provides additional metadata about its associated file. Buttons are included for adding or removing files  from the table, as well as for sonifying them. The table may be sorted by clicking on either of the column headings.</li>
+  <li><strong>Feature Selector Panel: </strong> This panel, on the top right of the jSymbolic GUI shown in Figure 1 below, contains a table containing one row for each  feature, and whose first column contains check boxes allowing users to select which features to save during feature extraction. This feature table also allows users to view additional metadata about each feature, and still further metadata can be seen for a feature (including its feature dependencies) by double clicking on its row. Buttons are included for auto-selecting all features, no features or just the default features.</li>
+  <li><strong>Processing Information Panel:</strong> This panel, on the middle left of the jSymbolic GUI shown in Figure 1 below,  is a space where processing updates are posted during feature extraction. Summary information is also posted here at startup relating to feature breakdowns, and additional updates are written here relating to configuration files and symbolic music files selected to have features extracted from them.</li>
+  <li><strong>Error Reports Panel:</strong> This panel, on the middle right of the jSymbolic GUI shown in Figure 1 below, is a space where any problems encountered during feature extraction processing are posted (such problems typically relate to invalid files).</li>
+  <li><strong>Configuration File and Windowing Settings Panel:</strong> This panel, on the bottom left of the jSymbolic GUI shown in Figure 1 below, allows the user to save and load configuration settings files. The user can also specify settings related to windowed feature extraction.</li>
+  <li><strong>Feature Extraction and Saving Settings Panel:</strong> This panel, on the bottom right of the jSymbolic GUI shown in Figure 1 below, allows the user to specify the kinds and paths of output files to be generated by jSymbolic when feature extraction is complete, and to initiate feature extraction.</li>
 </ul>
+<p>More details on some of these panels are provided in the following sections.</p>
+<p><img src="./jSymbolicScreenShot.gif" height="678" width="844" border=1></p>
+<p><em><strong>Figure 1: </strong></em>The jSymbolic GUI.</p>
 
-<p><strong>THE RECORDING SELECTOR PANEL</strong></p>
+<p><strong>THE MUSIC FILE SELECTOR PANEL</strong></p>
 
-<p>MEI and MIDI recordings can be added and removed from the list of files to extract features from on this panel by clicking the <i>Add Recordings</i> and <i>Delete Recordings</i> buttons, respectively. If the <i>Validate Recordings</i> checkbox is checked, then the recordings will be validated immediately upon addition to this list in order to ensure that they are valid MEI and MIDI before feature extraction begins. It is highly recommended to leave this checkbox on. The <i>Store Sequence</i> checkbox causes MIDI sequences to be stored for all valid input files.</p>
-
-<p>The <i>Play Sequence</i> button and <i>Stop Playback</i> buttons can be used to sonify MIDI and MEI files (the latter of which is converted to a MIDI file using <a href="https://github.com/DDMAL/jMei2Midi" target="top">jMei2Midi</a> for playback).</p>
-
-<p>The <i>Fiew File Info</i> button displays metadata for input files. It currently only displays file information for MIDI files.</p>
-
-<p><img src="./recording_selector_panel.png" border=1></p>
-<p><em><strong>Figure 1: </strong></em>The Recording Selector Panel.</p>
-
+<p>This panel contains a table listing all symbolic music files from which features are to be extracted. The first column indicates the name of each file, and the second indicates its file path. The following buttons are contained on this panel:</p>
+<ul>
+  <li><strong>Add Files:</strong> Brings up a file chooser dialog box allowing the user to select one or more symbolic music files to add to the table. An error message will be displayed if invalid or nonexistent files are chosen. Files chosen are already on the table will be ignored. If any files are selected, then a report will be written to the Processing Information Panel.</li>
+  <li><strong>Remove Files:</strong> Removes all selected files from the table.</li>
+  <li><strong>Play Sonification:</strong> Plays the selected symbolic music file on the table (MEI files are converted to MIDI).</li>
+  <li><strong>Stop Sonification:</strong> Stops any currently ongoing playback.</li>
+</ul>
+<p>Double clicking on a given row will bring up a dialog box providing additional metadata on the row's associated file. The table may be sorted by clicking on either of the column headings.</p>
 <p><strong>THE FEATURE SELECTOR PANEL</strong></p>
 
-<p>The top section of the Feature Selector Panel allows the user to use checkboxes to select the features they would like to extract from the input files specified in the Recording Selector Panel. The <i>Dimensions</i> column of this table indicates the number of dimenions assocuated with each feature (multi-dimensional features are at the end of this list).</p>
-
-<p>The <i>Save Features For Each Window</i> and <i>Save For Overall Recordings</i> radio buttons allow the user to choose whether input files should be broken into windows from which features will be extracted individually, or if only features for input files as a whole should be extracted. If the <i>Save Features For Each Window</i> option is selected, then the <i>Window Length (seconds)</i> text box must be used to specify the number of seconds each window should last, and the <i>Window Overlap (fraction)</i> text box must be used to specify the fractional overlap between consecutive windows. For example, for a window length value of 10 and an overlap value of 0.1, the windows will be from 0 sec to 10 sec, 9 sec to 19 sec, etc.</p>
-
-<p>The <i>Convert from ACE XML to ARFF</i> checkbox allows the user to decide whether feature values should be saved in a <a href="http://www.cs.waikato.ac.nz/ml/weka/arff.html" target="top">WEKA ARFF</a> file. Similarly, the <i>Convert from ACE XML to CSV</i> checkbox allows the user to decide whether feature values should be saved in a <a href="https://en.wikipedia.org/wiki/Comma-separated_values" target="top">CSV text</a> file. Features are also saved as <a href="http://jmir.sourceforge.net/index_ACE_XML.html" target="top">ACE XML</a> files, regardless of whether ARFF or CSV files are also generated.</p>
-
-<p>The <i>ACE XML Feature Values Save Path</i> button allows the user to open a browse dialog box to choose the path to save the ACE XML feature values to. This path may also be written in the accompanying text box by hand. If ARFF or CSV files are set to be saved, they will be given the same file name, but with a .arff or .csv extension, respectively.</p>
-
-<p>The <i>ACE XML Feature Definitions Save Path</i> button allows the user to open a browse dialog box to choose the path to save the ACE XML feature metadata to. This path may also be written in the accompanying text box by hand.</p>
-
-<p>The <i>Save GUI Configuration</i> allows the user to save the settings currently displayed in the jSymbolic GUI as a <a href="../configuration_files/configuration.html">configuration settings file</a> to the path specified in the accompanying text box.</p>
-
-<p>Finally, feature extraction is initiated by pressing the <i>Extract Features</i> button. Any invalid files will result in popup error message at the end of the processing. All valid files will still be processed and have features saved. If an MEI-specific feature (e.g. Number of Grace Notes) is set to be extracted, then it will only be extracted from MEI files (it will be ignored by other files, such as MIDI files).</p>
-
-<p><img src="./feature_selector_panel.png" border=1></p>
-<p><em><strong>Figure 2: </strong></em>The Feature Selector Panel.</p>
-
-<p></p>
+<p>This panel contains a table containing one row for each  feature. Users may select which of these features they would like to have saved after feature extraction is complete by selecting or deselecting the checkbox for each feature in the first column of the table. The columns of this table are as follows:</p>
+<ul>
+  <li><strong>Save:</strong> Whether or not to save the value of a feature after feature extraction is complete.</li>
+  <li><strong>Feature Name:</strong> The unique name of each feature.</li>
+  <li><strong>Code: </strong>The unique code of each feature. This consists of the feature group letter followed by the numerical identifier within the group.</li>
+  <li><strong> Values: </strong>The number of dimensions (i.e. independent values) associated with the feature. Any feature with a Values entry greater than 1 is a feature vector rather than a single-value feature.</li>
+  <li><strong>MEI-Only:</strong> Whether a given feature can only be extracted from MEI files. Such features should only be used if features are exclusively being extracted from MEI files.</li>
+  <li><strong> Sequential:</strong> Whether a given feature can be extracted for windows of a symbolic piece. A value of Yes means that the feature can be extracted from either complete pieces or from individual windows, and a Value of No indicates that it can only be extracted from complete pieces.</li>
+</ul>
+<p>This panel also includes the following buttons:</p>
+<ul>
+  <li><strong>Select Default Features:</strong> Sets the Save checkboxes to match the default features to save hard-coded into jSymbolic.</li>
+  <li><strong>Select All Features:</strong> Sets the Save checkboxes such that all features are set to be saved.</li>
+  <li><strong>Deselect All Features:</strong> Sets the Save checkboxes such that no features are set to be saved.</li>
+</ul>
+<p>Users may also double click on any row to see metadata for the associated feature, including a brief description of the feature and the names of any other features that it is dependant on for calculation.</p>
+<p>More details on each of these features are provided <a href="../featureexplanations_files/featureexplanations.html">here</a>. A breakdown summary of both the features set to be extracted at startup and of all implemented features is printed to the Processing Information Panel at startup.</p>
+<p>Note that some features need other features to first be calculated in order to be extracted themselves. So, even if a given feature is not explicitly selected for saving on this table, it will still be automatically extracted (but not  saved) if another feature that is calculated based on it is in fact selected for saving.</p>
+<p><strong>CONFIGURATION FILE AND WINDOWING SETTINGS PANEL</strong></p>
+<p>This panel allows the user to save and load <a href="../configuration_files/configuration.html">configuration settings files</a>. The user can also specify settings related to windowed feature extraction. This panel consists of the following components:</p>
+<ul>
+  <li><strong>Load New Settings from a Configuration File Button:</strong> Brings up a file chooser dialog box that allows the user to load the contents of a  specified jSymbolic configuration settings file into the GUI. Note that all input symbolic music file paths specified in the input config file should ideally exist and be valid. Note also that any settings currently entered on the GUI will be lost.</li>
+  <li><strong>Save These Settings to a Configuration File Button:</strong> Brings up a file chooser dialog box that allows the user to select a path to save a configuration settings file holding all the settings currently entered on the GUI. Note that this file must be saved with a .txt extension (it will be given one automatically if one is not specified). Note that, as specified in the <a href="../configuration_files/configuration.html">configuration settings files</a> part of the manual, ACE XML save paths are only saved in the resultant config file if input symbolic music files have been loaded onto the the music file selector table (config files must contain both of these elements or neither). The default path specified in the file chooser dialog box will be a file in the jSymbolic working directory called jSymbolicDefaultConfigs.txt (jSymbolic looks for such a file at startup, and automatically loads settings from it). </li>
+  <li><strong>Extract Features from Files in Their Entirety Radio Button:</strong> Causes features to only be extracted from symbolic files in their entirety (i.e. without windowing). Selecting this option will grey out the Window Duration and Window Overlap text areas.</li>
+  <li><strong>Extract Features from Windows Radio Button:</strong> Causes features to be extracted from windows only (i.e.  not from files in their entirety). Each window will have a duration equal to the number of seconds specified in the <strong>Window Duration Text Area</strong>, and the windows will have a factional overlap specified in the  <strong>Window Overlap Fraction Text Area</strong> (a value of 0 indicates no overlap). For example, for a window duration  value of 10 and a window overlap fraction value of 0.1, the windows will be from 0 sec to 10 sec, 9 sec to 19 sec, etc.</li>
+</ul>
+<p><strong>FEATURE EXTRACTION AND SAVING SETTINGS PANEL</strong></p>
+<p>This panel allows the user to specify the kinds and paths of output files to be generated by jSymbolic when feature extraction is complete, and to initiate feature extraction. This panel consists of the following components:</p>
+<ul>
+  <li><strong>Set ACE XML Feature Values Save Path Button:</strong> Brings up a file chooser dialog box allowing the user to select a path to save extracted feature values to as an <a href="http://jmir.sourceforge.net/index_ACE_XML.html" target="top">ACE XML</a> Feature Values file after feature extraction is  complete. This path must have a .xml extension (it will automatically be given one if one is not specified).  The selected path will automatically be entered in the text area to the right of this button. Users may enter or change  the save path directly in this text box if they prefer, rather than using the button.</li>
+  <li><strong>Set ACE XML Feature Definitions Save Path Button:</strong> Brings up a file chooser dialog box allowing the user to select a path to save extracted feature definitions to as an <a href="http://jmir.sourceforge.net/index_ACE_XML.html" target="top">ACE XML</a> Feature Definitions file after feature extraction is complete. This path must have a .xml extension (it will automatically be given one if one is  not specified). The selected path will be automatically entered in the text area to the right of this button. Users may enter or change the save path directly in this text box if they prefer, rather than using the button.</li>
+  <li><strong>Also Save Features in a Weka ARFF File Check Box:</strong> Will, if selected, cause features to be saved as a <a href="http://www.cs.waikato.ac.nz/ml/weka/arff.html" target="top">WEKA ARFF</a> file after feature extraction is complete (features will still also be saved as ACE XML Feature Values file as well). The path of this ARFF file will be the same as that entered in the Feature Values File text area above, but the extension will be changed from .xml to .arff.</li>
+  <li><strong>Also Save Features in a CSV File Check Box:</strong> Will, if selected, cause features to be saved as a <a href="https://en.wikipedia.org/wiki/Comma-separated_values" target="top">CSV text</a> file after feature extraction is complete (features will still also be saved as ACE XML Feature Values File as well). The path of this CSV file will be the same as that entered in the Feature Values file text area, but the extension will be changed from .xml to .csv.</li>
+  <li><strong>EXTRACT AND SAVE FEATURES Button:</strong> Causes feature extraction to be carried out (and features  saved) based on the settings specified on all components of the GUI. The Processing Information Panel and Error Reports Panel text areas will be updated to indicate progress. A beep will sound and a confirmation dialog box will appear when feature extraction is complete (the GUI settings may not be changed while feature  extraction is occurring).</li>
+</ul>
 <table height="5" width="100%" bgcolor="#0033C4" border="0"><tbody><tr><th></th></tr></tbody></table>
 <p><tt><a href="../gui_files/gui.html#Top">-top of page-</a></tt></p>
 
