@@ -25,17 +25,20 @@ import mckay.utilities.staticlibraries.StringMethods;
  * saving, to save the settings currently entered on the GUI in a configuration file, or to load a new GUI
  * based on the contents of a configuration file.
  * 
- * <p>The Load New Settings from a Configuration File button brings up a file chooser dialog box that allows
- * the user to load the contents of a specified jSymbolic configuration settings file into the GUI. Note that
- * any settings currently entered on the GUI will be lost.</p>
+ * <p>Brings up a file chooser dialog box that allows the user to load the contents of a specified jSymbolic
+ * configuration settings file into the GUI. Note that all input symbolic music file paths specified in the
+ * input config file should ideally exist and be valid. Note also that any settings currently entered on the
+ * GUI will be lost.</p>
  * 
  * <p>The Save These Settings to a Configuration File button brings up a file chooser dialog that allows the 
  * user to select a path to save a configuration settings file holding all the settings currently entered on
  * the GUI. Note that this file must be saved with a .txt extension (it will be given one automatically if one
- * is not specified). The default path specified will be a file in the jSymbolic working directory called
- * jSymbolicDefaultConfigs.txt (jSymbolic looks for such a file at startup, and automatically loads settings
- * from it). Alternative save paths may be used, of * course, and internal default settings are used if such a
- * file is not available at startup.</p>
+ * is not specified). Note that ACE XML save paths are only saved in the resultant config file if input
+ * symbolic music files have been loaded onto the the music file selector table (config files must contain
+ * both of these elements or neither). The default path specified in the file chooser dialog box will be a 
+ * file in the jSymbolic working directory called jSymbolicDefaultConfigs.txt (jSymbolic looks for such a file
+ * at startup, and automatically loads settings from it). Alternative save paths may be used, of course, and 
+ * internal default settings are used if such a file is not available at startup.</p>
  * 
  * <p>The Extract Features from Files in Their Entirety radio button causes features to only be extracted from
  * symbolic files in their entirety (i.e. without windowing). Selecting this option will grey out the Window
