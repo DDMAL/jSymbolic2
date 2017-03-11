@@ -257,7 +257,7 @@ public class MIDIFeatureProcessor
           this.save_overall_recording_features = save_overall_recording_features;
           
           // Calculate the window offset
-          window_overlap_offset = (int) (window_overlap * (double) window_size);
+          window_overlap_offset = window_overlap * window_size;
           
           // Find which features need to be extracted and in what order. Also find
           // the indices of dependencies and the maximum offsets for each feature.
@@ -1019,11 +1019,9 @@ public class MIDIFeatureProcessor
                //Compute start and end times
                int start_tick = start_ticks[win];
                int end_tick = end_ticks[win];
-               double seconds_per_tick_start = seconds_per_tick[start_tick];
-               double seconds_per_tick_end = seconds_per_tick[end_tick];
-               double start_time = (seconds_per_tick_start * start_tick);
+               double start_time = MIDIMethods.getSecondsAtTick(start_tick, seconds_per_tick);
                start_time = (start_time > 0) ? start_time : 0; //check for non negative
-               double end_time = (seconds_per_tick_end * end_tick);
+               double end_time = MIDIMethods.getSecondsAtTick(end_tick, seconds_per_tick);
                
                values_writer.writeBytes( "\t\t<section start=\"" + start_time +
                     "\" stop=\"" + end_time + "\">\n");
