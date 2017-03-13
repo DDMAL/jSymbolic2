@@ -1,0 +1,1235 @@
+<?xml version="1.0"?>
+<!DOCTYPE feature_vector_file [
+   <!ELEMENT feature_vector_file (comments, data_set+)>
+   <!ELEMENT comments (#PCDATA)>
+   <!ELEMENT data_set (data_set_id, section*, feature*)>
+   <!ELEMENT data_set_id (#PCDATA)>
+   <!ELEMENT section (feature+)>
+   <!ATTLIST section start CDATA ""
+                     stop CDATA "">
+   <!ELEMENT feature (name, v+)>
+   <!ELEMENT name (#PCDATA)>
+   <!ELEMENT v (#PCDATA)>
+]>
+
+<feature_vector_file>
+
+   <comments></comments>
+
+	<data_set>
+		<data_set_id>C:\Git\jSymbolic2\manual\api_files\.\MySymbolicMusicFiles\Bach J S - Cello Suite No 1 Prelude.mid</data_set_id>
+		<feature>
+			<name>Prevalence of Most Common Pitch</name>
+			<v>1.707E-1</v>
+		</feature>
+		<feature>
+			<name>Prevalence of Most Common Pitch Class</name>
+			<v>1.951E-1</v>
+		</feature>
+		<feature>
+			<name>Relative Prevalence of Top Pitches</name>
+			<v>7.143E-1</v>
+		</feature>
+		<feature>
+			<name>Relative Prevalence of Top Pitch Classes</name>
+			<v>7.656E-1</v>
+		</feature>
+		<feature>
+			<name>Interval Between Most Prevalent Pitches</name>
+			<v>7E0</v>
+		</feature>
+		<feature>
+			<name>Interval Between Most Prevalent Pitch Classes</name>
+			<v>7E0</v>
+		</feature>
+		<feature>
+			<name>Number of Common Pitches</name>
+			<v>3E0</v>
+		</feature>
+		<feature>
+			<name>Pitch Variety</name>
+			<v>2.8E1</v>
+		</feature>
+		<feature>
+			<name>Pitch Class Variety</name>
+			<v>1.2E1</v>
+		</feature>
+		<feature>
+			<name>Range</name>
+			<v>3.1E1</v>
+		</feature>
+		<feature>
+			<name>Most Common Pitch</name>
+			<v>5.7E1</v>
+		</feature>
+		<feature>
+			<name>Mean Pitch</name>
+			<v>5.3E1</v>
+		</feature>
+		<feature>
+			<name>Importance of Bass Register</name>
+			<v>5.168E-1</v>
+		</feature>
+		<feature>
+			<name>Importance of Middle Register</name>
+			<v>4.832E-1</v>
+		</feature>
+		<feature>
+			<name>Importance of High Register</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Most Common Pitch Class</name>
+			<v>9E0</v>
+		</feature>
+		<feature>
+			<name>Dominant Spread</name>
+			<v>7E0</v>
+		</feature>
+		<feature>
+			<name>Strong Tonal Centres</name>
+			<v>2E0</v>
+		</feature>
+		<feature>
+			<name>Major or Minor</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Glissando Prevalence</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Average Range of Glissandos</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Vibrato Prevalence</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Microtone Prevalence</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Most Common Melodic Interval</name>
+			<v>2E0</v>
+		</feature>
+		<feature>
+			<name>Mean Melodic Interval</name>
+			<v>4.321E0</v>
+		</feature>
+		<feature>
+			<name>Number of Common Melodic Intervals</name>
+			<v>3E0</v>
+		</feature>
+		<feature>
+			<name>Distance Between Most Prevalent Melodic Intervals</name>
+			<v>1E0</v>
+		</feature>
+		<feature>
+			<name>Prevalence of Most Common Melodic Interval</name>
+			<v>2.844E-1</v>
+		</feature>
+		<feature>
+			<name>Relative Prevalence of Most Common Melodic Intervals</name>
+			<v>4.892E-1</v>
+		</feature>
+		<feature>
+			<name>Amount of Arpeggiation</name>
+			<v>3.287E-1</v>
+		</feature>
+		<feature>
+			<name>Repeated Notes</name>
+			<v>2.599E-2</v>
+		</feature>
+		<feature>
+			<name>Chromatic Motion</name>
+			<v>1.391E-1</v>
+		</feature>
+		<feature>
+			<name>Stepwise Motion</name>
+			<v>4.235E-1</v>
+		</feature>
+		<feature>
+			<name>Melodic Thirds</name>
+			<v>1.774E-1</v>
+		</feature>
+		<feature>
+			<name>Melodic Perfect Fourths</name>
+			<v>5.963E-2</v>
+		</feature>
+		<feature>
+			<name>Melodic Tritones</name>
+			<v>7.645E-2</v>
+		</feature>
+		<feature>
+			<name>Melodic Perfect Fifths</name>
+			<v>5.046E-2</v>
+		</feature>
+		<feature>
+			<name>Melodic Sixths</name>
+			<v>9.633E-2</v>
+		</feature>
+		<feature>
+			<name>Melodic Sevenths</name>
+			<v>5.505E-2</v>
+		</feature>
+		<feature>
+			<name>Melodic Octaves</name>
+			<v>9.174E-3</v>
+		</feature>
+		<feature>
+			<name>Melodic Large Intervals</name>
+			<v>2.599E-2</v>
+		</feature>
+		<feature>
+			<name>Minor Major Melodic Third Ratio</name>
+			<v>1.974E0</v>
+		</feature>
+		<feature>
+			<name>Melodic Embellishments</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Direction of Melodic Motion</name>
+			<v>4.835E-1</v>
+		</feature>
+		<feature>
+			<name>Average Length of Melodic Arcs</name>
+			<v>1.561E0</v>
+		</feature>
+		<feature>
+			<name>Average Interval Spanned by Melodic Arcs</name>
+			<v>6.887E0</v>
+		</feature>
+		<feature>
+			<name>Melodic Pitch Variety</name>
+			<v>4.663E0</v>
+		</feature>
+		<feature>
+			<name>Average Number of Simultaneous Pitch Classes</name>
+			<v>1.018E0</v>
+		</feature>
+		<feature>
+			<name>Variability of Number of Simultaneous Pitch Classes</name>
+			<v>1.324E-1</v>
+		</feature>
+		<feature>
+			<name>Average Number of Simultaneous Pitches</name>
+			<v>1.03E0</v>
+		</feature>
+		<feature>
+			<name>Variability of Number of Simultaneous Pitches</name>
+			<v>2.295E-1</v>
+		</feature>
+		<feature>
+			<name>Most Common Vertical Interval</name>
+			<v>8E0</v>
+		</feature>
+		<feature>
+			<name>Second Most Common Vertical Interval</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Distance Between Two Most Common Vertical Intervals</name>
+			<v>8E0</v>
+		</feature>
+		<feature>
+			<name>Prevalence of Most Common Vertical Interval</name>
+			<v>4.286E-1</v>
+		</feature>
+		<feature>
+			<name>Prevalence of Second Most Common Vertical Interval</name>
+			<v>2.857E-1</v>
+		</feature>
+		<feature>
+			<name>Prevalence Ratio of Two Most Common Vertical Intervals</name>
+			<v>6.667E-1</v>
+		</feature>
+		<feature>
+			<name>Vertical Unisons</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Vertical Minor Seconds</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Vertical Thirds</name>
+			<v>2.857E-1</v>
+		</feature>
+		<feature>
+			<name>Vertical Tritones</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Vertical Perfect Fourths</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Vertical Perfect Fifths</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Vertical Sixths</name>
+			<v>4.286E-1</v>
+		</feature>
+		<feature>
+			<name>Vertical Sevenths</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Vertical Octaves</name>
+			<v>2.857E-1</v>
+		</feature>
+		<feature>
+			<name>Perfect Vertical Intervals</name>
+			<v>2.857E-1</v>
+		</feature>
+		<feature>
+			<name>Vertical Dissonance Ratio</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Vertical Minor Third Prevalence</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Vertical Major Third Prevalence</name>
+			<v>1.19E-2</v>
+		</feature>
+		<feature>
+			<name>Chord Duration</name>
+			<v>1.983E-1</v>
+		</feature>
+		<feature>
+			<name>Partial Chords</name>
+			<v>1E0</v>
+		</feature>
+		<feature>
+			<name>Standard Triads</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Diminished and Augmented Triads</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Dominant Seventh Chords</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Seventh Chords</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Non-Standard Chords</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Complex Chords</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Minor Major Triad Ratio</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Strongest Rhythmic Pulse</name>
+			<v>8E1</v>
+		</feature>
+		<feature>
+			<name>Second Strongest Rhythmic Pulse</name>
+			<v>1.6E2</v>
+		</feature>
+		<feature>
+			<name>Harmonicity of Two Strongest Rhythmic Pulses</name>
+			<v>2E0</v>
+		</feature>
+		<feature>
+			<name>Strength of Strongest Rhythmic Pulse</name>
+			<v>1.432E-1</v>
+		</feature>
+		<feature>
+			<name>Strength of Second Strongest Rhythmic Pulse</name>
+			<v>1.432E-1</v>
+		</feature>
+		<feature>
+			<name>Strength Ratio of Two Strongest Rhythmic Pulses</name>
+			<v>1E0</v>
+		</feature>
+		<feature>
+			<name>Combined Strength of Two Strongest Rhythmic Pulses</name>
+			<v>2.864E-1</v>
+		</feature>
+		<feature>
+			<name>Number of Strong Rhythmic Pulses</name>
+			<v>7E0</v>
+		</feature>
+		<feature>
+			<name>Number of Moderate Rhythmic Pulses</name>
+			<v>7E0</v>
+		</feature>
+		<feature>
+			<name>Number of Relatively Strong Rhythmic Pulses</name>
+			<v>7E0</v>
+		</feature>
+		<feature>
+			<name>Rhythmic Looseness</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Polyrhythms</name>
+			<v>4.286E-1</v>
+		</feature>
+		<feature>
+			<name>Rhythmic Variability</name>
+			<v>2.922E-2</v>
+		</feature>
+		<feature>
+			<name>Note Density</name>
+			<v>5.206E0</v>
+		</feature>
+		<feature>
+			<name>Note Density Variability</name>
+			<v>1.786E0</v>
+		</feature>
+		<feature>
+			<name>Average Note Duration</name>
+			<v>1.978E-1</v>
+		</feature>
+		<feature>
+			<name>Variability of Note Durations</name>
+			<v>1.402E-1</v>
+		</feature>
+		<feature>
+			<name>Maximum Note Duration</name>
+			<v>2.25E0</v>
+		</feature>
+		<feature>
+			<name>Minimum Note Duration</name>
+			<v>1.875E-1</v>
+		</feature>
+		<feature>
+			<name>Amount of Staccato</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Average Time Between Attacks</name>
+			<v>1.884E-1</v>
+		</feature>
+		<feature>
+			<name>Variability of Time Between Attacks</name>
+			<v>2.74E-2</v>
+		</feature>
+		<feature>
+			<name>Average Time Between Attacks for Each Voice</name>
+			<v>1.884E-1</v>
+		</feature>
+		<feature>
+			<name>Average Variability of Time Between Attacks for Each Voice</name>
+			<v>2.74E-2</v>
+		</feature>
+		<feature>
+			<name>Complete Rests</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Longest Complete Rest</name>
+			<v>1.26E2</v>
+		</feature>
+		<feature>
+			<name>Average Rest Fraction Per Voice</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Variability Across Voices of Total Rests Per Voice</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Initial Tempo</name>
+			<v>8E1</v>
+		</feature>
+		<feature>
+			<name>Compound Or Simple Meter</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Triple Meter</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Quintuple Meter</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Metrical Diversity</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Duration</name>
+			<v>1.26E2</v>
+		</feature>
+		<feature>
+			<name>Variability of Note Prevalence of Pitched Instruments</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Variability of Note Prevalence of Unpitched Instruments</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Number of Pitched Instruments</name>
+			<v>1E0</v>
+		</feature>
+		<feature>
+			<name>Number of Unpitched Instruments</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Percussion Instrument Prevalence</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>String Keyboard Prevalence</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Acoustic Guitar Prevalence</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Electric Guitar Prevalence</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Violin Prevalence</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Saxophone Prevalence</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Brass Prevalence</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Woodwinds Prevalence</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Orchestral Strings Prevalence</name>
+			<v>1E0</v>
+		</feature>
+		<feature>
+			<name>String Ensemble Prevalence</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Electric Instrument Prevalence</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Maximum Number of Independent Voices</name>
+			<v>1E0</v>
+		</feature>
+		<feature>
+			<name>Average Number of Independent Voices</name>
+			<v>1E0</v>
+		</feature>
+		<feature>
+			<name>Variability of Number of Independent Voices</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Voice Equality - Number of Notes</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Voice Equality - Note Duration</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Voice Equality - Dynamics</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Voice Equality - Melodic Leaps</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Voice Equality - Range</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Importance of Loudest Voice</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Relative Range of Loudest Voice</name>
+			<v>1E0</v>
+		</feature>
+		<feature>
+			<name>Relative Range Isolation of Loudest Voice</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Relative Range of Highest Line</name>
+			<v>1E0</v>
+		</feature>
+		<feature>
+			<name>Relative Note Density of Highest Line</name>
+			<v>8.079E-2</v>
+		</feature>
+		<feature>
+			<name>Relative Note Durations of Lowest Line</name>
+			<v>1E0</v>
+		</feature>
+		<feature>
+			<name>Relative Size of Melodic Intervals in Lowest Line</name>
+			<v>1E0</v>
+		</feature>
+		<feature>
+			<name>Voice Overlap</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Similar Motion</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Voice Separation</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Variability of Voice Separation</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Dynamic Range</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Variation of Dynamics</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Variation of Dynamics In Each Voice</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Average Note to Note Change in Dynamics</name>
+			<v>0E0</v>
+		</feature>
+	</data_set>
+
+	<data_set>
+		<data_set_id>C:\Git\jSymbolic2\manual\api_files\.\MySymbolicMusicFiles\Buxtehude - Herr Jesu Christ, ich weiss gar wohl.mid</data_set_id>
+		<feature>
+			<name>Prevalence of Most Common Pitch</name>
+			<v>8.408E-2</v>
+		</feature>
+		<feature>
+			<name>Prevalence of Most Common Pitch Class</name>
+			<v>1.521E-1</v>
+		</feature>
+		<feature>
+			<name>Relative Prevalence of Top Pitches</name>
+			<v>9.362E-1</v>
+		</feature>
+		<feature>
+			<name>Relative Prevalence of Top Pitch Classes</name>
+			<v>1E0</v>
+		</feature>
+		<feature>
+			<name>Interval Between Most Prevalent Pitches</name>
+			<v>2E0</v>
+		</feature>
+		<feature>
+			<name>Interval Between Most Prevalent Pitch Classes</name>
+			<v>2E0</v>
+		</feature>
+		<feature>
+			<name>Number of Common Pitches</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Pitch Variety</name>
+			<v>3.5E1</v>
+		</feature>
+		<feature>
+			<name>Pitch Class Variety</name>
+			<v>1.1E1</v>
+		</feature>
+		<feature>
+			<name>Range</name>
+			<v>4.1E1</v>
+		</feature>
+		<feature>
+			<name>Most Common Pitch</name>
+			<v>6.4E1</v>
+		</feature>
+		<feature>
+			<name>Mean Pitch</name>
+			<v>6.141E1</v>
+		</feature>
+		<feature>
+			<name>Importance of Bass Register</name>
+			<v>1.807E-1</v>
+		</feature>
+		<feature>
+			<name>Importance of Middle Register</name>
+			<v>7.639E-1</v>
+		</feature>
+		<feature>
+			<name>Importance of High Register</name>
+			<v>5.546E-2</v>
+		</feature>
+		<feature>
+			<name>Most Common Pitch Class</name>
+			<v>2E0</v>
+		</feature>
+		<feature>
+			<name>Dominant Spread</name>
+			<v>6E0</v>
+		</feature>
+		<feature>
+			<name>Strong Tonal Centres</name>
+			<v>3E0</v>
+		</feature>
+		<feature>
+			<name>Major or Minor</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Glissando Prevalence</name>
+			<v>7.156E-3</v>
+		</feature>
+		<feature>
+			<name>Average Range of Glissandos</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Vibrato Prevalence</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Microtone Prevalence</name>
+			<v>7.156E-3</v>
+		</feature>
+		<feature>
+			<name>Most Common Melodic Interval</name>
+			<v>2E0</v>
+		</feature>
+		<feature>
+			<name>Mean Melodic Interval</name>
+			<v>2.049E0</v>
+		</feature>
+		<feature>
+			<name>Number of Common Melodic Intervals</name>
+			<v>2E0</v>
+		</feature>
+		<feature>
+			<name>Distance Between Most Prevalent Melodic Intervals</name>
+			<v>1E0</v>
+		</feature>
+		<feature>
+			<name>Prevalence of Most Common Melodic Interval</name>
+			<v>4.216E-1</v>
+		</feature>
+		<feature>
+			<name>Relative Prevalence of Most Common Melodic Intervals</name>
+			<v>7.863E-1</v>
+		</feature>
+		<feature>
+			<name>Amount of Arpeggiation</name>
+			<v>1.91E-1</v>
+		</feature>
+		<feature>
+			<name>Repeated Notes</name>
+			<v>8.468E-2</v>
+		</feature>
+		<feature>
+			<name>Chromatic Motion</name>
+			<v>3.315E-1</v>
+		</feature>
+		<feature>
+			<name>Stepwise Motion</name>
+			<v>7.532E-1</v>
+		</feature>
+		<feature>
+			<name>Melodic Thirds</name>
+			<v>7.027E-2</v>
+		</feature>
+		<feature>
+			<name>Melodic Perfect Fourths</name>
+			<v>4.505E-2</v>
+		</feature>
+		<feature>
+			<name>Melodic Tritones</name>
+			<v>1.802E-3</v>
+		</feature>
+		<feature>
+			<name>Melodic Perfect Fifths</name>
+			<v>2.162E-2</v>
+		</feature>
+		<feature>
+			<name>Melodic Sixths</name>
+			<v>9.009E-3</v>
+		</feature>
+		<feature>
+			<name>Melodic Sevenths</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Melodic Octaves</name>
+			<v>1.441E-2</v>
+		</feature>
+		<feature>
+			<name>Melodic Large Intervals</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Minor Major Melodic Third Ratio</name>
+			<v>1.786E0</v>
+		</feature>
+		<feature>
+			<name>Melodic Embellishments</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Direction of Melodic Motion</name>
+			<v>4.626E-1</v>
+		</feature>
+		<feature>
+			<name>Average Length of Melodic Arcs</name>
+			<v>2.032E0</v>
+		</feature>
+		<feature>
+			<name>Average Interval Spanned by Melodic Arcs</name>
+			<v>4.496E0</v>
+		</feature>
+		<feature>
+			<name>Melodic Pitch Variety</name>
+			<v>4.909E0</v>
+		</feature>
+		<feature>
+			<name>Average Number of Simultaneous Pitch Classes</name>
+			<v>2.893E0</v>
+		</feature>
+		<feature>
+			<name>Variability of Number of Simultaneous Pitch Classes</name>
+			<v>7.135E-1</v>
+		</feature>
+		<feature>
+			<name>Average Number of Simultaneous Pitches</name>
+			<v>3.426E0</v>
+		</feature>
+		<feature>
+			<name>Variability of Number of Simultaneous Pitches</name>
+			<v>7.905E-1</v>
+		</feature>
+		<feature>
+			<name>Most Common Vertical Interval</name>
+			<v>3E0</v>
+		</feature>
+		<feature>
+			<name>Second Most Common Vertical Interval</name>
+			<v>7E0</v>
+		</feature>
+		<feature>
+			<name>Distance Between Two Most Common Vertical Intervals</name>
+			<v>4E0</v>
+		</feature>
+		<feature>
+			<name>Prevalence of Most Common Vertical Interval</name>
+			<v>1.816E-1</v>
+		</feature>
+		<feature>
+			<name>Prevalence of Second Most Common Vertical Interval</name>
+			<v>1.519E-1</v>
+		</feature>
+		<feature>
+			<name>Prevalence Ratio of Two Most Common Vertical Intervals</name>
+			<v>8.364E-1</v>
+		</feature>
+		<feature>
+			<name>Vertical Unisons</name>
+			<v>6.737E-4</v>
+		</feature>
+		<feature>
+			<name>Vertical Minor Seconds</name>
+			<v>4.582E-3</v>
+		</feature>
+		<feature>
+			<name>Vertical Thirds</name>
+			<v>3.243E-1</v>
+		</feature>
+		<feature>
+			<name>Vertical Tritones</name>
+			<v>3.542E-2</v>
+		</feature>
+		<feature>
+			<name>Vertical Perfect Fourths</name>
+			<v>1.05E-1</v>
+		</feature>
+		<feature>
+			<name>Vertical Perfect Fifths</name>
+			<v>1.519E-1</v>
+		</feature>
+		<feature>
+			<name>Vertical Sixths</name>
+			<v>1.71E-1</v>
+		</feature>
+		<feature>
+			<name>Vertical Sevenths</name>
+			<v>3.462E-2</v>
+		</feature>
+		<feature>
+			<name>Vertical Octaves</name>
+			<v>1.209E-1</v>
+		</feature>
+		<feature>
+			<name>Perfect Vertical Intervals</name>
+			<v>3.784E-1</v>
+		</feature>
+		<feature>
+			<name>Vertical Dissonance Ratio</name>
+			<v>1.445E-1</v>
+		</feature>
+		<feature>
+			<name>Vertical Minor Third Prevalence</name>
+			<v>6.051E-1</v>
+		</feature>
+		<feature>
+			<name>Vertical Major Third Prevalence</name>
+			<v>4.824E-1</v>
+		</feature>
+		<feature>
+			<name>Chord Duration</name>
+			<v>4.044E-1</v>
+		</feature>
+		<feature>
+			<name>Partial Chords</name>
+			<v>1.816E-1</v>
+		</feature>
+		<feature>
+			<name>Standard Triads</name>
+			<v>4.334E-1</v>
+		</feature>
+		<feature>
+			<name>Diminished and Augmented Triads</name>
+			<v>6.953E-2</v>
+		</feature>
+		<feature>
+			<name>Dominant Seventh Chords</name>
+			<v>4.78E-2</v>
+		</feature>
+		<feature>
+			<name>Seventh Chords</name>
+			<v>7.394E-2</v>
+		</feature>
+		<feature>
+			<name>Non-Standard Chords</name>
+			<v>3.11E-1</v>
+		</feature>
+		<feature>
+			<name>Complex Chords</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Minor Major Triad Ratio</name>
+			<v>8.966E-1</v>
+		</feature>
+		<feature>
+			<name>Strongest Rhythmic Pulse</name>
+			<v>6.8E1</v>
+		</feature>
+		<feature>
+			<name>Second Strongest Rhythmic Pulse</name>
+			<v>4.6E1</v>
+		</feature>
+		<feature>
+			<name>Harmonicity of Two Strongest Rhythmic Pulses</name>
+			<v>1.478E0</v>
+		</feature>
+		<feature>
+			<name>Strength of Strongest Rhythmic Pulse</name>
+			<v>3.633E-1</v>
+		</feature>
+		<feature>
+			<name>Strength of Second Strongest Rhythmic Pulse</name>
+			<v>2.542E-1</v>
+		</feature>
+		<feature>
+			<name>Strength Ratio of Two Strongest Rhythmic Pulses</name>
+			<v>1.429E0</v>
+		</feature>
+		<feature>
+			<name>Combined Strength of Two Strongest Rhythmic Pulses</name>
+			<v>6.174E-1</v>
+		</feature>
+		<feature>
+			<name>Number of Strong Rhythmic Pulses</name>
+			<v>3E0</v>
+		</feature>
+		<feature>
+			<name>Number of Moderate Rhythmic Pulses</name>
+			<v>5E0</v>
+		</feature>
+		<feature>
+			<name>Number of Relatively Strong Rhythmic Pulses</name>
+			<v>3E0</v>
+		</feature>
+		<feature>
+			<name>Rhythmic Looseness</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Polyrhythms</name>
+			<v>6.667E-1</v>
+		</feature>
+		<feature>
+			<name>Rhythmic Variability</name>
+			<v>4.024E-2</v>
+		</feature>
+		<feature>
+			<name>Note Density</name>
+			<v>3.803E0</v>
+		</feature>
+		<feature>
+			<name>Note Density Variability</name>
+			<v>3.313E0</v>
+		</feature>
+		<feature>
+			<name>Average Note Duration</name>
+			<v>8.992E-1</v>
+		</feature>
+		<feature>
+			<name>Variability of Note Durations</name>
+			<v>1.007E0</v>
+		</feature>
+		<feature>
+			<name>Maximum Note Duration</name>
+			<v>1.054E1</v>
+		</feature>
+		<feature>
+			<name>Minimum Note Duration</name>
+			<v>1.071E-1</v>
+		</feature>
+		<feature>
+			<name>Amount of Staccato</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Average Time Between Attacks</name>
+			<v>4.275E-1</v>
+		</feature>
+		<feature>
+			<name>Variability of Time Between Attacks</name>
+			<v>2.021E-1</v>
+		</feature>
+		<feature>
+			<name>Average Time Between Attacks for Each Voice</name>
+			<v>9.808E-1</v>
+		</feature>
+		<feature>
+			<name>Average Variability of Time Between Attacks for Each Voice</name>
+			<v>1.182E0</v>
+		</feature>
+		<feature>
+			<name>Complete Rests</name>
+			<v>1.166E-2</v>
+		</feature>
+		<feature>
+			<name>Longest Complete Rest</name>
+			<v>1.477E2</v>
+		</feature>
+		<feature>
+			<name>Average Rest Fraction Per Voice</name>
+			<v>1.537E-1</v>
+		</feature>
+		<feature>
+			<name>Variability Across Voices of Total Rests Per Voice</name>
+			<v>1.14E1</v>
+		</feature>
+		<feature>
+			<name>Initial Tempo</name>
+			<v>7E1</v>
+		</feature>
+		<feature>
+			<name>Compound Or Simple Meter</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Triple Meter</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Quintuple Meter</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Metrical Diversity</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Duration</name>
+			<v>1.477E2</v>
+		</feature>
+		<feature>
+			<name>Variability of Note Prevalence of Pitched Instruments</name>
+			<v>1.062E2</v>
+		</feature>
+		<feature>
+			<name>Variability of Note Prevalence of Unpitched Instruments</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Number of Pitched Instruments</name>
+			<v>3E0</v>
+		</feature>
+		<feature>
+			<name>Number of Unpitched Instruments</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Percussion Instrument Prevalence</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>String Keyboard Prevalence</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Acoustic Guitar Prevalence</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Electric Guitar Prevalence</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Violin Prevalence</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Saxophone Prevalence</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Brass Prevalence</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Woodwinds Prevalence</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Orchestral Strings Prevalence</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>String Ensemble Prevalence</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Electric Instrument Prevalence</name>
+			<v>2.236E-1</v>
+		</feature>
+		<feature>
+			<name>Maximum Number of Independent Voices</name>
+			<v>4E0</v>
+		</feature>
+		<feature>
+			<name>Average Number of Independent Voices</name>
+			<v>3.422E0</v>
+		</feature>
+		<feature>
+			<name>Variability of Number of Independent Voices</name>
+			<v>7.756E-1</v>
+		</feature>
+		<feature>
+			<name>Voice Equality - Number of Notes</name>
+			<v>1.81E1</v>
+		</feature>
+		<feature>
+			<name>Voice Equality - Note Duration</name>
+			<v>1.14E1</v>
+		</feature>
+		<feature>
+			<name>Voice Equality - Dynamics</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Voice Equality - Melodic Leaps</name>
+			<v>5E-1</v>
+		</feature>
+		<feature>
+			<name>Voice Equality - Range</name>
+			<v>6.055E0</v>
+		</feature>
+		<feature>
+			<name>Importance of Loudest Voice</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Relative Range of Loudest Voice</name>
+			<v>5.854E-1</v>
+		</feature>
+		<feature>
+			<name>Relative Range Isolation of Loudest Voice</name>
+			<v>7.76E-1</v>
+		</feature>
+		<feature>
+			<name>Relative Range of Highest Line</name>
+			<v>3.171E-1</v>
+		</feature>
+		<feature>
+			<name>Relative Note Density of Highest Line</name>
+			<v>5.081E-1</v>
+		</feature>
+		<feature>
+			<name>Relative Note Durations of Lowest Line</name>
+			<v>1.136E0</v>
+		</feature>
+		<feature>
+			<name>Relative Size of Melodic Intervals in Lowest Line</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Voice Overlap</name>
+			<v>7.156E-1</v>
+		</feature>
+		<feature>
+			<name>Similar Motion</name>
+			<v>4.597E-1</v>
+		</feature>
+		<feature>
+			<name>Voice Separation</name>
+			<v>7E0</v>
+		</feature>
+		<feature>
+			<name>Variability of Voice Separation</name>
+			<v>1.732E0</v>
+		</feature>
+		<feature>
+			<name>Dynamic Range</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Variation of Dynamics</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Variation of Dynamics In Each Voice</name>
+			<v>0E0</v>
+		</feature>
+		<feature>
+			<name>Average Note to Note Change in Dynamics</name>
+			<v>0E0</v>
+		</feature>
+	</data_set>
+
+</feature_vector_file>

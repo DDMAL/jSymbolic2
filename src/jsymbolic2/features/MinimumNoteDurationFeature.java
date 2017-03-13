@@ -1,82 +1,59 @@
-/*
- * MinimumNoteDurationFeature.java
- * Version 2.0
- *
- * Last modified on April 11, 2010.
- * McGill University
- */
-
 package jsymbolic2.features;
 
 import javax.sound.midi.*;
 import ace.datatypes.FeatureDefinition;
+import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
-
 /**
- * A feature exractor that finds the duration of the shortest note (in seconds).
- *
- * <p>No extracted feature values are stored in objects of this class.
+ * A feature calculator that finds the duration of the shortest note in the piece (in seconds). Set to 0 if
+ * there are no notes.
  *
  * @author Cory McKay
  */
 public class MinimumNoteDurationFeature
-	extends MIDIFeatureExtractor
+		extends MIDIFeatureExtractor
 {
-	/* CONSTRUCTOR ********************************************************/
-	
+	/* CONSTRUCTOR ******************************************************************************************/
+
 	
 	/**
-	 * Basic constructor that sets the definition and dependencies (and 
-         * their offsets) of this feature.
+	 * Basic constructor that sets the values of the fields inherited from this class' superclass.
 	 */
 	public MinimumNoteDurationFeature()
 	{
+		code = "R-20";
 		String name = "Minimum Note Duration";
-		String description = "Duration of the shortest note (in seconds).";
+		String description = "Duration of the shortest note in the piece (in seconds). Set to 0 if there are no notes.";
 		boolean is_sequential = true;
 		int dimensions = 1;
-		definition = new FeatureDefinition( name,
-		                                    description,
-		                                    is_sequential,
-		                                    dimensions );
-
+		definition = new FeatureDefinition(name, description, is_sequential, dimensions);
 		dependencies = null;
-		
 		offsets = null;
 	}
+	
 
-
-	/* PUBLIC METHODS *****************************************************/
-
+	/* PUBLIC METHODS ***************************************************************************************/
+	
 	
 	/**
-      * Extracts this feature from the given MIDI sequence given the other
-      * feature values.
-      *
-      * <p>In the case of this feature, the other_feature_values parameters
-      * are ignored.
-      *
-      * @param sequence			The MIDI sequence to extract the feature
-      *                                 from.
-      * @param sequence_info		Additional data about the MIDI sequence.
-      * @param other_feature_values	The values of other features that are
-      *					needed to calculate this value. The
-      *					order and offsets of these features
-      *					must be the same as those returned by
-      *					this class's getDependencies and
-      *					getDependencyOffsets methods
-      *                                 respectively. The first indice indicates
-      *                                 the feature/window and the second
-      *                                 indicates the value.
-      * @return				The extracted feature value(s).
-      * @throws Exception		Throws an informative exception if the
-      *					feature cannot be calculated.
+	 * Extract this feature from the given sequence of MIDI data and its associated information.
+	 *
+	 * @param sequence				The MIDI data to extract the feature from.
+	 * @param sequence_info			Additional data already extracted from the the MIDI sequence.
+	 * @param other_feature_values	The values of other features that may be needed to calculate this feature. 
+	 *								The order and offsets of these features must be the same as those returned
+	 *								by this class' getDependencies and getDependencyOffsets methods, 
+	 *								respectively. The first indice indicates the feature/window, and the 
+	 *								second indicates the value.
+	 * @return						The extracted feature value(s).
+	 * @throws Exception			Throws an informative exception if the feature cannot be calculated.
 	 */
+	@Override
 	public double[] extractFeature( Sequence sequence,
-                                    MIDIIntermediateRepresentations sequence_info,
-	                                double[][] other_feature_values )
-		throws Exception
+									MIDIIntermediateRepresentations sequence_info,
+									double[][] other_feature_values )
+	throws Exception
 	{
 		double value;
 		if (sequence_info != null)
@@ -85,18 +62,16 @@ public class MinimumNoteDurationFeature
 			Object[] durations_obj = sequence_info.note_durations.toArray();
 			double[] durations = new double[durations_obj.length];
 			for (int i = 0; i < durations.length; i++)
-				durations[i] = ((Double) durations_obj[i]).doubleValue(); 
-                        
-                        // Added null check for durations[]
-                        if(durations.length == 0)
-                        {
-                            durations = new double[1];
-                            durations[0] = -1;
-                        }
-                        
-			// Calculate value
-			int index = mckay.utilities.staticlibraries.MathAndStatsMethods.getIndexOfSmallest(durations);
-			value = durations[index];
+				durations[i] = ((Double) durations_obj[i]).doubleValue();
+
+			// Calculate feature value
+			if (durations.length == 0)
+				value = 0.0;
+			else
+			{
+				int index = mckay.utilities.staticlibraries.MathAndStatsMethods.getIndexOfSmallest(durations);
+				value = durations[index];
+			}
 		}
 		else value = -1.0;
 

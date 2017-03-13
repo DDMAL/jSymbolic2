@@ -1,0 +1,1073 @@
+<?xml version="1.0"?>
+<!DOCTYPE feature_key_file [
+   <!ELEMENT feature_key_file (comments, feature+)>
+   <!ELEMENT comments (#PCDATA)>
+   <!ELEMENT feature (name, description?, is_sequential, parallel_dimensions)>
+   <!ELEMENT name (#PCDATA)>
+   <!ELEMENT description (#PCDATA)>
+   <!ELEMENT is_sequential (#PCDATA)>
+   <!ELEMENT parallel_dimensions (#PCDATA)>
+]>
+
+<feature_key_file>
+
+   <comments></comments>
+
+   <feature>
+      <name>Prevalence of Most Common Pitch</name>
+      <description>Fraction of notes that correspond to the most common pitch.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Prevalence of Most Common Pitch Class</name>
+      <description>Fraction of notes that correspond to the most common pitch class.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Relative Prevalence of Top Pitches</name>
+      <description>Relative frequency of the second most common pitch in the piece, divided by the relative frequency of the most common pitch.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Relative Prevalence of Top Pitch Classes</name>
+      <description>Relative frequency of the of the second most common pitch class in the piece, divided by the relative frequency of the most common pitch class.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Interval Between Most Prevalent Pitches</name>
+      <description>Absolute value of the difference (in semitones) between the pitches of the two most frequently occurring pitches.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Interval Between Most Prevalent Pitch Classes</name>
+      <description>Absolute value of the difference (in semitones) between the pitches of the two most frequently occurring pitch classes.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Number of Common Pitches</name>
+      <description>Number of pitches that account individually for at least 9% of all notes. Enharmonic equivalents are grouped together for the purpose of this calculation.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Pitch Variety</name>
+      <description>Number of pitches that occur at least once in the piece. Enharmonic equivalents are grouped together for the purpose of this calculation.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Pitch Class Variety</name>
+      <description>Number of pitch classes that occur at least once in the piece. Enharmonic equivalents are grouped together for the purpose of this calculation.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Range</name>
+      <description>Difference in semitones between the highest and lowest pitches.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Most Common Pitch</name>
+      <description>MIDI pitch value of the most frequently occuring pitch.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Mean Pitch</name>
+      <description>Mean MIDI pitch value, averaged across all pitched notes in the piece. Set to 0 if there are no pitched notes.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Importance of Bass Register</name>
+      <description>Fraction of notes between MIDI pitches 0 and 54.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Importance of Middle Register</name>
+      <description>Fraction of notes between MIDI pitches 55 and 72.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Importance of High Register</name>
+      <description>Fraction of notes between MIDI pitches 73 and 127.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Most Common Pitch Class</name>
+      <description>The pitch class that occurs most frequently compared to other pitch classes. A value of 0 corresponds to C, and pitches increase chromatically by semitone in integer untis (e.g. a value of 2 would mean that D is the most common pitch class). Enharmonic equivalents are treated as a single pitch class.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Dominant Spread</name>
+      <description>Largest number of consecutive pitch classes separated by perfect 5ths that each individually account for at least 9% of the total notes in the piece.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Strong Tonal Centres</name>
+      <description>Number of isolated peaks in the fifths pitch histogram that each individually account for at least 9% of all notes in the piece.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Major or Minor</name>
+      <description>Whether the piece is major or minor, as indicated by the first encountered major/minor metadata tag in the piece. Set to 0 if the metadata indicates that the piece is major, or set to 1 if the metadata indicates that it is minor. Defaults to 0 if the key signature is unknown.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Glissando Prevalence</name>
+      <description>Number of pitched MIDI Note Ons that have at least one MIDI Pitch Bend associated with them, divided by the total number of pitched Note Ons in the piece.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Average Range of Glissandos</name>
+      <description>Average range of MIDI Pitch Bends, where "range" is defined as the greatest value of the absolute difference between 64 and the second data byte of all MIDI Pitch Bend messages falling between the Note On and Note Off messages of any note in the piece. Set to 0 if there are no MIDI Pitch Bends in the piece.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Vibrato Prevalence</name>
+      <description>Number of pitched notes that have associated MIDI Pitch Bend messages change direction at least twice in connection with the note in question, divided by the total number of pitched Note Ons in the piece.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Microtone Prevalence</name>
+      <description>Number of pitched notes that are each associated with exactly one MIDI Pitch Bend message, divided by the total number of pitched Note Ons in the piece. Set to 0 if there are no pitched Note Ons in the piece.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Most Common Melodic Interval</name>
+      <description>Number of semitones corresponding to the most frequently occurring melodic interval.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Mean Melodic Interval</name>
+      <description>Mean average (in semitones) of the intervals involved in each of the melodic intervals in the piece.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Number of Common Melodic Intervals</name>
+      <description>Number of different melodic intervals that each account individually for at least 9% of all melodic intervals.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Distance Between Most Prevalent Melodic Intervals</name>
+      <description>Absolute value of the difference (in semitones) between the most common and second most common melodic intervals in the piece.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Prevalence of Most Common Melodic Interval</name>
+      <description>Fraction of all melodic intervals that corresponds to the most common melodic interval.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Relative Prevalence of Most Common Melodic Intervals</name>
+      <description>Relative frequency of the second most common melodic interval in the piece, divided by the relative frequency of the most common melodic interval..</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Amount of Arpeggiation</name>
+      <description>Fraction of melodic intervals that are repeated notes, minor thirds, major thirds, perfect fifths, minor sevenths, major sevenths, octaves, minor tenths or major tenths. This is only a very approximate measure of the amount of arpeggiation in the music, of course.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Repeated Notes</name>
+      <description>Fraction of melodic intervals that correspond to repeated notes.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Chromatic Motion</name>
+      <description>Fraction of melodic intervals that correspond to a semitone.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Stepwise Motion</name>
+      <description>Fraction of melodic intervals that correspond to a minor or major second.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Melodic Thirds</name>
+      <description>Fraction of melodic intervals that are major or minor thirds.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Melodic Perfect Fourths</name>
+      <description>Fraction of melodic intervals that are perfect fourths.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Melodic Tritones</name>
+      <description>Fraction of melodic intervals that are tritones.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Melodic Perfect Fifths</name>
+      <description>Fraction of melodic intervals that are perfect fifths.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Melodic Sixths</name>
+      <description>Fraction of melodic intervals that are major or minor sixths.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Melodic Sevenths</name>
+      <description>Fraction of melodic intervals that are major or minor sevenths.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Melodic Octaves</name>
+      <description>Fraction of melodic intervals that are octaves.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Melodic Large Intervals</name>
+      <description>Fraction of melodic intervals greater than one octave.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Minor Major Melodic Third Ratio</name>
+      <description>Combined fraction of all melodic intervals that are minor thirds, divided by the combined fraction of all melodic intervals that are major thirds. Set to 0 if there are no melodic minor thirds or melodic major thirds.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Melodic Embellishments</name>
+      <description>Fraction of all notes that are surrounded on both sides by MIDI Note Ons on the same MIDI channel that have durations at least three times as long as the central note. Set to 0 if there are no notes in the piece.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Direction of Melodic Motion</name>
+      <description>Fraction of melodic intervals that are rising in pitch. Set to zero if no rising or falling melodic intervals are found.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Average Length of Melodic Arcs</name>
+      <description>Average number of notes that separate melodic peaks and troughs. Similar assumptions are made in the calculation of this feature as for the Melodic Interval Histogram. Set to 0 if no melodic arcs are found.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Average Interval Spanned by Melodic Arcs</name>
+      <description>Average melodic interval (in semitones) separating the top note of melodic peaks and the bottom note of adjacent melodic troughs. Similar assumptions are made in the calculation of this feature as for the Melodic Interval Histogram.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Melodic Pitch Variety</name>
+      <description>Average number of notes that go by in a MIDI channel before a note's pitch is repeated. This is calculated across each channel individually before being combined. Notes that occur simultaneously on the same MIDI tick are only counted as one note for the purpose of this calculation. Notes that do not recur after 16 notes in the same channel are not included in this calculation. Set to 0 if there are no qualifying repeated notes in the piece.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Average Number of Simultaneous Pitch Classes</name>
+      <description>Average number of different pitch classes sounding simultaneously. Rests are excluded from this calculation.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Variability of Number of Simultaneous Pitch Classes</name>
+      <description>Standard deviation of the number of different pitch classes sounding simultaneously. Rests are excluded from this calculation.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Average Number of Simultaneous Pitches</name>
+      <description>Average number of pitches sounding simultaneously. Rests are excluded from this calculation. Unisons are also excluded from this calculation, but octave multiples are included in it.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Variability of Number of Simultaneous Pitches</name>
+      <description>Standard deviation of the number of pitches sounding simultaneously. Rests are excluded from this calculation. Unisons are also excluded from this calculation, but octave multiples are included in it.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Most Common Vertical Interval</name>
+      <description>The interval in semitones corresponding to the wrapped vertical interval histogram bin with the highest magnitude.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Second Most Common Vertical Interval</name>
+      <description>The interval in semitones corresponding to the wrapped vertical interval histogram bin with the second highest magnitude.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Distance Between Two Most Common Vertical Intervals</name>
+      <description>The interval in semitones between the wrapped vertical interval histogram bins with the two most common vertical intervals.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Prevalence of Most Common Vertical Interval</name>
+      <description>Fraction of vertical intervals on the wrapped vertical interval histogram corresponding to the most common vertical interval.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Prevalence of Second Most Common Vertical Interval</name>
+      <description>Fraction of vertical intervals on the wrapped vertical interval histogram corresponding to the second most common vertical interval.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Prevalence Ratio of Two Most Common Vertical Intervals</name>
+      <description>Ratio between the fraction of notes corresponding to the second most common vertical interval on the wrapped vertical interval histogram and the fraction of vertical intervals corresponding to the most common vertical interval. Set to 0 if either of these prevalences are 0.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Vertical Unisons</name>
+      <description>Fraction of all vertical intervals that are unisons. This is weighted by how long intervals are held (e.g. an interval lasting a whole note will be weighted four times as strongly as an interval lasting a quarter note).</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Vertical Minor Seconds</name>
+      <description>Fraction of all wrapped vertical intervals that are minor seconds. This is weighted by how long intervals are held (e.g. an interval lasting a whole note will be weighted four times as strongly as an interval lasting a quarter note).</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Vertical Thirds</name>
+      <description>Fraction all wrapped vertical intervals that are minor or major thirds. This is weighted by how long intervals are held (e.g. an interval lasting a whole note will be weighted four times as strongly as an interval lasting a quarter note).</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Vertical Tritones</name>
+      <description>Fraction of all wrapped vertical intervals that are tritones. This is weighted by how long intervals are held (e.g. an interval lasting a whole note will be weighted four times as strongly as an interval lasting a quarter note).</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Vertical Perfect Fourths</name>
+      <description>Fraction of all wrapped vertical intervals that are perfect fourths. This is weighted by how long intervals are held (e.g. an interval lasting a whole note will be weighted four times as strongly as an interval lasting a quarter note).</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Vertical Perfect Fifths</name>
+      <description>Fraction of all wrapped vertical intervals that are perfect fifths. This is weighted by how long intervals are held (e.g. an interval lasting a whole note will be weighted four times as strongly as an interval lasting a quarter note).</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Vertical Sixths</name>
+      <description>Fraction all wrapped vertical intervals that are minor or major sixths. This is weighted by how long intervals are held (e.g. an interval lasting a whole note will be weighted four times as strongly as an interval lasting a quarter note).</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Vertical Sevenths</name>
+      <description>Fraction all wrapped vertical intervals that are minor or major sevenths. This is weighted by how long intervals are held (e.g. an interval lasting a whole note will be weighted four times as strongly as an interval lasting a quarter note).</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Vertical Octaves</name>
+      <description>Fraction of all wrapped vertical intervals that are octaves. This is weighted by how long intervals are held (e.g. an interval lasting a whole note will be weighted four times as strongly as an interval lasting a quarter note).</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Perfect Vertical Intervals</name>
+      <description>Fraction of all wrapped vertical intervals that are unisons, perfect fourths, perfect fifths or octaves. This is weighted by how long intervals are held (e.g. an interval lasting a whole note will be weighted four times as strongly as an interval lasting a quarter note).</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Vertical Dissonance Ratio</name>
+      <description>Ratio of all wrapped vertical intervals that are dissonant (2nds, tritones, and 7ths to all wrapped vertical intervals that are consonant (unisons, 3rds, 4ths, 5ths, 6ths, octaves). This is weighted by how long each of these intervals are held (e.g. an interval lasting a whole note will be weighted four times as strongly as an interval lasting a quarter note). Set to 0 if there are no dissonant vertical intervals or no consonant vertical intervals.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Vertical Minor Third Prevalence</name>
+      <description>Fraction of the music by time where at least one wrapped vertical minor third is sounding (regardless of whatever other vertical intervals may or may not be sounding at the same time). Only that part of the music where one or more pitched notes is sounding is included in this calculation (rests and sections containing only unpitched notes are ignored).</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Vertical Major Third Prevalence</name>
+      <description>Fraction of the music by time where at least one wrapped vertical major third is sounding (regardless of whatever other vertical intervals may or may not be sounding at the same time). Only that part of the music where one or more pitched notes is sounding is included in this calculation (rests and sections containing only unpitched notes are ignored).</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Chord Duration</name>
+      <description>Average duration in seconds of a chord. A "chord" here is considered to stay the same as long as no new pitch classes are added, and no pitch classes are taken away. This "chord" may consist of any number of pitch classes, even only one. A "chord" is not considered to end if it is split by one or more rests (although the rests themselves are not counted in the duration of the "chord").</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Partial Chords</name>
+      <description>Fraction of simultaneously sounding pitch groups that consist of only two pitch classes. This is weighted by how long pitch groups are held (e.g. a pitch group lasting a whole note will be weighted four times as strongly as a pitch group lasting a quarter note).</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Standard Triads</name>
+      <description>Fraction of all simultaneously sounding pitch groups that are either major or minor triads. This is weighted by how long pitch groups are held (e.g. a pitch group lasting a whole note will be weighted four times as strongly as a pitch group lasting a quarter note).</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Diminished and Augmented Triads</name>
+      <description>Fraction of all simultaneously sounding pitch groups that are either diminished or augmented triads. This is weighted by how long pitch groups are held (e.g. a pitch group lasting a whole note will be weighted four times as strongly as a pitch group lasting a quarter note).</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Dominant Seventh Chords</name>
+      <description>Fraction of all simultaneously sounding pitch groups that are dominant seventh chords. This is weighted by how long pitch groups are held (e.g. a pitch group lasting a whole note will be weighted four times as strongly as a pitch group lasting a quarter note).</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Seventh Chords</name>
+      <description>Fraction of all simultaneously sounding pitch groups that are dominant seventh, major seventh or minor seventh chords. This is weighted by how long pitch groups are held (e.g. a pitch group lasting a whole note will be weighted four times as strongly as a pitch group lasting a quarter note).</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Non-Standard Chords</name>
+      <description>Fraction of all simultaneously sounding pitch groups that consist of more than two pitch classes yet are not major triads, are not minor triads and are not seventh chords. This is weighted by how long pitch groups are held (e.g. a pitch group lasting a whole note will be weighted four times as strongly as a pitch group lasting a quarter note).</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Complex Chords</name>
+      <description>Fraction of all simultaneously sounding pitch groups that contain more that four pitch classes. This is weighted by how long pitch groups are held (e.g. a pitch group lasting a whole note will be weighted four times as strongly as a pitch group lasting a quarter note).</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Minor Major Triad Ratio</name>
+      <description>The prevalence of minor triads divided by the prevalence of major triads. This is weighted by how long the chords are held (e.g. a chord lasting a whole note will be weighted four times as strongly as a chord lasting a quarter note). Set to 0 if there are no minor triads or if there are no major triads.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Strongest Rhythmic Pulse</name>
+      <description>Bin index of the beat histogram bin with the highest magnitude.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Second Strongest Rhythmic Pulse</name>
+      <description>Bin index of the beat histogram peak with the second highest magnitude.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Harmonicity of Two Strongest Rhythmic Pulses</name>
+      <description>Bin index of the higher (in terms of bin index) of the two beat histogram peaks with the highest magnitude, divided by the index of the lower (in terms of bin index) of the two bins.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Strength of Strongest Rhythmic Pulse</name>
+      <description>Magnitude of the beat histogram bin with the highest magnitude.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Strength of Second Strongest Rhythmic Pulse</name>
+      <description>Magnitude of the beat histogram peak with the second highest magnitude.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Strength Ratio of Two Strongest Rhythmic Pulses</name>
+      <description>Magnitude of the higher (in terms of magnitude) of the two beat histogram bins corresponding to the peaks with the two highest magnitudes, divided by the magnitude of the lower peak.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Combined Strength of Two Strongest Rhythmic Pulses</name>
+      <description>Sum of the magnitudes of the two beat histogram peaks with the highest magnitudes.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Number of Strong Rhythmic Pulses</name>
+      <description>Number of beat histogram peaks with normalized magnitudes over 0.1.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Number of Moderate Rhythmic Pulses</name>
+      <description>Number of beat histogram peaks with normalized magnitudes over 0.01.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Number of Relatively Strong Rhythmic Pulses</name>
+      <description>Number of beat histogram peaks with magnitudes at least 30% as high as the magnitude of the beat histogram peak with the highest magnitude.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Rhythmic Looseness</name>
+      <description>Average width of beat histogram peaks. The width of a peak is defined here as the distance (in beats per minute) between the two points on the peak in question that have magnitudes closest to 30% of the height of the peak. Only peaks with magnitudes at least 30% as high as the highest peak are considered in this calculation.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Polyrhythms</name>
+      <description>Number of beat histogram peaks with magnitudes at least 30% as high as the magnitude of the highest peak, and whose bin labels are not integer multiples or factors (using only multipliers of 1, 2, 3, 4, 6 and 8, and with an accepted error of +/- 3 bins) of the bin label of the peak with the highest magnitude. This number is then divided by the total number of bins with frequencies over 30% of the highest magnitude.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Rhythmic Variability</name>
+      <description>Standard deviation of the beat histogram bin magnitudes</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Note Density</name>
+      <description>Average number of notes per second.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Note Density Variability</name>
+      <description>How much the note density (average number of notes per second) varies throughout the piece. In order to calculate this, the piece is broken into windows of 5 second duration, and the note density of each window is calculated. The final value of this feature is then found by calculating the standard deviation of the note densities of these windows. Set to 0 if there is insufficient music for more than one window.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Average Note Duration</name>
+      <description>Average duration of notes (in seconds).</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Variability of Note Durations</name>
+      <description>Standard deviation of note durations (in seconds).</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Maximum Note Duration</name>
+      <description>Duration of the longest note in the piece (in seconds).</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Minimum Note Duration</name>
+      <description>Duration of the shortest note in the piece (in seconds). Set to 0 if there are no notes.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Amount of Staccato</name>
+      <description>Number of notes with a duration less than 0.1 seconds, divided by the total number of notes in the piece.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Average Time Between Attacks</name>
+      <description>Average time (in seconds) between Note On events (regardless of MIDI channel). Set to 0 if there are less than two attacks.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Variability of Time Between Attacks</name>
+      <description>Standard deviation of the times (in seconds) between Note On events (regardless of MIDI channel).</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Average Time Between Attacks for Each Voice</name>
+      <description>Average of the individual channel averages of time (in seconds) between Note On events in each given MIDI channel. Only channels that contain at least one note are included in this calculation.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Average Variability of Time Between Attacks for Each Voice</name>
+      <description>Average of the standard deviations (in seconds) of each individual MIDI channel's time between Note On events. Only channels that contain at least one note are included in this calculation.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Complete Rests</name>
+      <description>Total amount of time (in seconds) in which no notes are sounding on any MIDI channel, divided by the total duration of the piece. Non-pitched (MIDI channel 10) notes are not considered in this calculation.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Longest Complete Rest</name>
+      <description>Longest amount of uninterrupted time (in seconds) in which no pitched notes are sounding on any MIDI channel. Non-pitched (MIDI channel 10) notes are not considered in this calculation.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Average Rest Fraction Per Voice</name>
+      <description>Average of the total amount of combined time (in seconds) in each MIDI channel in which no note is sounding in that particular channel, averaged across channels, and then divided by the total duration of the piece. Only channels with at least one note are counted in this calculation.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Variability Across Voices of Total Rests Per Voice</name>
+      <description>Standard deviation (in seconds) of the total amount of time per MIDI channel in which no notes are sounding in that channel. Only channels with at least one note are counted in this calculation.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Initial Tempo</name>
+      <description>Tempo in beats per minute at the start of the piece.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Compound Or Simple Meter</name>
+      <description>Set to 1 if the initial meter is compound (numerator of time signature is greater than or equal to 6 and is evenly divisible by 3) and to 0 if it is simple (if the above condition is not fulfilled).</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Triple Meter</name>
+      <description>Set to 1 if numerator of initial time signature is 3, set to 0 otherwise.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Quintuple Meter</name>
+      <description>Set to 1 if numerator of initial time signature is 5, set to 0 otherwise.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Metrical Diversity</name>
+      <description>Set to 1 if the time signature is changed one or more times during the piece.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Duration</name>
+      <description>The total duration (in seconds) of the piece.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Variability of Note Prevalence of Pitched Instruments</name>
+      <description>Standard deviation of the fraction of total notes in the piece played by each (pitched) General MIDI Instrument patch that is used to play at least one note.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Variability of Note Prevalence of Unpitched Instruments</name>
+      <description>Standard deviation of the fraction of total notes in the piece played by each (unpitched) MIDI Percussion Key Map instrument that is used to play at least one note. It should be noted that only MIDI Channel 10 instruments 35 to 81 are included here, as they are the ones that meet the official standard.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Number of Pitched Instruments</name>
+      <description>Total number of (pitched) General MIDI instrument patches that are used to play at least one note.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Number of Unpitched Instruments</name>
+      <description>Total number of (unpitched) MIDI Percussion Key Map instruments that are used to play at least one note. It should be noted that only MIDI Channel 10 instruments 35 to 81 are included here, as they are the ones that meet the official standard.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Percussion Instrument Prevalence</name>
+      <description>Fraction of all Note Ons played by (unpitched) MIDI Percussion Key Map instruments. It should be noted that only MIDI Channel 10 instruments 35 to 81 are included here, as they are the ones that meet the official standard.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>String Keyboard Prevalence</name>
+      <description>Fraction of all Note Ons played by string keyboard instruments (General MIDI patches 1 to 8).</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Acoustic Guitar Prevalence</name>
+      <description>Fraction of all Note Ons played by acoustic guitar instruments (General MIDI patches 25 and 26).</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Electric Guitar Prevalence</name>
+      <description>Fraction of all Note Ons played by electric guitar instruments (General MIDI patches 27 to 32).</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Violin Prevalence</name>
+      <description>Fraction of all Note Ons played by violin instruments (General MIDI patches 41 or 111).</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Saxophone Prevalence</name>
+      <description>Fraction of all Note Ons played by saxophone instruments (General MIDI patches 65 to 68).</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Brass Prevalence</name>
+      <description>Fraction of all Note Ons played by brass instruments, including saxophones (General MIDI patches 57 to 68).</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Woodwinds Prevalence</name>
+      <description>Fraction of all Note Ons played by woodwind instruments (General MIDI patches 69 to 76).</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Orchestral Strings Prevalence</name>
+      <description>Fraction of all Note Ons played by orchestral string instruments (General MIDI patches 41 to 47).</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>String Ensemble Prevalence</name>
+      <description>Fraction of all Note Ons played by orchestral string ensemble instruments (General MIDI patches 49 to 52).</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Electric Instrument Prevalence</name>
+      <description>Fraction of all Note Ons played by electric non-"synth" instruments (General MIDI patches 5, 6, 17, 19, 27 to 32, 34 to 40).</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Maximum Number of Independent Voices</name>
+      <description>Maximum number of different channels in which notes are sounded simultaneously.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Average Number of Independent Voices</name>
+      <description>Average number of different channels in which notes are sounded simultaneously. Rests are not included in this calculation.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Variability of Number of Independent Voices</name>
+      <description>Standard deviation of the number of different channels in which notes are sounded simultaneously at each given moment (MIDI tick). Rests are not included in this calculation.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Voice Equality - Number of Notes</name>
+      <description>Standard deviation of the total number of Note Ons in each channel that contains at least one note.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Voice Equality - Note Duration</name>
+      <description>Standard deviation of the cumulative amount of time during which one or more notes were sounding in each channel that contains at least one note.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Voice Equality - Dynamics</name>
+      <description>Standard deviation of the average loudness (MIDI velocity) of notes in each channel that contains at least one note.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Voice Equality - Melodic Leaps</name>
+      <description>Standard deviation of the average melodic leap distance of each channel that contains at least one note.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Voice Equality - Range</name>
+      <description>Standard deviation of the differences between the highest and lowest pitches in each channel that contains at least one note.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Importance of Loudest Voice</name>
+      <description>Difference between the average loudness (MIDI velocity) of the loudest channel and the average loudness of the other channels that contain at least one note.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Relative Range of Loudest Voice</name>
+      <description>Difference between the highest note and the lowest note played in the channel with the highest average loudness (MIDI velocity), divided by the difference between the highest note and the lowest note in the piece as a whole. Set to 0 if there if there are fewer than 2 pitches in the music.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Relative Range Isolation of Loudest Voice</name>
+      <description>Number of pitched notes in the MIDI channel with the highest average loudness that fall outside the range of any other pitched channel, divided by the total number of notes in the channel with the highest average loudness. Set to 0 if there are only 0 or 1 channels containing pitched notes.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Relative Range of Highest Line</name>
+      <description>Pitch difference in semitones between the highest note and the lowest note played in the channel with the highest average pitch, divided by the difference between the highest note and the lowest note in the piece overall. Set to 0 if there if there are fewer than 2 pitches in the music.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Relative Note Density of Highest Line</name>
+      <description>Number of Note Ons in the channel with the highest average pitch, divided by the average number of Note Ons in all channels that contain at least one note.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Relative Note Durations of Lowest Line</name>
+      <description>Average duration of notes (in seconds) in the channel with the lowest average pitch, divided by the average duration of notes in all channels that contain at least one note.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Relative Size of Melodic Intervals in Lowest Line</name>
+      <description>Average melodic interval in semitones in the channel with the lowest average pitch, divided by the average melodic interval in all channels that contain at least two notes.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Voice Overlap</name>
+      <description>Number of notes played within the range of another channel, divided by the total number of notes in the piece as a whole.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Similar Motion</name>
+      <description>Fraction of all pitched notes that move together in the same direction within 10% of the duration of the shorter note. If multiple notes are sounding within a single channel (e.g. a piano chord), only the highest pitched note in each such channel is considered for the purposes of this feature. Set to 0 if there are no pitched notes.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Voice Separation</name>
+      <description>Average separation in semitones between the average pitches of consecutive channels (after sorting based on average pitch) that contain at least one note. </description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Variability of Voice Separation</name>
+      <description>Average separation in semi-tones between the average pitches of consecutive channels (after sorting based on average pitch) that contain at least one note.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Dynamic Range</name>
+      <description>Loudness of the loudest note in the piece, minus the loudness of the softest note.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Variation of Dynamics</name>
+      <description>Standard deviation of loudness levels across all notes.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Variation of Dynamics In Each Voice</name>
+      <description>Standard deviations of note loudness levels within each MIDI channel, averaged across all channels. Only channels that contain at least one note are included in this calculation.</description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+   <feature>
+      <name>Average Note to Note Change in Dynamics</name>
+      <description>Average change of loudness from one note to the next note in the same MIDI channel. </description>
+      <is_sequential>true</is_sequential>
+      <parallel_dimensions>1</parallel_dimensions>
+   </feature>
+
+</feature_key_file>
