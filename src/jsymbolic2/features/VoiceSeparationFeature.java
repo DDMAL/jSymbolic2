@@ -22,7 +22,7 @@ public class VoiceSeparationFeature
 	 */
 	public VoiceSeparationFeature()
 	{
-		code = "T-18";
+		code = "T-17";
 		String name = "Voice Separation";
 		String description = "Average separation in semitones between the average pitches of consecutive channels (after sorting based on average pitch) that contain at least one note. ";
 		boolean is_sequential = true;

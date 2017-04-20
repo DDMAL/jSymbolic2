@@ -162,9 +162,9 @@ public class CollectedNoteInfo
 	
 	/**
 	 * @return	A map holding all notes parsed from a MIDI stream so far. It stores all notes starting on any
-				given MIDI tick, where the start tick value serves as the map key and the map value is a list
-				of all notes starting on the specified tick, on any track and on any channel. The particular
-				ordering of notes in this List value is not necessarily meaningful.
+	 *			given MIDI tick, where the start tick value serves as the map key and the map value is a list
+	 *			of all notes starting on the specified tick, on any track and on any channel. The particular
+	 *			ordering of notes in this List value is not necessarily meaningful.
 	 */
 	public Map<Integer, List<NoteInfo>> getStartTickNoteMap()
 	{

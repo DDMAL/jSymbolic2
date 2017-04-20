@@ -22,7 +22,7 @@ public class VariabilityOfVoiceSeparationFeature
 	 */
 	public VariabilityOfVoiceSeparationFeature()
 	{
-		code = "T-19";
+		code = "T-18";
 		String name = "Variability of Voice Separation";
 		String description = "Average separation in semi-tones between the average pitches of consecutive channels (after sorting based on average pitch) that contain at least one note.";
 		boolean is_sequential = true;

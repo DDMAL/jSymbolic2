@@ -328,6 +328,7 @@ public class MIDIIntermediateRepresentations
 	 * stream. The first dimension indicates the MIDI tick (after removal of rest ticks) and the second
 	 * dimension indicates the note index (there will be one entry for each MIDI pitch sounding during the
 	 * given MIDI tick). Each entry indicates the MIDI pitch number (0 to 127) of one of the sounding notes.
+	 * The pitch values are sorted from lowest to highest.
 	 */	
 	public short[][] pitches_present_by_tick_excluding_rests;
 	
@@ -338,9 +339,99 @@ public class MIDIIntermediateRepresentations
 	 * stream. The first dimension indicates the MIDI tick (after removal of rest ticks) and the second
 	 * dimension indicates the note index (there will be one entry for each pitch class sounding during the
 	 * given MIDI tick). Each entry indicates the pitch class (0 to 11, where 0 is C) of one of the sounding
-	 * notes.
+	 * notes. The pitch class values are sorted from lowest to highest.
 	 */
 	public short[][] pitch_classes_present_by_tick_excluding_rests;
+	
+	/**
+	 * Fraction of movements between voices that consist of parallel motion (the fraction is calculated
+	 * relative to the total amount of qualifying transitions, including all parallel, similar, contrary and
+	 * oblique transitions). If more than two voices are involved in a given pitch transition, then each
+	 * possible pair of voices comprising the transition is included in the calculation. Note that only
+	 * transitions from one set of pitches to another set of pitches comprising the same number of pitches as
+	 * the first are included in this calculation, although a brief lookahead is performed in order to
+	 * accommodate small rhythmic desynchronizations (e.g. if a MIDI file is a transcription of a human
+	 * performance). Only unique pitches are included in this calculation (unisons are treated as a single
+	 * pitch). All pitches present are considered, regardless of their MIDI channel or track; this has the
+	 * advantage of accommodating polyphonic instruments such as piano or guitar, but the consequence is that
+	 * this feature does not incorporate an awareness of voice crossing.
+	 */
+	public double parallel_motion_fraction;
+	
+	/**
+	 * Fraction of movements between voices that consist of similar motion (the fraction is calculated
+	 * relative to the total amount of qualifying transitions, including all parallel, similar, contrary and
+	 * oblique transitions). If more than two voices are involved in a given pitch transition, then each
+	 * possible pair of voices comprising the transition is included in the calculation. Note that only
+	 * transitions from one set of pitches to another set of pitches comprising the same number of pitches as
+	 * the first are included in this calculation, although a brief lookahead is performed in order to
+	 * accommodate small rhythmic desynchronizations (e.g. if a MIDI file is a transcription of a human
+	 * performance). Only unique pitches are included in this calculation (unisons are treated as a single
+	 * pitch). All pitches present are considered, regardless of their MIDI channel or track; this has the
+	 * advantage of accommodating polyphonic instruments such as piano or guitar, but the consequence is that
+	 * this feature does not incorporate an awareness of voice crossing.
+	 */
+	public double similar_motion_fraction;
+	
+	/**
+	 * Fraction of movements between voices that consist of contrary motion (the fraction is calculated
+	 * relative to the total amount of qualifying transitions, including all parallel, similar, contrary and
+	 * oblique transitions). If more than two voices are involved in a given pitch transition, then each
+	 * possible pair of voices comprising the transition is included in the calculation. Note that only
+	 * transitions from one set of pitches to another set of pitches comprising the same number of pitches as
+	 * the first are included in this calculation, although a brief lookahead is performed in order to
+	 * accommodate small rhythmic desynchronizations (e.g. if a MIDI file is a transcription of a human
+	 * performance). Only unique pitches are included in this calculation (unisons are treated as a single
+	 * pitch). All pitches present are considered, regardless of their MIDI channel or track; this has the
+	 * advantage of accommodating polyphonic instruments such as piano or guitar, but the consequence is that
+	 * this feature does not incorporate an awareness of voice crossing.
+	 */
+	public double contrary_motion_fraction;
+	
+	/**
+	 * Fraction of movements between voices that consist of oblique motion (the fraction is calculated
+	 * relative to the total amount of qualifying transitions, including all parallel, similar, contrary and
+	 * oblique transitions). If more than two voices are involved in a given pitch transition, then each
+	 * possible pair of voices comprising the transition is included in the calculation. Note that only
+	 * transitions from one set of pitches to another set of pitches comprising the same number of pitches as
+	 * the first are included in this calculation, although a brief lookahead is performed in order to
+	 * accommodate small rhythmic desynchronizations (e.g. if a MIDI file is a transcription of a human
+	 * performance). Only unique pitches are included in this calculation (unisons are treated as a single
+	 * pitch). All pitches present are considered, regardless of their MIDI channel or track; this has the
+	 * advantage of accommodating polyphonic instruments such as piano or guitar, but the consequence is that
+	 * this feature does not incorporate an awareness of voice crossing.
+	 */
+	public double oblique_motion_fraction;
+	
+	/**
+	 * Fraction of movements between voices that consist of parallel fifths (the fraction is calculated
+	 * relative to the total amount of qualifying transitions, including all parallel, similar, contrary and
+	 * oblique transitions). If more than two voices are involved in a given pitch transition, then each
+	 * possible pair of voices comprising the transition is included in the calculation. Note that only
+	 * transitions from one set of pitches to another set of pitches comprising the same number of pitches as
+	 * the first are included in this calculation, although a brief lookahead is performed in order to
+	 * accommodate small rhythmic desynchronizations (e.g. if a MIDI file is a transcription of a human
+	 * performance). Only unique pitches are included in this calculation (unisons are treated as a single
+	 * pitch). All pitches present are considered, regardless of their MIDI channel or track; this has the
+	 * advantage of accommodating polyphonic instruments such as piano or guitar, but the consequence is that
+	 * this feature does not incorporate an awareness of voice crossing.
+	 */
+	public double parallel_fifths_fraction;
+		
+	/**
+	 * Fraction of movements between voices that consist of parallel octaves (the fraction is calculated
+	 * relative to the total amount of qualifying transitions, including all parallel, similar, contrary and
+	 * oblique transitions). If more than two voices are involved in a given pitch transition, then each
+	 * possible pair of voices comprising the transition is included in the calculation. Note that only
+	 * transitions from one set of pitches to another set of pitches comprising the same number of pitches as
+	 * the first are included in this calculation, although a brief lookahead is performed in order to
+	 * accommodate small rhythmic desynchronizations (e.g. if a MIDI file is a transcription of a human
+	 * performance). Only unique pitches are included in this calculation (unisons are treated as a single
+	 * pitch). All pitches present are considered, regardless of their MIDI channel or track; this has the
+	 * advantage of accommodating polyphonic instruments such as piano or guitar, but the consequence is that
+	 * this feature does not incorporate an awareness of voice crossing.
+	 */
+	public double parallel_octaves_fraction;	
 	
 	/**
 	 * A table with rows (first index) corresponding to MIDI channel number, and columns (second index)
@@ -398,6 +489,31 @@ public class MIDIIntermediateRepresentations
 		// Caclulate mean_ticks_per_second
 		mean_ticks_per_second = ((double) sequence.getTickLength()) / ((double) sequence.getMicrosecondLength() / 1000000.0);
 
+		// Print out all note ons and note offs for debugging
+		/*for (int n_track = 0; n_track < tracks.length; n_track++)
+		{
+			System.out.println("TRACK " + n_track + ":");
+			Track track = tracks[n_track];
+			for (int n_event = 0; n_event < track.size(); n_event++)
+			{
+				MidiEvent event = track.get(n_event);
+				MidiMessage message = event.getMessage();
+				if (message instanceof ShortMessage)
+				{
+					ShortMessage short_message = (ShortMessage) message;
+					if (short_message.getCommand() == 0x90) // note on
+					{
+						if (short_message.getData2() != 0) // not velocity 0
+							System.out.println("ON Tick: " + event.getTick() + "\tPitch: " + short_message.getData1());
+						if (short_message.getData2() == 0) // velocity 0
+							System.out.println("OFF Tick: " + event.getTick() + "\tPitch: " + short_message.getData1());
+					}
+					if (short_message.getCommand() == 0x80) // note off
+						System.out.println("OFF Tick: " + event.getTick() + "\tPitch: " + short_message.getData1());
+				}
+			}
+		}*/
+		
 		// Fill in the public fields of this class
 		// Commented out code is for the purpose of testing calculated values in case changes are made
 		
@@ -560,7 +676,16 @@ public class MIDIIntermediateRepresentations
 			for (int j = 0; j < pitch_classes_present_by_tick_excluding_rests[i].length; j++)
 				System.out.print(pitch_classes_present_by_tick_excluding_rests[i][j] + " ");
 		}*/	
-
+		
+		generateContrapuntalCounts();
+		/*System.out.println("SEQUENCE DURATION: " + sequence_duration);
+		System.out.println("parallel_motion_fraction " + parallel_motion_fraction);
+		System.out.println("similar_motion_fraction " + similar_motion_fraction);
+		System.out.println("contrary_motion_fraction " + contrary_motion_fraction);
+		System.out.println("oblique_motion_fraction " + oblique_motion_fraction);
+		System.out.println("parallel_fifths_fraction " + parallel_fifths_fraction);
+		System.out.println("parallel_octaves_fraction " + parallel_octaves_fraction);*/
+	
 		generateNoteLoudnesses();
 		/*for (int i = 0; i < note_loudnesses.length; i++)
 			System.out.print("\nCHAN: " + i + "  ");
@@ -1077,7 +1202,7 @@ public class MIDIIntermediateRepresentations
 		}
 	}
 	
-	
+
 	/**
 	 * Find the values of the note_attack_tick_map field
 	 */
@@ -1599,7 +1724,7 @@ public class MIDIIntermediateRepresentations
 		{
 			// Find the MIDI pitch numbers of all pitches found this tick
 			ArrayList<Short> pitches_this_tick = new ArrayList<>();
-			for (int pitch = 0; pitch < pitch_strength_by_tick_chart[tick].length - 1; pitch++)
+			for (int pitch = 0; pitch < pitch_strength_by_tick_chart[tick].length; pitch++)
 				if (pitch_strength_by_tick_chart[tick][pitch] != 0)
 					pitches_this_tick.add((short) pitch);
 
@@ -1646,6 +1771,153 @@ public class MIDIIntermediateRepresentations
 		pitch_classes_present_by_tick_excluding_rests = pitch_classes_present_by_tick_excluding_rests_arli.toArray(new short[pitch_classes_present_by_tick_excluding_rests_arli.size()][]);
 	}
 
+	
+	/**
+	 * Calculate the values of the parallel_motion_fraction, similar_motion_fraction,
+	 * contrary_motion_fraction, oblique_motion_fraction, parallel_fifths_fraction and
+	 * parallel_octaves_fraction fields.
+	 */
+	private void generateContrapuntalCounts()
+	{
+		// The number of ticks that this method will look ahead if the number of sounding voices changes from
+		// one tick to the next (this is because of rhythmic desynching that can occur between note onsets and
+		// offsets. Note that this is counted in addition to ticks on which no notes are sounding (rests).
+		final int TICK_DELAY_TOLERANCE = 150;
+		
+		// The number of times each type of movement occurs
+		int parallel_count = 0;
+		int similar_count = 0;
+		int contrary_count = 0;
+		int oblique_count = 0;
+		int parallel_fifths_count = 0;
+		int parallel_octaves_count = 0;
+	
+		// The unique sorted pitches on the last tick on which one or more pitches were sounding
+		short[] previous_pitches = null;
+		
+		// The unique sorted pitches on the current tick (on which pitches are sounding)
+		short[] current_pitches = null;
+		
+		// Iterate through all ticks on which one or more pitches were sounding
+		for (int tick = 0; tick < pitches_present_by_tick_excluding_rests.length; tick++)
+		{
+			// Fill previous_pitches and move to the next tick if it has not been filled yet
+			if (previous_pitches == null || previous_pitches.length == 0)
+			{
+				previous_pitches = pitches_present_by_tick_excluding_rests[tick];
+				continue;
+			}
+
+			// Update current_pitches and previous_pitches
+			if (current_pitches == null || current_pitches.length == 0)
+				current_pitches = pitches_present_by_tick_excluding_rests[tick];
+			else
+			{
+				previous_pitches = current_pitches;
+				current_pitches = pitches_present_by_tick_excluding_rests[tick];
+			}
+
+			// Output current_pitches for debugging
+			//System.out.print(tick + ": ");
+			//for (int i = 0; i < current_pitches.length; i++)
+			//	System.out.print(current_pitches[i] + " ");
+			//System.out.print("\n");
+			
+			// Move on to the next tick if current_pitches and previous_pitches are of different sizes,
+			// allowing for a look ahead of TICK_DELAY_TOLERANCE ticks (if a set of pitches of the same size
+			// as previous_pitches is found in the lookahead, then we jump ahead to that tick).
+			if (previous_pitches.length != current_pitches.length)
+			{
+				boolean move_on = true;
+				if ( tick < (pitches_present_by_tick_excluding_rests.length - TICK_DELAY_TOLERANCE - 1) )
+				{
+					for (int look_ahead_tick = tick + 1; look_ahead_tick < (tick + TICK_DELAY_TOLERANCE); look_ahead_tick++)
+					{
+						if (pitches_present_by_tick_excluding_rests[look_ahead_tick].length == previous_pitches.length)
+						{
+							tick = look_ahead_tick;
+							current_pitches = pitches_present_by_tick_excluding_rests[look_ahead_tick];
+							move_on = false;
+							break;
+						}
+					}
+				}
+				if (move_on) continue;
+			}
+			
+			// Move on to the next tick if only one or no notes are sounding
+			if (current_pitches.length <= 1)
+				continue;
+				
+			// Move on to the next tick if current_pitches and previous_pitches are the same
+			boolean prev_and_cur_are_identical = true;
+			for (int i = 0; i < current_pitches.length; i++)
+				if (previous_pitches[i] != current_pitches[i])
+					prev_and_cur_are_identical = false;
+			if (prev_and_cur_are_identical)
+				continue;
+			
+			// Count the different types of motion by comparing each pair of voices
+			for (int bottom_ind = 0; bottom_ind < current_pitches.length - 1; bottom_ind++)
+			{
+				for (int top_ind = bottom_ind + 1; top_ind < current_pitches.length; top_ind++)
+				{
+					// Note each of the four pitches involved
+					short prev_bottom_pitch = previous_pitches[bottom_ind];
+					short prev_top_pitch = previous_pitches[top_ind];
+					short cur_bottom_pitch = current_pitches[bottom_ind];
+					short cur_top_pitch = current_pitches[top_ind];
+
+					// Output the pair's pitch transition for debugging
+					//System.out.println(tick + ": " + prev_bottom_pitch + " to " + cur_bottom_pitch + " and " + prev_top_pitch + " to " + cur_top_pitch);
+					
+					// Move to the next pair if there is no change between this pair's pitches
+					if (prev_bottom_pitch == cur_bottom_pitch && prev_top_pitch == cur_top_pitch)
+						continue;
+					
+					// Note oblique motion
+					if (prev_bottom_pitch == cur_bottom_pitch || prev_top_pitch == cur_top_pitch)
+						oblique_count++;
+					
+					// Note contrary motion
+					else if ( ((cur_bottom_pitch - prev_bottom_pitch) < 0 && (cur_top_pitch - prev_top_pitch) > 0) ||
+					          ((cur_bottom_pitch - prev_bottom_pitch) > 0 && (cur_top_pitch - prev_top_pitch) < 0) )
+						contrary_count++;
+					
+					// Note parallel motion
+					else if ( (cur_top_pitch - cur_bottom_pitch) == (prev_top_pitch - prev_bottom_pitch) )
+					{
+						parallel_count++;
+						
+						// Also look for parallel fifths and octaves
+						if ( (cur_top_pitch - cur_bottom_pitch) == 7)
+							parallel_fifths_count++;
+						if ( (cur_top_pitch - cur_bottom_pitch) == 12)
+							parallel_octaves_count++;
+					}
+					
+					// Note similar motion
+					else similar_count++;
+				}
+			}
+		}
+		
+		// Caculate the total amount of qualifying motion
+		double total_motion_count = (double) parallel_count + (double) similar_count + 
+									(double) contrary_count + (double) oblique_count;
+
+		// Calculate the fractions of each type of motion
+		if (total_motion_count > 0.0)
+		{
+			parallel_motion_fraction = ((double) parallel_count) / total_motion_count;
+			similar_motion_fraction = ((double) similar_count) / total_motion_count;
+			contrary_motion_fraction = ((double) contrary_count) / total_motion_count;
+			oblique_motion_fraction = ((double) oblique_count) / total_motion_count;
+			parallel_fifths_fraction = ((double) parallel_fifths_count) / total_motion_count;
+			parallel_octaves_fraction = ((double) parallel_octaves_count) / total_motion_count;
+		}
+	}
+	
 
 	/**
 	 * Calculate the values of the note_loudnesses field.

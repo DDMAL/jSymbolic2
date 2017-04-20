@@ -236,9 +236,14 @@ public final class FeatureExtractorAccess
 			new RelativeNoteDurationsOfLowestLineFeature(),
 			new RelativeSizeOfMelodicIntervalsInLowestLineFeature(),
 			new VoiceOverlapFeature(),
-			new SimilarMotionFeature(),
 			new VoiceSeparationFeature(),
 			new VariabilityOfVoiceSeparationFeature(),
+			new ParallelMotionFeature(),
+			new SimilarMotionFeature(),
+			new ContraryMotionFeature(),
+			new ObliqueMotionFeature(),
+			new ParallelFifthsFeature(),
+			new ParallelOctavesFeature(),
 			
 			// Add features based on dynamics
 			new DynamicRangeFeature(),
@@ -422,9 +427,14 @@ public final class FeatureExtractorAccess
 			true, // RelativeNoteDurationsOfLowestLineFeature
 			true, // RelativeSizeOfMelodicIntervalsInLowestLineFeature
 			true, // VoiceOverlapFeature
-			true, // SimilarMotionFeature
 			true, // VoiceSeparationFeature
 			true, // VariabilityOfVoiceSeparationFeature
+			true, // ParallelMotionFeature
+			true, // SimilarMotionFeature
+			true, // ContraryMotionFeature
+			true, // ObliqueMotionFeature
+			true, // ParallelFifthsFeature
+			true, // ParallelOctavesFeature
 			
 			// Features based on dynamics
 			true, // DynamicRangeFeature

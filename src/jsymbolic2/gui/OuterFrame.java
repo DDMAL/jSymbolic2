@@ -59,6 +59,40 @@ public class OuterFrame
 	public static final int DIALOG_BOX_HANGING_INDENT_CHARS = 5;
 	
 
+	/* PRIVATE STATIC FINAL FIELDS ***************************************************************************/
+
+	
+	/**
+	 * The title to include in the GUI title bar.
+	 */
+	private static final String WINDOW_TITLE = "jSymbolic 2";
+	
+	/**
+	 * The name of this software's author.
+	 */
+	private static final String AUTHOR_STRING = "Cory McKay";
+	
+	/**
+	 * The string indicating licensing credit.
+	 */
+	private static final String LICENSING_STRING = "2017 (GNU GPL)";
+	
+	/**
+	 * The credited institution.
+	 */
+	private static final String INSTITUTION_CREDIT_STRING = "CIRMMT";
+	
+	/**
+	 * The horizontal dimension of the GUI window, in pixels.
+	 */
+	private static final int WINDOW_WIDTH_HORIZONTAL = 1200;
+
+	/**
+	 * The vertical dimension of the GUI window, in pixels.
+	 */
+	private static final int WINDOW_WIDTH_VERTICAL = 900;
+	
+
 	/* PUBLIC FIELDS ****************************************************************************************/
 
 	
@@ -136,10 +170,10 @@ public class OuterFrame
 	public OuterFrame(ConfigurationFileData config_file_data)
 	{
 		// Position the GUI window at the left corner of the screen with a size of 1280 x 1024
-		setBounds (0, 0, 1200, 900);
+		setBounds (0, 0, WINDOW_WIDTH_HORIZONTAL, WINDOW_WIDTH_VERTICAL);
 		
 		// Set the GUI window title
-		setTitle("jSymbolic 2");
+		setTitle(WINDOW_TITLE);
 
 		// Make jSymbolic quit when exit box is pressed
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -278,10 +312,10 @@ public class OuterFrame
 		if (event.getSource().equals(about_menu_item))
 		{
 			new AboutDialog( this,
-			                "jSymbolic 2",
-			                "Cory McKay",
-			                "2017 (GNU GPL)",
-			                "Marianopolis College and CIRMMT");
+			                 WINDOW_TITLE,
+			                 AUTHOR_STRING,
+			                 LICENSING_STRING,
+			                 INSTITUTION_CREDIT_STRING );
 		}
 
 		// React to the help_menu_item
