@@ -22,16 +22,16 @@ public class ParallelMotionFeatureTest {
         Track t2_tracks = test_tracks.createTrack();
         //Velocities here are always 64
         MidiEvent e_tracks3 = MidiBuildEvent.createNoteOnEvent(0, 0, 0);
-        MidiEvent e_tracks4 = MidiBuildEvent.createNoteOffEvent(0, 12, 0);
-        MidiEvent e_tracks1 = MidiBuildEvent.createNoteOnEvent(4, 12, 0);
-        MidiEvent e_tracks2 = MidiBuildEvent.createNoteOffEvent(4, 14, 0);
-        MidiEvent e_tracks5 = MidiBuildEvent.createNoteOnEvent(1, 0, 1);
-        MidiEvent e_tracks6 = MidiBuildEvent.createNoteOffEvent(1, 11, 1);
-        MidiEvent e_tracks7 = MidiBuildEvent.createNoteOnEvent(2, 11, 1);
-        MidiEvent e_tracks8 = MidiBuildEvent.createNoteOffEvent(2, 30, 1);
-        MidiEvent e_tracks9 = MidiBuildEvent.createNoteOnEvent(3, 13, 0);
-        MidiEvent e_tracks10 = MidiBuildEvent.createNoteOffEvent(3, 30, 0);
-        MidiEvent e_tracks13 = MidiBuildEvent.createNoteOnEvent(1, 12, 1);
+        MidiEvent e_tracks4 = MidiBuildEvent.createNoteOffEvent(0, 11, 0);
+        MidiEvent e_tracks1 = MidiBuildEvent.createNoteOnEvent(4, 0, 0);
+        MidiEvent e_tracks2 = MidiBuildEvent.createNoteOffEvent(4, 11, 0);
+        MidiEvent e_tracks5 = MidiBuildEvent.createNoteOnEvent(2, 12, 1);
+        MidiEvent e_tracks6 = MidiBuildEvent.createNoteOffEvent(2, 24, 1);
+        MidiEvent e_tracks7 = MidiBuildEvent.createNoteOnEvent(6, 12, 1);
+        MidiEvent e_tracks8 = MidiBuildEvent.createNoteOffEvent(6, 24, 1);
+        MidiEvent e_tracks9 = MidiBuildEvent.createNoteOnEvent(7, 25, 0);
+        MidiEvent e_tracks10 = MidiBuildEvent.createNoteOffEvent(7, 30, 0);
+        MidiEvent e_tracks13 = MidiBuildEvent.createNoteOnEvent(1, 25, 1);
         MidiEvent e_tracks14 = MidiBuildEvent.createNoteOffEvent(1, 30, 1);
         t1_tracks.add(e_tracks3);
         t2_tracks.add(e_tracks2);
@@ -47,10 +47,10 @@ public class ParallelMotionFeatureTest {
         t2_tracks.add(e_tracks14);
 
         MIDIIntermediateRepresentations inter = new MIDIIntermediateRepresentations(test_tracks);
-        MIDIFeatureExtractor actual_common = new SimilarMotionFeature();
-        double[] actual_chord_type = actual_common.extractFeature(test_tracks, inter, null);
-        double[] expected_chord_type = {0.6666};
-        assertArrayEquals(expected_chord_type, actual_chord_type, 0.0001);
+        MIDIFeatureExtractor actual_common = new ParallelMotionFeature();
+        double[] actual_value = actual_common.extractFeature(test_tracks, inter, null);
+        double[] expected_value = {0.5};
+        assertArrayEquals(expected_value, actual_value, 0.0001);
     }
 
 }

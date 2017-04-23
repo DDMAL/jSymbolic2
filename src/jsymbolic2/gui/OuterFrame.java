@@ -80,17 +80,17 @@ public class OuterFrame
 	/**
 	 * The credited institution.
 	 */
-	private static final String INSTITUTION_CREDIT_STRING = "CIRMMT";
+	private static final String INSTITUTION_CREDIT_STRING = "CIRMMT / Marianopolis College / McGill University";
 	
 	/**
 	 * The horizontal dimension of the GUI window, in pixels.
 	 */
-	private static final int WINDOW_WIDTH_HORIZONTAL = 1200;
+	private static final int WINDOW_WIDTH_HORIZONTAL = 1250;
 
 	/**
 	 * The vertical dimension of the GUI window, in pixels.
 	 */
-	private static final int WINDOW_WIDTH_VERTICAL = 900;
+	private static final int WINDOW_WIDTH_VERTICAL = 940;
 	
 
 	/* PUBLIC FIELDS ****************************************************************************************/
@@ -169,8 +169,18 @@ public class OuterFrame
 	 */
 	public OuterFrame(ConfigurationFileData config_file_data)
 	{
-		// Position the GUI window at the left corner of the screen with a size of 1280 x 1024
-		setBounds (0, 0, WINDOW_WIDTH_HORIZONTAL, WINDOW_WIDTH_VERTICAL);
+		// Determine the proper window size based on the current display settings. Use default size if there
+		// is enough room, otherwise choose a size that will fit the screen.
+		int frame_width = WINDOW_WIDTH_HORIZONTAL;
+		int frame_height = WINDOW_WIDTH_VERTICAL;
+		Dimension current_screen_size = Toolkit.getDefaultToolkit().getScreenSize();
+		if (frame_width > current_screen_size.getWidth())
+			frame_width = (int) current_screen_size.getWidth();
+		if (frame_height > current_screen_size.getHeight())
+			frame_height = (int) current_screen_size.getHeight() - 80;
+		
+		// Position the GUI window at the left corner of the an appropriate size
+		setBounds (0, 0, frame_width, frame_height);
 		
 		// Set the GUI window title
 		setTitle(WINDOW_TITLE);
@@ -178,6 +188,12 @@ public class OuterFrame
 		// Make jSymbolic quit when exit box is pressed
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
+		// Create an outer border
+		JPanel outer_padding_panel = new JPanel();				
+		Border outer_padding = BorderFactory.createEmptyBorder(VERTICAL_GAP, HORIZONTAL_GAP, VERTICAL_GAP, HORIZONTAL_GAP);
+		outer_padding_panel.setBorder(outer_padding);
+		setContentPane(outer_padding_panel);
+		
 		// Set up the menu bar
 		JMenuBar menu_bar = new JMenuBar();
 		JMenu information_menu = new JMenu("Information");
@@ -285,11 +301,25 @@ public class OuterFrame
 		JPanel combined_text_panels = new JPanel(new GridLayout(1, 2, HORIZONTAL_GAP, VERTICAL_GAP));
 		combined_text_panels.add(status_text_panel);
 		combined_text_panels.add(error_text_panel);
+
+		// Set up the all_but_extraction_configuration_panels
+		GridBagLayout all_but_extraction_configuration_panels_layout = new GridBagLayout();
+		JPanel all_but_extraction_configuration_panels = new JPanel(all_but_extraction_configuration_panels_layout);
+		GridBagConstraints all_but_extraction_configuration_panels_constraints = new GridBagConstraints();
+		all_but_extraction_configuration_panels_constraints.weightx = 1.0;
+		all_but_extraction_configuration_panels_constraints.weighty = 0.7;
+		all_but_extraction_configuration_panels_constraints.fill = GridBagConstraints.BOTH;
+		all_but_extraction_configuration_panels_constraints.gridwidth = GridBagConstraints.REMAINDER;
+		all_but_extraction_configuration_panels_layout.setConstraints(music_and_feature_panel, all_but_extraction_configuration_panels_constraints);
+		all_but_extraction_configuration_panels.add(music_and_feature_panel);
+		all_but_extraction_configuration_panels_constraints.insets = new Insets(VERTICAL_GAP, 0, 0, 0);
+		all_but_extraction_configuration_panels_constraints.weighty = 0.3;
+		all_but_extraction_configuration_panels_layout.setConstraints(combined_text_panels, all_but_extraction_configuration_panels_constraints);
+		all_but_extraction_configuration_panels.add(combined_text_panels);
 		
 		// Add items to the GUI
 		setLayout(new BorderLayout(HORIZONTAL_GAP, VERTICAL_GAP));
-		add(music_and_feature_panel, BorderLayout.NORTH);
-		add(combined_text_panels, BorderLayout.CENTER);
+		add(all_but_extraction_configuration_panels, BorderLayout.CENTER);
 		add(extraction_configurations_panel, BorderLayout.SOUTH);
 
 		// Display the GUI

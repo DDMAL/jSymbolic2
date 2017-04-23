@@ -490,7 +490,8 @@ public class MIDIIntermediateRepresentations
 		mean_ticks_per_second = ((double) sequence.getTickLength()) / ((double) sequence.getMicrosecondLength() / 1000000.0);
 
 		// Print out all note ons and note offs for debugging
-		/*for (int n_track = 0; n_track < tracks.length; n_track++)
+		/*System.out.println("++++++++++++++++++++++++++++++++++++++++++++");
+		for (int n_track = 0; n_track < tracks.length; n_track++)
 		{
 			System.out.println("TRACK " + n_track + ":");
 			Track track = tracks[n_track];

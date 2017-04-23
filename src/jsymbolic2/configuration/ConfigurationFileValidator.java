@@ -60,7 +60,7 @@ public abstract class ConfigurationFileValidator {
 
     /**
      * Validate the options logic specified in the configuration file.
-     * This occurs after the option syntax validation in the {@link #parseConfigFile(String, List, PrintSteram)} function.
+     * This occurs after the option syntax validation in the parseConfigFile(String, List, PrintSteram) method.
      * @param configOption The syntax validated configuration option data.
      * @param configurationFile The configuration file for file information.
      * @return ConfigurationOptionState The fully validated state of the configuration options from the configuration file.

@@ -264,9 +264,9 @@ public class ExtractionConfigurationsPanel
 	private void initializeGuiComponentFields(ConfigurationFileData configuration_file_data)
 	{
 		// Set up buttons associated with configuration files
-		load_configuration_file_button = new JButton("Load New Settings from a Configuration File");
+		load_configuration_file_button = new JButton("Load New Settings from a Config File");
 		load_configuration_file_button.addActionListener(this);
-		save_configuration_file_button = new JButton("Save These Settings to a Configuration File");
+		save_configuration_file_button = new JButton("Save These Settings to a Config File");
 		save_configuration_file_button.addActionListener(this);
 
 		// Set up the overall file vs. windowed extraction radio buttons and join them into a group
@@ -277,7 +277,7 @@ public class ExtractionConfigurationsPanel
 			save_overall_features_only = configuration_file_data.saveOverall();
 			save_windowed_features_only = configuration_file_data.saveWindow();
 		}
-		save_overall_features_only_radio_button = new JRadioButton( "Extract Features from Files in Their Entirety",
+		save_overall_features_only_radio_button = new JRadioButton( "Extract Features from Entire Files",
 																	save_overall_features_only );
 		save_windowed_features_only_radio_button = new JRadioButton( "Extract Features from Windows",
 																	 save_windowed_features_only );

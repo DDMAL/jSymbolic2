@@ -37,7 +37,7 @@
 <p>By its nature, the Java Virtual Machine is always assigned a maximum amount of memory at runtime. If a specific maximum is not assigned manually at runtime, then this will be the smaller of 1/4 the computer's physical memory or 1 GB.
 jSymbolic's processing can sometimes require quite
 a bit of memory, so it is best to manually specify a large maximum when running jSymbolic. This can be done by using the &quot;-Xmx&quot; flag when running Java, as shown in the examples below.</p>
-<p>It is suggested that a maximum of three gigabytes be used, which is why &quot;-Xmx3072m&quot; is specified below (3072 megabytes). Of course, the vast majority of processing jobs will require much, much less than this amount of memory, but it is suggested that a high maximum such as this be assigned if possible, as jSymbolic will quit processing (with an explanatory error message) if the maximum assigned memory is exceeded while processing a particular large or complex piece of music.
+<p>It is suggested that a maximum of three gigabytes be used, which is why &quot;-Xmx3072m&quot; is specified below (3072 megabytes). Of course, the vast majority of processing jobs will require much, much less than this amount of memory, but it is suggested that a high maximum such as this be assigned if possible, as jSymbolic will quit processing (with an explanatory error message) if the maximum assigned memory is exceeded while processing a particularly large or complex piece of music.
 In the very unlikely event that an out-of-memory error does occur, jSymbolic should be rerun with a larger maximum specified.</p>
 <p>Users are advised not to assign a greater amount of memory greater than the amount of physical memory that they have on their systems, however, as virtual memory processing can be quite slow.
 </p>
@@ -60,14 +60,15 @@ The simplest way to run jSymbolic from a terminal prompt is to type the followin
 
 <p><strong>Important Notes:</strong></p>
 <ul>
-	<li>The ordering of the command line arguments does matter in certain cases.</li>
-	<li>jSymbolic's operation can also be governed by its <a href="../configuration_files/configuration.html">configuration settings file</a>, as explained further below.</li>
-	<li>If the user does not specify a <a href="../configuration_files/configuration.html">configuration settings file</a> at runtime, then jSymboic will look for a default one in the same folder as the jSymbolic2.jar file, and with the file name <i>jSymbolicDefaultConfigs.txt</i>. If no such file exists, or if it is not a valid jSymbolic configuration settings file, then the jSymbolic will simply run with hard-coded default settings.
-	<li>All file or directory paths specified in command line arguments must either be absolute or relative to the directory containing the jSymbolic2.jar file.</li>
-	<li>Any errors that occur during batch processing of multiple files will be logged to the terminal. Processing of other files will not be interrupted..</li>
-	<li>jSymbolic can currently process the following kinds of symbolic music files: MIDI files and MEI files. Any files that cannot be parsed by jSymbolic will cause an error message to be generated.</li>
-	<li>If an MEI-specific feature (e.g. Number of Grace Notes) is set to be extracted, then it will only be extracted from MEI files. It will be ignored by other files, such as MIDI files.</li>
-	<li>It is no longer necessary to specify the default JRE heap size from the command line, for fear of running out of memory, as newer versions of jSymbolic automatically setsan appropriate heap size.</li>
+	
+  <li>The ordering of the command line arguments does matter in certain cases.</li>
+  <li>jSymbolic's operation can also be governed by its <a href="../configuration_files/configuration.html">configuration settings file</a>, as explained further below.</li>
+  <li>If the user does not specify a <a href="../configuration_files/configuration.html">configuration settings file</a> at runtime, then jSymboic will look for a default one in the same folder as the jSymbolic2.jar file, and with the file name <i>jSymbolicDefaultConfigs.txt</i>. If no such file exists, or if it is not a valid jSymbolic configuration settings file, then the jSymbolic will simply run with hard-coded default settings.
+	
+  <li>All file or directory paths specified in command line arguments must either be absolute or relative to the directory containing the jSymbolic2.jar file.</li>
+  <li>Any errors that occur during batch processing of multiple files will be logged to the terminal. Processing of other files will not be interrupted..</li>
+  <li>jSymbolic can currently process the following kinds of symbolic music files: MIDI files and MEI files. Any files that cannot be parsed by jSymbolic will cause an error message to be generated.</li>
+  <li>If an MEI-specific feature (e.g. Number of Grace Notes) is set to be extracted, then it will only be extracted from MEI files. It will be ignored by other files, such as MIDI files.</li>
 </ul>
 
 <p> <strong>JSYMBOLIC'S COMMAND LINE ARGUMENTS (WITH NO NON-DEFAULT CONFIGURATION FILE SPECIFIED)</strong></p>

@@ -1,8 +1,6 @@
-==================================================================================
- jSymbolic 2.0
-==================================================================================
- by Cory McKay
- Copyright (C) 2017 (GNU GPL)
+# jSymbolic 2.0
+by Cory McKay
+Copyright (C) 2017 (GNU GPL)
 
 
 ### OVERVIEW
@@ -19,12 +17,12 @@ empirical musical research.
 jSymbolic includes an easy-to-use graphical user interface, and may also be
 used via the command line. It also has an API facilitating programmatic use.
 The software can be used either with its excellent general-purpose default 
-settings, or advanced users can use it under a variety of settings (saved in
-a special configuration settings file).
+settings, or advanced users can use it under a variety of settings (which can
+also be saved in a special configuration settings file).
 
 Extracted features can be saved in a variety of formats, including ACE XML
-1.1, Weka ARFF and basic CSV text. The Weka ARFF and CSV files are optional
-, but the ACE XML files are always generated, and consist of two file types:
+1.1, Weka ARFF and basic CSV text. The Weka ARFF and CSV files are optional,
+but the ACE XML files are always generated, and consist of two file types:
 a Feature Values file that holds the extracted numerical feature values, and
 a Feature Definitions file that specifies explicative metadata about the
 extracted feature types. Some feature values each consist of single values, 
@@ -40,15 +38,15 @@ of all other feature values to each new feature and dynamic feature extraction
 scheduling that automatically resolves feature dependencies. jSymbolic is 
 implemented in Java in order to maximize cross-platform utilization.
 
-jSymbolic is part of the jMIR music classification research software suite, 
-and may be used either as part of this suite or independently. In particular,
-jSymbolic is designed to integrate especially well with the ACE meta-learning 
-automtic classification research suite, as well as the external Weka data-
-mining suite.
+jSymbolic is part of the jMIR (http://jmir.sourceforge.net) music 
+classification research software suite, and may be used either as part of this
+suite or independently. In particular, jSymbolic is designed to integrate
+especially well with the ACE meta-learning automtic classification research
+suite, as well as the external Weka data-mining suite.
 
 jSymbolic is also part of the SIMSSA (Single Interface for Music Score 
-Searching and Analysis) project, and is integrated with the music stored on 
-the associated Elvis database.
+Searching and Analysis, https://simssa.ca) project, and is integrated with 
+the music stored on the associated Elvis database (https://elvisproject.ca).
 
 
 ### GETTING MORE INFORMATION
@@ -71,17 +69,16 @@ This program is distributed in the hope that it will be useful, but WITHOUT
 ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License along with 
-this program; if not, write to the Free Software Foundation, Inc., 675 
-Mass Ave, Cambridge, MA 02139, USA.
+You may obtain a copy of the GNU General Public License by writing to the Free
+Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 
 ### COMPATIBILITY
 
-The jSymbolic software is written in Java, which means that it can in
+The jSymbolic software is written entirely in Java, which means that it can in
 principle be run on any system that has the Java Runtime Environment (JRE)
 installed on it. It is particularly recommended that this software be used
-with Windows or Linus, as it was developed and tested primarily under these
+with Windows or Linux, as it was developed and tested primarily using these
 operating systems. Although the software should still run perfectly well on
 OS X, Solaris or any other operating system with the JRE installed on it, 
 users should be advised that jSymbolic has not yet been fully tested on these
@@ -98,8 +95,8 @@ properly.
 If your system already has the JRE installed, as will most typically be the
 case, you may skip this section. If not, you will need to install the JRE in
 order to run jSymbolic. The JRE can be downloaded for free from the Java web
-site. The JDK typically includes the JRE, or the JRE can simply be installed
-alone.
+site (http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html).
+The JDK typically includes the JRE, or the JRE can simply be installed alone.
 
 When the JRE download is complete, follow the installation instructions that
 come with it in order to install it.
@@ -107,9 +104,9 @@ come with it in order to install it.
 
 ### INSTALLING jSymbolic
 
-The jSymbolic software is available at jmir.sourceforge.net. It is delivered 
-in a zipped file, from which jSymbolic can be extracted using any of a variety
-of dearchiving utilities (e.g. ZipGenius).
+The jSymbolic software is available at http://jmir.sourceforge.net. It is 
+delivered in a zipped file, from which jSymbolic can be extracted using any of
+a variety of dearchiving utilities (e.g. ZipGenius).
 
 There are two versions of jSymbolic, namely the development version and the 
 user version. The user version contains everything needed to run jSymbolic, 
@@ -138,7 +135,7 @@ jSymbolic, including source code.
 ### RUNNING JSYMBOLIC 
 
 The simplest way of using jSymbolic is to simply run the jSymbolic GUI by double
-clicking the jSymbolic.jar file's icon on a graphical disk interface, such as 
+clicking the jSymbolic.jar file's icon using a graphical operating system, such as 
 Windows or OS X. 
 
 However, a greater range of options are made available by running jSymbolic through
@@ -181,6 +178,24 @@ arguments being printed out to the terminal.
 More details on the kinds of command line arguments that may be used with jSymbolic
 are provided in the jSymbolic manual.
 
+By its nature, the Java Virtual Machine is always assigned a maximum amount of memory 
+at runtime. If a specific maximum is not assigned manually at runtime, then this will
+be the smaller of 1/4 the computer's physical memory or 1 GB. jSymbolic's processing
+can sometimes require quite a bit of memory, so it is best to manually specify a large
+maximum when running jSymbolic. This can be done by using the "-Xmx" flag when running
+Java, as shown in the examples above.
+
+It is suggested that a maximum of three gigabytes be used, which is why "-Xmx3072m" is 
+specified above (3072 megabytes). Of course, the vast majority of processing jobs will 
+require much, much less than this amount of memory, but it is suggested that a high 
+maximum such as this be assigned if possible, as jSymbolic will quit processing (with
+an explanatory error message) if the maximum assigned memory is exceeded while 
+processing a particularly large or complex piece of music. In the very unlikely event
+that an out-of-memory error does occur, jSymbolic should be rerun with a larger maximum
+specified. Users are advised not to assign a greater amount of memory greater than the
+amount of physical memory that they have on their systems, however, as virtual memory
+processing can be quite slow. 
+
 Important Notes:
 - The ordering of the command line arguments does matter in certain cases.
 - jSymbolic's operation can also be governed by its configuration settings file, as
@@ -188,8 +203,8 @@ explained further below.
 - If the user does not specify a configuration settings file at runtime, then jSymboic
 will look for a default one in the same folder as the jSymbolic.jar file, and with the 
 file name jSymbolicDefaultConfigs.txt. If no such file exists, or if it is not a valid 
-jSymbolic configuration settings file, then the jSymbolic will simply run with hard
--coded default settings.
+jSymbolic configuration settings file, then jSymbolic will simply run with hard-coded
+default settings.
 - All file or directory paths specified in command line arguments must either be 
 absolute or relative to the directory containing the jSymbolic.jar file.
 - Any errors that occur during batch processing of multiple files will be logged to the 
@@ -200,9 +215,6 @@ to be generated.
 - If an MEI-specific feature (e.g. Number of Grace Notes) is set to be extracted, then
 it will only be extracted from MEI files. It will be ignored by other files, such as MIDI 
 files.
-- It is no longer necessary to specify the default JRE heap size from the command line,
-for fear of running out of memory, as newer versions of jSymbolic automatically setsan
-appropriate heap size.
 
 
 ### USING THE JSYMBOLIC GUI
@@ -226,8 +238,8 @@ on its row. Buttons are included for auto-selecting all features, no features or
 default features.
 - Processing Information Panel: This panel, on the middle left of the jSymbolic GUI, is a
 space where processing updates are posted during feature extraction. Summary information is
-also posted here at startup relating to feature breakdowns, and additional updates ar
-e written here relating to configuration files and symbolic music files selected to have
+also posted here at startup relating to feature breakdowns, and additional updates are
+written here relating to configuration files and symbolic music files selected to have
 features extracted from them.
 - Error Reports Panel: This panel, on the middle right of the jSymbolic GUI, is a space
 where any problems encountered during feature extraction processing are posted (such
@@ -271,6 +283,11 @@ disable certain features for extraction without a configuration file using the G
 However, a configuration file is required if the user wishes to use the command line
 interface or API with any selection of features other than the default.
 
+The jSymbolic GUI also includes a single Information menu, with the following commands:
+
+- About: Displays a small window showing basic information about jSymbolic.
+- Help: Brings up a browsable window permitting access to this manual.
+
 More details on the jSymbolic configuration settings file and how to use it are provided in 
 the jSymbolic manual.
 
@@ -288,21 +305,3 @@ See the jSymbolic manual for more information on this topic.
 ### ACCESSING THE API
 
 See the jSymbolic manual for more information on this topic.
-
-
-### LICENSING AND LIABILITY 
-
-jSymbolic 2
-Copyright (C) 2017
-Cory McKay
-
-This program is free software; you can redistribute it and/or modify it under the terms
-of the GNU General Public License as published by the Free Software Foundation.
-
-This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
-without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-See the GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License along with this program;
-if not, write to the Free Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139,
-USA.

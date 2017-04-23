@@ -37,7 +37,7 @@ public class MelodicPitchVarietyFeatureTest {
         MIDIIntermediateRepresentations inter = new MIDIIntermediateRepresentations(test_tracks);
         MIDIFeatureExtractor actual_common = new MelodicPitchVarietyFeature();
         double[] actual_variety = actual_common.extractFeature(test_tracks, inter, null);
-        double[] expected_variety = {1};
+        double[] expected_variety = {2};
         assertArrayEquals(expected_variety, actual_variety, 0.1);
     }
 

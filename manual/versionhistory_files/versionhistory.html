@@ -13,40 +13,65 @@
 
 <p>All updates stated below are since jSymbolic 1.0</p>
 
-<p><strong>Currently Being Resolved:</strong></p>
+<p><strong> Currently Being Worked On:</strong></p>
 <ul>
-  <li>See the <a href="https://github.com/DDMAL/jSymbolic2/issues" target="top">GitHub issues</a> page.</li>
+  <li>Go to the <a href="https://github.com/DDMAL/jSymbolic2/tree/development" target="top">GitHub development branch</a> page to see the development version of the code. Of course, it is not recommended that you use this version yourself, as it may not be fully tested and stable at any given time.</li>
+  <li>Go to the <a href="https://github.com/DDMAL/jSymbolic2/tree/master" target="top">GitHub master branch</a> page to see the most current stable version of the code currently being worked on. The release version, however, which is the one that is recommended for research use, is available on the <a href="http://jmir.sourceforge.net" target="top">jMIR SourceForge page</a>.</li>
 </ul>
-
 <p><strong>jSymbolic 2.0:</strong></p>
 <ul>
-  <li>Added the ability to extract features from <a href="http://music-encoding.org" target="top">MEI</a> files using our new custom-built <a href="https://github.com/DDMAL/jMei2Midi" target="top">jMei2Midi</a> project (which can convert MEI files to MIDI), and which in turn uses the  <a href="https://github.com/alastair/jmei/" target="top">jmei</a> library. Of course, as MEI itself is still being developed, new aspects of the MEI format incorporated after the publication of this code may not yet be implemented.</li>
-  <li>Added the ability to implement and extract specialized MEI-specific features (i.e. features that cannot be extracted from MIDI files). An MEIFeatureExtractor architecture similar to the MIDIFeatureExtractor has been added in order to accomplish this. More information can be found at <a href="../extendingsoftware_files/extendingsoftware.html">Extending Software page</a>.</li>
-  <li>Implemented features that had previously been proposed but not implemented:
+  <li>Extensive expansion and improvement of the jSymbolic features and their support infrastructure:
     <ul>
-      <li>T-11, 14, 16, 17, 18, 19</li>
-      <li>
-        	R-16, 26, 27, 28, 29, 36</li>
-      <li>P-26</li>
-      <li>M-16, 20</li>
-      <li>C-1 to C-29</li>
-      <li>S-1, 2 <em>(these two are actually entirely new features implemented as examples of MEI-specific features)</em></li>
+      <li>Implemented 49 features that had been proposed in jSymbolic 1's support literature, but which had not yet been implemented.
+        <ul>
+          <li>This includes all the features related to chords and vertical intervals, among others.</li>
+        </ul>
+      </li>
+      <li>Designed and implemented 12 entirely new features.</li>
+      <li>Updated and improved a number of the previously implemented 111 features found in jSymbolic 1.</li>
+      <li>Added the ability to implement and extract specialized MEI-specific features (i.e. features that cannot be extracted from MIDI files).
+        <ul>
+          <li>An MEIFeatureExtractor architecture similar to the MIDIFeatureExtractor has been added in order to accomplish this.</li>
+          <li>More information can be found at <a href="../extendingsoftware_files/extendingsoftware.html">Extending Software page</a>.</li>
+        </ul>
+      </li>
+      <li>Added numerous helper classes and methods related to features.</li>
     </ul>
   </li>
-  <li>Numerous helper classes and methods were added to support the new features.</li>
-  <li>The ability to extract features separately and individually from multiple windows in a piece was added (as opposed to only being able to extract features from pieces overall, which was previously the only option). The ability to use windows with or without offsets was included.</li>
-  <li>Extracted features may now be saved as basic CSV text files or as Weka ARFF files (previously ACE XML was the only output option).</li>
-  <li>Added a new configuration file format to facilitate saving and reuse of settings, as well as to facilitate batch processing still further. This configuration file can be used the GUI, command line interface and API. It can be edited directly with a text editor, or may be saved from the GUI. The configuration file is also designed to be easily extensible.</li>
-  <li>Added a relatively detailed HTML manual.</li>
-  <li>Implemented an easy-to-use API so that jSymbolic can be incorporated into external software without needing to resort to command line calls.</li>
-  <li>Improved the GUI design in order to make it easier to use.</li>
-  <li>Improved the command line interface implementation in order to enable access to more functionality and to make it more easily extensible.</li>
-  <li>Set up jSymbolic to run as a separate process to deal with potential issues associated with the Java heap size. The user thus no longer has to worry about JVM-specific command line switches.</li>
-  <li>Improved and streamlined error handling. Among other things, now logs files that cannot be processed during batch processing, and does not terminate execution unnecessarily when problems occur.</li>
+  <li>Added the ability to extract features separately and individually from multiple windows in a file (as opposed to only being able to extract features from a file overall, which was the only option in jSymbolic 1).
+        
+    <ul>
+      <li>This includes the ability to use windows with or without offsets.</li>
+    </ul>
+  </li>
+  <li>Added the ability to extract features from <a href="http://music-encoding.org" target="top">MEI</a> files using our new custom-built <a href="https://github.com/DDMAL/jMei2Midi" target="top">jMei2Midi</a> project (which can convert MEI files to MIDI), and which in turn uses the  <a href="https://github.com/alastair/jmei/" target="top">jMEI</a> library.</li>
+  <li>Extensive interface and documentation improvements:
+    <ul>
+      <li>Added a  detailed HTML manual.</li>
+      <li>Added an easy-to-use and well-documented dedicated API so that jSymbolic can be incorporated into external software without needing to resort to command line calls.</li>
+      <li>Expanded and  redesigned the GUI in order to make it more powerful and easier to use.</li>
+      <li>Completely overhauled the command line interface design in order to enable access to more functionality and to make it more easily extensible.</li>
+      <li>Implementation of a new Rodan workflow for using jSymbolic in a distributed processing context.</li>
+    </ul>
+  </li>
+  <li>Added a new configuration file format to facilitate the saving and reuse of settings, as well as to facilitate batch processing still further. 
+    <ul>
+      <li>Configuration files can be used with the GUI, command line interface and API.</li>
+      <li>Configuration files can be edited directly with a text editor, or savings entered on the GUI may be saved to a configuration file using the GUI.</li>
+      <li>The configuration file format is  designed to itself be easily extensible.</li>
+    </ul>
+  </li>
+  <li>Extracted features may now be saved as basic CSV text files or as Weka ARFF files (ACE XML was the only output option in jSymbolic 1).</li>
+  <li>Substantially expanded, improved and streamlined error handling.
+    <ul>
+      <li>No longer terminates execution when problems occur, and produces log files to keep track of errors encountered during batch processing.</li>
+      <li>More error messages with more detailed and specific error explanations.</li>
+    </ul>
+  </li>
   <li>Added substantial unit testing.</li>
   <li>Cleaned up code and documentation in general.</li>
   <li>Numerous miscellaneous bug fixes.</li>
-  <li>Updated support libraries (ACE and UtilityClasses).</li>
+  <li>Updated the ACE and UtilityClasses support libraries to the newest (improved) versions.</li>
 </ul>
 
 <p><strong>jSymbolic 1.2.1: </strong></p>
@@ -63,7 +88,7 @@
 
 <p><strong>jSymbolic 1.1: </strong></p>
 <ul>
-  <li>Imported jSymbolic into the NetBeans framework to assist further development.</li>
+  <li>Imported jSymbolic into the NetBeans framework.</li>
 </ul>
 
 <table height="5" width="100%" bgcolor="#0033C4" border="0"><tbody><tr><th></th></tr></tbody></table>

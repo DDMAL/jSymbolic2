@@ -12,10 +12,10 @@ import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
  * A feature calculator that finds the average number of notes that go by in a MIDI channel before a note's
- * pitch is repeated. This is calculated across each channel individually before being combined. Notes that
- * occur simultaneously on the same MIDI tick are only counted as one note for the purpose of this
- * calculation. Notes that do not recur after 16 notes in the same channel are not included in this
- * calculation. Set to 0 if there are no qualifying repeated notes in the piece.
+ * pitch is repeated (including the repeated note itself). This is calculated across each channel individually
+ * before being combined. Notes that occur simultaneously on the same MIDI tick are only counted as one note
+ * for the purpose of this calculation. Notes that do not recur after 16 notes in the same channel are not
+ * included in this calculation. Set to 0 if there are no qualifying repeated notes in the piece.
  *
  * @author Cory McKay and Tristano Tenaglia
  */
@@ -32,7 +32,7 @@ public class MelodicPitchVarietyFeature
 	{
 		code = "M-25";
 		String name = "Melodic Pitch Variety";
-		String description = "Average number of notes that go by in a MIDI channel before a note's pitch is repeated. This is calculated across each channel individually before being combined. Notes that occur simultaneously on the same MIDI tick are only counted as one note for the purpose of this calculation. Notes that do not recur after 16 notes in the same channel are not included in this calculation. Set to 0 if there are no qualifying repeated notes in the piece.";
+		String description = "Average number of notes that go by in a MIDI channel before a note's pitch is repeated (including the repeated note itself). This is calculated across each channel individually before being combined. Notes that occur simultaneously on the same MIDI tick are only counted as one note for the purpose of this calculation. Notes that do not recur after 16 notes in the same channel are not included in this calculation. Set to 0 if there are no qualifying repeated notes in the piece.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, description, is_sequential, dimensions);
@@ -86,10 +86,10 @@ public class MelodicPitchVarietyFeature
 					List<NoteInfo> all_notes_in_this_channel = sequence_info.all_notes.getNotesOnChannel(channel);
 					all_notes_in_this_channel = CollectedNoteInfo.noteListToSortedNoteList(all_notes_in_this_channel);
 
-					// Prepare a map indicating all notes starting on any given MIDI tick, where the start tick
-					// value serves as the map key and the map value is a list of all notes starting on the
-					// specified tick. The particular ordering of notes in this List value is not necessarily
-					// meaningful.
+					// Prepare a map indicating all notes starting on any given MIDI tick, where the start 
+					// tick value serves as the map key and the map value is a list of all notes starting on 
+					// the specified tick. The particular ordering of notes in this List value is not 
+					// necessarily meaningful.
 					Map<Integer, List<NoteInfo>> note_start_tick_map_this_channel = CollectedNoteInfo.noteListToStartTickNoteMap(all_notes_in_this_channel);
 
 					// Prepare a sorted set of all ticks containing one or more note on messages
@@ -110,6 +110,7 @@ public class MelodicPitchVarietyFeature
 							{
 								if (tick_following_note != last_tick_examined)
 									notes_gone_by_with_different_pitch++;
+								
 								last_tick_examined = tick_following_note;
 
 								List<NoteInfo> notes_starting_this_following_tick = note_start_tick_map_this_channel.get(tick_following_note);
@@ -134,7 +135,7 @@ public class MelodicPitchVarietyFeature
 				}
 			}
 			
-			// To avoid channels with no notes in them
+			// To deal with music with no repeated notes
 			if (number_of_repeated_notes_found == 0)
 				value = 0.0;
 			else
