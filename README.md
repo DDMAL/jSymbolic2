@@ -33,8 +33,8 @@ primarily histograms).
 
 jSymbolic is free and open-source, and is designed to be used directly for
 conducting research as well as as a platform for iteratively developing new 
-features that can then be shared amongst researchers. As such, jSymbolic 
-emphasizes extensibility, and includes a modular design that facilitates 
+features that can then be shared amongst researchers. As such, jSymboli
+c emphasizes extensibility, and includes a modular design that facilitates 
 the implementation and incorporation of new features, automatic provision
 of all other feature values to each new feature and dynamic feature extraction
 scheduling that automatically resolves feature dependencies. jSymbolic is 
@@ -55,7 +55,7 @@ the associated Elvis database.
 
 More information on jMIR (and the software itself) is available at
 http://jmir.sourceforge.net. jSymbolic includes a detailed HTML manual,
-which is packaged with the code and also posted on the jMIR web site.
+which is packaged with the code and also posted on the jMIR web sit.
 
 Please Cory McKay (cory.mckay@mail.mcgill.ca) with any bug reports or
 questions relating to the software. 
