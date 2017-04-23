@@ -1,5 +1,5 @@
 <features_to_extract>
-Acoustic Guitar Fraction
+Acoustic Guitar Prevalence
 Duration
 Beat Histogram
 <jSymbolic_options>
@@ -10,8 +10,8 @@ save_overall_recording_features=true
 convert_to_arff=true
 convert_to_csv=true
 <output_files>
-feature_values_save_path=./test/jsymbolic/api/resources/feature_values.xml
-feature_definitions_save_path=./test/jsymbolic/api/resources/feature_definitions.xml
+feature_values_save_path=./test/jsymbolic2/api/resources/feature_values.xml
+feature_definitions_save_path=./test/jsymbolic2/api/resources/feature_definitions.xml
 <input_files>
-./test/jsymbolic/api/resources/Saint-Saens_LeCarnevalDesAnimmaux.mei
-./test/jsymbolic/api/resources/Chopin_Mazurka.midi
+./test/jsymbolic2/api/resources/Saint-Saens_LeCarnevalDesAnimmaux.mei
+./test/jsymbolic2/api/resources/Chopin_Mazurka.midi

@@ -4,7 +4,7 @@ Duration
 Beat Histogram
 <input_files>
 ./invalid.midi
-./test/jsymbolic/features/resources/Saint-Saens_LeCarnevalDesAnimmaux.mei
+./test/jsymbolic2/features/resources/Saint-Saens_LeCarnevalDesAnimmaux.mei
 <jSymbolic_options>
 window_size0
 window_overlap=0.1

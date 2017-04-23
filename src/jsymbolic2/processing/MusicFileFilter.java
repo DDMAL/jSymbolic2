@@ -16,7 +16,7 @@ import java.io.FileFilter;
  */
 public class MusicFileFilter implements FileFilter 
 {
-    private final String[] goodFileExtensions = new String[]{"mei","midi","mid"};
+    private final String[] goodFileExtensions = new String[]{".mei",".midi",".mid"};
     
     @Override
     public boolean accept(File pathname) 
