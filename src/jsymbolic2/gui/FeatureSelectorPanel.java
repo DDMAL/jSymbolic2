@@ -245,7 +245,7 @@ public class FeatureSelectorPanel
 		OuterFrame.formatLabel(panel_label);
 		
 		// Set up the features table button panel
-		select_default_features_button = new JButton("Select Defaults Features");
+		select_default_features_button = new JButton("Select Default Features");
 		select_all_features_button = new JButton("Select All Features");
 		deselect_all_features_button = new JButton("Deselect All Features");
 		JPanel button_panel = new JPanel(new GridLayout(1, 3, horizontal_gap, vertical_gap));

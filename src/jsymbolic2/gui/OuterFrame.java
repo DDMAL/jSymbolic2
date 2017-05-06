@@ -70,7 +70,7 @@ public class OuterFrame
 	/**
 	 * The name of this software's author.
 	 */
-	private static final String AUTHOR_STRING = "Cory McKay";
+	private static final String AUTHOR_STRING = "Cory McKay and Tristano Tenaglia";
 	
 	/**
 	 * The string indicating licensing credit.

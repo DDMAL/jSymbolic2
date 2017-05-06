@@ -1,9 +1,2 @@
-# Created by .ignore support plugin (hsz.mobi)
-.gitignore
-.idea/
-META-INF/
-bin/
-jSymbolic.iml
-out/
 /build/
 /dist/

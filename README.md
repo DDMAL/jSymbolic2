@@ -1,5 +1,5 @@
 # jSymbolic 2.0
-by Cory McKay
+by Cory McKay and Tristano Tenaglia
 Copyright (C) 2017 (GNU GPL)
 
 
@@ -72,6 +72,10 @@ FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 You may obtain a copy of the GNU General Public License by writing to the Free
 Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
+This project also includes software developed by the Apache Software 
+Foundation (http://www.apache.org), namely the Xerces library, which is used
+to parse XML files. The Xerces license can be accessed via the manual.
+
 
 ### COMPATIBILITY
 
@@ -94,42 +98,55 @@ properly.
 
 If your system already has the JRE installed, as will most typically be the
 case, you may skip this section. If not, you will need to install the JRE in
-order to run jSymbolic. The JRE can be downloaded for free from the Java web
-site (http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html).
-The JDK typically includes the JRE, or the JRE can simply be installed alone.
+order to run this project. The JRE can be downloaded for free from the Java web
+site. The JDK typically includes the JRE, or the JRE can simply be installed
+alone.
 
 When the JRE download is complete, follow the installation instructions that
-come with it in order to install it.
+come with it in order to install it
 
 
 ### INSTALLING jSymbolic
 
-The jSymbolic software is available at http://jmir.sourceforge.net. It is 
-delivered in a zipped file, from which jSymbolic can be extracted using any of
-a variety of dearchiving utilities (e.g. ZipGenius).
+The project can be accessed at http://jmir.sourceforge.net. This distribution
+includes a pre-compiled Jar file, the source code and extensive documentation. 
+All of this is delivered in a zipped file, from which the project files can be
+extracted.
 
-There are two versions of jSymbolic, namely the development version and the 
-user version. The user version contains everything needed to run jSymbolic, 
-but does not include any source code. The developer version does include source
-code.
+There are two versions of the project, namely the developer version and the
+user version. The user version contains everything needed to run the project,
+but does not include any source code. The developer version does include
+source code, presented in the form of a NetBeans project.
 
 The user version unzips into a single directory. Installation simply involves 
-extracting this directory to any desired disk location. 
+copying this directory into any desired location.
 
-The developer version presents jSymbolic in the form of a NetBeans project. 
-Four directories are contained in the zipped distribution file:
+The following directories are contained in the developer zip file:
 
-- ACE: A metalearning tool. jSymbolic uses it to save ACE XML files. A NetBeans
-project that includes source code.
-- jMei2Midi: Conversion software that converts MEI data to MIDI data. This
-includes an MEI pipeline which can extract and preserve MEI-specific features
-that would be lost in the conversion to MIDI.
-- jSymbolic: The jSymbolic source files, as well as other NetBeans project
-documents and general documentation.
-- ThirdPartyJars: Contains the distributable third party software used by 
-jSymbolic and its associated jMIR projects.
-- UtilityClasses: A NetBeans project holding general jMIR classes used by 
-jSymbolic, including source code.
+- jSymbolic2: The jSymbolic2 project, presented in the form of a NetBeans project.
+Contains the following directories and files:
+	- dist: Contains a pre-compiled jSymbolic2.jar file (and associated
+	libraries) for direct inclusion in other projects.
+	- javadoc: Javadoc documentation for the project source code.
+	- jSymbolic-Rodan: Files for using jSymbolic2 in a Rodan wrapper.
+	- manual: The software's HTML manual.
+	- nbproject: NetBeans project files. This is only relevant to those
+	wishing to use the software in a NetBeans IDE context; it is certainly
+	possible to use the software in other development environments as well.
+	- src: The project's source code.
+	- test: The project's unit testing code.
+	- build.xml: NetBeans build instructions. Only relevant if using the
+	NetBeans IDE.
+	- GNU_GPL.txt: Licensing information for the software.
+	- jSymbolicDefaultConfigs.txt: Default configuration settings for the
+	software.
+	- manifest.mf: The manifest used when building the project Jar file.
+	- README.txt: Basic overall documentation of the project.
+- Third-Party-Jars: Contains the distributable third-party software used by 
+the project. Also includes the jar files for other jMIR projects that this
+project has as adependencies, if any. These need to be included in the project's
+build (in the NetBeans context, this means adding the jar files found here as 
+libraries).
 
 
 ### RUNNING JSYMBOLIC 
