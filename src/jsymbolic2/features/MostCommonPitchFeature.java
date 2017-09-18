@@ -21,7 +21,7 @@ public class MostCommonPitchFeature
 	 */
 	public MostCommonPitchFeature()
 	{
-		code = "P-14";
+		code = "P-16";
 		String name = "Most Common Pitch";
 		String description = "MIDI pitch value of the most frequently occuring pitch.";
 		boolean is_sequential = true;

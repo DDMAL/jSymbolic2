@@ -1,5 +1,5 @@
-# jSymbolic 2.0
-by Cory McKay and Tristano Tenaglia
+# jSymbolic 2.1
+by Cory McKay
 Copyright (C) 2017 (GNU GPL)
 
 

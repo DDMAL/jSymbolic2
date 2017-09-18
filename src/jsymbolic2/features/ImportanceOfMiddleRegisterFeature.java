@@ -21,7 +21,7 @@ public class ImportanceOfMiddleRegisterFeature
 	 */
 	public ImportanceOfMiddleRegisterFeature()
 	{
-		code = "P-17";
+		code = "P-10";
 		String name = "Importance of Middle Register";
 		String description = "Fraction of notes between MIDI pitches 55 and 72.";
 		boolean is_sequential = true;

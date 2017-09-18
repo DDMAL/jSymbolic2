@@ -24,7 +24,7 @@ public class MostCommonPitchClassFeature
 	 */
 	public MostCommonPitchClassFeature()
 	{
-		code = "P-19";
+		code = "P-17";
 		String name = "Most Common Pitch Class";
 		String description = "The pitch class that occurs most frequently compared to other pitch classes. A value of 0 corresponds to C, and pitches increase chromatically by semitone in integer untis (e.g. a value of 2 would mean that D is the most common pitch class). Enharmonic equivalents are treated as a single pitch class.";
 		boolean is_sequential = true;

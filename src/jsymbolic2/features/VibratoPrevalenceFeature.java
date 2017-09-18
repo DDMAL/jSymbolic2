@@ -24,7 +24,7 @@ public class VibratoPrevalenceFeature
 	 */
 	public VibratoPrevalenceFeature()
 	{
-		code = "P-25";
+		code = "P-40";
 		String name = "Vibrato Prevalence";
 		String description = "Number of pitched notes that have associated MIDI Pitch Bend messages change direction at least twice in connection with the note in question, divided by the total number of pitched Note Ons in the piece.";
 		boolean is_sequential = true;

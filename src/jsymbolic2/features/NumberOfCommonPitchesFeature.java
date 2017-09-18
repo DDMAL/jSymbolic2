@@ -22,7 +22,7 @@ public class NumberOfCommonPitchesFeature
 	 */
 	public NumberOfCommonPitchesFeature()
 	{
-		code = "P-10";
+		code = "P-6";
 		String name = "Number of Common Pitches";
 		String description = "Number of pitches that account individually for at least 9% of all notes. Enharmonic equivalents are grouped together for the purpose of this calculation.";
 		boolean is_sequential = true;

@@ -11,7 +11,7 @@ import jsymbolic2.processing.MIDIIntermediateRepresentations;
  *
  * @author Cory McKay
  */
-public class PitchClassVarietyFeature
+public class NumberOfPitchClassesFeature
 		extends MIDIFeatureExtractor
 {
 	/* CONSTRUCTOR ******************************************************************************************/
@@ -20,10 +20,10 @@ public class PitchClassVarietyFeature
 	/**
 	 * Basic constructor that sets the values of the fields inherited from this class' superclass.
 	 */
-	public PitchClassVarietyFeature()
+	public NumberOfPitchClassesFeature()
 	{
-		code = "P-12";
-		String name = "Pitch Class Variety";
+		code = "P-5";
+		String name = "Number of Pitch Classes";
 		String description = "Number of pitch classes that occur at least once in the piece. Enharmonic equivalents are grouped together for the purpose of this calculation.";
 		boolean is_sequential = true;
 		int dimensions = 1;

@@ -22,7 +22,7 @@ public class StrongTonalCentresFeature
 	 */
 	public StrongTonalCentresFeature()
 	{
-		code = "P-21";
+		code = "P-13";
 		String name = "Strong Tonal Centres";
 		String description = "Number of isolated peaks in the fifths pitch histogram that each individually account for at least 9% of all notes in the piece.";
 		boolean is_sequential = true;

@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import javax.sound.midi.*;
 import jsymbolic2.featureutils.CollectedNoteInfo;
+import jsymbolic2.featureutils.NoteInfo;
 import mckay.utilities.staticlibraries.MathAndStatsMethods;
 
 /**
@@ -196,7 +197,9 @@ public class MIDIIntermediateRepresentations
 	 * bin is proportional to the number of Note Ons in the MIDI sequence at the pitch class of the bin. Any
 	 * Note Ons on Channel 10 (non-pitched percussion) are ignored for the purpose of this histogram.
 	 * Enharmonic equivalents are assigned the same pitch class number. Index 0 refers to C, and index pitches 
-	 * increase by semitone from there.
+	 * increase by semitone from there. IMPORTANT: The PitchClassHistogramFeature reorders these pitch classes
+	 * to start with the most common pitch class at Index 0, but this reordering is NOT performed in this 
+	 * field.
 	 */
 	public double[] pitch_class_histogram;
 
@@ -298,6 +301,21 @@ public class MIDIIntermediateRepresentations
 	 */
 	public List<List<Integer>> list_of_note_on_pitches_by_channel;	
 
+	/**
+	 * The MIDI pitches of all pitched note ons in the piece (unpitched notes on Channel 10 are excluded).
+	 * There is one entry for every note on, but they will not necessarily be in the same temporal order as
+	 * they occur in the piece. Each entry indicates the MIDI pitch of one of the sounding notes.
+	 */
+	public short[] pitches_of_all_note_ons;	
+	
+	/**
+	 * The pitch classes of all pitched note ons in the piece (unpitched notes on Channel 10 are excluded).
+	 * There is one entry for every note on, but they will not necessarily be in the same temporal order as
+	 * they occur in the piece. Each entry indicates the pitch class (0 to 11, where 0 is C) of one of the 
+	 * sounding notes.
+	 */
+	public short[] pitch_classes_of_all_note_ons;
+	
 	/**
 	 * A table with rows (first index) corresponding to MIDI ticks. The columns (second index) correspond to
 	 * the MIDI channels. An entry is set to true if one or more notes was sounding on the given channel
@@ -662,6 +680,12 @@ public class MIDIIntermediateRepresentations
 			System.out.print("\n");
 		}*/
 
+		generatePitchAndPitchClaessesOfAllNoteOns();
+		/*
+		for (int i = 0; i < pitch_classes_of_all_note_ons.length; i++)
+			System.out.println("NOTE " + (i + 1) + ": Pitch " + pitches_of_all_note_ons[i] + "  Pitch Class:" + pitch_classes_of_all_note_ons[i]);
+		*/
+		
 		generatePitchStrengthByTickChartAndCalculateTotalVerticalUnsionVelocity();
 
 		generatePitchesAndPitchClassesPresentByTickExcludingRests();
@@ -1648,6 +1672,30 @@ public class MIDIIntermediateRepresentations
 		}
 	}
 
+	
+	/**
+	 * Calculate the value of the pitch_classes_of_all_note_ons field.
+	 */
+	private void generatePitchAndPitchClaessesOfAllNoteOns()
+	{
+		List<NoteInfo> all_notes_in_piece = all_notes.getNoteList();
+		List<Short> list_of_midi_pitches_of_all_notes_in_piece = new ArrayList<>();
+		for (NoteInfo this_note : all_notes_in_piece)
+			if (this_note.getChannel() != 10 - 1) // Excluding Channel 10
+				list_of_midi_pitches_of_all_notes_in_piece.add((short) (this_note.getPitch()));
+
+		pitches_of_all_note_ons = new short[list_of_midi_pitches_of_all_notes_in_piece.size()];
+		pitch_classes_of_all_note_ons = new short[list_of_midi_pitches_of_all_notes_in_piece.size()];
+		for (int i = 0; i < pitch_classes_of_all_note_ons.length; i++)
+		{
+			short pitch = (short) list_of_midi_pitches_of_all_notes_in_piece.get(i);
+			pitches_of_all_note_ons[i] = pitch;
+			
+			short pitch_class = (short) (pitch % 12);
+			pitch_classes_of_all_note_ons[i] = pitch_class;
+		}
+	}
+	
 	
 	/**
 	 * Calculate the values of the pitch_strength_by_tick_chart and the total_vertical_unison_velocity fields.

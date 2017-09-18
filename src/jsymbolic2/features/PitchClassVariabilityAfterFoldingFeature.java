@@ -1,19 +1,18 @@
 package jsymbolic2.features;
 
+import javax.sound.midi.*;
 import ace.datatypes.FeatureDefinition;
 import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
-import javax.sound.midi.Sequence;
-import java.util.LinkedList;
 
 /**
- * A feature calculator that finds the number of pitched notes that are each associated with exactly one MIDI
- * Pitch Bend message, divided by the total number of pitched Note Ons in the piece. Set to 0 if there are no
- * pitched Note Ons in the piece.
+ * A feature calculator that finds the standard deviation of the pitch classes in the piece after being folded
+ * by perfect fifths as described for the folded fifths pitch class histogram. Provides a measure of how close 
+ * the pitch classes are as a whole from the mean pitch class from a dominant-tonic perspective. 
  *
- * @author Tristano Tenaglia and Cory McKay
+ * @author Cory McKay
  */
-public class MicrotonePrevalenceFeature
+public class PitchClassVariabilityAfterFoldingFeature
 		extends MIDIFeatureExtractor
 {
 	/* CONSTRUCTOR ******************************************************************************************/
@@ -22,15 +21,15 @@ public class MicrotonePrevalenceFeature
 	/**
 	 * Basic constructor that sets the values of the fields inherited from this class' superclass.
 	 */
-	public MicrotonePrevalenceFeature()
+	public PitchClassVariabilityAfterFoldingFeature()
 	{
-		code = "P-41";
-		String name = "Microtone Prevalence";
-		String description = "Number of pitched notes that are each associated with exactly one MIDI Pitch Bend message, divided by the total number of pitched Note Ons in the piece. Set to 0 if there are no pitched Note Ons in the piece.";
+		code = "P-26";
+		String name = "Pitch Class Variability After Folding";
+		String description = "Standard deviation of the pitch classes in the piece after being folded by perfect fifths as described for the folded fifths pitch class histogram. Provides a measure of how close the pitch classes are as a whole from the mean pitch class from a dominant-tonic perspective.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, description, is_sequential, dimensions);
-		dependencies = null;
+		dependencies = new String[] { "Pitch Class Histogram" };
 		offsets = null;
 	}
 	
@@ -60,28 +59,13 @@ public class MicrotonePrevalenceFeature
 		double value;
 		if (sequence_info != null)
 		{
-			// A list of lists of pitch bends associated with pitched (i.e. not Channel 10) notes. Each entry
-			// of the root list corresponds to a note that has at least one pitch bend message associated with
-			// it. Each such entry contains a list of all pitchbend messages (second MIDI data byte stored as 
-			// an Integer) associated with the note, in the order that they occurred.
-			LinkedList pitch_bends_list = sequence_info.pitch_bends_list;
-			
-			if ( sequence_info.total_number_pitched_note_ons == 0 || // if there are no pitched notes
-			     pitch_bends_list.isEmpty() ) // if there are no pitchbend messages
-				value = 0.0;
-			else
+			double[] folded_pitch_classes_of_all_note_ons = new double[sequence_info.pitch_classes_of_all_note_ons.length];
+			for (int i = 0; i < folded_pitch_classes_of_all_note_ons.length; i++)
 			{
-				double number_single_pitchbend_notes = 0;
-				for (Object pitch_bend_note : pitch_bends_list)
-				{
-					LinkedList bends_associated_with_this_note = (LinkedList) pitch_bend_note;
-					
-					// Only count if a single pitch bend is associated with this Note On
-					if (bends_associated_with_this_note.size() == 1)
-						number_single_pitchbend_notes++;
-				}
-				value = number_single_pitchbend_notes / sequence_info.total_number_pitched_note_ons;
+				double pitch_class = (double) sequence_info.pitch_classes_of_all_note_ons[i];
+				folded_pitch_classes_of_all_note_ons[i] = (7 * pitch_class) % 12;
 			}
+			value = mckay.utilities.staticlibraries.MathAndStatsMethods.getStandardDeviation(folded_pitch_classes_of_all_note_ons);
 		}
 		else value = -1.0;
 

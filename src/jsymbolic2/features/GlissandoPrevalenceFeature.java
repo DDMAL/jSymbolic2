@@ -22,7 +22,7 @@ public class GlissandoPrevalenceFeature
 	 */
 	public GlissandoPrevalenceFeature()
 	{
-		code = "P-23";
+		code = "P-38";
 		String name = "Glissando Prevalence";
 		String description = "Number of pitched MIDI Note Ons that have at least one MIDI Pitch Bend associated with them, divided by the total number of pitched Note Ons in the piece.";
 		boolean is_sequential = true;

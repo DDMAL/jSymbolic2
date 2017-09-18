@@ -1,19 +1,17 @@
 package jsymbolic2.features;
 
+import javax.sound.midi.*;
 import ace.datatypes.FeatureDefinition;
 import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
-import javax.sound.midi.Sequence;
-import java.util.LinkedList;
 
 /**
- * A feature calculator that finds the number of pitched notes that are each associated with exactly one MIDI
- * Pitch Bend message, divided by the total number of pitched Note Ons in the piece. Set to 0 if there are no
- * pitched Note Ons in the piece.
+ * A feature calculator that finds the MIDI pitch value of the last note in the piece. If there are multiple
+ * notes with simultaneous attacks at the end of the piece, then the one with the lowest pitch is selected.
  *
- * @author Tristano Tenaglia and Cory McKay
+ * @author Cory McKay
  */
-public class MicrotonePrevalenceFeature
+public class LastPitchFeature
 		extends MIDIFeatureExtractor
 {
 	/* CONSTRUCTOR ******************************************************************************************/
@@ -22,11 +20,11 @@ public class MicrotonePrevalenceFeature
 	/**
 	 * Basic constructor that sets the values of the fields inherited from this class' superclass.
 	 */
-	public MicrotonePrevalenceFeature()
+	public LastPitchFeature()
 	{
-		code = "P-41";
-		String name = "Microtone Prevalence";
-		String description = "Number of pitched notes that are each associated with exactly one MIDI Pitch Bend message, divided by the total number of pitched Note Ons in the piece. Set to 0 if there are no pitched Note Ons in the piece.";
+		code = "P-36";
+		String name = "Last Pitch";
+		String description = "The MIDI pitch value of the last note in the piece. If there are multiple notes with simultaneous attacks at the end of the piece, then the one with the lowest pitch is selected.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, description, is_sequential, dimensions);
@@ -60,29 +58,11 @@ public class MicrotonePrevalenceFeature
 		double value;
 		if (sequence_info != null)
 		{
-			// A list of lists of pitch bends associated with pitched (i.e. not Channel 10) notes. Each entry
-			// of the root list corresponds to a note that has at least one pitch bend message associated with
-			// it. Each such entry contains a list of all pitchbend messages (second MIDI data byte stored as 
-			// an Integer) associated with the note, in the order that they occurred.
-			LinkedList pitch_bends_list = sequence_info.pitch_bends_list;
+			int last_tick_index = sequence_info.pitches_present_by_tick_excluding_rests.length;
+			int lowest_last_pitch = sequence_info.pitches_present_by_tick_excluding_rests[last_tick_index-1][0];
 			
-			if ( sequence_info.total_number_pitched_note_ons == 0 || // if there are no pitched notes
-			     pitch_bends_list.isEmpty() ) // if there are no pitchbend messages
-				value = 0.0;
-			else
-			{
-				double number_single_pitchbend_notes = 0;
-				for (Object pitch_bend_note : pitch_bends_list)
-				{
-					LinkedList bends_associated_with_this_note = (LinkedList) pitch_bend_note;
-					
-					// Only count if a single pitch bend is associated with this Note On
-					if (bends_associated_with_this_note.size() == 1)
-						number_single_pitchbend_notes++;
-				}
-				value = number_single_pitchbend_notes / sequence_info.total_number_pitched_note_ons;
-			}
-		}
+			value = (double) lowest_last_pitch;
+		} 
 		else value = -1.0;
 
 		double[] result = new double[1];

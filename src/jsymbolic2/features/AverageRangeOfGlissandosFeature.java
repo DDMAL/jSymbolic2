@@ -25,7 +25,7 @@ public class AverageRangeOfGlissandosFeature
 	 */
 	public AverageRangeOfGlissandosFeature()
 	{
-		code = "P-24";
+		code = "P-39";
 		String name = "Average Range of Glissandos";
 		String description = "Average range of MIDI Pitch Bends, where \"range\" is defined as the greatest value of the absolute difference between 64 and the second data byte of all MIDI Pitch Bend messages falling between the Note On and Note Off messages of any note in the piece. Set to 0 if there are no MIDI Pitch Bends in the piece.";
 		boolean is_sequential = true;

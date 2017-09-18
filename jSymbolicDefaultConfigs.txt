@@ -9,25 +9,40 @@ convert_to_csv=true
 Basic Pitch Histogram
 Pitch Class Histogram
 Folded Fifths Pitch Class Histogram
+Number of Pitches
+Number of Pitch Classes
+Number of Common Pitches
+Number of Common Pitch Classes
+Range
+Importance of Bass Register
+Importance of Middle Register
+Importance of High Register
+Dominant Spread
+Strong Tonal Centres
+Mean Pitch
+Mean Pitch Class
+Most Common Pitch
+Most Common Pitch Class
 Prevalence of Most Common Pitch
 Prevalence of Most Common Pitch Class
 Relative Prevalence of Top Pitches
 Relative Prevalence of Top Pitch Classes
 Interval Between Most Prevalent Pitches
 Interval Between Most Prevalent Pitch Classes
-Number of Common Pitches
-Pitch Variety
-Pitch Class Variety
-Range
-Most Common Pitch
-Mean Pitch
-Importance of Bass Register
-Importance of Middle Register
-Importance of High Register
-Most Common Pitch Class
-Dominant Spread
-Strong Tonal Centres
+Pitch Variability Feature
+Pitch Class Variability Feature
+Pitch Class Variability After Folding
+Pitch Skewness
+Pitch Class Skewness
+Pitch Class Skewness After Folding
+Pitch Kurtosis
+Pitch Class Kurtosis
+Pitch Class Kurtosis After Folding
 Major or Minor
+First Pitch
+First Pitch Class
+Last Pitch
+Last Pitch Class
 Glissando Prevalence
 Average Range of Glissandos
 Vibrato Prevalence

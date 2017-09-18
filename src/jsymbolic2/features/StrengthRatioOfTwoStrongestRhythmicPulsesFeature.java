@@ -6,9 +6,8 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the magnitude of the higher (in terms of magnitude) of the two beat
- * histogram bins corresponding to the peaks with the two highest magnitudes, divided by the magnitude of the
- * lower peak.
+ * A feature calculator that finds the magnitude of the beat histogram peak with the highest magnitude divided 
+ * by the magnitude of the beat histogram peak with the second highest magnitude.
  *
  * @author Cory McKay
  */
@@ -25,7 +24,7 @@ public class StrengthRatioOfTwoStrongestRhythmicPulsesFeature
 	{
 		code = "R-7";
 		String name = "Strength Ratio of Two Strongest Rhythmic Pulses";
-		String description = "Magnitude of the higher (in terms of magnitude) of the two beat histogram bins corresponding to the peaks with the two highest magnitudes, divided by the magnitude of the lower peak.";
+		String description = "Magnitude of the beat histogram peak with the highest magnitude divided by the magnitude of the beat histogram peak with the second highest magnitude.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, description, is_sequential, dimensions);

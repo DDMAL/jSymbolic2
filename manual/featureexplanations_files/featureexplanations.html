@@ -28,7 +28,7 @@
 <p>The second type of histogram is called a <strong>pitch class histogram</strong>. It has one bin for each of the twelve pitch classes, which means that it is essentially a version of the basic pitch histogram where octaves are collapsed for each of the pitch classes. The magnitude of each bin is set to the number of Note On messages with a MIDI pitch that can be wrapped to this pitch class, with enharmonic equivalents assigned to the same pitch class number. The histogram is normalized, and the bins are translated so that the first bin corresponds to the pitch class with the highest magnitude, with the successive bins ordered chromatically in semitone increments. This type of histogram provides insights into areas such as the types of scales used and the amount of transposition that is present, for example.</p>
 <p>The third type of histogram is called a <strong>folded fifths pitch class histogram</strong>, and is derived directly from the pitch class histogram. This histogram is calculated by reordering the bins of the original unordered pitch class histogram such that adjacent bins are separated by perfect fifths rather than semitones. This is done using the following equation:</p>
 <p>B = (7a)mod(12)</p>
-<p>where B is the folded fifths pitch histogram bin and a is the corresponding pitch class histogram bin. The number seven is used because this is the number of semitones in a perfect fifth, and the number twelve is used because there are twelve pitch classes in total. This histogram is useful for measuring dominant tonic relationships and for looking at types of transpositions.	</p>
+<p>where B is the folded fifths pitch histogram bin and a is the corresponding pitch class histogram bin. The number seven is used because this is the number of semitones in a perfect fifth, and the number twelve is used because there are twelve pitch classes in total. This histogram is useful for measuring dominant-tonic relationships and for looking at types of transpositions.	</p>
 <p>The utility of the folded fifths pitch histogram can be seen by comparing the first figure below, which shows the folded fifths pitch histogram for a Baroque Vivaldi concerto, with the second figure below, which shows the folded fifths pitch histogram for an atonal Schoenberg piano miniature. The Vivaldi piece never or rarely uses five of the twelve pitch classes, and the pitch classes that are used are clustered around one section of the circle of fifths. These are characteristics that one would typically expect of basic tonal music without many tonally distant modulations or significant use of chromaticism. In contrast, all of the pitch classes are used to a significant degree in the Schoenberg piece, and the most frequently used pitch classes are not clustered together on the circle of fifths, both of which are characteristics that one would expect of such an atonal piece.</p>
 <p><img src="Four_Seasons.gif"></p>
 <p><img src="Schoenberg.gif""></p>
@@ -39,32 +39,140 @@
 <p>Some of the features in this section are based on MIDI Pitch Bends. Although the use of Pitch Bends is somewhat variable from MIDI encoder to MIDI encoder, and therefore not entirely dependant on the music itself, features relating to Pitch Bends can nonetheless have a high discriminating power, so they are included here. Efforts were made to use features with as limited a sensitivity to non-musical factors as possible.</p>
 <p>The jSymbolic feature catalogue includes the following features related to overall pitch statistics:</p>
 <ul>
-  <li><strong>P-1 Basic Pitch Histogram:</strong> A feature vector consisting of bin magnitudes of the basic pitch  histogram described above. Each bin corresponds to one of the 128 MIDI pitches, ordered from lowest to highest, and with an interval of a semitone between each (enharmonic equivalents are assigned the same pitch  number). Bin 60 corresponds to middle C. The magnitude of of each bin is proportional to the the number of times notes occurred at the bin's pitch in the piece, relative to all other pitches in the piece (the histogram is normalized).</li>
-  <li><strong>P-2 Pitch Class Histogram:</strong> A feature vector consisting of bin magnitudes of the pitch class histogram described above. Each bin corresponds to one of the 12 pitch classes, ordered in increasing pitch with an interval of a semitone between each (enharmonic equivalents are assigned the same pitch class number). The first bin corresponds to the most common pitch class in the piece under consideration (it does NOT correspond to a set pitch class). The magnitude of of each bin is proportional to the the number of times notes occurred at the bin's pitch class in the piece, relative to all other pitch classes in the piece (the histogram is normalized).</li>
-  <li><strong>P-3 Folded Fifths Pitch Class Histogram:</strong> A feature vector consisting of bin magnitudes of the folded fifths pitch class histogram described above. Each bin corresponds to one of the 12 pitch classes, and the bins are ordered such that adjacent bins are separated by an ascending perfect fifth. Bin 0 corresponds to C. Enharmonic equivalents are assigned the same pitch class number. The magnitude of of each bin is proportional to the the number of times notes occurred at the bin's pitch class in the piece, relative to all other pitch classes in the piece (the histogram is normalized).</li>
-  <li><strong>P-4 Prevalence of Most Common Pitch:</strong> Fraction of notes that correspond to the most common pitch.</li>
-  <li><strong>P-5 Prevalence of Most Common Pitch Class:</strong> Fraction of notes that correspond to the most common pitch class.</li>
-  <li><strong>P-6 Relative Prevalence of Top Pitches:</strong> Relative frequency of the  second most common pitch in the piece, divided by the relative frequency of the most common pitch.</li>
-  <li><strong>P-7 Relative Prevalence of Top Pitch Classes:</strong> Relative frequency of the of the second most common pitch class in the piece, divided by the relative frequency of the most common pitch class.</li>
-  <li><strong>P-8 Interval Between Most Prevalent Pitches:</strong> Absolute value of the difference (in semitones) between the pitches of the two most frequently occurring pitches.</li>
-  <li><strong>P-9 Interval Between Most Prevalent  Pitch Classes:</strong> Absolute value of the difference (in semitones) between the pitches of the two most frequently occurring  pitch classes.</li>
-  <li><strong>P-10 Number of Common Pitches:</strong> Number of pitches that account individually for at least 9% of all notes. Enharmonic equivalents are grouped together for the purpose of this calculation.</li>
-  <li><strong>P-11 Pitch Variety:</strong> Number of pitches that occur at least once in the piece. Enharmonic equivalents are grouped together for the purpose of this calculation.</li>
-  <li><strong>P-12 Pitch Class Variety:</strong> Number of pitch classes that occur at least once in the piece. Enharmonic equivalents are grouped together for the purpose of this calculation.</li>
-  <li><strong>P-13 Range:</strong> Difference in semitones between the highest and lowest pitches.</li>
-  <li><strong>P-14 Most Common Pitch:</strong> MIDI pitch value of the most frequently occurring pitch.</li>
-  <li><strong>P-15 Mean Pitch:</strong> Mean MIDI pitch value, averaged across all pitched notes in the piece.  Set to 0 if there are no pitched notes.</li>
-  <li><strong>P-16 Importance of Bass Register:</strong> Fraction of notes between MIDI pitches 0 and 54.</li>
-  <li><strong>P-17 Importance of Middle Register:</strong> Fraction of notes between MIDI pitches 55 and 72.</li>
-  <li><strong>P-18 Importance of High Register:</strong> Fraction of notes between MIDI pitches 73 and 127.</li>
-  <li><strong>P-19 Most Common Pitch Class:</strong> The pitch class that occurs most frequently compared to other pitch classes. A value of 0 corresponds to C, and pitches increase chromatically by semitone in integer units (e.g. a value of 2 would mean that D is the most common pitch class). Enharmonic equivalents are treated as a single pitch class.</li>
-  <li><strong>P-20 Dominant Spread:</strong> Largest number of consecutive pitch classes separated by perfect 5ths that each individually account for at least 9% of the total notes in the piece.</li>
-  <li><strong>P-21 Strong Tonal Centres:</strong> Number of isolated peaks in the fifths pitch histogram that each individually account for at least 9% of all notes in the piece.</li>
-  <li><strong>P-22 Major or Minor:</strong> Whether the piece is major or minor, as indicated by the first encountered major/minor metadata tag in the piece. Set to 0 if the metadata indicates that the piece is major, or set to 1 if the metadata indicates that it is minor. Defaults to 0 if the key signature is unknown.</li>
-  <li><strong>P-23 Glissando Prevalence:</strong> Number of pitched MIDI Note Ons that have at least one MIDI Pitch Bend associated with them, divided by the total number of pitched Note Ons in the piece.</li>
-  <li><strong>P-24 Average Range of Glissandos:</strong> Average range of MIDI Pitch Bends, where &quot;range&quot; is defined as the greatest value of the absolute difference between 64 and the second data byte of all MIDI Pitch Bend messages falling between the Note On and Note Off messages of any note in the piece. Set to 0 if there are no MIDI Pitch Bends in the piece.</li>
-  <li><strong>P-25 Vibrato Prevalence:</strong> Number of pitched notes  that have associated MIDI Pitch Bend messages change direction at least twice in connection with the note in question, divided by the total number of pitched Note Ons in the piece.</li>
-  <li><strong>P-26  Microtone Prevalence:</strong> Number of pitched notes that are  each associated with exactly one MIDI Pitch Bend message, divided by the total number of pitched Note Ons in the piece. Set to 0 if there are no pitched Note Ons in the piece.</li>
+  <li><strong>P-1 Basic Pitch Histogram:</strong> A feature vector consisting 
+    of bin magnitudes of the basic pitch histogram described above. Each bin corresponds 
+    to one of the 128 MIDI pitches, ordered from lowest to highest, and with an 
+    interval of a semitone between each (enharmonic equivalents are assigned the 
+    same pitch number). Bin 60 corresponds to middle C. The magnitude of of each 
+    bin is proportional to the the number of times notes occurred at the bin's 
+    pitch in the piece, relative to all other pitches in the piece (the histogram 
+    is normalized).</li>
+  <li><strong>P-2 Pitch Class Histogram:</strong> A feature vector consisting 
+    of bin magnitudes of the pitch class histogram described above. Each bin corresponds 
+    to one of the 12 pitch classes, ordered in increasing pitch with an interval 
+    of a semitone between each (enharmonic equivalents are assigned the same pitch 
+    class number). The first bin corresponds to the most common pitch class in 
+    the piece under consideration (it does NOT correspond to a set pitch class). 
+    The magnitude of of each bin is proportional to the the number of times notes 
+    occurred at the bin's pitch class in the piece, relative to all other pitch 
+    classes in the piece (the histogram is normalized).</li>
+  <li><strong>P-3 Folded Fifths Pitch Class Histogram:</strong> A feature vector 
+    consisting of bin magnitudes of the folded fifths pitch class histogram described 
+    above. Each bin corresponds to one of the 12 pitch classes, and the bins are 
+    ordered such that adjacent bins are separated by an ascending perfect fifth. 
+    Bin 0 corresponds to C. Enharmonic equivalents are assigned the same pitch 
+    class number. The magnitude of of each bin is proportional to the the number 
+    of times notes occurred at the bin's pitch class in the piece, relative to 
+    all other pitch classes in the piece (the histogram is normalized).</li>
+  <li><strong>P-4 Number of Pitches:</strong> Number of pitches that occur at 
+    least once in the piece. Enharmonic equivalents are grouped together for the 
+    purpose of this calculation.</li>
+  <li><strong>P-5 Number of Pitch Classes:</strong> Number of pitch classes that 
+    occur at least once in the piece. Enharmonic equivalents are grouped together 
+    for the purpose of this calculation.</li>
+  <li><strong>P-6 Number of Common Pitches:</strong> Number of pitches that account 
+    individually for at least 9% of all notes. Enharmonic equivalents are grouped 
+    together for the purpose of this calculation.</li>
+  <li><strong>P-7 Number of Common Pitch Classes:</strong> Number of pitch classes 
+    that account individually for at least 20% of all notes. Enharmonic equivalents 
+    are grouped together for the purpose of this calculation.</li>
+  <li><strong>P-8 Range:</strong> Difference in semitones between the highest 
+    and lowest pitches.</li>
+  <li><strong>P-9 Importance of Bass Register:</strong> Fraction of notes between 
+    MIDI pitches 0 and 54.</li>
+  <li><strong>P-10 Importance of Middle Register:</strong> Fraction of notes between 
+    MIDI pitches 55 and 72.</li>
+  <li><strong>P-11 Importance of High Register:</strong> Fraction of notes between 
+    MIDI pitches 73 and 127.</li>
+  <li><strong>P-12 Dominant Spread:</strong> Largest number of consecutive pitch 
+    classes separated by perfect 5ths that each individually account for at least 
+    9% of the total notes in the piece.</li>
+  <li><strong>P-13 Strong Tonal Centres:</strong> Number of isolated peaks in 
+    the fifths pitch histogram that each individually account for at least 9% 
+    of all notes in the piece.</li>
+  <li><strong>P-14 Mean Pitch:</strong> Mean MIDI pitch value, averaged across 
+    all pitched notes in the piece. Set to 0 if there are no pitched notes.</li>
+  <li><strong>P-15 Mean Pitch Class:</strong> Mean pitch class value, averaged 
+    across all pitched notes in the piece. A value of 0 corresponds to a mean 
+    pitch class of C, and pitches increase chromatically by semitone in integer 
+    units from there (e.g. a value of 2 would mean that D is the mean pitch class). 
+    Enharmonic equivalents are treated as a single pitch class. </li>
+  <li><strong>P-16 Most Common Pitch:</strong> MIDI pitch value of the most frequently 
+    occurring pitch.</li>
+  <li><strong>P-17 Most Common Pitch Class:</strong> The pitch class that occurs 
+    most frequently compared to other pitch classes. A value of 0 corresponds 
+    to C, and pitches increase chromatically by semitone in integer units (e.g. 
+    a value of 2 would mean that D is the most common pitch class). Enharmonic 
+    equivalents are treated as a single pitch class.</li>
+  <li><strong>P-18 Prevalence of Most Common Pitch:</strong> Fraction of notes 
+    that correspond to the most common pitch.</li>
+  <li><strong>P-19 Prevalence of Most Common Pitch Class:</strong> Fraction of 
+    notes that correspond to the most common pitch class.</li>
+  <li><strong>P-20 Relative Prevalence of Top Pitches:</strong> Relative frequency 
+    of the second most common pitch in the piece, divided by the relative frequency 
+    of the most common pitch.</li>
+  <li><strong>P-21 Relative Prevalence of Top Pitch Classes:</strong> Relative 
+    frequency of the of the second most common pitch class in the piece, divided 
+    by the relative frequency of the most common pitch class.</li>
+  <li><strong>P-22 Interval Between Most Prevalent Pitches:</strong> Absolute value 
+    of the difference (in semitones) between the pitches of the two most frequently 
+    occurring pitches.</li>
+  <li><strong>P-23 Interval Between Most Prevalent Pitch Classes:</strong> Absolute 
+    value of the difference (in semitones) between the pitches of the two most 
+    frequently occurring pitch classes.</li>
+  <li><strong>P-24 Pitch Variability:</strong> Standard deviation of the MIDI pitches of all pitched notes in the piece. Provides a measure of how close the pitches as a whole are 
+    to the mean pitch.</li>
+  <li><strong>P-25 Pitch Class Variability:</strong> Standard deviation of the 
+    pitch classes (where 0 corresponds to C, 1 to C#/Db, etc.) of all pitched notes in the piece. Provides a measure of how close the pitch classes as 
+    a whole are to the mean pitch class. </li>
+  <li><strong>P-26  Pitch Class Variability After Folding:</strong> Standard deviation of the 
+    pitch classes in the piece after being folded by perfect fifths as described for the folded fifths pitch class histogram. Provides a measure of how close the pitch classes are as 
+    a whole from the mean pitch class from a dominant-tonic perspective. </li>
+  <li><strong>P-27 Pitch Skewness:</strong> Skewness of the MIDI pitches of all pitched notes in the piece. Provides a measure of how asymmetrical the pitch distribution is to either the left or the right of the mean pitch. A value of zero indicates no skew.</li>
+  <li><strong>P-28 Pitch Class Skewness:</strong> Skewness of the pitch classes (where 0 corresponds to C, 1 to C#/Db, etc.) of all pitched notes in the piece. Provides a measure of how asymmetrical the pitch class distribution is to either the left or the right of the mean pitch class. A value of zero indicates no skew.</li>
+  <li><strong>P-29 Pitch Class Skewness After Folding:</strong> Skewness of the pitch classes  after being folded by perfect fifths as described for the folded fifths pitch class histogram. Provides a measure of how asymmetrical the pitch class distribution after folding is to either the left or the right of the mean from a dominant-tonic perspective. A value of zero indicates no skew.</li>
+  <li><strong>P-30 Pitch Kurtosis:</strong> Kurtosis of the MIDI pitches of all pitched notes in the piece. Provides a measure of how peaked or flat the pitch distribution is. The higher the kurtosis, the more the pitches are clustered near the mean and the fewer outliers there are.</li>
+  <li><strong>P-31 Pitch Class Kurtosis:</strong> Kurtosis of the pitch classes (where 0 corresponds to C, 1 to C#/Db, etc.) of all pitched notes in the piece. Provides a measure of how peaked or flat the pitch class distribution is. The higher the kurtosis, the more the pitch classes are clustered near the mean and the fewer outliers there are.</li>
+  <li><strong>P-32 Pitch Class Kurtosis After Folding:</strong> Kurtosis of the pitch classes  after being folded by perfect fifths as described for the folded fifths pitch class histogram. Provides a measure of how peaked or flat the pitch classes are from a dominant-tonic perspective.</li>
+  <li><strong>P-33 Major or Minor:</strong> Whether the piece is major or minor, 
+    as indicated by the first encountered major/minor metadata tag in the piece. 
+    Set to 0 if the metadata indicates that the piece is major, or set to 1 if 
+    the metadata indicates that it is minor. Defaults to 0 if the key signature 
+    is unknown.</li>
+  <li><strong>P-34 First Pitch:</strong> The MIDI pitch value of the first note 
+    in the piece. If there are multiple notes with simultaneous attacks at the 
+    beginning of the piece, then the one with the lowest pitch is selected. </li>
+  <li><strong>P-35 First Pitch Class:</strong> The pitch class of the first note 
+    in the piece. If there are multiple notes with simultaneous attacks at the 
+    beginning of the piece, then the one with the lowest pitch is selected. A 
+    value of 0 corresponds to C, and pitches increase chromatically by semitone 
+    in integer units (e.g. a value of 2 would mean that D is the most common pitch 
+    class). Enharmonic equivalents are treated as a single pitch class. </li>
+  <li><strong>P-36 Last Pitch:</strong> The MIDI pitch value of the last note 
+    in the piece. If there are multiple notes with simultaneous attacks at the 
+    end of the piece, then the one with the lowest pitch is selected. </li>
+  <li><strong>P-37 Last Pitch Class:</strong> The pitch class of the last note 
+    in the piece. If there are multiple notes with simultaneous attacks at the 
+    end of the piece, then the one with the lowest pitch is selected. A value 
+    of 0 corresponds to C, and pitches increase chromatically by semitone in integer 
+    units (e.g. a value of 2 would mean that D is the most common pitch class). 
+    Enharmonic equivalents are treated as a single pitch class.</li>
+  <li><strong>P-38 Glissando Prevalence:</strong> Number of pitched MIDI Note 
+    Ons that have at least one MIDI Pitch Bend associated with them, divided by 
+    the total number of pitched Note Ons in the piece.</li>
+  <li><strong>P-39 Average Range of Glissandos:</strong> Average range of MIDI 
+    Pitch Bends, where &quot;range&quot; is defined as the greatest value of the 
+    absolute difference between 64 and the second data byte of all MIDI Pitch 
+    Bend messages falling between the Note On and Note Off messages of any note 
+    in the piece. Set to 0 if there are no MIDI Pitch Bends in the piece.</li>
+  <li><strong>P-40 Vibrato Prevalence:</strong> Number of pitched notes that have 
+    associated MIDI Pitch Bend messages change direction at least twice in connection 
+    with the note in question, divided by the total number of pitched Note Ons 
+    in the piece.</li>
+  <li><strong>P-41 Microtone Prevalence:</strong> Number of pitched notes that 
+    are each associated with exactly one MIDI Pitch Bend message, divided by the 
+    total number of pitched Note Ons in the piece. Set to 0 if there are no pitched 
+    Note Ons in the piece.</li>
 </ul>
 <p><strong>FEATURES BASED ON MELODIC INTERVALS</strong></p>
 <p>Although features based on overall pitch statistics are often meaningful and useful, they do not reflect information relating to the order in which pitches occur. Melody is a very important part of how many humans hear and think about music, so features based on such sequential information are needed to complement features based on overall pitch statistics. Fortunately, ample theoretical work has been done that can be taken advantage of when designing melodic features, ranging from compositional resources like manuals on writing Baroque counterpoint, to more analytically formulated ideas like melodic contour.</p>
@@ -172,7 +280,7 @@
   <li><strong>R-4 Harmonicity of Two Strongest Rhythmic Pulses:</strong> Bin index of the higher (in terms of bin index) of the two beat histogram peaks with the highest magnitude, divided by the index of the lower (in terms of bin index) of the two bins.</li>
   <li><strong>R-5 Strength of Strongest Rhythmic Pulse:</strong> Magnitude of the beat histogram bin with the highest magnitude.</li>
   <li><strong>R-6 Strength of Second Strongest Rhythmic Pulse:</strong> Magnitude of the beat histogram peak with the second highest magnitude.</li>
-  <li><strong>R-7 Strength Ratio of Two Strongest Rhythmic Pulses:</strong> Magnitude of the higher (in terms of magnitude) of the two beat histogram bins corresponding to the peaks with the two highest magnitudes, divided by the magnitude of the lower peak.</li>
+  <li><strong>R-7 Strength Ratio of Two Strongest Rhythmic Pulses:</strong> Magnitude of the beat histogram peak with the highest magnitude divided by the magnitude of the beat histogram peak with the second highest magnitude.</li>
   <li><strong>R-8 Combined Strength of Two Strongest Rhythmic Pulses: </strong>Sum of the magnitudes of the two beat histogram peaks with the highest magnitudes.</li>
   <li><strong>R-9 Number of Strong Rhythmic Pulses:</strong> Number of beat histogram peaks with normalized magnitudes over 0.1.</li>
   <li><strong>R-10 Number of Moderate Rhythmic Pulses:</strong> Number of beat histogram peaks with normalized magnitudes over 0.01.</li>

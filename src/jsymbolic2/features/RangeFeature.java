@@ -21,7 +21,7 @@ public class RangeFeature
 	 */
 	public RangeFeature()
 	{
-		code = "P-13";
+		code = "P-8";
 		String name = "Range";
 		String description = "Difference in semitones between the highest and lowest pitches.";
 		boolean is_sequential = true;

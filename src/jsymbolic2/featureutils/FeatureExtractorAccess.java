@@ -71,25 +71,40 @@ public final class FeatureExtractorAccess
 			new BasicPitchHistogramFeature(),
 			new PitchClassHistogramFeature(),
 			new FoldedFifthsPitchClassHistogramFeature(),
+			new NumberOfPitchesFeature(),
+			new NumberOfPitchClassesFeature(),
+			new NumberOfCommonPitchesFeature(),
+			new NumberOfCommonPitchClassesFeature(),
+			new RangeFeature(),
+			new ImportanceOfBassRegisterFeature(),
+			new ImportanceOfMiddleRegisterFeature(),
+			new ImportanceOfHighRegisterFeature(),
+			new DominantSpreadFeature(),
+			new StrongTonalCentresFeature(),
+			new MeanPitchFeature(),
+			new MeanPitchClassFeature(),
+			new MostCommonPitchFeature(),
+			new MostCommonPitchClassFeature(),
 			new PrevalenceOfMostCommonPitchFeature(),
 			new PrevalenceOfMostCommonPitchClassFeature(),
 			new RelativePrevalenceOfTopPitchesFeature(),
 			new RelativePrevalenceOfTopPitchClassesFeature(),
 			new IntervalBetweenMostPrevalenttPitchesFeature(),
 			new IntervalBetweenMostPrevalentPitchClassesFeature(),
-			new NumberOfCommonPitchesFeature(),
-			new PitchVarietyFeature(),
-			new PitchClassVarietyFeature(),
-			new RangeFeature(),
-			new MostCommonPitchFeature(),
-			new MeanPitchFeature(),
-			new ImportanceOfBassRegisterFeature(),
-			new ImportanceOfMiddleRegisterFeature(),
-			new ImportanceOfHighRegisterFeature(),
-			new MostCommonPitchClassFeature(),
-			new DominantSpreadFeature(),
-			new StrongTonalCentresFeature(),
+			new PitchVariabilityFeature(),
+			new PitchClassVariabilityFeature(),
+			new PitchClassVariabilityAfterFoldingFeature(),
+			new PitchSkewnessFeature(),
+			new PitchClassSkewnessFeature(),
+			new PitchClassSkewnessAfterFoldingFeature(),
+			new PitchKurtosisFeature(),
+			new PitchClassKurtosisFeature(),
+			new PitchClassKurtosisAfterFoldingFeature(),
 			new MajorOrMinorFeature(),
+			new FirstPitchFeature(),
+			new FirstPitchClassFeature(),
+			new LastPitchFeature(),
+			new LastPitchClassFeature(),
 			new GlissandoPrevalenceFeature(),
 			new AverageRangeOfGlissandosFeature(),
 			new VibratoPrevalenceFeature(),
@@ -262,25 +277,40 @@ public final class FeatureExtractorAccess
 			false, // BasicPitchHistogramFeature
 			false, // PitchClassHistogramFeature
 			false, // FoldedFifthsPitchClassHistogramFeature
+			true, // NumberOfPitchesFeature
+			true, // NumberOfPitchClassesFeature
+			true, // NumberOfCommonPitchesFeature
+			true, // NumberOfCommonPitchClassesFeature
+			true, // RangeFeature
+			true, // ImportanceOfBassRegisterFeature
+			true, // ImportanceOfMiddleRegisterFeature
+			true, // ImportanceOfHighRegisterFeature
+			true, // DominantSpreadFeature
+			true, // StrongTonalCentresFeature
+			true, // MeanPitchFeature
+			true, // MeanPitchClassFeature
+			true, // MostCommonPitchFeature
+			true, // MostCommonPitchClassFeature
 			true, // PrevalenceOfMostCommonPitchFeature
 			true, // PrevalenceOfMostCommonPitchClassFeature
 			true, // RelativePrevalenceOfTopPitchesFeature
 			true, // RelativePrevalenceOfTopPitchClassesFeature
 			true, // IntervalBetweenMostPrevalenttPitchesFeature
 			true, // IntervalBetweenMostPrevalentPitchClassesFeature
-			true, // NumberOfCommonPitchesFeature
-			true, // PitchVarietyFeature
-			true, // PitchClassVarietyFeature
-			true, // RangeFeature
-			true, // MostCommonPitchFeature
-			true, // MeanPitchFeature
-			true, // ImportanceOfBassRegisterFeature
-			true, // ImportanceOfMiddleRegisterFeature
-			true, // ImportanceOfHighRegisterFeature
-			true, // MostCommonPitchClassFeature
-			true, // DominantSpreadFeature
-			true, // StrongTonalCentresFeature
+			true, // PitchVariabilityFeature
+			true, // PitchClassVariabilityFeature
+			true, // PitchClassVariabilityAfterFoldingFeature
+			true, // PitchSkewnessFeature
+			true, // PitchClassSkewnessFeature
+			true, // PitchClassSkewnessAfterFoldingFeature
+			true, // PitchKurtosisFeature
+			true, // PitchClassKurtosisFeature
+			true, // PitchClassKurtosisAfterFoldingFeature
 			true, // MajorOrMinorFeature
+			true, // FirstPitchFeature
+			true, // FirstPitchClassFeature
+			true, // LastPitchFeature
+			true, // LastPitchClassFeature
 			true, // GlissandoPrevalenceFeature
 			true, // AverageRangeOfGlissandosFeature
 			true, // VibratoPrevalenceFeature
