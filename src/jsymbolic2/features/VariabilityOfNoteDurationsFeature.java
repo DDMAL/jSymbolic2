@@ -21,7 +21,7 @@ public class VariabilityOfNoteDurationsFeature
 	 */
 	public VariabilityOfNoteDurationsFeature()
 	{
-		code = "R-18";
+		code = "RT-14";
 		String name = "Variability of Note Durations";
 		String description = "Standard deviation of note durations (in seconds).";
 		boolean is_sequential = true;

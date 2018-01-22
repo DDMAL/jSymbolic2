@@ -86,7 +86,7 @@ public class FeatureSelectorTableModel
 		// Add each feature one by one
 		for (int i = 0; i < features.length; i++)
 		{
-			Object[] row_contents = new Object[6];
+			Object[] row_contents = new Object[5];
 			
 			row_contents[0] = feature_save_defaults[i];
 
@@ -102,9 +102,9 @@ public class FeatureSelectorTableModel
 				row_contents[4] = "Yes";
 			else row_contents[4] = "No";
 			
-			if (features[i].getFeatureDefinition().is_sequential)
-				row_contents[5] = "Yes";
-			else row_contents[5] = "No";
+			//if (features[i].getFeatureDefinition().is_sequential)
+			//	row_contents[5] = "Yes";
+			//else row_contents[5] = "No";
 			
 			addRow(row_contents);
 		}

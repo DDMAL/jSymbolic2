@@ -19,7 +19,9 @@ public abstract class MIDIFeatureExtractor
 	
 	/**
 	 * The unique code identifying a feature that extends this class (see the HTML manual for identifying 
-	 * codes).
+	 * codes). Should be one or more letters identifying the feature group the feature belongs to, followed
+	 * by a hyphen, followed by the number of the feature within that group. For example, a value of I-7
+	 * would be appropriate for the seventh feature of the Instrumentation feature group.
 	 */
 	protected String code;
 	

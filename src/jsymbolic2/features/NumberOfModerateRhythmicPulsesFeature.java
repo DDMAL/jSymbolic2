@@ -21,7 +21,7 @@ public class NumberOfModerateRhythmicPulsesFeature
 	 */
 	public NumberOfModerateRhythmicPulsesFeature()
 	{
-		code = "R-10";
+		code = "RT-18";
 		String name = "Number of Moderate Rhythmic Pulses";
 		String description = "Number of beat histogram peaks with normalized magnitudes over 0.01.";
 		boolean is_sequential = true;

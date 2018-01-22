@@ -22,7 +22,7 @@ public class AverageTimeBetweenAttacksFeature
 	 */
 	public AverageTimeBetweenAttacksFeature()
 	{
-		code = "R-22";
+		code = "RT-7";
 		String name = "Average Time Between Attacks";
 		String description = "Average time (in seconds) between Note On events (regardless of MIDI channel). Set to 0 if there are less than two attacks.";
 		boolean is_sequential = true;

@@ -10,7 +10,7 @@ import jsymbolic2.processing.MIDIIntermediateRepresentations;
  *
  * @author Cory McKay
  */
-public class DurationFeature
+public class DurationInSecondsFeature
 		extends MIDIFeatureExtractor
 {
 	/* CONSTRUCTOR ******************************************************************************************/
@@ -19,11 +19,11 @@ public class DurationFeature
 	/**
 	 * Basic constructor that sets the values of the fields inherited from this class' superclass.
 	 */
-	public DurationFeature()
+	public DurationInSecondsFeature()
 	{
-		code = "R-36";
-		String name = "Duration";
-		String description = "The total duration (in seconds) of the piece.";
+		code = "RT-4";
+		String name = "Duration in Seconds";
+		String description = "Total duration (in seconds) of the piece.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, description, is_sequential, dimensions);

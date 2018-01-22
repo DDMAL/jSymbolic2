@@ -8,6 +8,7 @@ import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
  * A feature calculator that is set to 1 if the time signature is changed one or more times during the piece.
+ * Set to 0 otherwise.
  *
  * @author Cory McKay
  */
@@ -22,9 +23,9 @@ public class MetricalDiversity
 	 */
 	public MetricalDiversity()
 	{
-		code = "R-35";
+		code = "R-8";
 		String name = "Metrical Diversity";
-		String description = "Set to 1 if the time signature is changed one or more times during the piece.";
+		String description = "Set to 1 if the time signature is changed one or more times during the piece. Set to 0 otherwise.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, description, is_sequential, dimensions);

@@ -23,7 +23,7 @@ public class AverageTimeBetweenAttacksForEachVoiceFeature
 	 */
 	public AverageTimeBetweenAttacksForEachVoiceFeature()
 	{
-		code = "R-24";
+		code = "RT-8";
 		String name = "Average Time Between Attacks for Each Voice";
 		String description = "Average of the individual channel averages of time (in seconds) between Note On events in each given MIDI channel. Only channels that contain at least one note are included in this calculation.";
 		boolean is_sequential = true;

@@ -23,7 +23,7 @@ public class HarmonicityOfTwoStrongestRhythmicPulsesFeature
 	 */
 	public HarmonicityOfTwoStrongestRhythmicPulsesFeature()
 	{
-		code = "R-4";
+		code = "RT-22";
 		String name = "Harmonicity of Two Strongest Rhythmic Pulses";
 		String description = "Bin index of the higher (in terms of bin index) of the two beat histogram peaks with the highest magnitude, divided by the index of the lower (in terms of bin index) of the two bins.";
 		boolean is_sequential = true;

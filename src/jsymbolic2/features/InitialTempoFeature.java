@@ -21,7 +21,7 @@ public class InitialTempoFeature
 	 */
 	public InitialTempoFeature()
 	{
-		code = "R-30";
+		code = "RT-1";
 		String name = "Initial Tempo";
 		String description = "Tempo in beats per minute at the start of the piece.";
 		boolean is_sequential = true;

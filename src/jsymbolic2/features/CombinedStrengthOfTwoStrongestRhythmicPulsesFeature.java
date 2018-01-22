@@ -22,7 +22,7 @@ public class CombinedStrengthOfTwoStrongestRhythmicPulsesFeature
 	 */
 	public CombinedStrengthOfTwoStrongestRhythmicPulsesFeature()
 	{
-		code = "R-8";
+		code = "RT-26";
 		String name = "Combined Strength of Two Strongest Rhythmic Pulses";
 		String description = "Sum of the magnitudes of the two beat histogram peaks with the highest magnitudes.";
 		boolean is_sequential = true;

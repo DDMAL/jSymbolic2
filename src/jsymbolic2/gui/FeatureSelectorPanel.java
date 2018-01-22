@@ -207,8 +207,8 @@ public class FeatureSelectorPanel
 			"Feature Name",
 			"Code",
 			"Values",
-			"MEI-Only",
-			"Sequential"
+			"MEI-Only"
+			//"Sequential"
 		};
 
 		// Initialize features_table_model and features_table
@@ -222,7 +222,7 @@ public class FeatureSelectorPanel
 		features_table.getColumnModel().getColumn(2).setCellRenderer(right_column_renderer);
 		features_table.getColumnModel().getColumn(3).setCellRenderer(right_column_renderer);
 		features_table.getColumnModel().getColumn(4).setCellRenderer(right_column_renderer);
-		features_table.getColumnModel().getColumn(5).setCellRenderer(right_column_renderer);
+		//features_table.getColumnModel().getColumn(5).setCellRenderer(right_column_renderer);
 		
 		// Resize features_table columns to fit the data
 		TableMethods.sizeTableColumnsToFit(features_table, false);

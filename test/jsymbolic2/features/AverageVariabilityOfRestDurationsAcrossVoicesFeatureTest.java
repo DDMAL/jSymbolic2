@@ -39,7 +39,7 @@ public class AverageVariabilityOfRestDurationsAcrossVoicesFeatureTest {
         t2_tracks.add(e_tracks8);
 
         MIDIIntermediateRepresentations inter = new MIDIIntermediateRepresentations(test_tracks);
-        MIDIFeatureExtractor actual_common = new VariabilityAcrossVoicesOfTotalRestsPerVoice();
+        MIDIFeatureExtractor actual_common = new VariabilityAcrossVoicesOfCombinedRestsFeature();
         double[] actual_rest = actual_common.extractFeature(test_tracks, inter, null);
         double[] expected_rest = {2.82843};
         assertArrayEquals(expected_rest, actual_rest, 0.00001);

@@ -22,7 +22,7 @@ public class VariabilityOfTimeBetweenAttacksFeature
 	 */
 	public VariabilityOfTimeBetweenAttacksFeature()
 	{
-		code = "R-23";
+		code = "RT-9";
 		String name = "Variability of Time Between Attacks";
 		String description = "Standard deviation of the times (in seconds) between Note On events (regardless of MIDI channel).";
 		boolean is_sequential = true;

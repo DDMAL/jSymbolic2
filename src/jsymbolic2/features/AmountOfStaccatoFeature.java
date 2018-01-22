@@ -22,7 +22,7 @@ public class AmountOfStaccatoFeature
 	 */
 	public AmountOfStaccatoFeature()
 	{
-		code = "R-21";
+		code = "RT-15";
 		String name = "Amount of Staccato";
 		String description = "Number of notes with a duration less than 0.1 seconds, divided by the total number of notes in the piece.";
 		boolean is_sequential = true;

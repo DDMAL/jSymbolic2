@@ -21,7 +21,7 @@ public class MaximumNoteDurationFeature
 	 */
 	public MaximumNoteDurationFeature()
 	{
-		code = "R-19";
+		code = "RT-12";
 		String name = "Maximum Note Duration";
 		String description = "Duration of the longest note in the piece (in seconds).";
 		boolean is_sequential = true;

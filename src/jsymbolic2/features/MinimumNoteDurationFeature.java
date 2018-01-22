@@ -22,7 +22,7 @@ public class MinimumNoteDurationFeature
 	 */
 	public MinimumNoteDurationFeature()
 	{
-		code = "R-20";
+		code = "RT-11";
 		String name = "Minimum Note Duration";
 		String description = "Duration of the shortest note in the piece (in seconds). Set to 0 if there are no notes.";
 		boolean is_sequential = true;

@@ -21,7 +21,7 @@ public class StrongestRhythmicPulseFeature
 	 */
 	public StrongestRhythmicPulseFeature()
 	{
-		code = "R-2";
+		code = "RT-20";
 		String name = "Strongest Rhythmic Pulse";
 		String description = "Bin index of the beat histogram bin with the highest magnitude.";
 		boolean is_sequential = true;

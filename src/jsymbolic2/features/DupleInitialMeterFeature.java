@@ -1,17 +1,17 @@
 package jsymbolic2.features;
 
-import java.util.LinkedList;
 import javax.sound.midi.*;
 import ace.datatypes.FeatureDefinition;
 import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that is et to 1 if numerator of initial time signature is 5, set to 0 otherwise.
+ * A feature calculator that is set to 1 if the initial meter is a standard simple or compound duple meter
+ * (i.e. if the numerator of the time signature is 2 or 6) and to 0 otherwise.
  *
  * @author Cory McKay
  */
-public class QuintupleMeterFeature
+public class DupleInitialMeterFeature
 		extends MIDIFeatureExtractor
 {
 	/* CONSTRUCTOR ******************************************************************************************/
@@ -20,15 +20,15 @@ public class QuintupleMeterFeature
 	/**
 	 * Basic constructor that sets the values of the fields inherited from this class' superclass.
 	 */
-	public QuintupleMeterFeature()
+	public DupleInitialMeterFeature()
 	{
-		code = "R-34";
-		String name = "Quintuple Meter";
-		String description = "Set to 1 if numerator of initial time signature is 5, set to 0 otherwise.";
+		code = "R-5";
+		String name = "Duple Initial Meter";
+		String description = "Set to 1 if the initial meter is a standard simple or compound duple meter (i.e. if the numerator of the time signature is 2 or 6) and to 0 otherwise.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, description, is_sequential, dimensions);
-		dependencies = null;
+		dependencies = new String[] { "Initial Time Signature" };
 		offsets = null;
 	}
 	
@@ -55,30 +55,19 @@ public class QuintupleMeterFeature
 									double[][] other_feature_values )
 	throws Exception
 	{
-		double value;
+		double value = 0.0;
 		if (sequence_info != null)
 		{
-			// Default to no
+			// Default to simple meter
 			value = 0.0;
-
-			// If time signature specified
-			if (!((LinkedList) sequence_info.overall_metadata[1]).isEmpty())
-			{
-				// Convert data types
-				Object[] numerators_objects = ((LinkedList) sequence_info.overall_metadata[1]).toArray();
-				int[] numerators = new int[numerators_objects.length];
-				for (int i = 0; i < numerators.length; i++)
-					numerators[i] = ((Integer) numerators_objects[i]).intValue();
-
-				// Find initial numerator
-				int num = numerators[0];
-
-				// Find if correct
-				if (num == 5)
-					value = 1.0;
-			}
-		} 
-		else value = -1.0;
+			
+			// Get the numerator of the time signature
+			double initial_time_signature_numerator = other_feature_values[0][0];
+			
+			// Set to compound meter if appropriate
+			if ( initial_time_signature_numerator == 2.0 || initial_time_signature_numerator == 6.0 )
+				value = 1.0;
+		}
 
 		double[] result = new double[1];
 		result[0] = value;

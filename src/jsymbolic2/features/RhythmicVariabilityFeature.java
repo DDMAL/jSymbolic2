@@ -21,7 +21,7 @@ public class RhythmicVariabilityFeature
 	 */
 	public RhythmicVariabilityFeature()
 	{
-		code = "R-14";
+		code = "RT-27";
 		String name = "Rhythmic Variability";
 		String description = "Standard deviation of the beat histogram bin magnitudes";
 		boolean is_sequential = true;

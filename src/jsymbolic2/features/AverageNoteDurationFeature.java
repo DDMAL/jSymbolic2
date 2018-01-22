@@ -21,7 +21,7 @@ public class AverageNoteDurationFeature
 	 */
 	public AverageNoteDurationFeature()
 	{
-		code = "R-17";
+		code = "RT-13";
 		String name = "Average Note Duration";
 		String description = "Average duration of notes (in seconds).";
 		boolean is_sequential = true;

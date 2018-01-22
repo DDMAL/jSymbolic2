@@ -6,9 +6,10 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that calculates the longest amount of uninterrupted time (in seconds) in which no
- * pitched notes are sounding on any MIDI channel. Non-pitched (MIDI channel 10) notes are not considered in
- * this calculation.
+ * A feature calculator that calculates the longest amount of uninterrupted time (expressed as a fraction of 
+ * the duration of a quarter note) in which no pitched notes are sounding on any MIDI channel. Non-pitched 
+ * (MIDI channel 10) notes are not considered in this calculation. Rests shorter than 0.1 of a quarter note 
+ * are ignored in this calculation.
  *
  * @author Tristano Tenaglia and Cory McKay
  */
@@ -23,9 +24,9 @@ public class LongestCompleteRestFeature
 	 */
 	public LongestCompleteRestFeature()
 	{
-		code = "R-27";
+		code = "R-44";
 		String name = "Longest Complete Rest";
-		String description = "Longest amount of uninterrupted time (in seconds) in which no pitched notes are sounding on any MIDI channel. Non-pitched (MIDI channel 10) notes are not considered in this calculation.";
+		String description = "Longest amount of uninterrupted time (expressed as a fraction of the duration of a quarter note) in which no pitched notes are sounding on any MIDI channel. Non-pitched (MIDI channel 10) notes are not considered in this calculation. Rests shorter than 0.1 of a quarter note are ignored in this calculation.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, description, is_sequential, dimensions);
@@ -56,50 +57,16 @@ public class LongestCompleteRestFeature
 									double[][] other_feature_values )
 	throws Exception
 	{
-		double value = 0.0;
+		double value;
 		if (sequence_info != null)
 		{
-			short[][] pitch_strength_by_tick_chart = sequence_info.pitch_strength_by_tick_chart;
-
-			// Find the longest streak of ticks with no sounding pitches
-			double this_streak_length = 0;
-			int this_streak_start_tick = 0;
-			int this_streak_end_tick = 0;
-			double max_streak_length = 0;
-			int max_streak_start_tick = 0;
-			int max_streak_end_tick = 0;
-			for (int tick = 0; tick < pitch_strength_by_tick_chart.length; tick++)
+			if (sequence_info.complete_rest_durations == null)
+				value = 0.0;
+			else
 			{
-				// If no pitches are sounding
-				if (mckay.utilities.staticlibraries.ArrayMethods.doesArrayContainOnlyThisValue(pitch_strength_by_tick_chart[tick], 0))
-				{
-					this_streak_length++;
-					if (this_streak_length == 1)
-						this_streak_start_tick = tick;
-				}
-				
-				// If at least one pitch is sounding
-				else
-				{
-					this_streak_length = 0;
-					if (tick > 0)
-						this_streak_end_tick = tick;
-				}
-
-				// Compare current max streak to current streak
-				if (this_streak_length > max_streak_length)
-					max_streak_length = this_streak_length;
-				if ( (this_streak_end_tick - this_streak_start_tick) > (max_streak_end_tick - max_streak_start_tick))
-				{
-					max_streak_end_tick = this_streak_end_tick;
-					max_streak_start_tick = this_streak_start_tick;
-				}
+				int index_of_largest = mckay.utilities.staticlibraries.MathAndStatsMethods.getIndexOfLargest(sequence_info.complete_rest_durations);
+				value = sequence_info.complete_rest_durations[index_of_largest];
 			}
-
-			// Calculate the duration in seconds of the longest rest
-			double[] seconds_per_tick = sequence_info.duration_of_ticks_in_seconds;
-			for (int tick = max_streak_start_tick; tick < max_streak_end_tick; tick++)
-				value += seconds_per_tick[tick];
 		}
 		else value = -1.0;
 

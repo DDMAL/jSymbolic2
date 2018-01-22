@@ -23,7 +23,7 @@ public class RhythmicLoosenessFeature
 	 */
 	public RhythmicLoosenessFeature()
 	{
-		code = "R-12";
+		code = "RT-28";
 		String name = "Rhythmic Looseness";
 		String description = "Average width of beat histogram peaks. The width of a peak is defined here as the distance (in beats per minute) between the two points on the peak in question that have magnitudes closest to 30% of the height of the peak. Only peaks with magnitudes at least 30% as high as the highest peak are considered in this calculation.";
 		boolean is_sequential = true;

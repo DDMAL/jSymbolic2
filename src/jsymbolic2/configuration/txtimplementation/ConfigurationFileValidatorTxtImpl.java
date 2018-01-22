@@ -45,8 +45,7 @@ public class ConfigurationFileValidatorTxtImpl extends ConfigurationFileValidato
         for(String featureLine : featuresToSave){
             //Check to make sure feature actually exists in jSymbolic
             if(!extractorName.contains(featureLine)) {
-                throw new Exception("Configuration file for jSymbolic" + configurationFile.getName() + " at line " +
-                        lineNumber + " - " + featureLine + " is a non-existant feature in jSymbolic.");
+                throw new Exception("The " + configurationFile.getName() + " configuration file has an error at line " + lineNumber + ": " + featureLine + " is a non-existant feature in jSymbolic.");
             }
             lineNumber++;
         }
@@ -296,11 +295,11 @@ public class ConfigurationFileValidatorTxtImpl extends ConfigurationFileValidato
         String definitionName = definitionArray[0];
         String definitionValue = definitionArray[1];
         if(!valuesName.equals(valueSavePath)) {
-            throw new Exception("Name of features values must be : " + valueSavePath + ". It is now " +
+            throw new Exception("Name of features values must be: " + valueSavePath + ". It is now " +
                     valuesName);
         }
         if(!definitionName.equals(definitionSavePath)) {
-            throw new Exception("Name of feature definitions must be : " + definitionSavePath + ". It is now " +
+            throw new Exception("Name of feature definitions must be: " + definitionSavePath + ". It is now " +
                     definitionName);
         }
 

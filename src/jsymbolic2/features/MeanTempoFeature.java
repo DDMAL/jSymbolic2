@@ -1,19 +1,16 @@
 package jsymbolic2.features;
 
-import java.util.stream.DoubleStream;
-import javax.sound.midi.Sequence;
+import javax.sound.midi.*;
 import ace.datatypes.FeatureDefinition;
 import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the total amount of time (in seconds) in which no notes are sounding on any
- * MIDI channel, divided by the total duration of the piece. Non-pitched (MIDI channel 10) notes are not
- * considered in this calculation.
+ * A feature calculator that finds the average tempo of the piece in beats per minute.
  *
- * @author Tristano Tenaglia and Cory McKay
+ * @author Cory McKay
  */
-public class CompleteRestsFeature
+public class MeanTempoFeature
 		extends MIDIFeatureExtractor
 {
 	/* CONSTRUCTOR ******************************************************************************************/
@@ -22,18 +19,18 @@ public class CompleteRestsFeature
 	/**
 	 * Basic constructor that sets the values of the fields inherited from this class' superclass.
 	 */
-	public CompleteRestsFeature()
+	public MeanTempoFeature()
 	{
-		code = "R-26";
-		String name = "Complete Rests";
-		String description = "Total amount of time (in seconds) in which no notes are sounding on any MIDI channel, divided by the total duration of the piece. Non-pitched (MIDI channel 10) notes are not considered in this calculation.";
+		code = "RT-2";
+		String name = "Mean Tempo";
+		String description = "Average tempo of the piece in beats per minute.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, description, is_sequential, dimensions);
 		dependencies = null;
 		offsets = null;
 	}
-	
+
 
 	/* PUBLIC METHODS ***************************************************************************************/
 	
@@ -58,37 +55,29 @@ public class CompleteRestsFeature
 	throws Exception
 	{
 		double value;
+		
 		if (sequence_info != null)
-		{	
-			// Get information from sequence_info
-			short[][] pitch_strength_by_tick_chart = sequence_info.pitch_strength_by_tick_chart;
-			double[] seconds_per_tick = sequence_info.duration_of_ticks_in_seconds;
-			
-			// The number of ticks to examine (the minus 1 is because Java doesn't count the last tick
-			int ticks_to_test = pitch_strength_by_tick_chart.length - 1;
-			
-			// Find the durations of complete rests, tick by tick
-			double[] seconds_of_rest_per_tick = new double[ticks_to_test];
-			for (int tick = 0; tick < ticks_to_test; tick++)
+		{
+			// Access necessary information
+			double ticks_per_beat = (double) sequence.getResolution();
+			double[] duration_of_ticks_in_seconds = sequence_info.duration_of_ticks_in_seconds;
+
+			// Calculate all instantaneous tempos
+			double[] beats_per_minute = new double[duration_of_ticks_in_seconds.length];
+			for (int i = 0; i < beats_per_minute.length; i++)
 			{
-				short[] pitch_velocities = pitch_strength_by_tick_chart[tick];
-				if (mckay.utilities.staticlibraries.ArrayMethods.doesArrayContainOnlyThisValue(pitch_velocities, 0))
-					seconds_of_rest_per_tick[tick] = seconds_per_tick[tick];
+				double ticks_per_second = 1.0 / duration_of_ticks_in_seconds[i];
+				double beats_per_second = ticks_per_second / ticks_per_beat;
+				beats_per_minute[i] = beats_per_second * 60.0;
 			}
-			
-			// Add up the durations of all the complete rests
-			double total_complete_rests = DoubleStream.of(seconds_of_rest_per_tick).sum();
-			
-			// Divide by the length of the piece
-			if (sequence_info.sequence_duration_precise == 0.0)
-				value = 0.0;
-			else
-				value = total_complete_rests / sequence_info.sequence_duration_precise;
+
+			// Calculate the final feature value
+			value = mckay.utilities.staticlibraries.MathAndStatsMethods.getAverage(beats_per_minute);
 		}
 		else value = -1.0;
 
 		double[] result = new double[1];
 		result[0] = value;
-		return result;		
+		return result;
 	}
 }

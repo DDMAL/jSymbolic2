@@ -9,14 +9,16 @@ import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
  * A feature calculator that calculates how much the note density (average number of notes per second) varies
- * throughout the piece. In order to calculate this, the piece is broken into windows of 5 second duration,
- * and the note density of each window is calculated. The final value of this feature is then found by
- * calculating the standard deviation of the note densities of these windows. Set to 0 if there is 
- * insufficient music for more than one window.
+ * throughout the piece. Takes into account all notes in all voices, including both pitched and unpitched
+ * notes. In order to calculate this, the piece is broken into windows of 5 second duration, and the note
+ * density of each window is calculated. The final value of this feature is then found by calculating the
+ * standard deviation of the note densities of these windows. Set to 0 if there is insufficient music for more
+ * than one window.
  *
  * @author Tristano Tenaglia and Cory McKay
  */
-public class NoteDensityVariabilityFeature extends MIDIFeatureExtractor
+public class NoteDensityVariabilityFeature
+		extends MIDIFeatureExtractor
 {
 	/* CONSTRUCTOR ******************************************************************************************/
 
@@ -26,9 +28,9 @@ public class NoteDensityVariabilityFeature extends MIDIFeatureExtractor
 	 */
 	public NoteDensityVariabilityFeature()
 	{
-		code = "R-16";
+		code = "RT-6";
 		String name = "Note Density Variability";
-		String description = "How much the note density (average number of notes per second) varies throughout the piece. In order to calculate this, the piece is broken into windows of 5 second duration, and the note density of each window is calculated. The final value of this feature is then found by calculating the standard deviation of the note densities of these windows. Set to 0 if there is insufficient music for more than one window.";
+		String description = "How much the note density (average number of notes per second) varies throughout the piece.  Takes into account all notes in all voices, including both pitched and unpitched notes. In order to calculate this, the piece is broken into windows of 5 second duration, and the note density of each window is calculated. The final value of this feature is then found by calculating the standard deviation of the note densities of these windows. Set to 0 if there is insufficient music for more than one window.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, description, is_sequential, dimensions);
@@ -63,8 +65,8 @@ public class NoteDensityVariabilityFeature extends MIDIFeatureExtractor
 		if (sequence_info != null)
 		{	
 			// Break MIDI sequence into 5 second MIDI windows
-			int window_size = 5;
-			int window_overlap = 0;
+			double window_size = 5.0;
+			double window_overlap = 0.0;
 			double[] seconds_per_tick = MIDIMethods.getSecondsPerTick(sequence);
 			List<int[]> startEndTickArrays = MIDIMethods.getStartEndTickArrays(sequence, window_size, window_overlap, seconds_per_tick);
 			int[] start_ticks = startEndTickArrays.get(0);

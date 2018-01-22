@@ -6,7 +6,8 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the average number of notes per second.
+ * A feature calculator that finds the average number of notes per second. Takes into account all notes in all 
+ * voices, including both pitched and unpitched notes. 
  *
  * @author Cory McKay
  */
@@ -21,9 +22,9 @@ public class NoteDensityFeature
 	 */
 	public NoteDensityFeature()
 	{
-		code = "R-15";
+		code = "RT-5";
 		String name = "Note Density";
-		String description = "Average number of notes per second.";
+		String description = "Average number of notes per second. Takes into account all notes in all voices, including both pitched and unpitched notes.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, description, is_sequential, dimensions);
@@ -66,7 +67,7 @@ public class NoteDensityFeature
 			if (sequence_info.sequence_duration == 0)
 				value = 0.0;
 			else
-				value = (double) count / (double) sequence_info.sequence_duration;
+				value = (double) count / sequence_info.sequence_duration_precise;
 		}
 		else value = -1.0;
 

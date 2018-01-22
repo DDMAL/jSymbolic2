@@ -6,13 +6,12 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the fraction of all Note Ons played by (unpitched) MIDI Percussion Key Map
- * instruments. It should be noted that only MIDI Channel 10 instruments 35 to 81 are included here, as they
- * are the ones that meet the official standard.
+ * A feature calculator that is set to 1 if the initial meter is a standard compound meter (i.e. if the
+ * numerator of the time signature is 6, 9, 12, 15, 18 or 24) and to 0 otherwise.
  *
  * @author Cory McKay
  */
-public class PercussionInstrumentPrevalenceFeature
+public class CompoundMeterFeature
 		extends MIDIFeatureExtractor
 {
 	/* CONSTRUCTOR ******************************************************************************************/
@@ -21,15 +20,15 @@ public class PercussionInstrumentPrevalenceFeature
 	/**
 	 * Basic constructor that sets the values of the fields inherited from this class' superclass.
 	 */
-	public PercussionInstrumentPrevalenceFeature()
+	public CompoundMeterFeature()
 	{
-		code = "I-10";
-		String name = "Percussion Instrument Prevalence";
-		String description = "Fraction of all Note Ons played by (unpitched) MIDI Percussion Key Map instruments. It should be noted that only MIDI Channel 10 instruments 35 to 81 are included here, as they are the ones that meet the official standard.";
+		code = "R-3";
+		String name = "Compound Initial Meter";
+		String description = "Set to 1 if the initial meter is a standard compound meter (i.e. if the numerator of the time signature is 6, 9, 12, 15, 18 or 24) and to 0 otherwise.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, description, is_sequential, dimensions);
-		dependencies = null;
+		dependencies = new String[] { "Initial Time Signature" };
 		offsets = null;
 	}
 	
@@ -56,21 +55,21 @@ public class PercussionInstrumentPrevalenceFeature
 									double[][] other_feature_values )
 	throws Exception
 	{
-		double value;
+		double value = 0.0;
 		if (sequence_info != null)
 		{
-			int total_number_note_ons = 0;
-			for (int channel = 0; channel < sequence_info.channel_statistics.length; channel++)
-				total_number_note_ons += sequence_info.channel_statistics[channel][0];
-
-			int number_unpitched_note_ons = sequence_info.channel_statistics[10 - 1][0];
-
-			if (total_number_note_ons == 0)
-				value = 0.0;
-			else 
-				value = (double) number_unpitched_note_ons / (double) total_number_note_ons;
+			// Default to simple meter
+			value = 0.0;
+			
+			// Get the numerator of the time signature
+			double initial_time_signature_numerator = other_feature_values[0][0];
+			
+			// Set to compound meter if appropriate
+			if ( initial_time_signature_numerator == 6.0 || initial_time_signature_numerator == 9.0 ||
+			     initial_time_signature_numerator == 12.0 || initial_time_signature_numerator == 15.0 ||
+			     initial_time_signature_numerator == 18.0 || initial_time_signature_numerator == 24.0 )
+				value = 1.0;
 		}
-		else value = -1.0;
 
 		double[] result = new double[1];
 		result[0] = value;

@@ -62,18 +62,18 @@ public class VoiceEqualityNoteDurationFeature
 			int silent_count = 0;
 			for (int chan = 0; chan < sequence_info.channel_statistics.length; chan++)
 			{
-				if (sequence_info.channel_statistics[chan][1] == 0)
+				if (sequence_info.channel_statistics[chan][0] == 0)
 					silent_count++;
 			}
 
-			// Store the number of note ons in each channel with note ons
+			// Store the combined note durations in each channel with note ons
 			double[] durations = new double[sequence_info.channel_statistics.length - silent_count];
 			int count = 0;
 			for (int chan = 0; chan < sequence_info.channel_statistics.length; chan++)
 			{
-				if (sequence_info.channel_statistics[chan][1] != 0)
+				if (sequence_info.channel_statistics[chan][0] != 0)
 				{
-					durations[count] = (double) sequence_info.channel_statistics[chan][1];
+					durations[count] = sequence_info.total_time_notes_sounding_per_channel[chan];
 					count++;
 				}
 			}

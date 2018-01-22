@@ -6,13 +6,13 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the average of the total amount of combined time (in seconds) in each MIDI
- * channel in which no note is sounding in that particular channel, averaged across channels, and then divided
- * by the total duration of the piece. Only channels with at least one note are counted in this calculation.
+ * A feature calculator that calculates the fraction of the duration of each MIDI channel during which no note
+ * is sounding on that channel, averaged across all channels that contain at least one note. Non-pitched (MIDI
+ * channel 10) notes ARE considered in this calculation.
  *
  * @author Tristano Tenaglia and Cory McKay
  */
-public class AverageRestFractionPerVoiceFeature
+public class AverageRestFractionAcrossVoicesFeature
 		extends MIDIFeatureExtractor
 {
 	/* CONSTRUCTOR ******************************************************************************************/
@@ -21,11 +21,11 @@ public class AverageRestFractionPerVoiceFeature
 	/**
 	 * Basic constructor that sets the values of the fields inherited from this class' superclass.
 	 */
-	public AverageRestFractionPerVoiceFeature()
+	public AverageRestFractionAcrossVoicesFeature()
 	{
-		code = "R-28";
-		String name = "Average Rest Fraction Per Voice";
-		String description = "Average of the total amount of combined time (in seconds) in each MIDI channel in which no note is sounding in that particular channel, averaged across channels, and then divided by the total duration of the piece. Only channels with at least one note are counted in this calculation.";
+		code = "R-43";
+		String name = "Average Rest Fraction Across Voices";
+		String description = "Fraction of the duration of each MIDI channel during which no note is sounding on that channel, averaged across all channels that contain at least one note. Non-pitched (MIDI channel 10) notes ARE considered in this calculation.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, description, is_sequential, dimensions);
@@ -61,6 +61,7 @@ public class AverageRestFractionPerVoiceFeature
 		{
 			// Get information from sequence_info
 			int[][] channel_stats = sequence_info.channel_statistics;
+			double[] total_time_notes_sounding_per_channel = sequence_info.total_time_notes_sounding_per_channel; 
 
 			// Find the total amount of rest time accumulated across channels, as well as the number of
 			// channels with notes
@@ -75,10 +76,10 @@ public class AverageRestFractionPerVoiceFeature
 
 				// Note there are notes this channel and accumulate the total amount of rest time
 				number_channels_with_notes++;
-				int total_non_silence_this_channel = channel_stats[channel][1];
+				double total_non_silence_this_channel = total_time_notes_sounding_per_channel[channel];
 				total_rest_time_all_channels_combined += (sequence_info.sequence_duration_precise - total_non_silence_this_channel);
 			}
-			
+
 			// Find the average across channels, and then scale by duration
 			if (number_channels_with_notes == 0 || sequence_info.sequence_duration_precise == 0.0)
 				value = 0.0;

@@ -24,7 +24,7 @@ public class InitialTimeSignatureFeature
 	 */
 	public InitialTimeSignatureFeature()
 	{
-		code = "R-31";
+		code = "R-1";
 		String name = "Initial Time Signature";
 		String description = "A feature vector consisting of two values. The first is the numerator of the first specified time signature in the piece, and the second is the denominator of the same time signature. Both values are set to 0 if no time signature is specified.";
 		boolean is_sequential = true;

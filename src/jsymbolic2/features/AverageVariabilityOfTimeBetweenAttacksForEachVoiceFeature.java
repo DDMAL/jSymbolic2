@@ -23,7 +23,7 @@ public class AverageVariabilityOfTimeBetweenAttacksForEachVoiceFeature
 	 */
 	public AverageVariabilityOfTimeBetweenAttacksForEachVoiceFeature()
 	{
-		code = "R-25";
+		code = "RT-10";
 		String name = "Average Variability of Time Between Attacks for Each Voice";
 		String description = "Average of the standard deviations (in seconds) of each individual MIDI channel's time between Note On events. Only channels that contain at least one note are included in this calculation.";
 		boolean is_sequential = true;

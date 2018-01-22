@@ -65,12 +65,12 @@ public class OuterFrame
 	/**
 	 * The title to include in the GUI title bar.
 	 */
-	private static final String WINDOW_TITLE = "jSymbolic 2";
+	private static final String WINDOW_TITLE = "jSymbolic 2.1";
 	
 	/**
 	 * The name of this software's author.
 	 */
-	private static final String AUTHOR_STRING = "Cory McKay and Tristano Tenaglia";
+	private static final String AUTHOR_STRING = "Cory McKay";
 	
 	/**
 	 * The string indicating licensing credit.

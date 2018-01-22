@@ -6,6 +6,7 @@ import java.util.List;
 import javax.sound.midi.*;
 import jsymbolic2.featureutils.CollectedNoteInfo;
 import jsymbolic2.featureutils.NoteInfo;
+import mckay.utilities.staticlibraries.ArrayMethods;
 import mckay.utilities.staticlibraries.MathAndStatsMethods;
 
 /**
@@ -70,7 +71,7 @@ public class MIDIIntermediateRepresentations
 	public Object[] overall_metadata;
 
 	/**
-	 * The total duration in seconds of the sequence (as an int).
+	 * The total duration in seconds of the sequence (as an integer).
 	 */
 	public int sequence_duration;
 
@@ -78,6 +79,12 @@ public class MIDIIntermediateRepresentations
 	 * The total duration in seconds of the sequence (as a double).
 	 */
 	public double sequence_duration_precise;
+	
+	/**
+	 * The average duration in seconds of a MIDI tick. This is averaged across the sequence, since the 
+	 * moment-to-moment duration of a tick can vary due to tempo change messages.
+	 */
+	public double average_tick_duration;
 
 	/**
 	 * An array with an entry for each MIDI tick. The value at each entry specifies the duration of that 
@@ -135,7 +142,71 @@ public class MIDIIntermediateRepresentations
 	 * typically simply duplicate the allowed values).
 	 */
 	public int total_number_non_pitched_note_ons;
+	
+	/**
+	 * The duration in seconds of a quarter note. The average value for the piece as a whole (since tempo
+	 * changes can cause it to vary.
+	 */
+	public double average_quarter_note_duration_in_seconds;
+	
+	/**
+	 * A normalized histogram where the value of each bin specifies the fraction of all notes in the piece
+	 * with a rhythmic value corresponding to that of the given bin. The bins are numbered as follows: 
+	 * 
+	 *		0 -> thirty second notes (or less)
+	 *		1 -> sixteenth notes
+	 *		2 -> eighth notes
+	 *		3 -> dotted eighth notes
+	 *		4 -> quarter notes
+	 *		5 -> dotted quarter notes
+	 *		6 -> half notes
+	 *		7 -> dotted half notes
+	 *		8 -> whole notes
+	 *		9 -> dotted whole notes
+	 *		10 -> double whole notes
+	 *		11 -> dotted double whole notes (or more)
+	 * 
+	 * Both pitched and unpitched notes are included in this histogram. Tempo is, of course, not relevant to
+	 * this feature. Notes with durations not precisely matching one of these rhythmic note values are mapped
+	 * to the closest note value (to filter out the effects of rubato or uneven human rhythmic performances, 
+	 * for example). This histogram is calculated without regard to the dynamics, voice or instrument of any 
+	 * given note.
+	 */
+	public double[] rhythmic_value_histogram;
 
+	/**
+	 * Each dimension of this array is associated with a different rhythmic value (using the same numbering
+	 * scheme as the rhythmic_value_histogram). Each value of this array contains a list. There is an entry in
+	 * each list for each time a note with the list's associated rhythmic value is encountered in a context
+	 * where its rhythmic value differs from the preceding note's rhythmic value on the same channel and
+	 * track. Each such value indicates the number of notes of this same rhythmic value that occurred on the
+	 * same channel and track before a new rhythmic value was encountered on that channel and track.
+	 */
+	public LinkedList<Integer>[] runs_of_same_rhythmic_value;
+	
+	/**
+	 * An array with one entry for each note, where the value of each entry indicates the quantized duration
+	 * of the note in quarter notes (e.g. a value of 0.5 corresponds to a duration of an eighth note). The
+	 * order of the durations in this array is completely unrelated to the order in which the corresponding
+	 * notes each occur. Reported rhythmic values are after quantization as done for the
+	 * rhythmic_value_histogram. Both pitched and unpitched notes are included. This is calculated without
+	 * regard to the dynamics, voice or instrument of any given note.
+	 */
+	public double[] rhythmic_value_of_each_note_in_quarter_notes;
+	
+	/**
+	 * The offset in duration of each note from the exact idealized duration of its nearest rhythmic value,
+	 * expressed as a fraction of the duration of an idealized quarter note. This is an absolute value, so
+	 * offsets that are longer or shorter than each idealized duration are identical (they are both expressed
+	 * here as positive numbers). For example, a value of 0.1 for a note that happens to be a whole note would
+	 * indicate that the associated note has a duration that is one tenth the duration of a quarter note
+	 * shorter or longer than the idealized duration of a whole note. The order of the durations in this array
+	 * is completely unrelated to the order in which the corresponding notes each occur. Both pitched and
+	 * unpitched notes are included. This is calculated without regard to the dynamics, voice or instrument of
+	 * any given note.
+	 */
+	public double[] rhythmic_value_offsets;
+	
 	/**
 	 * A normalized histogram, with bins corresponding to rhythmic periodicities measured in beats per minute.
 	 * The magnitude of each bin is proportional to the aggregated loudnesses of the notes that occur at the
@@ -265,7 +336,8 @@ public class MIDIIntermediateRepresentations
 	 * <li><i>Column 0:</i> Total number of Note Ons on the given channel.</li>
 	 *
 	 * <li><i>Column 1:</i> Total amount of time in seconds that one or more notes were sounding on the given
-	 * channel.</li>
+	 * channel. Warning: This could suffer from rounding error. Use total_time_notes_sounding_per_channel if
+	 * more precision is needed.</li>
 	 *
 	 * <li><i>Column 2:</i> Average loudness (velocity scaled by channel volume, still falls between 0 and 
 	 * 127) of notes on the given channel.</li>
@@ -290,6 +362,18 @@ public class MIDIIntermediateRepresentations
 	 * <p>NOTE: This data combines data in all MIDI tracks.
 	 */
 	public int[][] channel_statistics;
+	
+	/**
+	 * The number of MIDI channels that contain at least one note. This DOES include MIDI Channel 10.
+	 */
+	public double number_of_active_voices;
+	
+	/**
+	 * Total amount of time in seconds that one or more notes were sounding on the channel corresponding to
+	 * the index. This data includes MIDI Channel 10, even though it is understood that notes on Channel 10
+	 * are in fact unpitched percussion patches. This data combines data in all MIDI tracks.
+	 */
+	public double[] total_time_notes_sounding_per_channel;
 	
 	/**
 	 * The first list contains a list for each channel. Each channel's list in turn contains the MIDI pitch
@@ -460,6 +544,33 @@ public class MIDIIntermediateRepresentations
 	 */
 	public int[][] note_loudnesses;
 	
+	/**
+	 * An array indicating channel-by-channel durations of rests, expressed in terms of a fraction of a
+	 * quarter note's duration (e.g. a half rest would have a value of 2). The first index corresponds to
+	 * channel, but not necessarily the actual channel number, since only channels that contain at least one
+	 * note and at least one rest are included here. The second index refers to the index of the rest (there
+	 * is one entry per rest), where rests are listed in the order in which they occur. A rest in this case is
+	 * defined as a period of time during which there are no notes being held on the particular channel in
+	 * question. Rests shorter than 0.1 of a quarter note are ignored (i.e. not included in this listing). A
+	 * value of null for this field as a whole indicates that there are no rests at all. Individual channel
+	 * rows cannot be null.
+	 *
+	 * <p>NOTE: This data includes MIDI Channel 10, even though it is understood that notes on Channel 10 are
+	 * in fact unpitched percussion patches.
+	 */
+	public double[][] rest_durations_separated_by_channel;
+	
+	/**
+	 * An array indicating the durations of all complete rests, expressed in terms of a fraction of a quarter
+	 * note's duration (e.g. a half rest would have a value of 2). A complete rest is defined as a period in
+	 * which no pitched notes are sounding on any MIDI channel. Non-pitched (MIDI channel 10) notes are NOT
+	 * considered in this calculation. The index indicates the index of the rest, and the rests are ordered
+	 * based on the order they occur in the piece. Rests shorter than 0.1 of a quarter note are ignored (i.e.
+	 * not included in this listing). A value of null for this field indicates that there are no complete
+	 * rests in the piece.
+	 */
+	public double[] complete_rest_durations;
+	
 
 	/* PRIVATE FIELDS ***************************************************************************************/
 
@@ -558,6 +669,10 @@ public class MIDIIntermediateRepresentations
 		generateSequenceDurationIntermediateRepresentations();
 		//System.out.println(sequence_duration);
 
+		generateAverageTickDuration();
+		// System.out.println("Average tick duration (in seconds): " + average_tick_duration);
+		// System.out.println("Ticks per beat: " + sequence.getResolution());
+		
 		generateTempoAndChannelVolumeMaps();
 		/*for (int i = 0; i < duration_of_ticks_in_seconds.length; i++)
 			System.out.println(i + " " + duration_of_ticks_in_seconds[i]);
@@ -585,7 +700,34 @@ public class MIDIIntermediateRepresentations
 
 		generateNoteCountIntermediateRepresentations();
 		//System.out.println(total_number_note_ons + " " + total_number_pitched_note_ons + " " + total_number_non_pitched_note_ons);
-
+		
+		generateRhythmicValueFeatures();
+		// System.out.println("Fraction thirty second notes: " + rhythmic_value_histogram[0]);
+		// System.out.println("Fraction sixteenth notes: " + rhythmic_value_histogram[1]);
+		// System.out.println("Fraction eighth notes: " + rhythmic_value_histogram[2]);
+		// System.out.println("Fraction dotted eighth notes: " + rhythmic_value_histogram[3]);
+		// System.out.println("Fraction quarter notes: " + rhythmic_value_histogram[4]);
+		// System.out.println("Fraction dotted quarter notes: " + rhythmic_value_histogram[5]);
+		// System.out.println("Fraction half notes: " + rhythmic_value_histogram[6]);
+		// System.out.println("Fraction dotted half notes: " + rhythmic_value_histogram[7]);
+		// System.out.println("Fraction whole notes: " + rhythmic_value_histogram[8]);
+		// System.out.println("Fraction dotted whole notes: " + rhythmic_value_histogram[9]);
+		// System.out.println("Fraction double whole notes: " + rhythmic_value_histogram[10]);
+		// System.out.println("Fraction dotted double whole notes: " + rhythmic_value_histogram[11]);
+		// System.out.println("---");
+		// System.out.println("Average quarter note duration (seconds): " + average_quarter_note_duration_in_seconds);
+		// System.out.println("---");
+		// for (int i = 0; i < runs_of_same_rhythmic_value.length; i ++)		
+		//	for (int j = 0; j < runs_of_same_rhythmic_value[i].size(); j++)
+		// 		System.out.println("Rhythmic Value: " + i + " Run Length: " + runs_of_same_rhythmic_value[i].get(j));
+		// System.out.println("---");			
+		// for (int i = 0; i < rhythmic_value_of_each_note_in_quarter_notes.length; i++)
+		//	System.out.println(rhythmic_value_of_each_note_in_quarter_notes[i]);
+		// System.out.println("===");
+		// for (int i = 0; i < rhythmic_value_offsets.length; i++)
+		//	System.out.println(rhythmic_value_offsets[i]);
+		// System.out.println("===");
+		
 		generateBeatHistogram();
 		/*for (int i = 0; i < beat_histogram.length; i++)
 			System.out.println("BPM: " + i + ": " + beat_histogram[i]);*/
@@ -678,8 +820,9 @@ public class MIDIIntermediateRepresentations
 			for (int j = 0; j < note_sounding_on_a_channel_tick_map[i].length; j++)
 				System.out.print("Channel " + j + ": " + note_sounding_on_a_channel_tick_map[i][j] + "  |  ");
 			System.out.print("\n");
-		}*/
-
+		}
+		System.out.println("Number of active voices: " + number_of_active_voices);*/
+		
 		generatePitchAndPitchClaessesOfAllNoteOns();
 		/*
 		for (int i = 0; i < pitch_classes_of_all_note_ons.length; i++)
@@ -717,6 +860,25 @@ public class MIDIIntermediateRepresentations
 			for (int j = 0; j < note_loudnesses[i].length; j++)
 				System.out.print("   " + note_loudnesses[i][j]);
 		System.out.println("\n");*/
+		
+		generateRestDurationsSeparatedByChannel();
+		/*for (int i = 0; i < rest_durations_separated_by_channel.length; i++)
+		{
+			for (int j = 0; j < rest_durations_separated_by_channel[i].length; j++)
+				System.out.print(rest_durations_separated_by_channel[i][j] + " / ");
+			System.out.print("\n");
+		}*/
+		
+		generateCompleteRestDurations();
+		/*if (complete_rest_durations == null)
+			System.out.print("complete_rest_durataions: null");
+		else
+		{
+			System.out.print("complete_rest_durataions: ");
+			for (int i = 0; i < complete_rest_durations.length; i++)
+				System.out.print(complete_rest_durations[i] + " / ");
+		}
+		System.out.print("\n");*/
 	}
 
 	
@@ -835,6 +997,15 @@ public class MIDIIntermediateRepresentations
 
 
 	/**
+	 * Calculate the value of the average_tick_duration field.
+	 */
+	private void generateAverageTickDuration()
+	{
+		average_tick_duration = sequence_duration_precise / ((double) sequence.getTickLength());
+	}
+	
+	
+	/**
 	 * Calculate the value of the duration_of_ticks_in_seconds and volume_of_channels_tick_map fields based on
 	 * tempo change and channel volume controller messages messages.
 	 */
@@ -883,7 +1054,7 @@ public class MIDIIntermediateRepresentations
 						double current_seconds_per_tick = ((double) microseconds_per_beat) / ((double) ticks_per_beat);
 						current_seconds_per_tick = current_seconds_per_tick / 1000000.0;
 
-						//System.out.println("Tick: " + event.getTick() + "  Current: " + current_seconds_per_tick  + "   Average: " + (1.0 / mean_ticks_per_second));
+						// System.out.println("Tick: " + event.getTick() + "  Current: " + current_seconds_per_tick  + "   Average: " + (1.0 / mean_ticks_per_second));
 						
 						// Make all subsequent tempos be at the current_seconds_per_tick rate
 						for (int i = (int) event.getTick(); i < duration_of_ticks_in_seconds.length; i++)
@@ -1082,6 +1253,243 @@ public class MIDIIntermediateRepresentations
 			total_number_non_pitched_note_ons += non_pitched_instrument_prevalence[i];
 	}
 
+
+	/**
+	 * Calculate the values of the average_quarter_note_duration_in_seconds, rhythmic_value_histogram,
+	 * runs_of_same_rhythmic_value, rhythmic_value_of_each_note_in_quarter_notes and rhythmic_value_offsets
+	 * fields.
+	 */
+	private void generateRhythmicValueFeatures()
+	{
+		// The number of ticks per quarter note for the entire sequence
+		int ppqn_ticks_per_beat = sequence.getResolution();
+		
+		// The number of ticks corresponding to each note value
+		int ticks_per_thirty_second_note = ppqn_ticks_per_beat / 8;
+		int ticks_per_sixteenth_note = ppqn_ticks_per_beat / 4;
+		int ticks_per_eighth_note = ppqn_ticks_per_beat / 2;
+		int ticks_per_dotted_eighth_note = ppqn_ticks_per_beat * 3 / 4;
+		int ticks_per_quarter_note = ppqn_ticks_per_beat;
+		int ticks_per_dotted_quarter_note = ppqn_ticks_per_beat * 3 / 2;
+		int ticks_per_half_note = ppqn_ticks_per_beat * 2;
+		int ticks_per_dotted_half_note = ppqn_ticks_per_beat * 3;
+		int ticks_per_whole_note = ppqn_ticks_per_beat * 4;
+		int ticks_per_dotted_whole_note = ppqn_ticks_per_beat * 6;
+		int ticks_per_double_whole_note = ppqn_ticks_per_beat * 8;
+		int ticks_per_dotted_double_whole_note = ppqn_ticks_per_beat * 12;
+	
+		// The average duration in seconds of a whole not 
+		average_quarter_note_duration_in_seconds = (double) ticks_per_quarter_note * average_tick_duration;
+		
+		// The number of ticks corresponding to each note value in the form of an array
+		int central_ticks_per_note_value[] = new int[] { ticks_per_thirty_second_note, // i=0
+														 ticks_per_sixteenth_note, // i=1
+														 ticks_per_eighth_note, // i=2
+														 ticks_per_dotted_eighth_note, // i=3
+														 ticks_per_quarter_note, // i=4
+														 ticks_per_dotted_quarter_note, // i=5
+														 ticks_per_half_note, // i=6
+														 ticks_per_dotted_half_note, // i=7
+														 ticks_per_whole_note, // i=8
+														 ticks_per_dotted_whole_note, // i=9
+														 ticks_per_double_whole_note, // i=10
+														 ticks_per_dotted_double_whole_note }; // i=11
+		
+		// The lowest number of ticks that a note of the given value can have
+		int lower_bound_ticks_per_note_value[] = new int[central_ticks_per_note_value.length];
+		lower_bound_ticks_per_note_value[0] = 0;
+		for (int i = 1; i < lower_bound_ticks_per_note_value.length; i++)
+			lower_bound_ticks_per_note_value[i] = central_ticks_per_note_value[i-1] + ((central_ticks_per_note_value[i] - central_ticks_per_note_value[i-1]) / 2);
+		// for (int i = 0; i < lower_bound_ticks_per_note_value.length; i++)
+		//	System.out.println("-- " + i + " " + ppqn_ticks_per_beat + " " + central_ticks_per_note_value[i] + " " + lower_bound_ticks_per_note_value[i]);
+		
+		// The number of notes corresponding to each note value
+		int[] rhythmic_duration_note_counts = new int[lower_bound_ticks_per_note_value.length]; 
+		
+		// Initialize runs_of_same_rhythmic_value
+		runs_of_same_rhythmic_value = new LinkedList[central_ticks_per_note_value.length]; 
+		for (int i = 0; i < runs_of_same_rhythmic_value.length; i++)
+			runs_of_same_rhythmic_value[i] = new LinkedList<>();
+
+		// The offset in duration of each note from the exact idealized duration of its nearest rhythmic
+		// value, expressed as a fraction of the duration of an idealized quarter note
+		LinkedList<Double> quantization_offsets_in_quarter_note_fractions = new LinkedList<>();
+		
+		// Fill rhythmic_duration_note_counts for the entire sequence
+		for (int n_track = 0; n_track < tracks.length; n_track++)
+		{
+			// The rhythmic value of each note on this track, divided by channel, and in the order they occur
+			// on that channel
+			LinkedList<Integer>[] ordered_rhythmic_values_by_channel = new LinkedList[16]; 
+			for (int i = 0; i < ordered_rhythmic_values_by_channel.length; i++)
+				ordered_rhythmic_values_by_channel[i] = new LinkedList<>();
+
+			// Process this track
+			Track track = tracks[n_track];
+			for (int n_event = 0; n_event < track.size(); n_event++)
+			{
+				// Get the MIDI message corresponding to the next MIDI event
+				MidiEvent event = track.get(n_event);
+				MidiMessage message = event.getMessage();
+
+				// If message is a ShortMessage (which Note Ons are)
+				if (message instanceof ShortMessage)
+				{
+					ShortMessage short_message = (ShortMessage) message;
+
+					// If a Note On message is encountered
+					if (short_message.getCommand() == 0x90)
+					{
+						if (short_message.getData2() != 0) // not velocity 0
+						{
+							// Look ahead to find the corresponding note off for this note on. Defaults
+							// to the last tick if no corresponding note off is found.
+							int event_start_tick = (int) event.getTick();
+							int event_end_tick = findCorrespondingNoteOffEndTick(short_message, n_event, track);
+							
+							// Calculate duration in ticks of the note
+							int duration_in_ticks = event_end_tick - event_start_tick;
+							
+							// System.out.println("NOTE FOUND: lasts " + duration_in_ticks + " ticks at " + ppqn_ticks_per_beat + " ticks per beat");
+	
+							// Map each note to its appropriate rhythmic value
+							for (int i = 0; i < rhythmic_duration_note_counts.length; i++)
+							{
+								if (i == rhythmic_duration_note_counts.length - 1)
+								{
+									// Fill in rhythmic_duration_note_counts
+									rhythmic_duration_note_counts[i]++;
+									// System.out.println("\tSet to rhythmic_duration_note_counts entry " + i);
+									
+									// Fill in ordered_rhythmic_values_by_channel
+									ordered_rhythmic_values_by_channel[short_message.getChannel()].add(i);
+									
+									// Fill in quantization_offsets_in_quarter_note_fractions
+									double quantization_offset_in_ticks = (double) Math.abs(duration_in_ticks - central_ticks_per_note_value[i]);
+									double quantization_offset_in_quarter_note_fractions = quantization_offset_in_ticks / (double) central_ticks_per_note_value[4];
+									// System.out.println("\t\tOffset: " + quantization_offset_in_ticks + " ticks " + quantization_offset_in_quarter_note_fractions + " quarter note fractions");
+									quantization_offsets_in_quarter_note_fractions.add(quantization_offset_in_quarter_note_fractions);
+								}
+								else if (duration_in_ticks < lower_bound_ticks_per_note_value[i+1])
+								{
+									// Fill in rhythmic_duration_note_counts
+									rhythmic_duration_note_counts[i]++;
+									// System.out.println("\tSet to rhythmic_duration_note_counts entry " + i);
+									
+									// Fill in ordered_rhythmic_values_by_channel
+									ordered_rhythmic_values_by_channel[short_message.getChannel()].add(i);
+									
+									// Fill in quantization_offsets_in_quarter_note_fractions
+									double quantization_offset_in_ticks = (double) Math.abs(duration_in_ticks - central_ticks_per_note_value[i]);
+									double quantization_offset_in_quarter_note_fractions = quantization_offset_in_ticks / (double) central_ticks_per_note_value[4];
+									// System.out.println("\t\tOffset: " + quantization_offset_in_ticks + " ticks " + quantization_offset_in_quarter_note_fractions + " quarter note fractions");
+									quantization_offsets_in_quarter_note_fractions.add(quantization_offset_in_quarter_note_fractions);
+									
+									// Exit the loop
+									break;
+								}
+							}
+						}
+					}
+				}
+			}
+			
+			// Update runs_of_same_rhythmic_value for this track
+			for (int chan = 0; chan < ordered_rhythmic_values_by_channel.length; chan++)
+			{
+				int current_run_length = 0;
+				int last_rhythmic_value = -1;
+				for (int note = 0; note < ordered_rhythmic_values_by_channel[chan].size(); note++)
+				{
+					int this_rhythmic_value = ordered_rhythmic_values_by_channel[chan].get(note);
+					// System.out.println("Track: " + n_track + " Channel : " + chan + " Rhythmic Value: " + this_rhythmic_value);
+					if (last_rhythmic_value == -1)
+					{
+						last_rhythmic_value = this_rhythmic_value;
+						current_run_length = 1;
+					}
+					else if (this_rhythmic_value == last_rhythmic_value)
+						current_run_length++;
+					else
+					{
+						runs_of_same_rhythmic_value[last_rhythmic_value].add(current_run_length);
+						// System.out.println("\t1) ADD Rhythmic Value: " + last_rhythmic_value + " Run Length: " + current_run_length);
+						last_rhythmic_value = this_rhythmic_value;
+						current_run_length = 1;
+					}
+				}
+				if (last_rhythmic_value != -1)
+				{
+					runs_of_same_rhythmic_value[last_rhythmic_value].add(current_run_length);
+					// System.out.println("\t2) ADD Rhythmic Value: " + last_rhythmic_value + " Run Length: " + current_run_length);
+				}
+			}
+		}
+
+		// Debugging code
+		// System.out.println("Number thirty second notes: " + rhythmic_duration_note_counts[0]);
+		// System.out.println("Number sixteenth notes: " + rhythmic_duration_note_counts[1]);
+		// System.out.println("Number eighth notes: " + rhythmic_duration_note_counts[2]);
+		// System.out.println("Number dotted eighth notes: " + rhythmic_duration_note_counts[3]);
+		// System.out.println("Number quarter notes: " + rhythmic_duration_note_counts[4]);
+		// System.out.println("Number dotted quarter notes: " + rhythmic_duration_note_counts[5]);
+		// System.out.println("Number half notes: " + rhythmic_duration_note_counts[6]);
+		// System.out.println("Number dotted half notes: " + rhythmic_duration_note_counts[7]);
+		// System.out.println("Number whole notes: " + rhythmic_duration_note_counts[8]);
+		// System.out.println("Number dotted whole notes: " + rhythmic_duration_note_counts[9]);
+		// System.out.println("Number double whole notes: " + rhythmic_duration_note_counts[10]);
+		// System.out.println("Number dotted double whole notes: " + rhythmic_duration_note_counts[11]);
+
+		// Calculate the total number of notes
+		int total_notes = 0;
+		for (int i = 0; i < rhythmic_duration_note_counts.length; i++)
+			total_notes += rhythmic_duration_note_counts[i];
+		
+		// Calculate the normalized fraction of notes corresponding to each rhythmic value
+		rhythmic_value_histogram = new double[rhythmic_duration_note_counts.length];
+		for (int i = 0; i < rhythmic_value_histogram.length; i++)
+		{
+			if (total_notes == 0)
+				rhythmic_value_histogram[i] = 0.0;
+			else rhythmic_value_histogram[i] = ((double) rhythmic_duration_note_counts[i]) / (double) total_notes;
+		}		
+		
+		// Construct an array with one entry for each note, where the value indicates the quantized duration
+		// of the note in quarter notes (e.g. 0.5 dorresponds to a duration of an eighth note).
+		rhythmic_value_of_each_note_in_quarter_notes = new double[total_notes];
+		int rvofeniqn_index = 0;
+		for (int i = 0; i < rhythmic_duration_note_counts.length; i++)
+		{
+			double quarter_note_fraction = 0.0;
+			switch (i)
+			{
+				case 0: quarter_note_fraction = 1.0 / 8.0; break;
+				case 1: quarter_note_fraction = 1.0 / 4.0; break;
+				case 2: quarter_note_fraction = 1.0 / 2.0; break;
+				case 3: quarter_note_fraction = 1.0 * 3.0 / 4.0; break;
+				case 4: quarter_note_fraction = 1.0; break;
+				case 5: quarter_note_fraction = 1.0 * 1.5; break;
+				case 6: quarter_note_fraction = 1.0 * 2.0; break;
+				case 7: quarter_note_fraction = 1.0 * 3.0; break;
+				case 8: quarter_note_fraction = 1.0 * 4.0; break;
+				case 9: quarter_note_fraction = 1.0 * 6.0; break;
+				case 10:quarter_note_fraction = 1.0 * 8.0; break;
+				case 11: quarter_note_fraction = 1.0 * 12.0; break;
+			}
+			
+			for (int j = 0; j < rhythmic_duration_note_counts[i]; j++)
+			{
+				rhythmic_value_of_each_note_in_quarter_notes[rvofeniqn_index] = quarter_note_fraction;
+				rvofeniqn_index++;
+			}
+		}
+		
+		// Prepare rhythmic_value_offsets
+		rhythmic_value_offsets = new double[quantization_offsets_in_quarter_note_fractions.size()];
+		for (int i = 0; i < rhythmic_value_offsets.length; i++)
+			rhythmic_value_offsets[i] = quantization_offsets_in_quarter_note_fractions.get(i);
+	}
+		
 
 	/**
 	 * Calculate the values of the beat_histogram field.
@@ -1417,7 +1825,7 @@ public class MIDIIntermediateRepresentations
 		// Fill melodic_interval_histogram and melodic_intervals_by_track_and_channel
 		for (int n_track = 0; n_track < tracks.length; n_track++)
 		{
-			// Prepare melodic_intervals_by_channel for this channel, and add it to
+			// Prepare melodic_intervals_by_channel for this track, and add it to
 			// melodic_intervals_by_track_and_channel
 			LinkedList<Integer>[] melodic_intervals_by_channel = new LinkedList[16];
 			for (int i = 0; i < melodic_intervals_by_channel.length; i++)
@@ -1479,7 +1887,8 @@ public class MIDIIntermediateRepresentations
 
 
 	/**
-	 * Calculate the values of the channel_statistics, list_of_note_on_pitches_by_channel and
+	 * Calculate the values of the channel_statistics, number_of_active_voices,
+	 * total_time_notes_sounding_per_channel, list_of_note_on_pitches_by_channel and 
 	 * note_sounding_on_a_channel_tick_map fields.
 	 */
 	private void generateChannelNoteOnIntermediateRepresentations()
@@ -1635,15 +2044,15 @@ public class MIDIIntermediateRepresentations
 
 		// Fill column 1 of channel_statistics by finding the total amount of time that one or more notes were
 		// playing on each channel
-		double[] total_seconds = new double[channel_statistics.length];
-		for (int ch = 0; ch < total_seconds.length; ch++)
-			total_seconds[ch] = 0.0;
+		total_time_notes_sounding_per_channel = new double[channel_statistics.length];
+		for (int ch = 0; ch < total_time_notes_sounding_per_channel.length; ch++)
+			total_time_notes_sounding_per_channel[ch] = 0.0;
 		for (int ti = 0; ti < note_sounding_on_a_channel_tick_map.length; ti++)
 			for (int ch = 0; ch < note_sounding_on_a_channel_tick_map[ti].length; ch++)
 				if (note_sounding_on_a_channel_tick_map[ti][ch])
-					total_seconds[ch] += duration_of_ticks_in_seconds[ti];
+					total_time_notes_sounding_per_channel[ch] += duration_of_ticks_in_seconds[ti];
 		for (int ch = 0; ch < channel_statistics.length; ch++)
-			channel_statistics[ch][1] = (int) total_seconds[ch];
+			channel_statistics[ch][1] = (int) total_time_notes_sounding_per_channel[ch];
 
 		// Fill column 2 of channel_statistics by dividing by the total number of notes per channel notes on
 		// each channel
@@ -1670,6 +2079,13 @@ public class MIDIIntermediateRepresentations
 			else
 				channel_statistics[i][6] = sum_of_pitches[i] / channel_statistics[i][0];
 		}
+		
+		// Calculate number_of_active_voices
+		int num_of_active_voices = 0;
+		for (int chan = 0; chan < channel_statistics.length; chan++)
+			if (channel_statistics[chan][0] != 0)
+				num_of_active_voices++;
+		number_of_active_voices = (double) num_of_active_voices;
 	}
 
 	
@@ -2007,6 +2423,137 @@ public class MIDIIntermediateRepresentations
 		}
 	}
 
+
+	/**
+	 * Calculate the values of the rest_durations_separated_by_channel field.
+	 */
+	private void generateRestDurationsSeparatedByChannel()
+	{
+		// Set non_empty_channels to true for channels that have at least one note
+		boolean[] non_empty_channels = new boolean[channel_statistics.length];
+		for (int i = 0; i < non_empty_channels.length; i++)
+		{
+			if (channel_statistics[i][0] != 0)
+				non_empty_channels[i] = true;
+			else non_empty_channels[i] = false;
+		}
+		
+		// A list of the duration of all rests (in seconds) in each channel, in the order that they appear
+		// in that channel. Only channels including at least one note are included.
+		ArrayList<ArrayList<Double>> rest_dration_list = new ArrayList<>();
+
+		// The number of ticks to examine (the minus 1 is because Java doesn't count the last tick
+		int ticks_to_test = note_sounding_on_a_channel_tick_map.length - 1;
+		
+		// Fill rest_dration_list channel by channel
+		for (int chan = 0; chan < non_empty_channels.length; chan++)
+		{
+			if (non_empty_channels[chan])
+			{
+				// Note the amount of time during which there is a rest on each tick of this channel
+				double[] seconds_of_rest_per_tick = new double[ticks_to_test];
+				for (int tick = 0; tick < ticks_to_test; tick++)
+				{
+					if (!note_sounding_on_a_channel_tick_map[tick][chan])
+						seconds_of_rest_per_tick[tick] = duration_of_ticks_in_seconds[tick];
+					else seconds_of_rest_per_tick[tick] = 0.0;
+				}
+				
+				// Find the duration of each rest in this channel (combined across ticks)
+				ArrayList<Double> rest_durations_on_this_channel = new ArrayList<>();
+				double current_rest_duration = 0.0;
+				for (int tick = 0; tick < seconds_of_rest_per_tick.length; tick++)
+				{
+					if (seconds_of_rest_per_tick[tick] == 0.0 && current_rest_duration != 0.0)
+					{
+						rest_durations_on_this_channel.add(current_rest_duration);
+						current_rest_duration = 0.0;
+					}
+					else if (seconds_of_rest_per_tick[tick] != 0.0)
+						current_rest_duration += seconds_of_rest_per_tick[tick];
+				}
+				if (current_rest_duration != 0.0)
+					rest_durations_on_this_channel.add(current_rest_duration);
+				
+				// Add the list of durations to rest_dration_list
+				if (rest_durations_on_this_channel.size() > 0)
+					rest_dration_list.add(rest_durations_on_this_channel);
+			}
+		}
+		
+		// Fill rest_durations_separated_by_channel based on rest_dration_list, after conversion from seconds
+		// to fraction of a quarter note
+		if (rest_dration_list.size() > 0)
+		{
+			rest_durations_separated_by_channel = new double[rest_dration_list.size()][];
+			for (int i = 0; i < rest_durations_separated_by_channel.length; i++)
+			{
+				rest_durations_separated_by_channel[i] = new double[rest_dration_list.get(i).size()];
+				for (int j = 0; j < rest_durations_separated_by_channel[i].length; j++)
+				{
+					double quarter_note_value = rest_dration_list.get(i).get(j) / average_quarter_note_duration_in_seconds;
+					rest_durations_separated_by_channel[i][j] = quarter_note_value;
+				}
+			}
+		}
+		
+		// Filter out all rests shorter than 0.1 of a quarter note.
+		rest_durations_separated_by_channel = ArrayMethods.removeEntriesLessThan(rest_durations_separated_by_channel, 0.1);
+	}
+	
+	
+	/**
+	 * Calculate the values of the complete_rest_durations field.
+	 */	
+	private void generateCompleteRestDurations()
+	{
+		// A list of the duration of all complete rests (in seconds) in the piece, in the order that they 
+		// appear. Channel 10 notes are NOT included.
+		ArrayList<Double> complete_rest_durations_list = new ArrayList();
+		
+		// The number of ticks to examine (the minus 1 is because Java doesn't count the last tick
+		int ticks_to_test = note_sounding_on_a_channel_tick_map.length - 1;
+
+		// Note the amount of time during which there is a complete rest on each tick
+		double[] seconds_of_rest_per_tick = new double[ticks_to_test];
+		for (int tick = 0; tick < ticks_to_test; tick++)
+		{
+			if (mckay.utilities.staticlibraries.ArrayMethods.doesArrayContainOnlyThisValue(pitch_strength_by_tick_chart[tick], 0))
+				seconds_of_rest_per_tick[tick] = duration_of_ticks_in_seconds[tick];
+			else seconds_of_rest_per_tick[tick] = 0.0;
+		}
+			
+		// Find the duration of each complete rest
+		double current_rest_duration = 0.0;
+		for (int tick = 0; tick < seconds_of_rest_per_tick.length; tick++)
+		{
+			if (seconds_of_rest_per_tick[tick] == 0.0 && current_rest_duration != 0.0)
+			{
+				complete_rest_durations_list.add(current_rest_duration);
+				current_rest_duration = 0.0;
+			}
+			else if (seconds_of_rest_per_tick[tick] != 0.0)
+				current_rest_duration += seconds_of_rest_per_tick[tick];
+		}
+		if (current_rest_duration != 0.0)
+			complete_rest_durations_list.add(current_rest_duration);
+
+		// Fill complete_rest_durations based on complete_rest_durations_list, after conversion from seconds
+		// to fraction of a quarter note
+		if (complete_rest_durations_list.size() > 0)
+		{
+			complete_rest_durations = new double[complete_rest_durations_list.size()];
+			for (int i = 0; i < complete_rest_durations.length; i++)
+			{
+				double quarter_note_value = complete_rest_durations_list.get(i) / average_quarter_note_duration_in_seconds;
+				complete_rest_durations[i] = quarter_note_value;
+			}
+		}		
+		
+		// Filter out all rests shorter than 0.1 of a quarter note.
+		complete_rest_durations = ArrayMethods.removeEntriesLessThan(complete_rest_durations, 0.1);
+	}
+	
 	
 	/* PRIVATE STATIC METHODS *******************************************************************************/
 

@@ -1,19 +1,17 @@
 package jsymbolic2.features;
 
-import java.util.LinkedList;
 import javax.sound.midi.*;
 import ace.datatypes.FeatureDefinition;
 import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that is set to 1 if the initial meter is compound (numerator of time signature is
- * greater than or equal to 6 and is evenly divisible by 3) and to 0 if it is simple (if the above condition
- * is not fulfilled).
+ * A feature calculator that is set to 1 if the initial meter is a standard complex meter (i.e. if the
+ * numerator of the time signature is 5, 7, 9, 11, 13, 15, 22 or 25) and to 0 otherwise.
  *
  * @author Cory McKay
  */
-public class CompoundOrSimpleMeterFeature
+public class ComplexInitialMeterFeature
 		extends MIDIFeatureExtractor
 {
 	/* CONSTRUCTOR ******************************************************************************************/
@@ -22,15 +20,15 @@ public class CompoundOrSimpleMeterFeature
 	/**
 	 * Basic constructor that sets the values of the fields inherited from this class' superclass.
 	 */
-	public CompoundOrSimpleMeterFeature()
+	public ComplexInitialMeterFeature()
 	{
-		code = "R-32";
-		String name = "Compound Or Simple Meter";
-		String description = "Set to 1 if the initial meter is compound (numerator of time signature is greater than or equal to 6 and is evenly divisible by 3) and to 0 if it is simple (if the above condition is not fulfilled).";
+		code = "R-4";
+		String name = "Complex Initial Meter";
+		String description = "Set to 1 if the initial meter is a standard complex meter (i.e. if the numerator of the time signature is 5, 7, 9, 11, 13, 15, 22 or 25) and to 0 otherwise.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, description, is_sequential, dimensions);
-		dependencies = null;
+		dependencies = new String[] { "Initial Time Signature" };
 		offsets = null;
 	}
 	
@@ -60,25 +58,18 @@ public class CompoundOrSimpleMeterFeature
 		double value = 0.0;
 		if (sequence_info != null)
 		{
-			// Default to simple
+			// Default to simple meter
 			value = 0.0;
-
-			// If time signature specified
-			if (!((LinkedList) sequence_info.overall_metadata[1]).isEmpty())
-			{
-				// Convert data types
-				Object[] numerators_objects = ((LinkedList) sequence_info.overall_metadata[1]).toArray();
-				int[] numerators = new int[numerators_objects.length];
-				for (int i = 0; i < numerators.length; i++)
-					numerators[i] = ((Integer) numerators_objects[i]).intValue();
-
-				// Find initial numerator
-				int num = numerators[0];
-
-				// Find if compound
-				if (num >= 6 && (num % 3) == 0)
-					value = 1.0;
-			}
+			
+			// Get the numerator of the time signature
+			double initial_time_signature_numerator = other_feature_values[0][0];
+			
+			// Set to compound meter if appropriate
+			if ( initial_time_signature_numerator == 5.0 || initial_time_signature_numerator == 7.0 ||
+			     initial_time_signature_numerator == 9.0 || initial_time_signature_numerator == 11.0 ||
+			     initial_time_signature_numerator == 13.0 || initial_time_signature_numerator == 15.0 ||
+			     initial_time_signature_numerator == 22.0 || initial_time_signature_numerator == 25.0 )
+				value = 1.0;
 		}
 
 		double[] result = new double[1];

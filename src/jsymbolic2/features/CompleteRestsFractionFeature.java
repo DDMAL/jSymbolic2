@@ -1,19 +1,19 @@
 package jsymbolic2.features;
 
-import java.util.ArrayList;
+import java.util.stream.DoubleStream;
 import javax.sound.midi.Sequence;
 import ace.datatypes.FeatureDefinition;
 import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the standard deviation (in seconds) of the total amount of time per MIDI
- * channel in which no notes are sounding in that channel. Only channels with at least one note are counted in
- * this calculation.
+ * A feature calculator that finds the fraction of the music during which no pitched notes are sounding on any
+ * MIDI channel. Non-pitched (MIDI channel 10) notes are not considered in this calculation.
  *
  * @author Tristano Tenaglia and Cory McKay
  */
-public class VariabilityAcrossVoicesOfTotalRestsPerVoice extends MIDIFeatureExtractor
+public class CompleteRestsFractionFeature
+		extends MIDIFeatureExtractor
 {
 	/* CONSTRUCTOR ******************************************************************************************/
 
@@ -21,11 +21,11 @@ public class VariabilityAcrossVoicesOfTotalRestsPerVoice extends MIDIFeatureExtr
 	/**
 	 * Basic constructor that sets the values of the fields inherited from this class' superclass.
 	 */
-	public VariabilityAcrossVoicesOfTotalRestsPerVoice()
+	public CompleteRestsFractionFeature()
 	{
-		code = "R-29";
-		String name = "Variability Across Voices of Total Rests Per Voice";
-		String description = "Standard deviation (in seconds) of the total amount of time per MIDI channel in which no notes are sounding in that channel. Only channels with at least one note are counted in this calculation.";
+		code = "R-41";
+		String name = "Complete Rests Fraction";
+		String description = "Fraction of the music during which no pitched notes are sounding on any MIDI channel. Non-pitched (MIDI channel 10) notes are not considered in this calculation.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, description, is_sequential, dimensions);
@@ -58,37 +58,36 @@ public class VariabilityAcrossVoicesOfTotalRestsPerVoice extends MIDIFeatureExtr
 	{
 		double value;
 		if (sequence_info != null)
-		{
+		{	
 			// Get information from sequence_info
-			int[][] channel_stats = sequence_info.channel_statistics;
+			short[][] pitch_strength_by_tick_chart = sequence_info.pitch_strength_by_tick_chart;
+			double[] seconds_per_tick = sequence_info.duration_of_ticks_in_seconds;
 			
-			// Find which channels have notes, and what the total amount of rest is per channel
-			ArrayList<Double> total_rest_time_per_channel = new ArrayList<>();
-			for (int channel = 0; channel < channel_stats.length; channel++)
+			// The number of ticks to examine (the minus 1 is because Java doesn't count the last tick
+			int ticks_to_test = pitch_strength_by_tick_chart.length - 1;
+			
+			// Find the durations of complete rests, tick by tick
+			double[] seconds_of_rest_per_tick = new double[ticks_to_test];
+			for (int tick = 0; tick < ticks_to_test; tick++)
 			{
-				int total_notes_on_this_channel = channel_stats[channel][0];
-				if (total_notes_on_this_channel > 0)
-				{
-					int total_non_silence_this_channel = channel_stats[channel][1];
-					total_rest_time_per_channel.add(sequence_info.sequence_duration_precise - total_non_silence_this_channel);
-				}
+				short[] pitch_velocities = pitch_strength_by_tick_chart[tick];
+				if (mckay.utilities.staticlibraries.ArrayMethods.doesArrayContainOnlyThisValue(pitch_velocities, 0))
+					seconds_of_rest_per_tick[tick] = seconds_per_tick[tick];
 			}
 			
-			// Convert to an array
-			double[] total_rest_time_per_channel_array = new double[total_rest_time_per_channel.size()];
-			for (int i = 0; i < total_rest_time_per_channel_array.length; i++)
-				total_rest_time_per_channel_array[i] = total_rest_time_per_channel.get(i);
-
-			// Calculate the standard deviation
-			if (total_rest_time_per_channel_array.length == 0)
+			// Add up the durations of all the complete rests
+			double total_complete_rests = DoubleStream.of(seconds_of_rest_per_tick).sum();
+			
+			// Divide by the length of the piece
+			if (sequence_info.sequence_duration_precise == 0.0)
 				value = 0.0;
-			else 
-				value = mckay.utilities.staticlibraries.MathAndStatsMethods.getStandardDeviation(total_rest_time_per_channel_array);
+			else
+				value = total_complete_rests / sequence_info.sequence_duration_precise;
 		}
 		else value = -1.0;
 
 		double[] result = new double[1];
 		result[0] = value;
-		return result;
+		return result;		
 	}
 }

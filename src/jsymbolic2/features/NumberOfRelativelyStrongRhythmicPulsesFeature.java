@@ -22,7 +22,7 @@ public class NumberOfRelativelyStrongRhythmicPulsesFeature
 	 */
 	public NumberOfRelativelyStrongRhythmicPulsesFeature()
 	{
-		code = "R-11";
+		code = "RT-19";
 		String name = "Number of Relatively Strong Rhythmic Pulses";
 		String description = "Number of beat histogram peaks with magnitudes at least 30% as high as the magnitude of the beat histogram peak with the highest magnitude.";
 		boolean is_sequential = true;
