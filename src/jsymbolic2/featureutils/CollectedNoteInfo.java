@@ -74,6 +74,10 @@ public class CollectedNoteInfo
 					{
 						if (start_message.getData2() != 0) // If not velocity 0
 						{
+							// Store the pitch and velocity of this note
+							int pitch = start_message.getData1();
+							int velocity = start_message.getData2();
+							
 							// Look ahead to find the corresponding Note Off for this Note On
 							int event_start_tick = (int) this_event.getTick();
 							for (int i = event_i + 1; i < this_track.size(); i++)
@@ -87,9 +91,9 @@ public class CollectedNoteInfo
 										{
 											if (end_message.getData1() == start_message.getData1()) // Must be same pitch as Note On
 											{
-												int pitch = end_message.getData1();
 												int event_end_tick = (int) this_track.get(i).getTick();
 												NoteInfo this_note = new NoteInfo( pitch,
+																				   velocity,
 																				   event_start_tick,
 																				   event_end_tick,
 																				   track_i,
@@ -104,9 +108,9 @@ public class CollectedNoteInfo
 											{
 												if (end_message.getData1() == start_message.getData1()) // same pitch
 												{
-													int pitch = end_message.getData1();
 													int event_end_tick = (int) this_track.get(i).getTick();
 													NoteInfo this_note = new NoteInfo( pitch,
+																					   velocity,
 																					   event_start_tick,
 																					   event_end_tick,
 																					   track_i,

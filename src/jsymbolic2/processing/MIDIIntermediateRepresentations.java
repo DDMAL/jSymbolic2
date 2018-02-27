@@ -65,7 +65,8 @@ public class MIDIIntermediateRepresentations
 	 * time signature metamessages are present.</li>
 	 *
 	 * <li><i>Indice 3:</i> Integer storing the initial tempo in beats per minute. Based on the first 
-	 * encountered tempo metamessage. Any further tempo metamessages are ignored.</li>
+	 * encountered tempo metamessage. Any further tempo metamessages are ignored. Set to the MIDI default of
+	 * 120 BPM if no tempo metamessage is present.</li>
 	 * </ul>
 	 */
 	public Object[] overall_metadata;
@@ -96,7 +97,8 @@ public class MIDIIntermediateRepresentations
 	 * A table with rows (first index) corresponding to MIDI ticks and columns (second index) corresponding to
 	 * MIDI channels. Each entry's value is set to the channel volume at that tick, as set by channel volume
 	 * controller messages divided by 127. The default is set to 1.0, which corresponds to a controller value 
-	 * of 127.
+	 * of 127. IMPORTANT: only coarse channel volume (CC 7) messages are considered, not expression (CC 11) or
+	 * fine channel volume (CC 39) messages are considered.
 	 */
 	public double[][] volume_of_channels_tick_map;
 
@@ -212,8 +214,9 @@ public class MIDIIntermediateRepresentations
 	 * The magnitude of each bin is proportional to the aggregated loudnesses of the notes that occur at the
 	 * bin's rhythmic periodicity, and calculation is done using autocorrelation. All bins below 40 BPM are
 	 * set to 0 because autocorrelation was not performed at these lags (because the results are too noisy in
-	 * this range). Calculations did NOT take tempo change messages after the first into consideration, in
-	 * order to emphasize the metrical notation of the recording.
+	 * this range). Bins only go up to 200 BPM. Calculations use the overall average tempo of the piece, in
+	 * order to emphasize the metrical notation of the recording, and do thus do not take into account tempo
+	 * variations in the piece.
 	 */
 	public double[] beat_histogram;
 
@@ -230,6 +233,35 @@ public class MIDIIntermediateRepresentations
 	 * magnitudes are set to 0.
 	 */
 	public double[][] beat_histogram_thresholded_table;
+	
+	/**
+	 * A normalized histogram, with bins corresponding to rhythmic periodicities measured in beats per minute.
+	 * This is similar to the beat_histogram field, except that music is effectively transformed before this
+	 * feature is calculated to have a tempo of 120 beats per minute, rather than the tempo its actual tempo
+	 * setting indicates that it should have. Any variations in tempo are ignored; for the purposes of this
+	 * feature the tempo is consistently 120 BPM throughout the music. The magnitude of each bin is
+	 * proportional to the aggregated loudnesses of the notes that occur at the bin's (virtual) rhythmic periodicity,
+	 * and calculation is done using autocorrelation. All bins below the (virtual) 40 BPM periodicity (relative
+	 * to the virtual 120 BPM tempo) are set to 0 because autocorrelation was not performed at these lags
+	 * (because the results are too noisy in this range). Bins only go up to a (virtual) 200 BPM.
+	 */
+	public double[] beat_histogram_120_bpm_standardized;
+	
+	/**
+	 * Table with rows (first index) corresponding to the bins of the beat_histogram_120_bpm_standardized
+	 * (i.e. rhythmic periodicities measured in beats per minute, after a tempo transformation to 120 BPM
+	 * consistently throughout the music). Entries are set to the magnitude of the corresponding bin of
+	 * beat_histogram_120_bpm_standardized if the magnitude in that bin of beat_histogram_120_bpm_standardized
+	 * is high enough to meet this beat_histogram_thresholded_table_120_bpm_standardized column's threshold
+	 * requirements, and to 0 otherwise. Column 0 has a threshold that only allows
+	 * beat_histogram_120_bpm_standardized bins with a normalized frequency over 0.1 to be counted, column 1
+	 * has a threshold of higher than 0.01, and column 2 only counts beat_histogram_120_bpm_standardized bins
+	 * that have a normalized frequency at least 30% as high as the normalized frequency of the highest
+	 * beat_histogram bin. This table is then processed so that only peaks are included, which is to say that
+	 * entries of beat_histogram_thresholded_table_120_bpm_standardized that are adjacent to
+	 * beat_histogram_thresholded_table_120_bpm_standardized bins with higher magnitudes are set to 0.
+	 */
+	public double[][] beat_histogram_thresholded_table_120_bpm_standardized;	
 	
 	/**
 	 * A list of the duration of each note in the sequence, in seconds. This includes all notes, including
@@ -290,7 +322,8 @@ public class MIDIIntermediateRepresentations
 	 * such entry contains a list of all MIDI pitchbend values (the second MIDI data byte stored as an
 	 * Integer) associated with the Note On, in the order that they occurred. Note that the order of the root
 	 * list is based on an iteration through tracks, and then through MIDI events on that track; this means
-	 * that the order of the Note Ons may not necessarily be in the temporal order that they occur.
+	 * that the order of the Note Ons may not necessarily be in the temporal order that they occur. Note that
+	 * this only takes the second (more significant) pitch bend byte into account.
 	 */
 	public LinkedList<LinkedList<Integer>> pitch_bends_list;
 
@@ -551,7 +584,7 @@ public class MIDIIntermediateRepresentations
 	 * note and at least one rest are included here. The second index refers to the index of the rest (there
 	 * is one entry per rest), where rests are listed in the order in which they occur. A rest in this case is
 	 * defined as a period of time during which there are no notes being held on the particular channel in
-	 * question. Rests shorter than 0.1 of a quarter note are ignored (i.e. not included in this listing). A
+	 * question. Rests shorter than 0.1 of a quarter note are ignored (i.e. omitted from this listing). A
 	 * value of null for this field as a whole indicates that there are no rests at all. Individual channel
 	 * rows cannot be null.
 	 *
@@ -566,8 +599,8 @@ public class MIDIIntermediateRepresentations
 	 * which no pitched notes are sounding on any MIDI channel. Non-pitched (MIDI channel 10) notes are NOT
 	 * considered in this calculation. The index indicates the index of the rest, and the rests are ordered
 	 * based on the order they occur in the piece. Rests shorter than 0.1 of a quarter note are ignored (i.e.
-	 * not included in this listing). A value of null for this field indicates that there are no complete
-	 * rests in the piece.
+	 * omitted from this listing). A value of null for this field indicates that there are no complete rests
+	 * of sufficient duration in the piece.
 	 */
 	public double[] complete_rest_durations;
 	
@@ -618,32 +651,6 @@ public class MIDIIntermediateRepresentations
 		// Caclulate mean_ticks_per_second
 		mean_ticks_per_second = ((double) sequence.getTickLength()) / ((double) sequence.getMicrosecondLength() / 1000000.0);
 
-		// Print out all note ons and note offs for debugging
-		/*System.out.println("++++++++++++++++++++++++++++++++++++++++++++");
-		for (int n_track = 0; n_track < tracks.length; n_track++)
-		{
-			System.out.println("TRACK " + n_track + ":");
-			Track track = tracks[n_track];
-			for (int n_event = 0; n_event < track.size(); n_event++)
-			{
-				MidiEvent event = track.get(n_event);
-				MidiMessage message = event.getMessage();
-				if (message instanceof ShortMessage)
-				{
-					ShortMessage short_message = (ShortMessage) message;
-					if (short_message.getCommand() == 0x90) // note on
-					{
-						if (short_message.getData2() != 0) // not velocity 0
-							System.out.println("ON Tick: " + event.getTick() + "\tPitch: " + short_message.getData1());
-						if (short_message.getData2() == 0) // velocity 0
-							System.out.println("OFF Tick: " + event.getTick() + "\tPitch: " + short_message.getData1());
-					}
-					if (short_message.getCommand() == 0x80) // note off
-						System.out.println("OFF Tick: " + event.getTick() + "\tPitch: " + short_message.getData1());
-				}
-			}
-		}*/
-		
 		// Fill in the public fields of this class
 		// Commented out code is for the purpose of testing calculated values in case changes are made
 		
@@ -728,12 +735,12 @@ public class MIDIIntermediateRepresentations
 		//	System.out.println(rhythmic_value_offsets[i]);
 		// System.out.println("===");
 		
-		generateBeatHistogram();
+		generateBeatHistograms();
 		/*for (int i = 0; i < beat_histogram.length; i++)
 			System.out.println("BPM: " + i + ": " + beat_histogram[i]);*/
 	
-		generateBeatHistogramThresholdTable();
-		/*for (int i = 0; i < beat_histogram_thresholded_table.length; i++)
+		generateBeatHistogramThresholdedTables();
+		 /*for (int i = 0; i < beat_histogram_thresholded_table.length; i++)
 		{
 			System.out.print("\nBPM: " + i + "     ");
 			for (int j = 0; j < beat_histogram_thresholded_table[i].length; j++)
@@ -917,10 +924,10 @@ public class MIDIIntermediateRepresentations
 	{
 		// Instantiat overall_metadata
 		overall_metadata = new Object[4];
-		overall_metadata[0] = new Integer(0); // major or minor
+		overall_metadata[0] = 0; // major or minor
 		overall_metadata[1] = new LinkedList(); // time signature numerators
 		overall_metadata[2] = new LinkedList(); // time signature denominators
-		overall_metadata[3] = new Integer(0); // tempo
+		overall_metadata[3] = 120; // default MIDI tempo
 
 		// Note that a key signature and initial tempo have not yet been found
 		boolean key_sig_found = false;
@@ -972,16 +979,23 @@ public class MIDIIntermediateRepresentations
 
 							// Convert to beats per minute
 							float ms_tempo_float = (float) ms_tempo;
-							if (ms_tempo_float <= 0)
-								ms_tempo_float = 0.1f;
-							float bpm = 60000000.0f / ms_tempo_float;
-							overall_metadata[3] = new Integer((int) bpm);
+							if (ms_tempo_float <= 0) ms_tempo_float = 0.1f;
+							int bpm = Math.round(60000000.0f / ms_tempo_float);
+							overall_metadata[3] = bpm;
 
+							// Note that the tempo has been found
 							tempo_found = true;
 						}
 					}
 				}
 			}
+		}
+		
+		// Default tihe time signature to 4 / 4 if no time signature is
+		if (((LinkedList) overall_metadata[1]).isEmpty())
+		{
+			((LinkedList) overall_metadata[1]).add(4);
+			((LinkedList) overall_metadata[2]).add(4);
 		}
 	}
 
@@ -1278,7 +1292,7 @@ public class MIDIIntermediateRepresentations
 		int ticks_per_double_whole_note = ppqn_ticks_per_beat * 8;
 		int ticks_per_dotted_double_whole_note = ppqn_ticks_per_beat * 12;
 	
-		// The average duration in seconds of a whole not 
+		// The average duration in seconds of a quarter note 
 		average_quarter_note_duration_in_seconds = (double) ticks_per_quarter_note * average_tick_duration;
 		
 		// The number of ticks corresponding to each note value in the form of an array
@@ -1492,9 +1506,9 @@ public class MIDIIntermediateRepresentations
 		
 
 	/**
-	 * Calculate the values of the beat_histogram field.
+	 * Calculate the values of the beat_histogram and beat_histogram_120_bpm_standardized fields.
 	 */
-	private void generateBeatHistogram()
+	private void generateBeatHistograms()
 	{
 		// Set the minimum and maximum periodicities that will be used in the autocorrelation
 		int min_BPM = 40;
@@ -1502,9 +1516,13 @@ public class MIDIIntermediateRepresentations
 
 		// Instantiate beat_histogram and initialize entries to 0
 		beat_histogram = new double[max_BPM + 1];
+		beat_histogram_120_bpm_standardized = new double[max_BPM + 1];
 		for (int i = 0; i < beat_histogram.length; i++)
+		{
 			beat_histogram[i] = 0.0;
-
+			beat_histogram_120_bpm_standardized[i] = 0.0;
+		}
+		
 		// Generate an array whose indices correspond to ticks and whose contents
 		// correspond to total velocity of all notes occuring at each given tick
 		int[] rhythm_score = new int[((int) sequence.getTickLength()) + 1];
@@ -1535,59 +1553,43 @@ public class MIDIIntermediateRepresentations
 		double[] tick_histogram = new double[convertBPMtoTicks(min_BPM - 1, mean_ticks_per_second)];
 		for (int lag = convertBPMtoTicks(max_BPM, mean_ticks_per_second); lag < tick_histogram.length; lag++)
 			tick_histogram[lag] = autoCorrelate(rhythm_score, lag);
-
-		// Histogram with tick intervals collected into beats per minute bins
+		
+		// Histogram based on tick interval bins (standardized to 120 BPM)
+		int ticks_per_beat = sequence.getResolution();
+		int ticks_per_second_at_120_bpm = ticks_per_beat * 2; 
+		double[] tick_histogram_120_bpm_standardized = new double[convertBPMtoTicks(min_BPM - 1, ticks_per_second_at_120_bpm)];
+		for (int lag = convertBPMtoTicks(max_BPM, ticks_per_second_at_120_bpm); lag < tick_histogram_120_bpm_standardized.length; lag++)
+			tick_histogram_120_bpm_standardized[lag] = autoCorrelate(rhythm_score, lag);				
+		
+		// Histograms with tick intervals collected into beats per minute bins
 		for (int bin = min_BPM; bin <= max_BPM; bin++)
 		{
 			beat_histogram[bin] = 0.0;
 			for (int tick = convertBPMtoTicks(bin, mean_ticks_per_second); tick < convertBPMtoTicks(bin - 1, mean_ticks_per_second); tick++)
 				beat_histogram[bin] += tick_histogram[tick];
+			
+			beat_histogram_120_bpm_standardized[bin] = 0.0;
+			for (int tick = convertBPMtoTicks(bin, ticks_per_second_at_120_bpm); tick < convertBPMtoTicks(bin - 1, ticks_per_second_at_120_bpm); tick++)
+				beat_histogram_120_bpm_standardized[bin] += tick_histogram_120_bpm_standardized[tick];
 		}
 
-		// Normalize beat_histogram
+		// Normalize beat_histogram and beat_histogram_120_bpm_standardized
 		beat_histogram = MathAndStatsMethods.normalize(beat_histogram);
+		beat_histogram_120_bpm_standardized = MathAndStatsMethods.normalize(beat_histogram_120_bpm_standardized);
 	}
 
 
 	/**
-	 * Calculate the values of the beat_histogram_thresholded_table field.
+	 * Calculate the contents of the beat_histogram_thresholded_table and
+	 * beat_histogram_thresholded_table_120_bpm_standardized field fields.
 	 */
-	private void generateBeatHistogramThresholdTable()
+	private void generateBeatHistogramThresholdedTables()
 	{
-		// Instantiate beat_histogram_thresholded_table and set entries to 0
-		beat_histogram_thresholded_table = new double[beat_histogram.length][3];
-		for (int i = 0; i < beat_histogram_thresholded_table.length; i++)
-			for (int j = 0; j < beat_histogram_thresholded_table[i].length; j++)
-				beat_histogram_thresholded_table[i][j] = 0.0;
-
-		// Find the highest frequency in rhythmic histogram
-		double highest_frequency = beat_histogram[getIndexOfHighest(beat_histogram)];
-
-		// Fill out beat_histogram_thresholded_table
-		for (int i = 0; i < beat_histogram.length; i++)
-		{
-			if (beat_histogram[i] > 0.1)
-				beat_histogram_thresholded_table[i][0] = beat_histogram[i];
-			if (beat_histogram[i] > 0.01)
-				beat_histogram_thresholded_table[i][1] = beat_histogram[i];
-			if (beat_histogram[i] > (0.3 * highest_frequency))
-				beat_histogram_thresholded_table[i][2] = beat_histogram[i];
-		}
-
-		// Make sure all values refer to peaks (are not adjacent to higher values in
-		// beat_histogram_thresholded_table)
-		for (int i = 1; i < beat_histogram_thresholded_table.length; i++)
-			for (int j = 0; j < beat_histogram_thresholded_table[i].length; j++)
-				if (beat_histogram_thresholded_table[i][j] > 0.0 && beat_histogram_thresholded_table[i - 1][j] > 0.0)
-				{
-					if (beat_histogram_thresholded_table[i][j] > beat_histogram_thresholded_table[i - 1][j])
-						beat_histogram_thresholded_table[i - 1][j] = 0.0;
-					else
-						beat_histogram_thresholded_table[i][j] = 0.0;
-				}
+		beat_histogram_thresholded_table = MathAndStatsMethods.calculateTablesOfThresholdedPeaks(beat_histogram);
+		beat_histogram_thresholded_table_120_bpm_standardized = MathAndStatsMethods.calculateTablesOfThresholdedPeaks(beat_histogram_120_bpm_standardized);
 	}
 
-
+	
 	/**
 	 * Calculate the contents of the note_durations field.
 	 */
@@ -2498,7 +2500,8 @@ public class MIDIIntermediateRepresentations
 		}
 		
 		// Filter out all rests shorter than 0.1 of a quarter note.
-		rest_durations_separated_by_channel = ArrayMethods.removeEntriesLessThan(rest_durations_separated_by_channel, 0.1);
+		if (rest_durations_separated_by_channel != null)
+			rest_durations_separated_by_channel = ArrayMethods.removeEntriesLessThan(rest_durations_separated_by_channel, 0.1);
 	}
 	
 	
@@ -2518,7 +2521,7 @@ public class MIDIIntermediateRepresentations
 		double[] seconds_of_rest_per_tick = new double[ticks_to_test];
 		for (int tick = 0; tick < ticks_to_test; tick++)
 		{
-			if (mckay.utilities.staticlibraries.ArrayMethods.doesArrayContainOnlyThisValue(pitch_strength_by_tick_chart[tick], 0))
+			if (ArrayMethods.doesArrayContainOnlyThisValue(pitch_strength_by_tick_chart[tick], 0))
 				seconds_of_rest_per_tick[tick] = duration_of_ticks_in_seconds[tick];
 			else seconds_of_rest_per_tick[tick] = 0.0;
 		}
@@ -2551,7 +2554,8 @@ public class MIDIIntermediateRepresentations
 		}		
 		
 		// Filter out all rests shorter than 0.1 of a quarter note.
-		complete_rest_durations = ArrayMethods.removeEntriesLessThan(complete_rest_durations, 0.1);
+		if (complete_rest_durations != null)
+			complete_rest_durations = ArrayMethods.removeEntriesLessThan(complete_rest_durations, 0.1);
 	}
 	
 	
@@ -2692,28 +2696,6 @@ public class MIDIIntermediateRepresentations
 	
 	
 	/**
-	 * Return the index of the highest value in the given data.
-	 *
-	 * @param	data	The data that is being searched.
-	 * @return			The index of data that corresponds to the entry of data with the highest value.
-	 */
-	private static int getIndexOfHighest(double[] data)
-	{
-		int highest_index_so_far = 0;
-		double highest_so_far = data[0];
-		for (int i = 0; i < data.length; i++)
-		{
-			if (data[i] > highest_so_far)
-			{
-				highest_so_far = data[i];
-				highest_index_so_far = i;
-			}
-		}
-		return highest_index_so_far;
-	}
-
-	
-	/**
 	 * Finds the number of MIDI ticks corresponding to the duration of a single beat at the given tempo in
 	 * beats per minute (assuming the specified average tempo in ticks per second).
 	 *
@@ -2723,7 +2705,7 @@ public class MIDIIntermediateRepresentations
 	 */
 	private static int convertBPMtoTicks(int bpm, double ticks_per_second)
 	{
-		return (int) ((ticks_per_second * 60) / bpm);
+		return (int) ((ticks_per_second * 60.0) / (double) bpm);
 	}
 	
 	

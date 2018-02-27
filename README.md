@@ -1,6 +1,6 @@
 # jSymbolic 2.1
 by Cory McKay
-Copyright (C) 2017 (GNU GPL)
+Copyright (C) 2018 (GNU GPL)
 
 
 ### OVERVIEW
@@ -51,12 +51,19 @@ the music stored on the associated Elvis database (https://elvisproject.ca).
 
 ### GETTING MORE INFORMATION
 
-More information on jMIR (and the software itself) is available at
-http://jmir.sourceforge.net. jSymbolic includes a detailed HTML manual,
-which is packaged with the code and also posted on the jMIR web site.
+More information on jMIR in general, and jSymbolic in particular, is available
+on the jMIR home page (http://jmir.sourceforge.net). jSymbolic includes a
+detailed HTML manual, which is packaged with jSymbolic and also posted on the 
+jMIR web site (http://jmir.sourceforge.net/manuals/jSymbolic_manual/home.html).
 
-Please Cory McKay (cory.mckay@mail.mcgill.ca) with any bug reports or
-questions relating to the software. 
+The most recent development code for jSymbolic can be found on its GitHub
+page (https://github.com/DDMAL/jSymbolic2). However, it is strongly suggested
+that users use the stable release version posted on the SourceForge page
+(https://sourceforge.net/projects/jmir/files/jSymbolic/) instead of the 
+development GitHub version, as the latter may not be fully tested yet.
+
+Please contact Cory McKay (cory.mckay@mail.mcgill.ca) with any bug reports
+or questions relating to the software. 
 
 
 ### LICENSING AND LIABILITY
@@ -108,15 +115,21 @@ come with it in order to install it
 
 ### INSTALLING jSymbolic
 
-The project can be accessed at http://jmir.sourceforge.net. This distribution
-includes a pre-compiled Jar file, the source code and extensive documentation. 
-All of this is delivered in a zipped file, from which the project files can be
-extracted.
+The release version of jSymbolic may be downloaded from
+https://sourceforge.net/projects/jmir/files/jSymbolic/. Alternatively, the
+most recent development code for jSymbolic can be found on its GitHub page
+(https://github.com/DDMAL/jSymbolic2). However, it is strongly suggested
+that users use the stable release version posted on the SourceForge page
+(https://sourceforge.net/projects/jmir/files/jSymbolic/) instead of the 
+development GitHub version, as the latter may not be fully tested yet. The
+information below refers to the content on the release SourceForge page,
+not the development GitHub page.
 
-There are two versions of the project, namely the developer version and the
-user version. The user version contains everything needed to run the project,
-but does not include any source code. The developer version does include
-source code, presented in the form of a NetBeans project.
+There are two release versions of jSymbolic posted on its SourceForge release
+page, namely the developer version and the user version. The user version
+contains everything needed to run the project, but does not include any source
+code. The developer version does include source code, presented in the form of 
+a NetBeans project.
 
 The user version unzips into a single directory. Installation simply involves 
 copying this directory into any desired location.
@@ -144,7 +157,7 @@ Contains the following directories and files:
 	- README.txt: Basic overall documentation of the project.
 - Third-Party-Jars: Contains the distributable third-party software used by 
 the project. Also includes the jar files for other jMIR projects that this
-project has as adependencies, if any. These need to be included in the project's
+project has as dependencies, if any. These need to be included in the project's
 build (in the NetBeans context, this means adding the jar files found here as 
 libraries).
 
@@ -173,7 +186,7 @@ The simplest way to run jSymbolic from a terminal prompt is to type the followin
 your terminal prompt (after you have navigated to the directory containing the
 jSymbolic.jar file):
 
-    java -Xmx3072m -jar jSymbolic2.jar
+    java -Xmx6g -jar jSymbolic2.jar
 
 This will run the jSymbolic GUI set up with default settings.
 
@@ -202,14 +215,14 @@ can sometimes require quite a bit of memory, so it is best to manually specify a
 maximum when running jSymbolic. This can be done by using the "-Xmx" flag when running
 Java, as shown in the examples above.
 
-It is suggested that a maximum of three gigabytes be used, which is why "-Xmx3072m" is 
-specified above (3072 megabytes). Of course, the vast majority of processing jobs will 
-require much, much less than this amount of memory, but it is suggested that a high 
-maximum such as this be assigned if possible, as jSymbolic will quit processing (with
-an explanatory error message) if the maximum assigned memory is exceeded while 
-processing a particularly large or complex piece of music. In the very unlikely event
-that an out-of-memory error does occur, jSymbolic should be rerun with a larger maximum
-specified. Users are advised not to assign a greater amount of memory greater than the
+It is suggested that a maximum of six gigabytes be used, which is why "-Xmx6g" is 
+specified above. Of course, the vast majority of processing jobs will require much, 
+much less than this amount of memory, but it is suggested that a high maximum such as
+this be assigned if possible, as jSymbolic will quit processing (with an explanatory 
+error message, of course) if the maximum assigned memory is exceeded while processing
+a particularly large or complex piece of music. In the very unlikely event that an 
+out-of-memory error does occur, jSymbolic should be rerun with still a larger maximum
+specified. Users are advised not to assign an amount of memory greater than the
 amount of physical memory that they have on their systems, however, as virtual memory
 processing can be quite slow. 
 
@@ -217,14 +230,16 @@ Important Notes:
 - The ordering of the command line arguments does matter in certain cases.
 - jSymbolic's operation can also be governed by its configuration settings file, as
 explained further below.
-- If the user does not specify a configuration settings file at runtime, then jSymboic
+- If the user does not specify a configuration settings file at runtime, then jSymbolic
 will look for a default one in the same folder as the jSymbolic.jar file, and with the 
 file name jSymbolicDefaultConfigs.txt. If no such file exists, or if it is not a valid 
 jSymbolic configuration settings file, then jSymbolic will simply run with hard-coded
 default settings.
 - All file or directory paths specified in command line arguments must either be 
 absolute or relative to the directory containing the jSymbolic.jar file.
-- Any errors that occur during batch processing of multiple files will be logged to the 
+- All recursive directory searches for symbolic files will only return files that have
+valid .mid, .midi or .mei extensions (with any mix of upper-case or lower-case letters).
+- Errors that occur during batch processing of multiple files will be logged to the 
 terminal. Processing of other files will not be interrupted..
 - jSymbolic can currently process the following kinds of symbolic music files: MIDI files
 and MEI files. Any files that cannot be parsed by jSymbolic will cause an error message
@@ -269,14 +284,21 @@ jSymbolic GUI, allows the user to specify the kinds and paths of output files to
 generated by jSymbolic when feature extraction is complete, and to initiate feature
 extraction.
 
+The jSymbolic GUI also includes a single Information menu, with the following commands:
+
+- About: Displays a small window showing basic information about jSymbolic.
+- Help: Brings up a browsable window permitting access to this manual.
+
+More details on the GUI are provided in the jSymbolic manual.
+
 
 ### THE JSYMBOLIC CONFIGURATION SETTINGS FILE
 
 jSymbolic includes a special configuration settings file format. The key advantage of this
 file is that it allows users to preserve feature extraction settings between sessions. It
 can also be used to keep a record of extraction settings that were used, and can also be 
-transmitted to other researchers for the purpose of complete feature extraction t
-ransparency.
+transmitted to other researchers for the purpose of complete feature extraction 
+transparency.
 
 The optional jSymbolic configuration settings file is a simple text file that allows the
 user to specify jSymbolic settings related to:
@@ -300,25 +322,35 @@ disable certain features for extraction without a configuration file using the G
 However, a configuration file is required if the user wishes to use the command line
 interface or API with any selection of features other than the default.
 
-The jSymbolic GUI also includes a single Information menu, with the following commands:
-
-- About: Displays a small window showing basic information about jSymbolic.
-- Help: Brings up a browsable window permitting access to this manual.
-
 More details on the jSymbolic configuration settings file and how to use it are provided in 
 the jSymbolic manual.
 
 
+### USING THE COMMAND LINE INTERFACE
+
+See the jSymbolic manual for more information on this topic.
+
+
 ### ACCESSING THE API
+
+See the jSymbolic manual for more information on this topic.
+
+
+### FEATURE EXPLANATIONS
+
+See the jSymbolic manual for more information on this topic.
+
+
+### PROCESSING SEQUENCE
+
+See the jSymbolic manual for more information on this topic.
+
+
+### CLASS STRUCTURE
 
 See the jSymbolic manual for more information on this topic.
 
 
 ### EXTENDING JSYMBOLIC
-
-See the jSymbolic manual for more information on this topic.
-
-
-### ACCESSING THE API
 
 See the jSymbolic manual for more information on this topic.

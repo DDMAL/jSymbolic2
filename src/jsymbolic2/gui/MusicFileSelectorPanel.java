@@ -10,7 +10,7 @@ import javax.sound.midi.*;
 import javax.swing.*;
 import jsymbolic2.configuration.ConfigurationFileData;
 import jsymbolic2.configuration.ConfigurationInputFiles;
-import jsymbolic2.processing.FileValidator;
+import jsymbolic2.processing.SymbolicMusicFileUtilities;
 import mckay.utilities.general.FileFilterImplementation;
 import mckay.utilities.sound.midi.MIDIMethods;
 import mckay.utilities.staticlibraries.ArrayMethods;
@@ -204,21 +204,24 @@ public class MusicFileSelectorPanel
 	 * @param midi_mei_counts	An array of size 2, where the 0th entry corresponds to the number of MIDI
 	 *							files and the 1st entry corresponds to the number of MEI files. Both are
 	 *							typically initially 0, but do not have to be. This method adds the respective
-	 *							totals from music_files to these two entries.
+	 *							totals from music_files to these two entries. Sets both values to 0 if 
+	 *							music_files is null.
 	 * @param music_files		The symbolic music files to count.
 	 */
 	private static void findNumberMeiAndMidiFile(int[] midi_mei_counts, SymbolicMusicFile[] music_files)
 	{
-		for (SymbolicMusicFile this_music_file : music_files)
+		if (music_files == null)
 		{
-			if (FileValidator.isValidMeiFile(new File(this_music_file.file_path)))
-				midi_mei_counts[1]++;
-			else try
-			{
-				FileValidator.getMIDISequence(new File(this_music_file.file_path), new ArrayList<String>());
+			midi_mei_counts[0] = 0;
+			midi_mei_counts[1] = 0;
+		}
+		
+		else for (SymbolicMusicFile this_music_file : music_files)
+		{
+			if (SymbolicMusicFileUtilities.isValidMidiFile(new File(this_music_file.file_path)))
 				midi_mei_counts[0]++;
-			}
-			catch (Exception e) {}
+			else if (SymbolicMusicFileUtilities.isValidMeiFile(new File(this_music_file.file_path)))
+				midi_mei_counts[1]++;
 		}
 	}
 	
@@ -408,7 +411,7 @@ public class MusicFileSelectorPanel
 				List<String> error_log = new ArrayList<>();
 				try
 				{
-					FileValidator.getValidSequence(files_to_add[i], error_log);
+					SymbolicMusicFileUtilities.getMidiSequenceFromMidiOrMeiFile(files_to_add[i], error_log);
 					music_files_to_add[i] = new SymbolicMusicFile(files_to_add[i], null);
 				} 
 				catch (Exception e)
@@ -473,14 +476,17 @@ public class MusicFileSelectorPanel
 		
 		// Add a report to the status_print_stream
 		int[] midi_mei_counts = new int[2];
+		int count_of_final_combined_and_cleaned_music_files = 0;
+		if (final_combined_and_cleaned_music_files != null)
+			count_of_final_combined_and_cleaned_music_files = final_combined_and_cleaned_music_files.length;
 		findNumberMeiAndMidiFile(midi_mei_counts, getSymbolicMusicFilesToExtractFeaturesFrom());
 		String report = ">>> Adding to the list of symbolic music files from which features are to be extracted . . . \n";
 		for (int i = 0; i < number_music_files_to_add; i++)
 			if (music_files_to_add[i] != null)
 				report += "\t\t>>> " + music_files_to_add[i].file_path + "\n";
 		report += "\t>>> " + number_music_files_to_add + " files were selected to be added to the existing list of " + number_music_files_already_on_table + " files.\n";
-		report += "\t>>> Of these, " + (final_combined_and_cleaned_music_files.length - number_music_files_already_on_table) + " files were valid non-duplicate files, and were added to the list.\n";
-		report += "\t>>> There are now a total of " + final_combined_and_cleaned_music_files.length + " files ready to have features extracted from them.\n";
+		report += "\t>>> Of these, " + (count_of_final_combined_and_cleaned_music_files - number_music_files_already_on_table) + " files were valid non-duplicate files, and were added to the list.\n";
+		report += "\t>>> There are now a total of " + count_of_final_combined_and_cleaned_music_files + " files ready to have features extracted from them.\n";
 		report += "\t>>> This total includes " + midi_mei_counts[0] + " MIDI files and " + midi_mei_counts[1] + " MEI files.\n";
 		outer_frame.status_print_stream.println(report);
 	}
@@ -494,14 +500,20 @@ public class MusicFileSelectorPanel
 	{
 		try
 		{
+			// Remove the rows from the table, and keep track of what is being done
 			int[] selected_rows = symbolic_music_files_table.getSelectedRows();
 			for (int i = 0; i < selected_rows.length; i++)
 				selected_rows[i] = symbolic_music_files_table.convertRowIndexToModel(selected_rows[i]);
 			if (selected_rows.length == 0)
 				throw new Exception("Could not delete rows from the table.\nDetails: No files selcected on the table.");
 			SymbolicMusicFile[] symbolic_music_files = getSymbolicMusicFilesToExtractFeaturesFrom();
+			int count_of_files_before_removal = symbolic_music_files.length;
+			String[] paths_of_removed_files = new String[selected_rows.length];
 			for (int i = 0; i < selected_rows.length; i++)
+			{
+				paths_of_removed_files[i] = symbolic_music_files[selected_rows[i]].file_path;
 				symbolic_music_files[selected_rows[i]] = null;
+			}
 			Object[] results = ArrayMethods.removeNullEntriesFromArray(symbolic_music_files);
 			if (results != null)
 			{
@@ -510,8 +522,21 @@ public class MusicFileSelectorPanel
 					symbolic_music_files[i] = (SymbolicMusicFile) results[i];
 				symbolic_music_files_table_model.resetAndFillTable(symbolic_music_files);
 			} 
-			else
-				symbolic_music_files_table_model.clearTable();
+			else symbolic_music_files_table_model.clearTable();
+
+			// Add a report to the status_print_stream
+			int[] midi_mei_counts = new int[2];
+			int count_of_files_after_removal = 0;
+			if (results != null)
+				count_of_files_after_removal = results.length;
+			findNumberMeiAndMidiFile(midi_mei_counts, getSymbolicMusicFilesToExtractFeaturesFrom());
+			String report = ">>> Removing entries from the list of symbolic music files from which features are to be extracted . . . \n";
+			for (int i = 0; i < paths_of_removed_files.length; i++)
+				report += "\t\t>>> " + paths_of_removed_files[i] + "\n";
+			report += "\t>>> " + paths_of_removed_files.length + " files were selected to be removed from the previous list of " + count_of_files_before_removal + " files.\n";
+			report += "\t>>> There are now a total of " + count_of_files_after_removal + " files ready to have features extracted from them.\n";
+			report += "\t>>> This total includes " + midi_mei_counts[0] + " MIDI files and " + midi_mei_counts[1] + " MEI files.\n";
+			outer_frame.status_print_stream.println(report);
 		}
 		catch (Exception e)
 		{
@@ -544,7 +569,7 @@ public class MusicFileSelectorPanel
 			File play_file = new File((String) symbolic_music_files_table_model.getValueAt(selected_row, 1));
 
 			// Load the file into a MIDI Sequence object
-			Sequence midi_sequence = FileValidator.getValidSequence(play_file, new ArrayList<>());
+			Sequence midi_sequence = SymbolicMusicFileUtilities.getMidiSequenceFromMidiOrMeiFile(play_file, new ArrayList<>());
 
 			// Begin playback
 			midi_sequencer = MIDIMethods.playMIDISequence(midi_sequence);

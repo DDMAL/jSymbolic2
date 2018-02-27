@@ -13,7 +13,7 @@ import jsymbolic2.configuration.txtimplementation.ConfigurationFileValidatorTxtI
 import jsymbolic2.configuration.txtimplementation.ConfigurationFileWriterTxtImpl;
 import jsymbolic2.featureutils.FeatureExtractorAccess;
 import jsymbolic2.processing.FeatureExtractionJobProcessor;
-import jsymbolic2.processing.FileValidator;
+import jsymbolic2.processing.SymbolicMusicFileUtilities;
 import mckay.utilities.staticlibraries.FileMethods;
 import mckay.utilities.staticlibraries.StringMethods;
 
@@ -672,9 +672,9 @@ public class ExtractionConfigurationsPanel
 			outer_frame.clearTextAreas();
 
 			// Extract and save features. Update the text areas as progress continues.
-			List<String> error_log = FeatureExtractionJobProcessor.extractAndSaveSpecificFeatures( files_to_extract_features_from,
-			                                                                                       FileValidator.correctFileExtension(feature_values_save_path_text_area.getText(), "xml"),
-			                                                                                       FileValidator.correctFileExtension(feature_definitions_save_path_text_area.getText(), "xml"),
+			List<String> error_log = FeatureExtractionJobProcessor.extractAndSaveSpecificFeatures(files_to_extract_features_from,
+			                                                                                       SymbolicMusicFileUtilities.correctFileExtension(feature_values_save_path_text_area.getText(), "xml"),
+			                                                                                       SymbolicMusicFileUtilities.correctFileExtension(feature_definitions_save_path_text_area.getText(), "xml"),
 			                                                                                       features_to_save,
 			                                                                                       save_windowed_features_only_radio_button.isSelected(),
 			                                                                                       save_overall_features_only_radio_button.isSelected(),
@@ -840,7 +840,7 @@ public class ExtractionConfigurationsPanel
 		SymbolicMusicFile a_non_mei_file = null;
 		for (SymbolicMusicFile this_music_file : music_to_process)
 		{
-			if (!FileValidator.isValidMeiFile(new File(this_music_file.file_path)))
+			if ( SymbolicMusicFileUtilities.isValidMidiFile(new File(this_music_file.file_path)) )
 			{
 				at_least_one_non_mei_file = true;
 				a_non_mei_file = this_music_file;

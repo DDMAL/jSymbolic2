@@ -33,13 +33,13 @@ public class FileValidatorTest {
      */
     @Test
     public void testGetMEISequence() 
-            throws InvalidMidiDataException, MeiXmlReadException, IOException 
+            throws InvalidMidiDataException, MeiXmlReadException, IOException, Exception
     {
         File invalid = new File("mei-test/Invalid_Altenburg.mei");
         List<String> errorLog = new ArrayList<>();
         
         exception.expect(FileNotFoundException.class);
-        FileValidator.getValidSequence(invalid, errorLog);
+        SymbolicMusicFileUtilities.getMidiSequenceFromMidiOrMeiFile(invalid, errorLog);
         
         String errorFile = errorLog.get(0);
         assertEquals("The specified file, mei-test/Invalid_Altenburg.mei, is not a valid MEI file.",
@@ -53,13 +53,13 @@ public class FileValidatorTest {
      */
     @Test
     public void testGetMIDISequence() 
-            throws InvalidMidiDataException, IOException
+            throws InvalidMidiDataException, IOException, Exception
     {
         File dne = new File("dne.midi");
         List<String> errorLog = new ArrayList<>();
         
         exception.expect(IOException.class);
-        FileValidator.getValidSequence(dne, errorLog);
+        SymbolicMusicFileUtilities.getMidiSequenceFromMidiOrMeiFile(dne, errorLog);
         
         String errorFile = errorLog.get(0);
         assertEquals("The specified path, dne.midi, does not refer to a valid file.",
@@ -75,14 +75,14 @@ public class FileValidatorTest {
 
         String noDot = "test";
         String expectedNoDot = "test.xml";
-        assertEquals(expectedNoDot,FileValidator.correctFileExtension(noDot,fileExtension));
+        assertEquals(expectedNoDot,SymbolicMusicFileUtilities.correctFileExtension(noDot,fileExtension));
 
         String withDot = "test.two";
         String expectedWithDot = "test.two.xml";
-        assertEquals(expectedWithDot,FileValidator.correctFileExtension(withDot,fileExtension));
+        assertEquals(expectedWithDot,SymbolicMusicFileUtilities.correctFileExtension(withDot,fileExtension));
 
         String noProblem = "test.Xml";
         String expectedNoProblem = "test.Xml";
-        assertEquals(expectedNoProblem,FileValidator.correctFileExtension(noProblem,fileExtension));
+        assertEquals(expectedNoProblem,SymbolicMusicFileUtilities.correctFileExtension(noProblem,fileExtension));
     }
 }

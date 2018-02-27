@@ -2,8 +2,8 @@ package jsymbolic2.configuration.txtimplementation;
 
 import jsymbolic2.configuration.*;
 import jsymbolic2.featureutils.FeatureExtractorAccess;
-import jsymbolic2.processing.FileValidator;
-import jsymbolic2.processing.MusicFileFilter;
+import jsymbolic2.processing.SymbolicMusicFileUtilities;
+import jsymbolic2.processing.MusicFilter;
 import mckay.utilities.staticlibraries.FileMethods;
 
 import java.io.File;
@@ -304,18 +304,18 @@ public class ConfigurationFileValidatorTxtImpl extends ConfigurationFileValidato
         }
 
         //Check that path exists for feature value and definition save paths
-        if(!FileValidator.filePathExists(valuesValue)) {
+        if(!SymbolicMusicFileUtilities.filePathExists(valuesValue)) {
             throw new Exception("Feature value save path " + definitionValue + " is not a valid path in configuration file "
                     + configurationFile.getName());
         }
-        if(!FileValidator.filePathExists(definitionValue)) {
+        if(!SymbolicMusicFileUtilities.filePathExists(definitionValue)) {
             throw new Exception("Feature definition save path " + valuesValue + " is not a valid path in configuration file "
                     + configurationFile.getName());
         }
 
         //Check and correct that the extension is in fact xml
-        valuesValue = FileValidator.correctFileExtension(valuesValue, "xml");
-        definitionValue = FileValidator.correctFileExtension(definitionValue, "xml");
+        valuesValue = SymbolicMusicFileUtilities.correctFileExtension(valuesValue, "xml");
+        definitionValue = SymbolicMusicFileUtilities.correctFileExtension(definitionValue, "xml");
         ConfigurationOutputFiles outputFile = new ConfigurationOutputFiles(valuesValue,definitionValue);
         return outputFile;
     }
@@ -409,7 +409,7 @@ public class ConfigurationFileValidatorTxtImpl extends ConfigurationFileValidato
      * @param inputFiles The input files extracted from the configuration file.
      */
     private void validateDirectory(File directory, ConfigurationInputFiles inputFiles) {
-        File[] allFiles = FileMethods.getAllFilesInDirectory(directory, true, new MusicFileFilter(), null);
+        File[] allFiles = FileMethods.getAllFilesInDirectory(directory, true, new MusicFilter(), null);
         for(File file : allFiles) {
             validateSingleFile(file,inputFiles);
         }

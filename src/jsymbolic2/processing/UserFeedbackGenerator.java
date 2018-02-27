@@ -14,7 +14,20 @@ import jsymbolic2.commandline.CommandLineUtilities;
 public class UserFeedbackGenerator
 {	
 	/**
-	 * Generic method for printing the given message directly to stream.
+	 * Generic method for printing the given message directly to stream, with no added new line at the end.
+	 * 
+	 * @param stream	The stream to print the message to.
+	 * @param message	The message to print.
+	 */
+	public static void simplePrint(PrintStream stream, String message)
+	{
+		stream.print(message);
+	}
+
+	
+	/**
+	 * Generic method for printing the given message directly to stream, with a new line added return at the
+	 * end.
 	 * 
 	 * @param stream	The stream to print the message to.
 	 * @param message	The message to print.

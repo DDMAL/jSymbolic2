@@ -159,6 +159,7 @@ Median Partial Rest Duration
 Variability of Complete Rest Durations
 Variability of Partial Rest Durations
 Variability Across Voices of Combined Rests
+Beat Histogram Tempo Independent
 Initial Tempo
 Mean Tempo
 Tempo Variability

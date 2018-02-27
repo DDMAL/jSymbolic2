@@ -3,12 +3,16 @@ package jsymbolic2.commandline;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import jsymbolic2.configuration.txtimplementation.ConfigurationFileValidatorTxtImpl;
 import jsymbolic2.configuration.ConfigFileHeaderEnum;
 import jsymbolic2.configuration.ConfigurationFileData;
 import jsymbolic2.processing.FeatureExtractionJobProcessor;
+import jsymbolic2.processing.MIDIReporter;
+import jsymbolic2.processing.MusicFilter;
+import jsymbolic2.processing.SymbolicMusicFileUtilities;
 import jsymbolic2.processing.UserFeedbackGenerator;
 
 /**
@@ -74,8 +78,18 @@ public enum CommandLineSwitchEnum
 	 * A command line switch for checking if the specified configuration file is valid with all data 
 	 * specified, excluding input and output save paths.
 	 */
-	
 	VALIDATE_CONFIGURATION_FEATURE_OPTION(SwitchCommandEnum.VALIDATE_CONFIG_FEATURE_OPTION, "-validateconfigfeatureoption"),
+	
+	/**
+	 * A command line switch for checking if certain musical characteristics are consistent both across a set
+	 * of MIDI or MEI files, and internally within each file.
+	 */
+	CONSISTENCY_CHECK(SwitchCommandEnum.CONSISTENCY_CHECK, "-consistencycheck"),
+	
+	/**
+	 * A command line switch for printing out reports on the contents of a MIDI (or converted) MEI files.
+	 */
+	MIDI_DUMP(SwitchCommandEnum.MIDI_DUMP, "-mididump"),
 	
 	/**
 	 * A command line switch for printing out valid command line usage instructions.
@@ -189,8 +203,8 @@ public enum CommandLineSwitchEnum
 				return e;
 		return null;
 	}
-
-
+	
+	
 	/* INTERNAL ENUM ****************************************************************************************/
 
 	
@@ -456,6 +470,101 @@ public enum CommandLineSwitchEnum
 				
 				// If the configuration file is not valid as defined by this method
 				catch (Exception e) { UserFeedbackGenerator.simplePrintln(System.out, "\n" + e.getMessage() + "\n"); }
+			}
+		},
+			
+		CONSISTENCY_CHECK
+		{
+			/**
+			 * Parses the MIDI and/or MEI files referred to in args (either a single file or a directory 
+			 * holding MIDI and/or MEI files) and prints out ordered reports to standard out on whether or not
+			 * certain musical characteristics are consistent both across the files as a group, and internally
+			 * within each file. In the case of directories, processing is recursive, and only files with
+			 * qualifying MIDI or MEI file extensions are included.
+			 * 
+			 * @param args	Arguments with which jSymbolic was run at the command line.
+			 */
+			@Override
+			public void runProcessing(String[] args)
+			{
+				// Check valid number of command line arguments
+				if (args.length != 2)
+					UserFeedbackGenerator.indicateIncorrectCommandLineArgumentsAndEndExecution(System.err, args);
+
+				try
+				{
+					// Prepare the set of files (after recursive directory parsing and extension filtering, if
+					// appropriate), to report on
+					File[] midi_or_mei_file_list = SymbolicMusicFileUtilities.getRecursiveListOfFiles( args[1],
+					                                                                                   new MusicFilter(),
+					                                                                                   System.err,
+					                                                                                   new ArrayList<>() );					
+					
+					// Prepare and output the reports
+					if (midi_or_mei_file_list != null)
+					{					
+						String report = MIDIReporter.prepareConsistencyReports( midi_or_mei_file_list,
+						                                                        true,
+						                                                        true,
+						                                                        true );
+						UserFeedbackGenerator.simplePrint(System.out, report);
+					}
+				}			
+				// If the MIDI file is not valid
+				catch (Exception e) { UserFeedbackGenerator.printExceptionErrorMessage(System.err, e); }
+			}
+		},
+
+		MIDI_DUMP
+		{
+			/**
+			 * Parse the MIDI and/or MEI files referred to in args (either a single file or a directory 
+			 * holding MIDI and/or MEI files) and print out ordered reports on the file(s) and the MIDI
+			 * messages they contain to standard out. If it is an MEI file, it is converted to MIDI before
+			 * reporting. In the case of directories, processing is recursive, and only files with qualifying
+			 * MIDI or MEI file extensions are included.
+			 * 
+			 * @param args	Arguments with which jSymbolic was run at the command line.
+			 */
+			@Override
+			public void runProcessing(String[] args)
+			{
+				// Check valid number of command line arguments
+				if (args.length != 2)
+					UserFeedbackGenerator.indicateIncorrectCommandLineArgumentsAndEndExecution(System.err, args);
+
+				try
+				{
+					// Prepare the set of files (after recursive directory parsing and extension filtering, if
+					// appropriate), to report on
+					File[] midi_or_mei_file_list = SymbolicMusicFileUtilities.getRecursiveListOfFiles( args[1],
+					                                                                                   new MusicFilter(),
+					                                                                                   System.err,
+					                                                                                   new ArrayList<>() );					
+					
+					// Prepare and output the reports
+					if (midi_or_mei_file_list != null)
+					{					
+						// Report on each file
+						for (int i = 0; i < midi_or_mei_file_list.length; i++)
+						{
+							// Note progress
+							UserFeedbackGenerator.simplePrint(System.out, "\n============ MIDI MESSAGES REPORT FOR FILE " + (i+1) + " / " + midi_or_mei_file_list.length + " ============\n");
+
+							// Parse and check the MIDI file
+							MIDIReporter midi_debugger = new MIDIReporter(midi_or_mei_file_list[i]);
+
+							// Output the reports
+							UserFeedbackGenerator.simplePrint(System.out, midi_debugger.prepareHeaderReport());
+							UserFeedbackGenerator.simplePrint(System.out, midi_debugger.prepareMetaMessageReport(true, true, true, true, true, true));
+							UserFeedbackGenerator.simplePrint(System.out, midi_debugger.prepareProgramChangeAndUnpitchedInstrumentsReport());
+							UserFeedbackGenerator.simplePrint(System.out, midi_debugger.prepareControllerMessageReport());
+							UserFeedbackGenerator.simplePrintln(System.out, midi_debugger.prepareNoteReport(false, true));
+						}
+					}
+				}			
+				// If the MIDI file is not valid
+				catch (Exception e) { UserFeedbackGenerator.printExceptionErrorMessage(System.err, e); }
 			}
 		},
 		

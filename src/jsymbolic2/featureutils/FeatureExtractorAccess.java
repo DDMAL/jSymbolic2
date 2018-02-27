@@ -185,7 +185,7 @@ public final class FeatureExtractorAccess
 			new DupleInitialMeterFeature(),
 			new TripleInitialMeterFeature(),
 			new QuadrupleInitialMeterFeature(),
-			new MetricalDiversity(),
+			new MetricalDiversityFeature(),
 			new TotalNumberOfNotesFeature(),
 			new NoteDensityPerQuarterNoteFeature(),
 			new NoteDensityPerQuarterNotePerVoiceFeature(),
@@ -230,7 +230,8 @@ public final class FeatureExtractorAccess
 			new VariabilityOfCompleteRestDurationsFeature(),
 			new VariabilityOfPartialRestDurationsFeature(),
 			new VariabilityAcrossVoicesOfCombinedRestsFeature(),
-
+			new BeatHistogramTempoIndependentFeature(),
+			
 			// Add features based on rhythm (that DO take tempo into account)
 			new InitialTempoFeature(),
 			new MeanTempoFeature(),
@@ -438,7 +439,7 @@ public final class FeatureExtractorAccess
 			true, // DupleInitialMeterFeature
 			true, // TripleInitialMeterFeature
 			true, // QuadrupleInitialMeterFeature
-			true, // MetricalDiversity
+			true, // MetricalDiversityFeature
 			true, // TotalNumberOfNotesFeature
 			true, // NoteDensityPerQuarterNoteFeature
 			true, // NoteDensityPerQuarterNotePerVoiceFeature
@@ -483,7 +484,8 @@ public final class FeatureExtractorAccess
 			true, // VariabilityOfCompleteRestDurationsFeature
 			true, // VariabilityOfPartialRestDurationsFeature
 			true, // VariabilityAcrossVoicesOfCombinedRestsFeature
-
+			false, // BeatHistogramTempoIndependentFeature
+			
 			// Features based on rhythm (that DO take tempo into account)
 			true, // InitialTempoFeature
 			true, // MeanTempoFeature

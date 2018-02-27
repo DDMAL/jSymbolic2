@@ -1,7 +1,7 @@
 package jsymbolic2.configuration;
 
 import jsymbolic2.configuration.txtimplementation.ConfigurationFileExtensionEnum;
-import jsymbolic2.processing.FileValidator;
+import jsymbolic2.processing.SymbolicMusicFileUtilities;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -101,7 +101,7 @@ public abstract class ConfigurationFileWriter {
             addFormattedOutputFiles(rawConfigFile,configurationFileData.getOutputFileList());
         }
 
-        String correctConfigFileName = FileValidator.correctFileExtension(configurationFileData.getConfigurationFilePath(), ConfigurationFileExtensionEnum.txt.name());
+        String correctConfigFileName = SymbolicMusicFileUtilities.correctFileExtension(configurationFileData.getConfigurationFilePath(), ConfigurationFileExtensionEnum.txt.name());
         Files.write(Paths.get(correctConfigFileName), rawConfigFile, Charset.forName("ISO-8859-1"));
     }
 }

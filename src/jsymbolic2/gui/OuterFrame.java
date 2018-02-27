@@ -75,7 +75,7 @@ public class OuterFrame
 	/**
 	 * The string indicating licensing credit.
 	 */
-	private static final String LICENSING_STRING = "2017 (GNU GPL)";
+	private static final String LICENSING_STRING = "2018 (GNU GPL)";
 	
 	/**
 	 * The credited institution.

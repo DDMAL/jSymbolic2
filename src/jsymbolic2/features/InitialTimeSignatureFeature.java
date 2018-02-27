@@ -8,8 +8,8 @@ import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
  * A feature vector consisting of two values. The first is the numerator of the first specified time signature
- * in the piece, and the second is the denominator of the same time signature. Both values are set to 0 if no
- * time signature is specified.
+ * in the piece, and the second is the denominator of the same time signature. Set to 4/4 if no time signature
+ * is specified.
  *
  * @author Cory McKay
  */
@@ -26,7 +26,7 @@ public class InitialTimeSignatureFeature
 	{
 		code = "R-1";
 		String name = "Initial Time Signature";
-		String description = "A feature vector consisting of two values. The first is the numerator of the first specified time signature in the piece, and the second is the denominator of the same time signature. Both values are set to 0 if no time signature is specified.";
+		String description = "A feature vector consisting of two values. The first is the numerator of the first specified time signature in the piece, and the second is the denominator of the same time signature. Set to 4/4 if no time signature is specified.";
 		boolean is_sequential = true;
 		int dimensions = 2;
 		definition = new FeatureDefinition(name, description, is_sequential, dimensions);
@@ -64,8 +64,8 @@ public class InitialTimeSignatureFeature
 
 			if (((LinkedList) sequence_info.overall_metadata[1]).isEmpty())
 			{
-				result[0] = 0.0;
-				result[1] = 0.0;
+				result[0] = 4.0;
+				result[1] = 4.0;
 			}
 			else
 			{

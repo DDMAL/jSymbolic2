@@ -1,15 +1,10 @@
 package jsymbolic2.processing;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.PrintStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 import javax.swing.JOptionPane;
 import ace.datatypes.DataBoard;
 import jsymbolic2.configuration.ConfigurationFileData;
@@ -105,7 +100,7 @@ public final class FeatureExtractionJobProcessor
 		// To hold reports of errors that may occur. Note that this often simply duplicates what is written to
 		// error_print_stream.
 		List<String> error_log = new ArrayList<>();
-		
+
 		// Extract features and save the feature values and definitions as ACE XML files
 		extractFeatures( paths_of_files_or_folders_to_parse,
 		                 processor,
@@ -440,9 +435,18 @@ public final class FeatureExtractionJobProcessor
 	                                     boolean gui_processing )
 	{
 		// Traverse any subdirectories in files_and_folders_to_parse to find qualifying files there
-		ArrayList<File> files_to_parse = getFileListIncludingFolderContents( files_and_folders_to_parse,
-		                                                                     error_print_stream,
-				                                                             error_log );
+		ArrayList<File> files_to_parse = SymbolicMusicFileUtilities.getFilteredFilesRecursiveTraversal( files_and_folders_to_parse,
+		                                                                                                false,
+		                                                                                                new MusicFilter(),
+		                                                                                                error_print_stream,
+		                                                                                                error_log );
+		
+		// Remove all files from files_to_parse that are not valid MIDI or MEI files. Print error messages
+		// indicating any that are not. End execution if no valid files remain.
+		files_to_parse = SymbolicMusicFileUtilities.validateAndGetMidiAndMeiFiles( files_to_parse,
+		                                                                           status_print_stream,
+		                                                                           error_print_stream,
+		                                                                           error_log );
 		
 		// Verify that, if MEI-specific features have been chosen to be extracted, then none of the files
 		// chosen to be parsed are non-MEI files. End execution if some are.
@@ -543,56 +547,11 @@ public final class FeatureExtractionJobProcessor
 			                       "\n\tDetailed error message: " + e + ": " + e.getMessage();
 			UserFeedbackGenerator.printErrorMessage(error_print_stream, error_message);
 			error_log.add(error_message);
-			//e.printStackTrace(error_print_stream);
+			e.printStackTrace(error_print_stream);
 		}
 	}
 
 
-	/**
-	 * Generate a list of all files in the provided files_and_directories list that duplicates entries the
-	 * files there, but when encountering a directory in this list, adds all the qualifying files in it to the
-	 * returned list (and does not include the directory itself in the returned list). Qualifying files are
-	 * any that have the extensions specified in MusicFileFilter (which is to say MIDI or MEI files). Note
-	 * that this filter is NOT applied to files in the files_and_directories list, only to files in its
-	 * subdirectories.
-	 * 
-	 * @param files_and_directories	The set of files and/or directories to traverse.
-	 * @param error_print_stream	A stream to print processing errors to.
-	 * @param error_log				A list of errors encountered so far. Errors are added to it if 
-	 *								encountered.
-	 * @return						The new list of files, including qualifying files in subdirectories.
-	 */
-	private static ArrayList<File> getFileListIncludingFolderContents( List<File> files_and_directories,
-	                                                                   PrintStream error_print_stream,
-	                                                                   List<String> error_log )
-	{
-		ArrayList<File> complete_file_list = new ArrayList<>();
-		for (File file : files_and_directories)
-		{
-			if (file.isDirectory())
-			{
-				List<Path> files_in_subfolder;
-				try
-				{
-					files_in_subfolder = Files.walk(Paths.get(file.getAbsolutePath())).filter(name -> new MusicFileFilter().accept(name.toFile())).collect(Collectors.toList());
-					for (Path path_in_subfolder : files_in_subfolder)
-						complete_file_list.add(path_in_subfolder.toFile());
-				} 
-				catch (IOException ioe)
-				{
-					String error_message = "Could not traverse files from this folder: " + file.getAbsolutePath();
-					UserFeedbackGenerator.printErrorMessage(error_print_stream, error_message);
-					error_log.add(error_message);
-				}
-			}
-			else
-				complete_file_list.add(file);
-		}
-		
-		return complete_file_list;
-	}
-	
-	
 	/**
 	 * Verify that no MEI-specific features are scheduled to be extracted from non-MEI files. If one or more
 	 * MEI-specific features are scheduled to be extracted and if one or more non-MEI files is on th elist of
@@ -626,7 +585,7 @@ public final class FeatureExtractionJobProcessor
 		List<File> list_of_non_mei_files_present = new ArrayList<>();
 		for (File file : file_list)
 		{
-			if (!FileValidator.isValidMeiFile(file))
+			if (SymbolicMusicFileUtilities.isValidMidiFile(file))
 			{
 				non_mei_files_present = true;
 				list_of_non_mei_files_present.add(file);
@@ -703,7 +662,7 @@ public final class FeatureExtractionJobProcessor
 				}
 				catch (Exception e)
 				{
-					String warning = "Saving of Weka ARFF and/or CSV files was aborted since no features were successfully extracted.";
+					String warning = "Saving of Weka ARFF and/or CSV files was aborted. " + e.getMessage();
 					UserFeedbackGenerator.printWarningMessage(error_print_stream, warning);
 				}			
 

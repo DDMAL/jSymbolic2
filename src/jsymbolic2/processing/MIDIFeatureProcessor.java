@@ -1,14 +1,7 @@
-/*
- * MIDIFeatureProcessor.java
- * Version 2.0
- *
- * Last modified on April 11, 2010.
- * McGill University
- */
-
 package jsymbolic2.processing;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
 import javax.sound.midi.*;
 
@@ -94,21 +87,21 @@ public class MIDIFeatureProcessor
      private   boolean			save_features_for_each_window;
      
      /**
-      * Whetehr or not to save the average and standard deviation of each
-      * feature accross all windows.
+      * Whether or not to save the average and standard deviation of each
+      * feature across all windows.
       */
      private   boolean			save_overall_recording_features;
      
      /**
       * Used to write to the feature_vector_file file to save feature values to.
       */
-     private   DataOutputStream         values_writer;
+     private   OutputStreamWriter         values_writer;
      
      /**
       * Used to write to the feature_key_file file to save feature definitions
       * to.
       */
-     private   DataOutputStream         definitions_writer;
+     private   OutputStreamWriter         definitions_writer;
 
      private   File feature_values_save_file;
 
@@ -247,8 +240,8 @@ public class MIDIFeatureProcessor
           // Prepare stream writers
           FileOutputStream values_to = new FileOutputStream(feature_values_save_file);
           FileOutputStream definitions_to = new FileOutputStream(feature_definitions_save_file);
-          values_writer = new DataOutputStream(values_to);
-          definitions_writer = new DataOutputStream(definitions_to);
+          values_writer = new OutputStreamWriter(values_to, StandardCharsets.UTF_8);
+          definitions_writer = new OutputStreamWriter(definitions_to, StandardCharsets.UTF_8);
           definitions_written = false;
           
           // Save parameters as fields
@@ -280,7 +273,7 @@ public class MIDIFeatureProcessor
 	}
 
      /**
-      * Extract the features from the provided MIDI file. This may involve
+      * Extract the features from the provided MIDI or MEI file. This may involve
       * windowing, depending on the instantiation parameters of this object. The
       * feature values are automatically saved to the feature_vector_file XML
       * file referred to by the values_writer field. The definitions of the
@@ -301,16 +294,16 @@ public class MIDIFeatureProcessor
              throw new Exception("Window overlap offset is greater than window size, this is not possible.");
          
           // Extract the data from the file and check for exceptions
-          Sequence full_sequence;
+          Sequence full_sequence = null;
           MeiSequence mei_sequence = null;
-          if(FileValidator.isValidMeiFile(recording_file)) {
-               mei_sequence = FileValidator.getValidMeiSequence(recording_file,errorLog);
+		  if(SymbolicMusicFileUtilities.isValidMidiFile(recording_file))
+             full_sequence = SymbolicMusicFileUtilities.getMidiSequenceFromMidiOrMeiFile(recording_file,errorLog);
+		  else if(SymbolicMusicFileUtilities.isValidMeiFile(recording_file))
+		  {
+               mei_sequence = SymbolicMusicFileUtilities.getMeiSequenceFromMeiFile(recording_file,errorLog);
                full_sequence = mei_sequence.getSequence();
           }
-          else {
-               full_sequence = FileValidator.getValidSequence(recording_file,errorLog);
-          }
-
+  
          /**
           * Mei Specific Storage added here
           * null is set if the file is not an mei file
@@ -332,9 +325,9 @@ public class MIDIFeatureProcessor
           int[] end_ticks;
           try
           {
-               if (!save_features_for_each_window)
+              if (!save_features_for_each_window)
                {
-                   startEndTickArrays = MIDIMethods.getStartEndTickArrays(full_sequence, 
+                  startEndTickArrays = MIDIMethods.getStartEndTickArrays(full_sequence, 
                                                                            full_sequence.getMicrosecondLength() / 1000000.0, 
                                                                            0.0,
                                                                            seconds_per_tick);
@@ -364,7 +357,7 @@ public class MIDIFeatureProcessor
           }
           
           // Extract the feature values from the samples
-          double[][][] window_feature_values = getFeatures(windows, meiSpecificStorage);
+         double[][][] window_feature_values = getFeatures(windows, meiSpecificStorage);
           
           // Find the feature averages and standard deviations if appropriate
           FeatureDefinition[][] overall_feature_definitions = new FeatureDefinition[1][];
@@ -408,14 +401,14 @@ public class MIDIFeatureProcessor
                throw new Exception("Window overlap offset is greater than window size, this is not possible.");
 
           // Extract the data from the file and check for exceptions
-          Sequence full_sequence;
+          Sequence full_sequence = null;
           MeiSequence mei_sequence = null;
-          if(FileValidator.isValidMeiFile(recording_file)) {
-               mei_sequence = FileValidator.getValidMeiSequence(recording_file,errorLog);
+		  if(SymbolicMusicFileUtilities.isValidMidiFile(recording_file))
+			full_sequence = SymbolicMusicFileUtilities.getMidiSequenceFromMidiOrMeiFile(recording_file,errorLog);
+		  else if(SymbolicMusicFileUtilities.isValidMeiFile(recording_file))
+		  {
+               mei_sequence = SymbolicMusicFileUtilities.getMeiSequenceFromMeiFile(recording_file,errorLog);
                full_sequence = mei_sequence.getSequence();
-          }
-          else {
-               full_sequence = FileValidator.getValidSequence(recording_file,errorLog);
           }
 
           /**
@@ -517,7 +510,7 @@ public class MIDIFeatureProcessor
      throws Exception
      {
           try {
-              values_writer.writeBytes("</feature_vector_file>");
+              values_writer.write("</feature_vector_file>");
               values_writer.close();
           }
           catch (IOException e) {
@@ -727,7 +720,7 @@ public class MIDIFeatureProcessor
      
      /**
       * Extracts features from each window of the given MIDI sequences. If the
-      * passed windows paramter consists of only one window, then this could
+      * passed windows parameter consists of only one window, then this could
       * be a whole unwindowed MIDI file.
       *
       * @param	windows       The ordered MIDI windows to extract features from.
@@ -758,7 +751,7 @@ public class MIDIFeatureProcessor
           for (int win = 0; win < windows.length; win++)
           {
                // Extract information from sequence that is needed to extract features
-               MIDIIntermediateRepresentations intermediate = new MIDIIntermediateRepresentations(windows[win]);
+              MIDIIntermediateRepresentations intermediate = new MIDIIntermediateRepresentations(windows[win]);
                
                // Extract the features one by one
                for (int feat = 0; feat < feature_extractors.length; feat++)
@@ -773,7 +766,7 @@ public class MIDIFeatureProcessor
                          // Find previously extracted feature values that this feature
                          // needs
                          double[][] other_feature_values = null;
-                         if (feature_extractor_dependencies[feat] != null)
+                        if (feature_extractor_dependencies[feat] != null)
                          {
                               other_feature_values = new double[feature_extractor_dependencies[feat].length][];
                               for (int i = 0; i < feature_extractor_dependencies[feat].length; i++)
@@ -815,7 +808,7 @@ public class MIDIFeatureProcessor
           }
           
           // Return the results
-          return results;
+         return results;
      }
      
      
@@ -952,7 +945,7 @@ public class MIDIFeatureProcessor
                "<feature_vector_file>\n\n" +
                "   <comments></comments>\n\n"
                );
-          values_writer.writeBytes(feature_vector_header);
+          values_writer.write(feature_vector_header);
      }
      
      
@@ -1008,8 +1001,8 @@ public class MIDIFeatureProcessor
           throws Exception
      {
           // Start the entry for the recording
-          values_writer.writeBytes("\t<data_set>\n");
-          values_writer.writeBytes("\t\t<data_set_id>" + identifier + "</data_set_id>\n");
+          values_writer.write("\t<data_set>\n");
+          values_writer.write("\t\t<data_set_id>" + identifier + "</data_set_id>\n");
           
           // Write the features for individual windows
           if (save_features_for_each_window) {
@@ -1023,7 +1016,7 @@ public class MIDIFeatureProcessor
                start_time = (start_time > 0) ? start_time : 0; //check for non negative
                double end_time = MIDIMethods.getSecondsAtTick(end_tick, seconds_per_tick);
                
-               values_writer.writeBytes( "\t\t<section start=\"" + start_time +
+               values_writer.write( "\t\t<section start=\"" + start_time +
                     "\" stop=\"" + end_time + "\">\n");
                for (int feat = 0; feat < feature_values[win].length; feat++)
                {
@@ -1031,17 +1024,17 @@ public class MIDIFeatureProcessor
                          if (feature_values[win][feat] != null)
                          {
                          String feature_name = feature_extractors[feat].getFeatureDefinition().name;
-                         values_writer.writeBytes("\t\t\t<feature>\n");
-                         values_writer.writeBytes("\t\t\t\t<name>" + feature_name + "</name>\n");
+                         values_writer.write("\t\t\t<feature>\n");
+                         values_writer.write("\t\t\t\t<name>" + feature_name + "</name>\n");
                          for (int val = 0; val < feature_values[win][feat].length; val++)
                          {
                               String value = mckay.utilities.staticlibraries.StringMethods.getDoubleInScientificNotation(feature_values[win][feat][val], 4);
-                              values_writer.writeBytes("\t\t\t\t<v>" + value + "</v>\n");
+                              values_writer.write("\t\t\t\t<v>" + value + "</v>\n");
                          }
-                         values_writer.writeBytes("\t\t\t</feature>\n");
+                         values_writer.write("\t\t\t</feature>\n");
                          }
                }
-               values_writer.writeBytes("\t\t</section>\n");
+               values_writer.write("\t\t</section>\n");
                }
           }
           
@@ -1049,18 +1042,18 @@ public class MIDIFeatureProcessor
           if (overall_feature_values != null)
                for (int feat = 0; feat < overall_feature_values.length; feat++)
                {
-               values_writer.writeBytes("\t\t<feature>\n");
-               values_writer.writeBytes("\t\t\t<name>" + overall_feature_definitions[feat].name + "</name>\n");
+               values_writer.write("\t\t<feature>\n");
+               values_writer.write("\t\t\t<name>" + overall_feature_definitions[feat].name + "</name>\n");
                for (int val = 0; val < overall_feature_values[feat].length; val++)
                {
                     String value = mckay.utilities.staticlibraries.StringMethods.getDoubleInScientificNotation(overall_feature_values[feat][val], 4);
-                    values_writer.writeBytes("\t\t\t<v>" + value + "</v>\n");
+                    values_writer.write("\t\t\t<v>" + value + "</v>\n");
                }
-               values_writer.writeBytes("\t\t</feature>\n");
+               values_writer.write("\t\t</feature>\n");
                }
           
           // End the entry for the recording
-          values_writer.writeBytes("\t</data_set>\n\n");
+          values_writer.write("\t</data_set>\n\n");
      }
      
      
@@ -1100,7 +1093,7 @@ public class MIDIFeatureProcessor
                "<feature_key_file>\n\n" +
                "   <comments></comments>\n\n"
                );
-          definitions_writer.writeBytes(feature_key_header);
+          definitions_writer.write(feature_key_header);
           
           double[][] last_window_features = feature_values[feature_values.length - 1];
           
@@ -1111,12 +1104,12 @@ public class MIDIFeatureProcessor
                          if (last_window_features[feat] != null)
                          {
                FeatureDefinition def = feature_extractors[feat].getFeatureDefinition();
-               definitions_writer.writeBytes("   <feature>\n");
-               definitions_writer.writeBytes("      <name>" + def.name + "</name>\n");
-               definitions_writer.writeBytes("      <description>" + def.description + "</description>\n");
-               definitions_writer.writeBytes("      <is_sequential>" + def.is_sequential + "</is_sequential>\n");
-               definitions_writer.writeBytes("      <parallel_dimensions>" + last_window_features[feat].length + "</parallel_dimensions>\n");
-               definitions_writer.writeBytes("   </feature>\n\n");
+               definitions_writer.write("   <feature>\n");
+               definitions_writer.write("      <name>" + def.name + "</name>\n");
+               definitions_writer.write("      <description>" + def.description + "</description>\n");
+               definitions_writer.write("      <is_sequential>" + def.is_sequential + "</is_sequential>\n");
+               definitions_writer.write("      <parallel_dimensions>" + last_window_features[feat].length + "</parallel_dimensions>\n");
+               definitions_writer.write("   </feature>\n\n");
                          }
           
           // Write the overall file functions
@@ -1124,15 +1117,15 @@ public class MIDIFeatureProcessor
                for (int feat = 0; feat < overall_feature_definitions.length; feat++)
                {
                FeatureDefinition def = overall_feature_definitions[feat];
-               definitions_writer.writeBytes("   <feature>\n");
-               definitions_writer.writeBytes("      <name>" + def.name + "</name>\n");
-               definitions_writer.writeBytes("      <description>" + def.description + "</description>\n");
-               definitions_writer.writeBytes("      <is_sequential>" + def.is_sequential + "</is_sequential>\n");
-               definitions_writer.writeBytes("      <parallel_dimensions>" + def.dimensions + "</parallel_dimensions>\n");
-               definitions_writer.writeBytes("   </feature>\n\n");
+               definitions_writer.write("   <feature>\n");
+               definitions_writer.write("      <name>" + def.name + "</name>\n");
+               definitions_writer.write("      <description>" + def.description + "</description>\n");
+               definitions_writer.write("      <is_sequential>" + def.is_sequential + "</is_sequential>\n");
+               definitions_writer.write("      <parallel_dimensions>" + def.dimensions + "</parallel_dimensions>\n");
+               definitions_writer.write("   </feature>\n\n");
                }
           
-          definitions_writer.writeBytes("</feature_key_file>");
+          definitions_writer.write("</feature_key_file>");
           
           definitions_writer.close();
           

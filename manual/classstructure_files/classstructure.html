@@ -112,10 +112,11 @@
 	
   <li><strong>AceXmlConverter: </strong>Class relating to methods and objects for converting ACE XML Feature Value files to other formats.</li>
   <li><strong>FeatureExtractionJobProcessor:</strong> Static methods for performing outer layer feature extraction jobs.</li>
-  <li><strong>FileValidator: </strong>Validates MIDI and MEI files and returns an appropriate MIDI Sequence object for either. This class comes equipped with an error log which can be easily outputted to the user to show which files were not valid.</li>
   <li><strong>MIDIFeatureProcessor: </strong>This class is used to pre-process and extract features from MIDI data.</li>
   <li><strong>MIDIIntermediateRepresentations: </strong>Objects of this class take in the path of a MIDI file when they are constructed and automatically parse the file. The fields are then filled with a number of different representations of the MIDI file and statistics about it. These fields can then be accessed by feature objects.</li>
-  <li><strong>MusicFileFilter: </strong>A file filter to check if either the midi or mei extensions are given when validating input files by their extensions.</li>
+  <li><strong>MIDIReporter:</strong> A class for preparing reports on the contents of a MIDI or MEI file, or on groups of such files, including detailed formatted reports on the MIDI messages in each file, intraconsistency reports on single files and interconsistency reports comparing multiple files. This processing is not directly related to feature extraction; it is instead a tool for helping to avoid dataset bias and aid testing and debugging during feature development.</li>
+  <li><strong>MusicFilter: </strong>A file filter to check if either the midi or mei extensions are given when validating input files by their extensions.</li>
+  <li><strong>SymbolicMusicFileUtilities: </strong>Holds static methods for validating and parsing MIDI and MEI files. Many of these methods in      effect check to see if files are valid MIDI or MEI as part of their processing. If they are valid, they are parsed into a MIDI sequence (MEI files are converted to MIDI as part of this processing). If they are not valid, errors are logged in provided error logs and Exceptions are thrown.</li>
   <li><strong>UserFeedbackGenerator:</strong> A holder class for static methods for printing various kinds of formatted messages during processing to specified PrintStreams, primarily related to jSymbolic status updates and to errors.</li>
 </ul>
 

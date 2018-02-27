@@ -6,7 +6,8 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the tempo in beats per minute at the start of the piece.
+ * A feature calculator that finds the tempo in beats per minute at the start of the piece. Set to the default 
+ * MIDI value (120 BPM) if no tempo is specified explicitly.
  *
  * @author Cory McKay
  */
@@ -23,7 +24,7 @@ public class InitialTempoFeature
 	{
 		code = "RT-1";
 		String name = "Initial Tempo";
-		String description = "Tempo in beats per minute at the start of the piece.";
+		String description = "Tempo in beats per minute at the start of the piece. Set to the default MIDI value (120 BPM) if no tempo is specified explicitly.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, description, is_sequential, dimensions);

@@ -27,17 +27,17 @@
 <p><strong>COMMAND LINE ARGUMENTS THAT INCLUDE ONE OR MORE SPACES</strong></p>
 <p>Note that any command line arguments you use that contain a space (such as file paths) must be fully enclosed in quotation marks, otherwise jSymbolic will not work properly. This is standard Java practice. So, for example, if one were using jSymbolic with a configuration file (see below) called &quot;My Config File.txt&quot;, then this would NOT work:</p>
 <blockquote>
-  <pre>java -Xmx3072m -jar jSymbolic2.jar -configrun My Config File.txt</pre>
+  <pre>java -Xmx6g -jar jSymbolic2.jar -configrun My Config File.txt</pre>
 </blockquote>
 <p>Instead, correct usage would be:</p>
 <blockquote>
-  <pre>java -Xmx3072m -jar jSymbolic2.jar -configrun &quot;My Config File.txt&quot;</pre>
+  <pre>java -Xmx6g -jar jSymbolic2.jar -configrun &quot;My Config File.txt&quot;</pre>
 </blockquote>
 <p><strong>RUNNING JSYMBOLIC WITH A SUFFICIENTLY HIGH MEMORY CEILING</strong></p>
 <p>By its nature, the Java Virtual Machine is always assigned a maximum amount of memory at runtime. If a specific maximum is not assigned manually at runtime, then this will be the smaller of 1/4 the computer's physical memory or 1 GB.
 jSymbolic's processing can sometimes require quite
 a bit of memory, so it is best to manually specify a large maximum when running jSymbolic. This can be done by using the &quot;-Xmx&quot; flag when running Java, as shown in the examples below.</p>
-<p>It is suggested that a maximum of three gigabytes be used, which is why &quot;-Xmx3072m&quot; is specified below (3072 megabytes). Of course, the vast majority of processing jobs will require much, much less than this amount of memory, but it is suggested that a high maximum such as this be assigned if possible, as jSymbolic will quit processing (with an explanatory error message) if the maximum assigned memory is exceeded while processing a particularly large or complex piece of music.
+<p>It is suggested that a maximum of six gigabytes be used, which is why &quot;-Xmx6g&quot; is specified below. Of course, the vast majority of processing jobs will require much, much less than this amount of memory, but it is suggested that a high maximum such as this be assigned if possible, as jSymbolic will quit processing (with an explanatory error message) if the maximum assigned memory is exceeded while processing a particularly large or complex piece of music.
 In the very unlikely event that an out-of-memory error does occur, jSymbolic should be rerun with a larger maximum specified.</p>
 <p>Users are advised not to assign a greater amount of memory greater than the amount of physical memory that they have on their systems, however, as virtual memory processing can be quite slow.
 </p>
@@ -45,7 +45,7 @@ In the very unlikely event that an out-of-memory error does occur, jSymbolic sho
 The simplest way to run jSymbolic from a terminal prompt is to type the following at your terminal prompt (after you have navigated to the directory containing the jSymbolic2.jar file):
 
 <blockquote>
-  <pre>java -Xmx3072m -jar jSymbolic2.jar</pre>
+  <pre>java -Xmx6g -jar jSymbolic2.jar</pre>
 </blockquote>
 
 <p>This will run the <a href="../gui_files/gui.html">jSymbolic GUI</a> set up with default settings.</p>
@@ -58,7 +58,7 @@ The simplest way to run jSymbolic from a terminal prompt is to type the followin
 
 <p>Invalid command line arguments will also result in the list of legitimate command line arguments being printed out to the terminal.</p>
 
-<p><strong>Important Notes:</strong></p>
+<p><strong>Important General Notes:</strong></p>
 <ul>
 	
   <li>The ordering of the command line arguments does matter in certain cases.</li>
@@ -66,7 +66,8 @@ The simplest way to run jSymbolic from a terminal prompt is to type the followin
   <li>If the user does not specify a <a href="../configuration_files/configuration.html">configuration settings file</a> at runtime, then jSymboic will look for a default one in the same folder as the jSymbolic2.jar file, and with the file name <i>jSymbolicDefaultConfigs.txt</i>. If no such file exists, or if it is not a valid jSymbolic configuration settings file, then the jSymbolic will simply run with hard-coded default settings.
 	
   <li>All file or directory paths specified in command line arguments must either be absolute or relative to the directory containing the jSymbolic2.jar file.</li>
-  <li>Any errors that occur during batch processing of multiple files will be logged to the terminal. Processing of other files will not be interrupted..</li>
+  <li>All recursive directory searches for symbolic files (as mentioned below) will only return files that have valid .mid, .midi or .mei extensions (with any mix of upper-case or lower-case letters).</li>
+  <li>Errors that occur during batch processing of multiple files will be logged to the terminal. Processing of other files will not be interrupted.</li>
   <li>jSymbolic can currently process the following kinds of symbolic music files: MIDI files and MEI files. Any files that cannot be parsed by jSymbolic will cause an error message to be generated.</li>
   <li>If an MEI-specific feature (e.g. Number of Grace Notes) is set to be extracted, then it will only be extracted from MEI files. It will be ignored by other files, such as MIDI files.</li>
 </ul>
@@ -76,33 +77,40 @@ The simplest way to run jSymbolic from a terminal prompt is to type the followin
 <ul>
 	
   <li>
-    <pre>java -Xmx3072m -jar jSymbolic2.jar</pre>
-    <p>Runs the jSymbolic GUI using default settings pre-loaded.</li>
-  <li>
     <pre>java -jar jSymbolic2.jar -help</pre>
     <p>Outputs valid command line arguments.</li>
   <li>
-    <pre>java -Xmx3072m -jar jSymbolic2.jar &ltSymbolicMusicFileInputPath&gt &ltAceXmlFeatureValuesOutputPath&gt &ltAceXmlFeatureDefinitionsOutputPath&gt</pre>
-    <p>Extracts features using default settings from the symbolic music file as a whole at the path specified by <i>SymbolicMusicFileInputPath</i>, and saves the extracted features as an <a href="http://jmir.sourceforge.net/index_ACE_XML.html" target="top">ACE XML 1.1</a> Features Values File to the path specified by <i>AceXmlFeatureValuesOutputPath</i>. An ACE XML Feature Definitions File is also saved to the path specified by <i>AceXmlFeatureDefinitionsOutputPath</i>. Note that <i>SymbolicMusicFileInputPath</i> may alternatively be a directory, in which case jSymbolic extracts features from the symbolic music files it contains. Since no <a href="../configuration_files/configuration.html">configuration settings file</a> is specified, jSymbolic first checks for a  configurations file in the jSymbolic home directory with the default <i>jSymbolicDefaultConfigs.txt</i> file name If it exists, and it does not specify input or output paths, then feature extraction occurs under its settings. If it does not exist, or if it specifies input or output paths, then feature extraction occurs under default settings.</p>
+    <pre>java -Xmx6g -jar jSymbolic2.jar</pre>
+    <p>Runs the jSymbolic GUI using default settings pre-loaded.</li>
+  <li>
+    <pre>java -Xmx6g -jar jSymbolic2.jar &ltSymbolicMusicFileOrDirectoryInputPath&gt &ltAceXmlFeatureValuesOutputPath&gt &ltAceXmlFeatureDefinitionsOutputPath&gt</pre>
+    <p>Extracts features using default settings from the symbolic music file as a whole at the path specified by <i>SymbolicMusicFileOrDirectoryInputPath</i>, and saves the extracted features as an <a href="http://jmir.sourceforge.net/index_ACE_XML.html" target="top">ACE XML 1.1</a> Features Values File to the path specified by <i>AceXmlFeatureValuesOutputPath</i>. An ACE XML Feature Definitions File is also saved to the path specified by <i>AceXmlFeatureDefinitionsOutputPath</i>. Note that <i>SymbolicMusicFileOrDirectoryInputPath</i> may alternatively be a directory, in which case jSymbolic extracts features from the symbolic music files with recognized extentions that it (and its recursively searched sub-directrories) contain. Since no <a href="../configuration_files/configuration.html">configuration settings file</a> is specified, jSymbolic first checks for a  configurations file in the jSymbolic home directory with the default <i>jSymbolicDefaultConfigs.txt</i> file name. If it exists, and it does not specify input or output paths, then feature extraction occurs under its settings. If it does not exist, or if it specifies input or output paths, then feature extraction occurs under default settings.</p>
   </li>
   <li>
-    <pre>java -Xmx3072m -jar jSymbolic2.jar -window &ltSymbolicMusicFileInputPath&gt &ltAceXmlFeatureValuesOutputPath&gt &ltAceXmlFeatureDefinitionsOutputPath&gt &ltWindowLength&gt &ltWindowOverlapFraction&gt</pre>
+    <pre>java -Xmx6g -jar jSymbolic2.jar -window &ltSymbolicMusicFileOrDirectoryInputPath&gt &ltAceXmlFeatureValuesOutputPath&gt &ltAceXmlFeatureDefinitionsOutputPath&gt &ltWindowLength&gt &ltWindowOverlapFraction&gt</pre>
     <p>Processing here is similar to the above case, but now the input file is broken into a series of windows, and features are extracted from each of these windows separately. Each window is of equal temporal duration except for the last, which will have a duration corrsponding to the amount of remaining time in the piece. The features extracted from each of these windows are stored separately in a single output ACEM XML Feature Values file. The <i>WindowLength</i> value specifies the duration of each window in seconds. The <i>WindowOverlapFraction</i> value (which should have a value of 0 (for no overlap) or above and below 1) specifies the amount of overlap between consecutive windows. For example, for a <i>WindowLength</i> value of 10 and a <i>WindowOverlapFraction</i> value of 0.1, the windows will be from 0 sec to 10 sec, 9 sec to 19 sec, etc. Since no <a href="../configuration_files/configuration.html">configuration settings file</a> is specified, feature extraction occurs under default settings (aside from windowing, of course). Note that under these settings, even if a valid default <i>jSymbolicDefaultConfigs.txt</i> file exists, it is still ignored.</p>
   </li>
   <li>
-    <pre>java -Xmx3072m -jar jSymbolic2.jar -arff &ltSymbolicMusicFileInputPath&gt &ltAceXmlFeatureValuesOutputPath&gt &ltAceXmlFeatureDefinitionsOutputPath&gt</pre>
+    <pre>java -Xmx6g -jar jSymbolic2.jar -arff &ltSymbolicMusicFileOrDirectoryInputPath&gt &ltAceXmlFeatureValuesOutputPath&gt &ltAceXmlFeatureDefinitionsOutputPath&gt</pre>
   </li>
   <li>
-    <pre>java -Xmx3072m -jar jSymbolic2.jar -arff -window &ltSymbolicMusicFileInputPath&gt &ltAceXmlFeatureValuesOutputPath&gt &ltAceXmlFeatureDefinitionsOutputPath&gt &ltWindowLength&gt &ltWindowOverlapFraction&gt</pre>
+    <pre>java -Xmx6g -jar jSymbolic2.jar -arff -window &ltSymbolicMusicFileOrDirectoryInputPath&gt &ltAceXmlFeatureValuesOutputPath&gt &ltAceXmlFeatureDefinitionsOutputPath&gt &ltWindowLength&gt &ltWindowOverlapFraction&gt</pre>
     <p>The <i>-arff</i> switch can be added to save features as <a href="http://www.cs.waikato.ac.nz/ml/weka/arff.html" target="top">Weka ARFF</a> files (in addition to saving them as ACE XML files). The ARFF file is saved with the same name as the &ltAceXmlFeatureValuesOutputPath&gt file, but with the extension changed to ".arff". Note that this can be coupled with the <i>-csv</i> switch explained below as well. Note that under these settings, even if a valid default <i>jSymbolicDefaultConfigs.txt</i> file exists, it is still ignored.</p>
   </li>
   <li>
-    <pre>java -Xmx3072m -jar jSymbolic2.jar -csv &ltSymbolicMusicFileInputPath&gt &ltAceXmlFeatureValuesOutputPath&gt &ltAceXmlFeatureDefinitionsOutputPath&gt</pre>
+    <pre>java -Xmx6g -jar jSymbolic2.jar -csv &ltSymbolicMusicFileOrDirectoryInputPath&gt &ltAceXmlFeatureValuesOutputPath&gt &ltAceXmlFeatureDefinitionsOutputPath&gt</pre>
   </li>
   <li>
-    <pre>java -Xmx3072m -jar jSymbolic2.jar -csv -window &ltSymbolicMusicFileInputPath&gt &ltAceXmlFeatureValuesOutputPath&gt &ltAceXmlFeatureDefinitionsOutputPath&gt &ltWindowLength&gt &ltWindowOverlapFraction&gt</pre>
+    <pre>java -Xmx6g -jar jSymbolic2.jar -csv -window &ltSymbolicMusicFileOrDirectoryInputPath&gt &ltAceXmlFeatureValuesOutputPath&gt &ltAceXmlFeatureDefinitionsOutputPath&gt &ltWindowLength&gt &ltWindowOverlapFraction&gt</pre>
     <p>The <i>-csv</i> switch can be added to save features as <a href="https://en.wikipedia.org/wiki/Comma-separated_values" target="top">CSV</a> text files (in addition to saving them as ACE XML files). The CSV file is saved with the same name as the &ltAceXmlFeatureValuesOutputPath&gt file, but with the extension changed to ".csv". Note that this can be coupled with the <i>-arff</i> switch explained above as well. Note that under these settings, even if a valid default <i>jSymbolicDefaultConfigs.txt</i> file exists, it is still ignored.</p>
-  </li>
+  <li>
+    <pre>java -jar jSymbolic2.jar -consistencycheck &ltMidiOrMeiOrDirectoryPath&gt</pre>
+    <p>Outputs reports on whether or not certain musical characteristics are consistent within and across all MIDI and MEI files with recognized extensions that are found within the specified directory (and its recursively searched sub-directories), both across the files as a group and internally within each file.  Files must have a proper MIDI or MEI file extension to be included in this processing. A single file may alternatively be specified, in which case that file will just be checked for self-consistency. Either way, MEI files are converted to MIDI as part of this processing. If multiple files are found, then the generated reports will include: a brief report on the contents of each file and its self-consistency; a summary of self-inconsistencies found in the files (e.g. multiple tempos in a single file); and a report of the inconsistencies found across files (e.g. different tempos found in different files). Note that this does not involve feature extraction; it is instead a tool for helping to avoid dataset bias and aid testing and debugging during feature development.</li>
+</ul>
+<ul>
+  <li>
+    <pre>java -jar jSymbolic2.jar -mididump &ltMidiOrMeiOrDirectoryPath&gt</pre>
+    <p>Outputs reports about the specified MIDI or MEI file and each of the MIDI messages contained in it (MEI files are converted to MIDI as part of this processing). A directory may alternatively be specified, in which case the contents of each MIDI or MEI file with recognized extensions that  it (and its recursively searched sub-directories) contain  will be reported one-by-one. Files must have a proper MIDI or MEI file extension to be included in this processing. Reports include formatted and aggregated details of all relevant MIDI messages found in each file (or, in the case of MEI files, the MIDI messages corresponding to the contents of each such file). Note that this does not involve feature extraction; it is instead a tool for helping to avoid dataset bias and aid testing and debugging during feature development.</li>
 </ul>
 
 <p><strong>JSYMBOLIC'S COMMAND LINE ARGUMENTS (WITH A NON-DEFAULT CONFIGURATION FILE SPECIFIED)</strong></p>
@@ -112,46 +120,77 @@ The simplest way to run jSymbolic from a terminal prompt is to type the followin
 <ul>
 	
   <li>
-    <pre>java -Xmx3072m -jar jSymbolic2.jar -configgui &ltConfigurationFilePath&gt</pre>
+    <pre>java -Xmx6g -jar jSymbolic2.jar -configgui &ltConfigurationFilePath&gt</pre>
     <p>Runs the jSybmolic GUI with settings specified by the configuration file at the path specified by the <i>ConfigurationFilePath</i> value. An error message is printed to the terminal and execution terminated if this file is invalid or does not exist.</p>
   <li>
-    <pre>java -Xmx3072m -jar jSymbolic2.jar -configrun &ltConfigurationFilePath&gt</pre>
+    <pre>java -Xmx6g -jar jSymbolic2.jar -configrun &ltConfigurationFilePath&gt</pre>
     <p>Runs jSymbolic directly (does not run the GUI) using the settings specified by the configuration file at the path specified by the <i>ConfigurationFilePath</i> value. This configuration file must specify the input and output paths to use. An error message is printed to the terminal and execution terminated if this file is invalid or does not exist.</p>
   <li>
-    <pre>java -Xmx3072m -jar jSymbolic2.jar -configrun &ltConfigurationFilePath&gt &ltSymbolicMusicFileInputPath&gt &ltAceXmlFeatureValuesOutputPath&gt &ltAceXmlFeatureDefinitionsOutputPath&gt</pre>
+    <pre>java -Xmx6g -jar jSymbolic2.jar -configrun &ltConfigurationFilePath&gt &ltSymbolicMusicFileOrDirectoryInputPath&gt &ltAceXmlFeatureValuesOutputPath&gt &ltAceXmlFeatureDefinitionsOutputPath&gt</pre>
     <p>As in the above example, runs jSymbolic directly (does not run the GUI) using the settings specified by the configuration file at the path specified by the <i>ConfigurationFilePath</i> value. However, unlike the above example, the input and output paths must not be specified in the configuration settings file, and are instead specified directly in the provided command line arguments. An error message is printed to the terminal and execution terminated if this file is invalid or does not exist.</p>
   <li>
-    <pre>java -jar jSymbolic2.jar -validateconfigallheaders &ltConfigurationFilePath&gt</pre>
+    <pre>java -Xmx6g -jar jSymbolic2.jar -validateconfigallheaders &ltConfigurationFilePath&gt</pre>
     <p>Check the configuration file at the specified <i>ConfigurationFilePath</i> path to see if it is valid and complete. In this case, it must specify both output files and input files in order to be considered valid. Results are output to the terminal.</p>
   <li>
-    <pre>java -jar jSymbolic2.jar -validateconfigfeatureoption &ltConfigurationFilePath&gt</pre>
+    <pre>java -Xmx6g -jar jSymbolic2.jar -validateconfigfeatureoption &ltConfigurationFilePath&gt</pre>
     <p>Check the configuration file at the specified <i>ConfigurationFilePath</i> path to see if it is valid and complete. In this case, it may specify neither output files nor input files in order to be considered valid. Results are output to the terminal.</p>
 </ul>
 
 <p><strong>USAGE EXAMPLES</strong></p>
 
-<p>These examples demonstrate sample ways that jSymbolic can be run from the command line. These examples all make use of the flags and values explained above.</p>
+<p>These examples demonstrate a few sample ways that jSymbolic can be run from the command line. These examples all make use of the command line flags and values explained above.</p>
 
 <blockquote>
 	<p><strong>Example 1:</strong> Run the jSymbolic GUI under default settings.</p>
-	<blockquote><pre>java -Xmx3072m -jar jSymbolic2.jar</pre></blockquote>
+	<blockquote><pre>java -Xmx6g -jar jSymbolic2.jar</pre></blockquote>
 
-	<p><strong>Example 2:</strong> Extract features from a single music file called "test.mei" in the current directory, and output the results to "feature_values_1.xml" and "feature_descriptions_1.xml", to be created
+	
+  <p><strong>Example 2:</strong> Extract features from a single music file called "test.mid" in the current directory, and output the results to "feature_values_1.xml", &quot;feature_values_1.csv&quot;  and "feature_descriptions_1.xml", to be created
 	in the current directory.</p>
-	<blockquote><pre>java -Xmx3072m -jar jSymbolic2.jar ./test.mei ./feature_values_1.xml ./feature_descriptions_1.xml</pre></blockquote>
+	<blockquote>
+    <pre>java -Xmx6g -jar jSymbolic2.jar -csv ./test.mid ./feature_values_1.xml ./feature_descriptions_1.xml</pre>
+  </blockquote>
 	
-	<p><strong>Example 3:</strong> Extract features from all symbolic feature files in the directory called "test" in the current directory, and output the results to "feature_values_1.xml" and "feature_descriptions_1.xml" files, to be created in the current directory. A window size of 10 seconds will be used with an overlap fraction of 0.1 (i.e. 1 second, in this case).</p>
-	<blockquote><pre>java -Xmx3072m -jar jSymbolic2.jar -window ./test/ ./feature_values_1.xml ./feature_descriptions_1.xml 10 0.1</pre></blockquote>
 	
-	<p><strong>Example 4:</strong> Extract features from a single music file called "test.midi" in the current directory, and output the results to "feature_values_1.xml" and "feature_descriptions_1.xml", to be created
+  <p><strong>Example 3:</strong> Extract features from all symbolic feature files in the directory called "test"  (and its recursively searched sub-directories) with recognized extentions, and output the results to "feature_values_1.xml", &quot;feature_values_1.csv&quot; and "feature_descriptions_1.xml" files, to be created in the current directory.</p>
+	<blockquote>
+    <pre>java -Xmx6g -jar jSymbolic2.jar -csv ./test/ ./feature_values_1.xml ./feature_descriptions_1.xml</pre>
+  </blockquote>
+	
+	
+  <p><strong>Example 4:</strong> Extract features from all symbolic feature files in the directory called "test"  (and its recursively searched sub-directories) with recognized extensions, and output the results to "feature_values_1.xml" and "feature_descriptions_1.xml" files, to be created in the current directory. A window size of 10 seconds will be used with an overlap fraction of 0.1 (i.e. 1 second, in this case).</p>
+	<blockquote><pre>java -Xmx6g -jar jSymbolic2.jar -window ./test/ ./feature_values_1.xml ./feature_descriptions_1.xml 10 0.1</pre></blockquote>
+	
+	
+  <p><strong>Example 5:</strong> Extract features from a single music file called "test.mid" in the current directory, and output the results to "feature_values_1.xml" and "feature_descriptions_1.xml", to be created
 	in the current directory. Also output the extracted feature values in the form of a CSV file and an ARFF file, saved in the current directory as	as "feature_values_1.csv" and "feature_values_1.arff", respectively.</p>
-	<blockquote><pre>java -Xmx3072m -jar jSymbolic2.jar -arff -csv ./test.midi ./feature_values_1.xml ./feature_descriptions_1.xml</pre></blockquote>
+	<blockquote><pre>java -Xmx6g -jar jSymbolic2.jar -arff -csv ./test.mid ./feature_values_1.xml ./feature_descriptions_1.xml</pre></blockquote>
 	
-	<p><strong>Example 5:</strong> Extract features from all symbolic feature files in the directory called "test" in the current directory, and output the results to "feature_values_1.xml" and "feature_descriptions_1.xml" files, to be created in the current directory. The feature extraction is done using the configuration settings specified in the configuration file called "jsymbolic_configurations.txt" found in the current directory (and which should not itself specify input and output file paths).</p>
-	<blockquote><pre>java -Xmx3072m -jar jSymbolic2.jar -configrun ./jsymbolic_configurations.txt ./test/ ./feature_values_1.xml ./feature_descriptions_1.xml</pre></blockquote>
 	
-	<p><strong>Example 6:</strong> Run the jSymbolic GUI pre-loaded with the settings specified in the configuration file called "jsymbolic_configurations.txt" in the current directory.</p>
-	<blockquote><pre>java -Xmx3072m -jar jSymbolic2.jar -configgui ./jsymbolic_configuration.txt</pre></blockquote>
+  <p><strong>Example 6:</strong> Extract features from all symbolic feature files in the directory called "test"  (and its recursively searched sub-directories) with recognized extensions, and output the results to "feature_values_1.xml" and "feature_descriptions_1.xml" files, to be created in the current directory. The feature extraction is done using the configuration settings specified in the configuration file called "jsymbolic_configurations.txt" found in the current directory (and which should not itself specify input and output file paths).</p>
+	<blockquote><pre>java -Xmx6g -jar jSymbolic2.jar -configrun ./jsymbolic_configurations.txt ./test/ ./feature_values_1.xml ./feature_descriptions_1.xml</pre></blockquote>
+	
+	
+  <p><strong>Example 7:</strong> Extract features from all symbolic  files referred to in the configurations file called &quot;jsymbolic_configurations.txt&quot;, using the output paths and settings specified in this configuration file.</p>
+	<blockquote>
+    <pre>java -Xmx6g -jar jSymbolic2.jar -configrun ./jsymbolic_configurations.txt </pre>
+  </blockquote>
+	
+	
+  <p><strong>Example 8:</strong> Run the jSymbolic GUI pre-loaded with the settings (including, optionally, input and output paths) specified in the configuration file called "jsymbolic_configurations.txt" in the current directory.</p>
+	<blockquote><pre>java -Xmx6g -jar jSymbolic2.jar -configgui ./jsymbolic_configuration.txt</pre></blockquote>
+	
+	
+  <blockquote></blockquote>
+  <p><strong>Example 9:</strong> Display detailed intraconsistency and interconsistency reports on all MIDI and MEI files with recognized extentions that are found in the "TestingFolder" directory (and its recursively searched sub-directories).</p>
+  <blockquote>
+    <pre>java -Xmx6g -jar jSymbolic2.jar -consistencycheck ./TestingFolder</pre>
+  </blockquote>
+  <p><strong>Example 10:</strong> Display a detailed report on the MIDI file called "test.mid" in the current directory, including a breakdown of the MIDI messages it contains.</p>
+	
+  <blockquote>
+    <pre>java -Xmx6g -jar jSymbolic2.jar -mididump ./test.mid</pre>
+  </blockquote>
 </blockquote>
 
 <p></p>

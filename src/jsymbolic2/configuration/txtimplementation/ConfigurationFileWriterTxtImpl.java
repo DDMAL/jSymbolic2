@@ -1,7 +1,7 @@
 package jsymbolic2.configuration.txtimplementation;
 
 import jsymbolic2.configuration.*;
-import jsymbolic2.processing.FileValidator;
+import jsymbolic2.processing.SymbolicMusicFileUtilities;
 
 import java.io.File;
 import java.util.List;
@@ -96,12 +96,12 @@ public class ConfigurationFileWriterTxtImpl extends ConfigurationFileWriter {
     public List<String> addFormattedOutputFiles(List<String> rawConfigFile, ConfigurationOutputFiles outputFiles) {
         rawConfigFile.add(ConfigFileHeaderEnum.OUTPUT_FILE_HEADER.toString());
 
-        String featureValue = FileValidator.correctFileExtension(outputFiles.getFeature_values_save_path(), "xml");
+        String featureValue = SymbolicMusicFileUtilities.correctFileExtension(outputFiles.getFeature_values_save_path(), "xml");
         String formattedValue =
                 OutputEnum.feature_values_save_path.name() + ConfigurationFileDelimiterEnum.EQUAL + featureValue;
         rawConfigFile.add(formattedValue);
 
-        String definitionValue = FileValidator.correctFileExtension(outputFiles.getFeature_definition_save_path(),"xml");
+        String definitionValue = SymbolicMusicFileUtilities.correctFileExtension(outputFiles.getFeature_definition_save_path(),"xml");
         String formattedDefinition =
                 OutputEnum.feature_definitions_save_path.name() + ConfigurationFileDelimiterEnum.EQUAL + definitionValue;
         rawConfigFile.add(formattedDefinition);

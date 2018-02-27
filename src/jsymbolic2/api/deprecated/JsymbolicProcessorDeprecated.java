@@ -12,7 +12,7 @@ import jsymbolic2.configuration.txtimplementation.ConfigurationFileValidatorTxtI
 import jsymbolic2.featureutils.FeatureExtractorAccess;
 import jsymbolic2.processing.AceXmlConverter;
 import jsymbolic2.processing.MIDIFeatureProcessor;
-import jsymbolic2.processing.MusicFileFilter;
+import jsymbolic2.processing.MusicFilter;
 import jsymbolic2.processing.UserFeedbackGenerator;
 import mckay.utilities.staticlibraries.FileMethods;
 
@@ -353,7 +353,7 @@ public class JsymbolicProcessorDeprecated
 			throw new Exception(directory.getName() + " is not an existing directory.");
 
 		Map<File, JsymbolicData> featureMap = new HashMap<>();
-		File[] allFile = FileMethods.getAllFilesInDirectory(directory, true, new MusicFileFilter(), null);
+		File[] allFile = FileMethods.getAllFilesInDirectory(directory, true, new MusicFilter(), null);
 		for (File file : allFile)
 		{
 			MIDIFeatureProcessor processor = buildNewProcessor();

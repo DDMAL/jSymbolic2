@@ -6,8 +6,8 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the number of pitches that occur at least once in the piece. Enharmonic
- * equivalents are grouped together for the purpose of this calculation.
+ * A feature calculator that finds the number of unique pitches that occur at least once in the piece. 
+ * Enharmonic equivalents are grouped together for the purpose of this calculation.
  *
  * @author Cory McKay
  */
@@ -24,7 +24,7 @@ public class NumberOfPitchesFeature
 	{
 		code = "P-4";
 		String name = "Number of Pitches";
-		String description = "Number of pitches that occur at least once in the piece. Enharmonic equivalents are grouped together for the purpose of this calculation.";
+		String description = "Number of unique pitches that occur at least once in the piece. Enharmonic equivalents are grouped together for the purpose of this calculation.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, description, is_sequential, dimensions);

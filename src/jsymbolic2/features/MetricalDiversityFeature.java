@@ -3,16 +3,17 @@ package jsymbolic2.features;
 import java.util.LinkedList;
 import javax.sound.midi.*;
 import ace.datatypes.FeatureDefinition;
+import mckay.utilities.staticlibraries.StringMethods;
 import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that is set to 1 if the time signature is changed one or more times during the piece.
- * Set to 0 otherwise.
- *
+ * A feature calculator that is set to the number of different (unique) time signatures found in the piece.
+ * Set to 1 if no time signature is specified.
+ * 
  * @author Cory McKay
  */
-public class MetricalDiversity
+public class MetricalDiversityFeature
 		extends MIDIFeatureExtractor
 {
 	/* CONSTRUCTOR ******************************************************************************************/
@@ -21,11 +22,11 @@ public class MetricalDiversity
 	/**
 	 * Basic constructor that sets the values of the fields inherited from this class' superclass.
 	 */
-	public MetricalDiversity()
+	public MetricalDiversityFeature()
 	{
 		code = "R-8";
 		String name = "Metrical Diversity";
-		String description = "Set to 1 if the time signature is changed one or more times during the piece. Set to 0 otherwise.";
+		String description = "The number of different (unique) time signatures found in the piece. Set to 1 if no time signature is specified.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, description, is_sequential, dimensions);
@@ -59,21 +60,29 @@ public class MetricalDiversity
 		double value;
 		if (sequence_info != null)
 		{
-			// Default to no
-			value = 0.0;
+			// Default to 1
+			value = 1.0;
 
 			// If time signature specified
 			if (!((LinkedList) sequence_info.overall_metadata[1]).isEmpty())
 			{
 				// Convert data types
-				Object[] numerators_objects = ((LinkedList) sequence_info.overall_metadata[1]).toArray();
-				int[] numerators = new int[numerators_objects.length];
+				Object[] numerator_objects = ((LinkedList) sequence_info.overall_metadata[1]).toArray();
+				int[] numerators = new int[numerator_objects.length];
 				for (int i = 0; i < numerators.length; i++)
-					numerators[i] = ((Integer) numerators_objects[i]).intValue();
+					numerators[i] = (Integer) numerator_objects[i];
+				Object[] denominator_objects = ((LinkedList) sequence_info.overall_metadata[2]).toArray();
+				int[] denominators = new int[denominator_objects.length];
+				for (int i = 0; i < denominators.length; i++)
+					denominators[i] = (Integer) denominator_objects[i];
 
-				// Find if changes
-				if (numerators.length > 1)
-					value = 1.0;
+				// Join into united time signatures
+				String[] time_signatures = new String[numerators.length];
+				for (int i = 0; i < time_signatures.length; i++)
+					time_signatures[i] = numerators[i] + "/" + denominators[i];
+				
+				// Find the number of unique time signatures
+				value = (double) StringMethods.getCountsOfUniqueStrings(time_signatures).length;
 			}
 		}
 		else value = -1.0;
