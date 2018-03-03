@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.PrintStream;
 import java.util.Arrays;
 import java.util.List;
+import java.util.ArrayList;
 import ace.datatypes.DataBoard;
 import ace.datatypes.DataSet;
 import jsymbolic2.configuration.ConfigFileHeaderEnum;
@@ -16,7 +17,8 @@ import jsymbolic2.processing.*;
  * This class provides an API for programmatic access to jSymbolic's functionality. The constructor allows the
  * programmer to specify feature extraction settings, after which the methods of this class can be called to
  * extract features. Extracted feature values and associated metadata are saved to files, and may also be
- * returned in the form of a JsymbolicData object, depending on the particular method called.
+ * returned in the form of a JsymbolicData object, depending on the particular method called. Separate
+ * independent processing can also be performed via the static methods of this class.
  *
  * @author Tristano Tenaglia and Cory McKay
  */
@@ -489,5 +491,93 @@ public class JsymbolicProcessor
 	{
 		DataBoard feature_values_and_definitions = getCompleteExtractedFeatureInformation();
 		return feature_values_and_definitions.getFeatureVectors();
+	}	
+
+	
+	/* PUBLIC STATIC METHODS ********************************************************************************/
+	
+	
+	/**
+	 * Parse the MIDI and/or MEI files referred to in file_or_directory_path (either a single file or a
+	 * directory holding MIDI and/or MEI files) and return formatted ordered reports on whether or not certain
+	 * musical characteristics are consistent both across the files as a group, and internally within each
+	 * file. In the case of directories, processing is recursive, and only files with qualifying MIDI or MEI
+	 * file extensions are included. Problems that are encountered can result in an exception being thrown
+	 * and/or a message being printed to standard error.
+	 *
+	 * @param file_or_directory_path	Either a single file or a directory holding MIDI and/or MEI files.
+	 *									Generate the report based on these files.
+	 * @return							The formatted report.
+	 * @throws Exception				An informative exception is thrown if there is a problem with the
+	 *									specified file_or_directory_path.
+	 */
+	public static String getConsistencyReport(String file_or_directory_path)
+		throws Exception
+	{
+		// Prepare the set of files (after recursive directory parsing and extension filtering, if
+		// appropriate), to report on
+		File[] midi_or_mei_file_list = SymbolicMusicFileUtilities.getRecursiveListOfFiles( file_or_directory_path,
+																						   new MusicFilter(),
+																						   System.err,
+																						   new ArrayList<>() );					
+
+		// Prepare and return the report
+		if (midi_or_mei_file_list != null)
+			return MIDIReporter.prepareConsistencyReports(midi_or_mei_file_list, true, true, true);
+		else
+			throw new Exception("Null file or directory path provided.");
+	}
+	
+	
+	/**
+	 * Parse the MIDI and/or MEI files referred to in file_or_directory_path (either a single file or a
+	 * directory holding MIDI and/or MEI files) and return formatted ordered reports on the MIDI messages
+	 * contained in these files. This report indicates, separately for each file, a structured transcription
+	 * of all the relevant MIDI messages that the given file contains. If a given file is an MEI rather than a
+	 * MIDI file, then it is converted to MIDI before reporting. In the case of directories, processing is
+	 * recursive, and only files with qualifying MIDI or MEI file extensions are included. Problems that are
+	 * encountered can result in an exception being thrown and/or a message being printed to standard error.
+	 *
+	 * @param file_or_directory_path	Either a single file or a directory holding MIDI and/or MEI files.
+	 *									Generate the report based on these files.
+	 * @return							The formatted report.
+	 * @throws Exception				An informative exception is thrown if there is a problem with the
+	 *									specified file_or_directory_path.
+	 */
+	public static String getMidiContentsReport(String file_or_directory_path)
+		throws Exception
+	{
+		// Prepare the set of files (after recursive directory parsing and extension filtering, if
+		// appropriate), to report on
+		File[] midi_or_mei_file_list = SymbolicMusicFileUtilities.getRecursiveListOfFiles( file_or_directory_path,
+																						   new MusicFilter(),
+																						   System.err,
+																						   new ArrayList<>() );					
+
+		// Prepare and output the reports
+		if (midi_or_mei_file_list != null)
+		{					
+			// The report to display
+			StringBuilder report = new StringBuilder();
+			
+			// Report on each file
+			for (int i = 0; i < midi_or_mei_file_list.length; i++)
+			{
+				// Parse and check the MIDI file
+				MIDIReporter midi_debugger = new MIDIReporter(midi_or_mei_file_list[i]);
+
+				// Generate the report
+				report.append("\n============ MIDI MESSAGES REPORT FOR FILE " + (i+1) + " / " + midi_or_mei_file_list.length + " ============\n");
+				report.append(midi_debugger.prepareHeaderReport());
+				report.append(midi_debugger.prepareMetaMessageReport(true, true, true, true, true, true));
+				report.append(midi_debugger.prepareProgramChangeAndUnpitchedInstrumentsReport());
+				report.append(midi_debugger.prepareControllerMessageReport());
+				report.append(midi_debugger.prepareNoteReport(false, true));
+			}
+			
+			// Return the report
+			return report.toString();
+		}
+		else throw new Exception("Null file or directory path provided.");
 	}	
 }

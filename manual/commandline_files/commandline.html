@@ -72,7 +72,14 @@ The simplest way to run jSymbolic from a terminal prompt is to type the followin
   <li>If an MEI-specific feature (e.g. Number of Grace Notes) is set to be extracted, then it will only be extracted from MEI files. It will be ignored by other files, such as MIDI files.</li>
 </ul>
 
-<p> <strong>JSYMBOLIC'S COMMAND LINE ARGUMENTS (WITH NO NON-DEFAULT CONFIGURATION FILE SPECIFIED)</strong></p>
+<p> <strong>SPEEDING UP PROCESSING BY EXTRACTING FEATURES IN PARALLEL WITH MULTIPLE INSTANCES</strong></p>
+<p>Although it is not yet possible to run jSymbolic feature extraction using multiple 
+  internal threads to speed up processing, if processing speed is a concern
+then  multiple instances of  jSymbolic may be spawned from separate terminal windows, and each 
+  such jSymbolic instance may be run in parallel without danger to extract features from 
+  separate portions of a large dataset. This is rarely necessary in practice, however, since
+  jSymbolic is generally quite fast when even just a single instance is used.</p>
+<p><strong>JSYMBOLIC'S COMMAND LINE ARGUMENTS (WITH NO NON-DEFAULT CONFIGURATION FILE SPECIFIED)</strong></p>
 
 <ul>
 	
@@ -104,12 +111,12 @@ The simplest way to run jSymbolic from a terminal prompt is to type the followin
     <pre>java -Xmx6g -jar jSymbolic2.jar -csv -window &ltSymbolicMusicFileOrDirectoryInputPath&gt &ltAceXmlFeatureValuesOutputPath&gt &ltAceXmlFeatureDefinitionsOutputPath&gt &ltWindowLength&gt &ltWindowOverlapFraction&gt</pre>
     <p>The <i>-csv</i> switch can be added to save features as <a href="https://en.wikipedia.org/wiki/Comma-separated_values" target="top">CSV</a> text files (in addition to saving them as ACE XML files). The CSV file is saved with the same name as the &ltAceXmlFeatureValuesOutputPath&gt file, but with the extension changed to ".csv". Note that this can be coupled with the <i>-arff</i> switch explained above as well. Note that under these settings, even if a valid default <i>jSymbolicDefaultConfigs.txt</i> file exists, it is still ignored.</p>
   <li>
-    <pre>java -jar jSymbolic2.jar -consistencycheck &ltMidiOrMeiOrDirectoryPath&gt</pre>
+    <pre>java -Xmx6g -jar jSymbolic2.jar -consistencycheck &ltMidiOrMeiOrDirectoryPath&gt</pre>
     <p>Outputs reports on whether or not certain musical characteristics are consistent within and across all MIDI and MEI files with recognized extensions that are found within the specified directory (and its recursively searched sub-directories), both across the files as a group and internally within each file.  Files must have a proper MIDI or MEI file extension to be included in this processing. A single file may alternatively be specified, in which case that file will just be checked for self-consistency. Either way, MEI files are converted to MIDI as part of this processing. If multiple files are found, then the generated reports will include: a brief report on the contents of each file and its self-consistency; a summary of self-inconsistencies found in the files (e.g. multiple tempos in a single file); and a report of the inconsistencies found across files (e.g. different tempos found in different files). Note that this does not involve feature extraction; it is instead a tool for helping to avoid dataset bias and aid testing and debugging during feature development.</li>
 </ul>
 <ul>
   <li>
-    <pre>java -jar jSymbolic2.jar -mididump &ltMidiOrMeiOrDirectoryPath&gt</pre>
+    <pre>java -Xmx6g -jar jSymbolic2.jar -mididump &ltMidiOrMeiOrDirectoryPath&gt</pre>
     <p>Outputs reports about the specified MIDI or MEI file and each of the MIDI messages contained in it (MEI files are converted to MIDI as part of this processing). A directory may alternatively be specified, in which case the contents of each MIDI or MEI file with recognized extensions that  it (and its recursively searched sub-directories) contain  will be reported one-by-one. Files must have a proper MIDI or MEI file extension to be included in this processing. Reports include formatted and aggregated details of all relevant MIDI messages found in each file (or, in the case of MEI files, the MIDI messages corresponding to the contents of each such file). Note that this does not involve feature extraction; it is instead a tool for helping to avoid dataset bias and aid testing and debugging during feature development.</li>
 </ul>
 

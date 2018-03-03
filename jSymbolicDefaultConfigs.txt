@@ -159,7 +159,20 @@ Median Partial Rest Duration
 Variability of Complete Rest Durations
 Variability of Partial Rest Durations
 Variability Across Voices of Combined Rests
-Beat Histogram Tempo Independent
+Beat Histogram Tempo Standardized
+Number of Strong Rhythmic Pulses - Tempo Standardized
+Number of Moderate Rhythmic Pulses - Tempo Standardized
+Number of Relatively Strong Rhythmic Pulses - Tempo Standardized
+Strongest Rhythmic Pulse - Tempo Standardized
+Second Strongest Rhythmic Pulse - Tempo Standardized
+Harmonicity of Two Strongest Rhythmic Pulses - Tempo Standardized
+Strength of Strongest Rhythmic Pulse - Tempo Standardized
+Strength of Second Strongest Rhythmic Pulse - Tempo Standardized
+Strength Ratio of Two Strongest Rhythmic Pulses - Tempo Standardized
+Combined Strength of Two Strongest Rhythmic Pulses - Tempo Standardized
+Rhythmic Variability - Tempo Standardized
+Rhythmic Looseness - Tempo Standardized
+Polyrhythms - Tempo Standardized
 Initial Tempo
 Mean Tempo
 Tempo Variability

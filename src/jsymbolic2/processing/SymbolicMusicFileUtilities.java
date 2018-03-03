@@ -285,7 +285,8 @@ public class SymbolicMusicFileUtilities
 	 *											file_filter.
 	 * @param file_filter						A filter through which files must pass in order to be included 
 	 *											in the returned list.
-	 * @param error_print_stream				A stream to print processing error reports to. May not be null.
+	 * @param error_print_stream				A stream to print processing error reports to. May be null, in
+	 *											which case errors will still be added to error_log.
 	 * @param error_log							A list of errors encountered so far. Errors are added to it if
 	 *											any are encountered. May not be null.
 	 * @return									A list of all files in files_and_directories and its
@@ -315,7 +316,8 @@ public class SymbolicMusicFileUtilities
 				catch (IOException ioe)
 				{
 					String error_message = "Could not traverse files from this folder: " + file.getAbsolutePath();
-					UserFeedbackGenerator.printWarningMessage(error_print_stream, error_message);
+					if (error_print_stream != null)
+						UserFeedbackGenerator.printWarningMessage(error_print_stream, error_message);
 					error_log.add(error_message);
 				}
 			}

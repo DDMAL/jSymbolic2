@@ -10,8 +10,11 @@ import javax.sound.midi.*;
 import javax.swing.*;
 import jsymbolic2.configuration.ConfigurationFileData;
 import jsymbolic2.configuration.ConfigurationInputFiles;
+import jsymbolic2.processing.MIDIReporter;
+import jsymbolic2.processing.MusicFilter;
 import jsymbolic2.processing.SymbolicMusicFileUtilities;
 import mckay.utilities.general.FileFilterImplementation;
+import mckay.utilities.gui.templates.InformationDialogFlexible;
 import mckay.utilities.sound.midi.MIDIMethods;
 import mckay.utilities.staticlibraries.ArrayMethods;
 import mckay.utilities.staticlibraries.StringMethods;
@@ -21,9 +24,9 @@ import org.ddmal.jmei2midi.MeiSequence;
  * A JPanel containing a table listing all files from which features are to be extracted. The first column
  * indicates the name of each file, and the second indicates its file path. Double clicking on a given row
  * provides additional metadata about its associated file. Buttons are included for adding or removing files
- * from the table, as well as for sonifying them. The table may be sorted by clicking on either of the column
- * headings.
- * 
+ * from the table, for sonifying them and for generating reports on them. The table may be sorted by clicking
+ * on either of the column headings.
+* 
  * @author Cory McKay and Tristano Tenaglia
  */
 public class MusicFileSelectorPanel
@@ -65,10 +68,45 @@ public class MusicFileSelectorPanel
 	/**
 	 * A button for adding symbolic music files to the the table of files from which features will eventually
 	 * be extracted. Brings up a file chooser dialog box for doing so. An error message will be displayed if
-	 * invalid or nonexistent files are chosen. Files chosen are already on the table will be ignored. If any
-	 * files are selected, then a report will be written to the Processing Information text area.
+	 * invalid or nonexistent files are chosen. Files chosen that are already on the table will be ignored. If
+	 * any files are selected, then a report will be written to the Processing Information text area.
 	 */
 	private JButton add_files_button;
+	
+	/**
+	 * A button for adding symbolic music files to the the table of files from which features will eventually
+	 * be extracted. Brings up a file chooser dialog box that allows the user to choose one (and only one)
+	 * directory, whose contents are added to the symbolic_music_files_table list of references of symbolic
+	 * music files. Any files that do not have a file extension associated with a compatible symbolic music
+	 * file are filtered out from consideration. Sub-directories are also explored, recursively. If an entered
+	 * path corresponds to a directory that does not exist, or that contains an invalid symbolic music file,
+	 * then an error message dialog box is displayed. Files chosen that are already on the table will be
+	 * ignored. Prints a report to the Processing Information text area.
+	 */	
+	private JButton add_directory_button;
+
+	/**
+	 * A button for displaying consistency reports. Brings up a new text window holding a formatted
+	 * consistency report on those symbolic music files that the user has selected on the
+	 * symbolic_music_files_table table (i.e. the particular ones that are selected, not necessarily all of
+	 * the ones that appear on the table). This report begins by providing, for each file separately, an
+	 * intraconsistenccy report that indicates whether the given file has more than one value for a range of
+	 * quantities (e.g. more than one tempo, more than one meter, etc.). Then, if more than one file has been
+	 * selected by the user, an interconsistency is provided that indicates, for all files considered as a
+	 * whole, whether all the files share the same value or set of values for each of the quantities being
+	 * tested for (e.g. all the files have the same tempo, or the same set of tempos).
+	 */
+	private JButton get_consistency_reports_button;
+
+	/**
+	 * A button for displaying MIDI dump reports. Brings up a new text window holding a report on those
+	 * symbolic music files that the user has selected on the symbolic_music_files_table table (i.e. the
+	 * particular ones that are selected, not necessarily all of the ones that appear on the table). This
+	 * report indicates, separately for each file selected by the user, a structured transcription of all the
+	 * relevant MIDI messages that the given file contains. If a given file is an MEI file rather than a MIDI
+	 * file, then it is converted to MIDI before the report on it is generated.
+	 */
+	private JButton see_midi_messages_button;
 	
 	/**
 	 * Removes any files selected on the table from the table.
@@ -91,6 +129,12 @@ public class MusicFileSelectorPanel
 	private JFileChooser load_symbolic_music_file_chooser;
 
 	/**
+	 * Allows the user to a directory from which all symbolic music files with qualifying file extensions will
+	 * be loaded. Sub-directories are explored recursively.
+	 */
+	private JFileChooser load_symbolic_music_in_a_directory_chooser;
+	
+	/**
 	 * For synthesizing MIDI streams.
 	 */
 	private Sequencer midi_sequencer;
@@ -109,8 +153,9 @@ public class MusicFileSelectorPanel
 		// Store a reference to the containing JFrame
 		this.outer_frame = outer_frame;
 
-		// Initialize JFileChooser to null
+		// Initialize JFileChoosers
 		load_symbolic_music_file_chooser = null;
+		load_symbolic_music_in_a_directory_chooser = null;
 
 		// Initialize the symbolic_music_files_table and symbolic_music_files_table_model fields.
 		setUpSymbolicMusicFilesTable();
@@ -138,9 +183,21 @@ public class MusicFileSelectorPanel
 		if (event.getSource().equals(add_files_button))
 			addSymbolicMusicFilesToTableWithJFileChooser();
 		
+		// React to the add_directory_button
+		else if (event.getSource().equals(add_directory_button))
+			addDirectoryRecursivelyToTableWithJFileChooser();
+		
 		// React to the remove_files_button
 		else if (event.getSource().equals(remove_files_button))
 			removeSymbolicMusicFilesFromTable();
+
+		// React to the get_consistency_report_button
+		else if (event.getSource().equals(get_consistency_reports_button))
+			displayConsistencyReport();
+
+		// React to the see_midi_messages_button
+		else if (event.getSource().equals(see_midi_messages_button))
+			displayMidiDump();
 		
 		// React to the sonify_file_directly_button
 		else if (event.getSource().equals(sonify_file_directly_button))
@@ -263,18 +320,28 @@ public class MusicFileSelectorPanel
 		
 		// Set up buttons
 		add_files_button = new JButton("Add Files");
+		add_directory_button = new JButton("Add Directory");
 		remove_files_button = new JButton("Remove Files");
+		get_consistency_reports_button = new JButton("Consistency Report");
+		see_midi_messages_button = new JButton("Contents Report");
 		sonify_file_directly_button = new JButton("Play Sonification");
 		stop_sonification_button = new JButton("Stop Sonification");
-		JPanel button_panel = new JPanel(new GridLayout(1, 4, horizontal_gap, vertical_gap));
+		JPanel button_panel = new JPanel(new GridLayout(2, 4, horizontal_gap, vertical_gap));
 		button_panel.add(add_files_button);
+		button_panel.add(add_directory_button);
 		button_panel.add(remove_files_button);
+		button_panel.add(new JLabel());
+		button_panel.add(get_consistency_reports_button);
+		button_panel.add(see_midi_messages_button);
 		button_panel.add(sonify_file_directly_button);
 		button_panel.add(stop_sonification_button);
 
 		// Add action listeners to buttons
 		add_files_button.addActionListener(this);
+		add_directory_button.addActionListener(this);
 		remove_files_button.addActionListener(this);
+		get_consistency_reports_button.addActionListener(this);
+		see_midi_messages_button.addActionListener(this);
 		sonify_file_directly_button.addActionListener(this);
 		stop_sonification_button.addActionListener(this);
 
@@ -291,8 +358,8 @@ public class MusicFileSelectorPanel
 		repaint();
 		outer_frame.repaint();
 	}
-	
-	
+
+
 	/**
 	 * Makes it so that if a row is double clicked on, then a description of the row's corresponding symbolic
 	 * music file is displayed in a pop-up window. Display an error dialog if this is not possible.
@@ -381,9 +448,54 @@ public class MusicFileSelectorPanel
 			File[] load_files = load_symbolic_music_file_chooser.getSelectedFiles();
 			addSymbolicMusicFilesToTable(load_files);
 		}
-	}	
+	}
 	
+	
+	/**
+	 * Instantiates a JFileChooser for the load_symbolic_music_in_a_directory_chooser field if one does not
+	 * already exist. This dialog box allows the user to choose one (and only one) directory, whose contents
+	 * are added to the symbolic_music_files_table list of references of symbolic music files. Any files that
+	 * do not have a file extension associated with a compatible symbolic music file are filtered out from
+	 * consideration. Sub-directories are also explored, recursively. If an entered path corresponds to a
+	 * directory that does not exist, or that contains an invalid symbolic music file, then an error message
+	 * dialog box is displayed. Files chosen that are already on the table will be ignored. Prints a report to
+	 * the status_print_stream.
+	 */
+	private void addDirectoryRecursivelyToTableWithJFileChooser()
+	{
+		// Initialize the load_symbolic_music_in_a_directory_chooser if it has not been opened yet
+		if (load_symbolic_music_in_a_directory_chooser == null)
+		{
+			load_symbolic_music_in_a_directory_chooser = new JFileChooser();
+			load_symbolic_music_in_a_directory_chooser.setCurrentDirectory(new File(DEFAULT_LOAD_DIRECTORY));
+			load_symbolic_music_in_a_directory_chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+			load_symbolic_music_in_a_directory_chooser.setMultiSelectionEnabled(false);
+		}
 
+		// Read the user's choice of load or cancel
+		int dialog_result = load_symbolic_music_in_a_directory_chooser.showOpenDialog(MusicFileSelectorPanel.this);
+
+		// Add the qualifying files in the directory specified to the table
+		if (dialog_result == JFileChooser.APPROVE_OPTION) // only do if OK chosen
+		{
+			// Note the directory chosen
+			ArrayList<File> directory_chosen = new ArrayList<>();
+			directory_chosen.add(load_symbolic_music_in_a_directory_chooser.getSelectedFile());
+			
+			// Traverse the files and subdirectories (recursively) in directory_chosen to find files with qualifying extensions
+			ArrayList<File> files_in_directory = SymbolicMusicFileUtilities.getFilteredFilesRecursiveTraversal( directory_chosen,
+			                                                                                                    false,
+			                                                                                                    new MusicFilter(),
+			                                                                                                    null,
+			                                                                                                    new ArrayList<>() );
+			
+			// Add the files to the table
+			File[] load_files = files_in_directory.toArray(new File[files_in_directory.size()]);
+			addSymbolicMusicFilesToTable(load_files);
+		}
+	}
+	
+	
 	/**
 	 * Adds the given files to the symbolic_music_files_table, after first verifying that they exist and that
 	 * they are files that can be parsed. Displays an error dialog box for each file that cannot be added.
@@ -547,7 +659,86 @@ public class MusicFileSelectorPanel
 		}
 	}
 	
+	
+	/**
+	 * Spawn a new text window holding a formatted consistency report on those symbolic music files that the
+	 * user has selected on the symbolic_music_files_table table (i.e. the particular ones that are selected,
+	 * not necessarily all of the ones that appear on the table). This report begins by providing, for each
+	 * file separately, an intraconsistenccy report that indicates whether the given file has more than one
+	 * value for a range of quantities (e.g. more than one tempo, more than one meter, etc.). Then, if more
+	 * than one file has been selected by the user, an interconsistency is provided that indicates, for all
+	 * files considered as a whole, whether all the files share the same value or set of values for each of
+	 * the quantities being tested for (e.g. all the files have the same tempo, or the same set of tempos).
+	 */
+	private void displayConsistencyReport()
+	{
+		try
+		{
+			// Note the files selected on the table by the user
+			File[] selected_files = getSelectedFiles();
+			
+			// Prepare the report
+			String report = MIDIReporter.prepareConsistencyReports(selected_files, true, true, true);
 
+			// Display the report in a new window
+			new InformationDialogFlexible(report, "Consistency Report", false, false, false, true, 80, 50);
+		}
+		catch (Exception e)
+		{
+			JOptionPane.showMessageDialog( outer_frame,
+			                               StringMethods.wrapString(e.getMessage(), OuterFrame.DIALOG_BOX_MAX_CHARS_PER_LINE, 0),
+			                               "Error",
+			                               JOptionPane.ERROR_MESSAGE );
+		}
+	}
+	
+	
+	/**
+	 * Spawn a new text window holding a MIDI dump report on those symbolic music files that the user has
+	 * selected on the symbolic_music_files_table table (i.e. the particular ones that are selected, not
+	 * necessarily all of the ones that appear on the table). This report indicates, separately for each file
+	 * selected by the user, a structured transcription of all the relevant MIDI messages that the given file
+	 * contains. If a given file is an MEI rather than a MIDI file, then it is converted to MIDI before
+	 * reporting. 
+	 */
+	private void displayMidiDump()
+	{
+		try
+		{
+			// Note the files selected on the table by the user
+			File[] selected_files = getSelectedFiles();
+			
+			// The report to display
+			StringBuilder report = new StringBuilder();
+			
+			// Report on each file
+			for (int i = 0; i < selected_files.length; i++)
+			{
+				// Parse and check the MIDI file
+				MIDIReporter midi_debugger = new MIDIReporter(selected_files[i]);
+
+				// Generate the report
+				report.append("\n============ MIDI MESSAGES REPORT FOR FILE " + (i+1) + " / " + selected_files.length + " ============\n");
+				report.append(midi_debugger.prepareHeaderReport());
+				report.append(midi_debugger.prepareMetaMessageReport(true, true, true, true, true, true));
+				report.append(midi_debugger.prepareProgramChangeAndUnpitchedInstrumentsReport());
+				report.append(midi_debugger.prepareControllerMessageReport());
+				report.append(midi_debugger.prepareNoteReport(false, true));
+			}
+
+			// Display the report in a new window
+			new InformationDialogFlexible(report.toString(), "MIDI Messages Report", false, false, false, true, 60, 50);
+		}
+		catch (Exception e)
+		{
+			JOptionPane.showMessageDialog( outer_frame,
+			                               StringMethods.wrapString(e.getMessage(), OuterFrame.DIALOG_BOX_MAX_CHARS_PER_LINE, 0),
+			                               "Error",
+			                               JOptionPane.ERROR_MESSAGE );
+		}
+	}
+	
+	
 	/**
 	 * Plays the selected symbolic music file directly from the file referred to by the currently selected row
 	 * on the symbolic_music_files_table. If multiple files are selected, plays only the first one. Any 
@@ -595,5 +786,35 @@ public class MusicFileSelectorPanel
 			midi_sequencer.stop();
 			midi_sequencer = null;
 		}
+	}
+	
+	
+	/**
+	 * Return the files that are currently selected in the symbolic_music_files_table.
+	 * 
+	 * @return				The selected files. Note that no verification is performed by this particular
+	 *						method to ensure that the files exist and are valid.
+	 * @throws Exception	Throws an informative Exception if the user has not selected any files.
+	 */
+	private File[] getSelectedFiles()
+		throws Exception
+	{
+		// Note which rows are selected on the table
+		int[] selected_rows = symbolic_music_files_table.getSelectedRows();
+		for (int i = 0; i < selected_rows.length; i++)
+			selected_rows[i] = symbolic_music_files_table.convertRowIndexToModel(selected_rows[i]);
+		if (selected_rows.length == 0)
+			throw new Exception("Could not generate the report.\nDetails: No files selcected on the table to generate the report on.");
+
+		// All the files listed on the table (selected or not)
+		SymbolicMusicFile[] all_symbolic_music_files_on_table = getSymbolicMusicFilesToExtractFeaturesFrom();
+
+		// Find the paths of the particular files selected on the table
+		File[] selected_files = new File[selected_rows.length];
+		for (int i = 0; i < selected_rows.length; i++)
+			selected_files[i] = new File(all_symbolic_music_files_on_table[selected_rows[i]].file_path);
+
+		// Return the results
+		return selected_files;
 	}
 }

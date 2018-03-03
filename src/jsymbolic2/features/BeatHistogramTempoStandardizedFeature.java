@@ -19,7 +19,7 @@ import jsymbolic2.processing.MIDIIntermediateRepresentations;
  *
  * @author Cory McKay
  */
-public class BeatHistogramTempoIndependentFeature
+public class BeatHistogramTempoStandardizedFeature
 		extends MIDIFeatureExtractor
 {
 	/* CONSTRUCTOR ******************************************************************************************/
@@ -28,10 +28,10 @@ public class BeatHistogramTempoIndependentFeature
 	/**
 	 * Basic constructor that sets the values of the fields inherited from this class' superclass.
 	 */
-	public BeatHistogramTempoIndependentFeature()
+	public BeatHistogramTempoStandardizedFeature()
 	{
 		code = "R-53";
-		String name = "Beat Histogram Tempo Independent";
+		String name = "Beat Histogram Tempo Standardized";
 		String description = "A feature vector consisting of the bin magnitudes of the beat histogram described in the jSymbolic manual. However, the tempo of the music is standardized to 120 BPM throughout the piece before this histogram is calculated. This means that variations in tempo within a single piece are in effect eliminated for the purposes of this histogram. The tempo-independent beat histograms of different pieces can also be compared in a way that is independent of potential tempo differences between the pieces. Rubato and dynamics do still influence the tempo-independent beat histogram, however. Also, the first 40 bins are not included in this feature vector, as is the case with the basic beat histogram. Each bin corresponds to a different beats per minute periodicity, with tempo increasing with the bin index. The magnitude of each bin is proportional to the cumulative loudness (MIDI velocity) of the notes that occur at that bin's rhythmic periodicity. The histogram is normalized.";
 		boolean is_sequential = true;
 		int dimensions = 161;

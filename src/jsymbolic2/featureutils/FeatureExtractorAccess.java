@@ -230,7 +230,20 @@ public final class FeatureExtractorAccess
 			new VariabilityOfCompleteRestDurationsFeature(),
 			new VariabilityOfPartialRestDurationsFeature(),
 			new VariabilityAcrossVoicesOfCombinedRestsFeature(),
-			new BeatHistogramTempoIndependentFeature(),
+			new BeatHistogramTempoStandardizedFeature(),
+			new NumberOfStrongRhythmicPulsesTempoStandardizedFeature(),
+			new NumberOfModerateRhythmicPulsesTempoStandardizedFeature(),
+			new NumberOfRelativelyStrongRhythmicPulsesTempoStandardizedFeature(),
+			new StrongestRhythmicPulseTempoStandardizedFeature(),
+			new SecondStrongestRhythmicPulseTempoStandardizedFeature(),
+			new HarmonicityOfTwoStrongestRhythmicPulsesTempoStandardizedFeature(),
+			new StrengthOfStrongestRhythmicPulseTempoStandardizedFeature(),
+			new StrengthOfSecondStrongestRhythmicPulseTempoStandardizedFeature(),
+			new StrengthRatioOfTwoStrongestRhythmicPulsesTempoStandardizedFeature(),
+			new CombinedStrengthOfTwoStrongestRhythmicPulsesTempoStandardizedFeature(),
+			new RhythmicVariabilityTempoStandardizedFeature(),
+			new RhythmicLoosenessTempoStandardizedFeature(),
+			new PolyrhythmsTempoStandardizedFeature(),
 			
 			// Add features based on rhythm (that DO take tempo into account)
 			new InitialTempoFeature(),
@@ -484,7 +497,20 @@ public final class FeatureExtractorAccess
 			true, // VariabilityOfCompleteRestDurationsFeature
 			true, // VariabilityOfPartialRestDurationsFeature
 			true, // VariabilityAcrossVoicesOfCombinedRestsFeature
-			false, // BeatHistogramTempoIndependentFeature
+			false, // BeatHistogramTempoStandardizedFeature
+			true, // NumberOfStrongRhythmicPulsesTempoStandardizedFeature
+			true, // NumberOfModerateRhythmicPulsesTempoStandardizedFeature
+			true, // NumberOfRelativelyStrongRhythmicPulsesTempoStandardizedFeature
+			true, // StrongestRhythmicPulseTempoStandardizedFeature
+			true, // SecondStrongestRhythmicPulseTempoStandardizedFeature
+			true, // HarmonicityOfTwoStrongestRhythmicPulsesTempoStandardizedFeature
+			true, // StrengthOfStrongestRhythmicPulseTempoStandardizedFeature
+			true, // StrengthOfSecondStrongestRhythmicPulseTempoStandardizedFeature
+			true, // StrengthRatioOfTwoStrongestRhythmicPulsesTempoStandardizedFeature
+			true, // CombinedStrengthOfTwoStrongestRhythmicPulsesTempoStandardizedFeature
+			true, // RhythmicVariabilityTempoStandardizedFeature
+			true, // RhythmicLoosenessTempoStandardizedFeature
+			true, // PolyrhythmsTempoStandardizedFeature			
 			
 			// Features based on rhythm (that DO take tempo into account)
 			true, // InitialTempoFeature

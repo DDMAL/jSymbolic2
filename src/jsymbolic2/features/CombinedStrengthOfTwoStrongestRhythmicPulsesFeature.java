@@ -6,7 +6,7 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the s um of the magnitudes of the two beat histogram peaks with the highest
+ * A feature calculator that finds the sum of the magnitudes of the two beat histogram peaks with the highest
  * magnitudes.
  *
  * @author Cory McKay
