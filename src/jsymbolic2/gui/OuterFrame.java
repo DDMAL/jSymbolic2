@@ -65,7 +65,7 @@ public class OuterFrame
 	/**
 	 * The title to include in the GUI title bar.
 	 */
-	private static final String WINDOW_TITLE = "jSymbolic 2.1";
+	private static final String WINDOW_TITLE = "jSymbolic 2.2";
 	
 	/**
 	 * The name of this software's author.
@@ -153,9 +153,19 @@ public class OuterFrame
 	private JMenuItem help_menu_item;
 	
 	/**
+	 * Makes the tutorial_dialog visible.
+	 */
+	private JMenuItem tutorial_menu_item;
+	
+	/**
 	 * Displays the on-line manual.
 	 */
 	private HelpDialog help_dialog;
+
+	/**
+	 * Displays the on-line tutorial.
+	 */
+	private HelpDialog tutorial_dialog;
 
 
 	/* CONSTRUCTOR ******************************************************************************************/
@@ -206,12 +216,20 @@ public class OuterFrame
 		help_menu_item.setMnemonic('h');
 		help_menu_item.addActionListener(OuterFrame.this);
 		information_menu.add(help_menu_item);
+		tutorial_menu_item = new JMenuItem("Tutorial");
+		tutorial_menu_item.setMnemonic('t');
+		tutorial_menu_item.addActionListener(OuterFrame.this);
+		information_menu.add(tutorial_menu_item);
 		menu_bar.add(information_menu);
 		setJMenuBar(menu_bar);
 
 		// Set up help dialog box
-		help_dialog = new HelpDialog( "Manual" + File.separator + "home_files" + File.separator + "contents.html",
-									  "Manual" + File.separator + "home_files" + File.separator + "splash.html" );
+		help_dialog = new HelpDialog( "manual" + File.separator + "home_files" + File.separator + "contents.html",
+									  "manual" + File.separator + "home_files" + File.separator + "splash.html" );
+		
+		// Set up tutorial dialog box
+		tutorial_dialog = new HelpDialog( "tutorial" + File.separator + "contents.html",
+									      "tutorial" + File.separator + "introduction.html" );
 		
 		// Set up the music_file_selector_panel and feature_selector_panel
 		JPanel music_and_feature_panel = new JPanel(new GridLayout(1, 2, HORIZONTAL_GAP, VERTICAL_GAP));
@@ -351,6 +369,10 @@ public class OuterFrame
 		// React to the help_menu_item
 		if (event.getSource().equals(help_menu_item))
 			help_dialog.setVisible(true);
+
+		// React to the tutorial_menu_item
+		if (event.getSource().equals(tutorial_menu_item))
+			tutorial_dialog.setVisible(true);
 	}
 	
 	

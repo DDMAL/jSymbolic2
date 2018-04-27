@@ -1,0 +1,259 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+	<title>jSymbolic Tutorial</title>
+</head>
+
+<body text="#000000" bgcolor="#e4e4e4" link="#0033C4" vlink="#0033C4" alink="#0033C4">
+<a name="Top"></a>
+
+<table cellspacing="0" cellpadding="4" width="100%" bgcolor="#0033C4" border="0">
+  <tbody><tr>
+      <th align="left"><font face="Arial" color="#ffffff" size="+3">jSymbolic 
+        Tutorial  - Installation</font></th>
+    </tr></tbody>
+</table>
+
+<p><strong>INSTALLATION: PREREQUISITE SOFTWARE</strong></p>
+<ul>
+  <li>Make sure that Java is installed on your computer: 
+    <ul>
+      <li> It almost certainly already is installed on your computer, but we should 
+        make sure, and install it if it is not there</li>
+      <li> Windows: 
+        <ul>
+          <li> Windows button &gt; type &quot;Control Panel&quot; and press enter 
+            <ul>
+              <li> Is there an icon named &quot;Java&quot;? </li>
+              <li>If so, then Java is already installed on your computer.</li>
+              <li>If not, then you will need to install Java in order to use jSymbolic 
+                and Weka: <a href="https://www.java.com/en/download/help/windows_manual_download.xml" target="top">https://www.java.com/en/download/help/windows_manual_download.xml</a></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li> Macintosh: 
+        <ul>
+          <li> Apple menu &gt; System preferences 
+            <ul>
+              <li> Is there an icon named &quot;Java&quot;? </li>
+              <li>If so, then Java is already installed on your computer.</li>
+              <li> If not, then you will need to install Java in order to use 
+                jSymbolic and Weka: <a href="https://java.com/en/download/help/mac_install.xml" target="top">https://java.com/en/download/help/mac_install.xml</a>
+                <ul>
+                  <li>Warning: Some versions of the Macintosh operating system 
+                    do not support Java 9, so I suggest that you install Java 
+                    8 if you are using a Macintosh</li>
+                  <li>Both jSymbolic and Weka are equally happy in either version 
+                    of Java</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Install the Weka data mining software on your computer: 
+    <ul>
+      <li><em>Note:</em> the instructions below are for version 3.8.2 of Weka. Newer versions of Weka may be available on the <a href="https://www.cs.waikato.ac.nz/ml/weka/downloading.html" target="top">Weka download page</a>, and the instalation instructions will likely be similar</li>
+      <li>Windows: 
+        <ul>
+          <li> Download Weka onto your Desktop from: <a href="http://prdownloads.sourceforge.net/weka/weka-3-8-2-x64.exe" target="top">http://prdownloads.sourceforge.net/weka/weka-3-8-2-x64.exe</a></li>
+          <li> Double click the &quot;weka-3-8-2-x64.exe&quot; file when it finishes 
+            downloading in order to run the Weka installer</li>
+          <li> Allow the installer to make changes to your computer, if asked</li>
+          <li> Click the &quot;Next&quot; button on the installer window that 
+            comes up, and then &quot;I Agree&quot;, &quot;Next&quot;, &quot;Next&quot;, 
+            &quot;Install&quot;, &quot;Next&quot; and &quot;Finish&quot;</li>
+          <li>This should create a &quot;Weka 3.8&quot; icon on your desktop 
+            <ul>
+              <li>Double click it just to make sure that it works</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>Macintosh: 
+        <ul>
+          <li> Download Weka onto your Desktop from: <a href="http://prdownloads.sourceforge.net/weka/weka-3-8-2-oracle-jvm.dmg" target="top">http://prdownloads.sourceforge.net/weka/weka-3-8-2-oracle-jvm.dmg</a></li>
+          <li> Double click the &quot;weka-3-8-2-oracle-jvm.dmg&quot; file when 
+            it finishes downloading 
+            <ul>
+              <li>This will place a &quot;weka-3-8-2&quot; drive icon on your 
+                Desktop, which should automatically open</li>
+            </ul>
+          </li>
+          <li> Double click on the &quot;weka-3-8-2-oracle-jvm&quot; icon in the 
+            &quot;weak-3-8-2&quot; window that appears in order to run Weka 
+            <ul>
+              <li>Do this just to make sure that it works</li>
+            </ul>
+          </li>
+          <li> If you get a message saying that your security settings prevent 
+            you from running Weka: 
+            <ul>
+              <li>Apple Menu &gt; System Preferences &gt; Security &amp; Privacy 
+                &gt; General Tab 
+                <ul>
+                  <li> Click the lock symbol in the lower left corner to allow 
+                    you to make changes</li>
+                  <li> Click on &quot;Open Anyway&quot;, next to where it says 
+                    that Weka was blocked</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li> We will not use Weka yet 
+        <ul>
+          <li> For now, we are just verifying that Weka is installed and works</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>I suggest that you install a good text editor on your computer, if you do 
+    not already have one installed: 
+    <ul>
+      <li> The default system text editors (TextEdit on a Mac and Notepad on Windows) 
+        work, but they can be a little unwieldy</li>
+      <li>I therefore suggest that you install a more sophisticated text editor 
+        (but you can make do with TextEdit or Notepad if you prefer)</li>
+      <li> Windows: 
+        <ul>
+          <li>I suggest installing EditPlus: <a href="https://www.editplus.com" target="top">https://www.editplus.com</a></li>
+          <li>It is shareware</li>
+        </ul>
+      </li>
+      <li> Macintosh: 
+        <ul>
+          <li> I suggest installing BBEdit: <a href="https://www.barebones.com/products/bbedit/" target="top">https://www.barebones.com/products/bbedit/</a></li>
+          <li>It has a free trial period </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>I suggest that you have a spreadsheet, like Excel, installed on your computer 
+    if possible, but do not worry if you do not have access to one 
+    <ul>
+      <li>You can use Google Sheets (<a href="https://www.google.ca/sheets/about/" target="top">https://www.google.ca/sheets/about/</a>) 
+        as a free on-line alternative 
+        <ul>
+          <li> But this will require that you have a Google account</li>
+          <li> And this will require that you upload everything you are working 
+            on to your Google drive in the cloud, and that you download the results 
+            back to your own computer afterwards for processing, which can be onerous</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+<p><strong>INSTALLATION: JSYMBOLIC AND DEMO DATA FILES</strong></p>
+<ul>
+  <li>Download the following two items onto the Desktop of your computer: 
+    <ul>
+      <li>The <a href="https://sourceforge.net/projects/jmir/files/jSymbolic/" target="top">jSymbolic 
+        software</a> 
+        <ul>
+          <li>I suggest that you use the most recent version available on this web site</li>
+          <li>Use the &quot;user&quot; version rather than the &quot;developer&quot; version
+            <ul>
+              <li>The developer version includes source code and other content that is more advanced</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>The <a href="jSymbolicTutorialWorkingFiles.zip" target="top">tutorial 
+        working files</a> 
+        <ul>
+          <li>This is what you will be working on during the course of this tutorial</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>The two files you just downloaded in the step above are in zip archives, and their contents 
+    need to be extracted </li>
+  <li>For <em>each </em>of the two .zip files you just downloaded onto your desktop:</li>
+  <ul>
+    <li>Windows: 
+      <ul>
+        <li>Double click on the zip file and drag its contents onto your Desktop</li>
+      </ul>
+    </li>
+    <li> Macintosh: 
+      <ul>
+        <li>Double click on the zip file and a folder will be generated automatically 
+          holding its content</li>
+      </ul>
+    </li>
+  </ul>
+</ul>
+<p> <strong>LANGUAGE SETTINGS AND SPECIAL CHARACTERS</strong></p>
+<ul>
+  <li>jSymbolic, Weka and many other software programs use a standard text file 
+    format called &quot;CSV&quot; 
+    <ul>
+      <li>It basically consists of pieces of information separated by commas (and 
+        line breaks)</li>
+    </ul>
+  </li>
+  <li>Unfortunately, this can be a problem in regions where the number standard 
+    being used separates decimal values from integers using a comma rather than 
+    a period 
+    <ul>
+      <li>e.g. expressing pi as 3,14 rather than 3.14</li>
+      <li>This is a big problem for CSV files, since they will misinterpret such 
+        commas as data separators rather than fractional markers</li>
+    </ul>
+  </li>
+  <li>So, regrettably, you will need to change the language/region 
+    settings on your computer (and probably restart it) if you have your computer 
+    set up to use such a numbering system 
+    <ul>
+      <li>Apologies on behalf of the ancient and presumably Anglocentric progenitors 
+        of the CSV standard </li>
+    </ul>
+  </li>
+  <li>Also, CSV files can sometimes be incompatible with certain accented letters 
+    and other &quot;special&quot; characters </li>
+  <li>So, once again very regrettably, you may need to make sure that the files 
+    you will be extracting features from do not have such characters in their 
+    filenames or the rest of their directory paths</li>
+  <ul>
+    <li>And apologies again on behalf of the prevalent Anglocentrism of the computer 
+      world</li>
+  </ul>
+  <li>In summary, the good news is that jSymbolic (and its native ACE XML files) 
+    are happily compatible with all  standard number systems and character 
+    sets 
+    <ul>
+      <li>The bad news is that Weka and the CSV files you need to get information 
+        to Weka is not compatible with either of these, so if you want to save 
+        features in CSV files and/or use Weka, you may need to adjust your language/region 
+        settings and avoid some (but not all) non-ASCII characters</li>
+    </ul>
+  </li>
+</ul>
+<p><strong>VERSION INFORMATION</strong></p>
+<ul>
+  <li>This tutorial was prepared with the following operating 
+    system and software versions: 
+    <ul>
+      <li> jSymbolic 2.2</li>
+      <li> Weka 3.8.2</li>
+      <li> Java 8 Update 161</li>
+      <li> Windows 10, version 1709</li>
+      <li> Mac OS 10.12.3 Sierra</li>
+    </ul>
+  </li>
+  <li>There might be slight differences if other versions are used
+    <ul>
+      <li>But it is unlikely to be a problem</li>
+    </ul>
+  </li>
+</ul>
+<p><em>Congratulations, you have now downloaded everything you need. Now to get 
+  jSymbolic up and running <a href="runningjsymbolic.html" target="right">. . 
+  .</a></em></p>
+<table height="5" width="100%" bgcolor="#0033C4" border="0"><tbody><tr><th></th></tr></tbody></table>
+<p><tt><a href="installation.html#Top">-top of page-</a></tt></p>
+
+</body></html>

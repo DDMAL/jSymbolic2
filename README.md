@@ -1,4 +1,4 @@
-# jSymbolic 2.1
+# jSymbolic 2.2
 by Cory McKay
 Copyright (C) 2018 (GNU GPL)
 
@@ -52,9 +52,14 @@ the music stored on the associated Elvis database (https://elvisproject.ca).
 ### GETTING MORE INFORMATION
 
 More information on jMIR in general, and jSymbolic in particular, is available
-on the jMIR home page (http://jmir.sourceforge.net). jSymbolic includes a
-detailed HTML manual, which is packaged with jSymbolic and also posted on the 
-jMIR web site (http://jmir.sourceforge.net/manuals/jSymbolic_manual/home.html).
+on the jMIR home page (http://jmir.sourceforge.net).
+
+jSymbolic includes a detailed HTML manual, which is packaged with jSymbolic 
+and also posted on the  jMIR web site
+(http://jmir.sourceforge.net/manuals/jSymbolic_manual/home.html).
+
+jSymbolic is also packaged with a detailed HTML tutorial that includes worked
+examples. First-time users of jSymbolic may wish to follow this tutorial.
 
 The most recent development code for jSymbolic can be found on its GitHub
 page (https://github.com/DDMAL/jSymbolic2). However, it is strongly suggested
@@ -107,7 +112,9 @@ If your system already has the JRE installed, as will most typically be the
 case, you may skip this section. If not, you will need to install the JRE in
 order to run this project. The JRE can be downloaded for free from the Java web
 site. The JDK typically includes the JRE, or the JRE can simply be installed
-alone.
+alone. Warning: Some versions of the Macintosh operating system have reportedly
+not supported Java 9, so users may wish to install Java 8 if they are using a
+Macintosh just to be safe.
 
 When the JRE download is complete, follow the installation instructions that
 come with it in order to install it
@@ -138,6 +145,8 @@ The following directories are contained in the developer zip file:
 
 - jSymbolic2: The jSymbolic2 project, presented in the form of a NetBeans project.
 Contains the following directories and files:
+	- configfiles: Contains pre-generated jSymbolic configurations files
+	that users may wish to use for various purposes.
 	- dist: Contains a pre-compiled jSymbolic2.jar file (and associated
 	libraries) for direct inclusion in other projects.
 	- javadoc: Javadoc documentation for the project source code.
@@ -148,13 +157,14 @@ Contains the following directories and files:
 	possible to use the software in other development environments as well.
 	- src: The project's source code.
 	- test: The project's unit testing code.
+	- tutorial: The software's HTML tutorial.
 	- build.xml: NetBeans build instructions. Only relevant if using the
 	NetBeans IDE.
 	- GNU_GPL.txt: Licensing information for the software.
 	- jSymbolicDefaultConfigs.txt: Default configuration settings for the
 	software.
 	- manifest.mf: The manifest used when building the project Jar file.
-	- README.txt: Basic overall documentation of the project.
+	- README.md: Basic overall documentation of the project.
 - Third-Party-Jars: Contains the distributable third-party software used by 
 the project. Also includes the jar files for other jMIR projects that this
 project has as dependencies, if any. These need to be included in the project's
@@ -166,7 +176,7 @@ libraries).
 
 The simplest way of using jSymbolic is to simply run the jSymbolic GUI by double
 clicking the jSymbolic.jar file's icon using a graphical operating system, such as 
-Windows or OS X. 
+Windows or OS X. This is, of course, a perfectly fine way of using the software.
 
 However, a greater range of options are made available by running jSymbolic through
 a terminal interface using command line arguments, such as a Windows DOS command
@@ -287,7 +297,8 @@ extraction.
 The jSymbolic GUI also includes a single Information menu, with the following commands:
 
 - About: Displays a small window showing basic information about jSymbolic.
-- Help: Brings up a browsable window permitting access to this manual.
+- Help: Brings up a browsable window permitting access to the manual.
+- Tutorial: Brings up a browsable window permitting access to the tutorial.
 
 More details on the GUI are provided in the jSymbolic manual.
 

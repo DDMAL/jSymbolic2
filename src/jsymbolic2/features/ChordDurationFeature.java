@@ -8,10 +8,11 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the average duration in seconds of a chord. A "chord" here is considered to
- * stay the same as long as no new pitch classes are added, and no pitch classes are taken away. This "chord"
- * may consist of any number of pitch classes, even only one. A "chord" is not considered to end if it is
- * split by one or more rests (although the rests themselves are not counted in the duration of the "chord").
+ * A feature calculator that finds the average duration a chord in units of time corresponding to the duration
+ * of an idealized quarter note. A "chord" here is considered to stay the same as long as no new pitch classes
+ * are added, and no pitch classes are taken away. This "chord" may consist of any number of pitch classes,
+ * even only one. A "chord" is not considered to end if it is split by one or more rests (although the rests
+ * themselves are not counted in the duration of the "chord").
  *
  * @author Cory McKay and Tristano Tenaglia
  */
@@ -28,7 +29,7 @@ public class ChordDurationFeature
 	{
 		code = "C-27";
 		String name = "Chord Duration";
-		String description = "Average duration in seconds of a chord. A \"chord\" here is considered to stay the same as long as no new pitch classes are added, and no pitch classes are taken away. This \"chord\" may consist of any number of pitch classes, even only one. A \"chord\" is not considered to end if it is split by one or more rests (although the rests themselves are not counted in the duration of the \"chord\").";
+		String description = "Average duration a chord in units of time corresponding to the duration of an idealized quarter note. A \"chord\" here is considered to stay the same as long as no new pitch classes are added, and no pitch classes are taken away. This \"chord\" may consist of any number of pitch classes, even only one. A \"chord\" is not considered to end if it is split by one or more rests (although the rests themselves are not counted in the duration of the \"chord\").";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, description, is_sequential, dimensions);
@@ -101,11 +102,14 @@ public class ChordDurationFeature
 				average_ticks_per_chord += chord_durations_in_ticks.get(i);
 			average_ticks_per_chord = average_ticks_per_chord / (double) total_number_chords;
 
-			// Convert from ticks to seconds
+			// Convert from ticks to seconds to quarter notes
 			// NOTE: This is imperfect, because it does not take into account tempo change messages. Rather,
 			// it assumes the tick duration is the same everywhere as on the same tick.
 			double initial_duration_of_a_tick_in_seconds = sequence_info.duration_of_ticks_in_seconds[0];
-			value = average_ticks_per_chord * initial_duration_of_a_tick_in_seconds;
+			double seconds_per_chord = average_ticks_per_chord * initial_duration_of_a_tick_in_seconds;
+			if (sequence_info.average_quarter_note_duration_in_seconds != 0.0)
+				value = seconds_per_chord / sequence_info.average_quarter_note_duration_in_seconds;
+			else value = 0.0;
 		}
 		else value = -1.0;
 

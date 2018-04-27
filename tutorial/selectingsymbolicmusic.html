@@ -1,0 +1,154 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+	<title>jSymbolic Tutoriall</title>
+</head>
+
+<body text="#000000" bgcolor="#e4e4e4" link="#0033C4" vlink="#0033C4" alink="#0033C4">
+<a name="Top"></a>
+
+<table cellspacing="0" cellpadding="4" width="100%" bgcolor="#0033C4" border="0">
+  <tbody><tr>
+      <th align="left"><font face="Arial" color="#ffffff" size="+3">jSymbolic 
+        Tutorial  - Selecting Symbolic Music</font></th>
+    </tr></tbody>
+</table>
+
+<p><strong>THE MUSIC SELECTOR PANEL</strong></p>
+<ul>
+  <li>The <em>Music Selector Panel </em>is the region on the top left of the jSymbolic 
+    GUI, and it includes: 
+    <ul>
+      <li>A table listing all symbolic music files from which features are to 
+        be extracted 
+        <ul>
+          <li>The first column indicates the name of each file, and the second 
+            indicates its file path</li>
+          <li>The table may be sorted by clicking on either of the column headings</li>
+          <li> Double clicking on a given row provides additional metadata about 
+            its associated file</li>
+        </ul>
+      </li>
+      <li> Buttons for: 
+        <ul>
+          <li>Adding or removing files from the table</li>
+          <li>Generating reports on the contents of files, or comparisons between 
+            files</li>
+          <li>Buttons for sonifying (playing) the files</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Note that jSymbolic can only read files in MIDI or MEI formats 
+    <ul>
+      <li>Other types of symbolic music files (Music XML, Kern, Sibelius, Finale, 
+        etc.) must first be converted to either MIDI or MEI</li>
+      <li>Generally, working with MIDI is the best choice for jSymbolic, although 
+        of course MIDI does have certain important limitations (as do all symbolic 
+        file formats)
+        <ul>
+          <li>MEI files in practice can be encoded in a variety of different ways, sometimes in ways that are inconsistent or incorrect, so MIDI is generally safer than MEI, unless one is confident that one has MEI files that were encoded correctly using one of the commonly accepted versions of MEI</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>We will now load two files into the GUI : 
+    <ul>
+      <li>Click on the <em>Add Files</em> button</li>
+      <li>In the file chooser dialog that pops up, go to the desktop and double 
+        click on the &quot;jSymbolicTutorialWorkingFiles&quot; folder, and then its &quot;01_Comparing_Two_Files&quot; folder 
+        <ul>
+          <li>This is one of the folders you extracted earlier from 
+        the &quot;jSymbolicTutorialWorkingFiles.zip&quot;  file you downloaded</li>
+        </ul>
+      </li>
+      <li>Select both of the MIDI files in this folder and then press the <em>Open 
+        </em>button</li>
+      <li>Note that the two files now appear in the table of files to extract 
+        features from 
+        <ul>
+          <li>No feature extraction has happened yet, however, these files are 
+            just queued for future extraction</li>
+        </ul>
+      </li>
+      <li>Note that an update was added to the <em>Processing Information Panel</em></li>
+    </ul>
+  </li>
+  <li>Oops, imagine we made a mistake, and we now want to remove the files from 
+    the table 
+    <ul>
+      <li>Select both files on the table</li>
+      <li>Click on the <em>Remove Files </em>button</li>
+      <li>They have now disappeared from the table, and an update has been added 
+        to the <em>Processing Information Panel</em></li>
+    </ul>
+  </li>
+  <li>Oops, it turns out we do want these two files after all, so let's add them 
+    in a different way: 
+    <ul>
+      <li>Click on the <em>Add Directory</em> button</li>
+      <li>In the file chooser dialog that pops up, go to the Desktop and single 
+        click on the &quot;01_Comparing_Two_Files&quot; folder </li>
+      <li> Press the open button</li>
+      <li>This adds all the recognized (i.e. MIDI and MEI) files in the selected 
+        folder and its sub-folder 
+        <ul>
+          <li>This can therefore be faster than the <em>Add Files </em>button 
+            if your files are in a complex directory structure</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Now let's get some quick overview information about the fields: 
+    <ul>
+      <li>Double click on either file on the table</li>
+      <li>This will bring up a window showing a few technical details about it</li>
+      <li>Press the <em>OK </em>button to close the window</li>
+    </ul>
+  </li>
+  <li>Let's say we want even more information: 
+    <ul>
+      <li>Make sure one (or both) of the files are selected on the table</li>
+      <li>Press the <em>Contents Report </em>button</li>
+      <li>This will display a great deal of detailed information about the selected 
+        file(s), including all notes that they each contain</li>
+      <li>Close this window</li>
+    </ul>
+  </li>
+  <li>Let's say we want to compare the two files 
+    <ul>
+      <li>Make sure both files are selected on the table</li>
+      <li>Press the <em>Consistency Report </em>button</li>
+      <li>This will bring up a window showing, for each file, whether certain 
+        values vary within that file 
+        <ul>
+          <li>e.g. is there more than one time signature?</li>
+        </ul>
+      </li>
+      <li>It will also show whether certain values vary between files 
+        <ul>
+          <li>e.g. do all files share the same time signature(s)?</li>
+        </ul>
+      </li>
+      <li>These reports can be very important in, among other things, helping 
+        to discover possible encoding biases 
+        <ul>
+          <li>e.g. are certain musical characteristics (e.g. tempo) linked to 
+            the encoding method rather than the actual underlying music? </li>
+        </ul>
+      </li>
+      <li>Close this window</li>
+    </ul>
+  </li>
+  <li>We can also listen to the files 
+    <ul>
+      <li>Select one of the files</li>
+      <li>Press the <em>Play Sonification </em>button to begin playback</li>
+      <li>Press the <em>Stop Sonification </em>button to stop playback</li>
+    </ul>
+  </li>
+</ul>
+<p><em>Now we can look at the features we can extract with jSymbolic <a href="workingwithfeatures.html" target="right">. 
+  . .</a></em></p>
+<table height="5" width="100%" bgcolor="#0033C4" border="0"><tbody><tr><th></th></tr></tbody></table>
+<p><tt><a href="selectingsymbolicmusic.html#Top">-top of page-</a></tt></p>
+
+</body></html>

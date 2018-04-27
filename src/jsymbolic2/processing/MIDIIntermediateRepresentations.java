@@ -463,7 +463,7 @@ public class MIDIIntermediateRepresentations
 	 * stream. The first dimension indicates the MIDI tick (after removal of rest ticks) and the second
 	 * dimension indicates the note index (there will be one entry for each MIDI pitch sounding during the
 	 * given MIDI tick). Each entry indicates the MIDI pitch number (0 to 127) of one of the sounding notes.
-	 * The pitch values are sorted from lowest to highest.
+	 * The pitch values are sorted from lowest to highest. Will be empty if there are no pitched notes.
 	 */	
 	public short[][] pitches_present_by_tick_excluding_rests;
 	
@@ -474,7 +474,8 @@ public class MIDIIntermediateRepresentations
 	 * stream. The first dimension indicates the MIDI tick (after removal of rest ticks) and the second
 	 * dimension indicates the note index (there will be one entry for each pitch class sounding during the
 	 * given MIDI tick). Each entry indicates the pitch class (0 to 11, where 0 is C) of one of the sounding
-	 * notes. The pitch class values are sorted from lowest to highest.
+	 * notes. The pitch class values are sorted from lowest to highest. Will be empty if there are no pitched 
+	 * notes.
 	 */
 	public short[][] pitch_classes_present_by_tick_excluding_rests;
 	

@@ -23,8 +23,7 @@
 
 <p> <strong>INSTALLING THE JAVA RUNTIME ENVIRONMENT</strong></p>
 
-<p>If your system already has the JRE installed, as will most typically be the case, you may skip this section. If not, you will need to install the JRE in order to run jSymbolic. The JRE can be downloaded for free from the <a href="http://www.java.com/" target="top">Java</a> web site. The JDK typically includes the JRE, or the JRE can simply be installed alone.</p>
-
+<p>If your system already has the JRE installed, as will most typically be the case, you may skip this section. If not, you will need to install the JRE in order to run jSymbolic. The JRE can be downloaded for free from the <a href="http://www.java.com/" target="top">Java</a> web site. The JDK typically includes the JRE, or the JRE can simply be installed alone. <em>Warning:</em> Some versions of the Macintosh operating system have reportedly not supported Java 9, so users may with to install Java 8 if they are using a Macintosh just to be safe.</p>
 <p>When the JRE download is complete, follow the installation instructions that come with it in order to install it.</p>
 
 <p><strong>INSTALLING JSYMBOLIC</strong></p>
@@ -44,6 +43,8 @@
   <li><strong>jSymbolic2:</strong> The jSymbolic2 project, presented in the form of a NetBeans project.
     Contains the following directories and files:
     <ul>
+      <li>configfiles: Contains pre-generated jSymbolic configurations files
+        	that users may wish to use for various purposes.</li>
       <li>dist: Contains a pre-compiled jSymbolic2.jar file (and associated
     	libraries) for direct inclusion in other projects.</li>
       <li>javadoc: Javadoc documentation for the project source code.</li>
@@ -54,13 +55,14 @@
     	possible to use the software in other development environments as well.</li>
       <li>src: The project's source code.</li>
       <li>test: The project's unit testing code.</li>
+      <li>tutorial: The software's HTML tutorial.</li>
       <li>build.xml: NetBeans build instructions. Only relevant if using the
     	NetBeans IDE.</li>
       <li>GNU_GPL.txt: Licensing information for the software.</li>
       <li>jSymbolicDefaultConfigs.txt: Default configuration settings for the
     	software.</li>
       <li>manifest.mf: The manifest used when building the project Jar file.</li>
-      <li>README.txt: Basic overall documentation of the project.</li>
+      <li>README.md: Basic overall documentation of the project.</li>
     </ul>
   </li>
   <li><strong>    Third-Party-Jars:</strong> Contains the distributable third-party software used by 

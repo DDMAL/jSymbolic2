@@ -23,7 +23,7 @@ public class PitchVariabilityFeature
 	public PitchVariabilityFeature()
 	{
 		code = "P-24";
-		String name = "Pitch Variability Feature";
+		String name = "Pitch Variability";
 		String description = "Standard deviation of the MIDI pitches of all pitched notes in the piece. Provides a measure of how close the pitches as a whole are to the mean pitch.";
 		boolean is_sequential = true;
 		int dimensions = 1;

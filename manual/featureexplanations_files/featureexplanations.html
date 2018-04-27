@@ -141,22 +141,22 @@
     is unknown.</li>
   <li><strong>P-34 First Pitch:</strong> The MIDI pitch value of the first note 
     in the piece. If there are multiple notes with simultaneous attacks at the 
-    beginning of the piece, then the one with the lowest pitch is selected. </li>
+    beginning of the piece, then the one with the lowest pitch is selected.  Set to 0 if there are no pitched notes.</li>
   <li><strong>P-35 First Pitch Class:</strong> The pitch class of the first note 
     in the piece. If there are multiple notes with simultaneous attacks at the 
     beginning of the piece, then the one with the lowest pitch is selected. A 
     value of 0 corresponds to C, and pitches increase chromatically by semitone 
     in integer units (e.g. a value of 2 would mean that D is the most common pitch 
-    class). Enharmonic equivalents are treated as a single pitch class. </li>
+    class). Enharmonic equivalents are treated as a single pitch class. Set to 0 if there are no pitched notes.</li>
   <li><strong>P-36 Last Pitch:</strong> The MIDI pitch value of the last note 
     in the piece. If there are multiple notes with simultaneous attacks at the 
-    end of the piece, then the one with the lowest pitch is selected. </li>
+    end of the piece, then the one with the lowest pitch is selected.  Set to 0 if there are no pitched notes.</li>
   <li><strong>P-37 Last Pitch Class:</strong> The pitch class of the last note 
     in the piece. If there are multiple notes with simultaneous attacks at the 
     end of the piece, then the one with the lowest pitch is selected. A value 
     of 0 corresponds to C, and pitches increase chromatically by semitone in integer 
     units (e.g. a value of 2 would mean that D is the most common pitch class). 
-    Enharmonic equivalents are treated as a single pitch class.</li>
+    Enharmonic equivalents are treated as a single pitch class. Set to 0 if there are no pitched notes.</li>
   <li><strong>P-38 Glissando Prevalence:</strong> Number of pitched MIDI Note 
     Ons that have at least one MIDI Pitch Bend associated with them, divided by 
     the total number of pitched Note Ons in the piece.</li>
@@ -249,7 +249,7 @@
   <li><strong>C-24 Vertical Dissonance Ratio:</strong> Ratio of all wrapped vertical intervals that are dissonant (2nds, tritones, and 7ths to all wrapped vertical intervals that are consonant (unisons, 3rds, 4ths, 5ths, 6ths, octaves). This is weighted by how long each of these intervals are held (e.g. an interval lasting a whole note will be weighted four times as strongly as an interval lasting a quarter note). Set to 0 if there are no dissonant vertical intervals or no consonant vertical intervals.</li>
   <li><strong>C-25 Vertical Minor Third Prevalence:</strong> Fraction of the music by time where at least one wrapped vertical minor third is sounding (regardless of whatever other vertical intervals may or may not be sounding at the same time). Only that part of the music where one or more pitched notes is sounding is included in this calculation (rests and sections containing only unpitched notes are ignored).</li>
   <li><strong>C-26 Vertical Major Third Prevalence:</strong> Fraction of the music by time where at least one wrapped vertical major third is sounding (regardless of whatever other vertical intervals may or may not be sounding at the same time). Only that part of the music where one or more pitched notes is sounding is included in this calculation (rests and sections containing only unpitched notes are ignored).</li>
-  <li><strong>C-27 Chord Duration:</strong> Average duration in seconds of a chord. A &quot;chord&quot; here is considered to stay the same as long as no new pitch classes are added, and no pitch classes are taken away. This &quot;chord&quot; may consist of any number of pitch classes, even only one. A &quot;chord&quot; is not considered to end if it is split by one or more rests (although the rests themselves are not counted in the duration of the &quot;chord&quot;).</li>
+  <li><strong>C-27 Chord Duration:</strong> Average duration a chord in units of time corresponding to the duration of an idealized quarter note. A &quot;chord&quot; here is considered to stay the same as long as no new pitch classes are added, and no pitch classes are taken away. This &quot;chord&quot; may consist of any number of pitch classes, even only one. A &quot;chord&quot; is not considered to end if it is split by one or more rests (although the rests themselves are not counted in the duration of the &quot;chord&quot;).</li>
   <li><strong>C-28 Partial Chords:</strong> Fraction of simultaneously sounding pitch groups that consist of only two pitch classes. This is weighted by how long pitch groups are held (e.g. a pitch group lasting a whole note will be weighted four times as strongly as a pitch group lasting a quarter note).</li>
   <li><strong>C-29 Standard Triads:</strong> Fraction of all simultaneously sounding pitch groups that are either major or minor triads. This is weighted by how long pitch groups are held (e.g. a pitch group lasting a whole note will be weighted four times as strongly as a pitch group lasting a quarter note).</li>
   <li><strong>C-30 Diminished and Augmented Triads:</strong> Fraction of all simultaneously sounding pitch groups that are either diminished or augmented triads. This is weighted by how long pitch groups are held (e.g. a pitch group lasting a whole note will be weighted four times as strongly as a pitch group lasting a quarter note).</li>

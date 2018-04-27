@@ -1,0 +1,151 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+	<title>jSymbolic Tutorial</title>
+</head>
+
+<body text="#000000" bgcolor="#e4e4e4" link="#0033C4" vlink="#0033C4" alink="#0033C4">
+<a name="Top"></a>
+
+<table cellspacing="0" cellpadding="4" width="100%" bgcolor="#0033C4" border="0">
+  <tbody><tr>
+      <th align="left"><font face="Arial" color="#ffffff" size="+3">jSymbolic 
+        Tutorial  - Running jSymbolic</font></th>
+    </tr></tbody>
+</table>
+
+<p><strong>TAKING A FIRST LOOK AT THE JSYMBOLIC INSTALL</strong></p>
+<ul>
+  <li>The jSymbolic folder you just downloaded and unzipped holds the jSymbolic software, which you will be learning and working 
+    with </li>
+  <li>The folders contained in the &quot;jSymbolicTutorialWorkingFiles.zip&quot; file you downloaded include various data, 
+    configuration, feature and other files that we will be working with soon 
+    <ul>
+      <li>More about those later</li>
+    </ul>
+  </li>
+  <li>Open the jSymbolic folder you downloaded and unzipped
+    <ul>
+      <li>&quot;jSymbolic2.jar&quot; is the jSymbolic program</li>
+      <li>&quot;lib&quot; is a set of code libraries used by jSymbolic 
+        <ul>
+          <li>You do not need to worry about these</li>
+        </ul>
+      </li>
+      <li>jSymbolicDefaultConfigs.txt&quot; contains the default settings jSymbolic 
+        starts with 
+        <ul>
+          <li>e.g. features to extract, windowing settings, input files, output 
+            save paths, etc.</li>
+          <li>Later we will look at how to generate and use your own specialized 
+            jSymbolic configuration files</li>
+        </ul>
+      </li>
+      <li>&quot;README.md&quot; is provides a basic introduction to jSymbolic</li>
+      <li>&quot;manual&quot; holds jSymbolic's detailed manual</li>
+    </ul>
+  </li>
+  <li>Open the &quot;manual&quot; sub-folder 
+    <ul>
+      <li>Double click on the &quot;home.html&quot; file in this sub-folder to open the manual</li>
+      <li>Take particular note of the &quot;Feature Explanations&quot; section, 
+        which provides explanations on each of the features jSymbolic extracts</li>
+      <li>We will cover many important highlights in this tutorial, but the manual 
+        will provide an important reference for further details</li>
+    </ul>
+  </li>
+</ul>
+<p><strong>RUNNING JSYMBOLIC BY DOUBLE CLICKING ON IT</strong></p>
+<ul>
+  <li>Go back to the main jSymbolic folder (the one that holds &quot;jSymbolic2.jar&quot;</li>
+  <li>The easiest way to run jSymbolic is to just double click on &quot;jSymbolic.jar&quot;, 
+    which will bring up the jSymbolic GUI
+    <ul>
+      <li>Try double clicking it</li>
+      <li>If Java is not installed on your computer, then this will not work 
+        <ul>
+          <li>See the <a href="installation.html" target="right">installation 
+            instructions</a> we saw previously on how to install Java</li>
+        </ul>
+      </li>
+      <li>If your computer asks you to authorize jSymbolic, or says that you do 
+        not have permission to run it, then authorize it
+        <ul>
+          <li>See the <a href="installation.html" target="right">installation 
+            instructions</a> for details on how to do this</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+<p><strong>RUNNING JSYMBOLIC FROM THE TERMINAL / COMMAND LINE</strong></p>
+<ul>
+  <li>Although double clicking on the jSymbolic2.jar file is almost always a perfectly fine 
+    way to start jSymbolic, this method of running jSymbolic may in rare occasions cause problems
+    <ul>
+      <li>Since  Java may not allocate enough memory for it process very large files</li>
+    </ul>
+  </li>
+  <li>Let's try running jSymbolic a different way, just to be safe
+    <ul>
+      <li>Although, as noted above, it is usually absolutely fine to run it simply by double clicking it</li>
+    </ul>
+  </li>
+  <li>If jSymbolic is still open from the steps above, close it by pressing the exit box at the top right of the jSymbolic 
+    window </li>
+  <li>We will now run jSymbolic from the command line 
+    <ul>
+      <li>This allows us to instruct Java to give jSymbolic more memory if it 
+        needs it</li>
+      <li>It is also possible to use  jSymbolic's dedicated command line interface (as opposed to its graphical user interface, which this tutorial focuses on), which 
+        can be a faster way of using the software once you get used to it
+        <ul>
+          <li>See the manual for more details on this way of using jSymbolic</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Open a text terminal on your computer and move to the jSymbolic directory 
+    in it: 
+    <ul>
+      <li>Windows: 
+        <ul>
+          <li>Press the windows button to allow you to open the search interface</li>
+          <li> Type &quot;cmd&quot; and press enter to spawn a terminal window 
+          </li>
+          <li>Type &quot;cd <em>the_path_of_the_jSymbolic_folder_you_downloaded_that_contains_the_jSymbolic2.jar_file</em>&quot; in the terminal 
+            and press enter to move to this folder</li>
+          <li> Type &quot;dir&quot; to see the files that are there and to make 
+            sure you are in the right place</li>
+        </ul>
+      </li>
+      <li>Macintosh: 
+        <ul>
+          <li>Press command-spacebar to allow you to open the search interface</li>
+          <li> Type &quot;terminal&quot; and press enter to spawn run a terminal 
+            window </li>
+          <li>Type &quot;cd <em>the_path_of_the_jSymbolic_folder_you_downloaded_that_contains_the_jSymbolic2.jar_file</em>&quot; in the terminal 
+            and press enter to move to this folder</li>
+          <li> Type &quot;ls&quot; to see the files that are there and to make 
+            sure you are in the right place</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Run the jSymbolic GUI in this terminal window (making sure that you moved 
+    into the jSymbolic folder you downloaded (the one containing &quot;jSymbolic2.jar&quot;) in the terminal, as described 
+    above) 
+    <ul>
+      <li> Type &quot;java -Xmx6g -jar jSymbolic2.jar&quot; to run jSymbolic</li>
+      <li>You will see the same jSymbolic window as you did before when you double 
+        clicked on &quot;jSymbolic2.jar&quot;, but you have now given Java permission 
+        to assign jSymbolic much more memory if it needs it</li>
+    </ul>
+  </li>
+  <li>Leave this window open for the next steps</li>
+</ul>
+<p><em>Congratulations, you have now got most of the infrastructural set-up work done. 
+  Now let's dive into actually using jSymbolic <a href="jsymbolicbasics.html" target="right">. 
+  . .</a></em></p>
+<table height="5" width="100%" bgcolor="#0033C4" border="0"><tbody><tr><th></th></tr></tbody></table>
+<p><tt><a href="runningjsymbolic.html#Top">-top of page-</a></tt></p>
+
+</body></html>

@@ -8,7 +8,7 @@ import jsymbolic2.processing.MIDIIntermediateRepresentations;
 /**
  * A feature calculator that finds the MIDI pitch value of the last note in the piece. If there are multiple
  * notes with simultaneous attacks at the end of the piece, then the one with the lowest pitch is selected.
- *
+ * Set to 0 if there are no pitched notes.
  * @author Cory McKay
  */
 public class LastPitchFeature
@@ -24,7 +24,7 @@ public class LastPitchFeature
 	{
 		code = "P-36";
 		String name = "Last Pitch";
-		String description = "The MIDI pitch value of the last note in the piece. If there are multiple notes with simultaneous attacks at the end of the piece, then the one with the lowest pitch is selected.";
+		String description = "The MIDI pitch value of the last note in the piece. If there are multiple notes with simultaneous attacks at the end of the piece, then the one with the lowest pitch is selected. Set to 0 if there are no pitched notes.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, description, is_sequential, dimensions);
@@ -58,8 +58,12 @@ public class LastPitchFeature
 		double value;
 		if (sequence_info != null)
 		{
-			int last_tick_index = sequence_info.pitches_present_by_tick_excluding_rests.length;
-			int lowest_last_pitch = sequence_info.pitches_present_by_tick_excluding_rests[last_tick_index-1][0];
+			int lowest_last_pitch = 0;
+			if (sequence_info.pitches_present_by_tick_excluding_rests.length > 0)
+			{
+				int last_tick_index = sequence_info.pitches_present_by_tick_excluding_rests.length;
+				lowest_last_pitch = sequence_info.pitches_present_by_tick_excluding_rests[last_tick_index-1][0];
+			}
 			
 			value = (double) lowest_last_pitch;
 		} 

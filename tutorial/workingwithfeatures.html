@@ -1,0 +1,182 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+	<title>jSymbolic Tutorial</title>
+</head>
+
+<body text="#000000" bgcolor="#e4e4e4" link="#0033C4" vlink="#0033C4" alink="#0033C4">
+<a name="Top"></a>
+
+<table cellspacing="0" cellpadding="4" width="100%" bgcolor="#0033C4" border="0">
+  <tbody><tr>
+      <th align="left"><font face="Arial" color="#ffffff" size="+3">jSymbolic 
+        Tutorial  - Working with Features</font></th>
+    </tr></tbody>
+</table>
+
+<p><strong>THE FEATURE SELECTOR PANEL</strong></p>
+<ul>
+  <li>The <em>Feature Selector Panel</em>, on the top right of the jSymbolic GUI, 
+    includes: 
+    <ul>
+      <li>A table containing one row for each feature that jSymbolic can extract 
+        <ul>
+          <li> The first column contains check boxes allowing users to select 
+            which features to save during feature extraction</li>
+          <li>The second column indicates the name of the feature</li>
+          <li>The third column indicates the unique code of the feature 
+            <ul>
+              <li>e.g. &quot;P-3&quot; indicates the third basic pitch feature</li>
+            </ul>
+          </li>
+          <li>The fourth column indicates the number of values the feature has 
+            <ul>
+              <li>Some features are multi-dimensional (mostly histograms)</li>
+            </ul>
+          </li>
+          <li>The fifth column indicates whether the feature may only be extracted 
+            from MEI (i.e. not MIDI) files</li>
+        </ul>
+      </li>
+      <li>The <em>Select Default Features </em>button selects the features loaded 
+        in the last config file</li>
+      <li>The <em>Select All Features </em>button selects all of the features</li>
+      <li>The <em>Deselect All Features </em>button deselects all of the features</li>
+    </ul>
+  </li>
+  <li>Double clicking any of the features will bring up some additional information 
+    about it, including: 
+    <ul>
+      <li>A brief description of it</li>
+      <li>Whether it may be extracted from overlapping windows of a file as well 
+        as from files as a whole, or only from files as a whole</li>
+      <li>Whether its calculation uses the values of any other features 
+        <ul>
+          <li>You don't need to worry about this in practice, since jSymbolic 
+            is smart enough to calculate necessary dependent features in the background 
+            even if you have not selected these dependencies to be saved</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Let's start with a very simple set of features: 
+    <ul>
+      <li>Press the <em>Deselect All Features </em>button</li>
+      <li>Check the <em>Range (P-8) </em>feature</li>
+      <li>Check the <em>Most Common Pitch (P-16) </em>feature</li>
+      <li>Check the <em>Most Common Pitch Class (P-17) </em>feature</li>
+      <li>This means that only three features are now set to be extracted 
+        <ul>
+          <li>Normally we will extract far more, but this is a nice simple example 
+            for pedagogical purposes</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Please see the &quot;Feature Explanations&quot; section of the <a href="../manual/home.html" target="top">jSymbolic manual</a> for more information on how each feature is defined</li>
+</ul>
+<p><strong>THE FEATURE EXTRACTION AND SAVING SETTINGS PANEL</strong></p>
+<ul>
+  <li>The <em>Feature Extraction and Saving Settings Panel</em>, on the bottom 
+    right of the jSymbolic GUI, includes: 
+    <ul>
+      <li>The <em>Set ACE XML Feature Values Save Path </em>button allows the 
+        user to specify the path to which feature values will be saved 
+        <ul>
+          <li>A save path can also be typed in directly</li>
+          <li>This path specifies where the ACE XML feature values file will be 
+            saved 
+            <ul>
+              <li>&quot;ACE XML&quot; is a set of special output file formats 
+                used by jSymbolic and the other jMIR components</li>
+              <li>This ACE XML file is always saved, even if feature values are 
+                also saved as Weka ARFF or CSV files (see below)</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>The <em>Set ACE XML Feature Definitions Save Path </em>button allows 
+        the user to specify the path to which feature definitions will be saved 
+        <ul>
+          <li>A save path can also be typed in directly</li>
+          <li>This path specifies where the ACE XML feature definitions file will 
+            be saved 
+            <ul>
+              <li>Unlike the ACE XML feature values file, this file does <em>not</em> 
+                hold any feature values 
+                <ul>
+                  <li>Instead, it holds descriptions and other metadata about 
+                    the features </li>
+                  <li>This is useful for the purpose of archiving and sharing 
+                    feature extraction information</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>The <em>Auto Save Features in a Weka ARFF File </em>check box allows 
+        users to also (i.e. in addition to the ACE XML feature values file) save 
+        features in an ARFF file 
+        <ul>
+          <li>ARFF files are used by the Weka data mining software</li>
+          <li>The ARFF file will be saved in the same directory and with the same 
+            file name as the specified ACE XML feature values file, but with a 
+            different file extension</li>
+        </ul>
+      </li>
+      <li>The <em>Auto Save Features in a CSV File </em>check box allows users 
+        to also (i.e. in addition to the ACE XML feature values file) save features 
+        in a CSV file 
+        <ul>
+          <li>CSV files are a common format used by spreadsheets, Weka and many 
+            other programs 
+            <ul>
+              <li>They are essentially just comma-delimited text files</li>
+            </ul>
+          </li>
+          <li>The CSV file will be saved in the same directory and with the same 
+            file name as the specified ACE XML feature values file, but with a 
+            different file extension</li>
+        </ul>
+      </li>
+      <li>The <em>EXTRACT AND SAVE FEATURES </em>button begins an actual feature 
+        extraction</li>
+    </ul>
+  </li>
+  <li>Let's do a simple feature extraction from the two files we selected and 
+    of the three features we selected in the previous steps 
+    <ul>
+      <li>Press the <em>Set ACE XML Feature Values Save Path </em>button and navigate 
+        to inside the &quot;01_Comparing_Two_Files&quot; folder 
+        <ul>
+          <li>In the <em>File Name </em>field type &quot;MyJosqOckSimpleFeatureValues.xml&quot;</li>
+          <li>Press the <em>Save</em> button</li>
+        </ul>
+      </li>
+      <li>Press the <em>Set ACE XML Feature Definitions Save Path </em>button 
+        and navigate to inside the &quot;01_Comparing_Two_Files&quot; folder (you 
+        will probably already be there) 
+        <ul>
+          <li>In the <em>File Name </em>field type &quot;MySimpleFeatureDefinitions.xml&quot;</li>
+          <li>Press the <em>Save</em> button</li>
+        </ul>
+      </li>
+      <li>Leave the <em>Auto Save Features in a Weka ARFF File</em> and <em>Auto 
+        Save Features in a CSV File</em> boxes checked</li>
+      <li>Press the <em>EXTRACT AND SAVE FEATURES </em>button 
+        <ul>
+          <li>Wait a few moments while the feature values are extracted</li>
+          <li>Note that updates are posted to the <em>Processing Information Panel 
+            </em>as processing progresses</li>
+          <li>Wait until a dialog box pops up telling you that processing is complete, 
+            and then press the <em>OK </em>button</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+<p><em>Let's look at the results <a href="examiningfeatures.html" target="right">. 
+  . .</a></em></p>
+<table height="5" width="100%" bgcolor="#0033C4" border="0"><tbody><tr><th></th></tr></tbody></table>
+<p><tt><a href="workingwithfeatures.html#Top">-top of page-</a></tt></p>
+
+</body></html>

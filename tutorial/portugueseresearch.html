@@ -1,0 +1,85 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+	<title>jSymbolic Tutorial</title>
+</head>
+
+<body text="#000000" bgcolor="#e4e4e4" link="#0033C4" vlink="#0033C4" alink="#0033C4">
+<a name="Top"></a>
+
+<table cellspacing="0" cellpadding="4" width="100%" bgcolor="#0033C4" border="0">
+  <tbody><tr>
+      <th align="left"><font face="Arial" color="#ffffff" size="+3">jSymbolic 
+        Tutorial  - Portuguese Research</font></th>
+    </tr></tbody>
+</table>
+
+<p><strong>LOOKING AT DATA FROM THE THE ANATOMY OF LATE 15TH- AND EARLY 16TH-CENTURY 
+  IBERIAN POLYPHONIC MUSIC PROJECT</strong></p>
+<ul>
+  <li>Dr. Jo&atilde;o Pedro d’Alvarenga has kindly provided  samples of 
+    the music associated with a <a href="https://iberianpolyphonicmusic.wordpress.com" target="top">very 
+    interesting project</a> his research group is working on 
+    <ul>
+      <li>This music is found in the &quot;04_Iberian_Data&quot; folder in the 
+        &quot;jSymbolicTutorialWorkingFiles.zip&quot; file you downloaded earlier</li>
+    </ul>
+  </li>
+  <li>This data provides an excellent opportunity to review what we have learned 
+    and to explore data that is particularly relevant to the context of this tutorial</li>
+  <li>It is suggested that you once again use the provided &quot;FeaturesThatAvoidBiasInRenMusictConfigs.txt&quot; feature subset</li>
+  <li> Please load some of these files into jSymbolic and run a feature extraction 
+    <ul>
+      <li>You may wish to start with a subset of the files, depending on the time 
+        available</li>
+    </ul>
+  </li>
+  <li>Once feature extraction is complete, please explore the extracted features 
+    in Weka 
+    <ul>
+      <li>But do not forget to label the music using a spreadsheet first! 
+        <ul>
+          <li>And you may need to be careful about certain non-ASCII characters 
+            in the class labels, as Weka can be fussy about some of these </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Things to experiment with in Weka:</li>
+  <ul>
+    <li>Manual examination of feature values in Excel (or some other spreadsheet)</li>
+    <li>Manual examination of feature histograms in Weka</li>
+  </ul>
+  <ul>
+    <li>Manual examination of feature scatterplots in Weka</li>
+    <li>Automatic feature selection</li>
+    <li>Machine learning 
+      <ul>
+        <li> Weka can use the jSymbolic features to distinguish between the four 
+          groups of music about 85% of the time under cross-validation, with 
+          just default settings 
+          <ul>
+            <li>It does tend to confuse the Penalosa (secular) as Penalosa (sacred), 
+              however, which is actually a musicologically reasonable result</li>
+          </ul>
+        </li>
+        <li>You can also try separating out your own training and testing sets, 
+          and seeing how individual pieces are actually classified 
+          <ul>
+            <li>Try to keep an equally balanced level of music in each category 
+              in the training set and in the testing set</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+  <li>What would you like to know about this music? 
+    <ul>
+      <li>What kinds of things would you like the features to reveal?</li>
+    </ul>
+  </li>
+</ul>
+<p><em>A few final words remain to be said about jSymbolic <a href="jsymbolicbitsandpieces.html" target="right">. 
+  . .</a></em></p>
+<table height="5" width="100%" bgcolor="#0033C4" border="0"><tbody><tr><th></th></tr></tbody></table>
+<p><tt><a href="portugueseresearch.html#Top">-top of page-</a></tt></p>
+
+</body></html>

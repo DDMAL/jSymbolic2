@@ -1,0 +1,124 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+	<title>jSymbolic Tutorial</title>
+</head>
+
+<body text="#000000" bgcolor="#e4e4e4" link="#0033C4" vlink="#0033C4" alink="#0033C4">
+<a name="Top"></a>
+
+<table cellspacing="0" cellpadding="4" width="100%" bgcolor="#0033C4" border="0">
+  <tbody><tr>
+      <th align="left"><font face="Arial" color="#ffffff" size="+3">jSymbolic 
+        Tutorial  - Configuration Files</font></th>
+    </tr></tbody>
+</table>
+
+<p><strong>THE CONFIGURATION FILE AND WINDOWING SETTINGS MANUAL</strong></p>
+<ul>
+  <li>jSymbolic has special configuration files that you can use to 
+    store settings and extraction jobs </li>
+  <li>We will now look at these files in some detail, as they can be very useful:</li>
+  <ul>
+    <li>These files can keep an archive of experiments you perform for future 
+      records </li>
+    <li>They can be shared for the purpose of research verification / duplication 
+    </li>
+    <li>They can also be very useful for quickly running different variants of 
+      an experiment</li>
+  </ul>
+  <li>The <em>Configuration File and Windowing Settings Panel</em>, on the bottom 
+    left of the jSymbolic GUI, includes: </li>
+  <ul>
+    <li>The <em>Load New Settings from a Config File</em> button allows the user 
+      to load a pre-saved set of selected features, input files, output paths 
+      and windowing settings from a configuration file</li>
+    <li>The <em>Save These Settings to a Config File </em>button allows the user 
+      to save the currently entered set of selected features, input files, output 
+      paths and windowing settings to a configuration file</li>
+    <li>The <em>Extract Features from Entire Files </em>radio button setting causes 
+      features to only be extracted from symbolic files in their entirety (i.e. 
+      without windowing) 
+      <ul>
+        <li> We will focus on this kind of feature extraction in this demo, as 
+          it tends to be the most useful</li>
+        <li>Selecting this option will grey out the Window Duration and Window 
+          Overlap text areas</li>
+      </ul>
+    </li>
+    <li>The <em>Extract Features from Windows Radio Button</em> causes features 
+      to be extracted from windows only (as opposed to extracting them from files 
+      in their entirety) 
+      <ul>
+        <li>Each window will have a duration equal to the number of seconds specified 
+          in the <em>Window Duration Text Area</em></li>
+        <li>The windows will have a fractional overlap specified in the <em>Window 
+          Overlap Fraction Text Area</em> 
+          <ul>
+            <li>A value of 0 indicates no overlap</li>
+            <li>e.g. for a window duration value of 10 and a window overlap fraction 
+              value of 0.1, the windows will be from 0 sec to 10 sec, 9 sec to 
+              19 sec, etc.</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+  <li>We can return to windowed extraction later if we have time, but let's move 
+    on for now</li>
+  <li>Let's save the settings you entered into jSymbolic in the previous steps: 
+    <ul>
+      <li>Click the <em>Save These Settings to a Config File </em>button</li>
+      <li>Navigate to inside the &quot;01_Comparing_Two_Files&quot; folder 
+        <ul>
+          <li>In the <em>File Name </em>field type &quot;MySimpleJosqOckConfigs.txt&quot;</li>
+          <li>Press the <em>Save</em> button</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>In your favorite text editor, open this config file that you just saved 
+    <ul>
+      <li>You will rarely look at config files manually in practice, but this 
+        gives you an idea of what they look like</li>
+    </ul>
+  </li>
+  <li>Let's now look at how you can load config files: 
+    <ul>
+      <li>Quit jSymbolic (press the exit box at the top right of the jSymbolic 
+        window)
+and rerun jSymbolic      
+        <ul>
+          <li>Note that you have lost the settings you entered previously</li>
+          <li>This step is not strictly necessary, but is included here for the purpose of illustration</li>
+        </ul>
+      </li>
+      <li>Click the <em>Load New Settings from a Config File </em>button</li>
+      <li>Navigate to inside the &quot;01_Comparing_Two_Files&quot; folder 
+        <ul>
+          <li>Double click the &quot;MySimpleJosqOckConfigs.txt&quot; file that 
+            you created</li>
+        </ul>
+      </li>
+      <li>Click the <em>Yes </em>button in the warning dialog box that comes up</li>
+      <li>Note that you have now recovered the settings you saved earlier</li>
+    </ul>
+  </li>
+</ul>
+<p><strong> MISCELLANEOUS NOTES ON CONFIGURATION FILES</strong></p>
+<ul>
+  <li>You can also save configuration files without specifying input files or 
+    output paths 
+    <ul>
+      <li>i.e. indicating only things like chosen features and windowing settings</li>
+    </ul>
+  </li>
+  <li>If you wish to always start up jSymbolic with a given set of default settings, 
+    save the corresponding configuration file in the same folder as the &quot;jSymbolic2.jar&quot; 
+    file, with the name &quot;jSymbolicDefaultConfigs.txt&quot;</li>
+  <li>See the <a href="../manual/home.html" target="top">jSymbolic manual</a> for more information on how the configuration files work</li>
+</ul>
+<p><em>Let's now conduct some real research with jSymbolic <a href="doingsomerealresearch.html" target="right">. 
+  . .</a></em></p>
+<table height="5" width="100%" bgcolor="#0033C4" border="0"><tbody><tr><th></th></tr></tbody></table>
+<p><tt><a href="configurationfiles.html#Top">-top of page-</a></tt></p>
+
+</body></html>

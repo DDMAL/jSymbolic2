@@ -1,0 +1,427 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+	<title>jSymbolic Tutorial</title>
+</head>
+
+<body text="#000000" bgcolor="#e4e4e4" link="#0033C4" vlink="#0033C4" alink="#0033C4">
+<a name="Top"></a>
+
+<table cellspacing="0" cellpadding="4" width="100%" bgcolor="#0033C4" border="0">
+  <tbody><tr>
+      <th align="left"><font face="Arial" color="#ffffff" size="+3">jSymbolic 
+        Tutorial  - Using Weka</font></th>
+    </tr></tbody>
+</table>
+
+<p><strong>PREPARING FEATURES TO BE USED BY WEKA</strong></p>
+<ul>
+  <li>Do these steps once the JosquinVsOckeghem features have finished being extracted
+    <ul>
+      <li>As instructed earlier in this tutorial</li>
+    </ul>
+  </li>
+  <li>We could just open the ARFF file jSymbolic generated in Weka 
+    <ul>
+      <li>This would not, however, tell Weka which pieces are by Josquin and which 
+        are by Ockeghem</li>
+    </ul>
+  </li>
+  <li>Let's instead make a modified version of the &quot;BigJosqOckFeatureValues.csv&quot; 
+    jSymbolic just created 
+    <ul>
+      <li>Open the &quot;BigJosqOckFeatureValues.csv&quot; file in your spreadsheet 
+        (I'll be using Excel)</li>
+      <li>In the spreadsheet, go to the first column on the right that does not 
+        have any data in it 
+        <ul>
+          <li>Column ADW, in this case</li>
+          <li>In the first row, type &quot;COMPOSER&quot; 
+            <ul>
+              <li>To let Weka know that this will identify the composer</li>
+            </ul>
+          </li>
+          <li>In each row of this column that corresponds to Josquin, type &quot;Josquin&quot;</li>
+          <li>In each row of this column that corresponds to Ockeghem, type &quot;Ockeghem&quot;</li>
+          <li>Use copy and pasting to speed up these operations</li>
+          <li>Look at the the paths in the first column to see where the Ockeghem 
+            files end and the Josquin files start</li>
+        </ul>
+      </li>
+      <li>Now delete the entire first column (which holds the file paths) 
+        <ul>
+          <li>Weka does not use this information</li>
+        </ul>
+      </li>
+      <li>Save this edited file as &quot;BigJosqOckFeatureValuesWekaReady.csv&quot;</li>
+      <li>This file now, in the column you added, indicates which pieces are by 
+        Josquin and which by Ockeghem
+        <ul>
+          <li>And no longer indicates which file each set of features was extracted 
+            from, since you delted the column that provided that information</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>If you are going to be doing lots of labeling of instances, there is a jMIR 
+    tool for speeding the process up: 
+    <ul>
+      <li><a href="http://jmir.sourceforge.net/index_jMIRUtilities.html" target="top">jMIRUtilities</a> 
+        includes a GUI for easily labeling music whose features have been extracted 
+        into ACE XML files</li>
+      <li>For now, it better to do this in Excel, since it lets us get a better 
+        low-level feel for what the data looks like</li>
+    </ul>
+  </li>
+</ul>
+<p><strong>USING WEKA TO MANUALLY EXPORE THE DATA AND SEARCH FOR MUSICOLOGICALLY 
+  MEANINGFUL PATTERNS</strong></p>
+<ul>
+  <li>Weka is a data mining package from the University of Waikato, New Zealand 
+    <ul>
+      <li>We can use it to explore statistical patterns in the features</li>
+      <li>We can use it to do machine learning</li>
+    </ul>
+  </li>
+  <li>If you have not yet installed Weka, then please do so now 
+    <ul>
+      <li>See the <a href="installation.html" target="right">installation instructions</a> 
+        from earlier</li>
+    </ul>
+  </li>
+  <li>Run Weka 
+    <ul>
+      <li>Macintosh: 
+        <ul>
+          <li>Double click the &quot;weka-3-8-2&quot; drive icon on your Desktop, 
+            and in the window that opens double click on the &quot;weka-3-8-2-oracle-jvm&quot; 
+            to run Weka</li>
+        </ul>
+      </li>
+      <li>Windows: 
+        <ul>
+          <li>Double click on the &quot;Weka 3.8&quot; icon on your desktop</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Click on the <em>Explorer </em>button</li>
+  <li>This opens the Weka Explorer interface, which we will be working with 
+    <ul>
+      <li>You will be starting in the <em>Preprocess </em>tab of the Weka Explorer</li>
+    </ul>
+  </li>
+  <li>Click the &quot;Open file&quot; button, and open the &quot;BigJosqOckFeatureValuesWekaReady.csv&quot; 
+    file we just created 
+    <ul>
+      <li>You will first need to select &quot;CSV data files&quot; from the <em>Files of Type </em>dropdown 
+        menu found in the file chooser dialog box that appears so that you can 
+        see CSV files</li>
+    </ul>
+  </li>
+  <li>All of the features in the file are now listed in the <em>Attributes </em> 
+    area of the Weka Explorer</li>
+  <li>This includes the &quot;COMPOSER&quot; field that we created in our spreadsheet 
+    <ul>
+      <li>Scroll to the bottom of the attributes and select &quot;COMPOSER&quot;</li>
+      <li>This shows that there are 98 Ockeghem pieces, who is displayed in blue, 
+        and 131 Josquin pieces, who is displayed in red</li>
+    </ul>
+  </li>
+  <li>Click, for example, on the Vertical_Sixths feature (number 506) 
+    <ul>
+      <li>The Vertical Sixths feature definition, from the manual: 
+        <ul>
+          <li>&quot;Fraction of all wrapped vertical intervals that are minor 
+            or major sixths. This is weighted by how long intervals are held (e.g. 
+            an interval lasting a whole note will be weighted four times as strongly 
+            as an interval lasting a quarter note).&quot;</li>
+        </ul>
+      </li>
+      <li>A number of stats about the feature distribution across all the files 
+        we extracted is shown on the right 
+        <ul>
+          <li>Minimum, maximum, mean and standard deviation</li>
+        </ul>
+      </li>
+      <li>Of particular interest, note the histogram graph 
+        <ul>
+          <li>In this graph, red corresponds to pieces by Josquin and blue to 
+            pieces by Ockeghem</li>
+          <li>The horizontal scale on the bottom of the histogram indicates the 
+            feature value range</li>
+          <li>The height or each bar indicates how many pieces had a feature value 
+            within the range of that bar 
+            <ul>
+              <li>e.g. 6 pieces (all by Josquin) had a vertical sixths value of 
+                near 0.1</li>
+            </ul>
+          </li>
+          <li>The colours show which pieces are associated with which composer</li>
+          <li>This particular graph shows that Josquin tends to have fewer vertical 
+            sixths proportionately then Ockeghem, overall 
+            <ul>
+              <li>Although there is certainly some overlap </li>
+              <li>e.g. a some Ockeghem pieces have fewer vertical sixths than 
+                a few Josquin pieces, but this is rare</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>This may be an important musicological insight! 
+    <ul>
+      <li>The other features can be examined one-by-one for other interesting 
+        and potentially meaningful similar patterns</li>
+    </ul>
+  </li>
+  <li>It can be even more meaningful to see how different features vary together 
+    <ul>
+      <li>Rather than just looking at one feature at a time, as we just did</li>
+    </ul>
+  </li>
+  <li>To see a scatterplot showing how any two features are distributed compared 
+    to one another: 
+    <ul>
+      <li> Click on the <em>Visualize</em> tab of the Weka Explorer</li>
+      <li> Click on any of the boxes in the <em>Plot Matrix</em> area of the <em>Visualize</em> 
+        tab to see a scatterplot of the two features corresponding to the box 
+        you clicked 
+        <ul>
+          <li>Each blue &quot;x&quot; corresponds to a piece by Ockeghem, and 
+            each red &quot;x&quot; to a piece by Josquin</li>
+        </ul>
+      </li>
+      <li>Of course, not all of these will be interesting, and we need to find 
+        feature pairs that separate the composers out well</li>
+      <li>Let's look at two features that experimentation has revealed to be interesting 
+        in the context of these two composers 
+        <ul>
+          <li>In the scatterplot window that you just opened, choose &quot;X: 
+            Average_Length_of_Melodic_Arcs (Num)&quot; in the X dropdown box (top 
+            left), and &quot;X: Vertical_Sixths (Num)&quot; in the Y dropdown 
+            box (top right)</li>
+          <li>Notice how one could draw an imaginary curve on the graph that would 
+            separate the composers relatively well 
+            <ul>
+              <li>It seems that just these two feature are quite useful in discriminating 
+                between the two composers!</li>
+              <li>Perhaps there is some musically meaningful relationship between 
+                the two features?</li>
+            </ul>
+          </li>
+          <li>Close the scatterplot window when you are done</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>It can be useful to experiment by looking at many such graphs in order to 
+    look for meaningful relationships </li>
+  <li>If the number of features is too overwhelming in the <em>Visualize </em> 
+    tab, you can filter ones out that you do not want to look at by not selecting 
+    them in the box that appears when you press the <em>Select Attribute </em>button 
+    <ul>
+      <li>Press the <em>Update </em>button when you are done in order to change 
+        the scatterplots shown</li>
+    </ul>
+  </li>
+</ul>
+<p><strong>USING WEKA TO AUTOMATICALLY FIND FEATURES THAT DISTINGUISH MUSICAL 
+  CLASSES (COMPOSERS IN THIS CASE)</strong></p>
+<ul>
+  <li>Manually examining histograms and scatterplots like we did in the last section 
+    can be a very powerful and revealing approach 
+    <ul>
+      <li>I highly recommend it!</li>
+    </ul>
+  </li>
+  <li>However, it can also be time-consuming and sometimes overwhelming </li>
+  <li>We will now look at a statistical technique called &quot;feature selection&quot; 
+    that uses statistical processing to find the features that are most likely 
+    to be significant in discriminating between the musical classes under consideration 
+    (composers, in this case) 
+    <ul>
+      <li>Note that I wrote &quot;most likely&quot; above</li>
+      <li>This is because feature selection and automatic classification are very 
+        complex operations, and they tend to give your results that are good but 
+        not necessarily optimal </li>
+    </ul>
+  </li>
+  <li>Click on the <em>Select attributes</em> tab in Weka</li>
+  <li>Under <em>Attribute Evaluator, </em>press the <em>Choose</em> button 
+    <ul>
+      <li>Select <em>weka &gt; attributeSelection &gt; CfsSubsetEval</em></li>
+      <li>This powerful algorithm evaluates the worth of a subset of features 
+        by considering the individual predictive ability of each feature along 
+        with the degree of redundancy between them</li>
+    </ul>
+  </li>
+  <li>Under <em>Search Method, </em>press the <em>Choose </em>button 
+    <ul>
+      <li>Select <em>weka &gt; attributeSelection &gt; BestFirst</em></li>
+      <li>This sets the way that the CfsSubsetEval algorithm will explore and 
+        select features</li>
+    </ul>
+  </li>
+  <li>Press the <em>Start </em>button 
+    <ul>
+      <li>Wait a few moments for processing to occur</li>
+    </ul>
+  </li>
+  <li>The list that comes up is the list of features that this algorithm found 
+    to most effectively distinguish between the composers 
+    <ul>
+      <li>For CfsSubsetEval, the order of the list does not indicate priority</li>
+    </ul>
+  </li>
+  <li>There is therefore statistical evidence that these particular reported features 
+    could be particularly musicologically meaningful when considered in connection 
+    to these two composers! </li>
+  <li>However, remember that no feature selection methodology is perfect 
+    <ul>
+      <li>There might be other features that are also important that CfsSubsetEval 
+        missed</li>
+    </ul>
+  </li>
+  <li>In particular, there might be particular feature <em>combinations</em> that 
+    are particularly important 
+    <ul>
+      <li>A feature that has no discriminatory power alone might turn out to be 
+        very useful when combined with another feature</li>
+      <li>This is why we need many candidate features!</li>
+    </ul>
+  </li>
+  <li>Let's try another algorithm, and see what happens: 
+    <ul>
+      <li>Under <em>Attribute Evaluator, </em>press the <em>Choose</em> button 
+        <ul>
+          <li>Select <em>weka &gt; attributeSelection &gt; CorrelationAttributeEval</em></li>
+          <li>Click <em>Yes </em> on the dialog box that comes up</li>
+          <li>This algorithm evaluates the worth of a feature by measuring the 
+            correlation (Pearson's) between it and a piece's class</li>
+        </ul>
+      </li>
+      <li>Press the <em>Start </em>button</li>
+      <li>The list of features that comes up is ranked from the ones estimated 
+        to be the most meaningful to the ones estimated to be the least meaningful 
+        <ul>
+          <li>Unlike CfsSubsetEval</li>
+        </ul>
+      </li>
+      <li>Note that the best features suggested by CorrelationAttributeEval are 
+        similar but not identical to those suggested by CfsSubsetEval</li>
+    </ul>
+  </li>
+  <li>It is useful to experiment with a range of such algorithms and look for 
+    similarities amongst the features they suggest 
+    <ul>
+      <li>Those features selected by a variety of algorithms are likely to be 
+        the most interesting ones in connection with the problem at hand</li>
+      <li>Although other ones can certainly be interesting as well</li>
+      <li>And, of course, the results of just one algorithm can certainly still 
+        be very musicologically meaningful</li>
+    </ul>
+  </li>
+  <li>There are also many alternative statistical analysis techniques that can 
+    be used to determine which features seem to be most relevant to distinguishing 
+    between certain classes 
+    <ul>
+      <li>e.g. ANOVA is quite well-known, but sadly not implemented by Weka</li>
+      <li>There are many advanced software packages that can be used to perform 
+        such analyses 
+        <ul>
+          <li>e.g. SAS, Matlab, etc.</li>
+        </ul>
+      </li>
+      <li>They are beyond the scope of this tutorial, however</li>
+      <li>For our purposes, Weka alone offers more than enough useful functionality 
+        to do meaningful analyses</li>
+    </ul>
+  </li>
+</ul>
+<p><strong>USING MACHINE LEARNING IN WEKA TO CLASSIFY CLASSES (COMPOSERS IN THIS 
+  CASE)</strong></p>
+<ul>
+  <li>Machine learning is a powerful set of techniques that, among other things, 
+    can train on sets of extracted features to automatically &quot;learn&quot; 
+    to distinguish between different classes (i.e. composers, in this case) 
+    <ul>
+      <li>e.g. recognize tumors or handwriting</li>
+      <li>e.g. recognize composers</li>
+    </ul>
+  </li>
+  <li>To use machine learning in Weka, click on the <em>Classify</em> tab</li>
+  <li>In the <em>Classifier </em>area, click on the <em>Choose </em>button 
+    <ul>
+      <li>Select weka &gt; classifiers &gt; functions &gt; SMO</li>
+      <li>This is an implementation of the Support Vector Machine (SVM) machine 
+        learning algorithm 
+        <ul>
+          <li>A simple but highly effective (and fast!) algorithm</li>
+        </ul>
+      </li>
+      <li>Make sure the <em>Cross-validation </em>option is selected in the <em>Test 
+        options </em>area</li>
+      <li>Press the <em>Start </em>button 
+        <ul>
+          <li>Wait a little while for the processing to occur</li>
+        </ul>
+      </li>
+      <li>A long report will be displayed when processing is complete</li>
+      <li>Scroll down this report and look for: 
+        <ul>
+          <li>The <em>Correctly Classified Instances </em>percentage: 
+            <ul>
+              <li>Indicates how accurately the algorithm was able to classify 
+                test pieces by composer after it was trained on separately partitioned 
+                training pieces</li>
+            </ul>
+          </li>
+          <li>The <em>Confusion Matrix:</em> 
+            <ul>
+              <li>Shows what kinds of misclassifications occurred</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>In just a few moments, the system was able to learn to correctly distinguish 
+    Josquin's music from Ockeghem's music about 93% of the time! 
+    <ul>
+      <li>With no feature selection pre-processing 
+        <ul>
+          <li>The feature selection we did in the <em>Select attributes </em> 
+            tab was not carried through here</li>
+          <li>If we wanted to do machine learning with an automatically reduced 
+            feature set, we would use the <em>Filter </em>area of the <em>Preprocess 
+            </em>tab</li>
+        </ul>
+      </li>
+      <li>With no tweaking of classifier parameters 
+        <ul>
+          <li>If we wanted to do this, we could click on where it says <em>SMO</em></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Even better results could be achieved if we had spent time setting up the 
+    classifier more carefully and pre-selecting features using statistically valid 
+    techniques 
+    <ul>
+      <li>However, this requires some expertise in machine learning, so we will 
+        not go more into it here</li>
+      <li>Special care has to be taken when doing this not to accidentally inflate 
+        results by &quot;overfitting&quot;</li>
+      <li>But this would only give us an extra one or two percentage points</li>
+      <li>This basic approach is more than good enough for achieving meaningful 
+        results </li>
+    </ul>
+  </li>
+</ul>
+<p><em>Next we will learn to train and save a clasification model using Weka, 
+  and then use it to classify pieces of music <a href="trainingamodelandusingit.html" target="right">. 
+  . .</a></em></p>
+<table height="5" width="100%" bgcolor="#0033C4" border="0"><tbody><tr><th></th></tr></tbody></table>
+<p><tt><a href="usingweka.html#Top">-top of page-</a></tt></p>
+
+</body></html>

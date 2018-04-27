@@ -17,7 +17,7 @@
 
 <p><strong>RUNNING JSYMBOLIC GRAPHICALLY</strong></p>
 
-<p>The simplest way of using jSymbolic is to simply run the jSymbolic <a href="../gui_files/gui.html">GUI</a> by double clicking the jSymbolic2.jar file's icon on a graphical disk interface, such as Windows or OS X. However, a greater range of options are made available by running jSymbolic through a terminal interface using command line arguments, as described below. Also, running jSymbolic simply by double clicking its icon could result in running out of memory in the case of particularly large and complex files (see below), so in such cases it may be safer to run jSymbolic from the command line.</p>
+<p>The simplest way of using jSymbolic is to simply run the jSymbolic <a href="../gui_files/gui.html">GUI</a> by double clicking the jSymbolic2.jar file's icon on a graphical disk interface, such as Windows or OS X. However, a greater range of options are made available by running jSymbolic through a terminal interface using command line arguments, as described below. Also, running jSymbolic simply by double clicking its icon could, in rare cases, result in running out of memory in the case of particularly large and complex files (see below), so in such cases it may be safer to run jSymbolic from the command line.</p>
 
 <p><strong>ACCESSING JSYMBOLIC VIA A TERMINAL INTERFACE</strong></p>
 
@@ -36,7 +36,7 @@
 <p><strong>RUNNING JSYMBOLIC WITH A SUFFICIENTLY HIGH MEMORY CEILING</strong></p>
 <p>By its nature, the Java Virtual Machine is always assigned a maximum amount of memory at runtime. If a specific maximum is not assigned manually at runtime, then this will be the smaller of 1/4 the computer's physical memory or 1 GB.
 jSymbolic's processing can sometimes require quite
-a bit of memory, so it is best to manually specify a large maximum when running jSymbolic. This can be done by using the &quot;-Xmx&quot; flag when running Java, as shown in the examples below.</p>
+a bit of memory, so it is best to manually specify a large maximum when running jSymbolic just to be safe. This can be done by using the &quot;-Xmx&quot; flag when running Java, as shown in the examples below.</p>
 <p>It is suggested that a maximum of six gigabytes be used, which is why &quot;-Xmx6g&quot; is specified below. Of course, the vast majority of processing jobs will require much, much less than this amount of memory, but it is suggested that a high maximum such as this be assigned if possible, as jSymbolic will quit processing (with an explanatory error message) if the maximum assigned memory is exceeded while processing a particularly large or complex piece of music.
 In the very unlikely event that an out-of-memory error does occur, jSymbolic should be rerun with a larger maximum specified.</p>
 <p>Users are advised not to assign a greater amount of memory greater than the amount of physical memory that they have on their systems, however, as virtual memory processing can be quite slow.

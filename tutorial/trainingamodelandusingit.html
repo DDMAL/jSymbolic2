@@ -1,0 +1,332 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+	<title>jSymbolic Tutorial</title>
+</head>
+
+<body text="#000000" bgcolor="#e4e4e4" link="#0033C4" vlink="#0033C4" alink="#0033C4">
+<a name="Top"></a>
+
+<table cellspacing="0" cellpadding="4" width="100%" bgcolor="#0033C4" border="0">
+  <tbody><tr>
+      <th align="left"><font face="Arial" color="#ffffff" size="+3">jSymbolic 
+        Tutorial  - Training a Classification Model and Using It</font></th>
+    </tr></tbody>
+</table>
+
+<p><strong>JOSQUIN ATTRIBUTION DATA</strong></p>
+<ul>
+  <li>There is significant debate on the proper attribution of a number of pieces 
+    sometimes credited to Josquin </li>
+  <li>Jesse Rodin has separated Josquin's music into six levels of attribution 
+    security, based on historical research 
+    <ul>
+      <li>The Level 1 pieces are the most secure (i.e. are most likely to have 
+        truly been composed by Josquin), and attribution becomes less secure as 
+        the levels increase</li>
+      <li>Pieces belonging to levels 1 and 2 can be reasonably expected to really 
+        be by Josquin, the other four levels are more ambiguous</li>
+    </ul>
+  </li>
+  <li>In this experiment, we will use machine learning to help us get a rough 
+    overall idea of how reasonable (in general) the Rodin attribution levels are, 
+    based only on the musical content itself 
+    <ul>
+      <li>i.e. not taking any external historical knowledge into account</li>
+    </ul>
+  </li>
+  <li>To do this, we will train a classification model to distinguish the music 
+    of the two most secure secure Josquin levels from the music of a variety of 
+    other composers that were roughly his contemporaries</li>
+  <li>We will then use this model to classify the music from the four least secure 
+    Josquin levels 
+    <ul>
+      <li>If the music belonging to the more secure of these four levels is classified 
+        as being by Josquin more often by this model then the music from the less 
+        secure levels, then this is a good sign that there is musical backing 
+        for Rodin's proposed attribution security levels</li>
+    </ul>
+  </li>
+  <li>This is different from what we did in previous stages of this tutorial 
+    <ul>
+      <li>Previously, we did cross-validation on all the data at once, which means 
+        that Weka automatically broke the data into its own training and testing 
+        sets, for the purpose of seeing how well it was able to distinguish the 
+        music</li>
+      <li>Here, we are going to manually separate out the training data and testing 
+        data (i.e. the music we are going to classify) separately</li>
+      <li>This will allow us to see how each piece in the testing data is actually 
+        classified individually</li>
+    </ul>
+  </li>
+  <li><em>IMPORTANT:</em> the training data must never share any pieces with the 
+    testing data, otherwise results may be biased</li>
+</ul>
+<p><strong>EXTRACTING AND PRE-PROCESSING THE FEATURES</strong></p>
+<ul>
+  <li>We will be working in the 03_Josquin_Attribution directory, which you downloaded 
+    as part of this tutorial 
+    <ul>
+      <li>Using the approaches covered in the previous sections of this tutorial, 
+        use jSymbolic (and the &quot;FeaturesThatAvoidBiasInRenMusictConfigs.txt&quot; 
+        config file), to extract features from all the files in the &quot;JosquinNotJosquin_MIDI&quot; 
+        folder 
+        <ul>
+          <li>Save the features as &quot;JosquinNotJosquinFeatureValues.xml&quot; 
+            (and the associated ARFF and CSV files)</li>
+          <li>These will be the features we will use to train the model</li>
+        </ul>
+      </li>
+      <li>Using jSymbolic (and the &quot;FeaturesThatAvoidBiasInRenMusictConfigs.txt&quot; 
+        config file), extract features from all the files in the &quot;MaybeJosquin_MIDI&quot; 
+        folder 
+        <ul>
+          <li>Save the features as &quot;MaybeJosquinFeatureValues.xml&quot; (and 
+            the associated ARFF and CSV files)</li>
+          <li>These will be the features we will classify with the model after 
+            we train it</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Use the spreadsheet editing approaches covered earlier in this tutorial 
+    to create versions of the two CSV files jSymbolic just generated 
+    <ul>
+      <li>Save a version of &quot;JosquinNotJosquinFeatureValues.csv&quot; called 
+        &quot;JosquinNotJosquinFeatureValuesWekaReady.csv&quot; where: 
+        <ul>
+          <li>A column has been added to the end called &quot;COMPOSER&quot;</li>
+          <li>This column has been filled with entries of either &quot;Josquin&quot; 
+            or &quot;NotJosquin&quot; for each piece, as appropriate for the given 
+            piece </li>
+          <li>The first column (where file paths are listed) has been deleted</li>
+        </ul>
+      </li>
+      <li>Save a version of &quot;MaybeJosquinFeatureValues.csv&quot; called &quot;MaybeJosquinFeatureValuesWekaReady.csv&quot; 
+        where: 
+        <ul>
+          <li>A column has been added to the end called &quot;COMPOSER&quot;</li>
+          <li>This column has been filled with entries of &quot;?&quot;' for each 
+            and every piece 
+            <ul>
+              <li>Since we do not actually know who composed these pieces (although 
+                it is of course suspected that many of them actually are by Josquin, 
+                especially those nearer the top, which have a greater security 
+                level)</li>
+            </ul>
+          </li>
+          <li>The first column (where file paths are listed) has been deleted</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Using the Weka skills you learned in previous parts of this tutorial, start 
+    the Weka Explorer</li>
+  <li>Using Weka, we will save the &quot;MaybeJosquinFeatureValues.csv&quot; testing data CSV file we just edited as a Weka 
+    ARFF file 
+    <ul>
+      <li>This will differ from the ARFF file jSymbolic created directly, since 
+        we have since edited the CSV file for this set to include class labels 
+        under the header of &quot;COMPOSER&quot; </li>
+      <li>In Weka, under the <em>Preprocess</em> tab, click on the <em>Open File 
+        </em> button, and open the &quot;MaybeJosquinFeatureValuesWekaReady.csv&quot; 
+        file 
+        <ul>
+          <li>Then, still in the Weka <em>Preprocess </em>tab, press the <em>Save</em> 
+            button 
+            <ul>
+              <li>Make sure the <em>Files of Type</em> dropdown menu says &quot;Arff 
+                data files (*.arff)&quot;</li>
+              <li>Save the file as &quot;MaybeJosquinFeatureValuesComposerFieldAdded.arff&quot;</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>We now need to perform a bit of a hack in order to make Weka be willing 
+    to accept these files 
+    <ul>
+      <li>In a text editor, open the &quot;MaybeJosquinFeatureValuesComposerFieldAdded.arff&quot; 
+        file we just saved</li>
+      <li>In the text editor, find the line that says &quot;@attribute COMPOSER 
+        string&quot;</li>
+      <li>Replace this line with a line that says &quot;@attribute COMPOSER {NotJosquin,Josquin}&quot; 
+        <ul>
+          <li>If you were using other potential labels than &quot;NotJosquin&quot; 
+            and &quot;Josquin&quot;, then you would have to include them here</li>
+          <li>These labels <em>must</em> match exactly the labels that are used 
+            in your training data 
+            <ul>
+              <li>Even though you do not need to generate an ARFF file for your 
+                training data (you can just use the CSV file you already saved), 
+                it can be useful to save one anyway and copy its relevant &quot;@attribute 
+                . . . &quot; line for its candidate classes to your test pieces 
+                ARFF file</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>This step is necessary for Weka to know what possible classes (composers, 
+        in this case) each of the pieces could have</li>
+      <ul>
+        <li>Normally Weka would know implicitly from the file model composer labels 
+          if they were included, but we marked these ones with &quot;?&quot; earlier 
+          because the truth is unknown</li>
+      </ul>
+      <li>Save the file as &quot;MaybeJosquinFeatureValuesComposerHeaderAdjusted.arff&quot;</li>
+    </ul>
+  </li>
+</ul>
+<p><strong>SAVING AND TRAINING A CLASSIFICATION MODEL</strong></p>
+<ul>
+  <li>We are now ready to train and save a classification model</li>
+  <li>In Weka's <em>Preprocess </em>tab, click the <em>Open file </em>button 
+    <ul>
+      <li>Open the &quot;JosquinNotJosquinFeatureValuesWekaReady.csv&quot; file</li>
+      <li>Go to Weka's <em>Classify </em>tab</li>
+      <li>In the <em>Classifier </em>area, press the <em>Choose </em>button 
+        <ul>
+          <li>Select <em>weka &gt; classifiers &gt; functions &gt; SMO</em></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>We can do a quick cross-validation test (as we did in previous sections 
+    of this tutorial) to make sure that this data reasonably separates pieces 
+    by Josquin from pieces not by Josquin 
+    <ul>
+      <li>In the <em>Test options </em>area, make sure <em>Cross-validation</em> 
+        is selected</li>
+      <li>Press the <em>Start </em>button</li>
+      <li>You should get an average classification accuracy of around 95%</li>
+      <li>If so, we are happy, since this data does a good job at doing what we 
+        want it to</li>
+    </ul>
+  </li>
+  <li>Now let's actually train and save a model 
+    <ul>
+      <li>In the <em>Test options </em>area, select <em>Use training set</em></li>
+      <li>Press the <em>Start </em>button</li>
+      <li>You will see an even higher classification accuracy than before 
+        <ul>
+          <li>This is meaningless, since we just classified the training data 
+            itself</li>
+        </ul>
+      </li>
+      <li>What is important is that we now have a model ready to classify other 
+        separate test data </li>
+    </ul>
+  </li>
+  <li>Save the model you just trained 
+    <ul>
+      <li>In the <em>Results list </em> area, tight-click on the <em>last </em>entry 
+        there and select <em>Save model</em></li>
+      <li>Save it as &quot;JosquinNotJosquinTrainedModel.model&quot;</li>
+      <li>We do not have to save it to use it, but it is good to keep a record 
+        of it</li>
+    </ul>
+  </li>
+</ul>
+<p><strong>USING OUR TRAINED MODEL TO CLASSIFY TEST PIECES</strong></p>
+<ul>
+  <li>Now we are ready to classify our uncertain pieces using the classification 
+    model we just trained</li>
+  <li>In the <em>Test options </em>area, click on <em>Supplied test set, </em>and 
+    then click the <em>Set</em> button next to it 
+    <ul>
+      <li>Click the <em>Open file </em>button in the dialog box that appears</li>
+      <li>In the file chooser dialog that appears, choose <em>Arff data files 
+        (*.arff)</em> from the <em>Files of Type </em>dropdown menu </li>
+      <li>Select &quot;MaybeJosquinFeatureValuesComposerHeaderAdjusted.arff&quot;</li>
+      <li>Press the <em>Open </em>button</li>
+      <li>Press the <em>Close </em>button on the dialog box you then drop back 
+        down to</li>
+    </ul>
+  </li>
+  <li>In the <em>Test options </em>area, press the <em>More options </em>button 
+    <ul>
+      <li>Press the <em>Choose </em>button and select <em>Plain Text</em></li>
+      <li>Press the <em>OK </em>button</li>
+    </ul>
+  </li>
+  <li>In the <em>Results list </em> area, make sure that the <em>last </em>entry 
+    is selected 
+    <ul>
+      <li>If you wanted to load an already saved model, you could right-click 
+        on the white space of the <em>Results list</em> option and select <em>Load 
+        model </em></li>
+      <li>We do not need to open a saved model now, since we still have the one 
+        we just trained already loaded</li>
+    </ul>
+  </li>
+  <li>Press the <em>Start </em>button 
+    <ul>
+      <li>This generates a big list of output data</li>
+      <li>If you want, you can copy and paste it into a text editor, where it 
+        can be saved, maybe as &quot;MaybeJosquinClassificationResults.txt&quot;</li>
+    </ul>
+  </li>
+  <li>In the big list of output data that was generated, scroll up to where it 
+    says &quot;=== Predictions on test set ===&quot;</li>
+  <ul>
+    <li>This lists, for each piece, whether it was classified as being by Josquin 
+      or NotJosquin</li>
+  </ul>
+  <li>The pieces are listed in the same order as in the 'MaybeJosquinFeatureValues.csv&quot; 
+    file jSymbolic originally generated 
+    <ul>
+      <li>You can cross-reference the two to identify which piece is which 
+        <ul>
+          <li>This is necessary because Weka sadly does not keep track of external 
+            instance identifiers</li>
+        </ul>
+      </li>
+      <li>Note that there will be an offset of one row number between the number 
+        in the list Weka generates and the row number in the &quot;MaybeJosquinFeatureValues.csv&quot; 
+        file 
+        <ul>
+          <li>This is because the &quot;MaybeJosquinFeatureValues.csv&quot; file 
+            has an extra row at the top specifying feature headings</li>
+          <li>You can temporarily delete this feature heading row if you want 
+            the two sets of row numbers to match</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>If you scroll down the list of classifications, you will see that, as we 
+    go, fewer and fewer pieces are counted as being Josquin 
+    <ul>
+      <li>This makes sense, because the probability of a given piece actually 
+        being by Josquin decreases as we go down the list, because they have less 
+        secure attribution levels (according to Jesse Rodin)</li>
+      <li>This is great news for Jesse Rodin, as it means that the patterns in 
+        the music tend to correspond overall with the results of the historical 
+        research that led him to specify these particular security levels 
+        <ul>
+          <li>Congratulations, Jesse!</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>This does not prove definitively which individual pieces really are by Josquin 
+    and which are not, however 
+    <ul>
+      <li>We would need more training data from more diverse composers who are 
+        not Josquin to do that</li>
+    </ul>
+  </li>
+  <li>It does, however, demonstrate and confirm a musicologically meaningful general 
+    pattern
+    <ul>
+      <li>And it shows how historical musicological research and statistical research 
+        using jSymbolic features and machine learning can mutually confirm or, 
+        less pleasingly but arguably even more importantly, challenge each other</li>
+    </ul>
+  </li>
+</ul>
+<p><em>Now we are ready to do some entirely original work to practice the fantastic 
+  skills we have learned with jSymbolic and Weka <a href="portugueseresearch.html" target="right">. 
+  . .</a></em></p>
+<table height="5" width="100%" bgcolor="#0033C4" border="0"><tbody><tr><th></th></tr></tbody></table>
+<p><tt><a href="trainingamodelandusingit.html#Top">-top of page-</a></tt></p>
+
+</body></html>

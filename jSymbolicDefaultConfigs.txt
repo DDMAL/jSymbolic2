@@ -29,8 +29,8 @@ Relative Prevalence of Top Pitches
 Relative Prevalence of Top Pitch Classes
 Interval Between Most Prevalent Pitches
 Interval Between Most Prevalent Pitch Classes
-Pitch Variability Feature
-Pitch Class Variability Feature
+Pitch Variability
+Pitch Class Variability
 Pitch Class Variability After Folding
 Pitch Skewness
 Pitch Class Skewness
@@ -135,7 +135,7 @@ Mean Rhythmic Value
 Most Common Rhythmic Value
 Prevalence of Most Common Rhythmic Value
 Relative Prevalence of Most Common Rhythmic Values
-Differnence Between Most Common Rhythmic Values
+Difference Between Most Common Rhythmic Values
 Rhythmic Value Variability
 Rhythmic Value Skewness
 Rhythmic Value Kurtosis

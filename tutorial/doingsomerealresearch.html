@@ -1,0 +1,95 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+	<title>jSymbolic Tutoriall</title>
+</head>
+
+<body text="#000000" bgcolor="#e4e4e4" link="#0033C4" vlink="#0033C4" alink="#0033C4">
+<a name="Top"></a>
+
+<table cellspacing="0" cellpadding="4" width="100%" bgcolor="#0033C4" border="0">
+  <tbody><tr>
+      <th align="left"><font face="Arial" color="#ffffff" size="+3">jSymbolic 
+        Tutorial  - Doing Some Real Research</font></th>
+    </tr></tbody>
+</table>
+
+<p><strong>EXTRACTING A LARGER NUMBER OF FEATURES</strong> </p>
+<ul>
+  <li>Let's now extract many more features, but still just for the two files we 
+    have been working with so far, using the methodology we just covered in the earlier steps of this tutorial</li>
+  <li>Click the <em>Select All Features </em>button, and then deselect the final 
+    two features in order to set all features for extraction except the MEI-only 
+    features (i.e. the last two)</li>
+  <li>Change the output file names (in the same directory as before) to &quot;MyJosqOckManyFeatureValues.xml&quot; 
+    and &quot;MyManyFeatureDefinitions.xml&quot;</li>
+  <li>Extract the features</li>
+  <li>Open the resulting &quot;MyJosqOckManyFeatureValues.csv&quot; file to take 
+    a look at the many features extracted </li>
+  <li>Not sure what the meaning of a given feature is?</li>
+  <ul>
+    <li>Check the <a href="../manual/home.html" target="top">jSymbolic 
+      manual</a>, check the feature definitions file, or double click the feature 
+      in the GUI</li>
+  </ul>
+  <li>Although comparing just two pieces of music can certainly be very useful 
+    and important, it can be even more revealing to compare features across many 
+    pieces of music 
+    <ul>
+      <li>This is what we will do next</li>
+    </ul>
+  </li>
+</ul>
+<p><strong>EXTRACTING FEATURES FROM A LARGER NUMBER OF FILES</strong></p>
+<ul>
+  <li>This next part will involve extracting features from a collection of many 
+    files by Josquin and Ockeghem 
+    <ul>
+      <li>These include all the Ockeghem files in the <a href="http://josquin.stanford.edu/" target="top">Josquin 
+        Research Project (JRP)</a>, and all the Josquin files with the highest 
+        two Rodin attribution certainty levels</li>
+    </ul>
+  </li>
+  <li>You will be using some of the techniques covered in the earlier sections of this tutorial
+    <ul>
+      <li>Refer back to them if, for example, you forget how to load configuration files or to set files to be extracted with jSymbolic</li>
+    </ul>
+  </li>
+  <li>Quit and restart jSymbolic</li>
+  <li>Load the configuration settings from the &quot;FeaturesThatAvoidBiasInRenMusictConfigs.txt&quot; 
+    file in the &quot;02_Exploring_A_Larger_Dataset&quot; sub-folder of
+the &quot;jSymbolicTutorialWorkingFiles&quot; folder you extracted onto your desktop earlier
+<ul>
+      <li>This configuration file omits all features that are not relevant to 
+        this kind of Renaissance music, and which could potentially introduce 
+        problems due to systematic bias in the encoding source (as opposed to 
+        in the music itself) 
+        <ul>
+          <li>For example, features associated with dynamics, tempo, microtones 
+            and instrumentation are all left out</li>
+        </ul>
+      </li>
+      <li>Note that these configurations do not specify any particular input files, 
+        unlike the configuration file we saved earlier</li>
+    </ul>
+  </li>
+  <li>In the jSybmolic GUI, add all 229 of the files in the &quot;JosquinVsOckeghem&quot; sub-folder 
+    of the &quot;02_Exploring_A_Larger_Dataset&quot; folder to be extracted jSymbolic</li>
+  <li>Set the feature values and definitions to be saved in the &quot;02_Exploring_A_Larger_Dataset&quot; 
+    folder 
+    <ul>
+      <li>Call them &quot;BigJosqOckFeatureValues.xml&quot; and &quot;BigJosqOckFeatureDefinitions.xml&quot;, 
+        respectively</li>
+      <li>Also leave jSymbolic set to generate CSV and ARFF files</li>
+    </ul>
+  </li>
+  <li>Extract the features 
+    <ul>
+      <li>This may take a little while, so we can begin to look at Weka in the 
+        meantime </li>
+    </ul>
+  </li>
+</ul>
+<p><em>On to Weka <a href="usingweka.html" target="right">. . .</a></em></p>
+<table height="5" width="100%" bgcolor="#0033C4" border="0"><tbody><tr><th></th></tr></tbody></table>
+<p><tt><a href="doingsomerealresearch.html#Top">-top of page-</a></tt></p>
+
+</body></html>
