@@ -15,8 +15,87 @@
 
 <p><strong> Currently Being Worked On:</strong></p>
 <ul>
-  <li>Go to the <a href="https://github.com/DDMAL/jSymbolic2/tree/development" target="top">GitHub development branch</a> page to see the development version of the code. Of course, it is not recommended that you deploy and use this version directly, as it may not be fully tested and stable at any given time.</li>
   <li>Go to the <a href="https://github.com/DDMAL/jSymbolic2/tree/master" target="top">GitHub master branch</a> page to see the most current stable version of the code currently being worked on. This is <em>not</em> the release version, however: the proper release version, which is recommended for research use, is available on the <a href="http://jmir.sourceforge.net" target="top">jMIR SourceForge page</a>.</li>
+  <li>Go to the <a href="https://github.com/DDMAL/jSymbolic2/tree/development" target="top">GitHub development branch</a> page to see the cutting edge development version of the code. Of course, it is not recommended that you deploy and use this version directly, as it may not be fully tested and stable at any given time.</li>
+</ul>
+<p><strong>jSymbolic 2.2:</strong></p>
+<ul>
+  <li>  Extensive new HTML tutorial:
+    <ul>
+      <li>Including working files.</li>
+      <li>Accessible via GUI or on-line.</li>
+    </ul>
+  </li>
+  <li>Optional new configuration file that automatically disables features that could potentially measure biased information in improperly constructed datasets.
+    <ul>
+      <li>e.g. disables tempo-related features, in case the dataset has tempo data linked to encoding source rather than musical content.</li>
+      <li>Designed to be especially useful for dealing with (Western) early  music, as the disabled features are not relevant to this kind of music.</li>
+    </ul>
+  </li>
+  <li>Minor bug fixes:
+    <ul>
+      <li>Changed the Chord Duration feature to reflect duration in quarter notes rather than in seconds.</li>
+      <li>Fixed typos in the hard-coded names of three features.</li>
+      <li>  Fixed bug involving pieces with no pitched notes.</li>
+    </ul>
+  </li>
+  <li>Updated the manual, README,  code documentation and configuration files to reflect all  changes.
+    <ul>
+      <li>Added minor documentation clarifications and corrections in general.</li>
+    </ul>
+  </li>
+</ul>
+<p><strong>jSymbolic 2.1:</strong></p>
+<ul>
+  <li>Features:  </li>
+  <ul>
+    <li>Added 74 new features.</li>
+    <li>Reordered, renumbered, renamed and/or reworded documentation of many features (new and old) for the purpose of clarity.</li>
+  </ul>
+  <li>New reports / analysis:
+    <ul>
+      <li>Detailed formatted reports on the MIDI message-by-message contents of individual MIDI and (internally converted) MEI files.</li>
+      <li>Reports on the intra-consistency and inter-consistency of MIDI and MEI files. Useful for testing for dataset bias and for debugging during feature development.</li>
+    </ul>
+  </li>
+  <li>            User interfaces:
+    <ul>
+      <li>Added recursive directory parsing option to the GUI and command line.</li>
+      <li>Added file count reporting to the GUI for when files are removed from the processing queue.</li>
+      <li>Removed the indication of whether features are sequential from the GUI features table (in order to create more space).</li>
+    </ul>
+  </li>
+  <li>Improved error handling:
+            
+        
+    <ul>
+      <li>Enhanced functionality for automatically validating and error-checking new features as they are added to jSymbolic.</li>
+      <li>Additional general new error detection functionality.</li>
+      <li>Improved clarity of error messages, removed redundant data.</li>
+      <li>Added  miscellaneous internal debugging methods.</li>
+    </ul>
+  </li>
+  <li>Adjusted reactions to unspecified data in symbolic music files:
+    <ul>
+      <li>        Defaulted time signature to 4/4 if no time signature is specified in the MIDI file (this is the default behaviour for MIDI).</li>
+      <li>    Defaulted tempo measurements to 120 BPM if no tempo change messages are specified in the MIDI (this is the MIDI default).</li>
+    </ul>
+  </li>
+  <li>             Improved character handling:    
+    <ul>
+      <li>Updated Apache Xerces to version 2.11.0.</li>
+      <li>Set saving of ACE XML files to consistently use UTF-8 encoding.</li>
+      <li>     Improved error messages to be more informative when encountering invalid characters in file names.</li>
+    </ul>
+  </li>
+  <li>Miscellaneous additional internal additions and changes.</li>
+  <li>Miscellaneous minor bug fixes.</li>
+  <li>Updated the manual, README,  code documentation and configuration files to reflect all  changes.
+    <ul>
+      <li>Added minor documentation clarifications and corrections in general.</li>
+    </ul>
+  </li>
+  <li>Updated the ACE and UtilityClasses support libraries to the newest (improved) versions.</li>
 </ul>
 <p><strong>jSymbolic 2.0:</strong></p>
 <ul>

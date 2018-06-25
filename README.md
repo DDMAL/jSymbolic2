@@ -59,7 +59,7 @@ and also posted on the  jMIR web site
 (http://jmir.sourceforge.net/manuals/jSymbolic_manual/home.html).
 
 jSymbolic is also packaged with a detailed HTML tutorial that includes worked
-examples. First-time users of jSymbolic may wish to follow this tutorial.
+examples. First-time users of jSymbolic may wish to follow this tutorial(http://jmir.sourceforge.net/manuals/jSymbolic_tutorial/home.html).
 
 The most recent development code for jSymbolic can be found on its GitHub
 page (https://github.com/DDMAL/jSymbolic2). However, it is strongly suggested
@@ -120,7 +120,7 @@ When the JRE download is complete, follow the installation instructions that
 come with it in order to install it
 
 
-### INSTALLING jSymbolic
+### INSTALLING JSYMBOLIC
 
 The release version of jSymbolic may be downloaded from
 https://sourceforge.net/projects/jmir/files/jSymbolic/. Alternatively, the

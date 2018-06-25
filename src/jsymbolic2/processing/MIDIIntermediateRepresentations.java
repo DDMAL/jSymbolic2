@@ -155,18 +155,18 @@ public class MIDIIntermediateRepresentations
 	 * A normalized histogram where the value of each bin specifies the fraction of all notes in the piece
 	 * with a rhythmic value corresponding to that of the given bin. The bins are numbered as follows: 
 	 * 
-	 *		0 -> thirty second notes (or less)
-	 *		1 -> sixteenth notes
-	 *		2 -> eighth notes
-	 *		3 -> dotted eighth notes
-	 *		4 -> quarter notes
-	 *		5 -> dotted quarter notes
-	 *		6 -> half notes
-	 *		7 -> dotted half notes
-	 *		8 -> whole notes
-	 *		9 -> dotted whole notes
-	 *		10 -> double whole notes
-	 *		11 -> dotted double whole notes (or more)
+	 *		0: thirty second notes (or less)
+	 *		1: sixteenth notes
+	 *		2: eighth notes
+	 *		3: dotted eighth notes
+	 *		4: quarter notes
+	 *		5: dotted quarter notes
+	 *		6: half notes
+	 *		7: dotted half notes
+	 *		8: whole notes
+	 *		9: dotted whole notes
+	 *		10: double whole notes
+	 *		11: dotted double whole notes (or more)
 	 * 
 	 * Both pitched and unpitched notes are included in this histogram. Tempo is, of course, not relevant to
 	 * this feature. Notes with durations not precisely matching one of these rhythmic note values are mapped
