@@ -28,7 +28,7 @@ public class CompleteRestsFractionFeature
 		String description = "Fraction of the music during which no pitched notes are sounding on any MIDI channel. Non-pitched (MIDI channel 10) notes are not considered in this calculation.";
 		boolean is_sequential = true;
 		int dimensions = 1;
-		definition = new FeatureDefinition(name, description, is_sequential, dimensions);
+		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.NAME_AND_VERSION);
 		dependencies = null;
 		offsets = null;
 	}

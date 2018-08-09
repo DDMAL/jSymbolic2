@@ -33,7 +33,7 @@ public class NumberOfSlursMeiFeature extends MEIFeatureExtractor
 		String description = "The total number of notes marked with slurs in the piece (i.e. the number of notes indicated as notes with slurs in the MEI encoding) divided by the total number of pitched notes in the music.";
 		boolean is_sequential = true;
 		int dimensions = 1;
-		definition = new FeatureDefinition(name, description, is_sequential, dimensions);
+		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.NAME_AND_VERSION);
 		dependencies = null;
 		offsets = null;
 	}

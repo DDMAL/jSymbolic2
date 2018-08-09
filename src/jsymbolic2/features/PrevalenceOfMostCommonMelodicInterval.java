@@ -27,7 +27,7 @@ public class PrevalenceOfMostCommonMelodicInterval
 		String description = "Fraction of all melodic intervals that corresponds to the most common melodic interval.";
 		boolean is_sequential = true;
 		int dimensions = 1;
-		definition = new FeatureDefinition(name, description, is_sequential, dimensions);
+		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.NAME_AND_VERSION);
 		dependencies = null;
 		offsets = null;
 	}

@@ -27,7 +27,7 @@ public class PrevalenceOfSecondMostCommonVerticalIntervalFeature
 		String description = "Fraction of vertical intervals on the wrapped vertical interval histogram corresponding to the second most common vertical interval.";
 		boolean is_sequential = true;
 		int dimensions = 1;
-		definition = new FeatureDefinition(name, description, is_sequential, dimensions);
+		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.NAME_AND_VERSION);
 		dependencies = new String[] { "Wrapped Vertical Interval Histogram", "Second Most Common Vertical Interval"	};
 		offsets = null;
 	}

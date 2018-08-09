@@ -27,7 +27,7 @@ public class DistanceBetweenTwoMostCommonVerticalIntervalsFeature
 		String description = "The interval in semitones between the wrapped vertical interval histogram bins with the two most common vertical intervals.";
 		boolean is_sequential = true;
 		int dimensions = 1;
-		definition = new FeatureDefinition(name, description, is_sequential, dimensions);
+		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.NAME_AND_VERSION);
 		dependencies = new String[] {"Most Common Vertical Interval", "Second Most Common Vertical Interval"};
 		offsets = null;
 	}

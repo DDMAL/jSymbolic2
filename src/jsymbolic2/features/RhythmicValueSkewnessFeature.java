@@ -30,7 +30,7 @@ public class RhythmicValueSkewnessFeature
 		String description = "Skewness of the note durations in quarter notes of all notes in the music. Provides a measure of how asymmetrical the rhythmic value distribution is to either the left or the right of the mean rhythmic value. A value of zero indicates no skew. This calculation includes both pitched and unpitched notes, is calculated after rhythmic quantization, is not influenced by tempo, and is calculated without regard to the dynamics, voice or instrument of any given note.";
 		boolean is_sequential = true;
 		int dimensions = 1;
-		definition = new FeatureDefinition(name, description, is_sequential, dimensions);
+		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.NAME_AND_VERSION);
 		dependencies = null;
 		offsets = null;
 	}

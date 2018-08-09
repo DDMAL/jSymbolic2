@@ -63,11 +63,6 @@ public class OuterFrame
 
 	
 	/**
-	 * The title to include in the GUI title bar.
-	 */
-	private static final String WINDOW_TITLE = "jSymbolic 2.2";
-	
-	/**
 	 * The name of this software's author.
 	 */
 	private static final String AUTHOR_STRING = "Cory McKay";
@@ -193,7 +188,7 @@ public class OuterFrame
 		setBounds (0, 0, frame_width, frame_height);
 		
 		// Set the GUI window title
-		setTitle(WINDOW_TITLE);
+		setTitle(jsymbolic2.Main.NAME_AND_VERSION);
 
 		// Make jSymbolic quit when exit box is pressed
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -360,7 +355,7 @@ public class OuterFrame
 		if (event.getSource().equals(about_menu_item))
 		{
 			new AboutDialog( this,
-			                 WINDOW_TITLE,
+			                 jsymbolic2.Main.NAME_AND_VERSION,
 			                 AUTHOR_STRING,
 			                 LICENSING_STRING,
 			                 INSTITUTION_CREDIT_STRING );

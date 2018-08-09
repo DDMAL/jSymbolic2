@@ -29,7 +29,7 @@ public class PrevalenceOfLongRhythmicValuesFeature
 		String description = "Fraction of all notes in the music that have a quantized rhythmic value greater than a dotted quarter note. This includes both pitched and unpitched notes, is calculated after rhythmic quantization, is not influenced by tempo, and is calculated without regard to the dynamics, voice or instrument of any given note.";
 		boolean is_sequential = true;
 		int dimensions = 1;
-		definition = new FeatureDefinition(name, description, is_sequential, dimensions);
+		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.NAME_AND_VERSION);
 		dependencies = new String[] { "Rhythmic Value Histogram" };
 		offsets = null;
 	}

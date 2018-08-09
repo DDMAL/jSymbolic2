@@ -10,6 +10,12 @@ import jsymbolic2.commandline.CommandLineSwitchEnum;
 public class Main
 {
 	/**
+	 * The name and version of this jSymbolic instantiation.
+	 */
+	public static final String NAME_AND_VERSION = "jSymbolic 2.3";
+
+
+	/**
 	 * Runs the jSymbolic Feature Extractor. Operation will take place either in GUI or entirely via command
 	 * line processing, depending on the provided command line arguments.
 	 *

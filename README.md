@@ -1,4 +1,4 @@
-# jSymbolic 2.2
+# jSymbolic 2.3
 by Cory McKay
 Copyright (C) 2018 (GNU GPL)
 

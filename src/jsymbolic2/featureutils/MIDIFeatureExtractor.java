@@ -26,11 +26,12 @@ public abstract class MIDIFeatureExtractor
 	protected String code;
 	
 	/**
-	 * Meta-data about a feature that extends this class. Includes the feature's unique name; a description
-	 * of what information the feature represents and how it is calculated; whether the feature can be
-	 * extracted from sequential windows of data; and its dimensions (the number of values an extracted
-	 * feature will consist of). Note that a value of 0 in the returned dimensions of the FeatureDefinition 
-	 * implies that the feature dimensions are variable, and depend on the analyzed data.
+	 * Metadata about a feature that extends this class. Includes the feature's unique name; the feature's
+	 * code; description of what information the feature represents and how it is calculated; whether the
+	 * feature can be extracted from sequential windows of data; its dimensions (the number of values an
+	 * extracted feature will consist of); and the name and version of the software used to extract the
+	 * feature. Note that a value of 0 in the returned dimensions of the FeatureDefinition implies that the
+	 * feature dimensions are variable, and depend on the analyzed data.
 	 */
 	protected FeatureDefinition definition;
 

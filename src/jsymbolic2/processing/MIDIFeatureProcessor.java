@@ -1070,7 +1070,7 @@ public class MIDIFeatureProcessor
       * @param	overall_feature_definitions  The feature definitions of the
       *                                      features that are in the features
       *                                      for the recording. Will be null if
-      *                                      no overallfeatures were extracted.
+      *                                      no overall features were extracted.
       * @throws	Exception                    Throws an exception if cannot
       *                                      write.
       */
@@ -1084,17 +1084,19 @@ public class MIDIFeatureProcessor
                "<!DOCTYPE feature_key_file [\n" +
                "   <!ELEMENT feature_key_file (comments, feature+)>\n" +
                "   <!ELEMENT comments (#PCDATA)>\n" +
-               "   <!ELEMENT feature (name, description?, is_sequential, parallel_dimensions)>\n" +
+               "   <!ELEMENT feature (name, code?, description?, is_sequential, parallel_dimensions, extractor?)>\n" +
                "   <!ELEMENT name (#PCDATA)>\n" +
+               "   <!ELEMENT code (#PCDATA)>\n" +
                "   <!ELEMENT description (#PCDATA)>\n" +
                "   <!ELEMENT is_sequential (#PCDATA)>\n" +
                "   <!ELEMENT parallel_dimensions (#PCDATA)>\n" +
+               "   <!ELEMENT extractor (#PCDATA)>\n" +
                "]>\n\n" +
                "<feature_key_file>\n\n" +
                "   <comments></comments>\n\n"
                );
           definitions_writer.write(feature_key_header);
-          
+		  
           double[][] last_window_features = feature_values[feature_values.length - 1];
           
           // Write the window functions
@@ -1103,26 +1105,30 @@ public class MIDIFeatureProcessor
                     if (features_to_save[feat])
                          if (last_window_features[feat] != null)
                          {
-               FeatureDefinition def = feature_extractors[feat].getFeatureDefinition();
-               definitions_writer.write("   <feature>\n");
-               definitions_writer.write("      <name>" + def.name + "</name>\n");
-               definitions_writer.write("      <description>" + def.description + "</description>\n");
-               definitions_writer.write("      <is_sequential>" + def.is_sequential + "</is_sequential>\n");
-               definitions_writer.write("      <parallel_dimensions>" + last_window_features[feat].length + "</parallel_dimensions>\n");
-               definitions_writer.write("   </feature>\n\n");
+							FeatureDefinition def = feature_extractors[feat].getFeatureDefinition();
+							definitions_writer.write("   <feature>\n");
+							definitions_writer.write("      <name>" + def.name + "</name>\n");
+							definitions_writer.write("      <code>" + def.code + "</code>\n");
+							definitions_writer.write("      <description>" + def.description + "</description>\n");
+							definitions_writer.write("      <is_sequential>" + def.is_sequential + "</is_sequential>\n");
+							definitions_writer.write("      <parallel_dimensions>" + last_window_features[feat].length + "</parallel_dimensions>\n");
+							definitions_writer.write("      <extractor>" + def.extractor + "</extractor>\n");
+							definitions_writer.write("   </feature>\n\n");
                          }
           
           // Write the overall file functions
           if (overall_feature_definitions != null)
                for (int feat = 0; feat < overall_feature_definitions.length; feat++)
                {
-               FeatureDefinition def = overall_feature_definitions[feat];
-               definitions_writer.write("   <feature>\n");
-               definitions_writer.write("      <name>" + def.name + "</name>\n");
-               definitions_writer.write("      <description>" + def.description + "</description>\n");
-               definitions_writer.write("      <is_sequential>" + def.is_sequential + "</is_sequential>\n");
-               definitions_writer.write("      <parallel_dimensions>" + def.dimensions + "</parallel_dimensions>\n");
-               definitions_writer.write("   </feature>\n\n");
+					FeatureDefinition def = overall_feature_definitions[feat];
+					definitions_writer.write("   <feature>\n");
+					definitions_writer.write("      <name>" + def.name + "</name>\n");
+					definitions_writer.write("      <code>" + def.code + "</code>\n");
+					definitions_writer.write("      <description>" + def.description + "</description>\n");
+					definitions_writer.write("      <is_sequential>" + def.is_sequential + "</is_sequential>\n");
+					definitions_writer.write("      <parallel_dimensions>" + def.dimensions + "</parallel_dimensions>\n");
+					definitions_writer.write("      <extractor>" + def.extractor + "</extractor>\n");
+					definitions_writer.write("   </feature>\n\n");
                }
           
           definitions_writer.write("</feature_key_file>");
