@@ -19,7 +19,7 @@ import ace.datatypes.FeatureDefinition;
  * contains check boxes allowing users to select which features to save during feature extraction. This
  * feature table also allows users to view additional metadata about each feature, and still further metadata
  * can be seen for a feature (including its description and feature dependencies) by double clicking on its
- * row. Buttons are included for auto-selecting all features, no features or just the default features.
+ * row. Buttons are included for auto-selecting or de-selecting certain types of features.
  * 
  * <p>The Feature Name column indicates the unique name of each feature, the Code column indicates its unique
  * code (feature group letter followed by the numerical identifier within the group), the Values column
@@ -56,12 +56,6 @@ public class FeatureSelectorPanel
 	private final MIDIFeatureExtractor[] all_feature_extractors;
 
 	/**
-	 * The default features to save during feature extraction. Ordering matches those of the features in the
-	 * all_feature_extractors field.
-	 */
-	private final boolean[] feature_save_defaults;
-
-	/**
 	 * A table where each row corresponds to a different feature, and each implemented feature is listed
 	 * exactly once. The first column holds a check box indicating whether that row's feature should be saved
 	 * during feature extraction. The other columns hold metadata about the given row's feature.
@@ -74,9 +68,16 @@ public class FeatureSelectorPanel
 	private FeatureSelectorTableModel features_table_model;
 
 	/**
-	 * A button causing the default features to be marked for extraction on the features_table.
+	 * A button causing all the default features (and only the default features) to be marked for extraction 
+	 * on the features_table.
 	 */
-	private JButton select_default_features_button;
+	private JButton set_to_default_features_button;
+
+	/**
+	 * A button causing all the secure features (and only the secure features) to be marked for extraction 
+	 * on the features_table.
+	 */
+	private JButton set_to_secure_features_button;
 
 	/**
 	 * A button causing the all features to be marked for extraction on the features_table.
@@ -88,6 +89,16 @@ public class FeatureSelectorPanel
 	 */
 	private JButton deselect_all_features_button;
 	
+	/**
+	 * A button causing any selected insecure features to be unselected on the features_table.
+	 */
+	private JButton deselect_unsecure_features_button;
+	
+	/**
+	 * A button causing any selected multi-dimensional features to be unselected on the features_table.
+	 */
+	private JButton deselect_multi_dimensional_features_button;
+
 	
 	/* CONSTRUCTOR ******************************************************************************************/
 	
@@ -105,15 +116,16 @@ public class FeatureSelectorPanel
 		// Store a reference to the containing JFrame
 		this.outer_frame = outer_frame;
 
-		// Store informaation relating to feature extractors in this object's fields (including the particular
+		// Store information relating to feature extractors in this object's fields (including the particular
 		// features initially set to be saved, as parsed from a config file if one is specified).
 		all_feature_extractors = FeatureExtractorAccess.getAllImplementedFeatureExtractors();
+		boolean[] features_marked_to_save_at_startup;
 		if (configuration_file_data != null)
-			feature_save_defaults = configuration_file_data.getFeaturesToSaveBoolean();
-		else feature_save_defaults = FeatureExtractorAccess.getDefaultFeaturesToSave();
+			features_marked_to_save_at_startup = configuration_file_data.getFeaturesToSaveBoolean();
+		else features_marked_to_save_at_startup = FeatureExtractorAccess.getDefaultFeaturesToSave();
 				
 		// Set up the features_table and its features_table_model
-		setUpFeatureTable();
+		setUpFeatureTable(features_marked_to_save_at_startup);
 
 		// Set up the GUI elements on this JPanel
 		formatAndAddGuiElements();
@@ -135,8 +147,10 @@ public class FeatureSelectorPanel
 	@Override
 	public void actionPerformed(ActionEvent event)
 	{
-		if (event.getSource().equals(select_default_features_button))
-			features_table_model.setFeaturesMarkedForSaving(feature_save_defaults);
+		if (event.getSource().equals(set_to_default_features_button))
+			features_table_model.setFeaturesMarkedForSaving(FeatureExtractorAccess.getDefaultFeaturesToSave());
+		else if (event.getSource().equals(set_to_secure_features_button))
+			features_table_model.setFeaturesMarkedForSaving(FeatureExtractorAccess.getSecureFeatures());
 		else if (event.getSource().equals(select_all_features_button))
 		{
 			boolean[] to_save = new boolean[features_table_model.getRowCount()];
@@ -151,9 +165,37 @@ public class FeatureSelectorPanel
 				to_save[i] = false;
 			features_table_model.setFeaturesMarkedForSaving(to_save);
 		}
+		else if (event.getSource().equals(deselect_unsecure_features_button))
+		{
+			boolean[] currently_seclected_features;
+			try {currently_seclected_features = getFeaturesToSave();}
+			catch (Exception e) {currently_seclected_features = new boolean[features_table_model.getRowCount()];}
+			boolean[] to_save = new boolean[features_table_model.getRowCount()];
+			boolean[] secure_features = FeatureExtractorAccess.getSecureFeatures();
+			for (int i = 0; i < to_save.length; i++)
+			{
+				to_save[i] = currently_seclected_features[i];
+				if (!secure_features[i]) to_save[i] = false;
+			}
+			features_table_model.setFeaturesMarkedForSaving(to_save);
+		}
+		else if (event.getSource().equals(deselect_multi_dimensional_features_button))
+		{
+			boolean[] currently_seclected_features;
+			try {currently_seclected_features = getFeaturesToSave();}
+			catch (Exception e) {currently_seclected_features = new boolean[features_table_model.getRowCount()];}
+			boolean[] to_save = new boolean[features_table_model.getRowCount()];
+			boolean[] multi_dimensional_features = FeatureExtractorAccess.getMultiDimensionalFeatures();
+			for (int i = 0; i < to_save.length; i++)
+			{
+				to_save[i] = currently_seclected_features[i];
+				if (multi_dimensional_features[i]) to_save[i] = false;
+			}
+			features_table_model.setFeaturesMarkedForSaving(to_save);
+		}		
 	}
-
-
+	
+	
 	/**
 	 * Returns whether or not each of the features is marked to be saved on the features table, based on
 	 * whether its check box is checked on the table.
@@ -197,8 +239,13 @@ public class FeatureSelectorPanel
 	
 	/**
 	 * Initialize the features_table and features_table_model fields and format the features_table.
+	 * 
+	 * @param feature features_marked_to_save_at_startup	The features chosen to be saved during feature
+	 *														extraction when this class is instantiated. Size
+	 *														and ordering matches those of the features in the 
+	 *														all_feature_extractors field.
 	 */
-	private void setUpFeatureTable()
+	private void setUpFeatureTable(boolean[] features_marked_to_save_at_startup)
 	{
 		// Set the column headings and ordering
 		Object[] column_names =
@@ -213,7 +260,7 @@ public class FeatureSelectorPanel
 
 		// Initialize features_table_model and features_table
 		features_table_model = new FeatureSelectorTableModel(column_names, all_feature_extractors.length);
-		features_table_model.fillTable(all_feature_extractors, feature_save_defaults);
+		features_table_model.fillTable(all_feature_extractors, features_marked_to_save_at_startup);
 		features_table = new JTable(features_table_model);
 
 		// Right-justify features_table columns
@@ -245,18 +292,27 @@ public class FeatureSelectorPanel
 		OuterFrame.formatLabel(panel_label);
 		
 		// Set up the features table button panel
-		select_default_features_button = new JButton("Select Default Features");
+		set_to_default_features_button = new JButton("Set to Default Features");
+		set_to_secure_features_button = new JButton("Set to Secure Features");
 		select_all_features_button = new JButton("Select All Features");
 		deselect_all_features_button = new JButton("Deselect All Features");
-		JPanel button_panel = new JPanel(new GridLayout(1, 3, horizontal_gap, vertical_gap));
-		button_panel.add(select_default_features_button);
+		deselect_unsecure_features_button = new JButton("Deselect Unsecure Features");
+		deselect_multi_dimensional_features_button = new JButton("Deselect Multi-D Features");
+		JPanel button_panel = new JPanel(new GridLayout(2, 3, horizontal_gap, vertical_gap));
+		button_panel.add(set_to_default_features_button);
+		button_panel.add(set_to_secure_features_button);
 		button_panel.add(select_all_features_button);
 		button_panel.add(deselect_all_features_button);
+		button_panel.add(deselect_unsecure_features_button);
+		button_panel.add(deselect_multi_dimensional_features_button);
 		
 		// Add action listeners to buttons
-		select_default_features_button.addActionListener(this);
+		set_to_default_features_button.addActionListener(this);
+		set_to_secure_features_button.addActionListener(this);
 		select_all_features_button.addActionListener(this);
 		deselect_all_features_button.addActionListener(this);
+		deselect_unsecure_features_button.addActionListener(this);
+		deselect_multi_dimensional_features_button.addActionListener(this);
 
 		// Make the features_table scrollable and place it on its own JPanel
 		JScrollPane features_scroll_pane = new JScrollPane(features_table);
@@ -294,7 +350,7 @@ public class FeatureSelectorPanel
 
 						String text
 								= "NAME: " + definition.name + "\n"
-								+ "CODE: " + all_feature_extractors[row_clicked].getFeatureCode() + "\n"
+								+ "CODE: " + all_feature_extractors[row_clicked].getFeatureDefinition().code + "\n"
 								+ "DESCRIPTION: " + definition.description + "\n"
 								+ "DIMENSIONS: " + definition.dimensions + "\n"
 								+ "MEI-SPECIFIC: " + mei_specific + "\n"

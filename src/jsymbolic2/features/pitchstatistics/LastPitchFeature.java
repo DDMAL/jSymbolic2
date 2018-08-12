@@ -1,0 +1,78 @@
+package jsymbolic2.features.pitchstatistics;
+
+import javax.sound.midi.*;
+import ace.datatypes.FeatureDefinition;
+import jsymbolic2.featureutils.MIDIFeatureExtractor;
+import jsymbolic2.processing.MIDIIntermediateRepresentations;
+
+/**
+ * A feature calculator that finds the MIDI pitch value of the last note in the piece. If there are multiple
+ * notes with simultaneous attacks at the end of the piece, then the one with the lowest pitch is selected.
+ * Set to 0 if there are no pitched notes.
+ * @author Cory McKay
+ */
+public class LastPitchFeature
+		extends MIDIFeatureExtractor
+{
+	/* CONSTRUCTOR ******************************************************************************************/
+
+	
+	/**
+	 * Basic constructor that sets the values of the fields inherited from this class' superclass.
+	 */
+	public LastPitchFeature()
+	{
+		String name = "Last Pitch";
+		String code = "P-36";
+		String description = "The MIDI pitch value of the last note in the piece. If there are multiple notes with simultaneous attacks at the end of the piece, then the one with the lowest pitch is selected. Set to 0 if there are no pitched notes.";
+		boolean is_sequential = true;
+		int dimensions = 1;
+		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.NAME_AND_VERSION);
+		dependencies = null;
+		offsets = null;
+		is_default = true;
+		is_secure = true;
+	}
+	
+
+	/* PUBLIC METHODS ***************************************************************************************/
+	
+	
+	/**
+	 * Extract this feature from the given sequence of MIDI data and its associated information.
+	 *
+	 * @param sequence				The MIDI data to extract the feature from.
+	 * @param sequence_info			Additional data already extracted from the the MIDI sequence.
+	 * @param other_feature_values	The values of other features that may be needed to calculate this feature. 
+	 *								The order and offsets of these features must be the same as those returned
+	 *								by this class' getDependencies and getDependencyOffsets methods, 
+	 *								respectively. The first indice indicates the feature/window, and the 
+	 *								second indicates the value.
+	 * @return						The extracted feature value(s).
+	 * @throws Exception			Throws an informative exception if the feature cannot be calculated.
+	 */
+	@Override
+	public double[] extractFeature( Sequence sequence,
+									MIDIIntermediateRepresentations sequence_info,
+									double[][] other_feature_values )
+	throws Exception
+	{
+		double value;
+		if (sequence_info != null)
+		{
+			int lowest_last_pitch = 0;
+			if (sequence_info.pitches_present_by_tick_excluding_rests.length > 0)
+			{
+				int last_tick_index = sequence_info.pitches_present_by_tick_excluding_rests.length;
+				lowest_last_pitch = sequence_info.pitches_present_by_tick_excluding_rests[last_tick_index-1][0];
+			}
+			
+			value = (double) lowest_last_pitch;
+		} 
+		else value = -1.0;
+
+		double[] result = new double[1];
+		result[0] = value;
+		return result;
+	}
+}

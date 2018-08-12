@@ -1,0 +1,53 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+	<title>Feature Explanations: Instrumentation</title>
+</head>
+
+<body text="#000000" bgcolor="#e4e4e4" link="#0033C4" vlink="#0033C4" alink="#0033C4">
+<a name="Top"></a>
+
+<table cellspacing="0" cellpadding="4" width="100%" bgcolor="#0033C4" border="0">
+  <tbody><tr>
+      <th align="left"><font face="Arial" color="#ffffff" size="+3">Feature Explanations: Instrumentation</font></th>
+    </tr></tbody>
+</table>
+
+<p><strong>GENERAL NOTES</strong></p>
+
+<p>Although there is a significant amount of literature on instrumentation with respect to composing and arranging, very few music analytical systems take instrumentation into consideration. This is a shame, as information on instrumentation can in fact be very helpful in discriminating between certain types of musical classes. </p>
+<p>As was the case with the feature types presented in the earlier feature sections, histograms are also useful both as feature vectors and as intermediate data structures for calculating other features. Five instrumentation histograms in particular are used: the <strong>Pitched Instruments Present</strong>, <strong>Unpitched Instruments Present</strong>, <strong>Note Prevalence of Pitched Instruments</strong>, <strong>Note Prevalence of Unpitched Instruments</strong> and <strong>Time Prevalence of Pitched Instruments</strong> histograms. Each of these is described below.</p>
+
+<p>The jSymbolic software capitalizes on the fact that the General MIDI (level 1) specification allows MIDI files to include 128 different pitched-instrument patches, and the MIDI Percussion Key Map permits a further 47 percussion instruments. Although these MIDI instruments are certainly much fewer in number than the full range of extant instruments, particularly with respect to non-Western musics, they are nonetheless diverse enough for a reasonable variety of musical types.</p>
+
+<p>MIDI instrumentation notation can be somewhat sensitive to encoding inconsistencies between different MIDI authors in some cases. In a few fortunately rare cases, authors fail to specify patch numbers, with the result that all notes are played using a piano patch by default. Another problem is the inconsistency in the choice of patches that are used to represent sung lines, since there is no good General MIDI patch for solo vocal lines. Similarly, there are some inconsistencies in MEI with respect to how various instruments are specified.</p>
+
+<p>Despite these occasional problems, however, features based on instrumentation can still be highly characteristic of various musical categories, and the complementary use of other types of features can help to counterbalance inconsistencies in individual authors’ choices of patches.</p>
+
+<p><strong>JSYMBOLIC FEATURE CATALOGUE (INSTRUMENTATION SECTION)</strong></p>
+
+<ul>
+  <li><strong>I-1 Pitched Instruments Present:</strong> A feature vector indicating which pitched instruments are present. Has one entry for each of the 128 General MIDI Instrument patches (0 is Acoustic Piano, 40 is Violin, etc.). Each value is set to 1 if at least one note is played using the corresponding patch, or to 0 if that patch is never used.</li>
+  <li><strong>I-2 Unpitched Instruments Present:</strong> A feature vector indicating which unpitched instruments are present. Has one entry for each of the 47 MIDI Percussion Key Map instruments. Each value is set to 1 if at least one note is played using the corresponding instrument, or to 0 if that instrument is never used. It should be noted that only MIDI Channel 10 instruments 35 to 81 are included here, as they are the ones that meet the official standard (they are correspondingly indexed in this feature vector from 0 to 46, such that index 0 corresponds to Acoustic Bass Drum, index 4 corresponds to Hand Clap, etc.).</li>
+  <li><strong>I-3 Note Prevalence of Pitched Instruments:</strong> A feature vector indicating the fraction of (pitched) notes played with each of the 128 General MIDI Instrument patches (0 is Acoustic Piano, 40 is Violin, etc.). Has one entry for each of these instruments, and the value of each is set to the number of Note Ons played with the corresponding MIDI patch, divided by the total number of Note Ons in the piece.</li>
+  <li><strong>I-4 Note Prevalence of Unpitched Instruments: </strong>A feature vector indicating the fraction of (unpitched) notes played with each of the 47 MIDI Percussion Key Map instruments. Has one entry for each of these 47 instruments, and the value of each is set to the number of Note Ons played with the corresponding instrument, divided by the total number of Note Ons in the piece. It should be noted that only MIDI Channel 10 instruments 35 to 81 are included here, as they are the ones that meet the official standard (they are correspondingly indexed in this feature vector from 0 to 46, such that index 0 corresponds to Acoustic Bass Drum, index 4 corresponds to Hand Clap, etc.).</li>
+  <li><strong>I-5 Time Prevalence of Pitched Instruments:</strong> A feature vector indicating the fraction of time during which  (pitched) notes are being sounded by each of the 128 General MIDI Instrument patches (0 is Acoustic Piano, 40 is Violin, etc.). Has one entry for each of these instruments, and the value of each is set to  to the total time in seconds in a piece during which at least one note is being sounded with the corresponding MIDI patch, divided by the total length of the piece in seconds.</li>
+  <li><strong>I-6 Variability of Note Prevalence of Pitched Instruments:</strong> Standard deviation of the fraction of total notes in the piece played by each (pitched) General MIDI Instrument patch that is used to play at least one note.</li>
+  <li><strong>I-7 Variability of Note Prevalence of Unpitched Instruments:</strong> Standard deviation of the fraction of total notes in the piece played by each (unpitched) MIDI Percussion Key Map instrument that is used to play at least one note. It should be noted that only MIDI Channel 10 instruments 35 to 81 are included here, as they are the ones that meet the official standard.</li>
+  <li><strong>I-8 Number of Pitched Instruments:</strong> Total number of (pitched) General MIDI instrument patches that are used to play at least one note.</li>
+  <li><strong>I-9 Number of Unpitched Instruments:</strong> Total number of (unpitched) MIDI Percussion Key Map instruments that are used to play at least one note.  It should be noted that only MIDI Channel 10 instruments 35 to 81 are included here, as they are the ones that meet the official standard.</li>
+  <li><strong>I-10 Unpitched Percussion Instrument Prevalence:</strong> Fraction of  all Note Ons played by (unpitched) MIDI Percussion Key Map instruments. It should be noted that only MIDI Channel 10 instruments 35 to 81 are included here, as they are the ones that meet the official standard.</li>
+  <li><strong>I-11 String Keyboard Prevalence:</strong> Fraction of all Note Ons played by string keyboard instruments (General MIDI patches 1 to 8).</li>
+  <li><strong>I-12 Acoustic Guitar Prevalence:</strong> Fraction of all Note Ons played by acoustic guitar instruments (General MIDI patches 25 and 26).</li>
+  <li><strong>I-13 Electric Guitar Prevalence:</strong> Fraction of all Note Ons played by electric guitar instruments (General MIDI patches 27 to 32).</li>
+  <li><strong>I-14 Violin Prevalence:</strong> Fraction of all Note Ons played by violin instruments (General MIDI patches 41 or 111).</li>
+  <li><strong>I-15 Saxophone Prevalence:</strong> Fraction of all Note Ons played by saxophone instruments (General MIDI patches 65 to 68).</li>
+  <li><strong>I-16 Brass Prevalence:</strong> Fraction of all Note Ons played by brass instruments, including saxophones (General MIDI patches 57 to 68).</li>
+  <li><strong>I-17 Woodwinds Prevalence:</strong> Fraction of all Note Ons played by woodwind instruments (General MIDI patches 69 to 76).</li>
+  <li><strong>I-18 Orchestral Strings Prevalence:</strong> Fraction of all Note Ons played by orchestral string instruments (General MIDI patches 41 to 47).</li>
+  <li><strong>I-19 String Ensemble Prevalence:</strong> Fraction of all Note Ons played by orchestral string ensemble instruments (General MIDI patches 49 to 52).</li>
+  <li><strong>I-20 Electric Instrument Prevalence:</strong> Fraction of all Note Ons played by electric non-&quot;synth&quot; instruments (General MIDI patches 5, 6, 17, 19, 27 to 32, 34 to 40).</li>
+</ul>
+
+<table height="5" width="100%" bgcolor="#0033C4" border="0"><tbody><tr><th></th></tr></tbody></table>
+<p><tt><a href="../featureexplanations_files/featuresinstrumentation.html#Top">-top of page-</a></tt></p>
+
+</body></html>

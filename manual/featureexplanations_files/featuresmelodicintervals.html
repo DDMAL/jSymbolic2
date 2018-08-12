@@ -1,0 +1,55 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+	<title>Feature Explanations: Melody and Melodic Intervals</title>
+</head>
+
+<body text="#000000" bgcolor="#e4e4e4" link="#0033C4" vlink="#0033C4" alink="#0033C4">
+<a name="Top"></a>
+
+<table cellspacing="0" cellpadding="4" width="100%" bgcolor="#0033C4" border="0">
+  <tbody><tr>
+      <th align="left"><font face="Arial" color="#ffffff" size="+3">Feature Explanations: Melody and Melodic Intervals</font></th>
+    </tr></tbody>
+</table>
+
+<p><strong>GENERAL NOTES</strong></p>
+
+<p>Although features based on overall pitch statistics are often meaningful and useful, they do not reflect information relating to the order in which pitches occur. Melody is a very important part of how many humans hear and think about music, so features based on such sequential information are needed to complement features based on overall pitch statistics. Fortunately, ample theoretical work has been done that can be taken advantage of when designing melodic features, ranging from compositional resources like manuals on writing Baroque counterpoint, to more analytically formulated ideas like melodic contour.</p>
+<p>Unfortunately, the tasks of detecting and partitioning musical phrases and melodies, and of determining which notes belong to which phrases, are not trivial. Although expert humans can perform such tasks relatively easily, automatic systems for performing them have still achieved only limited general success, particularly in cases where the notes in a phrases are shared across voices. So, although a phrase detection pre-processing system would make many potentially useful melodic features accessible, such a system is not currently available.</p>
+<p>What one can do fairly easily, however, is collect basic statistics about melodic intervals and melodic motion. Although such statistics may be relatively rudimentary compared to expert melodic analyses, they can still potentially be very effective in performing classifications. One can also extract somewhat more sophisticated features related to melodic contour by making a few naive but often effective basic assumptions, such as the assumptions that all notes belonging to a phrase will be on the same MIDI channel and that phrases will each follow the overall shape of a basic concave or converse arc. Although such assumptions are clearly false, and certainly not acceptable for any wide-ranging analytical framework, they do make it possible to extract some potentially discriminating higher-level melodic features without a sophisticated phrase detection system.</p>
+<p>A <strong>melodic interval histogram</strong> is proposed here as a way of facilitating the extraction of certain basic features relating to melodic intervals. Each bin of this histogram represents a different melodic interval, and is labeled with an index indicating the number of semitones in the interval. The magnitude of each bin is set to the number of Note On messages in the piece that have a pitch interval from the preceding Note On message on the same MIDI channel corresponding to the bin label. The direction of the interval (i.e., up or down in pitch) is ignored in this histogram. The histogram is then normalized, so that the magnitude of each bin indicates the fraction of all melodic intervals that correspond to the melodic interval of the given bin.</p>
+<p>This histogram clearly has a few limitations. It treats all voices equally, for example, even though the highest line of a piece often carries the most significant melodic information. It is also problematic for polyphonic instruments such as pianos that can play harmonies or multiple melodies simultaneously. It is, however, a quick and easy approach that has been found experimentally to often be helpful in discriminating between classes.</p>
+<p>Another intermediate data structure is also used to help calculate some of the features listed below. This consists of a list of MIDI channels, where each entry of the list contains an array. Each array entry corresponds to a MIDI channel, and each entry in the array consists of a list of all melodic intervals, in semitones, for the associated channel. The numbers representing the intervals in this second intermediate data structure are set to negative for downward motion and to positive for upward motion.</p>
+<p>Once again, all notes occurring on MIDI channel ten are ignored for all of the features described in this section. This is because the “pitch” values on channel ten correspond to percussion instruments, not to pitches.</p>
+<p><strong>JSYMBOLIC FEATURE CATALOGUE (MELODY AND MELODIC INTERVALS SECTION)</strong></p>
+<ul>
+  <li><strong>M-1 Melodic Interval Histogram:</strong> A feature vector consisting of the bin magnitudes of the melodic interval histogram described above. Each bin corresponds to a melodic interval, and the bin index indicates the number of semitones comprising the interval associated with the bin (there are 128 bins in all). For example, bin 0 corresponds to repeated pitches, bin 1 to a melodic interval of one semitone, bin 2 to a melodic interval of 2 semitones, etc. The magnitude of each bin is proportional to the fraction of melodic intervals in the piece that are of the kind associated with the bin (this histogram is normalized). Rising and falling intervals are treated as identical. Melodies are assumed to be contained within individual MIDI tracks and channels, so melodic intervals are found separately for each track and channel before being combined in this histogram. It is also assumed that there is only one melody at a time per MIDI channel (if multiple notes occur simultaneously on the same MIDI tick on the same MIDI track and channel, then all notes but the first note on that tick are ignored). Other than this, all notes on the same track and the same channel are treated as if they are part of a single melody. It is also assumed that melodies do not cross MIDI tracks or channels (i.e. that they are each separately contained in their own track and channel). Only pitched notes are considered, so all notes on the unpitched MIDI Channel 10 are ignored.</li>
+  <li><strong>M-2 Most Common Melodic Interval:</strong> Number of semitones corresponding to the most frequently occurring melodic interval.</li>
+  <li><strong>M-3 Mean Melodic Interval:</strong> Mean average (in semitones) of the intervals involved in each of the melodic intervals in the piece.</li>
+  <li><strong>M-4 Number of Common Melodic Intervals:</strong> Number of different melodic intervals that each account individually for at least 9% of all melodic intervals.</li>
+  <li><strong>M-5 Distance Between Most Prevalent Melodic Intervals:</strong> Absolute value of the difference (in semitones) between the most common and second most common melodic intervals in the piece.</li>
+  <li><strong>M-6 Prevalence of Most Common Melodic Interval:</strong> Fraction of all melodic intervals that corresponds to the most common melodic interval.</li>
+  <li><strong>M-7 Relative Prevalence of Most Common Melodic Intervals:</strong> Relative frequency of the  second most common melodic interval in the piece, divided by the relative frequency of the most common melodic interval.</li>
+  <li><strong>M-8 Amount of Arpeggiation:</strong> Fraction of melodic intervals that are repeated notes, minor thirds, major thirds, perfect fifths, minor sevenths, major sevenths, octaves, minor tenths or major tenths. This is only a very approximate measure of the amount of arpeggiation in the music, of course.</li>
+  <li><strong>M-9 Repeated Notes:</strong> Fraction of melodic intervals that correspond to repeated notes.</li>
+  <li><strong>M-10 Chromatic Motion:</strong> Fraction of melodic intervals that correspond to a semitone.</li>
+  <li><strong>M-11 Stepwise Motion:</strong> Fraction of melodic intervals that correspond to a minor or major second.</li>
+  <li><strong>M-12 Melodic Thirds:</strong> Fraction of melodic intervals that are major or minor thirds.</li>
+  <li><strong>M-13 Melodic Perfect Fourths:</strong> Fraction of melodic intervals that are perfect fourths.</li>
+  <li><strong>M-14 Melodic Tritones:</strong> Fraction of melodic intervals that are tritones.</li>
+  <li><strong>M-15 Melodic Fifths:</strong> Fraction of melodic intervals that are perfect fifths.</li>
+  <li><strong>M-16 Melodic Sixths:</strong> Fraction of melodic intervals that are major or minor sixths.</li>
+  <li><strong>M-17 Melodic Sevenths:</strong> Fraction of melodic intervals that are major or minor sevenths.</li>
+  <li><strong>M-18 Melodic Octaves:</strong> Fraction of melodic intervals that are octaves.</li>
+  <li><strong>M-19 Melodic Large Intervals:</strong> Fraction of melodic intervals greater than one octave.</li>
+  <li><strong>M-20 Minor Major Melodic Third Ratio:</strong> Combined fraction of all melodic intervals that are minor thirds, divided by the combined fraction of all melodic intervals that are major thirds. Set to 0 if there are no melodic minor thirds or melodic major thirds.</li>
+  <li><strong>M-21 Melodic Embellishments:</strong> Fraction of all notes that are surrounded on both sides by MIDI Note Ons on the same MIDI channel that have durations at least three times as long as the central note. Set to 0 if there are no notes in the piece.</li>
+  <li><strong>M-22 Direction of Melodic Motion:</strong> Fraction of melodic intervals that are rising  in pitch. Set to zero if no rising or falling melodic intervals are found.</li>
+  <li><strong>M-23 Average Length of Melodic Arcs:</strong> Average number of notes that separate melodic peaks and troughs. Similar assumptions are made in the calculation of this feature as for the Melodic Interval Histogram.  Set to 0 if no melodic arcs are found.</li>
+  <li><strong>M-24 Average Interval Spanned by Melodic Arcs:</strong> Average melodic interval (in semitones) separating the top note of melodic peaks and the bottom note of adjacent melodic troughs. Similar assumptions are made in the calculation of this feature as for the Melodic Interval Histogram.</li>
+  <li><strong>M-25 Melodic Pitch Variety:</strong> Average number of notes that go by in a MIDI channel before a note's pitch is repeated (including the repeated note itself). This is calculated across each channel individually before being combined. Notes that occur simultaneously on the same MIDI tick are only counted as one note for the purpose of this calculation. Notes that do not recur after 16 notes in the same channel are not included in this calculation.
+ Set to 0 if there are no qualifying repeated notes in the piece.    </li>
+</ul>
+<table height="5" width="100%" bgcolor="#0033C4" border="0"><tbody><tr><th></th></tr></tbody></table>
+<p><tt><a href="../featureexplanations_files/featuresmelodicintervals.html#Top">-top of page-</a></tt></p>
+
+</body></html>

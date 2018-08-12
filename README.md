@@ -276,8 +276,8 @@ table containing one row for each feature, and whose first column contains check
 allowing users to select which features to save during feature extraction. This feature
 table also allows users to view additional metadata about each feature, and still further
 metadata can be seen for a feature (including its feature dependencies) by double clicking
-on its row. Buttons are included for auto-selecting all features, no features or just the
-default features.
+on its row. Buttons are included for auto-selecting or auto-deselecting features based on
+certain criteria.
 - Processing Information Panel: This panel, on the middle left of the jSymbolic GUI, is a
 space where processing updates are posted during feature extraction. Summary information is
 also posted here at startup relating to feature breakdowns, and additional updates are

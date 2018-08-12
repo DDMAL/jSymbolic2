@@ -92,7 +92,7 @@ public class FeatureSelectorTableModel
 
 			row_contents[1] = features[i].getFeatureDefinition().name;
 
-			row_contents[2] = features[i].getFeatureCode();
+			row_contents[2] = features[i].getFeatureDefinition().code;
 
 			if (features[i].getFeatureDefinition().dimensions > 0)
 				row_contents[3] = features[i].getFeatureDefinition().dimensions;

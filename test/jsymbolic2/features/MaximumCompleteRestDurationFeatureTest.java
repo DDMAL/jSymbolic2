@@ -1,5 +1,6 @@
 package jsymbolic2.features;
 
+import jsymbolic2.features.rhythm.LongestCompleteRestFeature;
 import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 import org.ddmal.midiUtilities.MidiBuildEvent;

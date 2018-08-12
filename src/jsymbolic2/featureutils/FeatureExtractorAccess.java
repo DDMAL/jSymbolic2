@@ -1,20 +1,29 @@
 package jsymbolic2.featureutils;
 
+import jsymbolic2.features.dynamics.*;
+import jsymbolic2.features.instrumentation.*;
+import jsymbolic2.features.meispecific.*;
+import jsymbolic2.features.melodicintervals.*;
+import jsymbolic2.features.pitchstatistics.*;
+import jsymbolic2.features.rhythm.*;
+import jsymbolic2.features.texture.*;
+import jsymbolic2.features.verticalintervals.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import jsymbolic2.features.*;
 
 /**
  * This class collects all implemented MIDIFeatureExtractor classes (including MEIFeatureExtractor
  * extractors), orders them to match the specifications of the jSymbolic manual, and indicates which ones are
- * set to be extracted and saved by default. This allows for consistent access to implemented features,
- * regardless of whether the jSymbolic GUI, command line interface, API of configuration file is being used.
+ * set to be extracted and saved by default and which ones can typically still be considered secure even if
+ * improperly encoded symbolic files are being processed. This allows for consistent access to implemented 
+ * features, regardless of whether the jSymbolic GUI, command line interface, API of configuration file is 
+ * being used.
  *
- * <p> <b>IMPORTANT:</b>All newly implemented MIDIFeatureExtractor objects must be referenced in the
- * all_implemented_feature_extractors and default_features_to_save fields of this class. Automatic error
- * checking is performed on all_implemented_feature_extractors and default_features_to_save at instantiation,
- * and potential problems are printed to standard error.</p>
+ * <p><b>IMPORTANT:</b>All newly implemented MIDIFeatureExtractor objects must be referenced in the
+ * all_implemented_feature_extractors field of this class. Automatic error checking is performed on
+ * all_implemented_feature_extractors at instantiation, and potential problems are printed to standard error.
+ * </p>
  *
  * @author Cory McKay and Tristano Tenaglia
  */
@@ -34,10 +43,34 @@ public final class FeatureExtractorAccess
 	 * An array with one entry for every feature implemented as a MIDIFeatureExtractor (including
 	 * MEIFeatureExtractor features). These are ordered in the same order in which they are presented in the
 	 * jSymbolic manual. Each entry is set to true if that feature is to be extracted and saved by default,
-	 * and to false if is not.
+	 * and to false if it is not.
 	 */
 	private static final boolean[] default_features_to_save;
-
+	
+	/**
+	 * An array with one entry for every feature implemented as a MIDIFeatureExtractor (including
+	 * MEIFeatureExtractor features). These are ordered in the same order in which they are presented in the
+	 * jSymbolic manual. Each entry is set to true if that feature is considered a secure feature, and to
+	 * false if it is not.
+	 */
+	private static final boolean[] secure_features;
+	
+	/**
+	 * An array with one entry for every feature implemented as a MIDIFeatureExtractor (including
+	 * MEIFeatureExtractor features). These are ordered in the same order in which they are presented in the
+	 * jSymbolic manual. Each entry is set to true if that feature has more than one dimension, and to
+	 * false if it does not.
+	 */
+	private static final boolean[] multi_dimensional_features;
+	
+	/**
+	 * An array with one entry for every feature implemented as a MIDIFeatureExtractor (including
+	 * MEIFeatureExtractor features). These are ordered in the same order in which they are presented in the
+	 * jSymbolic manual. Each entry is set to true if that feature is an MEI-specific feature, and to
+	 * false if it is not.
+	 */
+	private static final boolean[] mei_specific_features;
+	
 	/**
 	 * A List consisting of the feature names of every feature implemented as a MIDIFeatureExtractor
 	 * (including MEIFeatureExtractor features). These are ordered in the same order in which they are
@@ -51,6 +84,13 @@ public final class FeatureExtractorAccess
 	 * are ordered in the same order in which they are presented in the jSymbolic manual.
 	 */
 	private static final List<String> names_of_default_features_to_save;
+
+	/**
+	 * A List consisting of the feature names of every feature implemented as a MIDIFeatureExtractor
+	 * (including MEIFeatureExtractor features) and that are considered to be secure features. These
+	 * are ordered in the same order in which they are presented in the jSymbolic manual.
+	 */
+	private static final List<String> names_of_secure_features_to_save;
 
 	/**
 	 * A List consisting of the feature names of every feature implemented as an MEIeatureExtractor. These
@@ -180,7 +220,7 @@ public final class FeatureExtractorAccess
 			// Add features based on rhythm (that do NOT take tempo into account)
 			new InitialTimeSignatureFeature(),
 			new SimpleInitialMeterFeature(),
-			new CompoundMeterFeature(),
+			new CompoundInitialMeterFeature(),
 			new ComplexInitialMeterFeature(),
 			new DupleInitialMeterFeature(),
 			new TripleInitialMeterFeature(),
@@ -335,273 +375,30 @@ public final class FeatureExtractorAccess
 			new NumberOfSlursMeiFeature()
 		};
 
-		default_features_to_save = new boolean[]
+		default_features_to_save = new boolean[all_implemented_feature_extractors.length];
+		for (int i = 0; i < default_features_to_save.length; i++)
+			default_features_to_save[i] = all_implemented_feature_extractors[i].getIsDefault();
+
+		secure_features = new boolean[all_implemented_feature_extractors.length];
+		for (int i = 0; i < secure_features.length; i++)
+			secure_features[i] = all_implemented_feature_extractors[i].getIsSecure();
+		
+		multi_dimensional_features = new boolean[all_implemented_feature_extractors.length];
+		for (int i = 0; i < multi_dimensional_features.length; i++)
 		{
-			// Features based on pitch statistics
-			false, // BasicPitchHistogramFeature
-			false, // PitchClassHistogramFeature
-			false, // FoldedFifthsPitchClassHistogramFeature
-			true, // NumberOfPitchesFeature
-			true, // NumberOfPitchClassesFeature
-			true, // NumberOfCommonPitchesFeature
-			true, // NumberOfCommonPitchClassesFeature
-			true, // RangeFeature
-			true, // ImportanceOfBassRegisterFeature
-			true, // ImportanceOfMiddleRegisterFeature
-			true, // ImportanceOfHighRegisterFeature
-			true, // DominantSpreadFeature
-			true, // StrongTonalCentresFeature
-			true, // MeanPitchFeature
-			true, // MeanPitchClassFeature
-			true, // MostCommonPitchFeature
-			true, // MostCommonPitchClassFeature
-			true, // PrevalenceOfMostCommonPitchFeature
-			true, // PrevalenceOfMostCommonPitchClassFeature
-			true, // RelativePrevalenceOfTopPitchesFeature
-			true, // RelativePrevalenceOfTopPitchClassesFeature
-			true, // IntervalBetweenMostPrevalenttPitchesFeature
-			true, // IntervalBetweenMostPrevalentPitchClassesFeature
-			true, // PitchVariabilityFeature
-			true, // PitchClassVariabilityFeature
-			true, // PitchClassVariabilityAfterFoldingFeature
-			true, // PitchSkewnessFeature
-			true, // PitchClassSkewnessFeature
-			true, // PitchClassSkewnessAfterFoldingFeature
-			true, // PitchKurtosisFeature
-			true, // PitchClassKurtosisFeature
-			true, // PitchClassKurtosisAfterFoldingFeature
-			true, // MajorOrMinorFeature
-			true, // FirstPitchFeature
-			true, // FirstPitchClassFeature
-			true, // LastPitchFeature
-			true, // LastPitchClassFeature
-			true, // GlissandoPrevalenceFeature
-			true, // AverageRangeOfGlissandosFeature
-			true, // VibratoPrevalenceFeature
-			true, // MicrotonePrevalenceFeature
-
-			// Features based on melodic intervals
-			false, // MelodicIntervalHistogramFeature
-			true, // MostCommonMelodicIntervalFeature
-			true, // MeanMelodicIntervalFeature
-			true, // NumberOfCommonMelodicIntervalsFeature
-			true, // DistanceBetweenMostPrevalentMelodicIntervalsFeature
-			true, // PrevalenceOfMostCommonMelodicInterval
-			true, // RelativePrevalenceOfMostCommonMelodicIntervals
-			true, // AmountOfArpeggiationFeature
-			true, // RepeatedNotesFeature
-			true, // ChromaticMotionFeature
-			true, // StepwiseMotionFeature
-			true, // MelodicThirdsFeature
-			true, // MelodicPerfectFourthsFeature
-			true, // MelodicTritonesFeature
-			true, // MelodicPerfectFifthsFeature
-			true, // MelodicSixthsFeature
-			true, // MelodicSeventhsFeature
-			true, // MelodicOctavesFeature
-			true, // MelodicLargeIntervalsFeature
-			true, // MinorMajorMelodicThirdlRatioFeature
-			true, // MelodicEmbellishmentsFeature
-			true, // DirectionOfMelodicMotionFeature
-			true, // AverageLengthOfMelodicArcsFeature
-			true, // AverageIntervalSpannedByMelodicArcs
-			true, // MelodicPitchVarietyFeature
-
-			// Features based on chords and vertical intervals
-			false, // VerticalIntervalHistogramFeature
-			false, // WrappedVerticalIntervalHistogramFeature
-			false, // ChordTypeHistogramFeature			
-			true, // AverageNumberOfSimultaneousPitchClassesFeature
-			true, // VariabilityOfNumberOfSimultaneousPitchClassesFeature
-			true, // AverageNumberOfSimultaneousPitchesFeature
-			true, // VariabilityOfNumberOfSimultaneousPitchesFeature
-			true, // MostCommonVerticalIntervalFeature
-			true, // SecondMostCommonVerticalIntervalFeature
-			true, // DistanceBetweenTwoMostCommonVerticalIntervalsFeature
-			true, // PrevalenceOfMostCommonVerticalIntervalFeature
-			true, // PrevalenceOfSecondMostCommonVerticalIntervalFeature
-			true, // PrevalenceRatioOfTwoMostCommonVerticalIntervalsFeature
-			true, // VerticalUnisonsFeature
-			true, // VerticalMinorSecondsFeature
-			true, // VerticalThirdsFeature
-			true, // VerticalTritonesFeature
-			true, // VerticalPerfectFourthsFeature
-			true, // VerticalPerfectFifthsFeature
-			true, // VerticalSixthsFeature
-			true, // VerticalSeventhsFeature
-			true, // VerticalOctavesFeature
-			true, // PerfectVerticalIntervalsFeature
-			true, // VerticalDissonanceRatioFeature
-			true, // VerticalMinorThirdPrevalenceFeature
-			true, // VerticalMajorThirdPrevalenceFeature
-			true, // ChordDurationFeature
-			true, // PartialChordsFeature
-			true, // StandardTriadsFeature
-			true, // DiminishedAndAugmentedTriadsFeature
-			true, // DominantSeventhChordsFeature
-			true, // SeventhChordsFeature
-			true, // NonStandardChordsFeature
-			true, // ComplexChordsFeature
-			true, // MinorMajorTriadRatioFeature
-			
-			// Features based on rhythm (that do NOT take tempo into account)
-			false, // InitialTimeSignatureFeature
-			true, // SimpleInitialMeterFeature
-			true, // CompoundMeterFeature
-			true, // ComplexInitialMeterFeature
-			true, // DupleInitialMeterFeature
-			true, // TripleInitialMeterFeature
-			true, // QuadrupleInitialMeterFeature
-			true, // MetricalDiversityFeature
-			true, // TotalNumberOfNotesFeature
-			true, // NoteDensityPerQuarterNoteFeature
-			true, // NoteDensityPerQuarterNotePerVoiceFeature
-			true, // NoteDensityPerQuarterNoteVariabilityFeature
-			false, // RhythmicValueHistogramFeature
-			true, // RangeOfRhythmicValuesFeature
-			true, // NumberOfDifferentRhythmicValuesPresentFeature
-			true, // NumberOfCommonRhythmicValuesPresentFeature
-			true, // PrevalenceOfVeryShortRhythmicValuesFeature
-			true, // PrevalenceOfShortRhythmicValuesFeature
-			true, // PrevalenceOfMediumRhythmicValuesFeature
-			true, // PrevalenceOfLongRhythmicValuesFeature
-			true, // PrevalenceOfVeryLongRhythmicValuesFeature
-			true, // PrevalenceOfDottedNotesFeature
-			true, // ShortestRhythmicValueFeature
-			true, // LongestRhythmicValueFeature
-			true, // MeanRhythmicValueFeature
-			true, // MostCommonRhythmicValueFeature
-			true, // PrevalenceOfMostCommonRhythmicValueFeature
-			true, // RelativePrevalenceOfMostCommonRhythmicValuesFeature
-			true, // DifferenceBetweenMostCommonRhythmicValuesFeature
-			true, // RhythmicValueVariabilityFeature
-			true, // RhythmicValueSkewnessFeature
-			true, // RhythmicValueKurtosisFeature
-			false, // RhythmicValueMedianRunLengthsHistogramFeature
-			true, // MeanRhythmicValueRunLengthFeature
-			true, // MedianRhythmicValueRunLengthFeature
-			true, // VariabilityInRhythmicValueRunLengthsFeature
-			false, // RhythmicValueVariabilityInRunLengthsHistogramFeature
-			true, // MeanRhythmicValueOffsetFeature
-			true, // MedianRhythmicValueOffsetFeature
-			true, // VariabilityOfRhythmicValueOffsetsFeature
-			true, // CompleteRestsFractionFeature
-			true, // PartialRestsFractionFeature
-			true, // AverageRestFractionAcrossVoicesFeature
-			true, // LongestCompleteRestFeature
-			true, // LongestPartialRestFeature
-			true, // MeanCompleteRestDurationFeature
-			true, // MeanPartialRestDurationFeature
-			true, // MedianCompleteRestDurationFeature
-			true, // MedianPartialRestDurationFeature
-			true, // VariabilityOfCompleteRestDurationsFeature
-			true, // VariabilityOfPartialRestDurationsFeature
-			true, // VariabilityAcrossVoicesOfCombinedRestsFeature
-			false, // BeatHistogramTempoStandardizedFeature
-			true, // NumberOfStrongRhythmicPulsesTempoStandardizedFeature
-			true, // NumberOfModerateRhythmicPulsesTempoStandardizedFeature
-			true, // NumberOfRelativelyStrongRhythmicPulsesTempoStandardizedFeature
-			true, // StrongestRhythmicPulseTempoStandardizedFeature
-			true, // SecondStrongestRhythmicPulseTempoStandardizedFeature
-			true, // HarmonicityOfTwoStrongestRhythmicPulsesTempoStandardizedFeature
-			true, // StrengthOfStrongestRhythmicPulseTempoStandardizedFeature
-			true, // StrengthOfSecondStrongestRhythmicPulseTempoStandardizedFeature
-			true, // StrengthRatioOfTwoStrongestRhythmicPulsesTempoStandardizedFeature
-			true, // CombinedStrengthOfTwoStrongestRhythmicPulsesTempoStandardizedFeature
-			true, // RhythmicVariabilityTempoStandardizedFeature
-			true, // RhythmicLoosenessTempoStandardizedFeature
-			true, // PolyrhythmsTempoStandardizedFeature			
-			
-			// Features based on rhythm (that DO take tempo into account)
-			true, // InitialTempoFeature
-			true, // MeanTempoFeature
-			true, // TempoVariabilityFeature
-			true, // DurationInSecondsFeature
-			true, // NoteDensityFeature
-			true, // NoteDensityVariabilityFeature
-			true, // AverageTimeBetweenAttacksFeature
-			true, // AverageTimeBetweenAttacksForEachVoiceFeature
-			true, // VariabilityOfTimeBetweenAttacksFeature
-			true, // AverageVariabilityOfTimeBetweenAttacksForEachVoiceFeature
-			true, // MinimumNoteDurationFeature
-			true, // MaximumNoteDurationFeature
-			true, // AverageNoteDurationFeature
-			true, // VariabilityOfNoteDurationsFeature
-			true, // AmountOfStaccatoFeature
-			false, // BeatHistogramFeature
-			true, // NumberOfStrongRhythmicPulsesFeature
-			true, // NumberOfModerateRhythmicPulsesFeature
-			true, // NumberOfRelativelyStrongRhythmicPulsesFeature
-			true, // StrongestRhythmicPulseFeature
-			true, // SecondStrongestRhythmicPulseFeature
-			true, // HarmonicityOfTwoStrongestRhythmicPulsesFeature
-			true, // StrengthOfStrongestRhythmicPulseFeature
-			true, // StrengthOfSecondStrongestRhythmicPulseFeature
-			true, // StrengthRatioOfTwoStrongestRhythmicPulsesFeature
-			true, // CombinedStrengthOfTwoStrongestRhythmicPulsesFeature
-			true, // RhythmicVariabilityFeature
-			true, // RhythmicLoosenessFeature
-			true, // PolyrhythmsFeature
-
-			// Fatures based on instrumentation
-			false, // PitchedInstrumentsPresentFeature
-			false, // UnpitchedInstrumentsPresentFeature
-			false, // NotePrevalenceOfPitchedInstrumentsFeature
-			false, // NotePrevalenceOfUnpitchedInstrumentsFeature
-			false, // TimePrevalenceOfPitchedInstrumentsFeature
-			true, // VariabilityOfNotePrevalenceOfPitchedInstrumentsFeature
-			true, // VariabilityOfNotePrevalenceOfUnpitchedInstrumentsFeature			
-			true, // NumberOfPitchedInstrumentsFeature
-			true, // NumberOfUnpitchedInstrumentsFeature
-			true, // UnpitchedPercussionInstrumentPrevalenceFeature
-			true, // StringKeyboardPrevalenceFeature
-			true, // AcousticGuitarPrevalenceFeature
-			true, // ElectricGuitarPrevalenceFeature
-			true, // ViolinPrevalenceFeature
-			true, // SaxophonePrevalenceFeature
-			true, // BrassPrevalenceFeature
-			true, // WoodwindsPrevalenceFeature
-			true, // OrchestralStringsPrevalenceFeature
-			true, // StringEnsemblePrevalenceFeature
-			true, // ElectricInstrumentPrevalenceFeature
-
-			// Features based on musical texture
-			true, // MaximumNumberOfIndependentVoicesFeature
-			true, // AverageNumberOfIndependentVoicesFeature
-			true, // VariabilityOfNumberOfIndependentVoicesFeature
-			true, // VoiceEqualityNumberOfNotesFeature
-			true, // VoiceEqualityNoteDurationFeature
-			true, // VoiceEqualityDynamicsFeature
-			true, // VoiceEqualityMelodicLeapsFeature
-			true, // VoiceEqualityRangeFeature
-			true, // ImportanceOfLoudestVoiceFeature
-			true, // RelativeRangeOfLoudestVoiceFeature
-			true, // RelativeRangeIsolationOfLoudestVoiceFeature
-			true, // RelativeRangeOfHighestLineFeature
-			true, // RelativeNoteDensityOfHighestLineFeature
-			true, // RelativeNoteDurationsOfLowestLineFeature
-			true, // RelativeSizeOfMelodicIntervalsInLowestLineFeature
-			true, // VoiceOverlapFeature
-			true, // VoiceSeparationFeature
-			true, // VariabilityOfVoiceSeparationFeature
-			true, // ParallelMotionFeature
-			true, // SimilarMotionFeature
-			true, // ContraryMotionFeature
-			true, // ObliqueMotionFeature
-			true, // ParallelFifthsFeature
-			true, // ParallelOctavesFeature
-			
-			// Features based on dynamics
-			true, // DynamicRangeFeature
-			true, // VariationOfDynamicsFeature
-			true, // VariationOfDynamicsInEachVoiceFeature
-			true, // AverageNoteToNoteChangeInDynamicsFeature
-
-			// MEI-specific features
-			false, // NumberOfGraceNotesFeature
-			false // NumberOfSlurNotesFeature
-		};
-
+			if (all_implemented_feature_extractors[i].getFeatureDefinition().dimensions > 1)
+				multi_dimensional_features[i] = true;
+			else multi_dimensional_features[i] = false;
+		}
+		
+		mei_specific_features = new boolean[all_implemented_feature_extractors.length];
+		for (int i = 0; i < secure_features.length; i++)
+		{
+			if (all_implemented_feature_extractors[i] instanceof MEIFeatureExtractor)
+				mei_specific_features[i] = true;
+			else mei_specific_features[i] = false;
+		}
+		
 		names_of_all_implemented_features = new ArrayList<>();
 		List<MIDIFeatureExtractor> all_extractors = Arrays.asList(all_implemented_feature_extractors);
 		for (MIDIFeatureExtractor fe : all_extractors)
@@ -609,9 +406,14 @@ public final class FeatureExtractorAccess
 
 		names_of_default_features_to_save = new ArrayList<>();
 		for (int i = 0; i < default_features_to_save.length; i++)
-			if (default_features_to_save[i] == true)
+			if (default_features_to_save[i])
 				names_of_default_features_to_save.add(names_of_all_implemented_features.get(i));
-
+		
+		names_of_secure_features_to_save = new ArrayList<>();
+		for (int i = 0; i < secure_features.length; i++)
+			if (secure_features[i])
+				names_of_default_features_to_save.add(names_of_all_implemented_features.get(i));
+		
 		names_of_mei_specific_features = new ArrayList<>();
 		for (MIDIFeatureExtractor feature : all_implemented_feature_extractors)
 		{
@@ -655,6 +457,40 @@ public final class FeatureExtractorAccess
 	}
 
 	/**
+	 * @return	An array with one entry for every feature implemented as a MIDIFeatureExtractor (including 
+	 *			MEIFeatureExtractor features). These are ordered in the same order in which they are presented
+	 *			in the jSymbolic manual. Each entry is set to true if that feature is safe to be extracted and
+	 *			saved even when dealing with input symbolic music files that may be improperly or
+	 *			inconsistently encoded, and to false if it is not.
+	 */
+	public static boolean[] getSecureFeatures()
+	{
+		return secure_features;
+	}
+
+	/**
+	 * @return	An array with one entry for every feature implemented as a MIDIFeatureExtractor (including 
+	 *			MEIFeatureExtractor features). These are ordered in the same order in which they are presented
+	 *			in the jSymbolic manual. Each entry is set to true if that feature is a multi-dimensional 
+	 *			feature, and to false if it is not.
+	 */
+	public static boolean[] getMultiDimensionalFeatures()
+	{
+		return multi_dimensional_features;
+	}
+	
+	/**
+	 * @return	An array with one entry for every feature implemented as a MIDIFeatureExtractor (including 
+	 *			MEIFeatureExtractor features). These are ordered in the same order in which they are presented
+	 *			in the jSymbolic manual. Each entry is set to true if that feature is an MEI-specific feature,
+	 *			and to false if it is not.
+	 */
+	public static boolean[] getMeiSpecificFeatures()
+	{
+		return mei_specific_features;
+	}
+	
+	/**
 	 * @return	A List consisting of the feature names of every feature implemented as a MIDIFeatureExtractor
 	 *			(including MEIFeatureExtractor features). These are ordered in the same order in which they 
 	 *			are presented in the jSymbolic manual.
@@ -672,6 +508,18 @@ public final class FeatureExtractorAccess
 	public static List<String> getNamesOfDefaultFeaturesToSave()
 	{
 		return names_of_default_features_to_save;
+	}
+
+	/**
+	 * @return	A List consisting of the feature names of every feature implemented as a MIDIFeatureExtractor
+	 *			(including MEIFeatureExtractor features) and that has also been marked as safe to be extracted
+	 *			and saved, even when dealing with input symbolic music files that may be improperly or 
+	 *			inconsistently encoded. These are ordered in the same order in which they are presented in the
+	 *			jSymbolic manual.
+	 */
+	public static List<String> getNamesOfSecureFeaturesToSave()
+	{
+		return names_of_secure_features_to_save;
 	}
 
 	/**
@@ -790,7 +638,7 @@ public final class FeatureExtractorAccess
                 if (feat.getFeatureDefinition().is_sequential)
                     total_sequential_features++;
 
-                char code = feat.getFeatureCode().charAt(0);
+                char code = feat.getFeatureDefinition().code.charAt(0);
                 switch (code)
                 {
                     case 'P':
@@ -848,11 +696,10 @@ public final class FeatureExtractorAccess
 	
 	
 	/**
-	 * Verify that the all_implemented_feature_extractors and default_features_to_save fields have been set
-	 * up in ways that are individually self-consistent and compatible with one another. Print warnings about
-	 * any potential problems detected to standard error, along with an indication of problem severity. This
-	 * is a useful error checker to help make sure that new features added to extend jSymbolic have been added
-	 * properly. The following potential issues are checked:
+	 * Verify that the all_implemented_feature_extractors has been set up in a way that is self-consistent and
+	 * compatible. Print warnings about any potential problems detected to standard error, along with an
+	 * indication of problem severity. This is a useful error checker to help make sure that new features
+	 * added to extend jSymbolic have been added properly. The following potential issues are checked:
 	 * 
 	 * 1) Verify that no features have been added to all_implemented_feature_extractors that are dependent on 
 	 * features  that have not themselves been added to all_implemented_feature_extractors.
@@ -862,10 +709,8 @@ public final class FeatureExtractorAccess
 	 * all_implemented_feature_extractors.
 	 * 4) Verify that all features have been added contiguously to all_implemented_feature_extractors, based 
 	 * on their feature code groups and numbers, and that all feature codes are properly formatted.
-	 * 5) Verify that all_implemented_feature_extractors and default_features_to_save are of the same size.
-	 * 6) Verify that, by default, all multi-dimensional features have been set to not be extracted, that all
-	 * MEI-specific features have been set to not be extracted, and that all other features have been set to
-	 * be extracted.
+	 * 5) Verify that, by default all MEI-specific features have been set to not be extracted, and that all
+	 * other features have been set to be extracted.
 	 */
 	private static void printWarningReportIfFeaturesAddedImproperly()
 	{
@@ -916,13 +761,13 @@ public final class FeatureExtractorAccess
 		// all_implemented_feature_extractors
 		String[] all_feature_codes = new String[all_implemented_feature_extractors.length];
 		for (int i = 0; i < all_feature_codes.length; i++)
-			all_feature_codes[i] = all_implemented_feature_extractors[i].getFeatureCode();
+			all_feature_codes[i] = all_implemented_feature_extractors[i].getFeatureDefinition().code;
 		int[][] duplicate_codes = mckay.utilities.staticlibraries.StringMethods.getIndexesOfDuplicateEntries(all_feature_codes);
 		if (duplicate_codes != null)
 		{
 			for (int i = 0; i < duplicate_codes.length; i++)
 			{
-				String duplicated_feature_code = all_implemented_feature_extractors[duplicate_codes[i][0]].getFeatureCode();
+				String duplicated_feature_code = all_implemented_feature_extractors[duplicate_codes[i][0]].getFeatureDefinition().code;
 				int number_of_occurrences = duplicate_codes[i].length;
 				problem_report += "WARNING: The feature code " + duplicated_feature_code + " has been added to jSymbolic in " + number_of_occurrences + " features. No feature code should be used more than once. This is not a serious problem, but it could result in confusion or redundant feature extraction.\n";
 			}
@@ -936,7 +781,7 @@ public final class FeatureExtractorAccess
 		{
 			try
 			{
-				String[] split_code = all_implemented_feature_extractors[feat].getFeatureCode().split("-");
+				String[] split_code = all_implemented_feature_extractors[feat].getFeatureDefinition().code.split("-");
 				String this_group = split_code[0];
 				int this_number = Integer.parseInt(split_code[1]);
 
@@ -945,10 +790,10 @@ public final class FeatureExtractorAccess
 					if (this_group.equals(last_group))
 					{
 						if (this_number != (last_number + 1))
-							problem_report += "WARNING: The feature " + all_implemented_feature_extractors[feat].getFeatureCode() + " has been added to jSymbolic out of sequence (its code does not numerically follow the previous feature in its group). This is not a serious problem, but it could result in confusion.\n";
+							problem_report += "WARNING: The feature " + all_implemented_feature_extractors[feat].getFeatureDefinition().code + " has been added to jSymbolic out of sequence (its code does not numerically follow the previous feature in its group). This is not a serious problem, but it could result in confusion.\n";
 					}
 					else if (this_number != 1)
-						problem_report += "WARNING: The feature " + all_implemented_feature_extractors[feat].getFeatureCode() + " has been added to jSymbolic out of sequence (a new feature group should be numbered as 0). This is not a serious problem, but it could result in confusion.\n";
+						problem_report += "WARNING: The feature " + all_implemented_feature_extractors[feat].getFeatureDefinition().code + " has been added to jSymbolic out of sequence (a new feature group should be numbered as 0). This is not a serious problem, but it could result in confusion.\n";
 				}
 
 				last_group = this_group;
@@ -956,31 +801,20 @@ public final class FeatureExtractorAccess
 			}
 			catch (Exception e)
 			{
-				problem_report += "WARNING: The feature " + all_implemented_feature_extractors[feat].getFeatureCode() + " has an improperly formatted code. The code should consist of one or more letters identifying the feature group the feature belongs to, followed by a hyphen, followed by the number of the feature within that group. For example, a code of I-7 would be appropriate for the seventh feature of the Instrumentation feature group. This is not a serious problem, but it could result in confusion.\n";
+				problem_report += "WARNING: The feature " + all_implemented_feature_extractors[feat].getFeatureDefinition().code + " has an improperly formatted code. The code should consist of one or more letters identifying the feature group the feature belongs to, followed by a hyphen, followed by the number of the feature within that group. For example, a code of I-7 would be appropriate for the seventh feature of the Instrumentation feature group. This is not a serious problem, but it could result in confusion.\n";
 			}
 		}
 		
-		// Verify that all_implemented_feature_extractors and default_features_to_save are of the same size.
-		// Verify that, by default, all multi-dimensional features have been set to not be extracted, that all
-		// MEI-specific features have been set to not be extracted, and that all other features have been set
-		// to be extracted.
-		if (default_features_to_save.length != all_implemented_feature_extractors.length)
-			problem_report += "WARNING: " + all_implemented_feature_extractors.length + " features have been added to jSymbolic, but settings for " + default_features_to_save.length + " features have been specified as to which features are to be extracted and saved by default. These numbers should be identical. This is a serious problem, as a mismatch could cause jSymbolic to crash.\n";
-		else for (int feat = 0; feat < all_implemented_feature_extractors.length; feat++)
+		// Verify that, by default, all MEI-specific features have been set to not be extracted, and that all
+		// other features have been set to be extracted.
+		for (int feat = 0; feat < all_implemented_feature_extractors.length; feat++)
 		{
-			if (!default_features_to_save[feat])
-			{
-				if ( all_implemented_feature_extractors[feat].getFeatureDefinition().dimensions == 1 &&
-			         !(all_implemented_feature_extractors[feat] instanceof MEIFeatureExtractor) )
-					problem_report += "WARNING: " + names_of_all_features_added[feat] + " is set to not be extracted and saved by default. Typically, all one-dimensional and non-MEI specific features such as this one are set to be saved by default. This is not a serious issue, but it might cause confusion.\n";
-			}
-			else
-			{
-				if (all_implemented_feature_extractors[feat].getFeatureDefinition().dimensions != 1)
-					problem_report += "WARNING: " + names_of_all_features_added[feat] + " is set to be extracted and saved by default. Typically, multi-dimensional features such as this one are not set to be saved by default. This is not a serious issue, but it might cause confusion.\n";
-				if (all_implemented_feature_extractors[feat] instanceof MEIFeatureExtractor)
-					problem_report += "WARNING: " + names_of_all_features_added[feat] + " is set to be extracted and saved by default. Typically, MEI-specific features such as this one are not set to be saved by default. This is not a serious issue, but it might cause confusion.\n";
-			}
+			if ( !default_features_to_save[feat] && 
+			     !(all_implemented_feature_extractors[feat] instanceof MEIFeatureExtractor) )
+				problem_report += "WARNING: " + names_of_all_features_added[feat] + " is set to not be extracted and saved by default. Typically, all non-MEI specific features such as this one are set to be saved by default. This is not a serious issue, but it might cause confusion.\n";
+			else if ( default_features_to_save[feat] &&
+			          all_implemented_feature_extractors[feat] instanceof MEIFeatureExtractor )
+				problem_report += "WARNING: " + names_of_all_features_added[feat] + " is set to be extracted and saved by default. Typically, MEI-specific features such as this one are not set to be saved by default. This is not a serious issue, but it might cause confusion.\n";
 		}		
 		
 		// Print error report if a problem was found
@@ -996,7 +830,7 @@ public final class FeatureExtractorAccess
 	{
 		System.out.println("ALL " + all_implemented_feature_extractors.length + " IMPLEMENTED FEATURES:");
 		for (int i = 0; i < all_implemented_feature_extractors.length; i++)
-			System.out.println( (i+1) + ":\t" + all_implemented_feature_extractors[i].getFeatureCode() + "\t" +
+			System.out.println( (i+1) + ":\t" + all_implemented_feature_extractors[i].getFeatureDefinition().code + "\t" +
 			                    all_implemented_feature_extractors[i].definition.name);
 	}
 	
@@ -1011,7 +845,7 @@ public final class FeatureExtractorAccess
 		{
 			if (all_implemented_feature_extractors[i].dependencies != null)
 			{
-				System.out.println(all_implemented_feature_extractors[i].getFeatureCode() + "\t" +
+				System.out.println(all_implemented_feature_extractors[i].getFeatureDefinition().code + "\t" +
 			                        all_implemented_feature_extractors[i].definition.name);
 				for (int j = 0; j < all_implemented_feature_extractors[i].dependencies.length; j++)
 					System.out.println("\tDEPENDS ON: " + all_implemented_feature_extractors[i].dependencies[j]);

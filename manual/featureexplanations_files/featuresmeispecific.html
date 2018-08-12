@@ -1,0 +1,27 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+	<title>Feature Explanations: MEI-Specific Features</title>
+</head>
+
+<body text="#000000" bgcolor="#e4e4e4" link="#0033C4" vlink="#0033C4" alink="#0033C4">
+<a name="Top"></a>
+
+<table cellspacing="0" cellpadding="4" width="100%" bgcolor="#0033C4" border="0">
+  <tbody><tr>
+      <th align="left"><font face="Arial" color="#ffffff" size="+3">Feature Explanations: MEI-Specific Features</font></th>
+    </tr></tbody>
+</table>
+
+<p><strong>GENERAL NOTES</strong></p>
+
+<p>There is certain information that cannot be encoded in MIDI files, due to limitations of the MIDI format. jSymbolic provides access to this data through a separate data pipeline, which can be accessed by MEI-specific features, such as the sample features listed below.</p>
+<p>MEI-specific features rely on information that is available in MEI files, but cannot be encoded in MIDI files. These features should  only be used when extracting features from a musical collection consisting exclusively of MEI files, as a feature set extracted from a mixture of MIDI and MEI files would be inconsistent if MEI-specific features are  available for MEI instances but not for MIDI instances.</p>
+<p><strong>JSYMBOLIC FEATURE CATALOGUE (MEI-SPECIFIC FEATURES SECTION)</strong></p>
+<ul>
+  <li><strong>S-1 Number of Grace Notes:</strong> The total number of grace notes in a piece (i.e. the number of notes indicated as grace notes in the MEI encoding) divided by the total number of pitched notes in the music.</li>
+  <li><strong>S-2 Number of Slurs:</strong> The total number of notes marked with slurs in the piece (i.e. the number of notes indicated as notes with slurs in the MEI encoding) divided by the total number of pitched notes in the music.</li>
+</ul>
+<p></p>
+<table height="5" width="100%" bgcolor="#0033C4" border="0"><tbody><tr><th></th></tr></tbody></table>
+<p><tt><a href="../featureexplanations_files/featuresmeispecific.html#Top">-top of page-</a></tt></p>
+
+</body></html>

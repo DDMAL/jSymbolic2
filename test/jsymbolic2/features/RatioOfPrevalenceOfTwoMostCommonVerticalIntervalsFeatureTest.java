@@ -1,5 +1,12 @@
 package jsymbolic2.features;
 
+import jsymbolic2.features.verticalintervals.WrappedVerticalIntervalHistogramFeature;
+import jsymbolic2.features.verticalintervals.VerticalIntervalHistogramFeature;
+import jsymbolic2.features.verticalintervals.SecondMostCommonVerticalIntervalFeature;
+import jsymbolic2.features.verticalintervals.PrevalenceRatioOfTwoMostCommonVerticalIntervalsFeature;
+import jsymbolic2.features.verticalintervals.PrevalenceOfSecondMostCommonVerticalIntervalFeature;
+import jsymbolic2.features.verticalintervals.PrevalenceOfMostCommonVerticalIntervalFeature;
+import jsymbolic2.features.verticalintervals.MostCommonVerticalIntervalFeature;
 import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 import org.ddmal.midiUtilities.MidiBuildEvent;
