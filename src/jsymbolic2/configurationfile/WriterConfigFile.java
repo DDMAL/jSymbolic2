@@ -1,7 +1,8 @@
-package jsymbolic2.configuration;
+package jsymbolic2.configurationfile;
 
-import jsymbolic2.configuration.txtimplementation.ConfigurationFileExtensionEnum;
-import jsymbolic2.processing.SymbolicMusicFileUtilities;
+import jsymbolic2.configurationfile.txtimplementation.EnumFileExtension;
+
+import mckay.utilities.staticlibraries.StringMethods;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -35,7 +36,7 @@ import java.util.List;
  *
  * @author Tristano Tenaglia
  */
-public abstract class ConfigurationFileWriter {
+public abstract class WriterConfigFile {
 
     /**
      * Add appropriately formatted options to the raw line by line raw configuration file.
@@ -44,7 +45,7 @@ public abstract class ConfigurationFileWriter {
      * @return A raw line by line configuration file that now has the properly formatted configuration
      * option state.
      */
-    public abstract List<String> addFormattedOptions(List<String> rawConfigFile, ConfigurationOptionState optionState);
+    public abstract List<String> addFormattedOptions(List<String> rawConfigFile, ConfigFileWindowingAndOutputFormatSettings optionState);
 
     /**
      * Add appropriately formatted features to the raw line by line raw configuration file.
@@ -62,7 +63,7 @@ public abstract class ConfigurationFileWriter {
      * @return A raw line by line configuration file that now has the properly formatted configuration
      * input file state.
      */
-    public abstract List<String> addFormattedInputFiles(List<String> rawConfigFile, ConfigurationInputFiles inputFiles);
+    public abstract List<String> addFormattedInputFiles(List<String> rawConfigFile, ConfigFileInputFilePaths inputFiles);
 
     /**
      * Add appropriately formatted output files to the raw line by line raw configuration file.
@@ -71,7 +72,7 @@ public abstract class ConfigurationFileWriter {
      * @return A raw line by line configuration file that now has the properly formatted configuration
      * output file state.
      */
-    public abstract List<String> addFormattedOutputFiles(List<String> rawConfigFile, ConfigurationOutputFiles outputFiles);
+    public abstract List<String> addFormattedOutputFiles(List<String> rawConfigFile, ConfigFileOutputFilePaths outputFiles);
 
     /**
      * The template method pattern which correctly uses the abstract methods to build up the raw line by line
@@ -80,28 +81,28 @@ public abstract class ConfigurationFileWriter {
      * @param headersToWrite The headers and corresponding sections that need to be written to the configuration file.
      * @throws IOException Thrown if any writing problems occur on the local system.
      */
-    public void write(ConfigurationFileData configurationFileData, List<ConfigFileHeaderEnum> headersToWrite)
+    public void write(ConfigFileCompleteData configurationFileData, List<EnumSectionDividers> headersToWrite)
             throws IOException
     {
         List<String> rawConfigFile = new ArrayList<>();
 
-        if(headersToWrite.contains(ConfigFileHeaderEnum.OPTION_HEADER)) {
-            addFormattedOptions(rawConfigFile,configurationFileData.getOptionState());
+        if(headersToWrite.contains(EnumSectionDividers.OPTIONS_HEADER)) {
+            addFormattedOptions(rawConfigFile,configurationFileData.getWindowingAndOutputFormatSettings());
         }
 
-        if(headersToWrite.contains(ConfigFileHeaderEnum.FEATURE_HEADER)) {
+        if(headersToWrite.contains(EnumSectionDividers.FEATURE_HEADER)) {
             addFormattedFeatures(rawConfigFile,configurationFileData.getFeaturesToSave());
         }
 
-        if(headersToWrite.contains(ConfigFileHeaderEnum.INPUT_FILE_HEADER)) {
-            addFormattedInputFiles(rawConfigFile,configurationFileData.getInputFileList());
+        if(headersToWrite.contains(EnumSectionDividers.INPUT_FILES_HEADER)) {
+            addFormattedInputFiles(rawConfigFile,configurationFileData.getInputFilePaths());
         }
 
-        if(headersToWrite.contains(ConfigFileHeaderEnum.OUTPUT_FILE_HEADER)) {
-            addFormattedOutputFiles(rawConfigFile,configurationFileData.getOutputFileList());
+        if(headersToWrite.contains(EnumSectionDividers.OUTPUT_FILES_HEADER)) {
+            addFormattedOutputFiles(rawConfigFile,configurationFileData.getOutputFilePaths());
         }
 
-        String correctConfigFileName = SymbolicMusicFileUtilities.correctFileExtension(configurationFileData.getConfigurationFilePath(), ConfigurationFileExtensionEnum.txt.name());
+        String correctConfigFileName = StringMethods.correctExtension(configurationFileData.getConfigurationFilePath(), EnumFileExtension.txt.name());
         Files.write(Paths.get(correctConfigFileName), rawConfigFile, Charset.forName("ISO-8859-1"));
     }
 }

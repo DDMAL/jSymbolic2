@@ -6,11 +6,12 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import jsymbolic2.configuration.ConfigFileHeaderEnum;
-import jsymbolic2.configuration.ConfigurationFileData;
-import jsymbolic2.configuration.txtimplementation.ConfigurationFileValidatorTxtImpl;
+import jsymbolic2.configurationfile.EnumSectionDividers;
+import jsymbolic2.configurationfile.ConfigFileCompleteData;
+import jsymbolic2.configurationfile.txtimplementation.ValidatorConfigFileTxtImpl;
 import jsymbolic2.featureutils.FeatureExtractorAccess;
 import jsymbolic2.processing.AceXmlConverter;
+import jsymbolic2.processing.FeatureExtractionJobProcessor;
 import jsymbolic2.processing.MIDIFeatureProcessor;
 import jsymbolic2.processing.MusicFilter;
 import jsymbolic2.processing.UserFeedbackGenerator;
@@ -265,15 +266,15 @@ public class JsymbolicProcessorDeprecated
 	                                     PrintStream error_print_stream )
 		throws Exception
 	{
-		ConfigurationFileData config_data;
+		ConfigFileCompleteData config_data;
 		try
 		{
 			UserFeedbackGenerator.printParsingConfigFileMessage(status_print_stream, configuration_file_path);
-			List<ConfigFileHeaderEnum> config_file_headers_to_check = Arrays.asList( ConfigFileHeaderEnum.FEATURE_HEADER,
-			                                                                         ConfigFileHeaderEnum.OPTION_HEADER,
-			                                                                         ConfigFileHeaderEnum.OUTPUT_FILE_HEADER,
-																					 ConfigFileHeaderEnum.INPUT_FILE_HEADER);
-			config_data = new ConfigurationFileValidatorTxtImpl().parseConfigFile( configuration_file_path,
+			List<EnumSectionDividers> config_file_headers_to_check = Arrays.asList(EnumSectionDividers.FEATURE_HEADER,
+			                                                                         EnumSectionDividers.OPTIONS_HEADER,
+			                                                                         EnumSectionDividers.OUTPUT_FILES_HEADER,
+																					 EnumSectionDividers.INPUT_FILES_HEADER);
+			config_data = new ValidatorConfigFileTxtImpl().parseConfigFile( configuration_file_path,
 			                                                                       config_file_headers_to_check,
 			                                                                       error_print_stream );
 		}
@@ -284,12 +285,12 @@ public class JsymbolicProcessorDeprecated
 		}
 
 		feature_values_save_path = config_data.getFeatureValueSavePath();
-		feature_definitions_save_path = config_data.getFeatureDefinitionSavePath();
-		save_arff_file = config_data.convertToArff();
-		save_csv_file = config_data.convertToCsv();
+		feature_definitions_save_path = FeatureExtractionJobProcessor.getMatchingFeatureDefinitionsXmlSavePath(feature_values_save_path);
+		save_arff_file = config_data.getConvertToArff();
+		save_csv_file = config_data.getConvertToCsv();
 		features_to_extract = config_data.getFeaturesToSaveBoolean();
-		save_features_for_overall_pieces = config_data.saveOverall();
-		save_features_for_each_window = config_data.saveWindow();
+		save_features_for_overall_pieces = config_data.getSaveOverallRecordingFeatures();
+		save_features_for_each_window = config_data.getSaveFeaturesForEachWindow();
 		analysis_window_size = config_data.getWindowSize();
 		analysis_window_overlap = config_data.getWindowOverlap();
 		this.status_print_stream = status_print_stream;

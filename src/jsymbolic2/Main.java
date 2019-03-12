@@ -9,12 +9,33 @@ import jsymbolic2.commandline.CommandLineSwitchEnum;
  */
 public class Main
 {
+	/* PUBLIC STATIC FINAL FIELDS ***************************************************************************/
+
+
 	/**
-	 * The name and version of this jSymbolic instantiation.
+	 * The name and version of this jSymbolic version.
 	 */
-	public static final String NAME_AND_VERSION = "jSymbolic 2.3";
+	public static final String SOFTWARE_NAME_AND_VERSION = "jSymbolic 2.3";
 
-
+	/**
+	 * The string indicating licensing credit.
+	 */
+	public static final String YEAR_AND_LICENSING = "2019 (GNU GPL)";
+	
+	/**
+	 * The name of this software's author.
+	 */
+	public static final String PRINCIPALAUTHOR_CREDIT = "Cory McKay";
+	
+	/**
+	 * The credited institution.
+	 */
+	public static final String INSTITUTION_CREDIT = "CIRMMT / Marianopolis College / McGill University";
+	
+	
+	/* PUBLIC METHODS ***************************************************************************************/
+	
+	
 	/**
 	 * Runs the jSymbolic Feature Extractor. Operation will take place either in GUI or entirely via command
 	 * line processing, depending on the provided command line arguments.

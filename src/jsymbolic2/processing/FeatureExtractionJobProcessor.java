@@ -7,10 +7,11 @@ import java.util.Arrays;
 import java.util.List;
 import javax.swing.JOptionPane;
 import ace.datatypes.DataBoard;
-import jsymbolic2.configuration.ConfigurationFileData;
+import jsymbolic2.configurationfile.ConfigFileCompleteData;
 import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.featureutils.FeatureExtractorAccess;
 import mckay.utilities.staticlibraries.FileMethods;
+import mckay.utilities.staticlibraries.StringMethods;
 
 /**
  * Static methods for performing outer layer feature extraction jobs.
@@ -21,6 +22,23 @@ public final class FeatureExtractionJobProcessor
 {
 	/* PUBLIC STATIC METHODS ********************************************************************************/
 	
+	
+	/**
+	 * Returns the save path for an ACE XML feature definitions file to match the given ACE XML feature values
+	 * file save path. This new feature definitions save path is based on feature_values_save_path: first the
+	 * feature_values_save_path's extension (if any) is stripped away, and then _FeatDefs.xml is appended to
+	 * the end.
+	 *
+	 * @param feature_values_save_path	The ACE XML feature values file path to base the returned path on.
+	 * @return							The path of the ACE XML feature definitions file.
+	 */
+	public static String getMatchingFeatureDefinitionsXmlSavePath(String feature_values_save_path)
+	{
+		String definitions_path = StringMethods.removeExtension2(feature_values_save_path);
+		definitions_path += "_FeatDefs" + ".xml";
+		return definitions_path;
+	}
+		
 	
 	/**
 	 * Extracts features from all the files in the specified files_and_folders_to_parse list and saves them in
@@ -370,7 +388,7 @@ public final class FeatureExtractionJobProcessor
 	 *												simply duplicates what is written to error_print_stream.
 	 */
 	public static List<String> extractAndSaveFeaturesConfigFileSettings( List<File> paths_of_files_or_folders_to_parse,
-	                                                                     ConfigurationFileData config_file_data,
+	                                                                     ConfigFileCompleteData config_file_data,
 	                                                                     String feature_values_save_path,
 	                                                                     String feature_definitions_save_path,
 	                                                                     PrintStream status_print_stream,
@@ -381,12 +399,12 @@ public final class FeatureExtractionJobProcessor
 	                                           feature_values_save_path,
 	                                           feature_definitions_save_path,
 	                                           config_file_data.getFeaturesToSaveBoolean(),
-										       config_file_data.saveWindow(),
-	                                           config_file_data.saveOverall(),
+										       config_file_data.getSaveFeaturesForEachWindow(),
+	                                           config_file_data.getSaveOverallRecordingFeatures(),
 	                                           config_file_data.getWindowSize(),
 	                                           config_file_data.getWindowOverlap(),
-										       config_file_data.convertToArff(),
-										       config_file_data.convertToCsv(),
+										       config_file_data.getConvertToArff(),
+										       config_file_data.getConvertToCsv(),
 	                                           status_print_stream,
 	                                           error_print_stream,
 											   gui_processing );

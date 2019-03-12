@@ -27,7 +27,7 @@ public class NoteDensityFeature
 		String description = "Average number of notes per second. Takes into account all notes in all voices, including both pitched and unpitched notes.";
 		boolean is_sequential = true;
 		int dimensions = 1;
-		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.NAME_AND_VERSION);
+		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
 		dependencies = null;
 		offsets = null;
 		is_default = true;

@@ -53,17 +53,20 @@
 		<li><strong>window_size:</strong> The duration in seconds of analysis windows to break input music into for analysis. This option is only meaningful if windowed selection is enabled via the save_features_for_each_window option below.</li>
 		<li><strong>window_overlap:</strong> This fractional value (which should have a value of 0 (for no overlap) or above and below 1) specifies the amount of overlap between consecutive windows. For example, for a window_size value of 10 and a window_overlap: value of 0.1, the windows will be from 0 sec to 10 sec, 9 sec to 19 sec, etc. This option is only meaningful if windowed selection is enabled via the save_features_for_each_window option below.</li>
 		<li><strong>save_features_for_each_window:</strong> Whether or not to break each input file into analysis windows (of duration window_size and overlap window_overlap) and extract and save features separately for each such window. Must have a value of either "true" or "false".</li>
-		<li><strong>save_overall_recording_features:</strong> Whether or not to save the feature for entire indput files only (i.e. no windowing is used). Must have a value of either "true" or "false"</li>
+		<li><strong>save_overall_recording_features:</strong> Whether or not to save the feature for entire input files only (i.e. no windowing is used). Must have a value of either "true" or "false"</li>
 		<li><strong>convert_to_arff:</strong> Whether or not to save extracted features in a <a href="http://www.cs.waikato.ac.nz/ml/weka/arff.html" target="top">Weka ARFF</a> file, in addition to saving them as an <a href="http://jmir.sourceforge.net/index_ACE_XML.html" target="top">ACE XML 1.1</a> Features Values File. Must have a value of either "true" or "false".</li>
 		<li><strong>convert_to_csv:</strong> Whether or not to save extracted features in a <a href="https://en.wikipedia.org/wiki/Comma-separated_values" target="top">CSV</a> text file, in addition to saving them as an <a href="http://jmir.sourceforge.net/index_ACE_XML.html" target="top">ACE XML 1.1</a> Features Values File. Must have a value of either "true" or "false".</li>
 	</ul><p></p>
 		
 	<strong>Output File Section</strong>
-	<p>This section specifies the paths to save extracted feature values and feature metadata to. All file paths must be absolute or relative to the directory holding the jSymbolic.jar file. Only file paths for the two ACE XML output files are specified here; if Weka ARFF or CSV files are selected to be saved as well, they will be given the same path and file name as the ACE XML Feature Values File, but with the extension changed automatically. As mentioned above, this section may optionally be omitted from valid configuration files. This section includes the following two settings which should be specified.
-	<ul>
-		<li><strong>feature_values_save_path:</strong> The path of the ACE XML Feature Values File to save extracted feature values to.</li>
-		<li><strong>feature_definitions_save_path:</strong> The path of the ACE XML Feature Definitions File to save feature metadata to.</li>
-	</ul><p></p>
+	
+  <p>This section specifies the paths to save extracted feature values and feature metadata to. All file paths must be absolute or relative to the directory holding the jSymbolic.jar file. Only the file path for an ACE XML Feature Values file is permitted here (during processing an ACE XML Feature Definitions file will also be generated, with a file name based on that specified for the Feature Values file). If Weka ARFF or CSV files are selected to be saved as well, they will be given the same path and file name as the ACE XML Feature Values File, but with the extension changed automatically. As mentioned above, this section may optionally be omitted from valid configuration files. This section includes the following single setting which should be specified.
+	
+  <ul>
+		
+    <li><strong>feature_values_save_path:</strong> The path of the ACE XML Feature Values File to save extracted feature values to.</li>
+  </ul>
+  <p></p>
 
 	<strong>Input File Section</strong>
 	<p>A list of input files to extract features from. All file paths must be absolute or relative to the directory holding the jSymbolic.jar file. These files must currently be either MIDI or MEI files. As mentioned above, this section may optionally be omitted from valid configuration files.</p>
@@ -152,7 +155,6 @@ convert_to_arff=false<br>
 convert_to_csv=false<br>
 &lt;output_files&gt;<br>
 feature_values_save_path=test_value.xml<br>
-feature_definitions_save_path=test_definition.xml<br>
 &lt;input_files&gt;<br>
 ./test/jsymbolic/features/resources/Saint-Saens_LeCarnevalDesAnimmaux.mei<br>
 </i></blockquote>
@@ -177,7 +179,6 @@ convert_to_arff=false<br>
 convert_to_csv=false<br>
 &lt;output_files&gt;<br>
 feature_values_save_pathtest_value.xml<br>
-feature_definitions_save_path=test_definition.xml<br>
 </i></blockquote>
 
 <p></p>

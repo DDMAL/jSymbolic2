@@ -6,9 +6,9 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import jsymbolic2.configuration.txtimplementation.ConfigurationFileValidatorTxtImpl;
-import jsymbolic2.configuration.ConfigFileHeaderEnum;
-import jsymbolic2.configuration.ConfigurationFileData;
+import jsymbolic2.configurationfile.txtimplementation.ValidatorConfigFileTxtImpl;
+import jsymbolic2.configurationfile.EnumSectionDividers;
+import jsymbolic2.configurationfile.ConfigFileCompleteData;
 import jsymbolic2.processing.FeatureExtractionJobProcessor;
 import jsymbolic2.processing.MIDIReporter;
 import jsymbolic2.processing.MusicFilter;
@@ -241,9 +241,9 @@ public enum CommandLineSwitchEnum
 						List<File> input_file_list = Arrays.asList(new File(args[0]));
 						String feature_values_save_path = args[1];
 						String feature_definitions_save_path = args[2];
-						List<ConfigFileHeaderEnum> config_file_headers_to_check = Arrays.asList(ConfigFileHeaderEnum.FEATURE_HEADER, ConfigFileHeaderEnum.OPTION_HEADER);
+						List<EnumSectionDividers> config_file_headers_to_check = Arrays.asList(EnumSectionDividers.FEATURE_HEADER, EnumSectionDividers.OPTIONS_HEADER);
 						UserFeedbackGenerator.printParsingConfigFileMessage(System.out, default_config_file_path);
-						ConfigurationFileData config_file_data = new ConfigurationFileValidatorTxtImpl().parseConfigFile(default_config_file_path, config_file_headers_to_check, System.err);
+						ConfigFileCompleteData config_file_data = new ValidatorConfigFileTxtImpl().parseConfigFile(default_config_file_path, config_file_headers_to_check, System.err);
 						FeatureExtractionJobProcessor.extractAndSaveFeaturesConfigFileSettings( input_file_list,
 						                                                                        config_file_data,
 						                                                                        feature_values_save_path,
@@ -294,7 +294,7 @@ public enum CommandLineSwitchEnum
 					try
 					{
 						UserFeedbackGenerator.printParsingConfigFileMessage(System.out, default_config_file_path);
-						ConfigurationFileData config_file_data = new ConfigurationFileValidatorTxtImpl().parseConfigFileTwoThreeOrFour(default_config_file_path, System.err);
+						ConfigFileCompleteData config_file_data = new ValidatorConfigFileTxtImpl().parseConfigFileTwoThreeOrFour(default_config_file_path, System.err);
 						new jsymbolic2.gui.OuterFrame(config_file_data);
 					}
 					catch (Exception e)
@@ -326,7 +326,7 @@ public enum CommandLineSwitchEnum
 				try
 				{
 					UserFeedbackGenerator.printParsingConfigFileMessage(System.out, config_file_path);
-					ConfigurationFileData config_file_data = new ConfigurationFileValidatorTxtImpl().parseConfigFileTwoThreeOrFour(config_file_path, System.err);
+					ConfigFileCompleteData config_file_data = new ValidatorConfigFileTxtImpl().parseConfigFileTwoThreeOrFour(config_file_path, System.err);
 					new jsymbolic2.gui.OuterFrame(config_file_data);
 				}
 				catch (Exception e) { UserFeedbackGenerator.printExceptionErrorMessage(System.err, e); }
@@ -355,10 +355,10 @@ public enum CommandLineSwitchEnum
 					try
 					{
 						UserFeedbackGenerator.printParsingConfigFileMessage(System.out, config_file_path);
-						ConfigurationFileData config_file_data = new ConfigurationFileValidatorTxtImpl().parseConfigFileAllHeaders(config_file_path, System.err);
-						List<File> input_file_list = config_file_data.getInputFileList().getValidFiles();
+						ConfigFileCompleteData config_file_data = new ValidatorConfigFileTxtImpl().parseConfigFileAllHeaders(config_file_path, System.err);
+						List<File> input_file_list = config_file_data.getInputFilePaths().getValidFiles();
 						String feature_values_save_path = config_file_data.getFeatureValueSavePath();
-						String feature_definitions_save_path = config_file_data.getFeatureDefinitionSavePath();
+						String feature_definitions_save_path = FeatureExtractionJobProcessor.getMatchingFeatureDefinitionsXmlSavePath(feature_values_save_path);
 						FeatureExtractionJobProcessor.extractAndSaveFeaturesConfigFileSettings( input_file_list,
 																								config_file_data,
 																								feature_values_save_path,
@@ -382,14 +382,14 @@ public enum CommandLineSwitchEnum
 					String input_file_path = args[2];
 					String feature_values_save_path = args[3];
 					String feature_definitions_save_path = args[4];
-					List<ConfigFileHeaderEnum> config_file_headers_to_check = Arrays.asList(ConfigFileHeaderEnum.FEATURE_HEADER, ConfigFileHeaderEnum.OPTION_HEADER);
+					List<EnumSectionDividers> config_file_headers_to_check = Arrays.asList(EnumSectionDividers.FEATURE_HEADER, EnumSectionDividers.OPTIONS_HEADER);
 					
 					// Parse configuration file and extract features based on its contents and the supplied
 					// command line arguments
 					try
 					{
 						UserFeedbackGenerator.printParsingConfigFileMessage(System.out, config_file_path);
-						ConfigurationFileData config_file_data = new ConfigurationFileValidatorTxtImpl().parseConfigFile(config_file_path, config_file_headers_to_check, System.err);
+						ConfigFileCompleteData config_file_data = new ValidatorConfigFileTxtImpl().parseConfigFile(config_file_path, config_file_headers_to_check, System.err);
 						List<File> input_file_list = Arrays.asList(new File(input_file_path));
 						FeatureExtractionJobProcessor.extractAndSaveFeaturesConfigFileSettings( input_file_list,
 																								config_file_data,
@@ -428,7 +428,7 @@ public enum CommandLineSwitchEnum
 				{
 					// Try parsing configuration file to see if it is valid
 					UserFeedbackGenerator.printParsingConfigFileMessage(System.out, config_file_path);
-					new ConfigurationFileValidatorTxtImpl().parseConfigFileAllHeaders(config_file_path, System.err);
+					new ValidatorConfigFileTxtImpl().parseConfigFileAllHeaders(config_file_path, System.err);
 					
 					// If the configuration file is valid as defined by this method
 					UserFeedbackGenerator.simplePrintln(System.out, "\n" + config_file_path + " is a valid configuration file that specifies features to be extracted, extraction options, input file paths and output file paths.\n");
@@ -456,13 +456,13 @@ public enum CommandLineSwitchEnum
 					UserFeedbackGenerator.indicateIncorrectCommandLineArgumentsAndEndExecution(System.err, args);
 
 				String config_file_path = args[1];
-				List<ConfigFileHeaderEnum> config_headers_to_check = Arrays.asList( ConfigFileHeaderEnum.FEATURE_HEADER,
-				                                                                    ConfigFileHeaderEnum.OPTION_HEADER );
+				List<EnumSectionDividers> config_headers_to_check = Arrays.asList(EnumSectionDividers.FEATURE_HEADER,
+				                                                                    EnumSectionDividers.OPTIONS_HEADER );
 				try
 				{
 					// Try parsing configuration file to see if it is valid
 					UserFeedbackGenerator.printParsingConfigFileMessage(System.out, config_file_path);
-					new ConfigurationFileValidatorTxtImpl().parseConfigFile(config_file_path, config_headers_to_check, System.err);
+					new ValidatorConfigFileTxtImpl().parseConfigFile(config_file_path, config_headers_to_check, System.err);
 					
 					// If the configuration file is valid as defined by this method
 					UserFeedbackGenerator.simplePrintln(System.out, "\n" + config_file_path + " is a valid configuration file that specifies features to be extracted and extraction options, but does not specify input or output files.\n");

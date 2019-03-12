@@ -27,7 +27,7 @@ public class RelativePrevalenceOfTopPitchClassesFeature
 		String description = "Relative frequency of the of the second most common pitch class in the piece, divided by the relative frequency of the most common pitch class.";
 		boolean is_sequential = true;
 		int dimensions = 1;
-		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.NAME_AND_VERSION);
+		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
 		dependencies = null;
 		offsets = null;
 		is_default = true;

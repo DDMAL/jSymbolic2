@@ -320,7 +320,7 @@ public class MIDIReporter
 
 							// Note the General MIDI patch
 							general_midi_patch_values.add((new Integer(patch_number)).toString());
-							
+
 							// Note the patch in this particular track and channel
 							patches_per_channel_per_track[tr][channel].add((new Integer(patch_number)).toString());
 						}
@@ -441,10 +441,10 @@ public class MIDIReporter
 			unique_tempos_found[file] = StringMethods.getUniqueStrings(tempo_values.toArray(new String[tempo_values.size()]));
 			unique_time_signatures_found[file] = StringMethods.getUniqueStrings(time_signature_values.toArray(new String[time_signature_values.size()]));
 			unique_key_signatures_found[file] = StringMethods.getUniqueStrings(key_signature_values.toArray(new String[key_signature_values.size()]));
-			unique_general_midi_patches_found[file] = StringMethods.getUniqueStrings(general_midi_patch_values.toArray(new String[key_signature_values.size()]));
-			unique_channel_volumes_found[file] = StringMethods.getUniqueStrings(channel_volume_values.toArray(new String[key_signature_values.size()]));
-			unique_velocities_found[file] = StringMethods.getUniqueStrings(velocity_values.toArray(new String[key_signature_values.size()]));
-			unique_pitch_bend_values_found[file] = StringMethods.getUniqueStrings(pitch_bend_values.toArray(new String[key_signature_values.size()]));
+			unique_general_midi_patches_found[file] = StringMethods.getUniqueStrings(general_midi_patch_values.toArray(new String[general_midi_patch_values.size()]));
+			unique_channel_volumes_found[file] = StringMethods.getUniqueStrings(channel_volume_values.toArray(new String[channel_volume_values.size()]));
+			unique_velocities_found[file] = StringMethods.getUniqueStrings(velocity_values.toArray(new String[velocity_values.size()]));
+			unique_pitch_bend_values_found[file] = StringMethods.getUniqueStrings(pitch_bend_values.toArray(new String[pitch_bend_values.size()]));
 		}
 
 		// Prepare intraconsistency reports for individual files

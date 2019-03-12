@@ -6,6 +6,9 @@
 package jsymbolic2.processing;
 
 import ca.mcgill.music.ddmal.mei.MeiXmlReader.MeiXmlReadException;
+
+import mckay.utilities.staticlibraries.StringMethods;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -75,14 +78,14 @@ public class FileValidatorTest {
 
         String noDot = "test";
         String expectedNoDot = "test.xml";
-        assertEquals(expectedNoDot,SymbolicMusicFileUtilities.correctFileExtension(noDot,fileExtension));
+        assertEquals(expectedNoDot,StringMethods.correctExtension(noDot,fileExtension));
 
         String withDot = "test.two";
         String expectedWithDot = "test.two.xml";
-        assertEquals(expectedWithDot,SymbolicMusicFileUtilities.correctFileExtension(withDot,fileExtension));
+        assertEquals(expectedWithDot,StringMethods.correctExtension(withDot,fileExtension));
 
         String noProblem = "test.Xml";
         String expectedNoProblem = "test.Xml";
-        assertEquals(expectedNoProblem,SymbolicMusicFileUtilities.correctFileExtension(noProblem,fileExtension));
+        assertEquals(expectedNoProblem,StringMethods.correctExtension(noProblem,fileExtension));
     }
 }

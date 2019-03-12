@@ -8,8 +8,8 @@ import java.util.Date;
 import java.util.List;
 import javax.sound.midi.*;
 import javax.swing.*;
-import jsymbolic2.configuration.ConfigurationFileData;
-import jsymbolic2.configuration.ConfigurationInputFiles;
+import jsymbolic2.configurationfile.ConfigFileCompleteData;
+import jsymbolic2.configurationfile.ConfigFileInputFilePaths;
 import jsymbolic2.processing.MIDIReporter;
 import jsymbolic2.processing.MusicFilter;
 import jsymbolic2.processing.SymbolicMusicFileUtilities;
@@ -35,11 +35,6 @@ public class MusicFileSelectorPanel
 {
 	/* STATIC FINAL FIELDS **********************************************************************************/
 	
-	
-	/**
-	 * The default directory to begin in when looking for symbolic music files to load.
-	 */
-	private static final String DEFAULT_LOAD_DIRECTORY = ".";
 	
 	/**
 	 * File extensions of symbolic music files recognized by jSymbolic.
@@ -217,11 +212,11 @@ public class MusicFileSelectorPanel
 	 *									references to symbolic music files that should be referenced by the
 	 *									symbolic_music_files_table. Do nothing if this is null.
 	 */
-	public void addMusicFilesParsedFromConfigFile(ConfigurationFileData configuration_file_data)
+	public void addMusicFilesParsedFromConfigFile(ConfigFileCompleteData configuration_file_data)
 	{
 		if (configuration_file_data != null)
 		{
-			ConfigurationInputFiles input_files = configuration_file_data.getInputFileList();
+			ConfigFileInputFilePaths input_files = configuration_file_data.getInputFilePaths();
 			if (input_files != null)
 				addSymbolicMusicFilesToTable(input_files.getValidFiles().toArray(new File[0]));
 		}
@@ -298,8 +293,8 @@ public class MusicFileSelectorPanel
 		symbolic_music_files_table_model = new SymbolicMusicFilesTableModel(column_names, 0);
 		symbolic_music_files_table = new JTable(symbolic_music_files_table_model);
 		
-		// Make table sortable
-		symbolic_music_files_table.setAutoCreateRowSorter(true);
+		// Make table sortable (DISABLED
+		// symbolic_music_files_table.setAutoCreateRowSorter(true);
 	}	
 	
 	
@@ -433,18 +428,24 @@ public class MusicFileSelectorPanel
 		if (load_symbolic_music_file_chooser == null)
 		{
 			load_symbolic_music_file_chooser = new JFileChooser();
-			load_symbolic_music_file_chooser.setCurrentDirectory(new File(DEFAULT_LOAD_DIRECTORY));
 			load_symbolic_music_file_chooser.setFileFilter(new FileFilterImplementation(ALLOWED_EXTENSIONS));
 			load_symbolic_music_file_chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 			load_symbolic_music_file_chooser.setMultiSelectionEnabled(true);
 		}
+		
+		// Set the active directory to the last directory accessed by a JFileChooser object
+		load_symbolic_music_file_chooser.setCurrentDirectory(new File(outer_frame.current_file_chooser_directory));
 
 		// Read the user's choice of load or cancel
 		int dialog_result = load_symbolic_music_file_chooser.showOpenDialog(MusicFileSelectorPanel.this);
 
-		// Add the files to the table
-		if (dialog_result == JFileChooser.APPROVE_OPTION) // only do if OK chosen
+		// If OK is chosen by the user
+		if (dialog_result == JFileChooser.APPROVE_OPTION) 
 		{
+			// Store the directory that was accessed for use by future JFileChooser objects
+			outer_frame.current_file_chooser_directory = load_symbolic_music_file_chooser.getCurrentDirectory().getAbsolutePath();
+
+			// Add the files to the table
 			File[] load_files = load_symbolic_music_file_chooser.getSelectedFiles();
 			addSymbolicMusicFilesToTable(load_files);
 		}
@@ -467,10 +468,12 @@ public class MusicFileSelectorPanel
 		if (load_symbolic_music_in_a_directory_chooser == null)
 		{
 			load_symbolic_music_in_a_directory_chooser = new JFileChooser();
-			load_symbolic_music_in_a_directory_chooser.setCurrentDirectory(new File(DEFAULT_LOAD_DIRECTORY));
 			load_symbolic_music_in_a_directory_chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 			load_symbolic_music_in_a_directory_chooser.setMultiSelectionEnabled(false);
 		}
+
+		// Set the active directory to the last directory accessed by a JFileChooser object
+		load_symbolic_music_in_a_directory_chooser.setCurrentDirectory(new File(outer_frame.current_file_chooser_directory));
 
 		// Read the user's choice of load or cancel
 		int dialog_result = load_symbolic_music_in_a_directory_chooser.showOpenDialog(MusicFileSelectorPanel.this);
@@ -478,6 +481,9 @@ public class MusicFileSelectorPanel
 		// Add the qualifying files in the directory specified to the table
 		if (dialog_result == JFileChooser.APPROVE_OPTION) // only do if OK chosen
 		{
+			// Store the directory that was accessed for use by future JFileChooser objects
+			outer_frame.current_file_chooser_directory = load_symbolic_music_in_a_directory_chooser.getCurrentDirectory().getAbsolutePath();
+
 			// Note the directory chosen
 			ArrayList<File> directory_chosen = new ArrayList<>();
 			directory_chosen.add(load_symbolic_music_in_a_directory_chooser.getSelectedFile());
@@ -663,12 +669,13 @@ public class MusicFileSelectorPanel
 	/**
 	 * Spawn a new text window holding a formatted consistency report on those symbolic music files that the
 	 * user has selected on the symbolic_music_files_table table (i.e. the particular ones that are selected,
-	 * not necessarily all of the ones that appear on the table). This report begins by providing, for each
-	 * file separately, an intraconsistenccy report that indicates whether the given file has more than one
-	 * value for a range of quantities (e.g. more than one tempo, more than one meter, etc.). Then, if more
-	 * than one file has been selected by the user, an interconsistency is provided that indicates, for all
-	 * files considered as a whole, whether all the files share the same value or set of values for each of
-	 * the quantities being tested for (e.g. all the files have the same tempo, or the same set of tempos).
+	 * not necessarily all of the ones that appear on the table). If no files are selected, then a report will
+	 * be generated for all files in the table. This report begins by providing, for each file separately, an
+	 * intraconsistency report that indicates whether the given file has more than one value for a range of
+	 * quantities (e.g. more than one tempo, more than one meter, etc.). Then, if more than one file has been
+	 * selected by the user, an interconsistency is provided that indicates, for all files considered as a
+	 * whole, whether all the files share the same value or set of values for each of the quantities being
+	 * tested for (e.g. all the files have the same tempo, or the same set of tempos).
 	 */
 	private void displayConsistencyReport()
 	{
@@ -696,10 +703,10 @@ public class MusicFileSelectorPanel
 	/**
 	 * Spawn a new text window holding a MIDI dump report on those symbolic music files that the user has
 	 * selected on the symbolic_music_files_table table (i.e. the particular ones that are selected, not
-	 * necessarily all of the ones that appear on the table). This report indicates, separately for each file
-	 * selected by the user, a structured transcription of all the relevant MIDI messages that the given file
-	 * contains. If a given file is an MEI rather than a MIDI file, then it is converted to MIDI before
-	 * reporting. 
+	 * necessarily all of the ones that appear on the table). If no files are selected, then a report will be
+	 * generated for all files in the table. This report indicates, separately for each file selected by the
+	 * user, a structured transcription of all the relevant MIDI messages that the given file contains. If a
+	 * given file is an MEI rather than a MIDI file, then it is converted to MIDI before reporting.
 	 */
 	private void displayMidiDump()
 	{
@@ -790,25 +797,39 @@ public class MusicFileSelectorPanel
 	
 	
 	/**
-	 * Return the files that are currently selected in the symbolic_music_files_table.
+	 * Return the files that are currently selected in the symbolic_music_files_table. If no files are
+	 * selected, then all files in the table will be returned.
 	 * 
-	 * @return				The selected files. Note that no verification is performed by this particular
-	 *						method to ensure that the files exist and are valid.
-	 * @throws Exception	Throws an informative Exception if the user has not selected any files.
+	 * @return				The selected files, or all files in the table if none are selected. Note that no
+	 *						verification is performed by this particular method to ensure that the files exist 
+	 *						and are valid.
+	 * @throws Exception	Throws an informative Exception if there are no files on the table.
 	 */
 	private File[] getSelectedFiles()
 		throws Exception
 	{
-		// Note which rows are selected on the table
-		int[] selected_rows = symbolic_music_files_table.getSelectedRows();
-		for (int i = 0; i < selected_rows.length; i++)
-			selected_rows[i] = symbolic_music_files_table.convertRowIndexToModel(selected_rows[i]);
-		if (selected_rows.length == 0)
-			throw new Exception("Could not generate the report.\nDetails: No files selcected on the table to generate the report on.");
-
 		// All the files listed on the table (selected or not)
 		SymbolicMusicFile[] all_symbolic_music_files_on_table = getSymbolicMusicFilesToExtractFeaturesFrom();
 
+		// Throw an exception if there are no entries in the table
+		if (all_symbolic_music_files_on_table == null)
+			throw new Exception("Could not generate the report.\nDetails: No files available on the table to generate the report on.");
+
+		// Note which rows are selected on the table
+		int[] selected_rows = symbolic_music_files_table.getSelectedRows();
+		
+		// If no rows are selected, then behave as if all rows were selected
+		if (selected_rows.length == 0)
+		{
+			selected_rows = new int[all_symbolic_music_files_on_table.length];
+			for (int i = 0; i < selected_rows.length; i++)
+				selected_rows[i] = i;
+		}
+		
+		// Make sure ordered properly
+		for (int i = 0; i < selected_rows.length; i++)
+			selected_rows[i] = symbolic_music_files_table.convertRowIndexToModel(selected_rows[i]);
+		
 		// Find the paths of the particular files selected on the table
 		File[] selected_files = new File[selected_rows.length];
 		for (int i = 0; i < selected_rows.length; i++)

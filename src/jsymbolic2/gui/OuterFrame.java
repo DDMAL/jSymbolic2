@@ -12,8 +12,8 @@ import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
 import javax.swing.text.DefaultCaret;
 import jsymbolic2.commandline.CommandLineSwitchEnum;
-import jsymbolic2.configuration.ConfigurationFileData;
-import jsymbolic2.configuration.txtimplementation.ConfigurationFileValidatorTxtImpl;
+import jsymbolic2.configurationfile.ConfigFileCompleteData;
+import jsymbolic2.configurationfile.txtimplementation.ValidatorConfigFileTxtImpl;
 import jsymbolic2.featureutils.FeatureExtractorAccess;
 import jsymbolic2.processing.UserFeedbackGenerator;
 import mckay.utilities.gui.templates.AboutDialog;
@@ -59,24 +59,9 @@ public class OuterFrame
 	public static final int DIALOG_BOX_HANGING_INDENT_CHARS = 5;
 	
 
-	/* PRIVATE STATIC FINAL FIELDS ***************************************************************************/
+	/* PRIVATE STATIC FINAL FIELDS **************************************************************************/
 
-	
-	/**
-	 * The name of this software's author.
-	 */
-	private static final String AUTHOR_STRING = "Cory McKay";
-	
-	/**
-	 * The string indicating licensing credit.
-	 */
-	private static final String LICENSING_STRING = "2018 (GNU GPL)";
-	
-	/**
-	 * The credited institution.
-	 */
-	private static final String INSTITUTION_CREDIT_STRING = "CIRMMT / Marianopolis College / McGill University";
-	
+
 	/**
 	 * The horizontal dimension of the GUI window, in pixels.
 	 */
@@ -86,7 +71,7 @@ public class OuterFrame
 	 * The vertical dimension of the GUI window, in pixels.
 	 */
 	private static final int WINDOW_WIDTH_VERTICAL = 940;
-	
+
 
 	/* PUBLIC FIELDS ****************************************************************************************/
 
@@ -122,7 +107,13 @@ public class OuterFrame
 	 * The stream to which errors are written to.
 	 */
 	public PrintStream error_print_stream;
-			
+		
+	/**
+	 * The last active directory in a JFileChooser, and the directory to which the next opened JFileChooser
+	 * should open to.
+	 */
+	public String current_file_chooser_directory;	
+	
 	
 	/* PRIVATE FIELDS ***************************************************************************************/
 	
@@ -172,8 +163,11 @@ public class OuterFrame
 	 * @param config_file_data	Data parsed from a configuration file. Null if no configuration file data is 
 	 *							available or specified.
 	 */
-	public OuterFrame(ConfigurationFileData config_file_data)
+	public OuterFrame(ConfigFileCompleteData config_file_data)
 	{
+		// Set the initial load directory
+		current_file_chooser_directory = ".";	
+		
 		// Determine the proper window size based on the current display settings. Use default size if there
 		// is enough room, otherwise choose a size that will fit the screen.
 		int frame_width = WINDOW_WIDTH_HORIZONTAL;
@@ -188,7 +182,7 @@ public class OuterFrame
 		setBounds (0, 0, frame_width, frame_height);
 		
 		// Set the GUI window title
-		setTitle(jsymbolic2.Main.NAME_AND_VERSION);
+		setTitle(jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
 
 		// Make jSymbolic quit when exit box is pressed
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -288,7 +282,7 @@ public class OuterFrame
 			try
 			{
 				UserFeedbackGenerator.printParsingConfigFileMessage(status_print_stream, config_file_data.getConfigurationFilePath());
-				new ConfigurationFileValidatorTxtImpl().parseConfigFileTwoThreeOrFour(config_file_data.getConfigurationFilePath(), error_print_stream);
+				new ValidatorConfigFileTxtImpl().parseConfigFileTwoThreeOrFour(config_file_data.getConfigurationFilePath(), error_print_stream);
 			}
 			catch (Exception e) {}
 		}
@@ -355,10 +349,10 @@ public class OuterFrame
 		if (event.getSource().equals(about_menu_item))
 		{
 			new AboutDialog( this,
-			                 jsymbolic2.Main.NAME_AND_VERSION,
-			                 AUTHOR_STRING,
-			                 LICENSING_STRING,
-			                 INSTITUTION_CREDIT_STRING );
+			                 jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION,
+			                 jsymbolic2.Main.PRINCIPALAUTHOR_CREDIT,
+			                 jsymbolic2.Main.YEAR_AND_LICENSING,
+			                 jsymbolic2.Main.INSTITUTION_CREDIT );
 		}
 
 		// React to the help_menu_item

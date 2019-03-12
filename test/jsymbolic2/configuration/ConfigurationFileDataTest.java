@@ -1,5 +1,9 @@
 package jsymbolic2.configuration;
 
+import jsymbolic2.configurationfile.ConfigFileOutputFilePaths;
+import jsymbolic2.configurationfile.ConfigFileCompleteData;
+import jsymbolic2.configurationfile.ConfigFileInputFilePaths;
+import jsymbolic2.configurationfile.ConfigFileWindowingAndOutputFormatSettings;
 import jsymbolic2.featureutils.FeatureExtractorAccess;
 import org.junit.Test;
 
@@ -16,12 +20,12 @@ public class ConfigurationFileDataTest {
     @Test
     public void getFeaturesToSaveBoolean() throws Exception {
         List<String> inputFeatures = Arrays.asList("Brass Prevalence","Duration");
-        ConfigurationOptionState optionState = new ConfigurationOptionState(10,0.1,true,false,false,false);
-        ConfigurationOutputFiles outputFiles = new ConfigurationOutputFiles("valuetest.xml","featuretest.xml");
-        ConfigurationInputFiles inputFiles = new ConfigurationInputFiles();
+        ConfigFileWindowingAndOutputFormatSettings optionState = new ConfigFileWindowingAndOutputFormatSettings(10,0.1,true,false,false,false);
+        ConfigFileOutputFilePaths outputFiles = new ConfigFileOutputFilePaths("valuetest.xml");
+        ConfigFileInputFilePaths inputFiles = new ConfigFileInputFilePaths();
         inputFiles.addValidFile(new File("./test/jsymbolic/features/resources/Saint-Saens_LeCarnevalDesAnimmaux.mei"));
         String configFilePath = "/workspace/ddmal/jSymbolic/test/jsymbolic/configuration/resources/sampleConfiguration.txt";
-        ConfigurationFileData data = new ConfigurationFileData(inputFeatures,optionState,outputFiles,configFilePath,inputFiles);
+        ConfigFileCompleteData data = new ConfigFileCompleteData(inputFeatures,optionState,outputFiles,configFilePath,inputFiles);
 
         boolean[] expectedSave = new boolean[FeatureExtractorAccess.getNamesOfAllImplementedFeatures().size()];
         expectedSave = initializeArrayFalse(expectedSave);

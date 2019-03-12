@@ -34,7 +34,7 @@ public class jSymbolicProcessorTest {
 
     @Before
     public void setUp() throws Exception {
-        List<String> featureNames = Arrays.asList("Duration", "Acoustic Guitar Prevalence", "Beat Histogram");
+        List<String> featureNames = Arrays.asList("Duration in Seconds", "Acoustic Guitar Prevalence", "Beat Histogram");
         processor = new JsymbolicProcessorDeprecated(valuesPath, definitionsPath, false, false, featureNames, false, true, 10, 0.1, System.out, System.err);
         processorConfig = new JsymbolicProcessorDeprecated("./test/jsymbolic2/api/resources/sampleConfiguration.txt", System.out, System.err);
         processorConvert = new JsymbolicProcessorDeprecated("./test/jsymbolic2/api/resources/sampleConfigConvert.txt", System.out, System.err);

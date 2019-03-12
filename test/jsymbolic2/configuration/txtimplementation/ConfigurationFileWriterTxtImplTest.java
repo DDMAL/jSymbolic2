@@ -1,6 +1,13 @@
 package jsymbolic2.configuration.txtimplementation;
 
-import jsymbolic2.configuration.*;
+import jsymbolic2.configurationfile.txtimplementation.EnumFieldValueDelimiter;
+import jsymbolic2.configurationfile.txtimplementation.WriterConfigFileTxtImpl;
+import jsymbolic2.configurationfile.EnumWindowingAndOutputFormatSettings;
+import jsymbolic2.configurationfile.ConfigFileOutputFilePaths;
+import jsymbolic2.configurationfile.EnumSectionDividers;
+import jsymbolic2.configurationfile.EnumOutputFileTypes;
+import jsymbolic2.configurationfile.ConfigFileInputFilePaths;
+import jsymbolic2.configurationfile.ConfigFileWindowingAndOutputFormatSettings;
 import org.junit.Test;
 
 import java.io.File;
@@ -16,32 +23,31 @@ import static org.junit.Assert.*;
 public class ConfigurationFileWriterTxtImplTest {
     @Test
     public void addFormattedOptions() throws Exception {
-        List<String> expectedList = Arrays.asList(ConfigFileHeaderEnum.OPTION_HEADER.toString(),
-                OptionsEnum.window_size.name() + ConfigurationFileDelimiterEnum.EQUAL + "1.5",
-                OptionsEnum.window_overlap.name() + ConfigurationFileDelimiterEnum.EQUAL + "0.1",
-                OptionsEnum.save_features_for_each_window.name() + ConfigurationFileDelimiterEnum.EQUAL + "true",
-                OptionsEnum.save_overall_recording_features.name() + ConfigurationFileDelimiterEnum.EQUAL + "false",
-                OptionsEnum.convert_to_arff.name() + ConfigurationFileDelimiterEnum.EQUAL + "false",
-                OptionsEnum.convert_to_csv.name() + ConfigurationFileDelimiterEnum.EQUAL + "false"
+        List<String> expectedList = Arrays.asList(EnumSectionDividers.OPTIONS_HEADER.toString(),
+                EnumWindowingAndOutputFormatSettings.window_size.name() + EnumFieldValueDelimiter.EQUAL + "1.5",
+                EnumWindowingAndOutputFormatSettings.window_overlap.name() + EnumFieldValueDelimiter.EQUAL + "0.1",
+                EnumWindowingAndOutputFormatSettings.save_features_for_each_window.name() + EnumFieldValueDelimiter.EQUAL + "true",
+                EnumWindowingAndOutputFormatSettings.save_overall_recording_features.name() + EnumFieldValueDelimiter.EQUAL + "false",
+                EnumWindowingAndOutputFormatSettings.convert_to_arff.name() + EnumFieldValueDelimiter.EQUAL + "false",
+                EnumWindowingAndOutputFormatSettings.convert_to_csv.name() + EnumFieldValueDelimiter.EQUAL + "false"
         );
         List<String> actualList = new ArrayList<>();
-        ConfigurationFileWriterTxtImpl writer = new ConfigurationFileWriterTxtImpl();
+        WriterConfigFileTxtImpl writer = new WriterConfigFileTxtImpl();
         actualList = writer.addFormattedOptions(actualList,
-                            new ConfigurationOptionState(1.5,0.1,true,false,false,false));
+                            new ConfigFileWindowingAndOutputFormatSettings(1.5,0.1,true,false,false,false));
 
         assertEquals(expectedList,actualList);
     }
 
     @Test
     public void addFormattedFeatures() throws Exception {
-        List<String> expectedList = Arrays.asList(
-                ConfigFileHeaderEnum.FEATURE_HEADER.toString(),
+        List<String> expectedList = Arrays.asList(EnumSectionDividers.FEATURE_HEADER.toString(),
                 "Acoustic Guitar Prevalence",
                 "Duration",
                 "Beat Histogram"
         );
 
-        ConfigurationFileWriterTxtImpl writer = new ConfigurationFileWriterTxtImpl();
+        WriterConfigFileTxtImpl writer = new WriterConfigFileTxtImpl();
         List<String> actualList = new ArrayList<>();
         actualList = writer.addFormattedFeatures(
                 actualList,
@@ -57,14 +63,13 @@ public class ConfigurationFileWriterTxtImplTest {
     public void addFormattedInputFiles() throws Exception {
         String fileName = "test.mei";
 
-        List<String> expectedList = Arrays.asList(
-                ConfigFileHeaderEnum.INPUT_FILE_HEADER.toString(),
+        List<String> expectedList = Arrays.asList(EnumSectionDividers.INPUT_FILES_HEADER.toString(),
                 fileName
         );
 
         List<String> actualList = new ArrayList<>();
-        ConfigurationFileWriterTxtImpl writer = new ConfigurationFileWriterTxtImpl();
-        ConfigurationInputFiles inputFiles = new ConfigurationInputFiles();
+        WriterConfigFileTxtImpl writer = new WriterConfigFileTxtImpl();
+        ConfigFileInputFilePaths inputFiles = new ConfigFileInputFilePaths();
         inputFiles.addValidFile(new File(fileName));
         writer.addFormattedInputFiles(actualList,inputFiles);
         assertEquals(expectedList,actualList);
@@ -75,15 +80,12 @@ public class ConfigurationFileWriterTxtImplTest {
         String value = "test_value.xml";
         String definition = "test_definition.xml";
 
-        List<String> expectedList = Arrays.asList(
-                ConfigFileHeaderEnum.OUTPUT_FILE_HEADER.toString(),
-                OutputEnum.feature_values_save_path.name() + ConfigurationFileDelimiterEnum.EQUAL + value,
-                OutputEnum.feature_definitions_save_path.name() + ConfigurationFileDelimiterEnum.EQUAL + definition
-        );
+        List<String> expectedList = Arrays.asList(EnumSectionDividers.OUTPUT_FILES_HEADER.toString(),
+                EnumOutputFileTypes.feature_values_save_path.name() + EnumFieldValueDelimiter.EQUAL + value);
 
         List<String> actualList = new ArrayList<>();
-        ConfigurationFileWriterTxtImpl writer = new ConfigurationFileWriterTxtImpl();
-        actualList = writer.addFormattedOutputFiles(actualList,new ConfigurationOutputFiles(value,definition));
+        WriterConfigFileTxtImpl writer = new WriterConfigFileTxtImpl();
+        actualList = writer.addFormattedOutputFiles(actualList,new ConfigFileOutputFilePaths(value));
 
         assertEquals(expectedList,actualList);
     }

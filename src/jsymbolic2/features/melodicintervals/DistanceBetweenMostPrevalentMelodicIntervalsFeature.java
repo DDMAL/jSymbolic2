@@ -27,7 +27,7 @@ public class DistanceBetweenMostPrevalentMelodicIntervalsFeature
 		String description = "Absolute value of the difference (in semitones) between the most common and second most common melodic intervals in the piece.";
 		boolean is_sequential = true;
 		int dimensions = 1;
-		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.NAME_AND_VERSION);
+		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
 		dependencies = null;
 		offsets = null;
 		is_default = true;

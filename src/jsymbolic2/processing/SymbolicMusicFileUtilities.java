@@ -332,44 +332,4 @@ public class SymbolicMusicFileUtilities
 		}
 		return complete_file_list;
 	}
-	
-	
-	/**
-	 * Checks if the specified file_name ends with the specified file_extension (preceded by a period). If it
-	 * does, then return a reference to it unchanged. If it does not, then return a reference to a new string
-	 * with file_extension (preceded by a period) added to the end of file_name.
-	 *
-	 * @param file_name			The file name to check.
-	 * @param file_extension	The file extension to check file_name for. This file_extension should not 
-	 *							include a period.
-	 * @return					file_name with the proper extension added to it if it is not there already.
-	 */
-	public static String correctFileExtension(String file_name, String file_extension)
-	{
-		String file_name_with_extension_added = file_name + "." + file_extension;
-		
-		if (!file_name.contains("."))
-			return file_name_with_extension_added;
-
-		String[] split_file_name = file_name.split("\\.");
-		if (split_file_name[split_file_name.length - 1].equalsIgnoreCase(file_extension))
-			return file_name;
-		else return file_name_with_extension_added;
-	}
-
-	
-	/**
-	 * Given a file path, return true if a file (or other resource) at the corresponding path exists, and
-	 * false if it does not.
-	 *
-	 * @param path_to_check	The file path to check.
-	 * @return				True if a resource exists at path_to_check, false if it does not.
-	 */
-	public static boolean filePathExists(String path_to_check)
-	{
-		String absolute_path = (new File(path_to_check)).getAbsolutePath();
-		String path_string = absolute_path.substring(0, absolute_path.lastIndexOf(File.separator));
-		Path path = Paths.get(path_string);
-		return Files.exists(path);
-	}
 }

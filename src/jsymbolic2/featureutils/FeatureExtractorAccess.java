@@ -707,9 +707,11 @@ public final class FeatureExtractorAccess
 	 * all_implemented_feature_extractors.
 	 * 3) Verify that no more than one feature with any given feature code has been added to 
 	 * all_implemented_feature_extractors.
-	 * 4) Verify that all features have been added contiguously to all_implemented_feature_extractors, based 
+	 * 4) Verify that no feature names have commas in them (since this can cause problems when saved CSV
+	 * or ARFF files are parsed).
+	 * 5) Verify that all features have been added contiguously to all_implemented_feature_extractors, based 
 	 * on their feature code groups and numbers, and that all feature codes are properly formatted.
-	 * 5) Verify that, by default all MEI-specific features have been set to not be extracted, and that all
+	 * 6) Verify that, by default all MEI-specific features have been set to not be extracted, and that all
 	 * other features have been set to be extracted.
 	 */
 	private static void printWarningReportIfFeaturesAddedImproperly()
@@ -772,6 +774,15 @@ public final class FeatureExtractorAccess
 				problem_report += "WARNING: The feature code " + duplicated_feature_code + " has been added to jSymbolic in " + number_of_occurrences + " features. No feature code should be used more than once. This is not a serious problem, but it could result in confusion or redundant feature extraction.\n";
 			}
 		}
+		
+		// Verify that no feature names have commas in them (since this can cause problems when saved CSV
+		// or ARFF files are parsed).
+		ArrayList<String> names_of_features_with_commas = new ArrayList();
+		for (String name : names_of_all_features_added)
+			if (name.indexOf(",") != -1) names_of_features_with_commas.add(name);
+		if (!names_of_features_with_commas.isEmpty())
+			for (String name : names_of_features_with_commas)
+				problem_report += "WARNING: The feature " + name + " contains a comma in its name. This will cause problems when saved CSV or ARFF files are parsed (but will not affect saved ACE XML files). It is strongly suggested that the feature be renamed, without a comma. This is a moderately serious problem.\n";
 		
 		// Verify that all features have been added contiguously to all_implemented_feature_extractors, based
 		// on their feature code groups and numbers, and that all feature codes are properly formatted

@@ -1,12 +1,12 @@
 package jsymbolic2.gui;
 
+import jsymbolic2.configurationfile.ConfigFileCompleteData;
 import java.util.List;
 import java.util.ArrayList;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.table.*;
-import jsymbolic2.configuration.*;
 import jsymbolic2.featureutils.FeatureExtractorAccess;
 import jsymbolic2.featureutils.MEIFeatureExtractor;
 import jsymbolic2.featureutils.MIDIFeatureExtractor;
@@ -111,7 +111,7 @@ public class FeatureSelectorPanel
 	 *									features set to be saved. If null is provided here, then default 
 	 *									features are set to be saved.
 	 */
-	public FeatureSelectorPanel(OuterFrame outer_frame, ConfigurationFileData configuration_file_data)
+	public FeatureSelectorPanel(OuterFrame outer_frame, ConfigFileCompleteData configuration_file_data)
 	{
 		// Store a reference to the containing JFrame
 		this.outer_frame = outer_frame;

@@ -7,9 +7,9 @@ import java.util.List;
 import java.util.ArrayList;
 import ace.datatypes.DataBoard;
 import ace.datatypes.DataSet;
-import jsymbolic2.configuration.ConfigFileHeaderEnum;
-import jsymbolic2.configuration.ConfigurationFileData;
-import jsymbolic2.configuration.txtimplementation.ConfigurationFileValidatorTxtImpl;
+import jsymbolic2.configurationfile.EnumSectionDividers;
+import jsymbolic2.configurationfile.ConfigFileCompleteData;
+import jsymbolic2.configurationfile.txtimplementation.ValidatorConfigFileTxtImpl;
 import jsymbolic2.featureutils.FeatureExtractorAccess;
 import jsymbolic2.processing.*;
 
@@ -31,12 +31,6 @@ public class JsymbolicProcessor
 	 * The path of the ACE XML Feature Values file to save extracted feature values to.
 	 */
 	private final String feature_values_save_path;
-
-	/**
-	 * The path of the ACE XML Feature Definitions file to save feature metadata about all extracted features
-	 * to.
-	 */
-	private final String feature_definitions_save_path;
 
 	/**
 	 * Whether or not to save extracted feature values in a Weka ARFF file. If this is set to true, the saved
@@ -105,8 +99,6 @@ public class JsymbolicProcessor
 	 *
 	 * @param feature_values_save_path			The path of the ACE XML Feature Values file to save extracted
 	 *											feature values to.
-	 * @param feature_definitions_save_path		The path of the ACE XML Feature Definitions file to save
-	 *											feature metadata about all extracted features to.
 	 * @param save_arff_file					Whether or not to save extracted feature values in a Weka
 	 *											ARFF file. If this is set to true, the saved file will have 
 	 *											the same save path as that specified in
@@ -141,7 +133,6 @@ public class JsymbolicProcessor
 	 *											feature implemented in jSymbolic.
 	 */
 	public JsymbolicProcessor( String feature_values_save_path,
-	                           String feature_definitions_save_path,
 	                           boolean save_arff_file,
 	                           boolean save_csv_file,
 	                           List<String> names_of_features_to_extract,
@@ -154,7 +145,6 @@ public class JsymbolicProcessor
 		throws Exception
 	{
 		this.feature_values_save_path = feature_values_save_path;
-		this.feature_definitions_save_path = feature_definitions_save_path;
 		this.save_arff_file = save_arff_file;
 		this.save_csv_file = save_csv_file;
 		this.features_to_extract = FeatureExtractorAccess.findSpecifiedFeatures(names_of_features_to_extract);
@@ -176,8 +166,6 @@ public class JsymbolicProcessor
 	 *
 	 * @param feature_values_save_path			The path of the ACE XML Feature Values file to save extracted
 	 *											feature values to.
-	 * @param feature_definitions_save_path		The path of the ACE XML Feature Definitions file to save
-	 *											feature metadata about all extracted features to.
 	 * @param save_arff_file					Whether or not to save extracted feature values in a Weka
 	 *											ARFF file. If this is set to true, the saved file will have 
 	 *											the same save path as that specified in
@@ -208,7 +196,6 @@ public class JsymbolicProcessor
 	 *											feature implemented in jSymbolic.
 	 */
 	public JsymbolicProcessor( String feature_values_save_path,
-	                           String feature_definitions_save_path,
 	                           boolean save_arff_file,
 	                           boolean save_csv_file,
 	                           boolean save_features_for_overall_pieces,
@@ -220,7 +207,6 @@ public class JsymbolicProcessor
 		throws Exception
 	{
 		this( feature_values_save_path,
-	          feature_definitions_save_path,
 	          save_arff_file,
 	          save_csv_file,
 	          FeatureExtractorAccess.getNamesOfDefaultFeaturesToSave(),
@@ -257,14 +243,14 @@ public class JsymbolicProcessor
 	                           PrintStream error_print_stream )
 		throws Exception
 	{
-		ConfigurationFileData config_data;
+		ConfigFileCompleteData config_data;
 		try
 		{
 			UserFeedbackGenerator.printParsingConfigFileMessage(status_print_stream, configuration_file_path);
-			List<ConfigFileHeaderEnum> config_file_headers_to_check = Arrays.asList( ConfigFileHeaderEnum.FEATURE_HEADER,
-			                                                                         ConfigFileHeaderEnum.OPTION_HEADER,
-			                                                                         ConfigFileHeaderEnum.OUTPUT_FILE_HEADER );
-			config_data = new ConfigurationFileValidatorTxtImpl().parseConfigFile( configuration_file_path,
+			List<EnumSectionDividers> config_file_headers_to_check = Arrays.asList(EnumSectionDividers.FEATURE_HEADER,
+			                                                                         EnumSectionDividers.OPTIONS_HEADER,
+			                                                                         EnumSectionDividers.OUTPUT_FILES_HEADER );
+			config_data = new ValidatorConfigFileTxtImpl().parseConfigFile( configuration_file_path,
 			                                                                       config_file_headers_to_check,
 			                                                                       error_print_stream );
 		}
@@ -275,12 +261,11 @@ public class JsymbolicProcessor
 		}
 
 		feature_values_save_path = config_data.getFeatureValueSavePath();
-		feature_definitions_save_path = config_data.getFeatureDefinitionSavePath();
-		save_arff_file = config_data.convertToArff();
-		save_csv_file = config_data.convertToCsv();
+		save_arff_file = config_data.getConvertToArff();
+		save_csv_file = config_data.getConvertToCsv();
 		features_to_extract = config_data.getFeaturesToSaveBoolean();
-		save_features_for_overall_pieces = config_data.saveOverall();
-		save_features_for_each_window = config_data.saveWindow();
+		save_features_for_overall_pieces = config_data.getSaveOverallRecordingFeatures();
+		save_features_for_each_window = config_data.getSaveFeaturesForEachWindow();
 		analysis_window_size = config_data.getWindowSize();
 		analysis_window_overlap = config_data.getWindowOverlap();
 		this.status_print_stream = status_print_stream;
@@ -312,7 +297,7 @@ public class JsymbolicProcessor
 	{
 		return FeatureExtractionJobProcessor.extractAndSaveSpecificFeatures( path_of_file_or_folder_to_parse,
 		                                                                     feature_values_save_path,
-		                                                                     feature_definitions_save_path,
+		                                                                     FeatureExtractionJobProcessor.getMatchingFeatureDefinitionsXmlSavePath(feature_values_save_path),
 		                                                                     features_to_extract,
 		                                                                     save_features_for_each_window,
 		                                                                     save_features_for_overall_pieces,
@@ -347,7 +332,7 @@ public class JsymbolicProcessor
 	{
 		return FeatureExtractionJobProcessor.extractAndSaveSpecificFeatures( paths_of_files_or_folders_to_parse,
 		                                                                     feature_values_save_path,
-		                                                                     feature_definitions_save_path,
+		                                                                     FeatureExtractionJobProcessor.getMatchingFeatureDefinitionsXmlSavePath(feature_values_save_path),
 		                                                                     features_to_extract,
 		                                                                     save_features_for_each_window,
 		                                                                     save_features_for_overall_pieces,
@@ -385,11 +370,11 @@ public class JsymbolicProcessor
 		try
 		{
 			UserFeedbackGenerator.printParsingConfigFileMessage(status_print_stream, configuration_file_path);
-			List<ConfigFileHeaderEnum> config_file_headers_to_check = Arrays.asList(ConfigFileHeaderEnum.INPUT_FILE_HEADER);
-			ConfigurationFileData config_file_data = new ConfigurationFileValidatorTxtImpl().parseConfigFile( configuration_file_path,
+			List<EnumSectionDividers> config_file_headers_to_check = Arrays.asList(EnumSectionDividers.INPUT_FILES_HEADER);
+			ConfigFileCompleteData config_file_data = new ValidatorConfigFileTxtImpl().parseConfigFile( configuration_file_path,
 																											  config_file_headers_to_check,
 																											  error_print_stream );
-			input_file_list = config_file_data.getInputFileList().getValidFiles();
+			input_file_list = config_file_data.getInputFilePaths().getValidFiles();
 		}
 		catch (Exception e)
 		{
@@ -399,7 +384,7 @@ public class JsymbolicProcessor
 		if (input_file_list != null)
 			return FeatureExtractionJobProcessor.extractAndSaveSpecificFeatures( input_file_list,
 																				 feature_values_save_path,
-																				 feature_definitions_save_path,
+																				 FeatureExtractionJobProcessor.getMatchingFeatureDefinitionsXmlSavePath(feature_values_save_path),
 																				 features_to_extract,
 																				 save_features_for_each_window,
 																				 save_features_for_overall_pieces,
@@ -456,7 +441,7 @@ public class JsymbolicProcessor
 		// Parse the ACE XML feature values and feature definitions file.
 		String[] feature_values_paths = {feature_values_save_path};
 		DataBoard feature_values_and_definitions = new DataBoard( null,
-		                                                          feature_definitions_save_path,
+		                                                          FeatureExtractionJobProcessor.getMatchingFeatureDefinitionsXmlSavePath(feature_values_save_path),
 		                                                          feature_values_paths,
 		                                                          null );
 		

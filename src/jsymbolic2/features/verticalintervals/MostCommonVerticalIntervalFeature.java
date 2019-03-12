@@ -27,7 +27,7 @@ public class MostCommonVerticalIntervalFeature
 		String description = "The interval in semitones corresponding to the wrapped vertical interval histogram bin with the highest magnitude.";
 		boolean is_sequential = true;
 		int dimensions = 1;
-		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.NAME_AND_VERSION);
+		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
 		dependencies = new String[1];
 		dependencies[0] = "Wrapped Vertical Interval Histogram";
 		offsets = null;

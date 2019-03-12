@@ -1,6 +1,12 @@
 package jsymbolic2.configuration.txtimplementation;
 
-import jsymbolic2.configuration.*;
+import jsymbolic2.configurationfile.txtimplementation.ValidatorConfigFileTxtImpl;
+import jsymbolic2.configurationfile.ConfigFileOutputFilePaths;
+import jsymbolic2.configurationfile.EnumSectionDividers;
+import jsymbolic2.configurationfile.ValidatorConfigFile;
+import jsymbolic2.configurationfile.ConfigFileCompleteData;
+import jsymbolic2.configurationfile.ConfigFileInputFilePaths;
+import jsymbolic2.configurationfile.ConfigFileWindowingAndOutputFormatSettings;
 import org.junit.*;
 import org.junit.rules.ExpectedException;
 
@@ -20,7 +26,7 @@ public class ConfigurationFileValidatorTxtImplTest {
     @Rule
     public ExpectedException exception = ExpectedException.none();
 
-    private ConfigurationFileValidator validate = new ConfigurationFileValidatorTxtImpl();
+    private ValidatorConfigFile validate = new ValidatorConfigFileTxtImpl();
 
     private static File sampleConfiguration;
     private static List<String> rawSampleConfig;
@@ -59,38 +65,38 @@ public class ConfigurationFileValidatorTxtImplTest {
     @Test
     public void validateHeaders() throws Exception {
         exception.expect(Exception.class);
-        validate.validateHeaders(rawInvalidConfig,invalidConfiguration,Arrays.asList(ConfigFileHeaderEnum.values()));
+        validate.validateHeaders(rawInvalidConfig,invalidConfiguration,Arrays.asList(EnumSectionDividers.values()));
 
         //Exception thrown when IO should not be but is in fact in the configuration file
         exception.expect(Exception.class);
-        validate.validateHeaders(rawSampleConfig,sampleConfiguration,Arrays.asList(ConfigFileHeaderEnum.FEATURE_HEADER,ConfigFileHeaderEnum.OPTION_HEADER));
+        validate.validateHeaders(rawSampleConfig,sampleConfiguration,Arrays.asList(EnumSectionDividers.FEATURE_HEADER,EnumSectionDividers.OPTIONS_HEADER));
     }
 
     @Test
     public void parseConfigFile() throws Exception {
         //Validate normal configuration files
         List<String> featuresToSave = Arrays.asList("Duration", "Beat Histogram", "Acoustic Guitar Prevalence");
-        ConfigurationOptionState opt = new ConfigurationOptionState(1.5,0.1,true,false,false,false);
-        ConfigurationInputFiles input = new ConfigurationInputFiles();
+        ConfigFileWindowingAndOutputFormatSettings opt = new ConfigFileWindowingAndOutputFormatSettings(1.5,0.1,true,false,false,false);
+        ConfigFileInputFilePaths input = new ConfigFileInputFilePaths();
         input.addValidFile(new File("./test/jsymbolic2/features/resources/Saint-Saens_LeCarnevalDesAnimmaux.mei"));
-        ConfigurationOutputFiles output = new ConfigurationOutputFiles("test_value.xml","test_definition.xml");
-        ConfigurationFileData expecteddata = new ConfigurationFileData(featuresToSave,opt,output,sampleConfigFileName,input);
-        ConfigurationFileData actualdata =
+        ConfigFileOutputFilePaths output = new ConfigFileOutputFilePaths("test_value.xml");
+        ConfigFileCompleteData expecteddata = new ConfigFileCompleteData(featuresToSave,opt,output,sampleConfigFileName,input);
+        ConfigFileCompleteData actualdata =
                 validate.parseConfigFileAllHeaders(sampleConfigFileName, System.err);
         assertEquals(expecteddata,actualdata);
 
         //Validate configuration files with no IO
         List<String> ioToSave = Arrays.asList("Duration", "Beat Histogram", "Acoustic Guitar Prevalence");
-        ConfigurationOptionState ioOpt = new ConfigurationOptionState(1.5,0.1,true,false,false,false);
-        ConfigurationFileData expectedIOData = new ConfigurationFileData(ioToSave,ioOpt,null,noIOConfig,null);
-        ConfigurationFileData actualIOData =
-                validate.parseConfigFile(noIOConfig, Arrays.asList(ConfigFileHeaderEnum.FEATURE_HEADER, ConfigFileHeaderEnum.OPTION_HEADER), System.err);
+        ConfigFileWindowingAndOutputFormatSettings ioOpt = new ConfigFileWindowingAndOutputFormatSettings(1.5,0.1,true,false,false,false);
+        ConfigFileCompleteData expectedIOData = new ConfigFileCompleteData(ioToSave,ioOpt,null,noIOConfig,null);
+        ConfigFileCompleteData actualIOData =
+                validate.parseConfigFile(noIOConfig, Arrays.asList(EnumSectionDividers.FEATURE_HEADER, EnumSectionDividers.OPTIONS_HEADER), System.err);
         assertEquals(expectedIOData,actualIOData);
     }
 
     @Test
     public void checkForInvalidOutputFiles() throws Exception {
-        ConfigurationOutputFiles expectedSavePaths = new ConfigurationOutputFiles("test_value.xml","test_definition.xml");
+        ConfigFileOutputFilePaths expectedSavePaths = new ConfigFileOutputFilePaths("test_value.xml");
         assertEquals(expectedSavePaths,validate.checkForInvalidOutputFiles(rawSampleConfig,sampleConfiguration));
 
         exception.expect(Exception.class);
@@ -101,15 +107,15 @@ public class ConfigurationFileValidatorTxtImplTest {
     public void validateFeatureSyntax() throws Exception {
         List<String> expectedFeatures = Arrays.asList("Acoustic Guitar Prevalence",
                 "Duration", "Beat Histogram");
-        assertEquals(expectedFeatures,validate.validateFeatureSyntax(rawSampleConfig,sampleConfiguration));
+        assertEquals(expectedFeatures,validate.getAndValidateFeatureNames(rawSampleConfig,sampleConfiguration));
 
         exception.expect(Exception.class);
-        validate.validateFeatureSyntax(rawInvalidConfig, invalidConfiguration);
+        validate.getAndValidateFeatureNames(rawInvalidConfig, invalidConfiguration);
     }
 
     @Test
     public void validateOptionSyntax() throws Exception {
-        ConfigurationOptionState expectedState = new ConfigurationOptionState(1.5,0.1,true,false,false,false);
+        ConfigFileWindowingAndOutputFormatSettings expectedState = new ConfigFileWindowingAndOutputFormatSettings(1.5,0.1,true,false,false,false);
         assertEquals(expectedState,validate.validateOptionSyntax(rawSampleConfig, sampleConfiguration));
         assertEquals(expectedState,validate.validateOptionSyntax(rawSampleConfig2, sampleConfiguration2));
 
@@ -119,11 +125,11 @@ public class ConfigurationFileValidatorTxtImplTest {
 
     @Test
     public void checkForInvalidInputFiles() throws Exception {
-        ConfigurationInputFiles input = new ConfigurationInputFiles();
+        ConfigFileInputFilePaths input = new ConfigFileInputFilePaths();
         input.addValidFile(new File("./test/jsymbolic2/features/resources/Saint-Saens_LeCarnevalDesAnimmaux.mei"));
         assertEquals(input,validate.checkForInvalidInputFiles(rawSampleConfig,sampleConfiguration));
 
-        ConfigurationInputFiles expectedInvalid = new ConfigurationInputFiles();
+        ConfigFileInputFilePaths expectedInvalid = new ConfigFileInputFilePaths();
         expectedInvalid.addValidFile(new File("./test/jsymbolic2/features/resources/Saint-Saens_LeCarnevalDesAnimmaux.mei"));
         expectedInvalid.addInvalidFile(new File("./invalid.midi"));
 

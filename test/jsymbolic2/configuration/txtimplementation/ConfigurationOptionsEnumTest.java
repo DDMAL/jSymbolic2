@@ -1,6 +1,6 @@
 package jsymbolic2.configuration.txtimplementation;
 
-import jsymbolic2.configuration.OptionsEnum;
+import jsymbolic2.configurationfile.EnumWindowingAndOutputFormatSettings;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,23 +23,23 @@ public class ConfigurationOptionsEnumTest {
 
     @Test
     public void contains() throws Exception {
-        assertTrue(OptionsEnum.contains("window_size"));
-        assertTrue(OptionsEnum.contains("window_overlap"));
-        assertTrue(OptionsEnum.contains("save_features_for_each_window"));
-        assertTrue(OptionsEnum.contains("save_overall_recording_features"));
-        assertTrue(OptionsEnum.contains("convert_to_arff"));
-        assertTrue(OptionsEnum.contains("convert_to_csv"));
+        assertTrue(EnumWindowingAndOutputFormatSettings.contains("window_size"));
+        assertTrue(EnumWindowingAndOutputFormatSettings.contains("window_overlap"));
+        assertTrue(EnumWindowingAndOutputFormatSettings.contains("save_features_for_each_window"));
+        assertTrue(EnumWindowingAndOutputFormatSettings.contains("save_overall_recording_features"));
+        assertTrue(EnumWindowingAndOutputFormatSettings.contains("convert_to_arff"));
+        assertTrue(EnumWindowingAndOutputFormatSettings.contains("convert_to_csv"));
     }
 
     @Test
     public void checkValue() throws Exception {
-        assertTrue(OptionsEnum.window_size.checkValue("5"));
-        assertTrue(OptionsEnum.window_size.checkValue("0"));
-        assertTrue(OptionsEnum.window_overlap.checkValue("0.1"));
-        assertTrue(OptionsEnum.window_overlap.checkValue("0"));
-        assertFalse(OptionsEnum.window_overlap.checkValue("1.1"));
-        assertTrue(OptionsEnum.convert_to_arff.checkValue("false"));
-        assertFalse(OptionsEnum.window_size.checkValue("-1"));
+        assertTrue(EnumWindowingAndOutputFormatSettings.window_size.checkValue("5"));
+        assertTrue(EnumWindowingAndOutputFormatSettings.window_size.checkValue("0"));
+        assertTrue(EnumWindowingAndOutputFormatSettings.window_overlap.checkValue("0.1"));
+        assertTrue(EnumWindowingAndOutputFormatSettings.window_overlap.checkValue("0"));
+        assertFalse(EnumWindowingAndOutputFormatSettings.window_overlap.checkValue("1.1"));
+        assertTrue(EnumWindowingAndOutputFormatSettings.convert_to_arff.checkValue("false"));
+        assertFalse(EnumWindowingAndOutputFormatSettings.window_size.checkValue("-1"));
     }
 
 }

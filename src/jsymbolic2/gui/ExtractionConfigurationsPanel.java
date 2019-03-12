@@ -1,5 +1,11 @@
 package jsymbolic2.gui;
 
+import jsymbolic2.configurationfile.ConfigFileInputFilePaths;
+import jsymbolic2.configurationfile.EnumSectionDividers;
+import jsymbolic2.configurationfile.WriterConfigFile;
+import jsymbolic2.configurationfile.ConfigFileCompleteData;
+import jsymbolic2.configurationfile.ConfigFileWindowingAndOutputFormatSettings;
+import jsymbolic2.configurationfile.ConfigFileOutputFilePaths;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
@@ -8,9 +14,8 @@ import java.util.Arrays;
 import java.util.List;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import jsymbolic2.configuration.*;
-import jsymbolic2.configuration.txtimplementation.ConfigurationFileValidatorTxtImpl;
-import jsymbolic2.configuration.txtimplementation.ConfigurationFileWriterTxtImpl;
+import jsymbolic2.configurationfile.txtimplementation.ValidatorConfigFileTxtImpl;
+import jsymbolic2.configurationfile.txtimplementation.WriterConfigFileTxtImpl;
 import jsymbolic2.featureutils.FeatureExtractorAccess;
 import jsymbolic2.processing.FeatureExtractionJobProcessor;
 import jsymbolic2.processing.SymbolicMusicFileUtilities;
@@ -56,14 +61,8 @@ import mckay.utilities.staticlibraries.StringMethods;
  * complete. This path must have a .xml extension (it will automatically be given one if one is not 
  * specified). The selected path will automatically be entered in the text area to the right of this button.
  * Users may enter or change the save path directly in this text box if they prefer, rather than using the 
- * button.</p>
- * 
- * <p>The Set ACE XML Feature Definitions Save Path button brings up a dialog box allowing the user to select
- * a path to save extracted feature definitions to as an ACE XML Feature Definition file after feature
- * extraction is complete. This path must have a .xml extension (it will automatically be given one if one is 
- * not specified). The selected path will be automatically entered in the text area to the right of this
- * button. Users may enter or change the save path directly in this text box if they prefer, rather than using 
- * the button.</p>
+ * button. The paths and file names of any other files saved during feature extraction (e.g. ACE XML Feature
+ * Definitions files, CSV files and ARFF files) will be based on this file name.</p>
  * 
  * <p>The Also Save Features in a Weka ARFF File check box will, if selected, cause features to be saved as a
  * Weka ARFF file after feature extraction is complete (features will still also be saved as ACE XML Feature
@@ -117,12 +116,6 @@ public class ExtractionConfigurationsPanel
 	private JTextArea feature_values_save_path_text_area;
 
 	/**
-	 * A text area where the user can indicate the path to which feature metadata is to be saved in the form of
-	 * an ACE XML feature definitions file after feature extraction is complete.
-	 */
-	private JTextArea feature_definitions_save_path_text_area;
-
-	/**
 	 * A radio button indicating that features are to be saved for each file as a whole (i.e. not for
 	 * individual windows).
 	 */
@@ -165,25 +158,25 @@ public class ExtractionConfigurationsPanel
 	private JButton feature_values_save_path_button;
 	
 	/**
-	 * A button that brings up a dialog box allowing the user to select the path to which feature metadata is
-	 * to be saved (in the form of an ACE XML feature definitions file) after feature extraction is complete.
-	 */
-	private JButton feature_definitions_save_path_button;
-	
-	/**
 	 * A button initiating feature extraction and saving.
 	 */
 	private JButton extract_features_button;
 
 	/**
-	 * A dialog box allowing the user to choose paths for loading various types of files.
+	 * A dialog box allowing the user to choose paths for loading configuration files.
 	 */
-	private JFileChooser load_file_chooser;
+	private JFileChooser config_load_file_chooser;
 
 	/**
-	 * A dialog box allowing the user to choose paths for saving various types of files.
+	 * A dialog box allowing the user to choose paths for saving configuration files.
 	 */
-	private JFileChooser save_file_chooser;
+	private JFileChooser config_save_file_chooser;
+
+	/**
+	 * A dialog box allowing the user to choose paths for saving the ACE XML Feature Values file holding the
+	 * values of extracted features.
+	 */
+	private JFileChooser extracted_feature_values_file_chooser;
 
 	
 	/* CONSTRUCTOR ******************************************************************************************/
@@ -197,14 +190,15 @@ public class ExtractionConfigurationsPanel
 	 *									initial settings. If it is null then the default settings are used.
 	 */
 	public ExtractionConfigurationsPanel( OuterFrame outer_frame,
-	                                      ConfigurationFileData configuration_file_data )
+	                                      ConfigFileCompleteData configuration_file_data )
 	{
 		// Store a reference to the containing JFrame
 		this.outer_frame = outer_frame;
 
 		// Set the JFileChoosers to null initially
-		load_file_chooser = null;
-		save_file_chooser = null;
+		config_load_file_chooser = null;
+		config_save_file_chooser = null;
+		extracted_feature_values_file_chooser = null;
 
 		// Initialize GUI component fields based on configuration file data if available, and based on
 		// default settings if not
@@ -244,8 +238,6 @@ public class ExtractionConfigurationsPanel
 			browseAndSaveConfigurationFile();
 		else if (event.getSource().equals(feature_values_save_path_button))
 			browseFeatureValuesSavePath();
-		else if (event.getSource().equals(feature_definitions_save_path_button))
-			browseFeatureDefinitionsSavePath();
 		else if (event.getSource().equals(extract_features_button))
 			extractAndSaveFeatures();
 	}
@@ -261,7 +253,7 @@ public class ExtractionConfigurationsPanel
 	 * @param configuration_file_data	The configuration file data that will be used in setting up the GUI
 	 *									components. Null if no configuration settings have been parsed.
 	 */
-	private void initializeGuiComponentFields(ConfigurationFileData configuration_file_data)
+	private void initializeGuiComponentFields(ConfigFileCompleteData configuration_file_data)
 	{
 		// Set up buttons associated with configuration files
 		load_configuration_file_button = new JButton("Load New Settings from a Config File");
@@ -274,8 +266,8 @@ public class ExtractionConfigurationsPanel
 		boolean save_windowed_features_only = Boolean.parseBoolean(DefaultSettingsEnum.default_save_windowed_features.toString());
 		if (configuration_file_data != null)
 		{
-			save_overall_features_only = configuration_file_data.saveOverall();
-			save_windowed_features_only = configuration_file_data.saveWindow();
+			save_overall_features_only = configuration_file_data.getSaveOverallRecordingFeatures();
+			save_windowed_features_only = configuration_file_data.getSaveFeaturesForEachWindow();
 		}
 		save_overall_features_only_radio_button = new JRadioButton( "Extract Features from Entire Files",
 																	save_overall_features_only );
@@ -309,30 +301,22 @@ public class ExtractionConfigurationsPanel
 			window_overlap_fraction_text_area.setEnabled(false);
 		}
 		
-		// Set the default ACE XML save paths and associated buttons and text areas
+		// Set the default ACE XML save path and associated button and text area
 		String feature_values_save_path = DefaultSettingsEnum.default_feature_values_save_path.toString();
-		String feature_definition_save_path = DefaultSettingsEnum.default_feature_definition_save_path.toString();
-		if (configuration_file_data != null && configuration_file_data.getOutputFileList() != null)
-		{
+		if (configuration_file_data != null && configuration_file_data.getOutputFilePaths() != null)
 			feature_values_save_path = configuration_file_data.getFeatureValueSavePath();
-			feature_definition_save_path = configuration_file_data.getFeatureDefinitionSavePath();
-		}
 		feature_values_save_path_button = new JButton("Set ACE XML Feature Values Save Path:");
 		feature_values_save_path_button.addActionListener(this);
 		feature_values_save_path_text_area = new JTextArea();
 		feature_values_save_path_text_area.setText(feature_values_save_path);
-		feature_definitions_save_path_button = new JButton("Set ACE XML Feature Definitions Save Path:");
-		feature_definitions_save_path_button.addActionListener(this);
-		feature_definitions_save_path_text_area = new JTextArea();
-		feature_definitions_save_path_text_area.setText(feature_definition_save_path);
 		
 		// Set up buttons and text areas associated with saving CSV and ARFF files
 		boolean save_as_weka_arff = Boolean.parseBoolean(DefaultSettingsEnum.default_convert_arff.toString());
 		boolean save_as_csv = Boolean.parseBoolean(DefaultSettingsEnum.default_convert_csv.toString());
 		if (configuration_file_data != null)
 		{
-			save_as_weka_arff = configuration_file_data.convertToArff();
-			save_as_csv = configuration_file_data.convertToCsv();
+			save_as_weka_arff = configuration_file_data.getConvertToArff();
+			save_as_csv = configuration_file_data.getConvertToCsv();
 		}
 		save_as_weka_arff_check_box = new JCheckBox( "Also Save Features in a Weka ARFF File",
 		                                             save_as_weka_arff );
@@ -386,8 +370,6 @@ public class ExtractionConfigurationsPanel
 		JPanel save_settings_and_extraction_panel = new JPanel(new GridLayout(4, 2, horizontal_gap, vertical_gap));
 		save_settings_and_extraction_panel.add(feature_values_save_path_button);
 		save_settings_and_extraction_panel.add(feature_values_save_path_text_area);
-		save_settings_and_extraction_panel.add(feature_definitions_save_path_button);
-		save_settings_and_extraction_panel.add(feature_definitions_save_path_text_area);
 		save_settings_and_extraction_panel.add(save_as_weka_arff_check_box);
 		save_settings_and_extraction_panel.add(save_as_csv_check_box);
 		save_settings_and_extraction_panel.add(new JLabel(""));
@@ -406,24 +388,29 @@ public class ExtractionConfigurationsPanel
 	private void browseAndLoadConfigurationFile()
 	{
 		// Instantiate the load_file_chooser JFileChooser if it does not already exist
-		if (load_file_chooser == null)
+		if (config_load_file_chooser == null)
 		{
-			load_file_chooser = new JFileChooser();
-			load_file_chooser.setCurrentDirectory(new File(DefaultSettingsEnum.default_jfilechooser_path.toString()));
-			load_file_chooser.setFileFilter(new FileNameExtensionFilter("jSymbolic configuration settings txt file", "txt"));
+			config_load_file_chooser = new JFileChooser();
+			config_load_file_chooser.setFileFilter(new FileNameExtensionFilter("jSymbolic configuration settings txt file", "txt"));
 		}
 		
+		// Set the active directory to the last directory accessed by a JFileChooser object
+		config_load_file_chooser.setCurrentDirectory(new File(outer_frame.current_file_chooser_directory));
+
 		// Process the user's entry
-		int dialog_result = load_file_chooser.showOpenDialog(outer_frame);
+		int dialog_result = config_load_file_chooser.showOpenDialog(outer_frame);
 		if (dialog_result == JFileChooser.APPROVE_OPTION) // only do if OK chosen
 		{
+			// Store the directory that was accessed for use by future JFileChooser objects
+			outer_frame.current_file_chooser_directory = config_load_file_chooser.getCurrentDirectory().getAbsolutePath();
+
 			// Note the file that the user chose
-			String load_path = load_file_chooser.getSelectedFile().getPath();
+			String load_path = config_load_file_chooser.getSelectedFile().getPath();
 
 			try
 			{
 				// Verify that the configuration file is valid (an exception is thrown if it isn't)
-				(new ConfigurationFileValidatorTxtImpl()).parseConfigFileAllOrFeatOpt(load_path, outer_frame.error_print_stream);
+				(new ValidatorConfigFileTxtImpl()).parseConfigFileAllOrFeatOpt(load_path, outer_frame.error_print_stream);
 
 				// Warn the user that s/he will lose all settings currently entered on the GUI if proceed
 				int proceed = JOptionPane.showConfirmDialog( outer_frame,
@@ -464,14 +451,67 @@ public class ExtractionConfigurationsPanel
 	{
 		try
 		{
+			// The model extension of config files
+			String config_file_model_extension = "txt";
+			
 			// Verify correct settings are currently entered on the GUI
 			if (outer_frame.music_file_selector_panel.getSymbolicMusicFilesToExtractFeaturesFrom() == null)
 				validateSettingsEnteredOnGui(true, false, false, true);
 			else
 				validateSettingsEnteredOnGui(true, true, true, true);
 			
-			// Get the user to enter the save path for the configuration file
-			String configuration_save_path = chooseSavePath("txt", "jSymbolic configuration settings txt file");
+			// Instantiate the save_file_chooser JFileChooser if it does not already exist
+			if (config_save_file_chooser == null)
+			{
+				config_save_file_chooser = new JFileChooser();
+				config_save_file_chooser.setFileFilter(new FileNameExtensionFilter("jSymbolic configuration settings txt file", config_file_model_extension));
+			}
+
+			// Set the active directory to the last directory accessed by a JFileChooser object
+			config_save_file_chooser.setCurrentDirectory(new File(outer_frame.current_file_chooser_directory));
+
+			// Set file name to the default config file name if nothing is entered
+			if (config_save_file_chooser.getSelectedFile() == null)
+				config_save_file_chooser.setSelectedFile(new File(DefaultSettingsEnum.default_configuration_file_save_path.toString()));
+
+			// Read the user's choice of load or cancel
+			int dialog_result = config_save_file_chooser.showSaveDialog(outer_frame);
+
+			// Process the user's entry
+			String configuration_save_path = null;
+			if (dialog_result == JFileChooser.APPROVE_OPTION) // only do if OK chosen
+			{
+				// Store the directory that was accessed for use by future JFileChooser objects
+				outer_frame.current_file_chooser_directory = config_save_file_chooser.getCurrentDirectory().getAbsolutePath();
+
+				// Note the file that the user chose
+				File to_save_to = config_save_file_chooser.getSelectedFile();
+
+				// Make sure the file that the user chose has proper extension
+				configuration_save_path = to_save_to.getPath();
+				String ext = StringMethods.getExtension2(configuration_save_path);
+				if (ext.isEmpty())
+				{
+					configuration_save_path += "." + config_file_model_extension;
+					to_save_to = new File(configuration_save_path);
+				}
+				else if (!ext.equals("." + config_file_model_extension))
+				{
+					configuration_save_path = StringMethods.removeExtension2(configuration_save_path) + "." + config_file_model_extension;
+					to_save_to = new File(configuration_save_path);
+				}
+
+				// See if user wishes to overwrite if a file with the same path exists
+				if (to_save_to.exists())
+				{
+					int overwrite = JOptionPane.showConfirmDialog( outer_frame,
+																   "A file at the specified path already exists.\nDo you wish to overwrite it?",
+																   "Warning",
+																   JOptionPane.YES_NO_OPTION );
+					if (overwrite != JOptionPane.YES_OPTION)
+						configuration_save_path = null;
+				}
+			}
 			
 			// If the user did not cancel the operation
 			if (configuration_save_path != null)
@@ -492,20 +532,18 @@ public class ExtractionConfigurationsPanel
 
 				// Read the feature save paths from the GUI
 				String feature_values_save_path = feature_values_save_path_text_area.getText();
-				String feature_definitions_save_path = feature_definitions_save_path_text_area.getText();
 
 				// Prepare configuration settings as data to be saved in a configuration file
-				ConfigurationOptionState basic_config_settings_from_gui = new ConfigurationOptionState( window_size,
+				ConfigFileWindowingAndOutputFormatSettings basic_config_settings_from_gui = new ConfigFileWindowingAndOutputFormatSettings( window_size,
 																										window_overlap,
 																										save_features_for_each_window,
 																										save_overall_music_file_features,
 																										convert_to_arff,
 																										convert_to_csv );
-				ConfigurationOutputFiles feature_save_path_config_settings_from_gui = new ConfigurationOutputFiles( feature_values_save_path,
-																													feature_definitions_save_path);
+				ConfigFileOutputFilePaths feature_save_path_config_settings_from_gui = new ConfigFileOutputFilePaths(feature_values_save_path);
 
 				// Save the configuration file
-				ConfigurationFileData combined_config_settings_from_gui;
+				ConfigFileCompleteData combined_config_settings_from_gui;
 				if (music_files_to_extract_features_from != null) // If input music_files_to_extract_features_from are specified on the GUI
 					combined_config_settings_from_gui = writeCompleteConfigurationFile( configuration_save_path,
 					                                                                    music_files_to_extract_features_from,
@@ -520,7 +558,7 @@ public class ExtractionConfigurationsPanel
 																									  basic_config_settings_from_gui );
 
 				// Try test parsing the new configuration file to make sure that it is valid
-				try {(new ConfigurationFileValidatorTxtImpl()).parseConfigFileAllOrFeatOpt(configuration_save_path, outer_frame.error_print_stream); }
+				try {(new ValidatorConfigFileTxtImpl()).parseConfigFileAllOrFeatOpt(configuration_save_path, outer_frame.error_print_stream); }
 				catch (Exception e) {throw new Exception("An invalid configuration settings file was saved. Although this file was in fact saved at the specified location (" + combined_config_settings_from_gui.getConfigurationFilePath() + "), it contains invalid settings, and jSymbolic will not be able tor read settings from it.");}
 				
 				// Show a dialob box indicating succes
@@ -553,76 +591,41 @@ public class ExtractionConfigurationsPanel
 	 */
 	private void browseFeatureValuesSavePath()
 	{
-		String path = chooseSavePath("xml", "ACE XML feature values file");
-		if (path != null)
-			feature_values_save_path_text_area.setText(path);
-	}
-
-	
-	/**
-	 * Allow the user to choose a save path for the Feature Definitions XML file to which feature metadata
-	 * will be saved after feature extraction is performed. The selected path is entered in the 
-	 * feature_definitions_save_path_text_area.
-	 */
-	private void browseFeatureDefinitionsSavePath()
-	{
-		String path = chooseSavePath("xml", "ACE XML feature definitions file");
-		if (path != null)
-			feature_definitions_save_path_text_area.setText(path);
-	}
-
-
-	/**
-	 * Allows the user to select or enter a file path using the JFileChooser referred to in this class'
-	 * save_file_chooser field. If the selected path does not have the specified extension, then it is given
-	 * this extension. If the chosen path refers to a file that already exists, then the user is asked if s/he
-	 * wishes to overwrite the selected file. No file is actually saved or overwritten by this method. The
-	 * selected path is simply returned.
-	 *
-	 * @param	extension				The extension that the selected file save path should have (e.g. 
-	 *									"xml"). Note that this should NOT include a period before the
-	 *									extension.
-	 * @param	file_type_description	A description of the file type to be saved, which is shown in the
-	 *									JFileChooser's file type filter box.
-	 * @return							The path of the selected or entered file. A value of null is returned
-	 *									if the user presses the cancel button or chooses not to overwrite a
-	 *									file.
-	 */
-	private String chooseSavePath(String extension, String file_type_description)
-	{
-		// Instantiate the save_file_chooser JFileChooser if it does not already exist
-		if (save_file_chooser == null)
+		// The model extension of ACE XML feature value files
+		String feature_values_file_model_extension = "xml";
+			
+		// Instantiate the extracted_feature_values_file_chooser JFileChooser if it does not already exist
+		if (extracted_feature_values_file_chooser == null)
 		{
-			save_file_chooser = new JFileChooser();
-			save_file_chooser.setCurrentDirectory(new File(DefaultSettingsEnum.default_jfilechooser_path.toString()));
+			extracted_feature_values_file_chooser = new JFileChooser();
+			extracted_feature_values_file_chooser.setFileFilter(new FileNameExtensionFilter("ACE XML feature values file", feature_values_file_model_extension));
 		}
+		
+		// Set the active directory to the last directory accessed by a JFileChooser object
+		extracted_feature_values_file_chooser.setCurrentDirectory(new File(outer_frame.current_file_chooser_directory));
 
-		// Set the JFileChooser filter to only dislpay files of the appropriate type
-		save_file_chooser.setFileFilter(new FileNameExtensionFilter(file_type_description, extension));
-		
-		// Set file name to the default config file name if nothing is entered
-		if (extension.equals("txt") && save_file_chooser.getSelectedFile() == null)
-			save_file_chooser.setSelectedFile(new File(DefaultSettingsEnum.default_configuration_file_save_path.toString()));
-		
-		// Process the user's entry
+		// Collect the user's entry
 		String path = null;
-		int dialog_result = save_file_chooser.showSaveDialog(outer_frame);
+		int dialog_result = extracted_feature_values_file_chooser.showSaveDialog(outer_frame);
 		if (dialog_result == JFileChooser.APPROVE_OPTION) // only do if OK chosen
 		{
+			// Store the directory that was accessed for use by future JFileChooser objects
+			outer_frame.current_file_chooser_directory = extracted_feature_values_file_chooser.getCurrentDirectory().getAbsolutePath();
+
 			// Note the file that the user chose
-			File to_save_to = save_file_chooser.getSelectedFile();
+			File to_save_to = extracted_feature_values_file_chooser.getSelectedFile();
 
 			// Make sure the file that the user chose has proper extension
 			path = to_save_to.getPath();
-			String ext = StringMethods.getExtension(path);
-			if (ext == null)
+			String ext = StringMethods.getExtension2(path);
+			if (ext.isEmpty())
 			{
-				path += "." + extension;
+				path += "." + feature_values_file_model_extension;
 				to_save_to = new File(path);
 			}
-			else if (!ext.equals("." + extension))
+			else if (!ext.equals("." + feature_values_file_model_extension))
 			{
-				path = StringMethods.removeExtension(path) + "." + extension;
+				path = StringMethods.removeExtension2(path) + "." + feature_values_file_model_extension;
 				to_save_to = new File(path);
 			}
 
@@ -638,11 +641,11 @@ public class ExtractionConfigurationsPanel
 			}
 		}
 
-		// Return the file path chosen by the user
-		return path;
+		// Update the feature_values_save_path_text_area based on the selected path
+		if (path != null) feature_values_save_path_text_area.setText(path);
 	}
-	
 
+	
 	/**
 	 * Extract and save the features selected on the FeatureSelectorPanel from all the symbolic music files
 	 * selected on the MusicFileSelectorPanel. Use the extraction settings entered on this
@@ -672,9 +675,9 @@ public class ExtractionConfigurationsPanel
 			outer_frame.clearTextAreas();
 
 			// Extract and save features. Update the text areas as progress continues.
-			List<String> error_log = FeatureExtractionJobProcessor.extractAndSaveSpecificFeatures(files_to_extract_features_from,
-			                                                                                       SymbolicMusicFileUtilities.correctFileExtension(feature_values_save_path_text_area.getText(), "xml"),
-			                                                                                       SymbolicMusicFileUtilities.correctFileExtension(feature_definitions_save_path_text_area.getText(), "xml"),
+			List<String> error_log = FeatureExtractionJobProcessor.extractAndSaveSpecificFeatures( files_to_extract_features_from,
+			                                                                                       StringMethods.correctExtension(feature_values_save_path_text_area.getText(), "xml"),
+			                                                                                       FeatureExtractionJobProcessor.getMatchingFeatureDefinitionsXmlSavePath(feature_values_save_path_text_area.getText()),
 			                                                                                       features_to_save,
 			                                                                                       save_windowed_features_only_radio_button.isSelected(),
 			                                                                                       save_overall_features_only_radio_button.isSelected(),
@@ -765,7 +768,8 @@ public class ExtractionConfigurationsPanel
 		if (test_save_paths)
 		{
 			FileMethods.verifyValidPath(feature_values_save_path_text_area.getText(), true, false, false, true, false, false);
-			FileMethods.verifyValidPath(feature_definitions_save_path_text_area.getText(), true, false, false, true, false, false);
+			String feature_definitions_save_path = FeatureExtractionJobProcessor.getMatchingFeatureDefinitionsXmlSavePath(feature_values_save_path_text_area.getText());
+			FileMethods.verifyValidPath(feature_definitions_save_path, true, false, false, true, false, false);
 		}
 		
 		// Test input files from which features are to be extracted
@@ -879,28 +883,28 @@ public class ExtractionConfigurationsPanel
 	 * @throws Exception							Throws an informative exception if the saving fails or if
 	 *												there is a problem with the data itself.
 	 */
-	private static ConfigurationFileData writeCompleteConfigurationFile( String configuration_save_path,
+	private static ConfigFileCompleteData writeCompleteConfigurationFile( String configuration_save_path,
 	                                                                     SymbolicMusicFile[] music_to_extract_features_from,
 	                                                                     List<String> names_of_features_to_save,
-	                                                                     ConfigurationOptionState basic_config_settings,
-	                                                                     ConfigurationOutputFiles feature_save_paths )
+	                                                                     ConfigFileWindowingAndOutputFormatSettings basic_config_settings,
+	                                                                     ConfigFileOutputFilePaths feature_save_paths )
 		throws Exception
 	{
 		// Collect the files marked to have features extracted from them
-		ConfigurationInputFiles files_to_extract_features_from = new ConfigurationInputFiles();
+		ConfigFileInputFilePaths files_to_extract_features_from = new ConfigFileInputFilePaths();
 		for (SymbolicMusicFile this_symbolic_music_file : music_to_extract_features_from)
 			files_to_extract_features_from.addValidFile(new File(this_symbolic_music_file.file_path));
 
 		// Format the data into configuration file format
-		ConfigurationFileData configuration_file_data = new ConfigurationFileData( names_of_features_to_save,
+		ConfigFileCompleteData configuration_file_data = new ConfigFileCompleteData( names_of_features_to_save,
 		                                                                           basic_config_settings,
 		                                                                           feature_save_paths,
 		                                                                           configuration_save_path,
 		                                                                           files_to_extract_features_from );
 		
 		// Save the configuration file to disk
-		ConfigurationFileWriter writer = new ConfigurationFileWriterTxtImpl();
-		writer.write(configuration_file_data, ConfigFileHeaderEnum.asList());
+		WriterConfigFile writer = new WriterConfigFileTxtImpl();
+		writer.write(configuration_file_data, EnumSectionDividers.asList());
 		
 		// Return the configuration file data
 		return configuration_file_data;
@@ -921,22 +925,22 @@ public class ExtractionConfigurationsPanel
 	 * @throws Exception				Throws an informative exception if the saving fails or if there is a 
 	 *									problem with the data itself.
 	 */
-	private static ConfigurationFileData writeConfigurationFileWithoutReadOrSavePaths( String configuration_save_path,
+	private static ConfigFileCompleteData writeConfigurationFileWithoutReadOrSavePaths( String configuration_save_path,
 	                                                                                   List<String> names_of_features_to_save,
-	                                                                                   ConfigurationOptionState basic_config_settings )
+	                                                                                   ConfigFileWindowingAndOutputFormatSettings basic_config_settings )
 		throws Exception
 	{
 
 		// Format the data into configuration file format
-		ConfigurationFileData configuration_file_data = new ConfigurationFileData( names_of_features_to_save,
+		ConfigFileCompleteData configuration_file_data = new ConfigFileCompleteData( names_of_features_to_save,
 		                                                                           basic_config_settings,
 		                                                                           null,
 		                                                                           configuration_save_path,
 		                                                                           null );
 
 		// Save the configuration file to disk
-		ConfigurationFileWriter writer = new ConfigurationFileWriterTxtImpl();
-		List<ConfigFileHeaderEnum> feature_options = Arrays.asList(ConfigFileHeaderEnum.FEATURE_HEADER, ConfigFileHeaderEnum.OPTION_HEADER);
+		WriterConfigFile writer = new WriterConfigFileTxtImpl();
+		List<EnumSectionDividers> feature_options = Arrays.asList(EnumSectionDividers.FEATURE_HEADER, EnumSectionDividers.OPTIONS_HEADER);
 		writer.write(configuration_file_data, feature_options);
 		
 		// Return the configuration file data
@@ -959,10 +963,8 @@ public class ExtractionConfigurationsPanel
 		default_window_length("0.0"),
 		default_window_overlap("0.0"),
 		default_feature_values_save_path("./extracted_feature_values.xml"),
-		default_feature_definition_save_path("./feature_definitions.xml"),
 		default_convert_arff("true"),
-		default_convert_csv("true"),
-		default_jfilechooser_path(".");
+		default_convert_csv("true");
 
 		private final String data;
 

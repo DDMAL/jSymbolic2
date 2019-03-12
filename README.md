@@ -1,6 +1,6 @@
 # jSymbolic 2.3
 by Cory McKay
-Copyright (C) 2018 (GNU GPL)
+Copyright (C) 2019 (GNU GPL)
 
 
 ### OVERVIEW
