@@ -79,14 +79,21 @@ Foundation.
 
 This program is distributed in the hope that it will be useful, but WITHOUT 
 ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+FOR A PARTICULAR PURPOSE. See the GNU General Public License file included with 
+this software for more details.
 
 You may obtain a copy of the GNU General Public License by writing to the Free
 Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
+The University of Waikato Weka data mining package is used to parse and
+save Weka ARFF files. This software is also distributed under a GNU GPL
+(http://www.gnu.org/licenses/gpl.html).
+More information on it is available at http://www.cs.waikato.ac.nz/ml/weka. 
+
 This project also includes software developed by the Apache Software 
 Foundation (http://www.apache.org), namely the Xerces library, which is used
-to parse XML files. The Xerces license can be accessed via the manual.
+to parse XML files. The Xerces license can be accessed at
+http://www.apache.org/licenses/LICENSE-2.0.
 
 
 ### COMPATIBILITY

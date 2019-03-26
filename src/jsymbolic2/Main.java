@@ -45,7 +45,7 @@ public class Main
 	public static void main(String[] args)
 	{
 		try { CommandLineSwitchEnum.runCommandLine(args); }
-
+		
 		// Note that this should never need to be executed, since internal processing should catch all errors.
 		catch (Exception e)
 		{

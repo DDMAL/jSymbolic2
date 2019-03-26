@@ -95,7 +95,7 @@ public class RelativeNoteDensityOfHighestLineFeature
 			double total_average = mckay.utilities.staticlibraries.MathAndStatsMethods.getAverage(number_of_notes);
 
 			// Set value
-			if (total_average == Double.NaN || total_average == 0.0)
+			if (Double.isNaN(total_average) || total_average == 0.0)
 				value = 0.0;
 			else 
 				value = ((double) max_so_far) / total_average;

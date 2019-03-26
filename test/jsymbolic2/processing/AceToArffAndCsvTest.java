@@ -44,7 +44,7 @@ public class AceToArffAndCsvTest {
         if(Files.exists(testARFF.toPath())) {
             Files.delete(testARFF.toPath());
         }
-        AceXmlConverter.saveAsArffOrCsvFiles(ACEname, null, true, false, System.out);
+        AceXmlConverter.saveAsArffOrCsvFiles(ACEname, null, true, false, false, false, System.out);
         testARFF = new File(ARFFname);
         File actualARFF = new File(ARFFname);
         try(Scanner inACE = new Scanner(testARFF);
@@ -75,7 +75,7 @@ public class AceToArffAndCsvTest {
         if(Files.exists(tempCSV.toPath())) {
             Files.delete(tempCSV.toPath());
         }
-        AceXmlConverter.saveAsArffOrCsvFiles(ACEname, null, false, true, System.out);
+        AceXmlConverter.saveAsArffOrCsvFiles(ACEname, null, false, true, false, false, System.out);
         tempCSV = new File(newCSVname);
         try(Scanner inACE = new Scanner(testCSV);
             Scanner inCSV = new Scanner(tempCSV))
@@ -104,7 +104,7 @@ public class AceToArffAndCsvTest {
         if(Files.exists(tempCSV.toPath())) {
             Files.delete(tempCSV.toPath());
         }
-        AceXmlConverter.saveAsArffOrCsvFiles(ACEname, null, true, true, System.out);
+        AceXmlConverter.saveAsArffOrCsvFiles(ACEname, null, true, true, false, false, System.out);
         tempCSV = new File(newCSVname);
         
         try(Scanner inACE = new Scanner(testCSV);
@@ -142,7 +142,7 @@ public class AceToArffAndCsvTest {
             Files.delete(csvFile.toPath());
         }
 
-        AceXmlConverter.saveAsArffOrCsvFiles(ACEname, null, true, true, System.out);
+        AceXmlConverter.saveAsArffOrCsvFiles(ACEname, null, true, true, false, false, System.out);
         assertTrue(arffFile.exists());
         assertTrue(csvFile.exists());
         
@@ -161,7 +161,7 @@ public class AceToArffAndCsvTest {
             Files.delete(csvnoXMLFile.toPath());
         }
 
-        AceXmlConverter.saveAsArffOrCsvFiles(noXML, null, true, true, System.out);
+        AceXmlConverter.saveAsArffOrCsvFiles(noXML, null, true, true, false, false, System.out);
         assertTrue(arffnoXMLFile.exists());
         assertTrue(csvnoXMLFile.exists());
     }

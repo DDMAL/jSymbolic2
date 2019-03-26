@@ -406,7 +406,7 @@ public class JsymbolicProcessorDeprecated
 	 */
 	private void createFileConversions(JsymbolicData featureState) throws Exception
 	{
-		AceXmlConverter.AceConversionPaths conversionPaths = AceXmlConverter.saveAsArffOrCsvFiles(feature_values_save_path, feature_definitions_save_path, save_arff_file, save_csv_file, status_print_stream);
+		AceXmlConverter.AceConversionPaths conversionPaths = AceXmlConverter.saveAsArffOrCsvFiles(feature_values_save_path, feature_definitions_save_path, save_arff_file, save_csv_file, false, false, status_print_stream);
 		if(save_arff_file) {
 			File arffFile = new File(conversionPaths.getArffFilePath());
 			featureState.setSavedWekaArffFile(arffFile);

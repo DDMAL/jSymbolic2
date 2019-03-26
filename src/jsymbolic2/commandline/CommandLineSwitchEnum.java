@@ -221,56 +221,50 @@ public enum CommandLineSwitchEnum
 		{
 			/**
 			 * Runs command line feature extraction under settings where there is no configuration file 
-			 * specified by the user, and where the GUI is not used. If there is a configuration at the 
-			 * default path, then settings are loaded from it. If such a file is invalid or does not exist,
-			 * then jSybmolic command line feature extraction is performed under standard settings. Note that
-			 * this method also serves as a catchall for generally erroneous command line arguments. If 
-			 * extraction is successful, then save ACE XML feature values and feature definitions files as
-			 * well as, if appropriate, Weka ARFF and CSV files.
+			 * specified by the user, and where the GUI is not used. If there is a configuration file at the 
+			 * default path, then features to extract are loaded from it (other information stored in it is
+			 * ignored). If such a file is invalid or does not exist, then feature extraction is performed
+			 * using default features. Note that this method also serves as a catchall for generally erroneous
+			 * command line arguments. If extraction is successful, then save ACE XML feature values and
+			 * feature definitions files as well as, if appropriate, Weka ARFF and CSV files.
 			 *
 			 * @param args	Arguments with which jSymbolic was run at the command line.
 			 */
 			@Override
 			public void runProcessing(String[] args)
 			{
-				if ( args.length == 3 &&  Files.exists(Paths.get(default_config_file_path)) )
+				// If a configuration file exists at the default path
+				if ( Files.exists(Paths.get(default_config_file_path)) )
 				{
-					// Try loading configuration file at default path
+					// Try loading configuration file at default path so that can get features to extract
 					try
 					{
-						List<File> input_file_list = Arrays.asList(new File(args[0]));
-						String feature_values_save_path = args[1];
-						String feature_definitions_save_path = args[2];
+						// Parse the config file
 						List<EnumSectionDividers> config_file_headers_to_check = Arrays.asList(EnumSectionDividers.FEATURE_HEADER, EnumSectionDividers.OPTIONS_HEADER);
 						UserFeedbackGenerator.printParsingConfigFileMessage(System.out, default_config_file_path);
 						ConfigFileCompleteData config_file_data = new ValidatorConfigFileTxtImpl().parseConfigFile(default_config_file_path, config_file_headers_to_check, System.err);
-						FeatureExtractionJobProcessor.extractAndSaveFeaturesConfigFileSettings( input_file_list,
-						                                                                        config_file_data,
-						                                                                        feature_values_save_path,
-						                                                                        feature_definitions_save_path,
-						                                                                        System.out,
-						                                                                        System.err,
-						                                                                        false );
+						
+						// Note the features to extract (ignore everything else)
+						boolean[] features_to_extract = config_file_data.getFeaturesToSaveBoolean();
+						
+						// Extract and save features based on command line args and features in config file
+						CommandLineUtilities.parseNoOrDefaultOnlyConfigFileCommandLineAndExtractAndSaveFeatures(args, features_to_extract);
 					}
 					
-					// Run without configuration file if does not exist at default path
+					// Run without configuration file if the configuration file is invalid
 					catch (Exception ex)
 					{
-						UserFeedbackGenerator.simplePrintln(System.out, "NON-CRITICAL WARNING: Could not find a configurations file called " + default_config_file_path + "  in the jSymbolic home directory that is valid under current settings. As a result, processing will continue using standard settings (unless specified manually). Although a default configurations file is by no means necessary to use jSymbolic, it is often convenient. You can save one at anytime either manually or using the jSymbolic GUI, if you wish (see the manual for more details).\n");
-						CommandLineUtilities.parseNoConfigFileCommandLineAndExtractAndSaveFeatures(args);
+						UserFeedbackGenerator.simplePrintln(System.out, "NON-CRITICAL WARNING: Could not find a valid configurations file called " + default_config_file_path + "  in the jSymbolic home directory that is valid under current settings. As a result, processing will continue using standard settings (unless specified manually). Although a default configurations file is by no means necessary to use jSymbolic, it is often convenient. You can save one at anytime either manually or using the jSymbolic GUI, if you wish (see the manual for more details).\n");
+						CommandLineUtilities.parseNoOrDefaultOnlyConfigFileCommandLineAndExtractAndSaveFeatures(args, null);
 					}
 				}
 				
-				// Run without configuration file if does not exist at default path
-				else if (args.length == 3)
+				// Run without configuration file if no file exists at default path
+				else
 				{
 					UserFeedbackGenerator.simplePrintln(System.out, "NON-CRITICAL WARNING: Could not find a configurations file called " + default_config_file_path + " in the jSymbolic home directory that is valid under current settings. As a result, processing will continue using standard settings (unless specified manually). Although a default configurations file is by no means necessary to use jSymbolic, it is often convenient. You can save one at anytime either manually or using the jSymbolic GUI, if you wish (see the manual for more details).\n");
-					CommandLineUtilities.parseNoConfigFileCommandLineAndExtractAndSaveFeatures(args);
+					CommandLineUtilities.parseNoOrDefaultOnlyConfigFileCommandLineAndExtractAndSaveFeatures(args, null);
 				}
-				
-				// Run without configuration file if does not exist at default path if three are some other
-				// number of command line arguments than 3
-				else CommandLineUtilities.parseNoConfigFileCommandLineAndExtractAndSaveFeatures(args);
 			}
 		},
 		
@@ -358,11 +352,10 @@ public enum CommandLineSwitchEnum
 						ConfigFileCompleteData config_file_data = new ValidatorConfigFileTxtImpl().parseConfigFileAllHeaders(config_file_path, System.err);
 						List<File> input_file_list = config_file_data.getInputFilePaths().getValidFiles();
 						String feature_values_save_path = config_file_data.getFeatureValueSavePath();
-						String feature_definitions_save_path = FeatureExtractionJobProcessor.getMatchingFeatureDefinitionsXmlSavePath(feature_values_save_path);
 						FeatureExtractionJobProcessor.extractAndSaveFeaturesConfigFileSettings( input_file_list,
 																								config_file_data,
 																								feature_values_save_path,
-																								feature_definitions_save_path,
+																								FeatureExtractionJobProcessor.getMatchingFeatureDefinitionsXmlSavePath(feature_values_save_path),
 																								System.out,
 																								System.err,
 						                                                                        false );
@@ -374,14 +367,13 @@ public enum CommandLineSwitchEnum
 				// file path
 				else
 				{
-					// Must be either 2 or 5 command line arguments for CONFIG_RUN option
-					if (args.length != 5)
+					// Must be either 2 or 4 command line arguments for CONFIG_RUN option
+					if (args.length != 4)
 						UserFeedbackGenerator.indicateIncorrectCommandLineArgumentsAndEndExecution(System.err, args);
 					
 					// Parse args
 					String input_file_path = args[2];
 					String feature_values_save_path = args[3];
-					String feature_definitions_save_path = args[4];
 					List<EnumSectionDividers> config_file_headers_to_check = Arrays.asList(EnumSectionDividers.FEATURE_HEADER, EnumSectionDividers.OPTIONS_HEADER);
 					
 					// Parse configuration file and extract features based on its contents and the supplied
@@ -394,7 +386,7 @@ public enum CommandLineSwitchEnum
 						FeatureExtractionJobProcessor.extractAndSaveFeaturesConfigFileSettings( input_file_list,
 																								config_file_data,
 																								feature_values_save_path,
-																								feature_definitions_save_path,
+																								FeatureExtractionJobProcessor.getMatchingFeatureDefinitionsXmlSavePath(feature_values_save_path),
 																								System.out,
 																								System.err,
 						                                                                        false );

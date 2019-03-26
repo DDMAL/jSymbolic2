@@ -113,7 +113,13 @@ public class MIDIFeatureProcessor
       */
      private	boolean			definitions_written;
 
-     
+     /**
+	  * The maximum number of significant digits a feature value saved to
+	  * an ACE XML file can have (in scientific notation).
+	  */	 
+	 private final int			maximum_significant_feature_digits = 8;
+	 
+	 
      /* CONSTRUCTORS **********************************************************/
      
      
@@ -1028,7 +1034,7 @@ public class MIDIFeatureProcessor
                          values_writer.write("\t\t\t\t<name>" + feature_name + "</name>\n");
                          for (int val = 0; val < feature_values[win][feat].length; val++)
                          {
-                              String value = mckay.utilities.staticlibraries.StringMethods.getDoubleInScientificNotation(feature_values[win][feat][val], 4);
+                              String value = mckay.utilities.staticlibraries.StringMethods.getDoubleInScientificNotation(feature_values[win][feat][val], maximum_significant_feature_digits);
                               values_writer.write("\t\t\t\t<v>" + value + "</v>\n");
                          }
                          values_writer.write("\t\t\t</feature>\n");
@@ -1046,7 +1052,7 @@ public class MIDIFeatureProcessor
                values_writer.write("\t\t\t<name>" + overall_feature_definitions[feat].name + "</name>\n");
                for (int val = 0; val < overall_feature_values[feat].length; val++)
                {
-                    String value = mckay.utilities.staticlibraries.StringMethods.getDoubleInScientificNotation(overall_feature_values[feat][val], 4);
+                    String value = mckay.utilities.staticlibraries.StringMethods.getDoubleInScientificNotation(overall_feature_values[feat][val], maximum_significant_feature_digits);
                     values_writer.write("\t\t\t<v>" + value + "</v>\n");
                }
                values_writer.write("\t\t</feature>\n");

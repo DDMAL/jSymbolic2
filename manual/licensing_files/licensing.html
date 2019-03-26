@@ -17,8 +17,8 @@
 
 <p><strong>LICENSING AND LIABILITY</strong></p>
 
-<p> jSymbolic 2.2<br>
-  Copyright (C) 2018<br>
+<p> jSymbolic 2.3<br>
+  Copyright (C) 2019<br>
   Cory McKay</p>
 
 <p>This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation.</p>
@@ -27,16 +27,24 @@
 
 <p>You should have received a copy of the <a href="http://www.gnu.org/licenses/gpl.html" target="top">GNU General Public License</a> along with this program; if not, write to the Free Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.</p>
 
-<p> <strong>LIBRARIES USED BY JSYMBOLIC</strong></p>
+<p> <strong>JMIR LIBRARIES USED BY JSYMBOLIC</strong></p>
 
 <p> The following Java .jar files serve as jSymbolic libraries, and are packaged with jSymbolic:</p>
 
 <ul>
   <li><strong>ACE:</strong> A metalearning tool. jSymbolic uses it to save ACE XML files. Like jSymbolic, ACE is part of the <a href="http://jmir.sourceforge.net/" target="top">jMIR</a> framework.</li>
-  <li><strong>UtilityClasses:</strong> A set of utility classes providing a variety of general-purpose functionality. jSymbolic uses it to perform miscellaneous tasks, especially those relating to parsing audio files. Like jSymbolic, these are part of the <a href="http://jmir.sourceforge.net/" target="top">jMIR</a> framework.</li>
   <li><strong>jMei2Midi:</strong> Conversion software that converts MEI data to MIDI data. This includes an MEI pipeline which can extract and preserve MEI-specific features that would be lost in the conversion to MIDI. The software can be found at the <a href="https://github.com/DDMAL/jMei2Midi" target="top">jMei2Midi page</a> as a <a href="https://maven.apache.org/" target="top">Maven project</a>.</li>
+  <li><strong>UtilityClasses:</strong> A set of utility classes providing a variety of general-purpose functionality. jSymbolic uses it to perform miscellaneous tasks, especially those relating to parsing audio files. Like jSymbolic, these are part of the <a href="http://jmir.sourceforge.net/" target="top">jMIR</a> framework.</li>
 </ul>
-
+<p><strong>THIRD-PARTY LIBRARIES USED BY JSYMBOLIC</strong></p>
+<p>jSymbolic also uses the following third-party libraries, which are distributed with it:</p>
+<ul>
+  <li><strong>Weka:</strong> The University of Waikato Weka data mining package is used to parse and
+    save Weka ARFF files. Weka is also distributed under a <a href="http://www.gnu.org/licenses/gpl.html" target="top">GNU GPL</a>.
+    More information on it is available at <a href="http://www.cs.waikato.ac.nz/ml/weka" target="top">http://www.cs.waikato.ac.nz/ml/weka</a>.</li>
+  <li><strong>Xerces:</strong> Apache's <a href="http://xerces.apache.org/" target="top">Xerces</a> library is used
+    to parse XML files. The Xerces license can be accessed at <a href="http://www.apache.org/licenses/LICENSE-2.0" target="top">http://www.apache.org/licenses/LICENSE-2.0</a>.</li>
+</ul>
 <p><strong>ACKNOWLEDGEMENTS</strong></p>
 
 <p> I would like to thank the many individuals and organizations who took part in the creation of the <a href="http://jmir.sourceforge.net/" target="top">jMIR</a> framework in general. Tristano Tenaglia deserves special credit for his extensive work co-writing many parts of version 2 of jSymbolic with me, and he was solely responsible for implementing the jMei2Midi MEI parsing functionality. Dr. Ichiro Fujinaga also played a key role as my Ph.D. supervisor during the development of the first version of this software, and he, Dr. Julie E. Cumming, and my other SIMSSA co-investigators also later made important contributions during the work associated with the <a href="https://simssa.ca" target="top">SIMSSA</a> (Single Interface for Music Score Searching and Analysis) project. I would also like to thank the <a href="http://www.frqsc.gouv.qc.ca/en/" target="top">FRQSC</a> (Fonds de recherche Société et culture du Québec) and <a href="http://www.sshrc-crsh.gc.ca/home-accueil-eng.aspx" target="top">SSHRC</a> (Social Sciences and Humanities Research Council) for their very generous funding.</p>

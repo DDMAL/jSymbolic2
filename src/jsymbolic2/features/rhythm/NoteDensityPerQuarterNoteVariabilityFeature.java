@@ -89,7 +89,11 @@ public class NoteDensityPerQuarterNoteVariabilityFeature
 			if (windows.length < 2)
 				value = 0.0;
 			else 
+			{
 				value = mckay.utilities.staticlibraries.MathAndStatsMethods.getStandardDeviation(note_density_of_each_window);
+				if (Double.isNaN(value))
+					value = 0.0;
+			}
 		}
 		else value = -1.0;
 

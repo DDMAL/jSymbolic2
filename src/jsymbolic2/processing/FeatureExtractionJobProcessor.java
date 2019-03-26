@@ -14,7 +14,7 @@ import mckay.utilities.staticlibraries.FileMethods;
 import mckay.utilities.staticlibraries.StringMethods;
 
 /**
- * Static methods for performing outer layer feature extraction jobs.
+ * Static methods for performing outer layer feature extraction-related jobs.
  *
  * @author Cory McKay and Tristano Tenaglia
  */
@@ -36,6 +36,23 @@ public final class FeatureExtractionJobProcessor
 	{
 		String definitions_path = StringMethods.removeExtension2(feature_values_save_path);
 		definitions_path += "_FeatDefs" + ".xml";
+		return definitions_path;
+	}
+		
+	
+	/**
+	 * Returns the save path for an ACE XML class labels file to match the given ACE XML feature values
+	 * file save path. This new feature definitions save path is based on feature_values_save_path: first the
+	 * feature_values_save_path's extension (if any) is stripped away, and then _ClassLabels.xml is appended to
+	 * the end.
+	 *
+	 * @param feature_values_save_path	The ACE XML feature values file path to base the returned path on.
+	 * @return							The path of the ACE XML class labels file.
+	 */
+	public static String getMatchingClassLabelsXmlSavePath(String feature_values_save_path)
+	{
+		String definitions_path = StringMethods.removeExtension2(feature_values_save_path);
+		definitions_path += "_ClassLabels" + ".xml";
 		return definitions_path;
 	}
 		
@@ -474,7 +491,7 @@ public final class FeatureExtractionJobProcessor
 		UserFeedbackGenerator.printGeneratingAceXmlFeatureDefinitionsFile(status_print_stream, feature_definitions_save_path);
 		UserFeedbackGenerator.printFeatureExtractionStartingMessage(status_print_stream, files_to_parse.size());
 		for (int i = 0; i < files_to_parse.size(); i++)
-			extractFeatures( files_to_parse.get(i).getPath(),
+			extractFeatures( files_to_parse.get(i).getAbsolutePath(),
 			                 processor,
 			                 i+1,
 			                 files_to_parse.size(),
@@ -684,13 +701,15 @@ public final class FeatureExtractionJobProcessor
 					UserFeedbackGenerator.printWarningMessage(error_print_stream, warning);
 				}			
 
-				// Onlly try the onversion if features for at least one instance are available
+				// Onlly try the conversion if features for at least one instance are available
 				if (number_succesfully_extracted_files > 0)
 				{
 					AceXmlConverter.saveAsArffOrCsvFiles( feature_values_save_path,
 														  feature_definitions_save_path,
 														  save_arff_file,
 														  save_csv_file,
+														  true,
+														  false,
 														  status_print_stream );
 				}
 			} 

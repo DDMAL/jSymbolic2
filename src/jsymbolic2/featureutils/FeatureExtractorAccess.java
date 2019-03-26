@@ -709,9 +709,11 @@ public final class FeatureExtractorAccess
 	 * all_implemented_feature_extractors.
 	 * 4) Verify that no feature names have commas in them (since this can cause problems when saved CSV
 	 * or ARFF files are parsed).
-	 * 5) Verify that all features have been added contiguously to all_implemented_feature_extractors, based 
+	 * 5) Verify that no feature names have underscores in them (since this can cause problems when saved CSV
+	 * or ARFF files are parsed).
+	 * 6) Verify that all features have been added contiguously to all_implemented_feature_extractors, based 
 	 * on their feature code groups and numbers, and that all feature codes are properly formatted.
-	 * 6) Verify that, by default all MEI-specific features have been set to not be extracted, and that all
+	 * 7) Verify that, by default all MEI-specific features have been set to not be extracted, and that all
 	 * other features have been set to be extracted.
 	 */
 	private static void printWarningReportIfFeaturesAddedImproperly()
@@ -779,10 +781,19 @@ public final class FeatureExtractorAccess
 		// or ARFF files are parsed).
 		ArrayList<String> names_of_features_with_commas = new ArrayList();
 		for (String name : names_of_all_features_added)
-			if (name.indexOf(",") != -1) names_of_features_with_commas.add(name);
+			if (name.contains(",")) names_of_features_with_commas.add(name);
 		if (!names_of_features_with_commas.isEmpty())
 			for (String name : names_of_features_with_commas)
 				problem_report += "WARNING: The feature " + name + " contains a comma in its name. This will cause problems when saved CSV or ARFF files are parsed (but will not affect saved ACE XML files). It is strongly suggested that the feature be renamed, without a comma. This is a moderately serious problem.\n";
+		
+		// Verify that no feature names have underscores in them (since this can cause problems when saved CSV
+		// or ARFF files are parsed).
+		ArrayList<String> names_of_features_with_underscores = new ArrayList();
+		for (String name : names_of_all_features_added)
+			if (name.contains("_")) names_of_features_with_underscores.add(name);
+		if (!names_of_features_with_underscores.isEmpty())
+			for (String name : names_of_features_with_underscores)
+				problem_report += "WARNING: The feature " + name + " contains an underscore in its name. This will cause problems when saved CSV or ARFF files are parsed (but will not affect saved ACE XML files). It is strongly suggested that the feature be renamed, without a comma. This is a moderately serious problem.\n";
 		
 		// Verify that all features have been added contiguously to all_implemented_feature_extractors, based
 		// on their feature code groups and numbers, and that all feature codes are properly formatted
