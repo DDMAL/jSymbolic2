@@ -11,50 +11,122 @@
 
 <p><strong>EXPLANATION OF THIS SECTION</strong></p>
 
-<p>This section provides hints on how programmers can extend jSymbolic's functionality. A particular emphasis is placed on designing and adding new features.</p>
+<p>This section provides instructions on how programmers can extend jSymbolic's functionality for their own uses. A particular emphasis is placed on designing and adding new features. Those wishing to collaborate directly with the jSymbolic development team may wish to read <a href="#GitHub">this</a> section.</p>
 
 <p><strong>FIRST STEPS</strong></p>
 
-<p>The first thing to do is to download the development version of jSymbolic from <a href="http://jmir.sourceforge.net/" target="top">jmir.sourceforge.net</a>. It is important to use this distribution rather than the user distribution, as only the former includes source code and associated Javadocs.</p>
+<p>The first thing to do is to download the development version of jSymbolic from <a href="http://jmir.sourceforge.net/" target="top">jmir.sourceforge.net</a>. It is important to use this distribution rather than the user distribution, as  the latter does not include source code and associated Javadocs.</p>
 
 <p>The user can use a variety of IDEs or text editors to modify the source code. <a href="https://netbeans.org/" target="top">NetBeans</a> was used to publish jSymbolic, but this is simply a matter of preference.</p>
 
-<p>It may be necessary to link within the chosen IDE to the libraries used by jSymbolic; although these are indeed provided as pre-compiled jar files, the source code for each of them is also provided in the development distribution of jSymbolic:</p>
+<p>It will be necessary to link within the chosen IDE to the jMIR libraries used by jSymbolic:</p>
 
 <ul>
-  <li><strong>ACE:</strong> A metalearning tool. jSymbolic uses it to save ACE XML files. Like jSymbolic, ACE is part of the <a href="http://jmir.sourceforge.net/" target="top">jMIR</a> framework.</li>
-  <li><strong>UtilityClasses:</strong> A set of utility classes providing a variety of general-purpose functionality. jSymbolic uses it to perform miscellaneous tasks, especially those relating to parsing audio files. Like jSymbolic, these are part of the <a href="http://jmir.sourceforge.net/" target="top">jMIR</a> framework.</li>
-  <li><strong>jMei2Midi:</strong> Conversion software that converts MEI data to MIDI data. This includes an MEI pipeline which can extract and preserve MEI-specific features that would be lost in the conversion to MIDI. The software can be found at the <a href="https://github.com/DDMAL/jMei2Midi" target="top">jMei2Midi page</a> as a <a href="https://maven.apache.org/" target="top">Maven project</a>.</li>
+  <li><strong>ACE:</strong> A metalearning tool. jSymbolic uses it to save ACE XML files. Like jSymbolic, ACE is part of the <a href="http://jmir.sourceforge.net/" target="top">jMIR</a> framework. More details on the software can be found on the <a href="http://jmir.sourceforge.net/index_ACE.html" target="top">ACE page</a>. </li>
+  <li><strong>UtilityClasses:</strong> A set of utility classes providing a variety of general-purpose functionality. jSymbolic uses it to perform miscellaneous tasks. Like jSymbolic, these are part of the <a href="http://jmir.sourceforge.net/" target="top">jMIR</a> framework. </li>
+  <li><strong>jMei2Midi:</strong> Converts MEI data to MIDI data. This includes an MEI pipeline which can extract and preserve MEI-specific features that would be lost in the conversion to MIDI. More details on the software can be found on the <a href="https://github.com/DDMAL/jMei2Midi" target="top">jMei2Midi page</a>. It is as a <a href="https://maven.apache.org/" target="top">Maven project</a>.</li>
 </ul>
 
-<p>One additional miscellaneous note of interest to take into account when configuring one's IDE to compile jSymbolic: the main class that the jSymbolic.jar uses to begin extecution should be set to <i>jsymbolic.jSymbolicRunner</i>, not <i>jsymbolic.Main</i>. This is in order to allow the JRE heap size to be automatically set appropriately.</p>
-
-<p>For more details on how jSymbolic is constructed, the reader may wish to consult jSymbolic's Javadocs and extensive source code documentation, of course. The manual's <a href="../processingsequence_files/processingsequence.html">Processing Sequence</a> and <a href="../classstructure_files/classstructure.html">Class Structure</a> sections also provide useful resources for getting an idea of how the software is constructed and operates as a whole.</p> 
+<p>These libraries are  included in the jSymbolic distribution as pre-compiled jar files. The source code for each of them is also available on the <a href="https://sourceforge.net/projects/jmir/files/" target="top">jMIR SourceForge page</a>.</p>
+<p>It will also be necessary to link the chosen IDE to the third-party used by jSymbolic, which are also included in as pre-compiled jar files in the jSymbolic distribution:</p>
+<ul>
+  <li><strong>Weka:</strong> The University of Waikato Weka data mining package is used to parse and
+    save Weka ARFF files. Weka is also distributed under a <a href="http://www.gnu.org/licenses/gpl.html" target="top">GNU GPL</a>.
+    More information on it is available at <a href="http://www.cs.waikato.ac.nz/ml/weka" target="top">http://www.cs.waikato.ac.nz/ml/weka</a>.</li>
+  <li><strong>Xerces:</strong> Apache's <a href="http://xerces.apache.org/" target="top">Xerces</a> library is used
+    to parse XML files. The Xerces license can be accessed at <a href="http://www.apache.org/licenses/LICENSE-2.0" target="top">http://www.apache.org/licenses/LICENSE-2.0</a>.</li>
+</ul>
+<p>For more details on how jSymbolic is constructed, the reader may wish to consult jSymbolic's Javadocs and extensive source code documentation. The manual's <a href="../processingsequence_files/processingsequence.html">Processing Sequence</a> and <a href="../classstructure_files/classstructure.html">Class Structure</a> sections also provide useful resources for getting an idea of how the software is constructed and operates as a whole.</p>
 
 <p><strong>ADDING NEW FEATURES</strong></p>
 
-<p>One of the most useful ways of extending jSybmolic is to implement new custom features. Fortunately, this is easy to do in jSymbolic, which is designed to be particularly modular and easily extensible in this sense.</p>
+<p>One of the most useful ways of extending jSybmbolic is to implement new custom features. Fortunately, this is easy to do, as jSymbolic is designed to be particularly easily extensible and modular in this sense.</p>
 
-<p>The first step in creating a new feature is to create a new class in one of the sub-packages (based on the type of feature) of the <i>jsymbolic.features</i> package that extends the <i>MIDIFeatureExtractor</i> abstract class. This new class must implement the specified <i>extractFeature</i> abstract method, and it should also have a constructor with no arguments that sets the <i>MIDIFeatureExtractor</i> superclass' fields. If desired, dependencies on other features can also be set here, or they can be set to null. The <i>extractFeature</i> method will automatically be provided with raw MIDI data, the values of other features and useful preliminary data structures stored in an <i>jsymbolic.processing.MIDIIntermediateRepresentations</i> object when it is called by jSymbolic. Programmers may consult the many other feature implementations in the <i>jsymbolic.features</i> sub-packages for examples to follow. It should be noted, incidentally, that features extending <i>MIDIFeatureExtractor</i> are extracted from all input files, including MEI (which jSymbolic automatically converts to MIDI, among other things), not just files that start off as MIDI files.</p>
+<p>The first step in creating a new feature is to create a new class in one of the sub-packages (based on the type of feature) of the <i>jsymbolic2.features</i> package that extends the <i><em>jsymbolic2.featureutils.</em>MIDIFeatureExtractor</i> abstract class. This new class must implement the <i>extractFeature</i> abstract method, and it should also have a constructor with no arguments that sets the <i>MIDIFeatureExtractor</i> superclass' fields. If desired, dependencies on other features can also be set via the <em>dependencies </em>field (e.g. see how <em>jsymbolic2.features.verticalintervals.MostCommonVerticalIntervalFeature</em> depends on <em>jsymbolic2.features.verticalintervals.WrappedVerticalIntervalHistogramFeature</em>), or they can be set to null (no dependencies). When it is called by jSymbolic, the <i>extractFeature</i> method will automatically be provided with raw MIDI data, the values of other (automatically scheduled) extracted features and useful preliminary data structures stored in an <i>jsymbolic2.processing.MIDIIntermediateRepresentations</i> object. Programmers may consult the many other feature implementations in the <i>jsymbolic2.features</i> sub-packages for examples to follow.</p>
+<p>It should be noted, incidentally, that features extending <i>MIDIFeatureExtractor</i> are extracted from all input symbolic files, including MEI files (which jSymbolic automatically converts to MIDI, among other things), not just files that start off as MIDI files. However, a slightly modified procedure is to be followed if the feature to be implemented is an MEI-specific feature. In such a case, the <i><em>jsymbolic2.featureutils.</em>MEIFeatureExtractor</i> abstract class should be extended by the new feature rather than the <i>MIDIFeatureExtractor</i> abstract class. The <i><em>jsymbolic2.features.meispecific.</em>NumberOfGraceNotesFeature</i> class provides a good example of such a feature. In this case, a constructor must be written (as with <i>MIDIFeatureExtractor</i> features), and the abstract method that must be implemented is called <i>extractMEIFeature</i>. This method will be automatically provided  with MEI-specific data when it is called by jSymbolic, as well as with raw MIDI data, the values of other features and useful preliminary data structures stored in an <i>MIDIIntermediateRepresentations</i> object. Note that the MEI-specific data comes from the <a href="https://github.com/DDMAL/jMei2Midi" target="top">jMei2Midi</a> software, which may need to be updated as well to provide necessary data.</p>
+<p>Once a new feature class is finished, be it a <i>MIDIFeatureExtractor</i> or a <i>MEIFeatureExtractor</i>, it must then be added to the <i>jsymbolic.featureutils.FeatureExtractorAccess</i> class in order to be automatically included in jSymbolic processing:  the new feature must be instantiated (without arguments) in the <em>all_implemented_feature_extractors</em> array. <i>FeatureExtractorAccess</i><em> </em>will automatically perform error checking (via its <em>printWarningReportIfFeaturesAddedImproperly() </em>method) upon instantiation in order to make sure that the feature has been added properly.</p>
 
-<p>A slightly modified procedure is to be followed if the feature to be implemented is an MEI-specific feature. In such a case, the <i>MEIFeatureExtractor</i> abstract class should be extended by the new feature rather than the <i>MIDIFeatureExtractor</i> abstract class. The <i>NumberOfGraceNotesFeature</i> class provides a good example of such a feature. In this case, a constructor must be written (as with <i>MIDIFeatureExtractor</i> features), and the abstract method that must be implemented is called <i>extractMEIFeature</i>. This method will be automatically provided provided with MEI-specific data when it is called by jSymbolic, as well as with raw MIDI data, the values of other features and useful preliminary data structures stored in an <i>jsymbolic.processing.MIDIIntermediateRepresentations</i> object. Note that the MEI-specific data comes from the <a href="https://github.com/DDMAL/jMei2Midi" target="top">jMei2Midi</a> software, which may need to be updated as well to provide necessary data.</p>
+<p>This is all that needs to be done to add a new feature to all aspects of jSymbolic's interface and processing. After recompilation, jSymbolic's GUI, command line interface and API will all now include the new feature. Even better, jSymbolic will automatically handle feature extraction scheduling to take feature dependencies into account.</p>
 
-<p>Once a new feature class is finished, be it a <i>MIDIFeatureExtractor</i> or a <i>MEIFeatureExtractor</i>, it must then be added to the <i>jsymbolic.processing.FeatureExtractorAccess</i> class in order to be automatically included in jSymbolic processing:  the new feature must be instantiated (without arguments) in the <em>all_implemented_feature_extractors</em> array. <i>FeatureExtractorAccess</i><em> </em>will automatically perform error checking (via its <em>printWarningReportIfFeaturesAddedImproperly() </em>method) upon instantiation in order to make sure that the feature has been added properly.</p>
-
-<p>This is all that needs to be done to add a new feature to all aspects of jSymbolic's interface and processing. After recompillation, jSymbolic's GUI, command line interface and API will all now include the new feature. Even better, jSymbolic will automatically handle feature extraction scheduling to take feature dependencies into account.</p>
-
-<p>One final thing that some users may wish to do: if an optional <a href="../configuration_files/configuration.html">configuration settings file</a> is being used that specifies features to extract, then the new feature should be added to the list of features to extract in this file (this can be done most easily by simply saving a configurationfile from the jSymbolic GUI).</p>
-
+<p>An additional  thing that some users may wish to do: if an optional <a href="../configuration_files/configuration.html">configuration settings file</a> is being used to specify features to extract, then the new feature should be added to the list of features to extract in this file (this can be done most easily by simply saving an updated configuration file from the jSymbolic GUI).</p>
+<p>There are also a few important details about  MIDI files  to keep in mind when implementing new features. Although the low-level parsing of MIDI is generally already handled by the <em>MIDIIntermediateRepresentations</em> class, it is nonetheless important to keep the following points in mind when implementing features:</p>
+<ul>
+  <li>Many MIDI encoders (and certainly live MIDI encodings) incorporate a certain amount of rubato. One can therefore not assume that rhythmic events will be on regular MIDI tick beat multiples.</li>
+  <li>
+Tempo is specified by Tempo Change messages, so a given number of MIDI ticks will vary in time duration based on the specified tempo at a given moment. Parts per quarter note (ppqn) settings also influence how rhythm is  interpreted.</li>
+  <li>A Note Off message is sometimes encoded as a Note On message with velocity 0, so the two must be treated as equivalent, and both must be checked for.</li>
+  <li>
+MIDI cannot distinguish enharmonic pitch equivalents (e.g. C# and Db are the same as far as MIDI is concerned).</li>
+  <li>Pitch Bend messages can change how the pitch specified in Note On messages that follow it should be interpreted.</li>
+  <li>
+   MIDI voices can be separated by both MIDI Tracks or MIDI Channels (or both).</li>
+  <li>
+   MIDI Channel 10 is always reserved for non-pitched instruments, so pitch values on Note On messages on Channel 10 should be interpreted not as pitches, but as types of instruments.</li>
+  <li>
+   Sometimes multiple voices are multiplexed into a single Track using alternating Program Change messages.</li>
+  <li>
+   The loudness of a note is based on both the velocity specified in its Note On message and by the Channel Volume corresponding to the channel it is played on.</li>
+</ul>
+<p>When a feature is completed, it should be carefully tested to make sure it works correctly with a variety of input symbolic files. In particular, care should be taken that values of NaN, infinity or -infinity are never output.</p>
 <p><strong>CREATING NEW KINDS OF CONFIGURATION FILES</strong></p>
 
 <p>Programmers may  potentially wish to create a modified version of jSymbolic's <a href="../configuration_files/configuration.html">configuration settings file</a>. In order to do so, one can begin by going to the <i>jsymbolic.configuration</i> package and extending the following two abstract classes:</p>
 
 <ul>
-    <li><strong>ConfigurationFileValidator:</strong> All abstract methods in this class must be implemented. This will allow for the <i>parseConfigFile</I> template method pattern to be used and appropriately parse the configuration file. This is done in the <i>CommandLineSwitchEnum</i> class and so the new subclass will simply need to be changed in order to parse the new configuration file format. This allows for very quick and easy extensibility if a new configuration file format is desired. Notice that the <i>parseConfigFile</i> method takes in a <i>List</i> of <i>HeaderEnums</i>, and the enums in the list will indeed be validated. Any other headers not in this list but found in the configuration file will result in an error message and termination of jSymbolic execution.</li><br>
+    
+  <li><strong>ConfigurationFileValidator:</strong> All abstract methods in this class must be implemented. This will allow for the <i>parseConfigFile</I> template method pattern to be used and appropriately parse the configuration file. This is done in the <i>CommandLineSwitchEnum</i> class and so the new subclass will simply need to be changed in order to parse the new configuration file format. This allows for very quick and easy extensibility if a new configuration file format is desired. Notice that the <i>parseConfigFile</i> method takes in a <i>List</i> of <i>HeaderEnums</i>, and the enums in the list will indeed be validated. Any other headers not in this list but found in the configuration file will result in an error message and termination of jSymbolic execution.</li>
+  <br>
 
-    <li><strong>ConfigurationFileWriter:</strong> All abstract methods in this class must be implemented. This will allow the write template method pattern to be used and thus write out the specified configuration file format. Notice that the write method takes in a <i>List</i> of <i>HeaderEnums</i> and the enums in the list will write out those sections of the configuration file. <i>HeaderEnums</i> not in the list will not be written out. This method is called in the <i>FeatureSelectorPanel</i> class when the Save GUI Configuration button is pressed in the GUI.</li>
+    
+  <li><strong>ConfigurationFileWriter:</strong> All abstract methods in this class must be implemented. This will allow the write template method pattern to be used and thus write out the specified configuration file format. Notice that the write method takes in a <i>List</i> of <i>HeaderEnums</i> and the enums in the list will write out those sections of the configuration file. <i>HeaderEnums</i> not in the list will not be written out. This method is called in the <i>FeatureSelectorPanel</i> class when the Save GUI Configuration button is pressed in the GUI.</li>
 </ul>
-
+<p><strong><a name="GitHub"></a>COLLABORATING DIRECTLY WITH THE JSYMBOLIC DEVELOPMENT TEAM</strong></p>
+<p>If you wish  to contribute to the official distribution version of jSymbolic, then you should contact <a href="mailto:cory.mckay@mail.mcgill.ca">Cory McKay</a>, specifying your GitHub user name and the particular additions or changes you would like to make. If everything is amenable, you will be given write access to the GitHub repositories that host the development version of jSymbolic and its associated projects:</p>
+<ul>
+  <li><a href="https://github.com/DDMAL/jSymbolic2" target="top">https://github.com/DDMAL/jSymbolic2</a></li>
+  <li><a href="https://github.com/DDMAL/ACE" target="top">https://github.com/DDMAL/ACE</a></li>
+  <li><a href="https://github.com/DDMAL/UtilityClasses" target="top">https://github.com/DDMAL/UtilityClasses</a></li>
+  <li><a href="https://github.com/DDMAL/Third-Party-Jars" target="top">https://github.com/DDMAL/Third-Party-Jars</a></li>
+  <li><a href="https://github.com/DDMAL/jSymbolic2_Test_Sets" target="top">https://github.com/DDMAL/jSymbolic2_Test_Sets</a></li>
+</ul>
+<p><strong>Important:</strong> The GitHub repos listed above contain the unstable version of jSymbolic currently under development. Unless they are directly working with the official jSymbolic development team, developers wishing to work independently on jSymbolic should instead download the official current release version <a href="http://jmir.sourceforge.net/" target="top">jmir.sourceforge.net</a>.</p>
+<p>You may wish to take the following steps in preparation for beginning development:</p>
+<ul>
+  <li>Clone the master branches of the GitHub repositories specified above.</li>
+  <li>Install version 8.2 of the <a href="https://netbeans.org/downloads/8.2/" target="top">NetBeans IDE</a>. This is a slightly outdated version, but it is well-matched to the current jSymbolic codebase. </li>
+  <li>
+ Make sure you have version 8 or later of the <a href="https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html" target="top">Java SE development kit</a> installed on your computer.</li>
+  <li>
+Set up your libraries in NetBeans so that you can build jSymbolic.</li>
+  <li>
+ Read Chapter 4 of <a href="http://jmir.sourceforge.net/publications/PhD_Dissertation_2010.pdf" target="top">Cory McKay's dissertation</a>. This describes an earlier version of jSymbolic, but it still provides a good overview of the software (there have been many features added and interface changes since it was written, though). In particular, read Section 4.2.2, as it provides an important review of MIDI and some of its important particularities.</li>
+  <li>  For an overview of  a more recent release version (2.2) of jSymbolic, read this <a href="http://jmir.sourceforge.net/publications/mckay18jsymbolic.pdf" target="top">ISMIR paper</a>.</li>
+  <li>
+ Go into the jSymbolic2 folder you cloned using Git, and open manual/home.html. This is the jSymbolic manual for the version of jSymbolic currently under development. There may be parts of the manual that have not been fully updated yet, depending on the development status at the moment.</li>
+  <li>Go into the jSymbolic2 folder you cloned using Git, and open tutorial/home.html. This is the jSymbolic tutorial for the version of jSymbolic currently under development. There may be parts of the tutorial that have not been fully updated yet, depending on the development status at the moment.</li>
+</ul>
+<p><strong>CODING STYLE GUIDE</strong></p>
+<p>As a long-term academic project, jSymbolic has acquired a somewhat idiosyncratic coding style. Despite this, anyone working on jSymbolic with the intent of adding their code to the official release version should follow this style guide for the sake of consistency:</p>
+<ul>
+  <li><a href="https://en.wikipedia.org/wiki/Javadoc" target="top">Javadoc</a> encodings should be used for all class, method and field documentation. At a minimum, properly structured Javadoc documentation must be included for all parameters, returned data and thrown exceptions.</li>
+  <li>Java naming conventions should be as follows (standard Java conventions, with one exception):
+    <ul>
+      <li>All names should be descriptive.</li>
+      <li>Class names should use UpperCamelCase (e.g. MyClass).</li>
+      <li>Method names should use lowerCamelCase (e.g. myMethod).</li>
+      <li>Non-constant field names and non-constant variable names in general should contain no capital letters and should have words separated with underscores (e.g. my_variable). Note that this differs from standard Java convention.</li>
+      <li>Constants should by written in all-caps with words separated by underscores (e.g. MY_CONSTANT).</li>
+    </ul>
+  </li>
+  <li>Indentation and brackets/parentheses should follow <a href="https://en.wikipedia.org/wiki/Indentation_style#Allman_style" target="top">Allman style</a>.
+    <ul>
+      <li>In addition, indents should be tabs (not spaces), and each tab should correspond to 4 spaces in width.</li>
+    </ul>
+  </li>
+  <li>Individual lines should not be longer than 110 characters (although exceptions are sometimes acceptable).</li>
+  <li>Sets of public fields, private fields, public constructors, private constructors, public static methods, private static methods, public non-static methods and private non-static methods should each be grouped together and preceded with a header such as &quot;/* PUBLIC METHODS ***************************************************************************************/&quot;</li>
+</ul>
+<p>There are  additional style practices that have been adopted in jSymbolic, so contributors should follow general practices prevalent in the existing code. As a caveat, however, there are a few remaining instances of classes where the code has not yet been adapted to the standardized practice.</p>
 <table height="5" width="100%" bgcolor="#0033C4" border="0"><tbody><tr><th></th></tr></tbody></table>
 <p><tt><a href="../extendingsoftware_files/extendingsoftware.html#Top">-top of page-</a></tt></p>
 
