@@ -24,7 +24,7 @@ public class PitchClassSkewnessFeature
 	public PitchClassSkewnessFeature()
 	{
 		String name = "Pitch Class Skewness";
-		String code = "P-28";
+		String code = "P-30";
 		String description = "Skewness of the pitch classes (where 0 corresponds to C, 1 to C#/Db, etc.) of all pitched notes in the piece. Provides a measure of how asymmetrical the pitch class distribution is to either the left or the right of the mean pitch class. A value of zero indicates no skew.";
 		boolean is_sequential = true;
 		int dimensions = 1;

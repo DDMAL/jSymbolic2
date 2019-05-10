@@ -23,7 +23,7 @@ public class MeanPitchFeature
 	public MeanPitchFeature()
 	{
 		String name = "Mean Pitch";
-		String code = "P-14";
+		String code = "P-16";
 		String description = "Mean MIDI pitch value, averaged across all pitched notes in the piece. Set to 0 if there are no pitched notes.";
 		boolean is_sequential = true;
 		int dimensions = 1;

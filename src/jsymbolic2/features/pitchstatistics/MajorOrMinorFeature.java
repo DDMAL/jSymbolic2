@@ -24,7 +24,7 @@ public class MajorOrMinorFeature
 	public MajorOrMinorFeature()
 	{
 		String name = "Major or Minor";
-		String code = "P-33";
+		String code = "P-36";
 		String description = "Whether the piece is major or minor, as indicated by the first encountered major/minor metadata tag in the piece. Set to 0 if the metadata indicates that the piece is major, or set to 1 if the metadata indicates that it is minor. Defaults to 0 if the key signature is unknown.";
 		boolean is_sequential = true;
 		int dimensions = 1;

@@ -67,6 +67,12 @@ public class MIDIIntermediateRepresentations
 	 * <li><i>Indice 3:</i> Integer storing the initial tempo in beats per minute. Based on the first 
 	 * encountered tempo metamessage. Any further tempo metamessages are ignored. Set to the MIDI default of
 	 * 120 BPM if no tempo metamessage is present.</li>
+	 * 
+	 * <li><i>Indice 4:</i> LinkedList of all key signatures in the order that they appear in the MIDI sequence.
+	 * Stored individually as Integer arrays, and based on key signature metamessages. The first element
+	 * in the array represents the number of sharps or flats, and the second element indicates the major/minor 
+	 * quality of the key, with 0 indicating major and 1 indicating minor. Empty if no key signature metamessage 
+	 * is present.</li>
 	 * </ul>
 	 */
 	public Object[] overall_metadata;
@@ -923,12 +929,13 @@ public class MIDIIntermediateRepresentations
 	 */
 	private void generateOverallMetadata()
 	{
-		// Instantiat overall_metadata
-		overall_metadata = new Object[4];
+		// Instantiate overall_metadata
+		overall_metadata = new Object[5];
 		overall_metadata[0] = 0; // major or minor
 		overall_metadata[1] = new LinkedList(); // time signature numerators
 		overall_metadata[2] = new LinkedList(); // time signature denominators
 		overall_metadata[3] = 120; // default MIDI tempo
+		overall_metadata[4] = new LinkedList(); // key signatures
 
 		// Note that a key signature and initial tempo have not yet been found
 		boolean key_sig_found = false;
@@ -961,6 +968,12 @@ public class MIDIIntermediateRepresentations
 								overall_metadata[0] = new Integer(1);
 								key_sig_found = true;
 						}
+						
+						int[] key_signature = new int[2];
+						key_signature[0] = data[0];
+						key_signature[1] = data[1];
+						
+						((LinkedList) overall_metadata[4]).add(key_signature);
 					}
 
 					// Check time signature, based on first time signature

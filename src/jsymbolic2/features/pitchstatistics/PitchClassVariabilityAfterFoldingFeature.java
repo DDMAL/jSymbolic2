@@ -24,7 +24,7 @@ public class PitchClassVariabilityAfterFoldingFeature
 	public PitchClassVariabilityAfterFoldingFeature()
 	{
 		String name = "Pitch Class Variability After Folding";
-		String code = "P-26";
+		String code = "P-28";
 		String description = "Standard deviation of the pitch classes in the piece after being folded by perfect fifths as described for the folded fifths pitch class histogram. Provides a measure of how close the pitch classes are as a whole from the mean pitch class from a dominant-tonic perspective.";
 		boolean is_sequential = true;
 		int dimensions = 1;

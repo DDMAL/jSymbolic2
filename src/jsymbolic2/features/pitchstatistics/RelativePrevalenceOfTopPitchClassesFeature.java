@@ -23,7 +23,7 @@ public class RelativePrevalenceOfTopPitchClassesFeature
 	public RelativePrevalenceOfTopPitchClassesFeature()
 	{
 		String name = "Relative Prevalence of Top Pitch Classes";
-		String code = "P-21";
+		String code = "P-23";
 		String description = "Relative frequency of the of the second most common pitch class in the piece, divided by the relative frequency of the most common pitch class.";
 		boolean is_sequential = true;
 		int dimensions = 1;

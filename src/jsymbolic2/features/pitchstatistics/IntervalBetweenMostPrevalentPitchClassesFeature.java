@@ -23,7 +23,7 @@ public class IntervalBetweenMostPrevalentPitchClassesFeature
 	public IntervalBetweenMostPrevalentPitchClassesFeature()
 	{
 		String name = "Interval Between Most Prevalent Pitch Classes";
-		String code = "P-23";
+		String code = "P-25";
 		String description = "Absolute value of the difference (in semitones) between the pitches of the two most frequently occurring pitch classes.";
 		boolean is_sequential = true;
 		int dimensions = 1;

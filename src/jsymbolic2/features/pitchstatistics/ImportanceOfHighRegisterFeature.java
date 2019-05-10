@@ -22,7 +22,7 @@ public class ImportanceOfHighRegisterFeature
 	public ImportanceOfHighRegisterFeature()
 	{
 		String name = "Importance of High Register";
-		String code = "P-11";
+		String code = "P-13";
 		String description = "Fraction of notes between MIDI pitches 73 and 127.";
 		boolean is_sequential = true;
 		int dimensions = 1;

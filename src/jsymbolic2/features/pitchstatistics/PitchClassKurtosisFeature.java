@@ -25,7 +25,7 @@ public class PitchClassKurtosisFeature
 	public PitchClassKurtosisFeature()
 	{
 		String name = "Pitch Class Kurtosis";
-		String code = "P-31";
+		String code = "P-33";
 		String description = "Kurtosis of the pitch classes (where 0 corresponds to C, 1 to C#/Db, etc.) of all pitched notes in the piece. Provides a measure of how peaked or flat the pitch class distribution is. The higher the kurtosis, the more the pitch classes are clustered near the mean and the fewer outliers there are.";
 		boolean is_sequential = true;
 		int dimensions = 1;

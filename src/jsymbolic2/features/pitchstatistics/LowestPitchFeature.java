@@ -6,14 +6,12 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the MIDI pitch value of the first note in the piece. If there are multiple 
- * notes with simultaneous attacks at the beginning of the piece, then the one with the lowest pitch is 
- * selected. Set to 0 if there are no pitched notes.
+ * A feature calculator that outputs the lowest MIDI pitch in the MIDI sequence.
  *
- * @author Cory McKay
+ * @author Rían Adamian
  */
-public class FirstPitchFeature
-		extends MIDIFeatureExtractor
+public class LowestPitchFeature 
+		    extends MIDIFeatureExtractor
 {
 	/* CONSTRUCTOR ******************************************************************************************/
 
@@ -21,11 +19,11 @@ public class FirstPitchFeature
 	/**
 	 * Basic constructor that sets the values of the fields inherited from this class' superclass.
 	 */
-	public FirstPitchFeature()
+	public LowestPitchFeature()
 	{
-		String name = "First Pitch";
-		String code = "P-39";
-		String description = "The MIDI pitch value of the first note in the piece. If there are multiple notes with simultaneous attacks at the beginning of the piece, then the one with the lowest pitch is selected. Set to 0 if there are no pitched notes.";
+		String name = "Lowest Pitch";
+		String code = "P-9";
+		String description = "MIDI pitch of the lowest pitch in the piece.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
@@ -35,41 +33,52 @@ public class FirstPitchFeature
 		is_secure = true;
 	}
 	
-
+	
 	/* PUBLIC METHODS ***************************************************************************************/
 	
 	
 	/**
 	 * Extract this feature from the given sequence of MIDI data and its associated information.
 	 *
-	 * @param sequence				The MIDI data to extract the feature from.
-	 * @param sequence_info			Additional data already extracted from the the MIDI sequence.
+	 * @param sequence		The MIDI data to extract the feature from.
+	 * @param sequence_info		Additional data already extracted from the the MIDI sequence.
 	 * @param other_feature_values	The values of other features that may be needed to calculate this feature. 
 	 *								The order and offsets of these features must be the same as those returned
 	 *								by this class' getDependencies and getDependencyOffsets methods, 
 	 *								respectively. The first indice indicates the feature/window, and the 
 	 *								second indicates the value.
-	 * @return						The extracted feature value(s).
-	 * @throws Exception			Throws an informative exception if the feature cannot be calculated.
+	 * @return			The extracted feature value(s).
+	 * @throws Exception		Throws an informative exception if the feature cannot be calculated.
 	 */
 	@Override
-	public double[] extractFeature( Sequence sequence,
-									MIDIIntermediateRepresentations sequence_info,
-									double[][] other_feature_values )
+	public double[] extractFeature( Sequence sequence, 
+								MIDIIntermediateRepresentations sequence_info, 
+								double[][] other_feature_values) 
 	throws Exception
 	{
 		double value;
 		if (sequence_info != null)
 		{
-			int lowest_first_pitch = 0;
-			if (sequence_info.pitches_present_by_tick_excluding_rests.length > 0)
-				lowest_first_pitch = sequence_info.pitches_present_by_tick_excluding_rests[0][0];
-			value = (double) lowest_first_pitch;
-		} 
+			int lowest = 128;
+
+			//Find the lowest pitch.
+			for (int bin = 0; bin < sequence_info.basic_pitch_histogram.length; bin++)
+			{
+				if (sequence_info.basic_pitch_histogram[bin] > 0.0 && lowest == 128)
+					    lowest = bin;
+			}
+
+			// Calculate the feature value
+			    if (lowest == 128)
+				    value = 0.0;
+			    else
+				    value = (double) lowest;
+		}
 		else value = -1.0;
 
 		double[] result = new double[1];
 		result[0] = value;
 		return result;
 	}
+    
 }
