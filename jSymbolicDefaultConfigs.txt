@@ -14,6 +14,8 @@ Number of Pitch Classes
 Number of Common Pitches
 Number of Common Pitch Classes
 Range
+Lowest Pitch
+Highest Pitch
 Importance of Bass Register
 Importance of Middle Register
 Importance of High Register
@@ -38,7 +40,10 @@ Pitch Class Skewness After Folding
 Pitch Kurtosis
 Pitch Class Kurtosis
 Pitch Class Kurtosis After Folding
+Key Signature Diversity
 Major or Minor
+Number of Flats in First Key Signature
+Number of Sharps in First Key Signature
 First Pitch
 First Pitch Class
 Last Pitch

@@ -8,7 +8,8 @@ import jsymbolic2.processing.MIDIIntermediateRepresentations;
 import mckay.utilities.staticlibraries.StringMethods;
 
 /**
- * A feature calculator that outputs the number of different unique key signatures found in the piece.
+ * A feature calculator that finds the number of different (unique) key signatures found in the piece. Set to
+ * 1 if no key signature is specified.
  *
  * @author Rían Adamian
  */
@@ -42,20 +43,20 @@ public class KeySignatureDiversityFeature
 	/**
 	 * Extract this feature from the given sequence of MIDI data and its associated information.
 	 *
-	 * @param sequence		The MIDI data to extract the feature from.
-	 * @param sequence_info		Additional data already extracted from the the MIDI sequence.
+	 * @param sequence              The MIDI data to extract the feature from.
+	 * @param sequence_info     	Additional data already extracted from the the MIDI sequence.
 	 * @param other_feature_values	The values of other features that may be needed to calculate this feature.
 	 *								The order and offsets of these features must be the same as those returned
 	 *								by this class' getDependencies and getDependencyOffsets methods,
 	 *								respectively. The first indice indicates the feature/window, and the
 	 *								second indicates the value.
-	 * @return			The extracted feature value(s).
-	 * @throws Exception		Throws an informative exception if the feature cannot be calculated.
+	 * @return                      The extracted feature value(s).
+	 * @throws Exception        	Throws an informative exception if the feature cannot be calculated.
 	 */
 	@Override
 	public double[] extractFeature( Sequence sequence,
-								MIDIIntermediateRepresentations sequence_info,
-								double[][] other_feature_values)
+                                	MIDIIntermediateRepresentations sequence_info,
+                                	double[][] other_feature_values)
 	throws Exception
 	{
 		double value;

@@ -68,11 +68,11 @@ public class MIDIIntermediateRepresentations
 	 * encountered tempo metamessage. Any further tempo metamessages are ignored. Set to the MIDI default of
 	 * 120 BPM if no tempo metamessage is present.</li>
 	 * 
-	 * <li><i>Indice 4:</i> LinkedList of all key signatures in the order that they appear in the MIDI sequence.
-	 * Stored individually as Integer arrays, and based on key signature metamessages. The first element
-	 * in the array represents the number of sharps or flats, and the second element indicates the major/minor 
-	 * quality of the key, with 0 indicating major and 1 indicating minor. Empty if no key signature metamessage 
-	 * is present.</li>
+	 * <li><i>Indice 4:</i> LinkedList of all key signatures in the order that they appear in the MIDI 
+	 * sequence. Stored individually as a list of 2-dimensional Integer arrays, and based on key signature
+     * metamessages. The first element in each array represents the number of sharps or flats, and the second
+     * element indicates the major/minor quality of the key, with 0 indicating major and 1 indicating minor.
+     * Empty if no key signature metamessage is present.</li>
 	 * </ul>
 	 */
 	public Object[] overall_metadata;
@@ -972,7 +972,6 @@ public class MIDIIntermediateRepresentations
 						int[] key_signature = new int[2];
 						key_signature[0] = data[0];
 						key_signature[1] = data[1];
-						
 						((LinkedList) overall_metadata[4]).add(key_signature);
 					}
 

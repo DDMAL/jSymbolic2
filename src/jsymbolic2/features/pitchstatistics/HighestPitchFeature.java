@@ -6,7 +6,8 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that outputs the highest MIDI pitch in the MIDI sequence.
+ * A feature calculator that finds the highest MIDI pitch in the piece. Set to zero if there are no pitched 
+ * notes.
  *
  * @author Rían Adamian
  */
@@ -23,7 +24,7 @@ public class HighestPitchFeature
 	{
 		String name = "Highest Pitch";
 		String code = "P-10";
-		String description = "MIDI pitch of the highest pitch in the piece.";
+		String description = "MIDI pitch of the highest pitch in the piece. Set to zero if there are no pitched notes.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
@@ -40,20 +41,20 @@ public class HighestPitchFeature
 	/**
 	 * Extract this feature from the given sequence of MIDI data and its associated information.
 	 *
-	 * @param sequence		The MIDI data to extract the feature from.
-	 * @param sequence_info		Additional data already extracted from the the MIDI sequence.
+	 * @param sequence              The MIDI data to extract the feature from.
+	 * @param sequence_info         Additional data already extracted from the the MIDI sequence.
 	 * @param other_feature_values	The values of other features that may be needed to calculate this feature. 
 	 *								The order and offsets of these features must be the same as those returned
 	 *								by this class' getDependencies and getDependencyOffsets methods, 
 	 *								respectively. The first indice indicates the feature/window, and the 
 	 *								second indicates the value.
-	 * @return			The extracted feature value(s).
-	 * @throws Exception		Throws an informative exception if the feature cannot be calculated.
+	 * @return                      The extracted feature value(s).
+	 * @throws Exception        	Throws an informative exception if the feature cannot be calculated.
 	 */
 	@Override
 	public double[] extractFeature( Sequence sequence, 
-								MIDIIntermediateRepresentations sequence_info, 
-								double[][] other_feature_values) 
+                                	MIDIIntermediateRepresentations sequence_info, 
+                                	double[][] other_feature_values ) 
 	throws Exception
 	{
 		double value;
@@ -80,5 +81,4 @@ public class HighestPitchFeature
 		result[0] = value;
 		return result;
 	}
-    
 }
