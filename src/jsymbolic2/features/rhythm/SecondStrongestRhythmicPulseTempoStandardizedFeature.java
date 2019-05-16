@@ -23,7 +23,7 @@ public class SecondStrongestRhythmicPulseTempoStandardizedFeature
 	public SecondStrongestRhythmicPulseTempoStandardizedFeature()
 	{
 		String name = "Second Strongest Rhythmic Pulse - Tempo Standardized";
-		String code = "R-58";
+		String code = "R-66";
 		String description = "Bin index of the tempo-standardized beat histogram peak with the second highest magnitude.";
 		boolean is_sequential = true;
 		int dimensions = 1;

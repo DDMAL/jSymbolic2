@@ -24,7 +24,7 @@ public class StrengthRatioOfTwoStrongestRhythmicPulsesTempoStandardizedFeature
 	public StrengthRatioOfTwoStrongestRhythmicPulsesTempoStandardizedFeature()
 	{
 		String name = "Strength Ratio of Two Strongest Rhythmic Pulses - Tempo Standardized";
-		String code = "R-62";
+		String code = "R-70";
 		String description = "Magnitude of the tempo-standardized beat histogram peak with the highest magnitude divided by the magnitude of the tempo-standardized beat histogram peak with the second highest magnitude.";
 		boolean is_sequential = true;
 		int dimensions = 1;

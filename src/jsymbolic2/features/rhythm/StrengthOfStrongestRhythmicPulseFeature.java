@@ -22,7 +22,7 @@ public class StrengthOfStrongestRhythmicPulseFeature
 	public StrengthOfStrongestRhythmicPulseFeature()
 	{
 		String name = "Strength of Strongest Rhythmic Pulse";
-		String code = "RT-23";
+		String code = "RT-30";
 		String description = "Magnitude of the beat histogram bin with the highest magnitude.";
 		boolean is_sequential = true;
 		int dimensions = 1;

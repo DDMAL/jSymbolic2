@@ -23,7 +23,7 @@ public class RhythmicVariabilityTempoStandardizedFeature
 	public RhythmicVariabilityTempoStandardizedFeature()
 	{
 		String name = "Rhythmic Variability - Tempo Standardized";
-		String code = "R-64";
+		String code = "R-72";
 		String description = "Standard deviation of the tempo-standardized beat histogram bin magnitudes";
 		boolean is_sequential = true;
 		int dimensions = 1;

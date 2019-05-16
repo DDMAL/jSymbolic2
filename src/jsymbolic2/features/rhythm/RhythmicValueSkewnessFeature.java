@@ -26,7 +26,7 @@ public class RhythmicValueSkewnessFeature
 	public RhythmicValueSkewnessFeature()
 	{
 		String name = "Rhythmic Value Skewness";
-		String code = "R-31";
+		String code = "R-32";
 		String description = "Skewness of the note durations in quarter notes of all notes in the music. Provides a measure of how asymmetrical the rhythmic value distribution is to either the left or the right of the mean rhythmic value. A value of zero indicates no skew. This calculation includes both pitched and unpitched notes, is calculated after rhythmic quantization, is not influenced by tempo, and is calculated without regard to the dynamics, voice or instrument of any given note.";
 		boolean is_sequential = true;
 		int dimensions = 1;

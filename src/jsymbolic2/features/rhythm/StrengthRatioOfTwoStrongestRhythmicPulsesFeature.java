@@ -23,7 +23,7 @@ public class StrengthRatioOfTwoStrongestRhythmicPulsesFeature
 	public StrengthRatioOfTwoStrongestRhythmicPulsesFeature()
 	{
 		String name = "Strength Ratio of Two Strongest Rhythmic Pulses";
-		String code = "RT-25";
+		String code = "RT-32";
 		String description = "Magnitude of the beat histogram peak with the highest magnitude divided by the magnitude of the beat histogram peak with the second highest magnitude.";
 		boolean is_sequential = true;
 		int dimensions = 1;

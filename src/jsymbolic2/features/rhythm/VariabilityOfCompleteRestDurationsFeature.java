@@ -25,7 +25,7 @@ public class VariabilityOfCompleteRestDurationsFeature
 	public VariabilityOfCompleteRestDurationsFeature()
 	{
 		String name = "Variability of Complete Rest Durations";
-		String code = "R-50";
+		String code = "R-51";
 		String description = "Standard deviation of the durations of all complete rests in the piece, expressed as a fraction of the duration of a quarter note. A complete rest is defined as a period in which no pitched notes are sounding on any MIDI channel. Non-pitched (MIDI channel 10) notes are not considered in this calculation. Rests shorter than 0.1 of a quarter note are ignored in this calculation.";
 		boolean is_sequential = true;
 		int dimensions = 1;

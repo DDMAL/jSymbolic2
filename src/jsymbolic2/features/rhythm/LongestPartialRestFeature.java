@@ -26,7 +26,7 @@ public class LongestPartialRestFeature
 	public LongestPartialRestFeature()
 	{
 		String name = "Longest Partial Rest";
-		String code = "R-45";
+		String code = "R-46";
 		String description = "Longest amount of uninterrupted time (expressed as a fraction of the duration of a quarter note) in which no notes are sounding on at least one active MIDI channel. Non-pitched (MIDI channel 10) notes ARE considered in this calculation. Only channels containing at least one note are counted in this calculation. Rests shorter than 0.1 of a quarter note are ignored in this calculation.";
 		boolean is_sequential = true;
 		int dimensions = 1;

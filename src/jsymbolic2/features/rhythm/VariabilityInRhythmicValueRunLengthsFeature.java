@@ -26,7 +26,7 @@ public class VariabilityInRhythmicValueRunLengthsFeature
 	public VariabilityInRhythmicValueRunLengthsFeature()
 	{
 		String name = "Variability in Rhythmic Value Run Lengths";
-		String code = "R-36";
+		String code = "R-37";
 		String description = "Standard deviation of the numbers of notes of the same rhythmic value that occur consecutively (either vertically or horizontally) in the same voice (MIDI channel and track). This calculation includes both pitched and unpitched notes, is calculated after rhythmic quantization and not influenced by neither tempo nor dynamics.";
 		boolean is_sequential = true;
 		int dimensions = 1;

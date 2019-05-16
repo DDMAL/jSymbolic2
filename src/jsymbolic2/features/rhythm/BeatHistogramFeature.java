@@ -67,6 +67,7 @@ public class BeatHistogramFeature
 			for (int i = 0; i < result.length; i++)
 				result[i] = sequence_info.beat_histogram[i + 40];
 		}
+		
 		return result;
 	}
 }

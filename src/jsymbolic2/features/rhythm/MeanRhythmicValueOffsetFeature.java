@@ -29,7 +29,7 @@ public class MeanRhythmicValueOffsetFeature
 	public MeanRhythmicValueOffsetFeature()
 	{
 		String name = "Mean Rhythmic Value Offset";
-		String code = "R-38";
+		String code = "R-39";
 		String description = "Mean offset in duration of notes from the idealized durations of each of their nearest quantized rhythmic values, expressed as a fraction of the duration of an idealized quantized quarter note. Offsets are treated as absolute values, so offsets that are longer or shorter than each idealized duration are both treated as identical positive numbers in this calculation. This feature provides an indication of how consistently quantized note durations are or, expressed slightly differently, how well they conform to idealized note durations. Higher values indicate greater average deviation from idealized note durations. Both pitched and unpitched notes are included, and this is calculated without regard to the dynamics, voice or instrument of any given note.";
 		boolean is_sequential = true;
 		int dimensions = 1;

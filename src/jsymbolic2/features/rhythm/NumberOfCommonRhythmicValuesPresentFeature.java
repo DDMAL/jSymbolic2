@@ -24,7 +24,7 @@ public class NumberOfCommonRhythmicValuesPresentFeature
 	public NumberOfCommonRhythmicValuesPresentFeature()
 	{
 		String name = "Number of Common Rhythmic Values Present";
-		String code = "R-16";
+		String code = "R-17";
 		String description = "Number of different quantized rhythmic values (e.g. quarter notes, dotted quarter notes, half notes, etc.) that represent at least 15% of the rhythmic values in the music. This is found by finding all non-zero entries in the Rhythmic Value Histogram.";
 		boolean is_sequential = true;
 		int dimensions = 1;

@@ -22,7 +22,7 @@ public class NumberOfStrongRhythmicPulsesFeature
 	public NumberOfStrongRhythmicPulsesFeature()
 	{
 		String name = "Number of Strong Rhythmic Pulses";
-		String code = "RT-17";
+		String code = "RT-19";
 		String description = "Number of beat histogram peaks with normalized magnitudes over 0.1.";
 		boolean is_sequential = true;
 		int dimensions = 1;

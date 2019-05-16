@@ -22,7 +22,7 @@ public class RhythmicVariabilityFeature
 	public RhythmicVariabilityFeature()
 	{
 		String name = "Rhythmic Variability";
-		String code = "RT-27";
+		String code = "RT-34";
 		String description = "Standard deviation of the beat histogram bin magnitudes";
 		boolean is_sequential = true;
 		int dimensions = 1;

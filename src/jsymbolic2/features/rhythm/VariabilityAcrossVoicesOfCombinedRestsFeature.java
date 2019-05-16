@@ -25,7 +25,7 @@ public class VariabilityAcrossVoicesOfCombinedRestsFeature extends MIDIFeatureEx
 	public VariabilityAcrossVoicesOfCombinedRestsFeature()
 	{
 		String name = "Variability Across Voices of Combined Rests";
-		String code = "R-52";
+		String code = "R-53";
 		String description = "Standard deviation of the total amount of time (expressed as a fraction of the duration of a quarter note) per active MIDI channel in which no notes are sounding in that channel. Only channels containing at least one note are counted in this calculation. Non-pitched (MIDI channel 10) notes ARE considered in this calculation.";
 		boolean is_sequential = true;
 		int dimensions = 1;

@@ -26,7 +26,7 @@ public class PrevalenceOfDottedNotesFeature
 	public PrevalenceOfDottedNotesFeature()
 	{
 		String name = "Prevalence of Dotted Notes";
-		String code = "R-22";
+		String code = "R-23";
 		String description = "Fraction of all notes in the music that have a quantized rhythmic value consisting of a dotted eighth note, dotted quarter note, dotted half note, dotted whole note or dotted double whole note. This includes both pitched and unpitched notes, is calculated after rhythmic quantization, is not influenced by tempo, and is calculated without regard to the dynamics, voice or instrument of any given note.";
 		boolean is_sequential = true;
 		int dimensions = 1;

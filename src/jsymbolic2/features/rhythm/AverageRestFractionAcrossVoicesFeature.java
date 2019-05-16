@@ -24,7 +24,7 @@ public class AverageRestFractionAcrossVoicesFeature
 	public AverageRestFractionAcrossVoicesFeature()
 	{
 		String name = "Average Rest Fraction Across Voices";
-		String code = "R-43";
+		String code = "R-44";
 		String description = "Fraction of the duration of each MIDI channel during which no note is sounding on that channel, averaged across all channels that contain at least one note. Non-pitched (MIDI channel 10) notes ARE considered in this calculation.";
 		boolean is_sequential = true;
 		int dimensions = 1;

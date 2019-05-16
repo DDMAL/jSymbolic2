@@ -25,7 +25,7 @@ public class RhythmicLoosenessTempoStandardizedFeature
 	public RhythmicLoosenessTempoStandardizedFeature()
 	{
 		String name = "Rhythmic Looseness - Tempo Standardized";
-		String code = "R-65";
+		String code = "R-75";
 		String description = "Average width of tempo-standardized beat histogram peaks. The width of a peak is defined here as the distance (in beats per minute) between the two points on the peak in question that have magnitudes closest to 30% of the height of the peak. Only peaks with magnitudes at least 30% as high as the highest peak are considered in this calculation.";
 		boolean is_sequential = true;
 		int dimensions = 1;

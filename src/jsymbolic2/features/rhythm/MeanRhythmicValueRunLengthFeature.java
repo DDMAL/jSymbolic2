@@ -26,7 +26,7 @@ public class MeanRhythmicValueRunLengthFeature
 	public MeanRhythmicValueRunLengthFeature()
 	{
 		String name = "Mean Rhythmic Value Run Length";
-		String code = "R-34";
+		String code = "R-35";
 		String description = "Mean number of notes of the same rhythmic value that occur consecutively (either vertically or horizontally) in the same voice (MIDI channel and track). This calculation includes both pitched and unpitched notes, is calculated after rhythmic quantization and not influenced by neither tempo nor dynamics.";
 		boolean is_sequential = true;
 		int dimensions = 1;

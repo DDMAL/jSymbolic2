@@ -25,7 +25,7 @@ public class RangeOfRhythmicValuesFeature
 	public RangeOfRhythmicValuesFeature()
 	{
 		String name = "Range of Rhythmic Values";
-		String code = "R-14";
+		String code = "R-15";
 		String description = "A measure of the difference between the shortest rhythmic values and the longest rhythmic values in the music. Measured in number of bins in the Rhythmic Value Histogram separating the first (i.e. the one with the shortest rhythmic value) non-zero bin and the last (i.e. the one with the longest rhythmic value) non-zero bin.";
 		boolean is_sequential = true;
 		int dimensions = 1;

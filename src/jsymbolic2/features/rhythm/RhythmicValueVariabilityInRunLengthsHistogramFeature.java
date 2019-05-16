@@ -33,7 +33,7 @@ public class RhythmicValueVariabilityInRunLengthsHistogramFeature
 	public RhythmicValueVariabilityInRunLengthsHistogramFeature()
 	{
 		String name = "Rhythmic Value Variability in Run Lengths Histogram";
-		String code = "R-37";
+		String code = "R-38";
 		String description = "A normalized feature vector that indicates, for each rhythmic value, the normalized standard deviation of the number of times that notes with that rhythmic value occur consecutively (either vertically or horizontally) in the same voice (MIDI channel and track). Each bin corresponds to a different rhythmic value, and they are numbered as follows: thirty second notes (or less) [0], sixteenth notes [1], eighth notes [2], dotted eighth notes [3], quarter notes [4], dotted quarter notes [5], half notes [6], dotted half notes [7], whole notes [8], dotted whole notes [9], double whole notes [10] and dotted double whole notes (or more ) [11]. Both pitched and unpitched notes are included in this histogram. Tempo is, of course, not relevant to this histogram. Notes with durations not precisely matching one of these rhythmic note values are mapped to the closest note value (to filter out the effects of rubato or uneven human rhythmic performances, for example). This histogram is calculated without regard to dynamics.";
 		boolean is_sequential = true;
 		int dimensions = 12;

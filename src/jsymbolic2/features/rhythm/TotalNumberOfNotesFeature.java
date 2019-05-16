@@ -22,7 +22,7 @@ public class TotalNumberOfNotesFeature
 	public TotalNumberOfNotesFeature()
 	{
 		String name = "Total Number of Notes";
-		String code = "R-9";
+		String code = "R-10";
 		String description = "Total number of notes, including both pitched and unpitched notes.";
 		boolean is_sequential = true;
 		int dimensions = 1;

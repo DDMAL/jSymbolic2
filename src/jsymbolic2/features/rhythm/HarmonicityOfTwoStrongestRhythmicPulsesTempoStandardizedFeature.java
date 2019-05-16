@@ -24,7 +24,7 @@ public class HarmonicityOfTwoStrongestRhythmicPulsesTempoStandardizedFeature
 	public HarmonicityOfTwoStrongestRhythmicPulsesTempoStandardizedFeature()
 	{
 		String name = "Harmonicity of Two Strongest Rhythmic Pulses - Tempo Standardized";
-		String code = "R-59";
+		String code = "R-67";
 		String description = "Bin index of the higher (in terms of bin index) of the two tempo-standardized beat histogram peaks with the highest magnitude, divided by the index of the lower (in terms of bin index) of the two bins.";
 		boolean is_sequential = true;
 		int dimensions = 1;

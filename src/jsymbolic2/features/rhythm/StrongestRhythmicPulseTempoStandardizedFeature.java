@@ -23,7 +23,7 @@ public class StrongestRhythmicPulseTempoStandardizedFeature
 	public StrongestRhythmicPulseTempoStandardizedFeature()
 	{
 		String name = "Strongest Rhythmic Pulse - Tempo Standardized";
-		String code = "R-57";
+		String code = "R-65";
 		String description = "Bin index of the tempo-standardized beat histogram bin with the highest magnitude.";
 		boolean is_sequential = true;
 		int dimensions = 1;

@@ -26,7 +26,7 @@ public class RhythmicValueVariabilityFeature
 	public RhythmicValueVariabilityFeature()
 	{
 		String name = "Rhythmic Value Variability";
-		String code = "R-30";
+		String code = "R-31";
 		String description = "Standard deviation of the note durations in quarter notes of all notes in the music. Provides a measure of how close the rhythmic values are to the mean rhythmic value. This calculation includes both pitched and unpitched notes, is calculated after rhythmic quantization, is not influenced by tempo, and is calculated without regard to the dynamics, voice or instrument of any given note.";
 		boolean is_sequential = true;
 		int dimensions = 1;

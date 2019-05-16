@@ -25,7 +25,7 @@ public class PrevalenceOfLongRhythmicValuesFeature
 	public PrevalenceOfLongRhythmicValuesFeature()
 	{
 		String name = "Prevalence of Long Rhythmic Values";
-		String code = "R-20";
+		String code = "R-21";
 		String description = "Fraction of all notes in the music that have a quantized rhythmic value greater than a dotted quarter note. This includes both pitched and unpitched notes, is calculated after rhythmic quantization, is not influenced by tempo, and is calculated without regard to the dynamics, voice or instrument of any given note.";
 		boolean is_sequential = true;
 		int dimensions = 1;

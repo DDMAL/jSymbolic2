@@ -27,7 +27,7 @@ public class MeanPartialRestDurationFeature
 	public MeanPartialRestDurationFeature()
 	{
 		String name = "Mean Partial Rest Duration";
-		String code = "R-47";
+		String code = "R-48";
 		String description = "Mean duration of rests in the piece, expressed as a fraction of the duration of a quarter note. This is calculated voice-by-voice, where each rest included in the calculation corresponds to a rest in one MIDI channel, regardless of what may or may not be happening simultaneously in any other MIDI channels. Non-pitched (MIDI channel 10) notes ARE considered in this calculation. Only channels containing at least one note are counted in this calculation. Rests shorter than 0.1 of a quarter note are ignored in this calculation.";
 		boolean is_sequential = true;
 		int dimensions = 1;

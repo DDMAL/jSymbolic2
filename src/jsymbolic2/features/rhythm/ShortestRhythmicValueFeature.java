@@ -26,7 +26,7 @@ public class ShortestRhythmicValueFeature
 	public ShortestRhythmicValueFeature()
 	{
 		String name = "Shortest Rhythmic Value";
-		String code = "R-23";
+		String code = "R-24";
 		String description = "Rhythmic value of the shortest note in the piece, expressed as a fraction of a quarter note. For example, a value of 0.5 indicates that the shortest note is an eighth note. This calculation includes both pitched and unpitched notes, is calculated after rhythmic quantization, is not influenced by tempo, and is calculated without regard to the dynamics, voice or instrument of any given note.";
 		boolean is_sequential = true;
 		int dimensions = 1;

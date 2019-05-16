@@ -23,7 +23,7 @@ public class NumberOfStrongRhythmicPulsesTempoStandardizedFeature
 	public NumberOfStrongRhythmicPulsesTempoStandardizedFeature()
 	{
 		String name = "Number of Strong Rhythmic Pulses - Tempo Standardized";
-		String code = "R-54";
+		String code = "R-57";
 		String description = "Number of tempo-standardized beat histogram peaks with normalized magnitudes over 0.1.";
 		boolean is_sequential = true;
 		int dimensions = 1;

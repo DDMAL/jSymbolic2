@@ -25,7 +25,7 @@ public class PartialRestsFractionFeature
 	public PartialRestsFractionFeature()
 	{
 		String name = "Partial Rests Fraction";
-		String code = "R-42";
+		String code = "R-43";
 		String description = "Fraction of the music during which no note is sounding on at least one active MIDI channel. Non-pitched (MIDI channel 10) notes ARE considered in this calculation. Only channels containing at least one note are counted in this calculation.";
 		boolean is_sequential = true;
 		int dimensions = 1;
