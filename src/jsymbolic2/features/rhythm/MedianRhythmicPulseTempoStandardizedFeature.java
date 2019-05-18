@@ -6,7 +6,7 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the median tempo-standardized periodicity, as averaged across the 
+ * A feature calculator that finds the median tempo-standardized beat periodicity, as averaged across the 
  * tempo-standardized beat histogram.
  *
  * @author radamian
@@ -22,9 +22,9 @@ public class MedianRhythmicPulseTempoStandardizedFeature
 	 */
 	public MedianRhythmicPulseTempoStandardizedFeature()
 	{
-		String name = "Median Rhythmic Pulse – Tempo Standardized";
+		String name = "Median Rhythmic Pulse - Tempo Standardized";
 		String code = "R-64";
-		String description = "Median tempo-standardized periodicity, as averaged across the tempo-standardized beat histogram.";
+		String description = "Median tempo-standardized beat periodicity, as averaged across the tempo-standardized beat histogram.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);

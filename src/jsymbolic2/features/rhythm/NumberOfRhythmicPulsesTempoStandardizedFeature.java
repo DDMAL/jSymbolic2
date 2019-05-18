@@ -21,7 +21,7 @@ public class NumberOfRhythmicPulsesTempoStandardizedFeature
 	 */
 	public NumberOfRhythmicPulsesTempoStandardizedFeature()
 	{
-		String name = "Number of Rhythmic Pulses – Tempo Standardized";
+		String name = "Number of Rhythmic Pulses - Tempo Standardized";
 		String code = "R-56";
 		String description = "Number of non-zero tempo-standardized beat histogram bins.";
 		boolean is_sequential = true;

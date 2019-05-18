@@ -21,7 +21,7 @@ public class RhythmicPulseSkewnessTempoStandardizedFeature
 	 */
 	public RhythmicPulseSkewnessTempoStandardizedFeature()
 	{
-		String name = "Rhythmic Pulse Skewness – Tempo Standardized";
+		String name = "Rhythmic Pulse Skewness - Tempo Standardized";
 		String code = "R-73";
 		String description = "Skewness of the rhythmic pulses in the tempo-standardized beat histogram. Provides a measure of how asymmetrical the pulse distribution is to either the left or the right of the mean pulse. A value of zero indicates no skew.";
 		boolean is_sequential = true;

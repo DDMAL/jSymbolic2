@@ -120,6 +120,7 @@ Duple Initial Meter
 Triple Initial Meter
 Quadruple Initial Meter
 Metrical Diversity
+Duration in Quarter Notes
 Total Number of Notes
 Note Density per Quarter Note
 Note Density per Quarter Note per Voice
@@ -165,9 +166,16 @@ Variability of Complete Rest Durations
 Variability of Partial Rest Durations
 Variability Across Voices of Combined Rests
 Beat Histogram Tempo Standardized
+Range of Rhythmic Pulses - Tempo Standardized
+Number of Rhythmic Pulses - Tempo Standardized
 Number of Strong Rhythmic Pulses - Tempo Standardized
 Number of Moderate Rhythmic Pulses - Tempo Standardized
 Number of Relatively Strong Rhythmic Pulses - Tempo Standardized
+Prevalence of Slower Rhythmic Pulses - Tempo Standardized
+Prevalence of Mid-Tempo Rhythmic Pulses - Tempo Standardized
+Prevalence of Faster Rhythmic Pulses - Tempo Standardized
+Mean Rhythmic Pulse - Tempo Standardized
+Median Rhythmic Pulse - Tempo Standardized
 Strongest Rhythmic Pulse - Tempo Standardized
 Second Strongest Rhythmic Pulse - Tempo Standardized
 Harmonicity of Two Strongest Rhythmic Pulses - Tempo Standardized
@@ -176,6 +184,8 @@ Strength of Second Strongest Rhythmic Pulse - Tempo Standardized
 Strength Ratio of Two Strongest Rhythmic Pulses - Tempo Standardized
 Combined Strength of Two Strongest Rhythmic Pulses - Tempo Standardized
 Rhythmic Variability - Tempo Standardized
+Rhythmic Pulse Skewness - Tempo Standardized
+Rhythmic Pulse Kurtosis - Tempo Standardized
 Rhythmic Looseness - Tempo Standardized
 Polyrhythms - Tempo Standardized
 Initial Tempo
@@ -194,9 +204,16 @@ Average Note Duration
 Variability of Note Durations
 Amount of Staccato
 Beat Histogram
+Range of Rhythmic Pulses
+Number of Rhythmic Pulses
 Number of Strong Rhythmic Pulses
 Number of Moderate Rhythmic Pulses
 Number of Relatively Strong Rhythmic Pulses
+Prevalence of Slower Rhythmic Pulses
+Prevalence of Mid-Tempo Rhythmic Pulses
+Prevalence of Faster Rhythmic Pulses
+Mean Rhythmic Pulse
+Median Rhythmic Pulse
 Strongest Rhythmic Pulse
 Second Strongest Rhythmic Pulse
 Harmonicity of Two Strongest Rhythmic Pulses
@@ -205,6 +222,8 @@ Strength of Second Strongest Rhythmic Pulse
 Strength Ratio of Two Strongest Rhythmic Pulses
 Combined Strength of Two Strongest Rhythmic Pulses
 Rhythmic Variability
+Rhythmic Pulse Skewness
+Rhythmic Pulse Kurtosis
 Rhythmic Looseness
 Polyrhythms
 Pitched Instruments Present

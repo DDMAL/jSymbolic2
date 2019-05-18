@@ -22,7 +22,7 @@ public class RangeOfRhythmicPulsesTempoStandardizedFeature
 	 */
 	public RangeOfRhythmicPulsesTempoStandardizedFeature()
 	{
-		String name = "Range of Rhythmic Pulses – Tempo Standardized";
+		String name = "Range of Rhythmic Pulses - Tempo Standardized";
 		String code = "R-55";
 		String description = "Number of tempo-standardized beat histogram bins spanning the first non-zero tempo-standardized beat histogram bin and the last non-zero tempo-standardized beat histogram bin.";
 		boolean is_sequential = true;

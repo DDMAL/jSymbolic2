@@ -63,7 +63,8 @@ MIDI cannot distinguish enharmonic pitch equivalents (e.g. C# and Db are the sam
   <li>
    MIDI Channel 10 is always reserved for non-pitched instruments, so pitch values on Note On messages on Channel 10 should be interpreted not as pitches, but as types of instruments.</li>
   <li>
-   Sometimes multiple voices are multiplexed into a single Track using alternating Program Change messages.</li>
+   Sometimes multiple voices are multiplexed into a single Channel using alternating Program Change messages.</li>
+  <li>In many kinds of music, each voice can be said to contain a single melody, distinct from melodies in other voices. However, this is not always the case; melodies can cross voices in practice, or can be otherwise integrated between voices. Since this can be difficult to detect in practice, so as an approximation for feature calculation it is sometimes necessary to assume that the notes in different voices (Tracks or Channels) are independent melodically. Also, since a single Track or Channel can contain multiple simultaneous pitches, potentially belonging to different virtual voices (i.e. either from a polyphonic instrument like a piano, or due to Channel multiplexing), it can be difficult to segregate notes belonging to melodies in different virtual voices appearing on single Tracks or Channels. In such cases, it is sometimes a necessary approximation for melodic feature calculation to only consider the highest note (or, alternatively, only the lowest) when multiple pitches sound simultaneously on the same channel or track.</li>
   <li>
    The loudness of a note is based on both the velocity specified in its Note On message and by the Channel Volume corresponding to the channel it is played on.</li>
 </ul>

@@ -6,7 +6,7 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the mean periodicity, as averaged across the beat histogram.
+ * A feature calculator that finds the mean beat periodicity, as averaged across the beat histogram.
  *
  * @author radamian
  */
@@ -23,7 +23,7 @@ public class MeanRhythmicPulseFeature
 	{
 		String name = "Mean Rhythmic Pulse";
 		String code = "RT-25";
-		String description = "Mean periodicity, as averaged across the beat histogram.";
+		String description = "Mean beat periodicity, as averaged across the beat histogram.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);

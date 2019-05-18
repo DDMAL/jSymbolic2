@@ -22,7 +22,7 @@ public class PrevalenceOfFasterRhythmicPulsesTempoStandardizedFeature
 	 */
 	public PrevalenceOfFasterRhythmicPulsesTempoStandardizedFeature()
 	{
-		String name = "Prevalence of Faster Rhythmic Pulses – Tempo Standardized";
+		String name = "Prevalence of Faster Rhythmic Pulses - Tempo Standardized";
 		String code = "R-62";
 		String description = "Fraction of the tempo-standardized beat periodicities contained in the last third of the tempo-standardized beat histogram.";
 		boolean is_sequential = true;

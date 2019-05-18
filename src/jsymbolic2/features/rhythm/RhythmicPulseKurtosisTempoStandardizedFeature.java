@@ -21,7 +21,7 @@ public class RhythmicPulseKurtosisTempoStandardizedFeature
 	 */
 	public RhythmicPulseKurtosisTempoStandardizedFeature()
 	{
-		String name = "Rhythmic Pulse Kurtosis – Tempo Standardized";
+		String name = "Rhythmic Pulse Kurtosis - Tempo Standardized";
 		String code = "R-74";
 		String description = "Kurtosis of the rhythmic pulses in the tempo-standardized beat histogram. Provides a measure of how peaked or flat the pulse distribution is. The higher the kurtosis, the more the pulses are clustered near the mean and the fewer outliers there are.";
 		boolean is_sequential = true;
