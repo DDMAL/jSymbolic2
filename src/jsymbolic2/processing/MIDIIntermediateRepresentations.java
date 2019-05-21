@@ -220,7 +220,7 @@ public class MIDIIntermediateRepresentations
 	 * The magnitude of each bin is proportional to the aggregated loudnesses of the notes that occur at the
 	 * bin's rhythmic periodicity, and calculation is done using autocorrelation. All bins below 40 BPM are
 	 * set to 0 because autocorrelation was not performed at these lags (because the results are too noisy in
-	 * this range). Bins only go up to 200 BPM. Calculations use the overall average tempo of the piece, in
+	 * this range). Bins only go up to 260 BPM. Calculations use the overall average tempo of the piece, in
 	 * order to emphasize the metrical notation of the recording, and do thus do not take into account tempo
 	 * variations in the piece.
 	 */
@@ -249,7 +249,7 @@ public class MIDIIntermediateRepresentations
 	 * proportional to the aggregated loudnesses of the notes that occur at the bin's (virtual) rhythmic periodicity,
 	 * and calculation is done using autocorrelation. All bins below the (virtual) 40 BPM periodicity (relative
 	 * to the virtual 120 BPM tempo) are set to 0 because autocorrelation was not performed at these lags
-	 * (because the results are too noisy in this range). Bins only go up to a (virtual) 200 BPM.
+	 * (because the results are too noisy in this range). Bins only go up to a (virtual) 260 BPM.
 	 */
 	public double[] beat_histogram_120_bpm_standardized;
 	
@@ -1525,7 +1525,7 @@ public class MIDIIntermediateRepresentations
 	{
 		// Set the minimum and maximum periodicities that will be used in the autocorrelation
 		int min_BPM = 40;
-		int max_BPM = 200;
+		int max_BPM = 260;
 
 		// Instantiate beat_histogram and initialize entries to 0
 		beat_histogram = new double[max_BPM + 1];

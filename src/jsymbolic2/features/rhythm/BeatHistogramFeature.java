@@ -29,7 +29,7 @@ public class BeatHistogramFeature
 		String code = "RT-16";
 		String description = "A feature vector consisting of the bin magnitudes of the beat histogram described in the jSymbolic manual. The first 40 bins are not included in this feature vector, however. Each bin corresponds to a different beats per minute periodicity, with tempo increasing with the bin index. The magnitude of each bin is proportional to the cumulative loudness (MIDI velocity) of the notes that occur at that bin's rhythmic periodicity. The histogram is normalized.";
 		boolean is_sequential = true;
-		int dimensions = 161;
+		int dimensions = 221;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
 		dependencies = null;
 		offsets = null;
