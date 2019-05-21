@@ -7,7 +7,7 @@ convert_to_arff=true
 convert_to_csv=true
 <features_to_extract>
 Basic Pitch Histogram
-Pitch Class Histogram
+Pitch Class Histogram - Transposed
 Folded Fifths Pitch Class Histogram
 Number of Pitches
 Number of Pitch Classes

@@ -7,7 +7,7 @@ import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
  * A feature calculator that finds the fraction of all Note Ons played by string keyboard instruments (General
- * MIDI patches 1 to 8).
+ * MIDI patches 0 to 7).
  *
  * @author Cory McKay
  */
@@ -24,7 +24,7 @@ public class StringKeyboardPrevalenceFeature
 	{
 		String name = "String Keyboard Prevalence";
 		String code = "I-11";
-		String description = "Fraction of all Note Ons played by string keyboard instruments (General MIDI patches 1 to 8).";
+		String description = "Fraction of all Note Ons played by string keyboard instruments (General MIDI patches 0 to 7).";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);

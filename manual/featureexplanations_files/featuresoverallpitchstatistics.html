@@ -19,7 +19,7 @@
 <p>To provide practical examples, the first figure below shows the basic pitch histogram for a Duke Ellington jazz piece, and the second shows the histogram for a Dr. Dre rap song. A number of genre-typical differences are immediately apparent from even a rough visual comparison of these two histograms, such as the fact that the rap song uses far fewer pitches than the jazz piece, for example.</p>
 <p><img src="Sophisticated_Lady.gif"></p>
 <p><img src="Forgot_About_Dre.gif"></p>
-<p>The second type of histogram is called a <strong>pitch class histogram</strong>. It has one bin for each of the twelve pitch classes, which means that it is essentially a version of the basic pitch histogram where octaves are collapsed for each of the pitch classes. The magnitude of each bin is set to the number of Note On messages with a MIDI pitch that can be wrapped to this pitch class, with enharmonic equivalents assigned to the same pitch class number. The histogram is normalized, and the bins are translated so that the first bin corresponds to the pitch class with the highest magnitude, with the successive bins ordered chromatically in semitone increments. This type of histogram provides insights into areas such as the types of scales used and the amount of transposition that is present, for example.</p>
+<p>The second type of histogram is called a <strong>pitch class histogram</strong>. It has one bin for each of the twelve pitch classes, which means that it is essentially a version of the basic pitch histogram where octaves are collapsed for each of the pitch classes. The magnitude of each bin is set to the number of Note On messages with a MIDI pitch that can be wrapped to this pitch class, with enharmonic equivalents assigned to the same pitch class number. The histogram is normalized. There are two versions of this histogram: one untransposed version, where each bin is set to a fixed pitch class (bin 0 corresponds to C), and a second transposed version where the bins are translated so that the first bin corresponds to the pitch class with the highest magnitude. In both cases,  successive bins are ordered in increasing semitone increments. This type of histogram provides insights into areas such as the types of scales used and the amount of transposition that is present, for example.</p>
 <p>The third type of histogram is called a <strong>folded fifths pitch class histogram</strong>, and is derived directly from the pitch class histogram. This histogram is calculated by reordering the bins of the original unordered pitch class histogram such that adjacent bins are separated by perfect fifths rather than semitones. This is done using the following equation:</p>
 <p>B = (7a)mod(12)</p>
 <p>where B is the folded fifths pitch histogram bin and a is the corresponding pitch class histogram bin. The number seven is used because this is the number of semitones in a perfect fifth, and the number twelve is used because there are twelve pitch classes in total. This histogram is useful for measuring dominant-tonic relationships and for looking at types of transpositions.	</p>
@@ -41,14 +41,20 @@
     bin is proportional to the the number of times notes occurred at the bin's 
     pitch in the piece, relative to all other pitches in the piece (the histogram 
     is normalized).</font></li>
-  <li><font color="#000000"><strong>P-2 Pitch Class Histogram:</strong> A feature vector consisting 
+  <li><font color="#FF0000"><strong>P-2 Pitch Class Histogram - Untransposed:</strong> A feature vector consisting 
     of bin magnitudes of the pitch class histogram described above. Each bin corresponds 
-    to one of the 12 pitch classes, ordered in increasing pitch with an interval 
-    of a semitone between each (enharmonic equivalents are assigned the same pitch 
+    to one of the 12 pitch classes, with bin 0 corresponding to C and pitch classes increasing by a semitone from one bin to the next (enharmonic equivalents are assigned the same pitch 
+    class number). 
+    For example, bin 3 corresponds to D#/Eb. The magnitude of of each bin is proportional to the the number of times notes 
+    occurred at the bin's pitch class in the piece, relative to notes of all other pitch 
+    classes in the piece (the histogram is normalized).</font></li>
+  <li><font color="#000000"><strong>P-2 Pitch Class Histogram - Transposed:</strong> A feature vector consisting 
+    of bin magnitudes of the pitch class histogram described above. Each bin corresponds 
+    to one of the 12 pitch classes, with pitch classes increasing by a semitone from one bin to the next (enharmonic equivalents are assigned the same pitch 
     class number). The first bin corresponds to the most common pitch class in 
-    the piece under consideration (it does NOT correspond to a set pitch class). 
+    the piece under consideration (and therefore does NOT necessarily correspond to the same pitch class when extracted from different pieces). 
     The magnitude of of each bin is proportional to the the number of times notes 
-    occurred at the bin's pitch class in the piece, relative to all other pitch 
+    occurred at the bin's pitch class in the piece, relative to notes of all other pitch 
     classes in the piece (the histogram is normalized).</font></li>
   <li><font color="#000000"><strong>P-3 Folded Fifths Pitch Class Histogram:</strong> A feature vector 
     consisting of bin magnitudes of the folded fifths pitch class histogram described 
@@ -158,6 +164,8 @@
     fifths pitch class histogram. Provides a measure of how peaked or flat the 
     pitch classes are from a dominant-tonic perspective.</font></li>
   <li><font color="#000000"><strong>P-35 Key Signature Diversity:</strong> The number of different (unique) key signatures found in the piece. Set to 1 if no key signature is specified.</font></li>
+  <li><font color="#000000"><strong><font color="#FF0000">P-37 Pitch Deviation from First Key Signature:</font></strong><font color="#FF0000"> The fraction of notes in the piece that do not belong to one of the 7 pitch classes specified by the first key signature in the piece. 0 if there is no key signature specified in the piece.</font></font></li>
+  <li><font color="#FF0000"><strong>P-38 Pitch Deviation from  Key Signature:</strong> The fraction of notes in the piece that do not belong to one of the 7 pitch classes specified by the key signature in effect at the time that they occur. 0 if there is no key signature specified in the piece.</font></li>
   <li><font color="#000000"><strong>P-36 Major or Minor:</strong> Whether the piece is major or minor, 
     as indicated by the first encountered major/minor metadata tag in the piece. 
     Set to 0 if the metadata indicates that the piece is major, or set to 1 if 

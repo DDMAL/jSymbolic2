@@ -7,7 +7,7 @@ import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
  * A feature calculator that finds the fraction of all Note Ons played by woodwind instruments (General MIDI
- * patches 69 to 76).
+ * patches 68 to 75).
  *
  * @author Cory McKay
  */
@@ -24,7 +24,7 @@ public class WoodwindsPrevalenceFeature
 	{
 		String name = "Woodwinds Prevalence";
 		String code = "I-17";
-		String description = "Fraction of all Note Ons played by woodwind instruments (General MIDI patches 69 to 76).";
+		String description = "Fraction of all Note Ons played by woodwind instruments (General MIDI patches 68 to 75).";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);

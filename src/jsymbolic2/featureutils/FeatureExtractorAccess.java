@@ -112,7 +112,7 @@ public final class FeatureExtractorAccess
 		{
 			// Add features based on pitch statistics
 			new BasicPitchHistogramFeature(),
-			new PitchClassHistogramFeature(),
+			new PitchClassHistogramTransposedFeature(),
 			new FoldedFifthsPitchClassHistogramFeature(),
 			new NumberOfPitchesFeature(),
 			new NumberOfPitchClassesFeature(),

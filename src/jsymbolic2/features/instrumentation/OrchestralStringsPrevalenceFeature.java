@@ -7,7 +7,7 @@ import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
  * A feature calculator that finds the fraction of all Note Ons played by orchestral string instruments
- * (General MIDI patches 41 to 47).
+ * (General MIDI patches 40 to 46).
  *
  * @author Cory McKay
  */
@@ -24,7 +24,7 @@ public class OrchestralStringsPrevalenceFeature
 	{
 		String name = "Orchestral Strings Prevalence";
 		String code = "I-18";
-		String description = "Fraction of all Note Ons played by orchestral string instruments (General MIDI patches 41 to 47).";
+		String description = "Fraction of all Note Ons played by orchestral string instruments (General MIDI patches 40 to 46).";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);

@@ -7,7 +7,7 @@ import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
  * A feature calculator that finds the fraction of all Note Ons played by electric guitar instruments (General
- * MIDI patches 27 to 32).
+ * MIDI patches 26 to 31).
  *
  * @author Cory McKay
  */
@@ -24,7 +24,7 @@ public class ElectricGuitarPrevalenceFeature
 	{
 		String name = "Electric Guitar Prevalence";
 		String code = "I-13";
-		String description = "Fraction of all Note Ons played by electric guitar instruments (General MIDI patches 27 to 32).";
+		String description = "Fraction of all Note Ons played by electric guitar instruments (General MIDI patches 26 to 31).";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);

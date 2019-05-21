@@ -7,7 +7,7 @@ import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
  * A feature calculator that finds the fraction of all Note Ons played by violin instruments (General MIDI
- * patches 41 or 111).
+ * patches 40 or 110).
  *
  * @author Cory McKay
  */
@@ -24,7 +24,7 @@ public class ViolinPrevalenceFeature
 	{
 		String name = "Violin Prevalence";
 		String code = "I-14";
-		String description = "Fraction of all Note Ons played by violin instruments (General MIDI patches 41 or 111).";
+		String description = "Fraction of all Note Ons played by violin instruments (General MIDI patches 40 or 110).";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);

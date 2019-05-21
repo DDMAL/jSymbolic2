@@ -7,7 +7,7 @@ import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
  * A feature calculator that finds the fraction of all Note Ons played by brass instruments, including
- * saxophones (General MIDI patches 57 to 68).
+ * saxophones (General MIDI patches 56 to 67).
  *
  * @author Cory McKay
  */
@@ -24,7 +24,7 @@ public class BrassPrevalenceFeature
 	{
 		String name = "Brass Prevalence";
 		String code = "I-16";
-		String description = "Fraction of all Note Ons played by brass instruments, including saxophones (General MIDI patches 57 to 68).";
+		String description = "Fraction of all Note Ons played by brass instruments, including saxophones (General MIDI patches 56 to 67).";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);

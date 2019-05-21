@@ -7,7 +7,7 @@ import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
  * A feature calculator that finds the fraction of all Note Ons played by electric non-"synth" instruments
- * (General MIDI patches 5, 6, 17, 19, 27 to 32, 34 to 40).
+ * (General MIDI patches 4, 5, 16, 18, 26 to 31, 33 to 39).
  *
  * @author Cory McKay
  */
@@ -24,7 +24,7 @@ public class ElectricInstrumentPrevalenceFeature
 	{
 		String code = "I-20";
 		String name = "Electric Instrument Prevalence";
-		String description = "Fraction of all Note Ons played by electric non-\"synth\" instruments (General MIDI patches 5, 6, 17, 19, 27 to 32, 34 to 40).";
+		String description = "Fraction of all Note Ons played by electric non-\"synth\" instruments (General MIDI patches 4, 5, 16, 18, 26 to 31, 33 to 39).";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
