@@ -13,7 +13,7 @@ import jsymbolic2.processing.MIDIIntermediateRepresentations;
  *
  * @author Cory McKay
  */
-public class AverageIntervalSpannedByMelodicHalfArcs
+public class AverageIntervalSpannedByMelodicHalfArcsFeature
 		extends MIDIFeatureExtractor
 {
 	/* CONSTRUCTOR ******************************************************************************************/
@@ -22,7 +22,7 @@ public class AverageIntervalSpannedByMelodicHalfArcs
 	/**
 	 * Basic constructor that sets the values of the fields inherited from this class' superclass.
 	 */
-	public AverageIntervalSpannedByMelodicHalfArcs()
+	public AverageIntervalSpannedByMelodicHalfArcsFeature()
 	{
 		String name = "Average Interval Spanned by Melodic Half-Arcs";
 		String code = "M-24";

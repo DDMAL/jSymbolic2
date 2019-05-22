@@ -80,16 +80,16 @@ Melodic Pitch Variety
 Vertical Interval Histogram
 Wrapped Vertical Interval Histogram
 Chord Type Histogram
-Average Number of Simultaneous Pitch Classes
-Variability of Number of Simultaneous Pitch Classes
 Average Number of Simultaneous Pitches
+Average Number of Simultaneous Pitch Classes
 Variability of Number of Simultaneous Pitches
-Most Common Vertical Interval
-Second Most Common Vertical Interval
-Distance Between Two Most Common Vertical Intervals
-Prevalence of Most Common Vertical Interval
-Prevalence of Second Most Common Vertical Interval
-Prevalence Ratio of Two Most Common Vertical Intervals
+Variability of Number of Simultaneous Pitch Classes
+Most Common Wrapped Vertical Interval
+Second Most Common Wrapped Vertical Interval
+Distance Between Two Most Common Wrapped Vertical Intervals
+Prevalence of Most Common Wrapped Vertical Interval
+Prevalence of Second Most Common Wrapped Vertical Interval
+Prevalence Ratio of Two Most Common Wrapped Vertical Intervals
 Vertical Unisons
 Vertical Minor Seconds
 Vertical Thirds
@@ -100,7 +100,7 @@ Vertical Sixths
 Vertical Sevenths
 Vertical Octaves
 Perfect Vertical Intervals
-Vertical Dissonance Ratio
+Vertical Dissonance Ratio - Fourths Not Dissonant
 Vertical Minor Third Prevalence
 Vertical Major Third Prevalence
 Chord Duration

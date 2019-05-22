@@ -2,8 +2,8 @@ package jsymbolic2.features;
 
 import jsymbolic2.features.verticalintervals.WrappedVerticalIntervalHistogramFeature;
 import jsymbolic2.features.verticalintervals.VerticalIntervalHistogramFeature;
-import jsymbolic2.features.verticalintervals.SecondMostCommonVerticalIntervalFeature;
-import jsymbolic2.features.verticalintervals.MostCommonVerticalIntervalFeature;
+import jsymbolic2.features.verticalintervals.SecondMostCommonWrappedVerticalIntervalFeature;
+import jsymbolic2.features.verticalintervals.MostCommonWrappedVerticalIntervalFeature;
 import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 import org.ddmal.midiUtilities.MidiBuildEvent;
@@ -54,11 +54,11 @@ public class SecondMostCommonVerticalIntervalFeatureTest {
         double[] unwrapped_vertical_intervals = new VerticalIntervalHistogramFeature().extractFeature(test_tracks, inter, null);
         double[][] vertical_interval_other_features = new double[1][];
         vertical_interval_other_features[0] = unwrapped_vertical_intervals;
-        MIDIFeatureExtractor actual_common = new SecondMostCommonVerticalIntervalFeature();
+        MIDIFeatureExtractor actual_common = new SecondMostCommonWrappedVerticalIntervalFeature();
         double[] vertical_intervals = new WrappedVerticalIntervalHistogramFeature().extractFeature(test_tracks, inter, vertical_interval_other_features);
         double[][] other_features = new double[2][];
         other_features[0] = vertical_intervals;
-        MIDIFeatureExtractor common_interval_feature = new MostCommonVerticalIntervalFeature();
+        MIDIFeatureExtractor common_interval_feature = new MostCommonWrappedVerticalIntervalFeature();
         double[] most_common_vertical_interval = common_interval_feature.extractFeature(test_tracks, inter, other_features);
         other_features[1] = most_common_vertical_interval;
         double[] actual_chord_type = actual_common.extractFeature(test_tracks, inter, other_features);

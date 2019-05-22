@@ -1,17 +1,16 @@
-package jsymbolic2.features.verticalintervals;
+package jsymbolic2.features.melodicintervals;
 
-import javax.sound.midi.Sequence;
+import javax.sound.midi.*;
 import ace.datatypes.FeatureDefinition;
 import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the fraction of vertical intervals on the wrapped vertical interval
- * histogram corresponding to the most common vertical interval.
+ * A feature calculator that finds the fraction of melodic intervals greater than a perfect octave.
  *
- * @author Tristano Tenaglia and Cory McKay
+ * @author Cory McKay
  */
-public class PrevalenceOfMostCommonVerticalIntervalFeature
+public class MelodicIntervalsLargerThanAnOctaveFeature
 		extends MIDIFeatureExtractor
 {
 	/* CONSTRUCTOR ******************************************************************************************/
@@ -20,15 +19,15 @@ public class PrevalenceOfMostCommonVerticalIntervalFeature
 	/**
 	 * Basic constructor that sets the values of the fields inherited from this class' superclass.
 	 */
-	public PrevalenceOfMostCommonVerticalIntervalFeature()
+	public MelodicIntervalsLargerThanAnOctaveFeature()
 	{
-		String name = "Prevalence of Most Common Vertical Interval";
-		String code = "C-11";
-		String description = "Fraction of vertical intervals on the wrapped vertical interval histogram corresponding to the most common vertical interval.";
+		String name = "Melodic Intervals Larger Than an Octave";
+		String code = "M-19";
+		String description = "Fraction of melodic intervals greater than a perfect octave.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
-		dependencies = new String[] { "Wrapped Vertical Interval Histogram", "Most Common Vertical Interval" };
+		dependencies = null;
 		offsets = null;
 		is_default = true;
 		is_secure = true;
@@ -57,13 +56,10 @@ public class PrevalenceOfMostCommonVerticalIntervalFeature
 									double[][] other_feature_values )
 	throws Exception
 	{
-		double value;
+		double value = 0.0;
 		if (sequence_info != null)
-		{
-			double[] wrapped_vertical_interval_histogram = other_feature_values[0];
-			int most_common_vertical_interval = (int) Math.round(other_feature_values[1][0]);
-			value = wrapped_vertical_interval_histogram[most_common_vertical_interval];
-		}
+			for (int i = 13; i < sequence_info.melodic_interval_histogram.length; i++)
+				value += sequence_info.melodic_interval_histogram[i];
 		else value = -1.0;
 
 		double[] result = new double[1];

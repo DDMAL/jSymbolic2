@@ -6,12 +6,12 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the relative frequency of the second most common melodic interval in the
- * piece, divided by the relative frequency of the most common melodic interval.
+ * A feature calculator that finds the fraction of all melodic intervals that corresponds to the most common
+ * melodic interval.
  *
  * @author Cory McKay
  */
-public class RelativePrevalenceOfMostCommonMelodicIntervals
+public class PrevalenceOfMostCommonMelodicIntervalFeature
 		extends MIDIFeatureExtractor
 {
 	/* CONSTRUCTOR ******************************************************************************************/
@@ -20,11 +20,11 @@ public class RelativePrevalenceOfMostCommonMelodicIntervals
 	/**
 	 * Basic constructor that sets the values of the fields inherited from this class' superclass.
 	 */
-	public RelativePrevalenceOfMostCommonMelodicIntervals()
+	public PrevalenceOfMostCommonMelodicIntervalFeature()
 	{
-		String name = "Relative Prevalence of Most Common Melodic Intervals";
-		String code = "M-7";
-		String description = "Relative frequency of the second most common melodic interval in the piece, divided by the relative frequency of the most common melodic interval..";
+		String name = "Prevalence of Most Common Melodic Interval";
+		String code = "M-6";
+		String description = "Fraction of all melodic intervals that corresponds to the most common melodic interval.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
@@ -60,27 +60,11 @@ public class RelativePrevalenceOfMostCommonMelodicIntervals
 		double value;
 		if (sequence_info != null)
 		{
-			// Find the bin with the highest magnitude
+			// Find the highest bin
 			int max_index = mckay.utilities.staticlibraries.MathAndStatsMethods.getIndexOfLargest(sequence_info.melodic_interval_histogram);
 
-			// Find the second highest bin
-			double second_max = 0;
-			int second_max_index = 0;
-			for (int bin = 0; bin < sequence_info.melodic_interval_histogram.length; bin++)
-			{
-				if ( sequence_info.melodic_interval_histogram[bin] > second_max && bin != max_index )
-				{
-					second_max = sequence_info.melodic_interval_histogram[bin];
-					second_max_index = bin;
-				}
-			}
-
-			// Calculate the value
-			if (sequence_info.melodic_interval_histogram[max_index] == 0.0)
-				value = 0.0;
-			else 
-				value = sequence_info.melodic_interval_histogram[second_max_index] /
-						sequence_info.melodic_interval_histogram[max_index];
+			// Calculate the feature value
+			value = sequence_info.melodic_interval_histogram[max_index];
 		} 
 		else value = -1.0;
 

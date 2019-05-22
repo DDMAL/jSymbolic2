@@ -7,11 +7,11 @@ import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
  * A feature calculator that finds the fraction of vertical intervals on the wrapped vertical interval
- * histogram corresponding to the second most common vertical interval.
+ * histogram corresponding to the most common vertical interval.
  *
  * @author Tristano Tenaglia and Cory McKay
  */
-public class PrevalenceOfSecondMostCommonVerticalIntervalFeature
+public class PrevalenceOfMostCommonWrappedVerticalIntervalFeature
 		extends MIDIFeatureExtractor
 {
 	/* CONSTRUCTOR ******************************************************************************************/
@@ -20,15 +20,15 @@ public class PrevalenceOfSecondMostCommonVerticalIntervalFeature
 	/**
 	 * Basic constructor that sets the values of the fields inherited from this class' superclass.
 	 */
-	public PrevalenceOfSecondMostCommonVerticalIntervalFeature()
+	public PrevalenceOfMostCommonWrappedVerticalIntervalFeature()
 	{
-		String name = "Prevalence of Second Most Common Vertical Interval";
-		String code = "C-12";
-		String description = "Fraction of vertical intervals on the wrapped vertical interval histogram corresponding to the second most common vertical interval.";
+		String name = "Prevalence of Most Common Wrapped Vertical Interval";
+		String code = "C-11";
+		String description = "Fraction of vertical intervals on the wrapped vertical interval histogram corresponding to the most common vertical interval.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
-		dependencies = new String[] { "Wrapped Vertical Interval Histogram", "Second Most Common Vertical Interval"	};
+		dependencies = new String[] { "Wrapped Vertical Interval Histogram", "Most Common Wrapped Vertical Interval" };
 		offsets = null;
 		is_default = true;
 		is_secure = true;
@@ -61,8 +61,8 @@ public class PrevalenceOfSecondMostCommonVerticalIntervalFeature
 		if (sequence_info != null)
 		{
 			double[] wrapped_vertical_interval_histogram = other_feature_values[0];
-			int second_most_common_vertical_interval = (int) Math.round(other_feature_values[1][0]);
-			value = wrapped_vertical_interval_histogram[second_most_common_vertical_interval];
+			int most_common_vertical_interval = (int) Math.round(other_feature_values[1][0]);
+			value = wrapped_vertical_interval_histogram[most_common_vertical_interval];
 		}
 		else value = -1.0;
 

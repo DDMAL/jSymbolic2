@@ -22,7 +22,7 @@ public class VariabilityOfNumberOfSimultaneousPitchClassesFeature
 	 */
 	public VariabilityOfNumberOfSimultaneousPitchClassesFeature() {
 		String name = "Variability of Number of Simultaneous Pitch Classes";
-		String code = "C-5";
+		String code = "C-7";
         String description = "Standard deviation of the number of different pitch classes sounding simultaneously. Rests are excluded from this calculation.";
 		boolean is_sequential = true;
 		int dimensions = 1;
