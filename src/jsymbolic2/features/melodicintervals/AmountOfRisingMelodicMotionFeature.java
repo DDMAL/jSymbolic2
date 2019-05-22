@@ -1,19 +1,18 @@
 package jsymbolic2.features.melodicintervals;
 
-import java.util.LinkedList;
+import java.util.LinkedList;;
 import javax.sound.midi.*;
 import ace.datatypes.FeatureDefinition;
 import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the average melodic interval (in semitones) separating the top note of
- * melodic peaks and the bottom note of adjacent melodic troughs. Similar assumptions are made in the
- * calculation of this feature as for the Melodic Interval Histogram.
+ * A feature calculator that finds the fraction of melodic intervals that are rising in pitch (repeated notes
+ * are not counted in this calculation). Set to zero if no rising or falling melodic intervals are found.
  *
  * @author Cory McKay
  */
-public class AverageIntervalSpannedByMelodicArcs
+public class AmountOfRisingMelodicMotionFeature
 		extends MIDIFeatureExtractor
 {
 	/* CONSTRUCTOR ******************************************************************************************/
@@ -22,11 +21,11 @@ public class AverageIntervalSpannedByMelodicArcs
 	/**
 	 * Basic constructor that sets the values of the fields inherited from this class' superclass.
 	 */
-	public AverageIntervalSpannedByMelodicArcs()
+	public AmountOfRisingMelodicMotionFeature()
 	{
-		String name = "Average Interval Spanned by Melodic Arcs";
-		String code = "M-24";
-		String description = "Average melodic interval (in semitones) separating the top note of melodic peaks and the bottom note of adjacent melodic troughs. Similar assumptions are made in the calculation of this feature as for the Melodic Interval Histogram.";
+		String name = "Amount of Rising Melodic Motion";
+		String code = "M-22";
+		String description = "Fraction of melodic intervals that are rising in pitch (repeated notes are not counted in this calculation). Set to zero if no rising or falling melodic intervals are found.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
@@ -62,80 +61,39 @@ public class AverageIntervalSpannedByMelodicArcs
 		double value;
 		if (sequence_info != null)
 		{
-			int total_intervals = 0;
-			int number_intervals = 0;
-		
+			int ups = 0;
+			int downs = 0;
 			for (int track = 0; track < sequence_info.melodic_intervals_by_track_and_channel.size(); track++)
 			{
 				LinkedList<Integer>[] melodic_intervals_by_channel = sequence_info.melodic_intervals_by_track_and_channel.get(track);
-			
+				
 				for (int chan = 0; chan < melodic_intervals_by_channel.length; chan++)
 				{
-					if (chan != (10 - 1)) // Exclude unpitched Channel 10 notes
+					if (chan != (10 - 1)) // Note Channel 10 unpitched instruments
 					{
-						// Convert the list of melodic intervals in this channel to an array
+						// Convert to array
 						Object[] list_contents = melodic_intervals_by_channel[chan].toArray();
 						int[] intervals = new int[list_contents.length];
 						for (int i = 0; i < intervals.length; i++)
 							intervals[i] = ((Integer) list_contents[i]).intValue();
 
-						// Find the number of arcs
-						int direction = 0;
-						int interval_so_far = 0;
+						// Find amount of upper and downward motion
 						for (int i = 0; i < intervals.length; i++)
 						{
-							// If arc is currently decending
-							if (direction == -1)
-							{
-								if (intervals[i] < 0)
-									interval_so_far += Math.abs(intervals[i]);
-								else if (intervals[i] > 0)
-								{
-									total_intervals += interval_so_far;
-									number_intervals++;
-									interval_so_far = Math.abs(intervals[i]);
-									direction = 1;
-								}
-							}
-
-							// If arc is currently ascending
-							else if (direction == 1)
-							{
-								if (intervals[i] > 0)
-									interval_so_far += Math.abs(intervals[i]);
-								else if (intervals[i] < 0)
-								{
-									total_intervals += interval_so_far;
-									number_intervals++;
-									interval_so_far = Math.abs(intervals[i]);
-									direction = -1;
-								}
-							}
-
-							// If arc is currently stationary
-							else if (direction == 0)
-							{
-								if (intervals[i] > 0)
-								{
-									direction = 1;
-									interval_so_far += Math.abs(intervals[i]);
-								}
-								if (intervals[i] < 0)
-								{
-									direction = -1;
-									interval_so_far += Math.abs(intervals[i]);
-								}
-							}
+							if (intervals[i] > 0)
+								ups++;
+							else if (intervals[i] < 0)
+								downs++;
 						}
 					}
 				}
 			}
 
-			// Calculate the value
-			if (number_intervals == 0)
+			// Calculate the feature value
+			if ((ups + downs) == 0)
 				value = 0.0;
-			else
-				value = (double) total_intervals / (double) number_intervals;
+			else 
+				value = (double) ups / ((double) (ups + downs));
 		}
 		else value = -1.0;
 

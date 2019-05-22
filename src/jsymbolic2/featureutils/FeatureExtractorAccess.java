@@ -177,12 +177,12 @@ public final class FeatureExtractorAccess
 			new MelodicSixthsFeature(),
 			new MelodicSeventhsFeature(),
 			new MelodicOctavesFeature(),
-			new MelodicLargeIntervalsFeature(),
+			new MelodicIntervalsLargerThanAnOctave(),
 			new MinorMajorMelodicThirdlRatioFeature(),
 			new MelodicEmbellishmentsFeature(),
-			new DirectionOfMelodicMotionFeature(),
-			new AverageLengthOfMelodicArcsFeature(),
-			new AverageIntervalSpannedByMelodicArcs(),
+			new AmountOfRisingMelodicMotionFeature(),
+			new AverageLengthOfMelodicHalfArcsFeature(),
+			new AverageIntervalSpannedByMelodicHalfArcs(),
 			new MelodicPitchVarietyFeature(),
 			
 			// Add features based on chords and vertical intervals

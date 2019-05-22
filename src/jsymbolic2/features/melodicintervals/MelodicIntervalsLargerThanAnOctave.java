@@ -6,11 +6,11 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the fraction of melodic intervals greater than one octave..
+ * A feature calculator that finds the fraction of melodic intervals greater than a perfect octave.
  *
  * @author Cory McKay
  */
-public class MelodicLargeIntervalsFeature
+public class MelodicIntervalsLargerThanAnOctave
 		extends MIDIFeatureExtractor
 {
 	/* CONSTRUCTOR ******************************************************************************************/
@@ -19,11 +19,11 @@ public class MelodicLargeIntervalsFeature
 	/**
 	 * Basic constructor that sets the values of the fields inherited from this class' superclass.
 	 */
-	public MelodicLargeIntervalsFeature()
+	public MelodicIntervalsLargerThanAnOctave()
 	{
-		String name = "Melodic Large Intervals";
+		String name = "Melodic Intervals Larger Than an Octave";
 		String code = "M-19";
-		String description = "Fraction of melodic intervals greater than one octave.";
+		String description = "Fraction of melodic intervals greater than a perfect octave.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);

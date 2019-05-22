@@ -70,12 +70,12 @@ Melodic Perfect Fifths
 Melodic Sixths
 Melodic Sevenths
 Melodic Octaves
-Melodic Large Intervals
+Melodic Intervals Larger Than an Octave
 Minor Major Melodic Third Ratio
 Melodic Embellishments
-Direction of Melodic Motion
-Average Length of Melodic Arcs
-Average Interval Spanned by Melodic Arcs
+Amount of Rising Melodic Motion
+Average Length of Melodic Half-Arcs
+Average Interval Spanned by Melodic Half-Arcs
 Melodic Pitch Variety
 Vertical Interval Histogram
 Wrapped Vertical Interval Histogram
