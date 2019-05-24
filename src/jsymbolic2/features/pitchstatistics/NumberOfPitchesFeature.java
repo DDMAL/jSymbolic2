@@ -23,7 +23,7 @@ public class NumberOfPitchesFeature
 	public NumberOfPitchesFeature()
 	{
 		String name = "Number of Pitches";
-		String code = "P-4";
+		String code = "P-5";
 		String description = "Number of unique pitches that occur at least once in the piece. Enharmonic equivalents are grouped together for the purpose of this calculation.";
 		boolean is_sequential = true;
 		int dimensions = 1;

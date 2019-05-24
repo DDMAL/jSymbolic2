@@ -28,7 +28,7 @@ public class PitchClassHistogramTransposedFeature
 	public PitchClassHistogramTransposedFeature()
 	{
 		String name = "Pitch Class Histogram - Transposed";
-		String code = "P-2";
+		String code = "P-3";
 		String description = "A feature vector consisting of bin magnitudes of the pitch class histogram described in the jSymbolic manual. Each bin corresponds to one of the 12 pitch classes, with pitch classes increasing by a semitone from one bin to the next (enharmonic equivalents are assigned the same pitch class number). The first bin corresponds to the most common pitch class in the piece under consideration (and therefore does NOT necessarily correspond to the same pitch class when extracted from different pieces). The magnitude of of each bin is proportional to the the number of times notes occurred at the bin's pitch class in the piece, relative to notes of all other pitch classes in the piece (the histogram is normalized).";
 		boolean is_sequential = true;
 		int dimensions = 12;

@@ -6,13 +6,17 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the skewness of the pitch classes (where 0 corresponds to C, 1 to C#/Db, 
- * etc.) of all pitched notes in the piece. Provides a measure of how asymmetrical the pitch class 
- * distribution is to either the left or the right of the mean pitch class. A value of zero indicates no skew.
+ * A feature vector consisting of bin magnitudes of the pitch class histogram described above. Each bin 
+ * corresponds to one of the 12 pitch classes, with bin 0 corresponding to C and pitch classes increasing by 
+ * a semitone from one bin to the next (enharmonic equivalents are assigned the same pitch class number). 
+ * For example, bin 3 corresponds to D#/Eb. The magnitude of of each bin is proportional to the the number 
+ * of times notes occurred at the bin's pitch class in the piece, relative to notes of all other pitch 
+ * classes in the piece (the histogram is normalized).
  *
- * @author Cory McKay
+ * @author radamian
  */
-public class PitchClassSkewnessFeature
+
+public class PitchClassHistogramUntransposedFeature
 		extends MIDIFeatureExtractor
 {
 	/* CONSTRUCTOR ******************************************************************************************/
@@ -21,13 +25,13 @@ public class PitchClassSkewnessFeature
 	/**
 	 * Basic constructor that sets the values of the fields inherited from this class' superclass.
 	 */
-	public PitchClassSkewnessFeature()
+	public PitchClassHistogramUntransposedFeature()
 	{
-		String name = "Pitch Class Skewness";
-		String code = "P-31";
-		String description = "Skewness of the pitch classes (where 0 corresponds to C, 1 to C#/Db, etc.) of all pitched notes in the piece. Provides a measure of how asymmetrical the pitch class distribution is to either the left or the right of the mean pitch class. A value of zero indicates no skew.";
+		String name = "Pitch Class Histogram - Untransposed";
+		String code = "P-2";
+		String description = "A feature vector consisting of bin magnitudes of the pitch class histogram described above. Each bin corresponds to one of the 12 pitch classes, with bin 0 corresponding to C and pitch classes increasing by a semitone from one bin to the next (enharmonic equivalents are assigned the same pitch class number). For example, bin 3 corresponds to D#/Eb. The magnitude of of each bin is proportional to the the number of times notes occurred at the bin's pitch class in the piece, relative to notes of all other pitch classes in the piece (the histogram is normalized).";
 		boolean is_sequential = true;
-		int dimensions = 1;
+		int dimensions = 12;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
 		dependencies = null;
 		offsets = null;
@@ -58,13 +62,13 @@ public class PitchClassSkewnessFeature
 									double[][] other_feature_values )
 	throws Exception
 	{
-		double value;
+		double[] result = null;
 		if (sequence_info != null)
-			value = mckay.utilities.staticlibraries.MathAndStatsMethods.getMedianSkewness(sequence_info.pitch_classes_of_all_note_ons);
-		else value = -1.0;
-
-		double[] result = new double[1];
-		result[0] = value;
+		{
+			result = new double[sequence_info.pitch_class_histogram.length];
+			for (int i = 0; i < result.length; i++)
+				result[i] = sequence_info.pitch_class_histogram[i];
+		}
 		return result;
 	}
 }

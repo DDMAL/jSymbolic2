@@ -112,6 +112,7 @@ public final class FeatureExtractorAccess
 		{
 			// Add features based on pitch statistics
 			new BasicPitchHistogramFeature(),
+			new PitchClassHistogramUntransposedFeature(),
 			new PitchClassHistogramTransposedFeature(),
 			new FoldedFifthsPitchClassHistogramFeature(),
 			new NumberOfPitchesFeature(),
@@ -146,6 +147,8 @@ public final class FeatureExtractorAccess
 			new PitchClassKurtosisFeature(),
 			new PitchClassKurtosisAfterFoldingFeature(),
 			new KeySignatureDiversityFeature(),
+			new PitchDeviationFromFirstKeySignatureFeature(),
+			new PitchDeviationFromKeySignatureFeature(),
 			new MajorOrMinorFeature(),
 			new NumberOfFlatsInFirstKeySignatureFeature(),
 			new NumberOfSharpsInFirstKeySignatureFeature(),

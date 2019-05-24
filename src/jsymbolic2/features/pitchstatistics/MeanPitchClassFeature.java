@@ -25,7 +25,7 @@ public class MeanPitchClassFeature
 	public MeanPitchClassFeature()
 	{
 		String name = "Mean Pitch Class";
-		String code = "P-17";
+		String code = "P-18";
 		String description = "Mean pitch class value, averaged across all pitched notes in the piece. A value of 0 corresponds to a mean pitch class of C, and pitches increase chromatically by semitone in integer units from there (e.g. a value of 2 would mean that D is the mean pitch class). Enharmonic equivalents are treated as a single pitch class.";
 		boolean is_sequential = true;
 		int dimensions = 1;

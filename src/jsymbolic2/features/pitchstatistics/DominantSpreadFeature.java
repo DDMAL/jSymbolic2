@@ -23,7 +23,7 @@ public class DominantSpreadFeature
 	public DominantSpreadFeature()
 	{
 		String name = "Dominant Spread";
-		String code = "P-14";
+		String code = "P-15";
 		String description = "Largest number of consecutive pitch classes separated by perfect 5ths that each individually account for at least 9% of the total notes in the piece.";
 		boolean is_sequential = true;
 		int dimensions = 1;

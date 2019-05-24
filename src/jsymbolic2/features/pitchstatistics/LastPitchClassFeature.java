@@ -26,7 +26,7 @@ public class LastPitchClassFeature
 	public LastPitchClassFeature()
 	{
 		String name = "Last Pitch Class";
-		String code = "P-42";
+		String code = "P-45";
 		String description = "The pitch class of the last note in the piece. If there are multiple notes with simultaneous attacks at the end of the piece, then the one with the lowest pitch is selected. A value of 0 corresponds to C, and pitches increase chromatically by semitone in integer units (e.g. a value of 2 would mean that D is the most common pitch class). Enharmonic equivalents are treated as a single pitch class. Set to 0 if there are no pitched notes.";
 		boolean is_sequential = true;
 		int dimensions = 1;

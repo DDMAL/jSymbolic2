@@ -24,7 +24,7 @@ public class FirstPitchFeature
 	public FirstPitchFeature()
 	{
 		String name = "First Pitch";
-		String code = "P-39";
+		String code = "P-42";
 		String description = "The MIDI pitch value of the first note in the piece. If there are multiple notes with simultaneous attacks at the beginning of the piece, then the one with the lowest pitch is selected. Set to 0 if there are no pitched notes.";
 		boolean is_sequential = true;
 		int dimensions = 1;

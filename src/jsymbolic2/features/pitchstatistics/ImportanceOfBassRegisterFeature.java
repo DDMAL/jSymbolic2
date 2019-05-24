@@ -22,7 +22,7 @@ public class ImportanceOfBassRegisterFeature
 	public ImportanceOfBassRegisterFeature()
 	{
 		String name = "Importance of Bass Register";
-		String code = "P-11";
+		String code = "P-12";
 		String description = "Fraction of notes between MIDI pitches 0 and 54.";
 		boolean is_sequential = true;
 		int dimensions = 1;

@@ -24,7 +24,7 @@ public class NumberOfSharpsInFirstKeySignatureFeature
 	public NumberOfSharpsInFirstKeySignatureFeature()
 	{
 		String name = "Number of Sharps in First Key Signature";
-		String code = "P-38";
+		String code = "P-41";
 		String description = "The number of sharps in the first key signature appearing in the piece. Set to 0 if no key signatures are specified or if the first key signature does not have any sharps.";
 		boolean is_sequential = true;
 		int dimensions = 1;

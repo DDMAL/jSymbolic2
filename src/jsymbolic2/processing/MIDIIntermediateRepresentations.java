@@ -969,9 +969,10 @@ public class MIDIIntermediateRepresentations
 								key_sig_found = true;
 						}
 						
-						int[] key_signature = new int[2];
+						int[] key_signature = new int[3];
 						key_signature[0] = data[0];
 						key_signature[1] = data[1];
+						key_signature[2] = (int) event.getTick();
 						((LinkedList) overall_metadata[4]).add(key_signature);
 					}
 

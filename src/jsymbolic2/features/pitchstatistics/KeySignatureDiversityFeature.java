@@ -25,7 +25,7 @@ public class KeySignatureDiversityFeature
 	public KeySignatureDiversityFeature()
 	{
 		String name = "Key Signature Diversity";
-		String code = "P-35";
+		String code = "P-36";
 		String description = "The number of different (unique) key signatures found in the piece. Set to 1 if no key signature is specified.";
 		boolean is_sequential = true;
 		int dimensions = 1;

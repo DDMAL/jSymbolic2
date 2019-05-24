@@ -23,7 +23,7 @@ public class LastPitchFeature
 	public LastPitchFeature()
 	{
 		String name = "Last Pitch";
-		String code = "P-41";
+		String code = "P-44";
 		String description = "The MIDI pitch value of the last note in the piece. If there are multiple notes with simultaneous attacks at the end of the piece, then the one with the lowest pitch is selected. Set to 0 if there are no pitched notes.";
 		boolean is_sequential = true;
 		int dimensions = 1;

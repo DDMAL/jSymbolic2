@@ -24,7 +24,7 @@ public class NumberOfFlatsInFirstKeySignatureFeature
 	public NumberOfFlatsInFirstKeySignatureFeature()
 	{
 		String name = "Number of Flats in First Key Signature";
-		String code = "P-37";
+		String code = "P-40";
 		String description = "The number of flats in the first key signature appearing in the piece. Set to 0 if no key signatures are specified or if the first key signature does not have any flats.";
 		boolean is_sequential = true;
 		int dimensions = 1;

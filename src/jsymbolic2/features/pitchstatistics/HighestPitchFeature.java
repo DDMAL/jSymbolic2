@@ -23,7 +23,7 @@ public class HighestPitchFeature
 	public HighestPitchFeature()
 	{
 		String name = "Highest Pitch";
-		String code = "P-10";
+		String code = "P-11";
 		String description = "MIDI pitch of the highest pitch in the piece. Set to zero if there are no pitched notes.";
 		boolean is_sequential = true;
 		int dimensions = 1;

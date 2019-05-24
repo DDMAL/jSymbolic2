@@ -22,7 +22,7 @@ public class PrevalenceOfMostCommonPitchClassFeature
 	public PrevalenceOfMostCommonPitchClassFeature()
 	{
 		String name = "Prevalence of Most Common Pitch Class";
-		String code = "P-21";
+		String code = "P-22";
 		String description = "Fraction of notes that correspond to the most common pitch class.";
 		boolean is_sequential = true;
 		int dimensions = 1;

@@ -24,7 +24,7 @@ public class PitchKurtosisFeature
 	public PitchKurtosisFeature()
 	{
 		String name = "Pitch Kurtosis";
-		String code = "P-32";
+		String code = "P-33";
 		String description = "Kurtosis of the MIDI pitches of all pitched notes in the piece. Provides a measure of how peaked or flat the pitch distribution is. The higher the kurtosis, the more the pitches are clustered near the mean and the fewer outliers there are.";
 		boolean is_sequential = true;
 		int dimensions = 1;

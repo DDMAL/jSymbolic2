@@ -23,7 +23,7 @@ public class LowestPitchFeature
 	public LowestPitchFeature()
 	{
 		String name = "Lowest Pitch";
-		String code = "P-9";
+		String code = "P-10";
 		String description = "MIDI pitch of the lowest pitch in the piece. Set to zero if there are no pitched notes.";
 		boolean is_sequential = true;
 		int dimensions = 1;
