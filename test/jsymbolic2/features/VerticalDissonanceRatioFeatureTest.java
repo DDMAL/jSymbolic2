@@ -2,7 +2,7 @@ package jsymbolic2.features;
 
 import jsymbolic2.features.verticalintervals.WrappedVerticalIntervalHistogramFeature;
 import jsymbolic2.features.verticalintervals.VerticalIntervalHistogramFeature;
-import jsymbolic2.features.verticalintervals.VerticalDissonanceRatioFeature;
+import jsymbolic2.features.verticalintervals.VerticalDissonanceRatioFeatureFourthsNotDissonantFeature;
 import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 import org.ddmal.midiUtilities.MidiBuildEvent;
@@ -41,7 +41,7 @@ public class VerticalDissonanceRatioFeatureTest {
         double[] unwrapped_vertical_intervals = new VerticalIntervalHistogramFeature().extractFeature(test_tracks, inter, null);
         double[][] vertical_interval_other_features = new double[1][];
         vertical_interval_other_features[0] = unwrapped_vertical_intervals;
-        MIDIFeatureExtractor actual_common = new VerticalDissonanceRatioFeature();
+        MIDIFeatureExtractor actual_common = new VerticalDissonanceRatioFeatureFourthsNotDissonantFeature();
         double[] vertical_intervals = new WrappedVerticalIntervalHistogramFeature().extractFeature(test_tracks, inter, vertical_interval_other_features);
         double[][] other_features = new double[2][];
         other_features[0] = vertical_intervals;

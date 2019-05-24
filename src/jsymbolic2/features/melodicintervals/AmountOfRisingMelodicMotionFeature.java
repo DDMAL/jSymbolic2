@@ -1,17 +1,18 @@
 package jsymbolic2.features.melodicintervals;
 
+import java.util.LinkedList;;
 import javax.sound.midi.*;
 import ace.datatypes.FeatureDefinition;
 import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the fraction of all melodic intervals that corresponds to the most common
- * melodic interval.
+ * A feature calculator that finds the fraction of melodic intervals that are rising in pitch (repeated notes
+ * are not counted in this calculation). Set to zero if no rising or falling melodic intervals are found.
  *
  * @author Cory McKay
  */
-public class PrevalenceOfMostCommonMelodicInterval
+public class AmountOfRisingMelodicMotionFeature
 		extends MIDIFeatureExtractor
 {
 	/* CONSTRUCTOR ******************************************************************************************/
@@ -20,11 +21,11 @@ public class PrevalenceOfMostCommonMelodicInterval
 	/**
 	 * Basic constructor that sets the values of the fields inherited from this class' superclass.
 	 */
-	public PrevalenceOfMostCommonMelodicInterval()
+	public AmountOfRisingMelodicMotionFeature()
 	{
-		String name = "Prevalence of Most Common Melodic Interval";
-		String code = "M-6";
-		String description = "Fraction of all melodic intervals that corresponds to the most common melodic interval.";
+		String name = "Amount of Rising Melodic Motion";
+		String code = "M-22";
+		String description = "Fraction of melodic intervals that are rising in pitch (repeated notes are not counted in this calculation). Set to zero if no rising or falling melodic intervals are found.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
@@ -60,12 +61,40 @@ public class PrevalenceOfMostCommonMelodicInterval
 		double value;
 		if (sequence_info != null)
 		{
-			// Find the highest bin
-			int max_index = mckay.utilities.staticlibraries.MathAndStatsMethods.getIndexOfLargest(sequence_info.melodic_interval_histogram);
+			int ups = 0;
+			int downs = 0;
+			for (int track = 0; track < sequence_info.melodic_intervals_by_track_and_channel.size(); track++)
+			{
+				LinkedList<Integer>[] melodic_intervals_by_channel = sequence_info.melodic_intervals_by_track_and_channel.get(track);
+				
+				for (int chan = 0; chan < melodic_intervals_by_channel.length; chan++)
+				{
+					if (chan != (10 - 1)) // Note Channel 10 unpitched instruments
+					{
+						// Convert to array
+						Object[] list_contents = melodic_intervals_by_channel[chan].toArray();
+						int[] intervals = new int[list_contents.length];
+						for (int i = 0; i < intervals.length; i++)
+							intervals[i] = ((Integer) list_contents[i]).intValue();
+
+						// Find amount of upper and downward motion
+						for (int i = 0; i < intervals.length; i++)
+						{
+							if (intervals[i] > 0)
+								ups++;
+							else if (intervals[i] < 0)
+								downs++;
+						}
+					}
+				}
+			}
 
 			// Calculate the feature value
-			value = sequence_info.melodic_interval_histogram[max_index];
-		} 
+			if ((ups + downs) == 0)
+				value = 0.0;
+			else 
+				value = (double) ups / ((double) (ups + downs));
+		}
 		else value = -1.0;
 
 		double[] result = new double[1];

@@ -6,13 +6,12 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the ratio between the fraction of notes corresponding to the second most
- * common vertical interval on the wrapped vertical interval histogram and the fraction of vertical intervals
- * corresponding to the most common vertical interval. Set to 0 if either of these prevalences are 0.
+ * A feature calculator that finds the absolute value of the difference (in semitones) between the most common
+ * and second most common wrapped vertical intervals in the piece.
  *
  * @author Tristano Tenaglia and Cory McKay
  */
-public class PrevalenceRatioOfTwoMostCommonVerticalIntervalsFeature
+public class DistanceBetweenTwoMostCommonWrappedVerticalIntervalsFeature
 		extends MIDIFeatureExtractor
 {
 	/* CONSTRUCTOR ******************************************************************************************/
@@ -21,15 +20,15 @@ public class PrevalenceRatioOfTwoMostCommonVerticalIntervalsFeature
 	/**
 	 * Basic constructor that sets the values of the fields inherited from this class' superclass.
 	 */
-	public PrevalenceRatioOfTwoMostCommonVerticalIntervalsFeature()
+	public DistanceBetweenTwoMostCommonWrappedVerticalIntervalsFeature()
 	{
-		String name = "Prevalence Ratio of Two Most Common Vertical Intervals";
-		String code = "C-13";
-		String description = "Ratio between the fraction of notes corresponding to the second most common vertical interval on the wrapped vertical interval histogram and the fraction of vertical intervals corresponding to the most common vertical interval. Set to 0 if either of these prevalences are 0.";
+		String name = "Distance Between Two Most Common Wrapped Vertical Intervals";
+		String code = "C-10";
+		String description = "Absolute value of the difference (in semitones) between the most common and second most common wrapped vertical intervals in the piece.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
-		dependencies = new String[] { "Prevalence of Most Common Vertical Interval", "Prevalence of Second Most Common Vertical Interval" };
+		dependencies = new String[] {"Most Common Wrapped Vertical Interval", "Second Most Common Wrapped Vertical Interval"};
 		offsets = null;
 		is_default = true;
 		is_secure = true;
@@ -61,14 +60,9 @@ public class PrevalenceRatioOfTwoMostCommonVerticalIntervalsFeature
 		double value;
 		if (sequence_info != null)
 		{
-			double prevalence_of_most_common_vertical_interval = other_feature_values[0][0];
-			double prevalence_of_second_common_vertical_interval = other_feature_values[1][0];
-			if (prevalence_of_most_common_vertical_interval == 0.0)
-				value = 0.0;
-			else if (prevalence_of_second_common_vertical_interval == 0.0)
-				value = 0.0;
-			else
-				value = prevalence_of_second_common_vertical_interval / prevalence_of_most_common_vertical_interval;
+			double most_common_vertical_interval = other_feature_values[0][0];
+			double second_common_vertical_interval = other_feature_values[1][0];
+			value = Math.round(Math.abs(most_common_vertical_interval - second_common_vertical_interval));
 		}
 		else value = -1.0;
 

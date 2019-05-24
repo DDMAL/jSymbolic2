@@ -13,7 +13,7 @@ import jsymbolic2.processing.MIDIIntermediateRepresentations;
  *
  * @author Cory McKay
  */
-public class AverageLengthOfMelodicArcsFeature
+public class AverageLengthOfMelodicHalfArcsFeature
 		extends MIDIFeatureExtractor
 {
 	/* CONSTRUCTOR ******************************************************************************************/
@@ -22,9 +22,9 @@ public class AverageLengthOfMelodicArcsFeature
 	/**
 	 * Basic constructor that sets the values of the fields inherited from this class' superclass.
 	 */
-	public AverageLengthOfMelodicArcsFeature()
+	public AverageLengthOfMelodicHalfArcsFeature()
 	{
-		String name = "Average Length of Melodic Arcs";
+		String name = "Average Length of Melodic Half-Arcs";
 		String code = "M-23";
 		String description = "Average number of notes that separate melodic peaks and troughs. Similar assumptions are made in the calculation of this feature as for the Melodic Interval Histogram. Set to 0 if no melodic arcs are found.";
 		boolean is_sequential = true;

@@ -6,7 +6,7 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature extractor that finds the average number of different pitch classes sounding simultaneously. Rests
+ * A feature extractor that finds the mean number of different pitch classes sounding simultaneously. Rests
  * are excluded from this calculation.
  *
  * @author Cory McKay and Tristano Tenaglia
@@ -23,8 +23,8 @@ public class AverageNumberOfSimultaneousPitchClassesFeature
 	public AverageNumberOfSimultaneousPitchClassesFeature()
 	{
 		String name = "Average Number of Simultaneous Pitch Classes";
-		String code = "C-4";
-		String description = "Average number of different pitch classes sounding simultaneously. Rests are excluded from this calculation.";
+		String code = "C-5";
+		String description = "Mean number of distinct pitch classes sounding simultaneously. Rests are excluded from this calculation.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);

@@ -1,18 +1,17 @@
 package jsymbolic2.features.verticalintervals;
 
+import javax.sound.midi.Sequence;
 import ace.datatypes.FeatureDefinition;
 import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
-import javax.sound.midi.Sequence;
-
 /**
- * A feature calculator that finds the interval in semitones corresponding to the wrapped vertical interval
- * histogram bin with the second highest magnitude.
+ * A feature calculator that finds the fraction of vertical intervals on the wrapped vertical interval
+ * histogram corresponding to the second most common vertical interval.
  *
  * @author Tristano Tenaglia and Cory McKay
  */
-public class SecondMostCommonVerticalIntervalFeature
+public class PrevalenceOfSecondMostCommonWrappedVerticalIntervalFeature
 		extends MIDIFeatureExtractor
 {
 	/* CONSTRUCTOR ******************************************************************************************/
@@ -21,17 +20,15 @@ public class SecondMostCommonVerticalIntervalFeature
 	/**
 	 * Basic constructor that sets the values of the fields inherited from this class' superclass.
 	 */
-	public SecondMostCommonVerticalIntervalFeature()
+	public PrevalenceOfSecondMostCommonWrappedVerticalIntervalFeature()
 	{
-		String name = "Second Most Common Vertical Interval";
-		String code = "C-9";
-		String description = "The interval in semitones corresponding to the wrapped vertical interval histogram bin with the second highest magnitude.";
+		String name = "Prevalence of Second Most Common Wrapped Vertical Interval";
+		String code = "C-12";
+		String description = "Fraction of vertical intervals on the wrapped vertical interval histogram corresponding to the second most common vertical interval.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
-		dependencies = new String[2];
-		dependencies[0] = "Wrapped Vertical Interval Histogram";
-		dependencies[1] = "Most Common Vertical Interval";
+		dependencies = new String[] { "Wrapped Vertical Interval Histogram", "Second Most Common Wrapped Vertical Interval"	};
 		offsets = null;
 		is_default = true;
 		is_secure = true;
@@ -64,18 +61,8 @@ public class SecondMostCommonVerticalIntervalFeature
 		if (sequence_info != null)
 		{
 			double[] wrapped_vertical_interval_histogram = other_feature_values[0];
-			int most_common_vertical_interval = (int) Math.round(other_feature_values[1][0]);
-			value = 0.0;
-			double max_magnitude = 0.0;
-			for (int interval = 0; interval < wrapped_vertical_interval_histogram.length; interval++)
-			{
-				if ( interval != most_common_vertical_interval &&
-				     wrapped_vertical_interval_histogram[interval] > max_magnitude )
-				{
-					max_magnitude = wrapped_vertical_interval_histogram[interval];
-					value = interval;
-				}
-			}
+			int second_most_common_vertical_interval = (int) Math.round(other_feature_values[1][0]);
+			value = wrapped_vertical_interval_histogram[second_most_common_vertical_interval];
 		}
 		else value = -1.0;
 
