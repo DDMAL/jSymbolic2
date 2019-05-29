@@ -69,10 +69,11 @@ public class MIDIIntermediateRepresentations
 	 * 120 BPM if no tempo metamessage is present.</li>
 	 * 
 	 * <li><i>Indice 4:</i> LinkedList of all key signatures in the order that they appear in the MIDI 
-	 * sequence. Stored individually as a list of 2-dimensional Integer arrays, and based on key signature
+	 * sequence. Stored individually as a list of 3-dimensional Integer arrays, and based on key signature
      * metamessages. The first element in each array represents the number of sharps or flats, and the second
      * element indicates the major/minor quality of the key, with 0 indicating major and 1 indicating minor.
-     * Empty if no key signature metamessage is present.</li>
+     * The third entry indicates the MIDI tick that the key signature metamessage occurred on. Empty if no key
+	 * signature metamessage is present.</li>
 	 * </ul>
 	 */
 	public Object[] overall_metadata;

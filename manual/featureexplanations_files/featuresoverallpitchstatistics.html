@@ -41,7 +41,7 @@
     bin is proportional to the the number of times notes occurred at the bin's 
     pitch in the piece, relative to all other pitches in the piece (the histogram 
     is normalized).</font></li>
-  <li><font color="#FF0000"><strong>P-2 Pitch Class Histogram - Untransposed:</strong> A feature vector consisting 
+  <li><font color="#000000"><strong>P-2 Pitch Class Histogram - Untransposed:</strong> A feature vector consisting 
     of bin magnitudes of the pitch class histogram described above. Each bin corresponds 
     to one of the 12 pitch classes, with bin 0 corresponding to C and pitch classes increasing by a semitone from one bin to the next (enharmonic equivalents are assigned the same pitch 
     class number). 
@@ -164,8 +164,8 @@
     fifths pitch class histogram. Provides a measure of how peaked or flat the 
     pitch classes are from a dominant-tonic perspective.</font></li>
   <li><font color="#000000"><strong>P-35 Key Signature Diversity:</strong> The number of different (unique) key signatures found in the piece. Set to 1 if no key signature is specified.</font></li>
-  <li><font color="#000000"><strong><font color="#FF0000">P-37 Pitch Deviation from First Key Signature:</font></strong><font color="#FF0000"> The fraction of notes in the piece that do not belong to one of the 7 pitch classes specified by the first key signature in the piece. 0 if there is no key signature specified in the piece.</font></font></li>
-  <li><font color="#FF0000"><strong>P-38 Pitch Deviation from  Key Signature:</strong> The fraction of notes in the piece that do not belong to one of the 7 pitch classes specified by the key signature in effect at the time that they occur. 0 if there is no key signature specified in the piece.</font></li>
+  <li><font color="#000000"><strong>P-37 Pitch Deviation from First Key Signature:</strong> The fraction of notes in the piece that do not belong to one of the 7 pitch classes specified by the first key signature in the piece. 0 if there is no key signature specified in the piece.</font></li>
+  <li><font color="#000000"><strong>P-38 Pitch Deviation from  Key Signature:</strong> The fraction of notes in the piece that do not belong to one of the 7 pitch classes specified by the key signature in effect at the time that they occur. 0 if there is no key signature specified in the piece.</font></li>
   <li><font color="#000000"><strong>P-36 Major or Minor:</strong> Whether the piece is major or minor, 
     as indicated by the first encountered major/minor metadata tag in the piece. 
     Set to 0 if the metadata indicates that the piece is major, or set to 1 if 

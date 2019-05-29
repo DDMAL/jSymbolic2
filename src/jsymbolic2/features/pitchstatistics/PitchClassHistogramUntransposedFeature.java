@@ -6,12 +6,12 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature vector consisting of bin magnitudes of the pitch class histogram described above. Each bin 
- * corresponds to one of the 12 pitch classes, with bin 0 corresponding to C and pitch classes increasing by 
- * a semitone from one bin to the next (enharmonic equivalents are assigned the same pitch class number). 
- * For example, bin 3 corresponds to D#/Eb. The magnitude of of each bin is proportional to the the number 
- * of times notes occurred at the bin's pitch class in the piece, relative to notes of all other pitch 
- * classes in the piece (the histogram is normalized).
+ * A feature vector consisting of bin magnitudes of the pitch class histogram described described in the
+ * jSymbolic manual. Each bin corresponds to one of the 12 pitch classes, with bin 0 corresponding to C and
+ * pitch classes increasing by a semitone from one bin to the next (enharmonic equivalents are assigned the
+ * same pitch class number). For example, bin 3 corresponds to D#/Eb. The magnitude of of each bin is
+ * proportional to the the number of times notes occurred at the bin's pitch class in the piece, relative to
+ * notes of all other pitch classes in the piece (the histogram is normalized).
  *
  * @author radamian
  */
@@ -29,7 +29,7 @@ public class PitchClassHistogramUntransposedFeature
 	{
 		String name = "Pitch Class Histogram - Untransposed";
 		String code = "P-2";
-		String description = "A feature vector consisting of bin magnitudes of the pitch class histogram described above. Each bin corresponds to one of the 12 pitch classes, with bin 0 corresponding to C and pitch classes increasing by a semitone from one bin to the next (enharmonic equivalents are assigned the same pitch class number). For example, bin 3 corresponds to D#/Eb. The magnitude of of each bin is proportional to the the number of times notes occurred at the bin's pitch class in the piece, relative to notes of all other pitch classes in the piece (the histogram is normalized).";
+		String description = "A feature vector consisting of bin magnitudes of the pitch class histogram described in the jSymbolic manual. Each bin corresponds to one of the 12 pitch classes, with bin 0 corresponding to C and pitch classes increasing by a semitone from one bin to the next (enharmonic equivalents are assigned the same pitch class number). For example, bin 3 corresponds to D#/Eb. The magnitude of of each bin is proportional to the the number of times notes occurred at the bin's pitch class in the piece, relative to notes of all other pitch classes in the piece (the histogram is normalized).";
 		boolean is_sequential = true;
 		int dimensions = 12;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);

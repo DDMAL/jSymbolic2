@@ -8,7 +8,6 @@ import ace.datatypes.FeatureDefinition;
 import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.featureutils.NoteInfo;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
-import mckay.utilities.staticlibraries.MathAndStatsMethods;
 
 /**
  * The fraction of notes in the piece that do not belong to one of the 7 pitch classes specified by the key 
