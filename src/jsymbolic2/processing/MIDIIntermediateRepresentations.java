@@ -821,12 +821,14 @@ public class MIDIIntermediateRepresentations
 		
 		//System.out.println("\n\n\n\n\nGENERATING NOTE ONSET SLICE LISTS\n\n");
 		generateNoteOnsetSliceContainer();
-//		for (int slice = 0; slice < note_onset_slice_container.getNoteOnsetSlices().size(); slice++)
-//		{
-//			System.out.println("\n\nEntry " + slice + " in note_onset_slices:");
-//			for (int pitch: note_onset_slice_container.getNoteOnsetSlices().get(slice))
-//				System.out.println(pitch + ", ");
-//		}
+		/*
+		for (int slice = 0; slice < note_onset_slice_container.getNoteOnsetSlices().size(); slice++)
+		{
+			System.out.println("\n\nEntry " + slice + " in note_onset_slices:");
+			for (int pitch: note_onset_slice_container.getNoteOnsetSlices().get(slice))
+				System.out.println(pitch + ", ");
+		}
+		*/
 				
 		// System.out.println("\n\n\n\nGENERATING MELODIC INTERMEDIATE REPRESENTATIONS");	
 		generateMelodicIntermediateRepresentations();

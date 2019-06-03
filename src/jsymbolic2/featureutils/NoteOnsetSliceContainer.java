@@ -51,16 +51,15 @@ public class NoteOnsetSliceContainer
 	public LinkedList<LinkedList<Integer>> note_onset_slices;
 	
 	/**
-	 * A list of tables, where each table represents a different note onset slice. The first index partitions
-	 * the note onset slice by tracks in which the note occurred, and the second partitions it into channels.
-	 * Each entry in this table is a list of lists, each inner list representing a note onset slice 
-	 * for a particular track and channel, containing the pitches of that slice in increasing order. 
-	 * This list has the same number of slices and the same rhythmic synchronizations as note_onset_slices. An 
-	 * onset slice is created for all tracks and channels whenever a note is encountered. If there is no note  
-	 * on a particular track and channel when an onset slice is created, then the entry for that track and 
-	 * channel is an empty list. 
+	 * A table of lists of lists, where The first index partitions the note onset slice by tracks in which the 
+	 * note occurred, and the second partitions it into channels. Each entry in the table is a list of lists, 
+	 * each inner list representing a note onset slice for a particular track and channel, containing the 
+	 * pitches of that slice in increasing order. This list has the same number of slices and the same 
+	 * rhythmic synchronizations as note_onset_slices. An onset slice is created for all tracks and channels 
+	 * whenever a note is encountered. If there is no note on a particular track and channel when an onset 
+	 * slice is created, then the entry for that track and channel is an empty list. 
 	 */
-	public LinkedList<LinkedList<Integer>[][]> note_onset_slices_by_track_and_channel;
+	public LinkedList<LinkedList<Integer>>[][] note_onset_slices_by_track_and_channel;
 	
 	/**
 	 * A list of lists, where each entry of the root list represents a note onset slice containing only notes 
@@ -72,16 +71,15 @@ public class NoteOnsetSliceContainer
 	public LinkedList<LinkedList<Integer>> note_onset_slices_only_new_onsets;
 	
 	/**
-	 * A list of tables, where each table represents a different note onset slice. The first index partitions
-	 * the note onset slice by tracks in which the note occurred, and the second partitions it into channels.
-	 * Each entry in this table is a list of lists, each inner list representing a note onset slice 
-	 * for a particular track and channel, containing the pitches of that slice in increasing order.
-	 * This list has the same number of slices and the same rhythmic synchronizations as 
-	 * note_onset_slices_only_new_onsets. An onset slice is created for all tracks and channels whenever a 
-	 * note is encountered. If there is no note on a particular track and channel when an onset slice is 
-	 * created, then the entry for that track and channel is an empty list. 
+	 * A table of lists of lists, where The first index partitions the note onset slice by tracks in which the 
+	 * note occurred, and the second partitions it into channels. Each entry in this table is a list of lists, 
+	 * each inner list representing a note onset slice for a particular track and channel, containing the 
+	 * pitches of that slice in increasing order. This list has the same number of slices and the same 
+	 * rhythmic synchronizations as note_onset_slices_only_new_onsets. An onset slice is created for all 
+	 * tracks and channels whenever a note is encountered. If there is no note on a particular track and 
+	 * channel when an onset slice is created, then the entry for that track and channel is an empty list. 
 	 */
-	public LinkedList<LinkedList<Integer>[][]> note_onset_slices_by_track_and_channel_only_new_onsets;
+	public LinkedList<LinkedList<Integer>>[][] note_onset_slices_by_track_and_channel_only_new_onsets;
 
 	
 	/* PRIVATE FIELDS ***************************************************************************************/
@@ -158,13 +156,20 @@ public class NoteOnsetSliceContainer
 		// note_onset_slices_only_new_onsets, and note_onset_slices_by_track_and_channel_only_new_onsets 
 		// fields.
 		note_onset_slices = new LinkedList<>();
-		note_onset_slices_by_track_and_channel = new LinkedList<>();
+		note_onset_slices_by_track_and_channel = new LinkedList[tracks.length][16];
 		note_onset_slices_only_new_onsets = new LinkedList<>();
-		note_onset_slices_by_track_and_channel_only_new_onsets = new LinkedList<>();
-		LinkedList<NoteInfo> notes_sounding = new LinkedList<>(); // A working list of notes still sounding
+		note_onset_slices_by_track_and_channel_only_new_onsets = new LinkedList[tracks.length][16];
+		for (int n_track = 0; n_track < tracks.length; n_track++)
+			for (int chan = 0; chan < 16; chan++)
+			{
+				note_onset_slices_by_track_and_channel[n_track][chan] = new LinkedList();
+				note_onset_slices_by_track_and_channel_only_new_onsets[n_track][chan] = new LinkedList();
+			}
 
 		// Iterate through ticks
 		Map<Integer, List<NoteInfo>> note_tick_map = all_notes.getStartTickNoteMap();
+		LinkedList<NoteInfo> notes_sounding = new LinkedList<>(); // A working list of notes still sounding
+		int slice = 0; // Index of note onset slice being built
 		for (int tick = 0; tick < sequence.getTickLength(); tick++)
 		{
 			// Get the list of notes starting on given tick
@@ -180,14 +185,12 @@ public class NoteOnsetSliceContainer
 				{
 					// Create new onset slices
 					LinkedList<Integer> onset_slice = new LinkedList<>();
-					LinkedList<Integer>[][] onset_slice_by_track_and_channel = new LinkedList[tracks.length][16];
 					LinkedList<Integer> onset_slice_only_new_onsets = new LinkedList<>();
-					LinkedList<Integer>[][] onset_slice_by_track_and_channel_only_new_onsets = new LinkedList[tracks.length][16];
 					for (int n_track = 0; n_track < tracks.length; n_track++)
 						for (int chan = 0; chan < 16; chan++)
 						{
-							onset_slice_by_track_and_channel[n_track][chan] = new LinkedList<>();
-							onset_slice_by_track_and_channel_only_new_onsets[n_track][chan] = new LinkedList<>();
+							note_onset_slices_by_track_and_channel[n_track][chan].add(new LinkedList<>());
+							note_onset_slices_by_track_and_channel_only_new_onsets[n_track][chan].add(new LinkedList<>());
 						}
 
 					// Add notes that are still sounding to the onset slices, update list of notes still sounding
@@ -200,9 +203,9 @@ public class NoteOnsetSliceContainer
 								to_remove.add(note_sounding);
 							else
 							{
-								//System.out.println("Held note: " + note_sounding.getPitch());
+//								System.out.println("Held note: " + note_sounding.getPitch());
 								onset_slice.add(note_sounding.getPitch());
-								onset_slice_by_track_and_channel[note_sounding.getTrack()][note_sounding.getChannel()].add(note_sounding.getPitch());
+								note_onset_slices_by_track_and_channel[note_sounding.getTrack()][note_sounding.getChannel()].get(slice).add(note_sounding.getPitch());
 							}
 						}
 						notes_sounding.removeAll(to_remove);
@@ -212,11 +215,11 @@ public class NoteOnsetSliceContainer
 					for (NoteInfo note: notes_starting_on_tick)
 						if (note.getChannel() != 10 - 1) // Exclude Channel 10 (percussion)
 						{
-							//System.out.println("New note: " + note.getPitch());
+//							System.out.println("New note: " + note.getPitch());
 							onset_slice.add(note.getPitch());
-							onset_slice_by_track_and_channel[note.getTrack()][note.getChannel()].add(note.getPitch());
+							note_onset_slices_by_track_and_channel[note.getTrack()][note.getChannel()].get(slice).add(note.getPitch());
 							onset_slice_only_new_onsets.add(note.getPitch());
-							onset_slice_by_track_and_channel_only_new_onsets[note.getTrack()][note.getChannel()].add(note.getPitch());
+							note_onset_slices_by_track_and_channel_only_new_onsets[note.getTrack()][note.getChannel()].get(slice).add(note.getPitch());
 							notes_sounding.add(note);
 						}						
 
@@ -234,9 +237,9 @@ public class NoteOnsetSliceContainer
 //									for (int pitch: onset_slice)
 //										System.out.print(pitch + ", ");
 									onset_slice.add(note.getPitch());
-									onset_slice_by_track_and_channel[note.getTrack()][note.getChannel()].add(note.getPitch());
+									note_onset_slices_by_track_and_channel[note.getTrack()][note.getChannel()].get(slice).add(note.getPitch());
 									onset_slice_only_new_onsets.add(note.getPitch());
-									onset_slice_by_track_and_channel_only_new_onsets[note.getTrack()][note.getChannel()].add(note.getPitch());
+									note_onset_slices_by_track_and_channel_only_new_onsets[note.getTrack()][note.getChannel()].get(slice).add(note.getPitch());
 								}
 							tick = i; // Jump to start tick of nearby note to avoid duplication upon next outer loop iteration
 						}			
@@ -248,19 +251,18 @@ public class NoteOnsetSliceContainer
 					for (int n_track = 0; n_track < tracks.length; n_track++)
 						for (int chan = 0; chan < 16; chan++)
 						{
-							onset_slice_by_track_and_channel[n_track][chan].sort((s1, s2) -> s1.compareTo(s2));
-							onset_slice_by_track_and_channel_only_new_onsets[n_track][chan].sort((s1, s2) -> s1.compareTo(s2));
+							note_onset_slices_by_track_and_channel[n_track][chan].get(slice).sort((s1, s2) -> s1.compareTo(s2));
+							note_onset_slices_by_track_and_channel_only_new_onsets[n_track][chan].get(slice).sort((s1, s2) -> s1.compareTo(s2));
 						}
 					
 //					System.out.println("Onset slice created at tick " + tick);
 //					for (Integer pitch: onset_slice)
 //						System.out.println(pitch + ", ");
 					
-					// Add onset slices to respective fields
+					// Add onset slices not by track and channel to respective fields
 					note_onset_slices.add(onset_slice);
-					note_onset_slices_by_track_and_channel.add(onset_slice_by_track_and_channel);
 					note_onset_slices_only_new_onsets.add(onset_slice_only_new_onsets);
-					note_onset_slices_by_track_and_channel_only_new_onsets.add(onset_slice_by_track_and_channel_only_new_onsets);
+					slice++;
 				}
 			}
 		}
@@ -281,7 +283,7 @@ public class NoteOnsetSliceContainer
 	/**
 	 * @return	The list of note onset slices in the MIDI sequence, sorted by track and channel. 
 	 */
-	public LinkedList<LinkedList<Integer>[][]> getNoteOnsetSlicesByTrackAndChannel()
+	public LinkedList<LinkedList<Integer>>[][] getNoteOnsetSlicesByTrackAndChannel()
 	{
 		return note_onset_slices_by_track_and_channel;
 	}
@@ -298,7 +300,7 @@ public class NoteOnsetSliceContainer
 	 * @return	The list of note onset slices in the MIDI sequence containing only new note onsets, sorted by 
 	 *			track and channel. 
 	 */
-	public LinkedList<LinkedList<Integer>[][]> getNoteOnsetSlicesByTrackAndChannelOnlyNewOnsets()
+	public LinkedList<LinkedList<Integer>>[][] getNoteOnsetSlicesByTrackAndChannelOnlyNewOnsets()
 	{
 		return note_onset_slices_by_track_and_channel_only_new_onsets;
 	}
@@ -313,8 +315,8 @@ public class NoteOnsetSliceContainer
 	 */
 	public boolean isNewOnset(int slice_index, int track, int channel)
 	{
-		int index_of_highest_pitch = note_onset_slices_by_track_and_channel.get(slice_index)[track][channel].size() - 1;
-		int pitch = note_onset_slices_by_track_and_channel.get(slice_index)[track][channel].get(index_of_highest_pitch);
-		return 	note_onset_slices_by_track_and_channel_only_new_onsets.get(slice_index)[track][channel].contains(pitch);
+		int index_of_highest_pitch = note_onset_slices_by_track_and_channel[track][channel].get(slice_index).size() - 1;
+		int pitch = note_onset_slices_by_track_and_channel[track][channel].get(slice_index).get(index_of_highest_pitch);
+		return 	note_onset_slices_by_track_and_channel_only_new_onsets[track][channel].get(slice_index).contains(pitch);
 	}
 }
