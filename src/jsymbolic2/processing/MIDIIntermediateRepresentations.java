@@ -3,7 +3,6 @@ package jsymbolic2.processing;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import javax.sound.midi.*;
 import jsymbolic2.featureutils.CollectedNoteInfo;
 import jsymbolic2.featureutils.NoteInfo;
@@ -40,7 +39,7 @@ import mckay.utilities.staticlibraries.MathAndStatsMethods;
  * <li>MIDI sequences that use SMPTE time encoding are not compatible with this software.</li>
  * </ul>
  * 
- * @author Cory McKay and Tristano Tenaglia
+ * @author Cory McKay, Tristano Tenaglia and radamian
  */
 public class MIDIIntermediateRepresentations
 {
@@ -337,14 +336,13 @@ public class MIDIIntermediateRepresentations
 	public LinkedList<LinkedList<Integer>> pitch_bends_list;
 	
 	/**
-	 * Information on the note onset slices of the parsed file. This can be used to access the data structures 
-	 * for all note onset slices, note onset slices divided into track and channel, and versions of each 
-	 * containing exclusively pitches of new note onsets. An onset slice is represented by a list of pitches,
-	 * in increasing order, created each time a pitched note is encountered. It includes the pitches of all 
-	 * notes encountered at that point, as well as those that are still sounding at that time. A lookahead 
-	 * value (in ticks) is calculated to include slightly desynchronized notes (e.g. if a MIDI file is a 
-	 * transcription of a human performance) in the proper onset slice. The minimum lookahead value is the 
-	 * duration of a thirty-second note in ticks.
+	 * The music divided into note onset slices. This can be used to access the data structures for all note
+	 * onset slices, note onset slices divided by track and channel, and versions of each containing
+	 * exclusively pitches of new note onsets (i.e. excluding notes sustained from previous slices). An onset
+	 * slice is represented by a list of pitches, in increasing order, created each time a pitched note is
+	 * encountered. A lookahead value (in ticks) is calculated to include slightly desynchronized notes (e.g.
+	 * if a MIDI file is a transcription of a human performance) in the same onset slice. The minimum
+	 * lookahead value is set to the duration of a thirty-second note in ticks.
 	 */
 	public NoteOnsetSliceContainer note_onset_slice_container;
 
@@ -824,9 +822,10 @@ public class MIDIIntermediateRepresentations
 		/*
 		for (int slice = 0; slice < note_onset_slice_container.getNoteOnsetSlices().size(); slice++)
 		{
-			System.out.println("\n\nEntry " + slice + " in note_onset_slices:");
+			System.out.println("\n\nSLICE: " + slice + " in note onset slices:");
 			for (int pitch: note_onset_slice_container.getNoteOnsetSlices().get(slice))
 				System.out.println(pitch + ", ");
+			System.out.print("\n");
 		}
 		*/
 				
@@ -1850,6 +1849,7 @@ public class MIDIIntermediateRepresentations
 		}
 	}
 	
+	
 	/**
 	 * Generate the note_onset_slice_container field.
 	 */
@@ -1857,6 +1857,7 @@ public class MIDIIntermediateRepresentations
 	{
 		note_onset_slice_container = new NoteOnsetSliceContainer(sequence, tracks, all_notes, rhythmic_value_of_each_note_in_quarter_notes);
 	}
+	
 	
 	/**
 	 * Calculate the values of the melodic_interval_histogram and melodic_intervals_by_track_and_channel
