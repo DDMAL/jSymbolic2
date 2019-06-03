@@ -86,7 +86,10 @@ public class VariabilityOfNotePrevalenceOfUnpitchedInstrumentsFeature
 			if (instrument_frequencies == null || instrument_frequencies.length == 0)
 				value = 0.0;
 			else 
+			{
+				instrument_frequencies = mckay.utilities.staticlibraries.MathAndStatsMethods.normalize(instrument_frequencies);
 				value = mckay.utilities.staticlibraries.MathAndStatsMethods.getStandardDeviation(instrument_frequencies);
+			}
 		} 
 		else value = -1.0;
 
