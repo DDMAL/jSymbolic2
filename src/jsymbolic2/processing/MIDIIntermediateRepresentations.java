@@ -363,6 +363,42 @@ public class MIDIIntermediateRepresentations
 	 * unpitched MIDI Channel 10 are ignored.
 	 */
 	public double[] melodic_interval_histogram;
+	
+	/**
+	 * Each bin corresponds to a melodic interval, and the bin index indicates the number of semitones
+	 * comprising the interval associated with the bin (there are 128 bins in all). For example, bin 0
+	 * corresponds to repeated pitches, bin 1 to a melodic interval of one semitone, bin 2 to a melodic
+	 * interval of 2 semitones, etc. The magnitude of each bin is proportional to the fraction of rising 
+	 * melodic intervals in the piece that are of the kind associated with the bin (this histogram is 
+	 * normalized). Falling intervals are ignored. Melodies are assumed to be contained within individual 
+	 * MIDI tracks and channels, so melodic intervals are found separately for each track and channel before 
+	 * being combined in this histogram. It is also assumed that there is only one melody at a time per MIDI 
+	 * channel (if multiple notes occur simultaneously on the same MIDI tick on the same MIDI track and 
+	 * channel, then all notes but the first note on that tick are ignored). Other than this, all notes on the 
+	 * same track and the same channel are treated as if they are part of a single melody. It is also assumed 
+	 * that melodies do not cross MIDI tracks or channels (i.e. that they are each separately contained in 
+	 * their own track and channel). Only pitched notes are considered, so all notes on the unpitched MIDI 
+	 * Channel 10 are ignored.
+	 */
+	public double[] melodic_interval_histogram_rising_intervals_only;
+	
+	/**
+	 * Each bin corresponds to a melodic interval, and the bin index indicates the number of semitones
+	 * comprising the interval associated with the bin (there are 128 bins in all). For example, bin 0
+	 * corresponds to repeated pitches, bin 1 to a melodic interval of one semitone, bin 2 to a melodic
+	 * interval of 2 semitones, etc. The magnitude of each bin is proportional to the fraction of falling 
+	 * melodic intervals in the piece that are of the kind associated with the bin (this histogram is 
+	 * normalized). Rising intervals are ignored. Melodies are assumed to be contained within individual 
+	 * MIDI tracks and channels, so melodic intervals are found separately for each track and channel before 
+	 * being combined in this histogram. It is also assumed that there is only one melody at a time per MIDI 
+	 * channel (if multiple notes occur simultaneously on the same MIDI tick on the same MIDI track and 
+	 * channel, then all notes but the first note on that tick are ignored). Other than this, all notes on the 
+	 * same track and the same channel are treated as if they are part of a single melody. It is also assumed 
+	 * that melodies do not cross MIDI tracks or channels (i.e. that they are each separately contained in 
+	 * their own track and channel). Only pitched notes are considered, so all notes on the unpitched MIDI 
+	 * Channel 10 are ignored.
+	 */
+	public double[] melodic_interval_histogram_falling_intervals_only;
 
 	/**
 	 * A list of data structures, where the outer list contains a separate entry for each MIDI track. The
@@ -1893,11 +1929,18 @@ public class MIDIIntermediateRepresentations
 		// Initialize the melodic_intervals_by_track_and_channel field
 		melodic_intervals_by_track_and_channel = new LinkedList<>();
 				
-		// Initialize melodic_interval_histogram
+		// Initialize melodic_interval_histogram, melodic_interval_histogram_rising_intervals_only, and
+		// melodic_interval_histogram_falling_intervals_only fields.
 		melodic_interval_histogram = new double[128];
+		melodic_interval_histogram_rising_intervals_only = new double[128];
+		melodic_interval_histogram_falling_intervals_only = new double[128];
 		for (int i = 0; i < melodic_interval_histogram.length; i++)
+		{
 			melodic_interval_histogram[i] = 0.0;
-
+			melodic_interval_histogram_rising_intervals_only[i] = 0.0;
+			melodic_interval_histogram_falling_intervals_only[i] = 0.0;
+		}
+			
 		// Fill melodic_interval_histogram and melodic_intervals_by_track_and_channel
 		for (int n_track = 0; n_track < tracks.length; n_track++)
 		{
@@ -1945,6 +1988,8 @@ public class MIDIIntermediateRepresentations
 									{
 										int interval = short_message.getData1() - previous_pitches[short_message.getChannel()];
 										melodic_interval_histogram[Math.abs(interval)]++;
+										if (interval >= 0) melodic_interval_histogram_rising_intervals_only[interval]++;
+										if (interval <= 0) melodic_interval_histogram_falling_intervals_only[Math.abs(interval)]++;
 										melodic_intervals_by_channel[short_message.getChannel()].add(interval);
 									}
 								}
@@ -1957,8 +2002,11 @@ public class MIDIIntermediateRepresentations
 			}
 		}
 		
-		// Normalize melodic_interval_histogram
+		// Normalize melodic_interval_histogram, melodic_interval_histogram_rising_intervals_only, and
+		// melodic_interval_histogram_falling_intervals_only
 		melodic_interval_histogram = MathAndStatsMethods.normalize(melodic_interval_histogram);
+		melodic_interval_histogram_rising_intervals_only = MathAndStatsMethods.normalize(melodic_interval_histogram_rising_intervals_only);
+		melodic_interval_histogram_falling_intervals_only = MathAndStatsMethods.normalize(melodic_interval_histogram_falling_intervals_only);
 	}
 
 
