@@ -828,7 +828,32 @@ public class MIDIIntermediateRepresentations
 			System.out.print("\n");
 		}
 		*/
-				
+		/*
+		LinkedList<LinkedList<Integer>>[][] onset_slices_by_track_and_channel = note_onset_slice_container.getNoteOnsetSlicesByTrackAndChannel();
+		LinkedList<LinkedList<Integer>> onset_slices = note_onset_slice_container.getNoteOnsetSlices();
+		System.out.println("\n\n\n\nGENERATING NOTE ONSET SLICES...");
+		for (int slice = 0; slice < onset_slices.size(); slice++)
+		{
+			System.out.println("\nSlice " + slice);
+			for (int pitch = 0; pitch < onset_slices.get(slice).size(); pitch++)
+				System.out.print(onset_slices.get(slice).get(pitch) + ", ");
+			System.out.print("\n");
+			
+			for (int n_track = 0; n_track < tracks.length; n_track++)
+			{
+				System.out.println("On track " + n_track);
+				for (int chan = 0; chan < 16; chan++)
+					if (!onset_slices_by_track_and_channel[n_track][chan].get(slice).isEmpty())
+					{
+						System.out.println("On channel " + chan);
+						for (int pitch = 0; pitch < onset_slices_by_track_and_channel[n_track][chan].get(slice).size(); pitch++)
+							System.out.print(onset_slices_by_track_and_channel[n_track][chan].get(slice).get(pitch) + ", ");
+						System.out.print("\n");
+					}
+			}	
+		}
+		*/
+						
 		// System.out.println("\n\n\n\nGENERATING MELODIC INTERMEDIATE REPRESENTATIONS");	
 		generateMelodicIntermediateRepresentations();
 		/*
@@ -1855,7 +1880,7 @@ public class MIDIIntermediateRepresentations
 	 */
 	private void generateNoteOnsetSliceContainer() 
 	{
-		note_onset_slice_container = new NoteOnsetSliceContainer(sequence, tracks, all_notes, rhythmic_value_of_each_note_in_quarter_notes);
+		note_onset_slice_container = new NoteOnsetSliceContainer(sequence, tracks, all_notes, .125);
 	}
 	
 	
