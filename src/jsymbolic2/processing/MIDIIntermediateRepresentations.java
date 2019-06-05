@@ -1921,8 +1921,9 @@ public class MIDIIntermediateRepresentations
 	
 	
 	/**
-	 * Calculate the values of the melodic_interval_histogram and melodic_intervals_by_track_and_channel
-	 * fields.
+	 * Calculate the values of the melodic_interval_histogram, 
+	 * melodic_interval_histogram_rising_intervals_only, melodic_interval_histogram_falling_intervals_only and
+	 * melodic_intervals_by_track_and_channel fields.
 	 */
 	private void generateMelodicIntermediateRepresentations()
 	{
