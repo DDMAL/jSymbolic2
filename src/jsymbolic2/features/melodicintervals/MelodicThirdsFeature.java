@@ -22,7 +22,7 @@ public class MelodicThirdsFeature
 	public MelodicThirdsFeature()
 	{
 		String name = "Melodic Thirds";
-		String code = "M-12";
+		String code = "M-35";
 		String description = "Fraction of melodic intervals that are major or minor thirds.";
 		boolean is_sequential = true;
 		int dimensions = 1;

@@ -22,7 +22,7 @@ public class RepeatedNotesFeature
 	public RepeatedNotesFeature()
 	{
 		String name = "Repeated Notes";
-		String code = "M-9";
+		String code = "M-32";
 		String description = "Fraction of melodic intervals that correspond to repeated notes.";
 		boolean is_sequential = true;
 		int dimensions = 1;

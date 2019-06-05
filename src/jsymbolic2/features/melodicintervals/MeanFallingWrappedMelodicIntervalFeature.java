@@ -6,11 +6,12 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the fraction of melodic intervals greater than a perfect octave.
+ * Mean average (in semitones) of the intervals involved in each of the falling wrapped melodic intervals in 
+ * the piece.
  *
- * @author Cory McKay
+ * @author radamian
  */
-public class MelodicIntervalsLargerThanAnOctaveFeature
+public class MeanFallingWrappedMelodicIntervalFeature
 		extends MIDIFeatureExtractor
 {
 	/* CONSTRUCTOR ******************************************************************************************/
@@ -19,13 +20,13 @@ public class MelodicIntervalsLargerThanAnOctaveFeature
 	/**
 	 * Basic constructor that sets the values of the fields inherited from this class' superclass.
 	 */
-	public MelodicIntervalsLargerThanAnOctaveFeature()
+	public MeanFallingWrappedMelodicIntervalFeature()
 	{
-		String name = "Melodic Intervals Larger Than an Octave";
-		String code = "M-42";
-		String description = "Fraction of melodic intervals greater than a perfect octave.";
+		String name = "Mean Falling Wrapped Melodic Interval";
+		String code = "M-12";
+		String description = "Mean average (in semitones) of the intervals involved in each of the falling wrapped melodic intervals in the piece.";
 		boolean is_sequential = true;
-		int dimensions = 1;
+		int dimensions = 12;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
 		dependencies = null;
 		offsets = null;
@@ -56,14 +57,24 @@ public class MelodicIntervalsLargerThanAnOctaveFeature
 									double[][] other_feature_values )
 	throws Exception
 	{
-		double value = 0.0;
+		double value;
 		if (sequence_info != null)
-			for (int i = 13; i < sequence_info.melodic_interval_histogram.length; i++)
-				value += sequence_info.melodic_interval_histogram[i];
-		else value = -1.0;
+		{
+			// Initialize wrapped histogram
+			double[] wrapped_melodic_interval_histogram_falling_intervals_only = new double[12];
+			for (int i = 0; i < wrapped_melodic_interval_histogram_falling_intervals_only.length; i++)
+				wrapped_melodic_interval_histogram_falling_intervals_only[i] = 0.0;
 
+			// Fill wrapped histogram
+			for (int bin = 0; bin < sequence_info.melodic_interval_histogram_falling_intervals_only.length; bin++)
+				wrapped_melodic_interval_histogram_falling_intervals_only[bin % 12] += sequence_info.melodic_interval_histogram_falling_intervals_only[bin];
+			
+			value = mckay.utilities.staticlibraries.MathAndStatsMethods.getAverage(wrapped_melodic_interval_histogram_falling_intervals_only);
+		}
+		else value = -1.0;
+		
 		double[] result = new double[1];
 		result[0] = value;
 		return result;
-	}
+    }
 }

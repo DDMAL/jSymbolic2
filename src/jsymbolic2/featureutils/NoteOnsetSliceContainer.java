@@ -179,11 +179,14 @@ public class NoteOnsetSliceContainer
 								int track = note_sounding.getTrack();
 								int channel = note_sounding.getChannel();
 								
-								// Check that pitch is not a duplicate
-								if (!onset_slice.contains(pitch)) 
-									onset_slice.add(pitch);
-								if (!note_onset_slices_by_track_and_channel[track][channel].get(slice).contains(pitch))
-									note_onset_slices_by_track_and_channel[track][channel].get(slice).add(pitch);
+								if (pitch > 20) // Check for erroneous pitch
+								{
+									// Check that pitch is not a duplicate
+									if (!onset_slice.contains(pitch)) 
+										onset_slice.add(pitch);
+									if (!note_onset_slices_by_track_and_channel[track][channel].get(slice).contains(pitch))
+										note_onset_slices_by_track_and_channel[track][channel].get(slice).add(pitch);
+								}
 							}
 						}
 						notes_sounding.removeAll(to_remove);
@@ -199,16 +202,19 @@ public class NoteOnsetSliceContainer
 							int track = note.getTrack();
 							int channel = note.getChannel();
 							
-							// Check that pitch is not a duplicate
-							if (!onset_slice.contains(pitch)) 
-								onset_slice.add(pitch);
-							if (!note_onset_slices_by_track_and_channel[track][channel].get(slice).contains(pitch))
-								note_onset_slices_by_track_and_channel[track][channel].get(slice).add(pitch);
-							if (!onset_slice_only_new_onsets.contains(pitch))
-								onset_slice_only_new_onsets.add(pitch);
-							if (!note_onset_slices_by_track_and_channel_only_new_onsets[track][channel].get(slice).contains(pitch))
-								note_onset_slices_by_track_and_channel_only_new_onsets[track][channel].get(slice).add(pitch);
-							notes_sounding.add(note);
+							if (pitch > 20) // Check for erroneous pitch
+							{
+								// Check that pitch is not a duplicate
+								if (!onset_slice.contains(pitch)) 
+									onset_slice.add(pitch);
+								if (!note_onset_slices_by_track_and_channel[track][channel].get(slice).contains(pitch))
+									note_onset_slices_by_track_and_channel[track][channel].get(slice).add(pitch);
+								if (!onset_slice_only_new_onsets.contains(pitch))
+									onset_slice_only_new_onsets.add(pitch);
+								if (!note_onset_slices_by_track_and_channel_only_new_onsets[track][channel].get(slice).contains(pitch))
+									note_onset_slices_by_track_and_channel_only_new_onsets[track][channel].get(slice).add(pitch);
+								notes_sounding.add(note);
+							}
 						}						
 
 					// Perform lookahead and jump to any tick inspected with a note onset
@@ -231,16 +237,19 @@ public class NoteOnsetSliceContainer
 										int track = note.getTrack();
 										int channel = note.getChannel();
 
-										// Check that pitch is not a duplicate
-										if (!onset_slice.contains(pitch)) 
-											onset_slice.add(pitch);
-										if (!note_onset_slices_by_track_and_channel[track][channel].get(slice).contains(pitch))
-											note_onset_slices_by_track_and_channel[track][channel].get(slice).add(pitch);
-										if (!onset_slice_only_new_onsets.contains(pitch))
-											onset_slice_only_new_onsets.add(pitch);
-										if (!note_onset_slices_by_track_and_channel_only_new_onsets[track][channel].get(slice).contains(pitch))
-											note_onset_slices_by_track_and_channel_only_new_onsets[track][channel].get(slice).add(pitch);
-										notes_sounding.add(note);
+										if (pitch > 20) // Check for erroneous pitch
+										{
+											// Check that pitch is not a duplicate
+											if (!onset_slice.contains(pitch)) 
+												onset_slice.add(pitch);
+											if (!note_onset_slices_by_track_and_channel[track][channel].get(slice).contains(pitch))
+												note_onset_slices_by_track_and_channel[track][channel].get(slice).add(pitch);
+											if (!onset_slice_only_new_onsets.contains(pitch))
+												onset_slice_only_new_onsets.add(pitch);
+											if (!note_onset_slices_by_track_and_channel_only_new_onsets[track][channel].get(slice).contains(pitch))
+												note_onset_slices_by_track_and_channel_only_new_onsets[track][channel].get(slice).add(pitch);
+											notes_sounding.add(note);
+										}
 									}
 								tick = i; // Jump to start tick of nearby note to avoid duplication upon next outer loop iteration
 							}
@@ -389,7 +398,10 @@ public class NoteOnsetSliceContainer
 				if (!onset_slice.contains(pitch_class)) // Check pitch class added is not a duplicate
 					onset_slice.add(pitch_class);
 			}
-		}	
+			
+			// Sort slice by pitch class
+			onset_slice.sort((s1, s2) -> s1.compareTo(s2));
+		}
 		
 		return result;
 	}
@@ -426,7 +438,10 @@ public class NoteOnsetSliceContainer
 				if (!onset_slice.contains(pitch_class)) // Check pitch class added is not a duplicate
 					onset_slice.add(pitch_class);
 			}
-		}	
+			
+			// Sort slice by pitch class
+			onset_slice.sort((s1, s2) -> s1.compareTo(s2));
+		}
 		
 		return result;
 	}
@@ -468,6 +483,9 @@ public class NoteOnsetSliceContainer
 						if (!onset_slice.contains(pitch_class)) // Check pitch class added is not a duplicate
 							onset_slice.add(pitch_class);
 					}
+					
+					// Sort slice by pitch class
+					onset_slice.sort((s1, s2) -> s1.compareTo(s2));
 				}
 			}	
 		
@@ -512,6 +530,9 @@ public class NoteOnsetSliceContainer
 						if (!onset_slice.contains(pitch_class)) // Check pitch class added is not a duplicate
 							onset_slice.add(pitch_class);
 					}
+					
+					// Sort slice by pitch class
+					onset_slice.sort((s1, s2) -> s1.compareTo(s2));
 				}
 			}	
 		

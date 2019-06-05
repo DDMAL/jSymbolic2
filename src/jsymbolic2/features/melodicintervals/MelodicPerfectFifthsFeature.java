@@ -22,7 +22,7 @@ public class MelodicPerfectFifthsFeature
 	public MelodicPerfectFifthsFeature()
 	{
 		String name = "Melodic Perfect Fifths";
-		String code = "M-15";
+		String code = "M-38";
 		String description = "Fraction of melodic intervals that are perfect fifths.";
 		boolean is_sequential = true;
 		int dimensions = 1;

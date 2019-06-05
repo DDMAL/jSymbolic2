@@ -23,7 +23,7 @@ public class DistanceBetweenMostPrevalentMelodicIntervalsFeature
 	public DistanceBetweenMostPrevalentMelodicIntervalsFeature()
 	{
 		String name = "Distance Between Most Prevalent Melodic Intervals";
-		String code = "M-5";
+		String code = "M-25";
 		String description = "Absolute value of the difference (in semitones) between the most common and second most common melodic intervals in the piece.";
 		boolean is_sequential = true;
 		int dimensions = 1;

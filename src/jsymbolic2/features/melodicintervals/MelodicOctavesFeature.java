@@ -22,7 +22,7 @@ public class MelodicOctavesFeature
 	public MelodicOctavesFeature()
 	{
 		String name = "Melodic Octaves";
-		String code = "M-18";
+		String code = "M-41";
 		String description = "Fraction of melodic intervals that are octaves.";
 		boolean is_sequential = true;
 		int dimensions = 1;

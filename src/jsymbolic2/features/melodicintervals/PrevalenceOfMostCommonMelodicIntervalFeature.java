@@ -23,7 +23,7 @@ public class PrevalenceOfMostCommonMelodicIntervalFeature
 	public PrevalenceOfMostCommonMelodicIntervalFeature()
 	{
 		String name = "Prevalence of Most Common Melodic Interval";
-		String code = "M-6";
+		String code = "M-29";
 		String description = "Fraction of all melodic intervals that corresponds to the most common melodic interval.";
 		boolean is_sequential = true;
 		int dimensions = 1;

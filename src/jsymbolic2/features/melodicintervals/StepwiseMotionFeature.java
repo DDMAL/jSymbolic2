@@ -23,7 +23,7 @@ public class StepwiseMotionFeature
 	public StepwiseMotionFeature()
 	{
 		String name = "Stepwise Motion";
-		String code = "M-11";
+		String code = "M-34";
 		String description = "Fraction of melodic intervals that correspond to a minor or major second.";
 		boolean is_sequential = true;
 		int dimensions = 1;

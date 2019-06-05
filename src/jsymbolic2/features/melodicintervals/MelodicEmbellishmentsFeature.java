@@ -29,7 +29,7 @@ public class MelodicEmbellishmentsFeature
 	public MelodicEmbellishmentsFeature()
 	{
 		String name = "Melodic Embellishments";
-		String code = "M-21";
+		String code = "M-44";
 		String description = "Fraction of all notes that are surrounded on both sides by MIDI Note Ons on the same MIDI channel that have durations at least three times as long as the central note. Set to 0 if there are no notes in the piece.";
 		boolean is_sequential = true;
 		int dimensions = 1;

@@ -24,7 +24,7 @@ public class AmountOfArpeggiationFeature
 	public AmountOfArpeggiationFeature()
 	{
 		String name = "Amount of Arpeggiation";
-		String code = "M-8";
+		String code = "M-31";
 		String description = "Fraction of melodic intervals that are repeated notes, minor thirds, major thirds, perfect fifths, minor sevenths, major sevenths, octaves, minor tenths or major tenths. This is only a very approximate measure of the amount of arpeggiation in the music, of course.";
 		boolean is_sequential = true;
 		int dimensions = 1;

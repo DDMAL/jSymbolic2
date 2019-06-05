@@ -6,11 +6,11 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the fraction of melodic intervals greater than a perfect octave.
+ * Number of melodic intervals that occur at least once in the piece.
  *
- * @author Cory McKay
+ * @author radamian
  */
-public class MelodicIntervalsLargerThanAnOctaveFeature
+public class NumberOfMelodicIntervalsFeature
 		extends MIDIFeatureExtractor
 {
 	/* CONSTRUCTOR ******************************************************************************************/
@@ -19,13 +19,13 @@ public class MelodicIntervalsLargerThanAnOctaveFeature
 	/**
 	 * Basic constructor that sets the values of the fields inherited from this class' superclass.
 	 */
-	public MelodicIntervalsLargerThanAnOctaveFeature()
+	public NumberOfMelodicIntervalsFeature()
 	{
-		String name = "Melodic Intervals Larger Than an Octave";
-		String code = "M-42";
-		String description = "Fraction of melodic intervals greater than a perfect octave.";
+		String name = "Number of Melodic Intervals";
+		String code = "M-13";
+		String description = "Number of melodic intervals that occur at least once in the piece.";
 		boolean is_sequential = true;
-		int dimensions = 1;
+		int dimensions = 128;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
 		dependencies = null;
 		offsets = null;
@@ -56,12 +56,17 @@ public class MelodicIntervalsLargerThanAnOctaveFeature
 									double[][] other_feature_values )
 	throws Exception
 	{
-		double value = 0.0;
+		double value;
 		if (sequence_info != null)
-			for (int i = 13; i < sequence_info.melodic_interval_histogram.length; i++)
-				value += sequence_info.melodic_interval_histogram[i];
+		{
+			int number_of_intervals = 0;
+			for (int bin = 0; bin < sequence_info.melodic_interval_histogram.length; bin++)
+				if (sequence_info.melodic_interval_histogram[bin] > 0.0) number_of_intervals++;
+			
+			value = (double) number_of_intervals;
+		}
 		else value = -1.0;
-
+		
 		double[] result = new double[1];
 		result[0] = value;
 		return result;

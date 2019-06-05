@@ -22,7 +22,7 @@ public class ChromaticMotionFeature
 	public ChromaticMotionFeature()
 	{
 		String name = "Chromatic Motion";
-		String code = "M-10";
+		String code = "M-33";
 		String description = "Fraction of melodic intervals that correspond to a semitone.";
 		boolean is_sequential = true;
 		int dimensions = 1;

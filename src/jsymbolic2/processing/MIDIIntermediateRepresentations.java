@@ -356,7 +356,7 @@ public class MIDIIntermediateRepresentations
 	 * individual MIDI tracks and channels, so melodic intervals are found separately for each track and
 	 * channel before being combined in this histogram. It is also assumed that there is only one melody at a
 	 * time per MIDI channel (if multiple notes occur simultaneously on the same MIDI tick on the same MIDI
-	 * track and channel, then all notes but the first note on that tick are ignored). Other than this, all
+	 * track and channel, then all notes but the highest note on that tick are ignored). Other than this, all
 	 * notes on the same track and the same channel are treated as if they are part of a single melody. It is
 	 * also assumed that melodies do not cross MIDI tracks or channels (i.e. that they are each separately
 	 * contained in their own track and channel). Only pitched notes are considered, so all notes on the
@@ -374,7 +374,7 @@ public class MIDIIntermediateRepresentations
 	 * MIDI tracks and channels, so melodic intervals are found separately for each track and channel before 
 	 * being combined in this histogram. It is also assumed that there is only one melody at a time per MIDI 
 	 * channel (if multiple notes occur simultaneously on the same MIDI tick on the same MIDI track and 
-	 * channel, then all notes but the first note on that tick are ignored). Other than this, all notes on the 
+	 * channel, then all notes but the highest note on that tick are ignored). Other than this, all notes on the 
 	 * same track and the same channel are treated as if they are part of a single melody. It is also assumed 
 	 * that melodies do not cross MIDI tracks or channels (i.e. that they are each separately contained in 
 	 * their own track and channel). Only pitched notes are considered, so all notes on the unpitched MIDI 
@@ -392,7 +392,7 @@ public class MIDIIntermediateRepresentations
 	 * MIDI tracks and channels, so melodic intervals are found separately for each track and channel before 
 	 * being combined in this histogram. It is also assumed that there is only one melody at a time per MIDI 
 	 * channel (if multiple notes occur simultaneously on the same MIDI tick on the same MIDI track and 
-	 * channel, then all notes but the first note on that tick are ignored). Other than this, all notes on the 
+	 * channel, then all notes but the highest note on that tick are ignored). Other than this, all notes on the 
 	 * same track and the same channel are treated as if they are part of a single melody. It is also assumed 
 	 * that melodies do not cross MIDI tracks or channels (i.e. that they are each separately contained in 
 	 * their own track and channel). Only pitched notes are considered, so all notes on the unpitched MIDI 
@@ -1941,66 +1941,46 @@ public class MIDIIntermediateRepresentations
 			melodic_interval_histogram_rising_intervals_only[i] = 0.0;
 			melodic_interval_histogram_falling_intervals_only[i] = 0.0;
 		}
-			
-		// Fill melodic_interval_histogram and melodic_intervals_by_track_and_channel
+		
+		// Iterate over onset slice structure organized by track and channel containing only new note onsets
+		LinkedList<LinkedList<Integer>>[][] note_onset_slices_by_track_and_channel = note_onset_slice_container.getNoteOnsetSlicesByTrackAndChannelOnlyNewOnsets();
 		for (int n_track = 0; n_track < tracks.length; n_track++)
 		{
-			// Prepare melodic_intervals_by_channel for this track, and add it to
+			// System.out.println("\n\n\nTrack " + n_track + ": ");
+			// Prepare melodic_intervals_by_channel for this track, and add it to 
 			// melodic_intervals_by_track_and_channel
 			LinkedList<Integer>[] melodic_intervals_by_channel = new LinkedList[16];
 			for (int i = 0; i < melodic_intervals_by_channel.length; i++)
 				melodic_intervals_by_channel[i] = new LinkedList<>();
 			melodic_intervals_by_track_and_channel.add(melodic_intervals_by_channel);
-
-			// The last MIDI pitch encountered on each channel
-			// -1 means none was encountered yet
+			
+			// The last pitch encountered for each channel; -1 means none was encountered yet
 			int[] previous_pitches = new int[16];
-			for (int i = 0; i < previous_pitches.length; i++)
-				previous_pitches[i] = -1;
-
-			// The last tick on which a note on was encountered for each channel
-			// -1 means none was encountered yet
-			int[] last_tick = new int[16];
-			for (int i = 0; i < last_tick.length; i++)
-				last_tick[i] = -1;
-
-			// Go through all MIDI events on this track
-			Track track = tracks[n_track];
-			for (int n_event = 0; n_event < track.size(); n_event++)
+				for (int i = 0; i < previous_pitches.length; i++)
+					previous_pitches[i] = -1;
+				
+			for (int chan = 0; chan < 16; chan++)
 			{
-				MidiEvent event = track.get(n_event);
-				MidiMessage message = event.getMessage();
-				if (message instanceof ShortMessage)
-				{
-					ShortMessage short_message = (ShortMessage) message;
-					if (short_message.getCommand() == 0x90) // note on
+				// System.out.println("\nChannel " + chan + ":");
+				for (int slice = 0; slice < note_onset_slices_by_track_and_channel[n_track][chan].size(); slice++)
+					if (!(note_onset_slices_by_track_and_channel[n_track][chan].get(slice).isEmpty()))
 					{
-						if (short_message.getChannel() != 10 - 1) // not channel 10 (percussion)
+						// Get highest note in the onset slice
+						int index = note_onset_slices_by_track_and_channel[n_track][chan].get(slice).size() - 1;
+						int current_note = note_onset_slices_by_track_and_channel[n_track][chan].get(slice).get(index);
+						
+						if (previous_pitches[chan] != -1)
 						{
-							if (short_message.getData2() != 0) // not velocity 0
-							{
-								int current_tick = (int) event.getTick();
-								if (previous_pitches[short_message.getChannel()] != -1)
-								{
-									// Check if the note is occuring on the same tick as the previous note
-									// on this channel (which would indicate a vertical interval, not a
-									// melodic interval)
-									if (current_tick != last_tick[short_message.getChannel()])
-									{
-										int interval = short_message.getData1() - previous_pitches[short_message.getChannel()];
-										melodic_interval_histogram[Math.abs(interval)]++;
-										if (interval >= 0) melodic_interval_histogram_rising_intervals_only[interval]++;
-										if (interval <= 0) melodic_interval_histogram_falling_intervals_only[Math.abs(interval)]++;
-										melodic_intervals_by_channel[short_message.getChannel()].add(interval);
-									}
-								}
-								last_tick[short_message.getChannel()] = current_tick;
-								previous_pitches[short_message.getChannel()] = short_message.getData1();
-							}
+							int interval = current_note - previous_pitches[chan];
+							// System.out.println("Interval of " + interval + " from " + previous_pitches[chan] + " to " + current_note);
+							melodic_interval_histogram[Math.abs(interval)]++;
+							if (interval >= 0) melodic_interval_histogram_rising_intervals_only[interval]++;
+							if (interval <= 0) melodic_interval_histogram_falling_intervals_only[Math.abs(interval)]++;
+							melodic_intervals_by_channel[chan].add(interval);
 						}
+						previous_pitches[chan] = current_note;
 					}
-				}
-			}
+			}		
 		}
 		
 		// Normalize melodic_interval_histogram, melodic_interval_histogram_rising_intervals_only, and

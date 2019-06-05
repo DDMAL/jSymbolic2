@@ -56,10 +56,33 @@ Average Range of Glissandos
 Vibrato Prevalence
 Microtone Prevalence
 Melodic Interval Histogram
+Wrapped Melodic Interval Histogram
+Wrapped Melodic Interval Histogram - Rising Intervals Only
+Wrapped Melodic Interval Histogram - Falling Intervals Only
 Most Common Melodic Interval
+Most Common Wrapped Melodic Interval
+Most Common Rising Wrapped Melodic Interval
+Most Common Falling Wrapped Melodic Interval
 Mean Melodic Interval
+Mean Wrapped Melodic Interval
+Mean Rising Wrapped Melodic Interval
+Mean Falling Wrapped Melodic Interval
+Number of Melodic Intervals
+Number of Wrapped Melodic Intervals
+Number of Rising Wrapped Melodic Intervals
+Number of Falling Wrapped Melodic Intervals
 Number of Common Melodic Intervals
+Number of Common Wrapped Melodic Intervals
+Number of Common Rising Wrapped Melodic Intervals
+Number of Common Falling Wrapped Melodic Intervals
+Number of Very Common Melodic Intervals
+Number of Very Common Wrapped Melodic Intervals
+Number of Very Common Rising Wrapped Melodic Intervals
+Number of Very Common Falling Wrapped Melodic Intervals
 Distance Between Most Prevalent Melodic Intervals
+Distance Between Most Prevalent Wrapped Melodic Intervals
+Distance Between Most Prevalent Rising Wrapped Melodic Intervals
+Distance Between Most Prevalent Falling Wrapped Melodic Intervals
 Prevalence of Most Common Melodic Interval
 Relative Prevalence of Most Common Melodic Intervals
 Amount of Arpeggiation

@@ -23,7 +23,7 @@ public class NumberOfCommonMelodicIntervalsFeature
 	public NumberOfCommonMelodicIntervalsFeature()
 	{
 		String name = "Number of Common Melodic Intervals";
-		String code = "M-4";
+		String code = "M-17";
 		String description = "Number of different melodic intervals that each account individually for at least 9% of all melodic intervals.";
 		boolean is_sequential = true;
 		int dimensions = 1;

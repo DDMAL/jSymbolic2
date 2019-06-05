@@ -23,7 +23,7 @@ public class MostCommonMelodicIntervalFeature
 	public MostCommonMelodicIntervalFeature()
 	{
 		String name = "Most Common Melodic Interval";
-		String code = "M-2";
+		String code = "M-5";
 		String description = "Number of semitones corresponding to the most frequently occurring melodic interval.";
 		boolean is_sequential = true;
 		int dimensions = 1;
