@@ -25,7 +25,7 @@ public class NumberOfFallingWrappedMelodicIntervalsFeature
 		String code = "M-16";
 		String description = "Number of falling wrapped melodic intervals that occur at least once in the piece.";
 		boolean is_sequential = true;
-		int dimensions = 128;
+		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
 		dependencies = null;
 		offsets = null;

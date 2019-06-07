@@ -6,13 +6,11 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the combined fraction of all melodic intervals that are minor thirds,
- * divided by the combined fraction of all melodic intervals that are major thirds. Set to 0 if there are no
- * melodic minor thirds or melodic major thirds.
+ * The largest falling melodic interval in the piece.
  *
- * @author Cory McKay
+ * @author radamian
  */
-public class MinorMajorMelodicThirdlRatioFeature
+public class LargestFallingMelodicIntervalFeature
 		extends MIDIFeatureExtractor
 {
 	/* CONSTRUCTOR ******************************************************************************************/
@@ -21,11 +19,11 @@ public class MinorMajorMelodicThirdlRatioFeature
 	/**
 	 * Basic constructor that sets the values of the fields inherited from this class' superclass.
 	 */
-	public MinorMajorMelodicThirdlRatioFeature()
+	public LargestFallingMelodicIntervalFeature()
 	{
-		String name = "Minor Major Melodic Third Ratio";
-		String code = "M-43";
-		String description = "Combined fraction of all melodic intervals that are minor thirds, divided by the combined fraction of all melodic intervals that are major thirds. Set to 0 if there are no melodic minor thirds or melodic major thirds.";
+		String name = "Largest Falling Melodic Interval";
+		String code = "M-51";
+		String description = "The largest falling melodic interval in the piece.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
@@ -58,14 +56,17 @@ public class MinorMajorMelodicThirdlRatioFeature
 									double[][] other_feature_values )
 	throws Exception
 	{
-		double value = 0.0;
+		double value;
 		if (sequence_info != null)
 		{
-			if ( sequence_info.melodic_interval_histogram[3] != 0 && 
-			     sequence_info.melodic_interval_histogram[4] != 0 )
-				value = sequence_info.melodic_interval_histogram[3] / sequence_info.melodic_interval_histogram[4];
+			// Find largest melodic interval
+			int largest_melodic_interval = 0;
+			for (int bin = 0; bin < sequence_info.melodic_interval_histogram_falling_intervals_only.length; bin++)
+				if (sequence_info.melodic_interval_histogram_falling_intervals_only[bin] > 0.0)
+					largest_melodic_interval = bin;	
 			
-		}
+			value = (double) largest_melodic_interval;
+		} 
 		else value = -1.0;
 
 		double[] result = new double[1];

@@ -22,7 +22,7 @@ public class MelodicSixthsFeature
 	public MelodicSixthsFeature()
 	{
 		String name = "Melodic Sixths";
-		String code = "M-39";
+		String code = "M-61";
 		String description = "Fraction of melodic intervals that are major or minor sixths.";
 		boolean is_sequential = true;
 		int dimensions = 1;

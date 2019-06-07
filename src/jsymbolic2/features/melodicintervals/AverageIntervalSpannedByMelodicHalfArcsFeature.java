@@ -25,7 +25,7 @@ public class AverageIntervalSpannedByMelodicHalfArcsFeature
 	public AverageIntervalSpannedByMelodicHalfArcsFeature()
 	{
 		String name = "Average Interval Spanned by Melodic Half-Arcs";
-		String code = "M-47";
+		String code = "M-70";
 		String description = "Average melodic interval (in semitones) separating the top note of melodic peaks and the bottom note of adjacent melodic troughs. Similar assumptions are made in the calculation of this feature as for the Melodic Interval Histogram.";
 		boolean is_sequential = true;
 		int dimensions = 1;

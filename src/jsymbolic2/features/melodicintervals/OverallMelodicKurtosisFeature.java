@@ -6,11 +6,13 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the fraction of melodic intervals that are perfect fourths.
+ * Kurtosis of the melodic intervals in the piece. Melodies are calculated using the same conventions 
+ * described for the Melodic Interval Histogram. The higher the kurtosis, the more the melodic intervals are 
+ * clustered near the mean and the fewer outliers there are.
  *
- * @author Cory McKay
+ * @author radamian
  */
-public class MelodicPerfectFourthsFeature
+public class OverallMelodicKurtosisFeature
 		extends MIDIFeatureExtractor
 {
 	/* CONSTRUCTOR ******************************************************************************************/
@@ -19,11 +21,11 @@ public class MelodicPerfectFourthsFeature
 	/**
 	 * Basic constructor that sets the values of the fields inherited from this class' superclass.
 	 */
-	public MelodicPerfectFourthsFeature()
+	public OverallMelodicKurtosisFeature()
 	{
-		String name = "Melodic Perfect Fourths";
-		String code = "M-57";
-		String description = "Fraction of melodic intervals that are perfect fourths.";
+		String name = "Overall Melodic Kurtosis";
+		String code = "M-43";
+		String description = "Kurtosis of the melodic intervals in the piece. Melodies are calculated using the same conventions described for the Melodic Interval Histogram. The higher the kurtosis, the more the melodic intervals are clustered near the mean and the fewer outliers there are.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
@@ -58,7 +60,28 @@ public class MelodicPerfectFourthsFeature
 	{
 		double value;
 		if (sequence_info != null)
-			value = sequence_info.melodic_interval_histogram[5];
+		{
+			// Find the number of melodic intervals in the piece
+			int number_of_intervals = 0;
+			for (int n_track = 0; n_track < sequence_info.melodic_intervals_by_track_and_channel.size(); n_track++)
+				for (int chan = 0; chan < sequence_info.melodic_intervals_by_track_and_channel.get(n_track).length; chan++)
+					for (int i = 0; i < sequence_info.melodic_intervals_by_track_and_channel.get(n_track)[chan].size(); i++)
+						number_of_intervals++;
+			
+			// Fill array containing each melodic interval in the piece
+			double[] all_melodic_intervals = new double[number_of_intervals];
+			int index = 0;
+			for (int n_track = 0; n_track < sequence_info.melodic_intervals_by_track_and_channel.size(); n_track++)
+				for (int chan = 0; chan < sequence_info.melodic_intervals_by_track_and_channel.get(n_track).length; chan++)
+					for (int i = 0; i < sequence_info.melodic_intervals_by_track_and_channel.get(n_track)[chan].size(); i++)
+					{
+						all_melodic_intervals[index] = sequence_info.melodic_intervals_by_track_and_channel.get(n_track)[chan].get(i);
+						index++;
+					}
+			
+			// Calculate the feature value
+			value = mckay.utilities.staticlibraries.MathAndStatsMethods.getSampleExcessKurtosis(all_melodic_intervals);
+		} 
 		else value = -1.0;
 
 		double[] result = new double[1];

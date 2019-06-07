@@ -6,11 +6,12 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the fraction of melodic intervals that are perfect fourths.
+ * Relative frequency of the second most common wrapped melodic interval in the piece, divided by the relative 
+ * frequency of the most common melodic interval.
  *
- * @author Cory McKay
+ * @author radamian
  */
-public class MelodicPerfectFourthsFeature
+public class RelativePrevalenceOfMostCommonWrappedMelodicIntervalsFeature
 		extends MIDIFeatureExtractor
 {
 	/* CONSTRUCTOR ******************************************************************************************/
@@ -19,11 +20,11 @@ public class MelodicPerfectFourthsFeature
 	/**
 	 * Basic constructor that sets the values of the fields inherited from this class' superclass.
 	 */
-	public MelodicPerfectFourthsFeature()
+	public RelativePrevalenceOfMostCommonWrappedMelodicIntervalsFeature()
 	{
-		String name = "Melodic Perfect Fourths";
-		String code = "M-57";
-		String description = "Fraction of melodic intervals that are perfect fourths.";
+		String name = "Relative Prevalence of Most Common Wrapped Melodic Intervals";
+		String code = "M-34";
+		String description = "Relative frequency of the second most common wrapped melodic interval in the piece, divided by the relative frequency of the most common melodic interval.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
@@ -58,7 +59,38 @@ public class MelodicPerfectFourthsFeature
 	{
 		double value;
 		if (sequence_info != null)
-			value = sequence_info.melodic_interval_histogram[5];
+		{
+			// Initialize wrapped histogram
+			double[] wrapped_melodic_interval_histogram = new double[12];
+			for (int bin = 0; bin < wrapped_melodic_interval_histogram.length; bin++)
+				wrapped_melodic_interval_histogram[bin] = 0.0;
+			
+			// Fill wrapped histogram
+			for (int bin = 0; bin < sequence_info.melodic_interval_histogram.length; bin++)
+				wrapped_melodic_interval_histogram[bin % 12] += sequence_info.melodic_interval_histogram[bin];
+			
+			// Find the bin with the highest magnitude
+			int max_index = mckay.utilities.staticlibraries.MathAndStatsMethods.getIndexOfLargest(wrapped_melodic_interval_histogram);
+
+			// Find the second highest bin
+			double second_max = 0;
+			int second_max_index = 0;
+			for (int bin = 0; bin < wrapped_melodic_interval_histogram.length; bin++)
+			{
+				if ( wrapped_melodic_interval_histogram[bin] > second_max && bin != max_index )
+				{
+					second_max = wrapped_melodic_interval_histogram[bin];
+					second_max_index = bin;
+				}
+			}
+
+			// Calculate the value
+			if (wrapped_melodic_interval_histogram[max_index] == 0.0)
+				value = 0.0;
+			else 
+				value = wrapped_melodic_interval_histogram[second_max_index] /
+						wrapped_melodic_interval_histogram[max_index];
+		} 
 		else value = -1.0;
 
 		double[] result = new double[1];

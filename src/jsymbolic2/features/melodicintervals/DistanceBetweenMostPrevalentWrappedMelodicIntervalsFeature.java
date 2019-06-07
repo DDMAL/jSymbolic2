@@ -26,7 +26,7 @@ public class DistanceBetweenMostPrevalentWrappedMelodicIntervalsFeature
 		String code = "M-26";
 		String description = "Absolute value of the difference (in semitones) between the most common and second most common wrapped melodic intervals in the piece.";
 		boolean is_sequential = true;
-		int dimensions = 12;
+		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
 		dependencies = null;
 		offsets = null;

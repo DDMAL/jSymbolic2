@@ -6,11 +6,11 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the fraction of melodic intervals that are perfect fourths.
+ * The largest melodic interval in the piece.
  *
- * @author Cory McKay
+ * @author radamian
  */
-public class MelodicPerfectFourthsFeature
+public class LargestMelodicIntervalFeature
 		extends MIDIFeatureExtractor
 {
 	/* CONSTRUCTOR ******************************************************************************************/
@@ -19,11 +19,11 @@ public class MelodicPerfectFourthsFeature
 	/**
 	 * Basic constructor that sets the values of the fields inherited from this class' superclass.
 	 */
-	public MelodicPerfectFourthsFeature()
+	public LargestMelodicIntervalFeature()
 	{
-		String name = "Melodic Perfect Fourths";
-		String code = "M-57";
-		String description = "Fraction of melodic intervals that are perfect fourths.";
+		String name = "Largest Melodic Interval";
+		String code = "M-48";
+		String description = "The largest melodic interval in the piece.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
@@ -58,7 +58,15 @@ public class MelodicPerfectFourthsFeature
 	{
 		double value;
 		if (sequence_info != null)
-			value = sequence_info.melodic_interval_histogram[5];
+		{
+			// Find largest melodic interval
+			int largest_melodic_interval = 0;
+			for (int bin = 0; bin < sequence_info.melodic_interval_histogram.length; bin++)
+				if (sequence_info.melodic_interval_histogram[bin] > 0.0)
+					largest_melodic_interval = bin;	
+			
+			value = (double) largest_melodic_interval;
+		} 
 		else value = -1.0;
 
 		double[] result = new double[1];

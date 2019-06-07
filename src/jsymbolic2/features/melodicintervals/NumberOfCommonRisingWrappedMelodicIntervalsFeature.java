@@ -26,7 +26,7 @@ public class NumberOfCommonRisingWrappedMelodicIntervalsFeature
 		String code = "M-19";
 		String description = "Number of different rising melodic intervals that each account individually for at least 9% of all rising wrapped melodic intervals.";
 		boolean is_sequential = true;
-		int dimensions = 128;
+		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
 		dependencies = null;
 		offsets = null;

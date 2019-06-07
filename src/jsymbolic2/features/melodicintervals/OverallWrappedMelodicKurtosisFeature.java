@@ -6,12 +6,13 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * Absolute value of the difference (in semitones) between the most common and second most common falling 
- * wrapped melodic intervals in the piece.
+ * Kurtosis of the wrapped melodic intervals in the piece. Melodies are calculated using the same conventions 
+ * described for the Melodic Interval Histogram. The higher the kurtosis, the more the wrapped melodic 
+ * intervals are clustered near the mean and the fewer outliers there are.
  *
  * @author radamian
  */
-public class DistanceBetweenMostPrevalentFallingWrappedMelodicIntervalsFeature
+public class OverallWrappedMelodicKurtosisFeature
 		extends MIDIFeatureExtractor
 {
 	/* CONSTRUCTOR ******************************************************************************************/
@@ -20,11 +21,11 @@ public class DistanceBetweenMostPrevalentFallingWrappedMelodicIntervalsFeature
 	/**
 	 * Basic constructor that sets the values of the fields inherited from this class' superclass.
 	 */
-	public DistanceBetweenMostPrevalentFallingWrappedMelodicIntervalsFeature()
+	public OverallWrappedMelodicKurtosisFeature()
 	{
-		String name = "Distance Between Most Prevalent Falling Wrapped Melodic Intervals";
-		String code = "M-28";
-		String description = "Absolute value of the difference (in semitones) between the most common and second most common falling wrapped melodic intervals in the piece.";
+		String name = "Overall Wrapped Melodic Kurtosis";
+		String code = "M-44";
+		String description = "Kurtosis of the wrapped melodic intervals in the piece. Melodies are calculated using the same conventions described for the Melodic Interval Histogram. The higher the kurtosis, the more the wrapped melodic intervals are clustered near the mean and the fewer outliers there are.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
@@ -60,38 +61,31 @@ public class DistanceBetweenMostPrevalentFallingWrappedMelodicIntervalsFeature
 		double value;
 		if (sequence_info != null)
 		{
-			// Initialize wrapped histogram
-			double[] wrapped_melodic_interval_histogram = new double[12];
-			for (int i = 0; i < wrapped_melodic_interval_histogram.length; i++)
-				wrapped_melodic_interval_histogram[i] = 0.0;
-
-			// Fill wrapped histogram
-			for (int bin = 0; bin < sequence_info.melodic_interval_histogram_falling_intervals_only.length; bin++)
-				wrapped_melodic_interval_histogram[bin % 12] += sequence_info.melodic_interval_histogram_falling_intervals_only[bin];
+			// Find the number of melodic intervals in the piece
+			int number_of_intervals = 0;
+			for (int n_track = 0; n_track < sequence_info.melodic_intervals_by_track_and_channel.size(); n_track++)
+				for (int chan = 0; chan < sequence_info.melodic_intervals_by_track_and_channel.get(n_track).length; chan++)
+					for (int i = 0; i < sequence_info.melodic_intervals_by_track_and_channel.get(n_track)[chan].size(); i++)
+						number_of_intervals++;
 			
-			// Find the bin with the highest magnitude
-			int max_index = mckay.utilities.staticlibraries.MathAndStatsMethods.getIndexOfLargest(wrapped_melodic_interval_histogram);
-
-			// Find the bin with the second highest magnitude
-			double second_max = 0;
-			int second_max_index = 0;
-			for (int bin = 0; bin < wrapped_melodic_interval_histogram.length; bin++)
-			{
-				if ( wrapped_melodic_interval_histogram[bin] > second_max && bin != max_index )
-				{
-					second_max = wrapped_melodic_interval_histogram[bin];
-					second_max_index = bin;
-				}
-			}
-
-			// Calculate the value
-			int difference = Math.abs(max_index - second_max_index);
-			value = (double) difference;
-		}
+			// Fill array containing each melodic interval in the piece
+			double[] all_melodic_intervals = new double[number_of_intervals];
+			int index = 0;
+			for (int n_track = 0; n_track < sequence_info.melodic_intervals_by_track_and_channel.size(); n_track++)
+				for (int chan = 0; chan < sequence_info.melodic_intervals_by_track_and_channel.get(n_track).length; chan++)
+					for (int i = 0; i < sequence_info.melodic_intervals_by_track_and_channel.get(n_track)[chan].size(); i++)
+					{
+						all_melodic_intervals[index] = sequence_info.melodic_intervals_by_track_and_channel.get(n_track)[chan].get(i) % 12;
+						index++;
+					}
+			
+			// Calculate the feature value
+			value = mckay.utilities.staticlibraries.MathAndStatsMethods.getSampleExcessKurtosis(all_melodic_intervals);
+		} 
 		else value = -1.0;
-		
+
 		double[] result = new double[1];
 		result[0] = value;
 		return result;
-    }
+	}
 }

@@ -24,7 +24,7 @@ public class AmountOfRisingMelodicMotionFeature
 	public AmountOfRisingMelodicMotionFeature()
 	{
 		String name = "Amount of Rising Melodic Motion";
-		String code = "M-45";
+		String code = "M-67";
 		String description = "Fraction of melodic intervals that are rising in pitch (repeated notes are not counted in this calculation). Set to zero if no rising or falling melodic intervals are found.";
 		boolean is_sequential = true;
 		int dimensions = 1;

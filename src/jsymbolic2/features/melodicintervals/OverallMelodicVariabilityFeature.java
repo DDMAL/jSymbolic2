@@ -6,11 +6,13 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the fraction of melodic intervals that are perfect fourths.
+ * Standard deviation of the melodic intervals in the piece. Melodies are calculated using the same 
+ * conventions described for the Melodic Interval Histogram. Provides a measure of how close the melodic 
+ * intervals as a whole are to the mean melodic interval.
  *
- * @author Cory McKay
+ * @author radamian
  */
-public class MelodicPerfectFourthsFeature
+public class OverallMelodicVariabilityFeature
 		extends MIDIFeatureExtractor
 {
 	/* CONSTRUCTOR ******************************************************************************************/
@@ -19,11 +21,11 @@ public class MelodicPerfectFourthsFeature
 	/**
 	 * Basic constructor that sets the values of the fields inherited from this class' superclass.
 	 */
-	public MelodicPerfectFourthsFeature()
+	public OverallMelodicVariabilityFeature()
 	{
-		String name = "Melodic Perfect Fourths";
-		String code = "M-57";
-		String description = "Fraction of melodic intervals that are perfect fourths.";
+		String name = "Overall Melodic Variability";
+		String code = "M-37";
+		String description = "Standard deviation of the melodic intervals in the piece. Melodies are calculated using the same conventions described for the Melodic Interval Histogram. Provides a measure of how close the melodic intervals as a whole are to the mean melodic interval.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
@@ -58,7 +60,28 @@ public class MelodicPerfectFourthsFeature
 	{
 		double value;
 		if (sequence_info != null)
-			value = sequence_info.melodic_interval_histogram[5];
+		{
+			// Find the number of melodic intervals in the piece
+			int number_of_intervals = 0;
+			for (int n_track = 0; n_track < sequence_info.melodic_intervals_by_track_and_channel.size(); n_track++)
+				for (int chan = 0; chan < sequence_info.melodic_intervals_by_track_and_channel.get(n_track).length; chan++)
+					for (int i = 0; i < sequence_info.melodic_intervals_by_track_and_channel.get(n_track)[chan].size(); i++)
+						number_of_intervals++;
+			
+			// Fill array containing each melodic interval in the piece
+			int[] all_melodic_intervals = new int[number_of_intervals];
+			int index = 0;
+			for (int n_track = 0; n_track < sequence_info.melodic_intervals_by_track_and_channel.size(); n_track++)
+				for (int chan = 0; chan < sequence_info.melodic_intervals_by_track_and_channel.get(n_track).length; chan++)
+					for (int i = 0; i < sequence_info.melodic_intervals_by_track_and_channel.get(n_track)[chan].size(); i++)
+					{
+						all_melodic_intervals[index] = sequence_info.melodic_intervals_by_track_and_channel.get(n_track)[chan].get(i);
+						index++;
+					}
+			
+			// Calculate the feature value
+			value = mckay.utilities.staticlibraries.MathAndStatsMethods.getStandardDeviation(all_melodic_intervals);
+		} 
 		else value = -1.0;
 
 		double[] result = new double[1];

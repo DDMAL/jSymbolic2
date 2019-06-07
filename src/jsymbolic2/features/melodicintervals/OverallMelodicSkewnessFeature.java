@@ -6,12 +6,14 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * Number of different falling melodic intervals that each account individually for at least 9% of all falling 
- * wrapped melodic intervals.
+ * Skewness of the melodic intervals in the piece. Melodies are calculated using the same conventions 
+ * described for the Melodic Interval Histogram. Provides a measure of how asymmetrical the melodic interval 
+ * distribution is to either the left or the right of the mean melodic interval. A value of zero indicates no 
+ * skew.
  *
  * @author radamian
  */
-public class NumberOfCommonFallingWrappedMelodicIntervalsFeature
+public class OverallMelodicSkewnessFeature
 		extends MIDIFeatureExtractor
 {
 	/* CONSTRUCTOR ******************************************************************************************/
@@ -20,11 +22,11 @@ public class NumberOfCommonFallingWrappedMelodicIntervalsFeature
 	/**
 	 * Basic constructor that sets the values of the fields inherited from this class' superclass.
 	 */
-	public NumberOfCommonFallingWrappedMelodicIntervalsFeature()
+	public OverallMelodicSkewnessFeature()
 	{
-		String name = "Number of Common Falling Wrapped Melodic Intervals";
-		String code = "M-20";
-		String description = "Number of different falling melodic intervals that each account individually for at least 9% of all falling wrapped melodic intervals.";
+		String name = "Overall Melodic Skewness";
+		String code = "M-41";
+		String description = "Skewness of the melodic intervals in the piece. Melodies are calculated using the same conventions described for the Melodic Interval Histogram. Provides a measure of how asymmetrical the melodic interval distribution is to either the left or the right of the mean melodic interval. A value of zero indicates no skew.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
@@ -60,26 +62,29 @@ public class NumberOfCommonFallingWrappedMelodicIntervalsFeature
 		double value;
 		if (sequence_info != null)
 		{
+			// Find the number of melodic intervals in the piece
 			int number_of_intervals = 0;
+			for (int n_track = 0; n_track < sequence_info.melodic_intervals_by_track_and_channel.size(); n_track++)
+				for (int chan = 0; chan < sequence_info.melodic_intervals_by_track_and_channel.get(n_track).length; chan++)
+					for (int i = 0; i < sequence_info.melodic_intervals_by_track_and_channel.get(n_track)[chan].size(); i++)
+						number_of_intervals++;
 			
-			// Initialize wrapped histogram
-			double[] wrapped_melodic_interval_histogram = new double[12];
-			for (int bin = 0; bin < wrapped_melodic_interval_histogram.length; bin++)
-				wrapped_melodic_interval_histogram[bin] = 0.0;
+			// Fill array containing each melodic interval in the piece
+			double[] all_melodic_intervals = new double[number_of_intervals];
+			int index = 0;
+			for (int n_track = 0; n_track < sequence_info.melodic_intervals_by_track_and_channel.size(); n_track++)
+				for (int chan = 0; chan < sequence_info.melodic_intervals_by_track_and_channel.get(n_track).length; chan++)
+					for (int i = 0; i < sequence_info.melodic_intervals_by_track_and_channel.get(n_track)[chan].size(); i++)
+					{
+						all_melodic_intervals[index] = sequence_info.melodic_intervals_by_track_and_channel.get(n_track)[chan].get(i);
+						index++;
+					}
 			
-			// Fill wrapped histogram
-			for (int bin = 0; bin < sequence_info.melodic_interval_histogram_falling_intervals_only.length; bin++)
-				wrapped_melodic_interval_histogram[bin % 12] += sequence_info.melodic_interval_histogram_falling_intervals_only[bin];
-			
-			// Count number of intervals that each account individually for at least 9% of all wrapped falling
-			// melodic intervals.
-			for (int bin = 0; bin < wrapped_melodic_interval_histogram.length; bin++)
-				if (wrapped_melodic_interval_histogram[bin] >= 0.09) number_of_intervals++;
-			
-			value = (double) number_of_intervals;
-		}
+			// Calculate the feature value
+			value = mckay.utilities.staticlibraries.MathAndStatsMethods.getMedianSkewness(all_melodic_intervals);
+		} 
 		else value = -1.0;
-		
+
 		double[] result = new double[1];
 		result[0] = value;
 		return result;

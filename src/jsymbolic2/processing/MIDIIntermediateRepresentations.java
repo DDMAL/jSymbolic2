@@ -864,31 +864,28 @@ public class MIDIIntermediateRepresentations
 			System.out.print("\n");
 		}
 		*/
-		/*
-		LinkedList<LinkedList<Integer>>[][] onset_slices_by_track_and_channel = note_onset_slice_container.getNoteOnsetSlicesByTrackAndChannel();
-		LinkedList<LinkedList<Integer>> onset_slices = note_onset_slice_container.getNoteOnsetSlices();
-		System.out.println("\n\n\n\nGENERATING NOTE ONSET SLICES...");
-		for (int slice = 0; slice < onset_slices.size(); slice++)
+		
+		LinkedList<LinkedList<Integer>>[][] melodic_lines_by_track_and_channel = note_onset_slice_container.getNoteOnsetSlicesByTrackAndChannelMelodicLinesOnly();
+		// LinkedList<LinkedList<Integer>> onset_slices = note_onset_slice_container.getNoteOnsetSlices();
+		System.out.println("\n\n\n\nNOTE ONSET SLICES CREATED:");
+		for (int slice = 0; slice < melodic_lines_by_track_and_channel[0][0].size(); slice++)
 		{
 			System.out.println("\nSlice " + slice);
-			for (int pitch = 0; pitch < onset_slices.get(slice).size(); pitch++)
-				System.out.print(onset_slices.get(slice).get(pitch) + ", ");
-			System.out.print("\n");
+//			for (int pitch = 0; pitch < onset_slices.get(slice).size(); pitch++)
+//				System.out.print(onset_slices.get(slice).get(pitch) + ", ");
+//			System.out.print("\n");
 			
 			for (int n_track = 0; n_track < tracks.length; n_track++)
-			{
-				System.out.println("On track " + n_track);
 				for (int chan = 0; chan < 16; chan++)
-					if (!onset_slices_by_track_and_channel[n_track][chan].get(slice).isEmpty())
+					if (!melodic_lines_by_track_and_channel[n_track][chan].get(slice).isEmpty())
 					{
-						System.out.println("On channel " + chan);
-						for (int pitch = 0; pitch < onset_slices_by_track_and_channel[n_track][chan].get(slice).size(); pitch++)
-							System.out.print(onset_slices_by_track_and_channel[n_track][chan].get(slice).get(pitch) + ", ");
+						System.out.println("On track " + n_track + " and channel " + chan);
+						for (int pitch = 0; pitch < melodic_lines_by_track_and_channel[n_track][chan].get(slice).size(); pitch++)
+							System.out.print(melodic_lines_by_track_and_channel[n_track][chan].get(slice).get(pitch) + ", ");
 						System.out.print("\n");
 					}
-			}	
 		}
-		*/
+		
 						
 		// System.out.println("\n\n\n\nGENERATING MELODIC INTERMEDIATE REPRESENTATIONS");	
 		generateMelodicIntermediateRepresentations();
@@ -1943,7 +1940,7 @@ public class MIDIIntermediateRepresentations
 		}
 		
 		// Iterate over onset slice structure organized by track and channel containing only new note onsets
-		LinkedList<LinkedList<Integer>>[][] note_onset_slices_by_track_and_channel = note_onset_slice_container.getNoteOnsetSlicesByTrackAndChannelOnlyNewOnsets();
+		LinkedList<LinkedList<Integer>>[][] melodic_lines__by_track_and_channel = note_onset_slice_container.getNoteOnsetSlicesByTrackAndChannelMelodicLinesOnly();
 		for (int n_track = 0; n_track < tracks.length; n_track++)
 		{
 			// System.out.println("\n\n\nTrack " + n_track + ": ");
@@ -1962,12 +1959,11 @@ public class MIDIIntermediateRepresentations
 			for (int chan = 0; chan < 16; chan++)
 			{
 				// System.out.println("\nChannel " + chan + ":");
-				for (int slice = 0; slice < note_onset_slices_by_track_and_channel[n_track][chan].size(); slice++)
-					if (!(note_onset_slices_by_track_and_channel[n_track][chan].get(slice).isEmpty()))
+				for (int slice = 0; slice < melodic_lines__by_track_and_channel[n_track][chan].size(); slice++)
+					if (!(melodic_lines__by_track_and_channel[n_track][chan].get(slice).isEmpty()))
 					{
 						// Get highest note in the onset slice
-						int index = note_onset_slices_by_track_and_channel[n_track][chan].get(slice).size() - 1;
-						int current_note = note_onset_slices_by_track_and_channel[n_track][chan].get(slice).get(index);
+						int current_note = melodic_lines__by_track_and_channel[n_track][chan].get(slice).get(0);
 						
 						if (previous_pitches[chan] != -1)
 						{

@@ -6,11 +6,11 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the fraction of melodic intervals that are perfect fourths.
+ * Fraction of melodic intervals greater than a perfect fifth.
  *
- * @author Cory McKay
+ * @author radamian
  */
-public class MelodicPerfectFourthsFeature
+public class MelodicIntervalsLargerThanAFifthFeature
 		extends MIDIFeatureExtractor
 {
 	/* CONSTRUCTOR ******************************************************************************************/
@@ -19,11 +19,11 @@ public class MelodicPerfectFourthsFeature
 	/**
 	 * Basic constructor that sets the values of the fields inherited from this class' superclass.
 	 */
-	public MelodicPerfectFourthsFeature()
+	public MelodicIntervalsLargerThanAFifthFeature()
 	{
-		String name = "Melodic Perfect Fourths";
-		String code = "M-57";
-		String description = "Fraction of melodic intervals that are perfect fourths.";
+		String name = "Melodic Intervals Larger Than a Fifth";
+		String code = "M-60";
+		String description = "Fraction of melodic intervals greater than a perfect fifth.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
@@ -56,9 +56,13 @@ public class MelodicPerfectFourthsFeature
 									double[][] other_feature_values )
 	throws Exception
 	{
-		double value;
+		double value = 0.0;
 		if (sequence_info != null)
-			value = sequence_info.melodic_interval_histogram[5];
+		{
+			// Sum the fractions of melodic intervals greater than a perfect fifth (> 7 semitones)
+			for (int bin = 8; bin < sequence_info.melodic_interval_histogram.length; bin++)
+				value += sequence_info.melodic_interval_histogram[bin];
+		}
 		else value = -1.0;
 
 		double[] result = new double[1];

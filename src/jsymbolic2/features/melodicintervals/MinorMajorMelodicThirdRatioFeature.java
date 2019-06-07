@@ -6,11 +6,13 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the fraction of melodic intervals that are perfect fourths.
+ * A feature calculator that finds the combined fraction of all melodic intervals that are minor thirds,
+ * divided by the combined fraction of all melodic intervals that are major thirds. Set to 0 if there are no
+ * melodic minor thirds or melodic major thirds.
  *
  * @author Cory McKay
  */
-public class MelodicPerfectFourthsFeature
+public class MinorMajorMelodicThirdRatioFeature
 		extends MIDIFeatureExtractor
 {
 	/* CONSTRUCTOR ******************************************************************************************/
@@ -19,11 +21,11 @@ public class MelodicPerfectFourthsFeature
 	/**
 	 * Basic constructor that sets the values of the fields inherited from this class' superclass.
 	 */
-	public MelodicPerfectFourthsFeature()
+	public MinorMajorMelodicThirdRatioFeature()
 	{
-		String name = "Melodic Perfect Fourths";
-		String code = "M-57";
-		String description = "Fraction of melodic intervals that are perfect fourths.";
+		String name = "Minor Major Melodic Third Ratio";
+		String code = "M-65";
+		String description = "Combined fraction of all melodic intervals that are minor thirds, divided by the combined fraction of all melodic intervals that are major thirds. Set to 0 if there are no melodic minor thirds or melodic major thirds.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
@@ -56,9 +58,14 @@ public class MelodicPerfectFourthsFeature
 									double[][] other_feature_values )
 	throws Exception
 	{
-		double value;
+		double value = 0.0;
 		if (sequence_info != null)
-			value = sequence_info.melodic_interval_histogram[5];
+		{
+			if ( sequence_info.melodic_interval_histogram[3] != 0 && 
+			     sequence_info.melodic_interval_histogram[4] != 0 )
+				value = sequence_info.melodic_interval_histogram[3] / sequence_info.melodic_interval_histogram[4];
+			
+		}
 		else value = -1.0;
 
 		double[] result = new double[1];

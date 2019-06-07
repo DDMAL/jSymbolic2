@@ -6,11 +6,11 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the fraction of melodic intervals that are perfect fourths.
+ * Fraction of all wrapped melodic intervals that corresponds to the most common wrapped melodic interval.
  *
- * @author Cory McKay
+ * @author radamian
  */
-public class MelodicPerfectFourthsFeature
+public class PrevalenceOfMostCommonWrappedMelodicIntervalFeature
 		extends MIDIFeatureExtractor
 {
 	/* CONSTRUCTOR ******************************************************************************************/
@@ -19,11 +19,11 @@ public class MelodicPerfectFourthsFeature
 	/**
 	 * Basic constructor that sets the values of the fields inherited from this class' superclass.
 	 */
-	public MelodicPerfectFourthsFeature()
+	public PrevalenceOfMostCommonWrappedMelodicIntervalFeature()
 	{
-		String name = "Melodic Perfect Fourths";
-		String code = "M-57";
-		String description = "Fraction of melodic intervals that are perfect fourths.";
+		String name = "Prevalence of Most Common Wrapped Melodic Interval";
+		String code = "M-30";
+		String description = "Fraction of all wrapped melodic intervals that corresponds to the most common wrapped melodic interval.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
@@ -58,7 +58,22 @@ public class MelodicPerfectFourthsFeature
 	{
 		double value;
 		if (sequence_info != null)
-			value = sequence_info.melodic_interval_histogram[5];
+		{
+			// Initialize wrapped histogram
+			double[] wrapped_melodic_interval_histogram = new double[12];
+			for (int bin = 0; bin < wrapped_melodic_interval_histogram.length; bin++)
+				wrapped_melodic_interval_histogram[bin] = 0.0;
+			
+			// Fill wrapped histogram
+			for (int bin = 0; bin < sequence_info.melodic_interval_histogram.length; bin++)
+				wrapped_melodic_interval_histogram[bin % 12] += sequence_info.melodic_interval_histogram[bin];
+			
+			// Find the highest bin
+			int max_index = mckay.utilities.staticlibraries.MathAndStatsMethods.getIndexOfLargest(wrapped_melodic_interval_histogram);
+
+			// Calculate the feature value
+			value = wrapped_melodic_interval_histogram[max_index];
+		} 
 		else value = -1.0;
 
 		double[] result = new double[1];

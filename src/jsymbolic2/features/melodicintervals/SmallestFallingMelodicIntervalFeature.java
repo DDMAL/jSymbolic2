@@ -6,11 +6,13 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the fraction of melodic intervals that are perfect fourths.
+ * The smallest falling melodic interval in the piece, measured in semitones. Repeated notes are not counted 
+ * for this feature, so a value of 0 will only be returned if there are no falling melodic intervals of a 
+ * semitone or larger.
  *
- * @author Cory McKay
+ * @author radamian
  */
-public class MelodicPerfectFourthsFeature
+public class SmallestFallingMelodicIntervalFeature
 		extends MIDIFeatureExtractor
 {
 	/* CONSTRUCTOR ******************************************************************************************/
@@ -19,11 +21,11 @@ public class MelodicPerfectFourthsFeature
 	/**
 	 * Basic constructor that sets the values of the fields inherited from this class' superclass.
 	 */
-	public MelodicPerfectFourthsFeature()
+	public SmallestFallingMelodicIntervalFeature()
 	{
-		String name = "Melodic Perfect Fourths";
-		String code = "M-57";
-		String description = "Fraction of melodic intervals that are perfect fourths.";
+		String name = "Smallest Falling Melodic Interval";
+		String code = "M-47";
+		String description = "The smallest falling melodic interval in the piece, measured in semitones. Repeated notes are not counted for this feature, so a value of 0 will only be returned if there are no falling melodic intervals of a semitone or larger.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
@@ -58,7 +60,28 @@ public class MelodicPerfectFourthsFeature
 	{
 		double value;
 		if (sequence_info != null)
-			value = sequence_info.melodic_interval_histogram[5];
+		{
+			// Initialize with default value
+			int smallest_melodic_interval = 0;
+
+			// Find smallest falling melodic interval that is not a repeated note
+			for (int n_track = 0; n_track < sequence_info.melodic_intervals_by_track_and_channel.size(); n_track++)
+				for (int chan = 0; chan < sequence_info.melodic_intervals_by_track_and_channel.get(n_track).length; chan++)
+					for (int i = 0; i < sequence_info.melodic_intervals_by_track_and_channel.get(n_track)[chan].size(); i++)
+					{
+						int interval = sequence_info.melodic_intervals_by_track_and_channel.get(n_track)[chan].get(i);
+						// Check that interval is falling and not a repeated note
+						if (interval < 0) 
+							// Check if interval is smaller in semitones than the current minimum, or if the 
+							// current minimum is set to the default value
+							if (Math.abs(interval) < smallest_melodic_interval
+								|| smallest_melodic_interval == 0)
+								smallest_melodic_interval = Math.abs(interval);
+					}
+						
+			
+			value = (double) smallest_melodic_interval;
+		} 
 		else value = -1.0;
 
 		double[] result = new double[1];

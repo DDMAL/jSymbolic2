@@ -22,7 +22,7 @@ public class MelodicIntervalsLargerThanAnOctaveFeature
 	public MelodicIntervalsLargerThanAnOctaveFeature()
 	{
 		String name = "Melodic Intervals Larger Than an Octave";
-		String code = "M-42";
+		String code = "M-64";
 		String description = "Fraction of melodic intervals greater than a perfect octave.";
 		boolean is_sequential = true;
 		int dimensions = 1;

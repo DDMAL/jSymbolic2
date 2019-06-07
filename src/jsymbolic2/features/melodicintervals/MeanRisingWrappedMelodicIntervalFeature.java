@@ -26,7 +26,7 @@ public class MeanRisingWrappedMelodicIntervalFeature
 		String code = "M-11";
 		String description = "Mean average (in semitones) of the intervals involved in each of the rising melodic wrapped melodic intervals in the piece.";
 		boolean is_sequential = true;
-		int dimensions = 12;
+		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
 		dependencies = null;
 		offsets = null;

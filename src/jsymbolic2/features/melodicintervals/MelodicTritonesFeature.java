@@ -22,7 +22,7 @@ public class MelodicTritonesFeature
 	public MelodicTritonesFeature()
 	{
 		String name = "Melodic Tritones";
-		String code = "M-37";
+		String code = "M-58";
 		String description = "Fraction of melodic intervals that are tritones.";
 		boolean is_sequential = true;
 		int dimensions = 1;

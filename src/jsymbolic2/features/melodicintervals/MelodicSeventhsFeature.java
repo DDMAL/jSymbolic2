@@ -22,7 +22,7 @@ public class MelodicSeventhsFeature
 	public MelodicSeventhsFeature()
 	{
 		String name = "Melodic Sevenths";
-		String code = "M-40";
+		String code = "M-62";
 		String description = "Fraction of melodic intervals that are major or minor sevenths.";
 		boolean is_sequential = true;
 		int dimensions = 1;
