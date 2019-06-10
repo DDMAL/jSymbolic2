@@ -84,15 +84,37 @@ Distance Between Most Prevalent Wrapped Melodic Intervals
 Distance Between Most Prevalent Rising Wrapped Melodic Intervals
 Distance Between Most Prevalent Falling Wrapped Melodic Intervals
 Prevalence of Most Common Melodic Interval
+Prevalence of Most Common Wrapped Melodic Interval
+Prevalence of Most Common Rising Wrapped Melodic Interval
+Prevalence of Most Common Falling Wrapped Melodic Interval
 Relative Prevalence of Most Common Melodic Intervals
-Amount of Arpeggiation
+Relative Prevalence of Most Common Wrapped Melodic Intervals
+Relative Prevalence of Most Common Rising Wrapped Melodic Intervals
+Relative Prevalence of Most Common Falling Wrapped Melodic Intervals
+Overall Melodic Variability
+Overall Wrapped Melodic Variability
+Overall Rising Wrapped Melodic Variability
+Overall Falling Wrapped Melodic Variability
+Overall Melodic Skewness
+Overall Wrapped Melodic Skewness
+Overall Melodic Kurtosis
+Overall Wrapped Melodic Kurtosis
+Smallest Melodic Interval
+Smallest Rising Melodic Interval
+Smallest Falling Melodic Interval
+Largest Melodic Interval
+Largest Wrapped Melodic Interval
+Largest Rising Melodic Interval
+Largest Falling Melodic Interval
 Repeated Notes
 Chromatic Motion
 Stepwise Motion
 Melodic Thirds
+Melodic Intervals Larger Than a Third
 Melodic Perfect Fourths
 Melodic Tritones
 Melodic Perfect Fifths
+Melodic Intervals Larger Than a Fifth
 Melodic Sixths
 Melodic Sevenths
 Melodic Octaves
@@ -100,6 +122,7 @@ Melodic Intervals Larger Than an Octave
 Minor Major Melodic Third Ratio
 Melodic Embellishments
 Amount of Rising Melodic Motion
+Amount of Arpeggiation
 Average Length of Melodic Half-Arcs
 Average Interval Spanned by Melodic Half-Arcs
 Melodic Pitch Variety

@@ -73,7 +73,7 @@ public class OverallWrappedMelodicSkewnessFeature
 				for (int chan = 0; chan < sequence_info.melodic_intervals_by_track_and_channel.get(n_track).length; chan++)
 					for (int i = 0; i < sequence_info.melodic_intervals_by_track_and_channel.get(n_track)[chan].size(); i++)
 					{
-						all_melodic_intervals[index] = sequence_info.melodic_intervals_by_track_and_channel.get(n_track)[chan].get(i) % 12;
+						all_melodic_intervals[index] = Math.abs(sequence_info.melodic_intervals_by_track_and_channel.get(n_track)[chan].get(i)) % 12;
 						index++;
 					}
 			

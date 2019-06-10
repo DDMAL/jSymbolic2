@@ -6,22 +6,23 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature vector consisting of the bin magnitudes of the Wrapped Melodic Interval Histogram described 
- * above, but where falling intervals are ignored (repeated pitches are counted). Entries for melodic 
- * intervals over an octave are amalgamated (e.g. 2nds and 9ths are combined). Each bin corresponds to a 
- * melodic interval, and the bin index indicates the number of semitones comprising the interval associated 
- * with the bin (there are 12 bins in all). For example, bin 0 corresponds to repeated pitches (and octave 
- * multiples), bin 1 to a melodic interval of one semitone (and octave multiples), bin 2 to a melodic interval 
- * of 2 semitones (and octave multiples), etc. The magnitude of each bin is proportional to the fraction of 
- * rising melodic intervals in the piece that are of the kind associated with the bin (this histogram is 
- * normalized). Melodies are assumed to be contained within individual MIDI tracks and channels, so melodic 
- * intervals are found separately for each track and channel before being combined in this histogram. It is 
- * also assumed that there is only one melody at a time per MIDI channel (if multiple notes occur 
- * simultaneously on the same MIDI tick on the same MIDI track and channel, then all notes but the first note 
- * on that tick are ignored). Other than this, all notes on the same track and the same channel are treated 
- * as if they are part of a single melody. It is also assumed that melodies do not cross MIDI tracks or 
- * channels (i.e. that they are each separately contained in their own track and channel). Only pitched notes 
- * are considered, so all notes on the unpitched MIDI Channel 10 are ignored.
+ * A feature vector consisting of the bin magnitudes of the Wrapped Melodic Interval Histogram described
+ * above, but where falling intervals are ignored (repeated pitches are counted). Entries for melodic
+ * intervals over an octave are amalgamated (e.g. 2nds and 9ths are combined). Each bin corresponds to a
+ * melodic interval, and the bin index indicates the number of semitones comprising the interval associated
+ * with the bin (there are 12 bins in all). For example, bin 0 corresponds to repeated pitches (and octave
+ * multiples), bin 1 to a melodic interval of one semitone (and octave multiples), bin 2 to a melodic interval
+ * of 2 semitones (and octave multiples), etc. The magnitude of each bin is proportional to the fraction of
+ * rising melodic intervals in the piece that are of the kind associated with the bin (this histogram is
+ * normalized). Melodies are assumed to be contained within individual MIDI tracks and channels, so melodic
+ * intervals are found separately for each track and channel before being combined in this histogram. If a
+ * given note onset slice on a given MIDI track and channel contains multiple pitches, then only the highest
+ * pitched note in the slice is counted for the purpose of melody calculations. Also, if the highest note is
+ * sustained from one note onset slice to the next, and is still the highest note in the second slice, then
+ * this is treated as if there is no change in melody, even if lower pitches in the same track and channel
+ * change. It is also assumed that melodies do not cross MIDI tracks or channels (i.e. that they are each
+ * separately contained in their own track and channel). Only pitched notes are considered, so all notes on
+ * the unpitched MIDI Channel 10 are ignored.
  *
  * @author radamian
  */
@@ -38,7 +39,7 @@ public class WrappedMelodicIntervalHistogramRisingIntervalsOnlyFeature
 	{
 		String name = "Wrapped Melodic Interval Histogram - Rising Intervals Only";
 		String code = "M-3";
-		String description = "A feature vector consisting of the bin magnitudes of the Wrapped Melodic Interval Histogram described above, but where falling intervals are ignored (repeated pitches are counted). Entries for melodic intervals over an octave are amalgamated (e.g. 2nds and 9ths are combined). Each bin corresponds to a melodic interval, and the bin index indicates the number of semitones comprising the interval associated with the bin (there are 12 bins in all). For example, bin 0 corresponds to repeated pitches (and octave multiples), bin 1 to a melodic interval of one semitone (and octave multiples), bin 2 to a melodic interval of 2 semitones (and octave multiples), etc. The magnitude of each bin is proportional to the fraction of rising melodic intervals in the piece that are of the kind associated with the bin (this histogram is normalized). Melodies are assumed to be contained within individual MIDI tracks and channels, so melodic intervals are found separately for each track and channel before being combined in this histogram. It is also assumed that there is only one melody at a time per MIDI channel (if multiple notes occur simultaneously on the same MIDI tick on the same MIDI track and channel, then all notes but the first note on that tick are ignored). Other than this, all notes on the same track and the same channel are treated as if they are part of a single melody. It is also assumed that melodies do not cross MIDI tracks or channels (i.e. that they are each separately contained in their own track and channel). Only pitched notes are considered, so all notes on the unpitched MIDI Channel 10 are ignored.";
+		String description = "A feature vector consisting of the bin magnitudes of the Wrapped Melodic Interval Histogram described above, but where falling intervals are ignored (repeated pitches are counted). Entries for melodic intervals over an octave are amalgamated (e.g. 2nds and 9ths are combined). Each bin corresponds to a melodic interval, and the bin index indicates the number of semitones comprising the interval associated with the bin (there are 12 bins in all). For example, bin 0 corresponds to repeated pitches (and octave multiples), bin 1 to a melodic interval of one semitone (and octave multiples), bin 2 to a melodic interval of 2 semitones (and octave multiples), etc. The magnitude of each bin is proportional to the fraction of rising melodic intervals in the piece that are of the kind associated with the bin (this histogram is normalized). Melodies are assumed to be contained within individual MIDI tracks and channels, so melodic intervals are found separately for each track and channel before being combined in this histogram. If a given note onset slice on a given MIDI track and channel contains multiple pitches, then only the highest pitched note in the slice is counted for the purpose of melody calculations. Also, if the highest note is sustained from one note onset slice to the next, and is still the highest note in the second slice, then this is treated as if there is no change in melody, even if lower pitches in the same track and channel change. It is also assumed that melodies do not cross MIDI tracks or channels (i.e. that they are each separately contained in their own track and channel). Only pitched notes are considered, so all notes on the unpitched MIDI Channel 10 are ignored.";
 		boolean is_sequential = true;
 		int dimensions = 12;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);

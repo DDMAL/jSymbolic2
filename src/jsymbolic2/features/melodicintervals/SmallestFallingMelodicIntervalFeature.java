@@ -70,16 +70,15 @@ public class SmallestFallingMelodicIntervalFeature
 					for (int i = 0; i < sequence_info.melodic_intervals_by_track_and_channel.get(n_track)[chan].size(); i++)
 					{
 						int interval = sequence_info.melodic_intervals_by_track_and_channel.get(n_track)[chan].get(i);
+
 						// Check that interval is falling and not a repeated note
 						if (interval < 0) 
 							// Check if interval is smaller in semitones than the current minimum, or if the 
 							// current minimum is set to the default value
-							if (Math.abs(interval) < smallest_melodic_interval
-								|| smallest_melodic_interval == 0)
+							if (Math.abs(interval) < smallest_melodic_interval || smallest_melodic_interval == 0)
 								smallest_melodic_interval = Math.abs(interval);
 					}
 						
-			
 			value = (double) smallest_melodic_interval;
 		} 
 		else value = -1.0;

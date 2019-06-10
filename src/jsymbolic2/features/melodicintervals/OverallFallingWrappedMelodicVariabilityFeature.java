@@ -78,7 +78,7 @@ public class OverallFallingWrappedMelodicVariabilityFeature
 					{
 						if (sequence_info.melodic_intervals_by_track_and_channel.get(n_track)[chan].get(i) <= 0)
 						{
-							all_falling_melodic_intervals[index] = Math.abs(sequence_info.melodic_intervals_by_track_and_channel.get(n_track)[chan].get(i)) % 12;
+							all_falling_melodic_intervals[index] = sequence_info.melodic_intervals_by_track_and_channel.get(n_track)[chan].get(i) % 12;
 							index++;
 						}
 

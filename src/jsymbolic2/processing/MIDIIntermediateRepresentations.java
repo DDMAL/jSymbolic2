@@ -354,49 +354,55 @@ public class MIDIIntermediateRepresentations
 	 * intervals in the piece that are of the kind associated with the bin (this histogram is normalized).
 	 * Rising and falling intervals are treated as identical. Melodies are assumed to be contained within
 	 * individual MIDI tracks and channels, so melodic intervals are found separately for each track and
-	 * channel before being combined in this histogram. It is also assumed that there is only one melody at a
-	 * time per MIDI channel (if multiple notes occur simultaneously on the same MIDI tick on the same MIDI
-	 * track and channel, then all notes but the highest note on that tick are ignored). Other than this, all
-	 * notes on the same track and the same channel are treated as if they are part of a single melody. It is
-	 * also assumed that melodies do not cross MIDI tracks or channels (i.e. that they are each separately
-	 * contained in their own track and channel). Only pitched notes are considered, so all notes on the
-	 * unpitched MIDI Channel 10 are ignored.
+	 * channel before being combined in this histogram. It is assumed that there is only one melody at a time
+	 * per MIDI track and channel (if multiple notes occur simultaneously in the same note onset slice on the
+	 * same MIDI track and channel, then all notes but the highest note in the slice are ignored; also, if the
+	 * highest note is sustained from one note onset slice to the next, and is still the highest note in the
+	 * second slice, then this is treated as if there is no change in melody, even if lower pitches in the
+	 * same track and channel change). Other than this, all notes on the same track and the same channel are
+	 * treated as if they are part of a single melody. It is also assumed that melodies do not cross MIDI
+	 * tracks or channels (i.e. that they are each separately contained in their own track and channel). Only
+	 * pitched notes are considered, so all notes on the unpitched MIDI Channel 10 are ignored.
 	 */
 	public double[] melodic_interval_histogram;
 	
 	/**
-	 * Each bin corresponds to a melodic interval, and the bin index indicates the number of semitones
-	 * comprising the interval associated with the bin (there are 128 bins in all). For example, bin 0
-	 * corresponds to repeated pitches, bin 1 to a melodic interval of one semitone, bin 2 to a melodic
-	 * interval of 2 semitones, etc. The magnitude of each bin is proportional to the fraction of rising 
-	 * melodic intervals in the piece that are of the kind associated with the bin (this histogram is 
-	 * normalized). Falling intervals are ignored. Melodies are assumed to be contained within individual 
-	 * MIDI tracks and channels, so melodic intervals are found separately for each track and channel before 
-	 * being combined in this histogram. It is also assumed that there is only one melody at a time per MIDI 
-	 * channel (if multiple notes occur simultaneously on the same MIDI tick on the same MIDI track and 
-	 * channel, then all notes but the highest note on that tick are ignored). Other than this, all notes on the 
-	 * same track and the same channel are treated as if they are part of a single melody. It is also assumed 
-	 * that melodies do not cross MIDI tracks or channels (i.e. that they are each separately contained in 
-	 * their own track and channel). Only pitched notes are considered, so all notes on the unpitched MIDI 
-	 * Channel 10 are ignored.
+	 * Each bin corresponds to a rising melodic interval, and the bin index indicates the number of semitones
+	 * comprising the interval associated with the bin (there are 128 bins in all). Falling intervals are
+	 * ignored. For example, bin 0 corresponds to repeated pitches, bin 1 to a rising melodic interval of one
+	 * semitone, bin 2 to a rising melodic interval of 2 semitones, etc. The magnitude of each bin is
+	 * proportional to the fraction of rising melodic intervals in the piece that are of the kind associated
+	 * with the bin (this histogram is normalized). Melodies are assumed to be contained within individual
+	 * MIDI tracks and channels, so melodic intervals are found separately for each track and channel before
+	 * being combined in this histogram. It is assumed that there is only one melody at a time per MIDI track
+	 * and channel (if multiple notes occur simultaneously in the same note onset slice on the same MIDI track
+	 * and channel, then all notes but the highest note in the slice are ignored; also, if the highest note is
+	 * sustained from one note onset slice to the next, and is still the highest note in the second slice,
+	 * then this is treated as if there is no change in melody, even if lower pitches in the same track and
+	 * channel change). Other than this, all notes on the same track and the same channel are treated as if
+	 * they are part of a single melody. It is also assumed that melodies do not cross MIDI tracks or channels
+	 * (i.e. that they are each separately contained in their own track and channel). Only pitched notes are
+	 * considered, so all notes on the unpitched MIDI Channel 10 are ignored.
 	 */
 	public double[] melodic_interval_histogram_rising_intervals_only;
 	
 	/**
-	 * Each bin corresponds to a melodic interval, and the bin index indicates the number of semitones
-	 * comprising the interval associated with the bin (there are 128 bins in all). For example, bin 0
-	 * corresponds to repeated pitches, bin 1 to a melodic interval of one semitone, bin 2 to a melodic
-	 * interval of 2 semitones, etc. The magnitude of each bin is proportional to the fraction of falling 
-	 * melodic intervals in the piece that are of the kind associated with the bin (this histogram is 
-	 * normalized). Rising intervals are ignored. Melodies are assumed to be contained within individual 
-	 * MIDI tracks and channels, so melodic intervals are found separately for each track and channel before 
-	 * being combined in this histogram. It is also assumed that there is only one melody at a time per MIDI 
-	 * channel (if multiple notes occur simultaneously on the same MIDI tick on the same MIDI track and 
-	 * channel, then all notes but the highest note on that tick are ignored). Other than this, all notes on the 
-	 * same track and the same channel are treated as if they are part of a single melody. It is also assumed 
-	 * that melodies do not cross MIDI tracks or channels (i.e. that they are each separately contained in 
-	 * their own track and channel). Only pitched notes are considered, so all notes on the unpitched MIDI 
-	 * Channel 10 are ignored.
+	 * Each bin corresponds to a falling melodic interval, and the bin index indicates the number of semitones
+	 * comprising the falling interval associated with the bin (there are 128 bins in all). Rising intervals
+	 * are ignored. For example, bin 0 corresponds to repeated pitches, bin 1 to a falling melodic interval of
+	 * one semitone, bin 2 to a falling melodic interval of 2 semitones, etc. The magnitude of each bin is
+	 * proportional to the fraction of falling melodic intervals in the piece that are of the kind associated
+	 * with the bin (this histogram is normalized). Melodies are assumed to be contained within individual
+	 * MIDI tracks and channels, so melodic intervals are found separately for each track and channel before
+	 * being combined in this histogram. It is assumed that there is only one melody at a time per MIDI track
+	 * and channel (if multiple notes occur simultaneously in the same note onset slice on the same MIDI track
+	 * and channel, then all notes but the highest note in the slice are ignored; also, if the highest note is
+	 * sustained from one note onset slice to the next, and is still the highest note in the second slice,
+	 * then this is treated as if there is no change in melody, even if lower pitches in the same track and
+	 * channel change). Other than this, all notes on the same track and the same channel are treated as if
+	 * they are part of a single melody. It is also assumed that melodies do not cross MIDI tracks or channels
+	 * (i.e. that they are each separately contained in their own track and channel). Only pitched notes are
+	 * considered, so all notes on the unpitched MIDI Channel 10 are ignored.
 	 */
 	public double[] melodic_interval_histogram_falling_intervals_only;
 
@@ -408,11 +414,14 @@ public class MIDIIntermediateRepresentations
 	 * indicates the number of semitones comprising the melodic interval, with positive values indicating
 	 * upwards motion and negative values indicating downwards motion. Any notes on Channel 10 (non-pitched
 	 * percussion) are ignored (i.e. the Channel 10 entry on the array is left empty). It is assumed that
-	 * there is only one melody per channel (if multiple notes occur simultaneously on the same MIDI tick on
-	 * the same MIDI track and channel, then all notes but the first note on that tick are ignored). Other
-	 * than this, all notes on the same track and the same channel are treated as if they are part of a single
-	 * melody. It is also assumed that melodies do not cross MIDI tracks or channels (i.e. that they are each
-	 * separately contained in their own track and channel).
+	 * there is only one melody at a time per MIDI track and channel (if multiple notes occur simultaneously
+	 * in the same note onset slice on the same MIDI track and channel, then all notes but the highest note in
+	 * the slice are ignored; also, if the highest note is sustained from one note onset slice to the next,
+	 * and is still the highest note in the second slice, then this is treated as if there is no change in
+	 * melody, even if lower pitches in the same track and channel change). Other than this, all notes on the
+	 * same track and the same channel are treated as if they are part of a single melody. It is also assumed
+	 * that melodies do not cross MIDI tracks or channels (i.e. that they are each separately contained in
+	 * their own track and channel).
 	 */
 	public LinkedList<LinkedList<Integer>[]> melodic_intervals_by_track_and_channel;
 
@@ -853,9 +862,9 @@ public class MIDIIntermediateRepresentations
 		}
 		System.out.print("\n\n--\n\n");*/
 		
-		//System.out.println("\n\n\n\n\nGENERATING NOTE ONSET SLICE LISTS\n\n");
 		generateNoteOnsetSliceContainer();
 		/*
+		System.out.println("\n\n\n\n\nGENERATING NOTE ONSET SLICE LISTS\n\n");
 		for (int slice = 0; slice < note_onset_slice_container.getNoteOnsetSlices().size(); slice++)
 		{
 			System.out.println("\n\nSLICE: " + slice + " in note onset slices:");
@@ -864,16 +873,16 @@ public class MIDIIntermediateRepresentations
 			System.out.print("\n");
 		}
 		*/
-		
+		/*
 		LinkedList<LinkedList<Integer>>[][] melodic_lines_by_track_and_channel = note_onset_slice_container.getNoteOnsetSlicesByTrackAndChannelMelodicLinesOnly();
-		// LinkedList<LinkedList<Integer>> onset_slices = note_onset_slice_container.getNoteOnsetSlices();
+		LinkedList<LinkedList<Integer>> onset_slices = note_onset_slice_container.getNoteOnsetSlices();
 		System.out.println("\n\n\n\nNOTE ONSET SLICES CREATED:");
 		for (int slice = 0; slice < melodic_lines_by_track_and_channel[0][0].size(); slice++)
 		{
 			System.out.println("\nSlice " + slice);
-//			for (int pitch = 0; pitch < onset_slices.get(slice).size(); pitch++)
-//				System.out.print(onset_slices.get(slice).get(pitch) + ", ");
-//			System.out.print("\n");
+			for (int pitch = 0; pitch < onset_slices.get(slice).size(); pitch++)
+				System.out.print(onset_slices.get(slice).get(pitch) + ", ");
+			System.out.print("\n");
 			
 			for (int n_track = 0; n_track < tracks.length; n_track++)
 				for (int chan = 0; chan < 16; chan++)
@@ -885,7 +894,7 @@ public class MIDIIntermediateRepresentations
 						System.out.print("\n");
 					}
 		}
-		
+		*/
 						
 		// System.out.println("\n\n\n\nGENERATING MELODIC INTERMEDIATE REPRESENTATIONS");	
 		generateMelodicIntermediateRepresentations();
@@ -1940,10 +1949,11 @@ public class MIDIIntermediateRepresentations
 		}
 		
 		// Iterate over onset slice structure organized by track and channel containing only new note onsets
-		LinkedList<LinkedList<Integer>>[][] melodic_lines__by_track_and_channel = note_onset_slice_container.getNoteOnsetSlicesByTrackAndChannelMelodicLinesOnly();
+		LinkedList<LinkedList<Integer>>[][] melodic_slices_by_track_and_channel = note_onset_slice_container.getNoteOnsetSlicesByTrackAndChannelMelodicLinesOnly();
 		for (int n_track = 0; n_track < tracks.length; n_track++)
 		{
 			// System.out.println("\n\n\nTrack " + n_track + ": ");
+			
 			// Prepare melodic_intervals_by_channel for this track, and add it to 
 			// melodic_intervals_by_track_and_channel
 			LinkedList<Integer>[] melodic_intervals_by_channel = new LinkedList[16];
@@ -1956,14 +1966,17 @@ public class MIDIIntermediateRepresentations
 				for (int i = 0; i < previous_pitches.length; i++)
 					previous_pitches[i] = -1;
 				
+			// Go through each channel on this track
 			for (int chan = 0; chan < 16; chan++)
 			{
 				// System.out.println("\nChannel " + chan + ":");
-				for (int slice = 0; slice < melodic_lines__by_track_and_channel[n_track][chan].size(); slice++)
-					if (!(melodic_lines__by_track_and_channel[n_track][chan].get(slice).isEmpty()))
+				
+				// Go through all note onset slices, making note of all melodic intervals as go
+				for (int slice = 0; slice < melodic_slices_by_track_and_channel[n_track][chan].size(); slice++)
+					if (!(melodic_slices_by_track_and_channel[n_track][chan].get(slice).isEmpty()))
 					{
 						// Get highest note in the onset slice
-						int current_note = melodic_lines__by_track_and_channel[n_track][chan].get(slice).get(0);
+						int current_note = melodic_slices_by_track_and_channel[n_track][chan].get(slice).get(0);
 						
 						if (previous_pitches[chan] != -1)
 						{

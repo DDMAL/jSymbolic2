@@ -70,6 +70,7 @@ public class SmallestRisingMelodicIntervalFeature
 					for (int i = 0; i < sequence_info.melodic_intervals_by_track_and_channel.get(n_track)[chan].size(); i++)
 					{
 						int interval = sequence_info.melodic_intervals_by_track_and_channel.get(n_track)[chan].get(i);
+
 						// Check that interval is rising and not a repeated note
 						if (interval > 0) 
 							// Check if interval is smaller in semitones than the current minimum, or if the 
@@ -77,7 +78,6 @@ public class SmallestRisingMelodicIntervalFeature
 							if (interval < smallest_melodic_interval || smallest_melodic_interval == 0)
 								smallest_melodic_interval = interval;
 					}
-						
 			
 			value = (double) smallest_melodic_interval;
 		} 
