@@ -6,7 +6,7 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * The largest wrapped melodic interval in the piece.
+ * A feature calculator that finds the largest wrapped melodic interval in the piece.
  *
  * @author radamian
  */
@@ -27,7 +27,8 @@ public class LargestWrappedMelodicIntervalFeature
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
-		dependencies = null;
+		dependencies = new String[1];
+		dependencies[0] = "Wrapped Melodic Interval Histogram";
 		offsets = null;
 		is_default = true;
 		is_secure = true;
@@ -59,14 +60,8 @@ public class LargestWrappedMelodicIntervalFeature
 		double value;
 		if (sequence_info != null)
 		{
-			// Initialize wrapped histogram
-			double[] wrapped_melodic_interval_histogram = new double[12];
-			for (int bin = 0; bin < wrapped_melodic_interval_histogram.length; bin++)
-				wrapped_melodic_interval_histogram[bin] = 0.0;
-			
-			// Fill wrapped histogram
-			for (int bin = 0; bin < sequence_info.melodic_interval_histogram.length; bin++)
-				wrapped_melodic_interval_histogram[bin % 12] += sequence_info.melodic_interval_histogram[bin];
+			// Get wrapped histogram
+			double[] wrapped_melodic_interval_histogram = other_feature_values[0];
 			
 			// Find largest melodic interval
 			int largest_melodic_interval = 0;

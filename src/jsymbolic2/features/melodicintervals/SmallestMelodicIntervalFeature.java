@@ -6,8 +6,9 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * The smallest melodic interval in the piece, measured in semitones. Repeated notes are not counted for this 
- * feature, so a value of 0 will only be returned if there are no melodic intervals of a semitone or larger.
+ * A feature calculator that finds the smallest melodic interval in the piece, measured in semitones. Repeated 
+ * notes are not counted for this feature, so a value of 0 will only be returned if there are no melodic 
+ * intervals of a semitone or larger.
  *
  * @author radamian
  */

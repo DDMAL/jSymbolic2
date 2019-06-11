@@ -6,8 +6,8 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * Mean average (in semitones) of the intervals involved in each of the rising melodic wrapped melodic 
- * intervals in the piece.
+ * A feature calculator that finds the mean average (in semitones) of the intervals involved in each of the 
+ * rising melodic wrapped melodic intervals in the piece.
  *
  * @author radamian
  */
@@ -28,7 +28,8 @@ public class MeanRisingWrappedMelodicIntervalFeature
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
-		dependencies = null;
+		dependencies = new String[1];
+		dependencies[0] = "Wrapped Melodic Interval Histogram - Rising Intervals Only";
 		offsets = null;
 		is_default = true;
 		is_secure = true;
@@ -60,16 +61,12 @@ public class MeanRisingWrappedMelodicIntervalFeature
 		double value;
 		if (sequence_info != null)
 		{
-			// Initialize wrapped melodic interval histogram
-			double[] wrapped_melodic_interval_histogram_rising_intervals_only = new double[12];
-			for (int i = 0; i < wrapped_melodic_interval_histogram_rising_intervals_only.length; i++)
-				wrapped_melodic_interval_histogram_rising_intervals_only[i] = 0.0;
-
-			// Fill wrapped melodic interval histogram
-			for (int bin = 0; bin < sequence_info.melodic_interval_histogram_rising_intervals_only.length; bin++)
-				wrapped_melodic_interval_histogram_rising_intervals_only[bin % 12] += sequence_info.melodic_interval_histogram_rising_intervals_only[bin];
+			// Get wrapped histogram
+			double[] wrapped_melodic_interval_histogram_rising_intervals_only = other_feature_values[0];
 			
-			value = mckay.utilities.staticlibraries.MathAndStatsMethods.getAverage(wrapped_melodic_interval_histogram_rising_intervals_only);
+			value = 0.0;
+			for (int bin = 0; bin < wrapped_melodic_interval_histogram_rising_intervals_only.length; bin++)
+				value += (double) bin * wrapped_melodic_interval_histogram_rising_intervals_only[bin];
 		}
 		else value = -1.0;
 		

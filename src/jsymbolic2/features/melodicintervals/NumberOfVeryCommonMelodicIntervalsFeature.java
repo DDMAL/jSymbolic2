@@ -6,8 +6,8 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * Number of different melodic intervals that each account individually for at least 20% of all melodic 
- * intervals.
+ * A feature calculator that finds the number of different melodic intervals that each account individually 
+ * for at least 20% of all melodic intervals.
  *
  * @author radamian
  */

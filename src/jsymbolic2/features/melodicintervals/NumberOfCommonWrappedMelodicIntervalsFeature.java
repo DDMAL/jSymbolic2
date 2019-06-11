@@ -6,8 +6,8 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * Number of different wrapped melodic intervals that each account individually for at least 9% of all wrapped 
- * melodic intervals.
+ * A feature calculator that finds the number of different wrapped melodic intervals that each account 
+ * individually for at least 9% of all wrapped melodic intervals.
  *
  * @author radamian
  */
@@ -28,7 +28,8 @@ public class NumberOfCommonWrappedMelodicIntervalsFeature
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
-		dependencies = null;
+		dependencies = new String[1];
+		dependencies[0] = "Wrapped Melodic Interval Histogram";
 		offsets = null;
 		is_default = true;
 		is_secure = true;
@@ -62,14 +63,8 @@ public class NumberOfCommonWrappedMelodicIntervalsFeature
 		{
 			int number_of_intervals = 0;
 			
-			// Initialize wrapped histogram
-			double[] wrapped_melodic_interval_histogram = new double[12];
-			for (int bin = 0; bin < wrapped_melodic_interval_histogram.length; bin++)
-				wrapped_melodic_interval_histogram[bin] = 0.0;
-			
-			// Fill wrapped histogram
-			for (int bin = 0; bin < sequence_info.melodic_interval_histogram.length; bin++)
-				wrapped_melodic_interval_histogram[bin % 12] += sequence_info.melodic_interval_histogram[bin];
+			// Get wrapped histogram
+			double[] wrapped_melodic_interval_histogram = other_feature_values[0];
 			
 			// Count number of intervals that each account individually for at least 9% of all wrapped
 			// melodic intervals.

@@ -6,9 +6,10 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * Standard deviation of the rising wrapped melodic intervals in the piece. Melodies are calculated using the 
- * same conventions described for the Wrapped Melodic Interval Histogram - Rising Intervals Only. Provides a 
- * measure of how close the melodic intervals as a whole are to the mean melodic interval.
+ * A feature calculator that finds the standard deviation of the rising wrapped melodic intervals in the 
+ * piece. Melodies are calculated using the same conventions described for the Wrapped Melodic Interval 
+ * Histogram - Rising Intervals Only. Provides a measure of how close the melodic intervals as a whole are to 
+ * the mean melodic interval.
  *
  * @author radamian
  */

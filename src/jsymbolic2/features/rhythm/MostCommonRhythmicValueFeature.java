@@ -67,24 +67,27 @@ public class MostCommonRhythmicValueFeature
 			value = 0.0;
 			double[] rhythmic_value_histogram = other_feature_values[0];
 			
-			// Find the strongest bin
-			int most_common_index = mckay.utilities.staticlibraries.MathAndStatsMethods.getIndexOfLargest(rhythmic_value_histogram);
-			
-			// Find the rhythmic value in quarter note units associated with this bin
-			switch (most_common_index)
+			if (!mckay.utilities.staticlibraries.ArrayMethods.doesArrayContainOnlyThisValue(rhythmic_value_histogram, 0.0))
 			{
-				case 0: value = 1.0 / 8.0; break;
-				case 1: value = 1.0 / 4.0; break;
-				case 2: value = 1.0 / 2.0; break;
-				case 3: value = 3.0 / 4.0; break;
-				case 4: value = 1.0; break;
-				case 5: value = 1.5; break;
-				case 6: value = 2.0; break;
-				case 7: value = 3.0; break;
-				case 8: value = 4.0; break;
-				case 9: value = 6.0; break;
-				case 10: value = 8.0; break;
-				case 11: value = 12.0; break;
+				// Find the strongest bin
+				int most_common_index = mckay.utilities.staticlibraries.MathAndStatsMethods.getIndexOfLargest(rhythmic_value_histogram);
+
+				// Find the rhythmic value in quarter note units associated with this bin
+				switch (most_common_index)
+				{
+					case 0: value = 1.0 / 8.0; break;
+					case 1: value = 1.0 / 4.0; break;
+					case 2: value = 1.0 / 2.0; break;
+					case 3: value = 3.0 / 4.0; break;
+					case 4: value = 1.0; break;
+					case 5: value = 1.5; break;
+					case 6: value = 2.0; break;
+					case 7: value = 3.0; break;
+					case 8: value = 4.0; break;
+					case 9: value = 6.0; break;
+					case 10: value = 8.0; break;
+					case 11: value = 12.0; break;
+				}
 			}
 		}
 		else value = -1.0;

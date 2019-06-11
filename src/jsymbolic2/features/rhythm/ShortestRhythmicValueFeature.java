@@ -64,7 +64,10 @@ public class ShortestRhythmicValueFeature
 		if (sequence_info != null)
 		{
 			int index_of_smallest = mckay.utilities.staticlibraries.MathAndStatsMethods.getIndexOfSmallest(sequence_info.rhythmic_value_of_each_note_in_quarter_notes);
-			value = sequence_info.rhythmic_value_of_each_note_in_quarter_notes[index_of_smallest];
+			if (sequence_info.rhythmic_value_of_each_note_in_quarter_notes.length > 0)
+				value = sequence_info.rhythmic_value_of_each_note_in_quarter_notes[index_of_smallest];
+			else
+				value = 0.0;
 		}
 		else value = -1.0;
 

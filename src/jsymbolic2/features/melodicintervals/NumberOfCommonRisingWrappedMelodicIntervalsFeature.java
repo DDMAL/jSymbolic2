@@ -6,8 +6,8 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * Number of different rising melodic intervals that each account individually for at least 9% of all rising 
- * wrapped melodic intervals.
+ * A feature calculator that finds the number of different rising melodic intervals that each account 
+ * individually for at least 9% of all rising wrapped melodic intervals.
  *
  * @author radamian
  */
@@ -28,7 +28,8 @@ public class NumberOfCommonRisingWrappedMelodicIntervalsFeature
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
-		dependencies = null;
+		dependencies = new String[1];
+		dependencies[0] = "Wrapped Melodic Interval Histogram - Rising Intervals Only";
 		offsets = null;
 		is_default = true;
 		is_secure = true;
@@ -60,19 +61,12 @@ public class NumberOfCommonRisingWrappedMelodicIntervalsFeature
 		double value;
 		if (sequence_info != null)
 		{
-			int number_of_intervals = 0;
-			
-			// Initialize wrapped histogram
-			double[] wrapped_melodic_interval_histogram = new double[12];
-			for (int bin = 0; bin < wrapped_melodic_interval_histogram.length; bin++)
-				wrapped_melodic_interval_histogram[bin] = 0.0;
-			
-			// Fill wrapped histogram
-			for (int bin = 0; bin < sequence_info.melodic_interval_histogram_rising_intervals_only.length; bin++)
-				wrapped_melodic_interval_histogram[bin % 12] += sequence_info.melodic_interval_histogram_rising_intervals_only[bin];
+			// Get wrapped histogram
+			double[] wrapped_melodic_interval_histogram = other_feature_values[0];
 			
 			// Count number of intervals that each account individually for at least 9% of all wrapped rising
 			// melodic intervals.
+			int number_of_intervals = 0;
 			for (int bin = 0; bin < wrapped_melodic_interval_histogram.length; bin++)
 				if (wrapped_melodic_interval_histogram[bin] >= 0.09) number_of_intervals++;
 			

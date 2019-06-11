@@ -6,7 +6,7 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * Fraction of melodic intervals greater than a perfect fifth.
+ * A feature calculator that finds the fraction of melodic intervals greater than a perfect fifth.
  *
  * @author radamian
  */

@@ -6,8 +6,8 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * Absolute value of the difference (in semitones) between the most common and second most common rising 
- * wrapped melodic intervals in the piece.
+ * A feature calculator that finds the absolute value of the difference (in semitones) between the most common 
+ * and second most common rising wrapped melodic intervals in the piece.
  *
  * @author radamian
  */
@@ -28,7 +28,8 @@ public class DistanceBetweenMostPrevalentRisingWrappedMelodicIntervalsFeature
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
-		dependencies = null;
+		dependencies = new String[1];
+		dependencies[0] = "Wrapped Melodic Interval Histogram - Rising Intervals Only";
 		offsets = null;
 		is_default = true;
 		is_secure = true;
@@ -60,29 +61,14 @@ public class DistanceBetweenMostPrevalentRisingWrappedMelodicIntervalsFeature
 		double value;
 		if (sequence_info != null)
 		{
-			// Initialize wrapped histogram
-			double[] wrapped_melodic_interval_histogram = new double[12];
-			for (int i = 0; i < wrapped_melodic_interval_histogram.length; i++)
-				wrapped_melodic_interval_histogram[i] = 0.0;
-
-			// Fill wrapped histogram
-			for (int bin = 0; bin < sequence_info.melodic_interval_histogram_rising_intervals_only.length; bin++)
-				wrapped_melodic_interval_histogram[bin % 12] += sequence_info.melodic_interval_histogram_rising_intervals_only[bin];
+			// Get wrapped histogram
+			double[] wrapped_melodic_interval_histogram = other_feature_values[0];
 			
 			// Find the bin with the highest magnitude
 			int max_index = mckay.utilities.staticlibraries.MathAndStatsMethods.getIndexOfLargest(wrapped_melodic_interval_histogram);
 
 			// Find the bin with the second highest magnitude
-			double second_max = 0;
-			int second_max_index = 0;
-			for (int bin = 0; bin < wrapped_melodic_interval_histogram.length; bin++)
-			{
-				if ( wrapped_melodic_interval_histogram[bin] > second_max && bin != max_index )
-				{
-					second_max = wrapped_melodic_interval_histogram[bin];
-					second_max_index = bin;
-				}
-			}
+			int second_max_index = mckay.utilities.staticlibraries.MathAndStatsMethods.getIndexOfSecondLargest(wrapped_melodic_interval_histogram);
 
 			// Calculate the value
 			int difference = Math.abs(max_index - second_max_index);

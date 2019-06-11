@@ -6,7 +6,7 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * The largest melodic interval in the piece.
+ * A feature calculator that finds the largest melodic interval in the piece.
  *
  * @author radamian
  */

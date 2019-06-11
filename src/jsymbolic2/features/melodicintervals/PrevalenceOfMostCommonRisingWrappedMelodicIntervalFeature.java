@@ -6,8 +6,8 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * Fraction of all rising wrapped melodic intervals that corresponds to the most common rising wrapped melodic 
- * interval.
+ * A feature calculator that finds the fraction of all rising wrapped melodic intervals that corresponds to 
+ * the most common rising wrapped melodic interval.
  *
  * @author radamian
  */
@@ -28,7 +28,8 @@ public class PrevalenceOfMostCommonRisingWrappedMelodicIntervalFeature
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
-		dependencies = null;
+		dependencies = new String[1];
+		dependencies[0] = "Wrapped Melodic Interval Histogram - Rising Intervals Only";
 		offsets = null;
 		is_default = true;
 		is_secure = true;
@@ -60,14 +61,8 @@ public class PrevalenceOfMostCommonRisingWrappedMelodicIntervalFeature
 		double value;
 		if (sequence_info != null)
 		{
-			// Initialize wrapped histogram
-			double[] wrapped_melodic_interval_histogram = new double[12];
-			for (int bin = 0; bin < wrapped_melodic_interval_histogram.length; bin++)
-				wrapped_melodic_interval_histogram[bin] = 0.0;
-			
-			// Fill wrapped histogram
-			for (int bin = 0; bin < sequence_info.melodic_interval_histogram_rising_intervals_only.length; bin++)
-				wrapped_melodic_interval_histogram[bin % 12] += sequence_info.melodic_interval_histogram_rising_intervals_only[bin];
+			// Get wrapped histogram
+			double[] wrapped_melodic_interval_histogram = other_feature_values[0];
 			
 			// Find the highest bin
 			int max_index = mckay.utilities.staticlibraries.MathAndStatsMethods.getIndexOfLargest(wrapped_melodic_interval_histogram);

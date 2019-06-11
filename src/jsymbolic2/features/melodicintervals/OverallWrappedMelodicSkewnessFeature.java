@@ -6,7 +6,10 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * Skewness of the wrapped melodic intervals in the piece. Melodies are calculated using the same conventions described for the Wrapped Melodic Interval Histogram. Provides a measure of how asymmetrical the wrapped melodic interval distribution is to either the left or the right of the mean wrapped melodic interval. A value of zero indicates no skew.
+ * A feature calculator that finds the skewness of the wrapped melodic intervals in the piece. Melodies are 
+ * calculated using the same conventions described for the Wrapped Melodic Interval Histogram. Provides a 
+ * measure of how asymmetrical the wrapped melodic interval distribution is to either the left or the right of 
+ * the mean wrapped melodic interval. A value of zero indicates no skew.
  *
  * @author radamian
  */

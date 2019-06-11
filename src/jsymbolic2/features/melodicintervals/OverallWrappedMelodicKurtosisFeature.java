@@ -6,9 +6,10 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * Kurtosis of the wrapped melodic intervals in the piece. Melodies are calculated using the same conventions 
- * described for the Melodic Interval Histogram. The higher the kurtosis, the more the wrapped melodic 
- * intervals are clustered near the mean and the fewer outliers there are.
+ * A feature calculator that finds the kurtosis of the wrapped melodic intervals in the piece. Melodies are 
+ * calculated using the same conventions described for the Melodic Interval Histogram. The higher the 
+ * kurtosis, the more the wrapped melodic intervals are clustered near the mean and the fewer outliers there 
+ * are.
  *
  * @author radamian
  */
