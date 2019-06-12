@@ -17,7 +17,7 @@ import jsymbolic2.processing.MIDIIntermediateRepresentations;
  *
  * @author Tristano Tenaglia and Cory McKay
  */
-public class MelodicEmbellishmentsFeature
+public class MelodicEmbellishmentsTwoSidedFeature
 		extends MIDIFeatureExtractor
 {
 	/* CONSTRUCTOR ******************************************************************************************/
@@ -26,10 +26,10 @@ public class MelodicEmbellishmentsFeature
 	/**
 	 * Basic constructor that sets the values of the fields inherited from this class' superclass.
 	 */
-	public MelodicEmbellishmentsFeature()
+	public MelodicEmbellishmentsTwoSidedFeature()
 	{
-		String name = "Melodic Embellishments";
-		String code = "M-66";
+		String name = "Melodic Embellishments - Two-Sided";
+		String code = "M-67";
 		String description = "Fraction of all notes that are surrounded on both sides by MIDI Note Ons on the same MIDI channel that have durations at least three times as long as the central note. Set to 0 if there are no notes in the piece.";
 		boolean is_sequential = true;
 		int dimensions = 1;

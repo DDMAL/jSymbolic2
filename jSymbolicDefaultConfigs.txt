@@ -120,9 +120,9 @@ Melodic Sevenths
 Melodic Octaves
 Melodic Intervals Larger Than an Octave
 Minor Major Melodic Third Ratio
-Melodic Embellishments
-Amount of Rising Melodic Motion
 Amount of Arpeggiation
+Melodic Embellishments - Two-Sided
+Amount of Rising Melodic Motion
 Average Length of Melodic Half-Arcs
 Average Interval Spanned by Melodic Half-Arcs
 Melodic Pitch Variety
