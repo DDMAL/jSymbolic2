@@ -9,6 +9,7 @@ import jsymbolic2.featureutils.NoteInfo;
 import jsymbolic2.featureutils.NoteOnsetSliceContainer;
 import mckay.utilities.staticlibraries.ArrayMethods;
 import mckay.utilities.staticlibraries.MathAndStatsMethods;
+import mckay.utilities.sound.midi.MIDIMethods;
 
 /**
  * An object of this class is instantiated with a MIDI sequence. The constructor parses this sequence and
@@ -874,14 +875,23 @@ public class MIDIIntermediateRepresentations
 		}
 		*/
 		/*
+		System.out.println("__________________________________________________________________________________________________________________________");
 		LinkedList<LinkedList<Integer>>[][] melodic_lines_by_track_and_channel = note_onset_slice_container.getNoteOnsetSlicesByTrackAndChannelMelodicLinesOnly();
 		LinkedList<LinkedList<Integer>> onset_slices = note_onset_slice_container.getNoteOnsetSlices();
+		for (NoteInfo note: all_notes.getNoteList())
+			if (note.getChannel() != 10 - 1)
+				if (!note_onset_slice_container.getAllPitchedNotesEncountered().contains(note))
+				{
+					System.out.println(" --------- ONSET SLICES DO NOT INCLUDE ALL PITCHED NOTES! -----------");
+					System.out.println("Missed " + mckay.utilities.sound.midi.MIDIMethods.midiPitchToPitch(note.getPitch()) + " at tick " + note.getStartTick());
+					break;
+				}
 		System.out.println("\n\n\n\nNOTE ONSET SLICES CREATED:");
 		for (int slice = 0; slice < melodic_lines_by_track_and_channel[0][0].size(); slice++)
 		{
 			System.out.println("\nSlice " + slice);
 			for (int pitch = 0; pitch < onset_slices.get(slice).size(); pitch++)
-				System.out.print(onset_slices.get(slice).get(pitch) + ", ");
+				System.out.print(mckay.utilities.sound.midi.MIDIMethods.midiPitchToPitch(onset_slices.get(slice).get(pitch)) + ", ");
 			System.out.print("\n");
 			
 			for (int n_track = 0; n_track < tracks.length; n_track++)
@@ -890,12 +900,12 @@ public class MIDIIntermediateRepresentations
 					{
 						System.out.println("On track " + n_track + " and channel " + chan);
 						for (int pitch = 0; pitch < melodic_lines_by_track_and_channel[n_track][chan].get(slice).size(); pitch++)
-							System.out.print(melodic_lines_by_track_and_channel[n_track][chan].get(slice).get(pitch) + ", ");
+							System.out.print(mckay.utilities.sound.midi.MIDIMethods.midiPitchToPitch(melodic_lines_by_track_and_channel[n_track][chan].get(slice).get(pitch)) + ", ");
 						System.out.print("\n");
 					}
 		}
 		*/
-						
+							
 		// System.out.println("\n\n\n\nGENERATING MELODIC INTERMEDIATE REPRESENTATIONS");	
 		generateMelodicIntermediateRepresentations();
 		/*
@@ -1922,7 +1932,7 @@ public class MIDIIntermediateRepresentations
 	 */
 	private void generateNoteOnsetSliceContainer() 
 	{
-		note_onset_slice_container = new NoteOnsetSliceContainer(sequence, tracks, all_notes, .125);
+		note_onset_slice_container = new NoteOnsetSliceContainer(sequence, tracks, all_notes, .125, false, true, .125);
 	}
 	
 	

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import javax.sound.midi.Sequence;
 import javax.sound.midi.Track;
+import mckay.utilities.sound.midi.MIDIMethods;
 
 /**
  * Objects of this class parse the music they are given at instantiation into note onset slices, and store the
@@ -112,8 +113,12 @@ public class NoteOnsetSliceContainer
 	 * note_onset_slices_by_track_and_channel_only_new_onsets.
 	 */
 	private final LinkedList<LinkedList<Integer>>[][] note_onset_slices_by_track_and_channel_only_melodic_lines;
-
 	
+	// Field used to test whether the onset slices have captures all notes in the MIDI sequence
+	// private final List<NoteInfo> all_pitched_notes_encountered;
+	
+	private final int NUMBER_OF_CHANNELS = 16;
+
 	/* CONSTRUCTOR ******************************************************************************************/
 	
 	
@@ -130,27 +135,49 @@ public class NoteOnsetSliceContainer
 	 *										quarter note, that can separate two note onsets for them to be
 	 *										treated as effectively simultaneous by merging them into the same
 	 *										note onset slice.
+	 * @param	lookahead_only				Whether to perform only a lookahead during the stage of file 
+	 *										parsing that captures possibly desynchronized notes, as opposed to 
+	 *										a lookahead and a lookbehind from a tick based on the calculated 
+	 *										lookahead_ticks.
+	 * @param	remove_notes_held_too_long	Whether to exclude held notes whose offsets are slightly past the 
+	 *										current tick from the onset slice being created.
+	 * @param	offset_error_margin			The minimum rhythmic distance, measured as a fraction of a
+	 *										quarter note, that a held note must sound from a given tick to be
+	 *										included in the onset slice being created at that tick, when
+	 *										remove_notes_held_too_long is true.
 	 */
 	public NoteOnsetSliceContainer( Sequence midi_sequence, 
 									Track[] tracks_from_sequence,
 									CollectedNoteInfo all_notes_from_sequence,
-									double note_simultaneity_threshold )
+									double note_simultaneity_threshold,
+									boolean lookahead_only,
+									boolean remove_notes_held_too_long,
+									double offset_error_margin)
 	{
 		// The smallest number of MIDI ticks that can separate two note onsets for them to be treated as
 		// as occurring in two separate onset slices. Notes separated by a smaller number of ticks are merged 
 		// into the same slice.
 		int lookahead_ticks = (int) ((int) midi_sequence.getResolution() * note_simultaneity_threshold);
+		// System.out.println("The resolution is " + midi_sequence.getResolution() + ", the note simultaneity threshold is " + lookahead_ticks + "\n");
+		
+		// Held notes whose offsets are within this value in ticks from the current tick will not be included
+		// in the onset slice being built, for being erroneously too long.
+		int offset_error_ticks = (int) ((int) midi_sequence.getResolution() * offset_error_margin);
+		// if (remove_notes_held_too_long)
+		// 	System.out.println("The offset_error_ticks value is " + offset_error_ticks + "\n");
+		// else
+		// 	System.out.println("No held note offset correction \n");
 		
 		// Initialize the note_onset_slices, note_onset_slices_by_track_and_channel, 
 		// note_onset_slices_only_new_onsets, and note_onset_slices_by_track_and_channel_only_new_onsets 
 		// fields.
 		note_onset_slices = new LinkedList<>();
-		note_onset_slices_by_track_and_channel = new LinkedList[tracks_from_sequence.length][16];
+		note_onset_slices_by_track_and_channel = new LinkedList[tracks_from_sequence.length][NUMBER_OF_CHANNELS];
 		note_onset_slices_only_new_onsets = new LinkedList<>();
-		note_onset_slices_by_track_and_channel_only_new_onsets = new LinkedList[tracks_from_sequence.length][16];
-		note_onset_slices_by_track_and_channel_only_melodic_lines = new LinkedList[tracks_from_sequence.length][16];
+		note_onset_slices_by_track_and_channel_only_new_onsets = new LinkedList[tracks_from_sequence.length][NUMBER_OF_CHANNELS];
+		note_onset_slices_by_track_and_channel_only_melodic_lines = new LinkedList[tracks_from_sequence.length][NUMBER_OF_CHANNELS];
 		for (int n_track = 0; n_track < tracks_from_sequence.length; n_track++)
-			for (int chan = 0; chan < 16; chan++)
+			for (int chan = 0; chan < NUMBER_OF_CHANNELS; chan++)
 			{
 				note_onset_slices_by_track_and_channel[n_track][chan] = new LinkedList();
 				note_onset_slices_by_track_and_channel_only_new_onsets[n_track][chan] = new LinkedList();
@@ -164,14 +191,16 @@ public class NoteOnsetSliceContainer
 		// A working table of the last note encountered in each track and channel that is considered to 
 		// comprise that track and channel's melody (i.e. the highest note sounding in each slice for that
 		// track and channel).
-		NoteInfo[][] melodic_notes = new NoteInfo[tracks_from_sequence.length][16];
+		NoteInfo[][] melodic_notes = new NoteInfo[tracks_from_sequence.length][NUMBER_OF_CHANNELS];
 		for (int n_track = 0; n_track < tracks_from_sequence.length; n_track++)
-			for (int chan = 0; chan < 16; chan++)
+			for (int chan = 0; chan < NUMBER_OF_CHANNELS; chan++)
 				melodic_notes[n_track][chan] = null;
 
 		// Iterate through ticks one-by-one
 		Map<Integer, List<NoteInfo>> note_tick_map = all_notes_from_sequence.getStartTickNoteMap();
 		int slice = 0; // Index of note onset slice being built
+		// all_pitched_notes_encountered = new LinkedList<>();
+		// List<NoteInfo> all_notes_captured
 		for (int tick = 0; tick < midi_sequence.getTickLength(); tick++)
 		{
 			// Get the list of notes starting on given tick
@@ -187,14 +216,15 @@ public class NoteOnsetSliceContainer
 				if (pitched_note_on_tick)
 				{
 					// Create new onset slices
+					// System.out.println("\n\nBUILDING SLICE " + slice + "\n");
 					LinkedList<Integer> onset_slice = new LinkedList<>();
 					LinkedList<Integer> onset_slice_only_new_onsets = new LinkedList<>();
 					for (int n_track = 0; n_track < tracks_from_sequence.length; n_track++)
-						for (int chan = 0; chan < 16; chan++)
+						for (int chan = 0; chan < NUMBER_OF_CHANNELS; chan++)
 						{
 							note_onset_slices_by_track_and_channel[n_track][chan].add(new LinkedList<>());
 							note_onset_slices_by_track_and_channel_only_new_onsets[n_track][chan].add(new LinkedList<>());
-							note_onset_slices_by_track_and_channel_only_melodic_lines[n_track][chan].add(new LinkedList<>());
+							note_onset_slices_by_track_and_channel_only_melodic_lines[n_track][chan].add(new LinkedList<>());	
 						}
 
 					// Remove notes no longer sounding from notes_sounding, and add notes still sounding
@@ -213,10 +243,30 @@ public class NoteOnsetSliceContainer
 								if (melodic_notes[note_sounding.getTrack()][note_sounding.getChannel()] == note_sounding)
 									melodic_notes[note_sounding.getTrack()][note_sounding.getChannel()] = null;
 							}
+							else if (remove_notes_held_too_long) 
+							{
+								// Notes whose end ticks are within the offset_error_ticks value of the
+								// current tick are considered to be erroneously held too long, and are not 
+								// included in the onset slice being constructed.
+								if (note_sounding.getEndTick() > tick + offset_error_ticks)
+								{
+									int pitch = note_sounding.getPitch();
+									int track = note_sounding.getTrack();
+									int channel = note_sounding.getChannel();
+
+									// Check that pitch is not a duplicate
+									if (!onset_slice.contains(pitch)) 
+										onset_slice.add(pitch);
+									if (!note_onset_slices_by_track_and_channel[track][channel].get(slice).contains(pitch))
+										note_onset_slices_by_track_and_channel[track][channel].get(slice).add(pitch);
+									// if (!all_pitched_notes_encountered.contains(note_sounding))
+									// 	all_pitched_notes_encountered.add(note_sounding);
+									// System.out.println("Held note: " + mckay.utilities.sound.midi.MIDIMethods.midiPitchToPitch(note_sounding.getPitch()) + " ending on " + note_sounding.getEndTick());
+								}
+							}
 							else
 							{
 								// System.out.println("Held note: " + note_sounding.getPitch() + " on tick " + tick);
-								
 								int pitch = note_sounding.getPitch();
 								int track = note_sounding.getTrack();
 								int channel = note_sounding.getChannel();
@@ -225,7 +275,10 @@ public class NoteOnsetSliceContainer
 								if (!onset_slice.contains(pitch)) 
 									onset_slice.add(pitch);
 								if (!note_onset_slices_by_track_and_channel[track][channel].get(slice).contains(pitch))
-									note_onset_slices_by_track_and_channel[track][channel].get(slice).add(pitch);	
+									note_onset_slices_by_track_and_channel[track][channel].get(slice).add(pitch);
+								// if (!all_pitched_notes_encountered.contains(note_sounding))
+								// 	all_pitched_notes_encountered.add(note_sounding);
+								// System.out.println("Held note: " + mckay.utilities.sound.midi.MIDIMethods.midiPitchToPitch(note_sounding.getPitch()) + " ending on " + note_sounding.getEndTick());
 							}
 						}
 						notes_sounding.removeAll(to_remove);	
@@ -254,13 +307,17 @@ public class NoteOnsetSliceContainer
 							if (melodic_notes[track][channel] == null || pitch > melodic_notes[track][channel].getPitch())
 								melodic_notes[track][channel] = note;
 							notes_sounding.add(note);
+							// if (!all_pitched_notes_encountered.contains(note))
+							// 	all_pitched_notes_encountered.add(note);
 						}						
 
-					// Perform lookahead and jump to any tick within range that contains a note onset, and
-					// add pitches to slices as encountered (except to 
+					// Perform lookahead and lookbehind from the next tick quantized to the division specified
+					// by the note_simultaneity_threshold, and add pitches to slices as encountered (except to
 					// note_onset_slices_by_track_and_channel_only_melodic_lines)
 					int original_tick = tick;
-					for (int i = tick + 1; i < original_tick + lookahead_ticks; i++)
+					if (lookahead_only) // Perform only a lookahead
+					{
+						for (int i = tick + 1; i < original_tick + lookahead_ticks; i++)
 						{
 							List<NoteInfo> nearby_ticks = note_tick_map.get(i);
 							if (nearby_ticks != null)
@@ -289,7 +346,10 @@ public class NoteOnsetSliceContainer
 											note_onset_slices_by_track_and_channel_only_new_onsets[track][channel].get(slice).add(pitch);
 										if (melodic_notes[track][channel] == null || pitch > melodic_notes[track][channel].getPitch())
 											melodic_notes[track][channel] = note;
-										notes_sounding.add(note);
+										if (!notes_sounding.contains(note))
+											notes_sounding.add(note);
+										// if (!all_pitched_notes_encountered.contains(note))
+										// 	all_pitched_notes_encountered.add(note);
 									}
 								
 								// Jump to the start tick of the nearby note to avoid duplication upon next
@@ -297,10 +357,69 @@ public class NoteOnsetSliceContainer
 								tick = i;
 							}
 						}
+					}
+					else // Perform a lookahead and lookbehind
+					{
+						int quantized_tick = (int) Math.floor(tick + (lookahead_ticks - (tick % lookahead_ticks)));
+						for (int i = quantized_tick - lookahead_ticks; i < quantized_tick + lookahead_ticks; i++)
+						{
+							List<NoteInfo> nearby_ticks = note_tick_map.get(i);
+							if (nearby_ticks != null)
+							{
+								// Check that there is at least one pitched note for which an onset slice should be created.
+								boolean pitched_note_on_nearby_tick = false;
+								for (NoteInfo note: notes_starting_on_tick)
+									if (note.getChannel() != 10 - 1) pitched_note_on_nearby_tick = true;
+
+								if (pitched_note_on_nearby_tick)
+								{
+									// if (i < quantized_tick) System.out.println("--- Looking behind from quantized tick " + quantized_tick + ":\n");
+									// if (i == quantized_tick) System.out.println("--- On quantized tick " + quantized_tick + ":\n");
+									// if (i > quantized_tick) System.out.println("--- Looking ahead from quantized tick " + quantized_tick + ":\n");
+									for (NoteInfo note: nearby_ticks)
+										if (note.getChannel() != 10 - 1) // Exclude Channel 10 (percussion)
+										{
+											// System.out.println("Note to merge: " 
+											// 	+ mckay.utilities.sound.midi.MIDIMethods.midiPitchToPitch(note.getPitch()) + " in measure ~" 
+											// 	+ (i / (midi_sequence.getResolution() * 4) + 1) + " on tick " + i);
+											// System.out.println("Other notes already in this onset slice: ");
+											// for (int pitch: onset_slice)
+											// 	System.out.print(mckay.utilities.sound.midi.MIDIMethods.midiPitchToPitch(pitch) + ", ");
+											// System.out.print("\n");
+
+											int pitch = note.getPitch();
+											int track = note.getTrack();
+											int channel = note.getChannel();
+
+											// Check that pitch is not a duplicate
+											if (!onset_slice.contains(pitch))
+												onset_slice.add(pitch);
+											if (!note_onset_slices_by_track_and_channel[track][channel].get(slice).contains(pitch))
+												note_onset_slices_by_track_and_channel[track][channel].get(slice).add(pitch);
+											if (!onset_slice_only_new_onsets.contains(pitch))
+												onset_slice_only_new_onsets.add(pitch);
+											if (!note_onset_slices_by_track_and_channel_only_new_onsets[track][channel].get(slice).contains(pitch))
+												note_onset_slices_by_track_and_channel_only_new_onsets[track][channel].get(slice).add(pitch);
+											if (melodic_notes[track][channel] == null || pitch > melodic_notes[track][channel].getPitch())
+												melodic_notes[track][channel] = note;
+											if (!notes_sounding.contains(note))
+												notes_sounding.add(note);
+											// if (!all_pitched_notes_encountered.contains(note))
+											// 	all_pitched_notes_encountered.add(note);
+										}
+
+									// Jump to the start tick of the nearby note to avoid duplication upon next
+									// outer loop iteration
+									if (i > original_tick) tick = i;
+								}
+							}
+						}
+					}
 					
-					// Add melody pitches to note_onset_slices_by_track_and_channel_only_melodic_lines
+					// Add melody pitches to note_onset_slices_by_track_and_channel_only_melodic_lines and
+					// note_onset_slices_by_channel_only_melodic_lines
 					for (int n_track = 0; n_track < tracks_from_sequence.length; n_track++)
-						for (int chan = 0; chan < 16; chan++)
+						for (int chan = 0; chan < NUMBER_OF_CHANNELS; chan++)
 						{
 							NoteInfo melody_note = melodic_notes[n_track][chan];
 							if (melody_note != null)
@@ -315,16 +434,16 @@ public class NoteOnsetSliceContainer
 					onset_slice.sort((s1, s2) -> s1.compareTo(s2));
 					onset_slice_only_new_onsets.sort((s1, s2) -> s1.compareTo(s2));
 					for (int n_track = 0; n_track < tracks_from_sequence.length; n_track++)
-						for (int chan = 0; chan < 16; chan++)
+						for (int chan = 0; chan < NUMBER_OF_CHANNELS; chan++)
 						{
 							note_onset_slices_by_track_and_channel[n_track][chan].get(slice).sort((s1, s2) -> s1.compareTo(s2));
 							note_onset_slices_by_track_and_channel_only_new_onsets[n_track][chan].get(slice).sort((s1, s2) -> s1.compareTo(s2));
 						}
 					
-					// System.out.println("Onset slice created at tick " + tick);
-					// for (Integer pitch: onset_slice)
-					//	System.out.println(pitch + ", ");
-					// Sytem.out.print("\n");
+//					 System.out.println("Onset slice created at tick " + tick);
+//					 for (Integer pitch: onset_slice)
+//						System.out.println(pitch + ", ");
+//					 System.out.print("\n");
 					
 					// Add onset slices not by track and channel to their respective fields
 					note_onset_slices.add(onset_slice);
@@ -549,10 +668,10 @@ public class NoteOnsetSliceContainer
 	 */
 	public LinkedList<LinkedList<Integer>>[][] getNoteOnsetSlicesByTrackAndChannelInPitchClasses()
 	{
-		LinkedList<LinkedList<Integer>>[][] result = new LinkedList[note_onset_slices_by_track_and_channel.length][16];
+		LinkedList<LinkedList<Integer>>[][] result = new LinkedList[note_onset_slices_by_track_and_channel.length][NUMBER_OF_CHANNELS];
 		
 		for (int n_track = 0; n_track < note_onset_slices_by_track_and_channel.length; n_track++)
-			for (int chan = 0; chan < 16; chan++)
+			for (int chan = 0; chan < NUMBER_OF_CHANNELS; chan++)
 			{
 				result[n_track][chan] = new LinkedList<>();
 				for (int slice = 0; slice < note_onset_slices_by_track_and_channel[n_track][chan].size(); slice++)
@@ -596,10 +715,10 @@ public class NoteOnsetSliceContainer
 	 */
 	public LinkedList<LinkedList<Integer>>[][] getNoteOnsetSlicesByTrackAndChannelOnlyNewOnsetsInPitchClasses()
 	{
-		LinkedList<LinkedList<Integer>>[][] result = new LinkedList[note_onset_slices_by_track_and_channel_only_new_onsets.length][16];
+		LinkedList<LinkedList<Integer>>[][] result = new LinkedList[note_onset_slices_by_track_and_channel_only_new_onsets.length][NUMBER_OF_CHANNELS];
 		
 		for (int n_track = 0; n_track < note_onset_slices_by_track_and_channel_only_new_onsets.length; n_track++)
-			for (int chan = 0; chan < 16; chan++)
+			for (int chan = 0; chan < NUMBER_OF_CHANNELS; chan++)
 			{
 				result[n_track][chan] = new LinkedList<>();
 				for (int slice = 0; slice < note_onset_slices_by_track_and_channel_only_new_onsets[n_track][chan].size(); slice++)
@@ -620,6 +739,12 @@ public class NoteOnsetSliceContainer
 		
 		return result;
 	}
+	
+	
+//	public List<NoteInfo> getAllPitchedNotesEncountered()
+//	{
+//		return all_pitched_notes_encountered;
+//	}
 	
 	
 	/**
