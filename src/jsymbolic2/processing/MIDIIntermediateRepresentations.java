@@ -9,7 +9,6 @@ import jsymbolic2.featureutils.NoteInfo;
 import jsymbolic2.featureutils.NoteOnsetSliceContainer;
 import mckay.utilities.staticlibraries.ArrayMethods;
 import mckay.utilities.staticlibraries.MathAndStatsMethods;
-import mckay.utilities.sound.midi.MIDIMethods;
 
 /**
  * An object of this class is instantiated with a MIDI sequence. The constructor parses this sequence and

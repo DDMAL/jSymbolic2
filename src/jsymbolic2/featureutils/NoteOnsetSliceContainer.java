@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import javax.sound.midi.Sequence;
 import javax.sound.midi.Track;
-import mckay.utilities.sound.midi.MIDIMethods;
 
 /**
  * Objects of this class parse the music they are given at instantiation into note onset slices, and store the
@@ -114,11 +113,12 @@ public class NoteOnsetSliceContainer
 	 */
 	private final LinkedList<LinkedList<Integer>>[][] note_onset_slices_by_track_and_channel_only_melodic_lines;
 	
-	// Field used to test whether the onset slices have captures all notes in the MIDI sequence
-	// private final List<NoteInfo> all_pitched_notes_encountered;
-	
-	private final int NUMBER_OF_CHANNELS = 16;
+	/**
+	 * The number of channels supported by the MIDI protocol.
+	 */
+	private final int NUMBER_OF_MIDI_CHANNELS = 16;
 
+	
 	/* CONSTRUCTOR ******************************************************************************************/
 	
 	
@@ -135,10 +135,12 @@ public class NoteOnsetSliceContainer
 	 *										quarter note, that can separate two note onsets for them to be
 	 *										treated as effectively simultaneous by merging them into the same
 	 *										note onset slice.
-	 * @param	lookahead_only				Whether to perform only a lookahead during the stage of file 
-	 *										parsing that captures possibly desynchronized notes, as opposed to 
-	 *										a lookahead and a lookbehind from a tick based on the calculated 
-	 *										lookahead_ticks.
+	 * @param	lookahead_only				Governs which algorithm is used to break the music into note onset 
+	 *										slices. If this is true, then a new slice is started whenever a
+	 *										note is encountered outside an existing slice, and then notes 
+	 *										falling in the note_simultaneity_threshold after it are merged
+	 *										into its slice. If this is false, then perform both a look-ahead
+	 *										and a look-behind.
 	 * @param	remove_notes_held_too_long	Whether to exclude held notes whose offsets are slightly past the 
 	 *										current tick from the onset slice being created.
 	 * @param	offset_error_margin			The minimum rhythmic distance, measured as a fraction of a
@@ -155,7 +157,7 @@ public class NoteOnsetSliceContainer
 									double offset_error_margin)
 	{
 		// The smallest number of MIDI ticks that can separate two note onsets for them to be treated as
-		// as occurring in two separate onset slices. Notes separated by a smaller number of ticks are merged 
+		// occurring in two separate onset slices. Notes separated by a smaller number of ticks are merged 
 		// into the same slice.
 		int lookahead_ticks = (int) ((int) midi_sequence.getResolution() * note_simultaneity_threshold);
 		// System.out.println("The resolution is " + midi_sequence.getResolution() + ", the note simultaneity threshold is " + lookahead_ticks + "\n");
@@ -172,12 +174,12 @@ public class NoteOnsetSliceContainer
 		// note_onset_slices_only_new_onsets, and note_onset_slices_by_track_and_channel_only_new_onsets 
 		// fields.
 		note_onset_slices = new LinkedList<>();
-		note_onset_slices_by_track_and_channel = new LinkedList[tracks_from_sequence.length][NUMBER_OF_CHANNELS];
+		note_onset_slices_by_track_and_channel = new LinkedList[tracks_from_sequence.length][NUMBER_OF_MIDI_CHANNELS];
 		note_onset_slices_only_new_onsets = new LinkedList<>();
-		note_onset_slices_by_track_and_channel_only_new_onsets = new LinkedList[tracks_from_sequence.length][NUMBER_OF_CHANNELS];
-		note_onset_slices_by_track_and_channel_only_melodic_lines = new LinkedList[tracks_from_sequence.length][NUMBER_OF_CHANNELS];
+		note_onset_slices_by_track_and_channel_only_new_onsets = new LinkedList[tracks_from_sequence.length][NUMBER_OF_MIDI_CHANNELS];
+		note_onset_slices_by_track_and_channel_only_melodic_lines = new LinkedList[tracks_from_sequence.length][NUMBER_OF_MIDI_CHANNELS];
 		for (int n_track = 0; n_track < tracks_from_sequence.length; n_track++)
-			for (int chan = 0; chan < NUMBER_OF_CHANNELS; chan++)
+			for (int chan = 0; chan < NUMBER_OF_MIDI_CHANNELS; chan++)
 			{
 				note_onset_slices_by_track_and_channel[n_track][chan] = new LinkedList();
 				note_onset_slices_by_track_and_channel_only_new_onsets[n_track][chan] = new LinkedList();
@@ -191,9 +193,9 @@ public class NoteOnsetSliceContainer
 		// A working table of the last note encountered in each track and channel that is considered to 
 		// comprise that track and channel's melody (i.e. the highest note sounding in each slice for that
 		// track and channel).
-		NoteInfo[][] melodic_notes = new NoteInfo[tracks_from_sequence.length][NUMBER_OF_CHANNELS];
+		NoteInfo[][] melodic_notes = new NoteInfo[tracks_from_sequence.length][NUMBER_OF_MIDI_CHANNELS];
 		for (int n_track = 0; n_track < tracks_from_sequence.length; n_track++)
-			for (int chan = 0; chan < NUMBER_OF_CHANNELS; chan++)
+			for (int chan = 0; chan < NUMBER_OF_MIDI_CHANNELS; chan++)
 				melodic_notes[n_track][chan] = null;
 
 		// Iterate through ticks one-by-one
@@ -220,7 +222,7 @@ public class NoteOnsetSliceContainer
 					LinkedList<Integer> onset_slice = new LinkedList<>();
 					LinkedList<Integer> onset_slice_only_new_onsets = new LinkedList<>();
 					for (int n_track = 0; n_track < tracks_from_sequence.length; n_track++)
-						for (int chan = 0; chan < NUMBER_OF_CHANNELS; chan++)
+						for (int chan = 0; chan < NUMBER_OF_MIDI_CHANNELS; chan++)
 						{
 							note_onset_slices_by_track_and_channel[n_track][chan].add(new LinkedList<>());
 							note_onset_slices_by_track_and_channel_only_new_onsets[n_track][chan].add(new LinkedList<>());
@@ -232,7 +234,7 @@ public class NoteOnsetSliceContainer
 					if (!(notes_sounding.isEmpty()))
 					{
 						List<NoteInfo> to_remove = new ArrayList();
-						for (NoteInfo note_sounding: notes_sounding)
+						for (NoteInfo note_sounding : notes_sounding)
 						{
 							if (note_sounding.getEndTick() <= tick)
 							{
@@ -311,11 +313,13 @@ public class NoteOnsetSliceContainer
 							// 	all_pitched_notes_encountered.add(note);
 						}						
 
-					// Perform lookahead and lookbehind from the next tick quantized to the division specified
-					// by the note_simultaneity_threshold, and add pitches to slices as encountered (except to
-					// note_onset_slices_by_track_and_channel_only_melodic_lines)
+					// Note the tick at which the new onset window was initiated
 					int original_tick = tick;
-					if (lookahead_only) // Perform only a lookahead
+
+					// Perform look-ahead and jump to any tick within range that contains a note onset, and
+					// add pitches to sices as encountered 
+					// (exept to note_onset_slices_by_track_and_channel_only_melodic_lines)
+					if (lookahead_only)
 					{
 						for (int i = tick + 1; i < original_tick + lookahead_ticks; i++)
 						{
@@ -358,7 +362,11 @@ public class NoteOnsetSliceContainer
 							}
 						}
 					}
-					else // Perform a lookahead and lookbehind
+					
+					// Perform lookahead and lookbehind from the next tick quantized to the division specified
+					// by the note_simultaneity_threshold, and add pitches to slices as encountered (except to
+					// note_onset_slices_by_track_and_channel_only_melodic_lines)
+					else
 					{
 						int quantized_tick = (int) Math.floor(tick + (lookahead_ticks - (tick % lookahead_ticks)));
 						for (int i = quantized_tick - lookahead_ticks; i < quantized_tick + lookahead_ticks; i++)
@@ -419,7 +427,7 @@ public class NoteOnsetSliceContainer
 					// Add melody pitches to note_onset_slices_by_track_and_channel_only_melodic_lines and
 					// note_onset_slices_by_channel_only_melodic_lines
 					for (int n_track = 0; n_track < tracks_from_sequence.length; n_track++)
-						for (int chan = 0; chan < NUMBER_OF_CHANNELS; chan++)
+						for (int chan = 0; chan < NUMBER_OF_MIDI_CHANNELS; chan++)
 						{
 							NoteInfo melody_note = melodic_notes[n_track][chan];
 							if (melody_note != null)
@@ -434,7 +442,7 @@ public class NoteOnsetSliceContainer
 					onset_slice.sort((s1, s2) -> s1.compareTo(s2));
 					onset_slice_only_new_onsets.sort((s1, s2) -> s1.compareTo(s2));
 					for (int n_track = 0; n_track < tracks_from_sequence.length; n_track++)
-						for (int chan = 0; chan < NUMBER_OF_CHANNELS; chan++)
+						for (int chan = 0; chan < NUMBER_OF_MIDI_CHANNELS; chan++)
 						{
 							note_onset_slices_by_track_and_channel[n_track][chan].get(slice).sort((s1, s2) -> s1.compareTo(s2));
 							note_onset_slices_by_track_and_channel_only_new_onsets[n_track][chan].get(slice).sort((s1, s2) -> s1.compareTo(s2));
@@ -668,10 +676,10 @@ public class NoteOnsetSliceContainer
 	 */
 	public LinkedList<LinkedList<Integer>>[][] getNoteOnsetSlicesByTrackAndChannelInPitchClasses()
 	{
-		LinkedList<LinkedList<Integer>>[][] result = new LinkedList[note_onset_slices_by_track_and_channel.length][NUMBER_OF_CHANNELS];
+		LinkedList<LinkedList<Integer>>[][] result = new LinkedList[note_onset_slices_by_track_and_channel.length][NUMBER_OF_MIDI_CHANNELS];
 		
 		for (int n_track = 0; n_track < note_onset_slices_by_track_and_channel.length; n_track++)
-			for (int chan = 0; chan < NUMBER_OF_CHANNELS; chan++)
+			for (int chan = 0; chan < NUMBER_OF_MIDI_CHANNELS; chan++)
 			{
 				result[n_track][chan] = new LinkedList<>();
 				for (int slice = 0; slice < note_onset_slices_by_track_and_channel[n_track][chan].size(); slice++)
@@ -715,10 +723,10 @@ public class NoteOnsetSliceContainer
 	 */
 	public LinkedList<LinkedList<Integer>>[][] getNoteOnsetSlicesByTrackAndChannelOnlyNewOnsetsInPitchClasses()
 	{
-		LinkedList<LinkedList<Integer>>[][] result = new LinkedList[note_onset_slices_by_track_and_channel_only_new_onsets.length][NUMBER_OF_CHANNELS];
+		LinkedList<LinkedList<Integer>>[][] result = new LinkedList[note_onset_slices_by_track_and_channel_only_new_onsets.length][NUMBER_OF_MIDI_CHANNELS];
 		
 		for (int n_track = 0; n_track < note_onset_slices_by_track_and_channel_only_new_onsets.length; n_track++)
-			for (int chan = 0; chan < NUMBER_OF_CHANNELS; chan++)
+			for (int chan = 0; chan < NUMBER_OF_MIDI_CHANNELS; chan++)
 			{
 				result[n_track][chan] = new LinkedList<>();
 				for (int slice = 0; slice < note_onset_slices_by_track_and_channel_only_new_onsets[n_track][chan].size(); slice++)
