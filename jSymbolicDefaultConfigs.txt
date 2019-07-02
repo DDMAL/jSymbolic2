@@ -120,11 +120,29 @@ Melodic Sevenths
 Melodic Octaves
 Melodic Intervals Larger Than an Octave
 Minor Major Melodic Third Ratio
+Melodic Dissonance Ratio - Fourths Not Dissonant
+Melodic Dissonance Ratio - Fourths Dissonant
 Amount of Arpeggiation
+Melodic Embellishments - One-Sided
 Melodic Embellishments - Two-Sided
 Amount of Rising Melodic Motion
+Amount of Falling Melodic Motion
+Average Length of Rising Melodic Runs
+Average Length of Falling Melodic Runs
+Variability in Length of Rising Melodic Runs
+Variability in Length of Falling Melodic Runs
+Average Interval Spanned by Rising Melodic Runs
+Average Interval Spanned by Falling Melodic Runs
+Variability in Interval Spanned by Rising Melodic Runs
+Variability in Interval Spanned by Falling Melodic Runs
+Average Length of Melodic Arcs
 Average Length of Melodic Half-Arcs
+Variability in Length of Melodic Arcs
+Variability in Length of Melodic Half-Arcs
+Average Interval Spanned by Melodic Arcs
 Average Interval Spanned by Melodic Half-Arcs
+Variability of Interval Spanned by Melodic Arcs
+Variability of Interval Spanned by Melodic Half-Arcs
 Melodic Pitch Variety
 Vertical Interval Histogram
 Wrapped Vertical Interval Histogram

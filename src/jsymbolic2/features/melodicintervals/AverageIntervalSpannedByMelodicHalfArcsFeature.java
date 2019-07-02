@@ -11,7 +11,7 @@ import jsymbolic2.processing.MIDIIntermediateRepresentations;
  * melodic peaks and the bottom note of adjacent melodic troughs. Similar assumptions are made in the
  * calculation of this feature as for the Melodic Interval Histogram.
  *
- * @author Cory McKay
+ * @author Cory McKay and radamian
  */
 public class AverageIntervalSpannedByMelodicHalfArcsFeature
 		extends MIDIFeatureExtractor
@@ -25,7 +25,7 @@ public class AverageIntervalSpannedByMelodicHalfArcsFeature
 	public AverageIntervalSpannedByMelodicHalfArcsFeature()
 	{
 		String name = "Average Interval Spanned by Melodic Half-Arcs";
-		String code = "M-70";
+		String code = "M-86";
 		String description = "Average melodic interval (in semitones) separating the top note of melodic peaks and the bottom note of adjacent melodic troughs. Similar assumptions are made in the calculation of this feature as for the Melodic Interval Histogram.";
 		boolean is_sequential = true;
 		int dimensions = 1;
@@ -79,12 +79,13 @@ public class AverageIntervalSpannedByMelodicHalfArcsFeature
 						for (int i = 0; i < intervals.length; i++)
 							intervals[i] = ((Integer) list_contents[i]).intValue();
 
-						// Find the number of arcs
 						int direction = 0;
 						int interval_so_far = 0;
+						
+						// Find the interval spanned by each melodic half-arc
 						for (int i = 0; i < intervals.length; i++)
 						{
-							// If arc is currently decending
+							// If arc is currently descending
 							if (direction == -1)
 							{
 								if (intervals[i] < 0)
@@ -112,7 +113,7 @@ public class AverageIntervalSpannedByMelodicHalfArcsFeature
 								}
 							}
 
-							// If arc is currently stationary
+							// Handle the first interval
 							else if (direction == 0)
 							{
 								if (intervals[i] > 0)
@@ -126,6 +127,14 @@ public class AverageIntervalSpannedByMelodicHalfArcsFeature
 									interval_so_far += Math.abs(intervals[i]);
 								}
 							}
+							
+							// Handle case when last interval is encountered
+							if (i == intervals.length - 1)
+								if (interval_so_far != 0)
+								{
+									total_intervals += interval_so_far;
+									number_intervals++;
+								}
 						}
 					}
 				}

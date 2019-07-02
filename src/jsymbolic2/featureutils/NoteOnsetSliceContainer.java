@@ -188,7 +188,8 @@ public class NoteOnsetSliceContainer
 		// in which notes will be merged into that slice (to account for small rhythmic offsets). Notes 
 		// separated by a larger number of ticks will be placed into separate slices.
 		int lookahead_or_lookbehind_ticks = (int) ((int) midi_sequence.getResolution() * note_simultaneity_threshold);
-		// System.out.println("The resolution is " + midi_sequence.getResolution() + ", the note simultaneity threshold is " + lookahead_ticks + "\n");
+		//  System.out.println("The resolution is " + midi_sequence.getResolution() + ", the note simultaneity threshold is " + lookahead_or_lookbehind_ticks + "\n");
+		// if (use_free_lookahead_only) System.out.println("Only a lookahead is performed.");
 		
 		// A held note whose rhythmic offset is within this value in ticks from the the tick at which a new
 		// onset slice is being created will not be included in the onset slice being built, since it is 

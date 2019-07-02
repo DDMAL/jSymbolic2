@@ -76,14 +76,11 @@ public class OverallFallingWrappedMelodicVariabilityFeature
 			for (int n_track = 0; n_track < sequence_info.melodic_intervals_by_track_and_channel.size(); n_track++)
 				for (int chan = 0; chan < sequence_info.melodic_intervals_by_track_and_channel.get(n_track).length; chan++)
 					for (int i = 0; i < sequence_info.melodic_intervals_by_track_and_channel.get(n_track)[chan].size(); i++)
-					{
 						if (sequence_info.melodic_intervals_by_track_and_channel.get(n_track)[chan].get(i) <= 0)
 						{
-							all_falling_melodic_intervals[index] = sequence_info.melodic_intervals_by_track_and_channel.get(n_track)[chan].get(i) % 12;
+							all_falling_melodic_intervals[index] = Math.abs(sequence_info.melodic_intervals_by_track_and_channel.get(n_track)[chan].get(i)) % 12;
 							index++;
 						}
-
-					}
 			
 			// Calculate the feature value
 			value = mckay.utilities.staticlibraries.MathAndStatsMethods.getStandardDeviation(all_falling_melodic_intervals);

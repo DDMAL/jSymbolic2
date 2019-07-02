@@ -1,36 +1,36 @@
 package jsymbolic2.features.melodicintervals;
 
+import javax.sound.midi.Sequence;
+import ace.datatypes.FeatureDefinition;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import javax.sound.midi.Sequence;
-import ace.datatypes.FeatureDefinition;
 import jsymbolic2.featureutils.CollectedNoteInfo;
 import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.featureutils.NoteInfo;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the fraction of all notes that are surrounded on both sides by MIDI Note
- * Ons on the same MIDI channel that have durations at least three times as long as the central note. Set to 0
- * if there are no notes in the piece.
+ * A feature calculator that finds the fraction of all notes that are surrounded on at least one side by a 
+ * MIDI Note On on the same MIDI channel that has a duration at least three times as long as it. Set to 0 if 
+ * there are no notes in the piece.
  *
- * @author Tristano Tenaglia and Cory McKay
+ * @author Tristano Tenaglia, Cory McKay and radamian
  */
-public class MelodicEmbellishmentsTwoSidedFeature
+public class MelodicEmbellishmentsOneSidedFeature
 		extends MIDIFeatureExtractor
 {
+
 	/* CONSTRUCTOR ******************************************************************************************/
 
-	
 	/**
 	 * Basic constructor that sets the values of the fields inherited from this class' superclass.
 	 */
-	public MelodicEmbellishmentsTwoSidedFeature()
+	public MelodicEmbellishmentsOneSidedFeature()
 	{
-		String name = "Melodic Embellishments - Two-Sided";
-		String code = "M-70";
-		String description = "Fraction of all notes that are surrounded on both sides by MIDI Note Ons on the same MIDI channel that have durations at least three times as long as the central note. Set to 0 if there are no notes in the piece.";
+		String name = "Melodic Embellishments - One-Sided";
+		String code = "M-69";
+		String description = "Fraction of all notes that are surrounded on at least one side by a MIDI Note On on the same MIDI channel that has a duration at least three times as long as it. Set to 0 if there are no notes in the piece.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
@@ -120,7 +120,7 @@ public class MelodicEmbellishmentsTwoSidedFeature
 								if (next.getDuration() >= 3 * current_note.getDuration())
 									next_check = true;
 
-							if (next_check && previous_check)
+							if (next_check || previous_check)
 								number_embelleshing_notes++;
 						}
 					}
@@ -131,7 +131,7 @@ public class MelodicEmbellishmentsTwoSidedFeature
 			if (sequence_info.total_number_note_ons == 0)
 				value = 0;
 			else
-				value = number_embelleshing_notes / sequence_info.total_number_note_ons;
+				value = number_embelleshing_notes / sequence_info.total_number_note_ons;	
 		}
 		else value = -1.0;
 

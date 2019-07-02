@@ -11,7 +11,7 @@ import jsymbolic2.processing.MIDIIntermediateRepresentations;
  * Similar assumptions are made in the calculation of this feature as for the Melodic Interval Histogram. Set
  * to 0 if no melodic arcs are found.
  *
- * @author Cory McKay
+ * @author Cory McKay and radamian
  */
 public class AverageLengthOfMelodicHalfArcsFeature
 		extends MIDIFeatureExtractor
@@ -25,7 +25,7 @@ public class AverageLengthOfMelodicHalfArcsFeature
 	public AverageLengthOfMelodicHalfArcsFeature()
 	{
 		String name = "Average Length of Melodic Half-Arcs";
-		String code = "M-69";
+		String code = "M-82";
 		String description = "Average number of notes that separate melodic peaks and troughs. Similar assumptions are made in the calculation of this feature as for the Melodic Interval Histogram. Set to 0 if no melodic arcs are found.";
 		boolean is_sequential = true;
 		int dimensions = 1;
@@ -62,7 +62,7 @@ public class AverageLengthOfMelodicHalfArcsFeature
 		double value;
 		if (sequence_info != null)
 		{
-			int total_number_intervening_intervals = 0;
+			int total_lengths_of_melodic_half_arcs = 0;
 			int number_arcs = 0;
 			
 			for (int track = 0; track < sequence_info.melodic_intervals_by_track_and_channel.size(); track++)
@@ -79,20 +79,36 @@ public class AverageLengthOfMelodicHalfArcsFeature
 						for (int i = 0; i < intervals.length; i++)
 							intervals[i] = ((Integer) list_contents[i]).intValue();
 
-						// Find the number of arcs
 						int direction = 0;
+						int length_of_half_arc = 0;
+						
+						// Find the lengths of each melodic half-arc
 						for (int i = 0; i < intervals.length; i++)
 						{
-							// If arc is currently decending
+							// If arc is currently descending
 							if (direction == -1)
 							{
 								if (intervals[i] < 0)
-									total_number_intervening_intervals++;
+									length_of_half_arc++;
 								else if (intervals[i] > 0)
 								{
-									total_number_intervening_intervals++;
+									total_lengths_of_melodic_half_arcs += length_of_half_arc + 1;
 									number_arcs++;
+									length_of_half_arc = 1;
 									direction = 1;
+								}
+								else if (intervals[i] == 0)
+								{
+									// A lookahead to find the next non-zero interval; unison intervals only 
+									// contribute to the arc's length if they occur mid-arc.
+									for (int j = i; j < intervals.length; j++)
+										if (intervals[j] < 0)
+										{
+											length_of_half_arc++;
+											break;
+										}
+										else if (intervals[j] > 0)
+											break;
 								}
 							}
 
@@ -100,29 +116,51 @@ public class AverageLengthOfMelodicHalfArcsFeature
 							else if (direction == 1)
 							{
 								if (intervals[i] > 0)
-									total_number_intervening_intervals++;
+									length_of_half_arc++;
 								else if (intervals[i] < 0)
 								{
-									total_number_intervening_intervals++;
+									total_lengths_of_melodic_half_arcs += length_of_half_arc + 1;
 									number_arcs++;
+									length_of_half_arc = 1;
 									direction = -1;
+								}
+								else if (intervals[i] == 0)
+								{
+									// A lookahead to find the next non-zero interval; unison intervals only 
+									// contribute to the arc's length if they occur mid-arc.
+									for (int j = i; j < intervals.length; j++)
+										if (intervals[j] < 0)
+											break;
+										else if (intervals[j] > 0)
+										{
+											length_of_half_arc++;
+											break;
+										}
 								}
 							}
 
-							// If arc is currently stationary
+							// Handle the first interval
 							else if (direction == 0)
 							{
 								if (intervals[i] > 0)
 								{
 									direction = 1;
-									total_number_intervening_intervals++;
+									length_of_half_arc++;
 								}
 								if (intervals[i] < 0)
 								{
 									direction = -1;
-									total_number_intervening_intervals++;
+									length_of_half_arc++;
 								}
 							}
+							
+							// Handle case when last interval is encountered
+							if (i == intervals.length - 1)
+								if (length_of_half_arc != 0)
+								{
+									total_lengths_of_melodic_half_arcs += length_of_half_arc + 1;
+									number_arcs++;
+								}
 						}
 					}
 				}
@@ -132,7 +170,7 @@ public class AverageLengthOfMelodicHalfArcsFeature
 			if (number_arcs == 0)
 				value = 0.0;
 			else
-				value = (double) total_number_intervening_intervals / (double) number_arcs;
+				value = (double) total_lengths_of_melodic_half_arcs / (double) number_arcs;
 		} 
 		else value = -1.0;
 
