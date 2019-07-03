@@ -904,7 +904,7 @@ public class MIDIIntermediateRepresentations
 					}
 		}
 		*/
-							
+		
 		// System.out.println("\n\n\n\nGENERATING MELODIC INTERMEDIATE REPRESENTATIONS");	
 		generateMelodicIntermediateRepresentations();
 		/*
@@ -1927,7 +1927,12 @@ public class MIDIIntermediateRepresentations
 	
 	
 	/**
-	 * Generate the note_onset_slice_container field.
+	 * Generate the note_onset_slice_container field. The default settings to account for encoding issues are
+	 * hard-coded: To group near-simultaneous notes in the same onset slice are that both a lookahead and a 
+	 * lookbehind, each a 32nd note's duration in ticks, are performed from the next tick based on an 
+	 * idealized 32nd note division. To filter out notes that are held only sightly past the point at which a 
+	 * new note onset slice is created, there is a threshold, a 32nd note's duration in ticks, past which a 
+	 * note must be held in order for it to be included in the new note onset slice.
 	 */
 	private void generateNoteOnsetSliceContainer() 
 	{

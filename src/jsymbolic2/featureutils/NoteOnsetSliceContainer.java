@@ -829,8 +829,15 @@ public class NoteOnsetSliceContainer
 	 */
 	public boolean isHighestPitchInSliceNewOnset(int slice_index, int track, int channel)
 	{
-		int index_of_highest_pitch = note_onset_slices_by_track_and_channel[track][channel].get(slice_index).size() - 1;
-		int highest_pitch = note_onset_slices_by_track_and_channel[track][channel].get(slice_index).get(index_of_highest_pitch);
-		return 	note_onset_slices_by_track_and_channel_only_new_onsets[track][channel].get(slice_index).contains(highest_pitch);
+		if (note_onset_slices_by_track_and_channel[track][channel].get(slice_index).isEmpty())
+		{
+			return false;
+		}
+		else
+		{
+			int index_of_highest_pitch = note_onset_slices_by_track_and_channel[track][channel].get(slice_index).size() - 1;
+			int highest_pitch = note_onset_slices_by_track_and_channel[track][channel].get(slice_index).get(index_of_highest_pitch);
+			return 	note_onset_slices_by_track_and_channel_only_new_onsets[track][channel].get(slice_index).contains(highest_pitch);
+		}
 	}
 }
