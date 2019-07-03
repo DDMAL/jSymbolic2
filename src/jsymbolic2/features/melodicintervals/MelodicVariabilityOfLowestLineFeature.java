@@ -8,12 +8,12 @@ import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
  * A feature calculator that finds the standard deviation of the melodic intervals in the MIDI channel with 
- * the highest average pitch. Provides a measure of how close the melodic intervals as a whole are to the mean 
+ * the lowest average pitch. Provides a measure of how close the melodic intervals as a whole are to the mean 
  * melodic interval.
  *
  * @author radamian
  */
-public class MelodicVariabilityOfHighestLineFeature
+public class MelodicVariabilityOfLowestLineFeature
 		extends MIDIFeatureExtractor
 {
 	/* CONSTRUCTOR ******************************************************************************************/
@@ -22,11 +22,11 @@ public class MelodicVariabilityOfHighestLineFeature
 	/**
 	 * Basic constructor that sets the values of the fields inherited from this class' superclass.
 	 */
-	public MelodicVariabilityOfHighestLineFeature()
+	public MelodicVariabilityOfLowestLineFeature()
 	{
-		String name = "Melodic Variability of Highest Line";
-		String code = "M-97";
-		String description = "Standard deviation of the melodic intervals in the MIDI channel with the highest average pitch. Provides a measure of how close the melodic intervals as a whole are to the mean melodic interval.";
+		String name = "Melodic Variability of Lowest Line";
+		String code = "M-125";
+		String description = "Standard deviation of the melodic intervals in the MIDI channel with the lowest average pitch. Provides a measure of how close the melodic intervals as a whole are to the mean melodic interval.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
@@ -62,18 +62,19 @@ public class MelodicVariabilityOfHighestLineFeature
 		double value;
 		if (sequence_info != null)
 		{
-			// Get channel with the highest average pitch
-			int channel_with_highest_average_pitch = 0;
+			// Get channel with the lowest average pitch
+			int channel_with_lowest_average_pitch = -1;
 			for (int chan = 0; chan < 16; chan++)
-				if (chan != 10 - 1) // Exclude Channel 10 (Percussion)
-					if (sequence_info.channel_statistics[chan][6] > sequence_info.channel_statistics[channel_with_highest_average_pitch][6])
-						channel_with_highest_average_pitch = chan;
+				// Exclude Channel 10 (Percussion) and check that there are notes on the given channel
+				if (chan != 10 - 1 && sequence_info.channel_statistics[chan][0] > 0)
+					if (channel_with_lowest_average_pitch == -1 || sequence_info.channel_statistics[chan][6] < sequence_info.channel_statistics[channel_with_lowest_average_pitch][6])
+						channel_with_lowest_average_pitch = chan;
 			
 			// Create list of the melodic intervals in that channel
 			LinkedList<Integer> melodic_intervals = new LinkedList<>();
 			for (int n_track = 0; n_track < sequence.getTracks().length; n_track++)
-				for (int i = 0; i < sequence_info.melodic_intervals_by_track_and_channel.get(n_track)[channel_with_highest_average_pitch].size(); i++)
-					melodic_intervals.add(sequence_info.melodic_intervals_by_track_and_channel.get(n_track)[channel_with_highest_average_pitch].get(i));
+				for (int i = 0; i < sequence_info.melodic_intervals_by_track_and_channel.get(n_track)[channel_with_lowest_average_pitch].size(); i++)
+					melodic_intervals.add(sequence_info.melodic_intervals_by_track_and_channel.get(n_track)[channel_with_lowest_average_pitch].get(i));
 			
 			// Prepare array for feature calculation
 			int[] melodic_intervals_in_array = new int[melodic_intervals.size()];

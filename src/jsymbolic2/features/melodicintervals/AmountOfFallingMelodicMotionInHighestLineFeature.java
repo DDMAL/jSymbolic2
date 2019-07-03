@@ -6,7 +6,7 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the Fraction of melodic intervals that are falling in pitch (repeated notes 
+ * A feature calculator that finds the fraction of melodic intervals that are falling in pitch (repeated notes 
  * are not counted in this calculation) in the MIDI channel with the highest average pitch. Set to zero if no 
  * rising or falling melodic intervals are found.
  *

@@ -6,9 +6,9 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the smallest melodic interval in the MIDI channel with the highest 
- * average pitch, measured in semitones. Repeated notes are not counted for this feature, so a value of 0 will 
- * only be returned if there are no melodic intervals of a semitone or larger.
+ * A feature calculator that finds the smallest melodic interval in the MIDI channel with the highest average 
+ * pitch, measured in semitones. Repeated notes are not counted for this feature, so a value of 0 will only be 
+ * returned if there are no melodic intervals of a semitone or larger.
  *
  * @author radamian
  */
@@ -68,23 +68,12 @@ public class SmallestMelodicIntervalInHighestLineFeature
 					if (sequence_info.channel_statistics[chan][6] > sequence_info.channel_statistics[channel_with_highest_average_pitch][6])
 						channel_with_highest_average_pitch = chan;
 			
-			// Create melodic interval histogram for that channel
-			int[] melodic_interval_histogram = new int[128];
+			// Find the smallest melodic interval for that channel
+			int smallest_melodic_interval = 0;
 			for (int n_track = 0; n_track < sequence.getTracks().length; n_track++)
 				for (int i = 0; i < sequence_info.melodic_intervals_by_track_and_channel.get(n_track)[channel_with_highest_average_pitch].size(); i++)
-					melodic_interval_histogram[Math.abs(sequence_info.melodic_intervals_by_track_and_channel.get(n_track)[channel_with_highest_average_pitch].get(i))]++;
-			
-			// Initialize with default value
-			int smallest_melodic_interval = 0;
-
-			// Find smallest melodic interval that is not a repeated note (i.e. bin 0 of the melodic interval
-			// histogram)
-			for (int bin = 1; bin < melodic_interval_histogram.length; bin++)
-				if (melodic_interval_histogram[bin] > 0.0)
-				{
-					smallest_melodic_interval = bin;
-					break;
-				}		
+					if (Math.abs(sequence_info.melodic_intervals_by_track_and_channel.get(n_track)[channel_with_highest_average_pitch].get(i)) < smallest_melodic_interval)
+						smallest_melodic_interval = Math.abs(sequence_info.melodic_intervals_by_track_and_channel.get(n_track)[channel_with_highest_average_pitch].get(i));
 			
 			value = (double) smallest_melodic_interval;
 		}

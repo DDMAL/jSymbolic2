@@ -172,6 +172,26 @@ Average Interval Spanned by Melodic Half-Arcs in Highest Line
 Variability of Interval Spanned by Melodic Arcs in Highest Line
 Variability of Interval Spanned by Melodic Half-Arcs in Highest Line
 Melodic Pitch Variety in Highest Line
+Wrapped Melodic Interval Histogram for Lowest Line
+Wrapped Melodic Interval Histogram for Lowest Line - Rising Intervals Only
+Wrapped Melodic Interval Histogram for Lowest Line - Falling Intervals Only
+Melodic Note Density per Quarter Note in Lowest Line
+Number of Distinct Melodic Intervals in Lowest Line
+Mean Melodic Interval of Lowest Line
+Prevalence of Most Common Melodic Interval in Lowest Line
+Melodic Variability of Lowest Line
+Smallest Melodic Interval in Lowest Line
+Largest Melodic Interval in Lowest Line
+Amount of Falling Melodic Motion in Lowest Line
+Average Length of Rising Melodic Runs in Lowest Line
+Average Length of Falling Melodic Runs in Lowest Line
+Variability in Length of Rising Melodic Runs in Lowest Line
+Variability in Length of Falling Melodic Runs in Lowest Line
+Average Interval Spanned by Rising Melodic Runs in Lowest Line
+Average Interval Spanned by Falling Melodic Runs in Lowest Line
+Variability in Interval Spanned by Rising Melodic Runs in Lowest Line
+Variability in Interval Spanned by Falling Melodic Runs in Lowest Line
+Melodic Pitch Variety in Lowest Line
 Vertical Interval Histogram
 Wrapped Vertical Interval Histogram
 Chord Type Histogram

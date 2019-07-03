@@ -67,14 +67,15 @@ public class LargestMelodicIntervalInHighestLineFeature
 					if (sequence_info.channel_statistics[chan][6] > sequence_info.channel_statistics[channel_with_highest_average_pitch][6])
 						channel_with_highest_average_pitch = chan;
 			
-			// Create melodic interval histogram for that channel
-			int[] melodic_interval_histogram = new int[128];
+			// Find the largest melodic interval for that channel
+			int largest_melodic_interval = 0;
 			for (int n_track = 0; n_track < sequence.getTracks().length; n_track++)
 				for (int i = 0; i < sequence_info.melodic_intervals_by_track_and_channel.get(n_track)[channel_with_highest_average_pitch].size(); i++)
-					melodic_interval_histogram[Math.abs(sequence_info.melodic_intervals_by_track_and_channel.get(n_track)[channel_with_highest_average_pitch].get(i))]++;	
+					if (Math.abs(sequence_info.melodic_intervals_by_track_and_channel.get(n_track)[channel_with_highest_average_pitch].get(i)) > largest_melodic_interval)
+						largest_melodic_interval = Math.abs(sequence_info.melodic_intervals_by_track_and_channel.get(n_track)[channel_with_highest_average_pitch].get(i));
 			
 			// Calculate feature value
-			value = mckay.utilities.staticlibraries.MathAndStatsMethods.getIndexOfLargest(melodic_interval_histogram);
+			value = (double) largest_melodic_interval;
 		}
 		else value = -1.0;
 		
