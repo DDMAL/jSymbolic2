@@ -64,70 +64,62 @@ public class AverageIntervalSpannedByFallingMelodicRunsInLowestLineFeature
 		double value;
 		if (sequence_info != null)
 		{
-			// Get channel with the lowest average pitch
-			int channel_with_lowest_average_pitch = -1;
-			for (int chan = 0; chan < 16; chan++)
-				// Exclude Channel 10 (Percussion) and check that there are notes on the given channel
-				if (chan != 10 - 1 && sequence_info.channel_statistics[chan][0] > 0)
-					if (channel_with_lowest_average_pitch == -1 || sequence_info.channel_statistics[chan][6] < sequence_info.channel_statistics[channel_with_lowest_average_pitch][6])
-						channel_with_lowest_average_pitch = chan;
+			int track_with_lowest_average_pitch = sequence_info.track_and_channel_with_lowest_average_pitch[0];
+			int channel_with_lowest_average_pitch = sequence_info.track_and_channel_with_lowest_average_pitch[1];
 			
 			int total_interval_lengths = 0;
 			int number_of_runs= 0;
-			
-			for (int track = 0; track < sequence_info.melodic_intervals_by_track_and_channel.size(); track++)
+
+			int direction = 0;
+			int interval_spanned_by_run = 0;
+
+			// Find the length of each rising melodic run
+			LinkedList<Integer> intervals = sequence_info.melodic_intervals_by_track_and_channel.get(track_with_lowest_average_pitch)[channel_with_lowest_average_pitch];
+			for (int i = 0; i < intervals.size(); i++)
 			{
-				int direction = 0;
-				int interval_spanned_by_run = 0;
-
-				// Find the length of each rising melodic run
-				LinkedList<Integer> intervals = sequence_info.melodic_intervals_by_track_and_channel.get(track)[channel_with_lowest_average_pitch];
-				for (int i = 0; i < intervals.size(); i++)
+				// If melodic arc is currently descending
+				if (direction == -1)
 				{
-					// If melodic arc is currently descending
-					if (direction == -1)
-					{
-						if (intervals.get(i) > 0)
-						{
-							total_interval_lengths += Math.abs(interval_spanned_by_run);
-							number_of_runs++;
-							interval_spanned_by_run = 0;
-							direction = 1;
-						}
-						else if (intervals.get(i) < 0)
-							interval_spanned_by_run += intervals.get(i);
-					}
-
-					// If melodic arc is currently ascending
-					else if (direction == 1)
-					{
-						if (intervals.get(i) < 0)
-						{
-							interval_spanned_by_run += intervals.get(i);
-							direction = -1;
-						}
-					}
-
-					// Handle the first interval
-					else if (direction == 0)
-					{
-						if (intervals.get(i) > 0)
-						{
-							direction = 1;
-						}
-						else if (intervals.get(i) < 0)
-						{
-							interval_spanned_by_run += intervals.get(i);
-							direction = -1;
-						}
-					}
-
-					// Handle case when last interval is encountered
-					if (i == intervals.size() - 1 && interval_spanned_by_run < 0)
+					if (intervals.get(i) > 0)
 					{
 						total_interval_lengths += Math.abs(interval_spanned_by_run);
 						number_of_runs++;
+						interval_spanned_by_run = 0;
+						direction = 1;
 					}
+					else if (intervals.get(i) < 0)
+						interval_spanned_by_run += intervals.get(i);
+				}
+
+				// If melodic arc is currently ascending
+				else if (direction == 1)
+				{
+					if (intervals.get(i) < 0)
+					{
+						interval_spanned_by_run += intervals.get(i);
+						direction = -1;
+					}
+				}
+
+				// Handle the first interval
+				else if (direction == 0)
+				{
+					if (intervals.get(i) > 0)
+					{
+						direction = 1;
+					}
+					else if (intervals.get(i) < 0)
+					{
+						interval_spanned_by_run += intervals.get(i);
+						direction = -1;
+					}
+				}
+
+				// Handle case when last interval is encountered
+				if (i == intervals.size() - 1 && interval_spanned_by_run < 0)
+				{
+					total_interval_lengths += Math.abs(interval_spanned_by_run);
+					number_of_runs++;
 				}
 			}
 			

@@ -64,35 +64,15 @@ public class MelodicPitchVarietyInHighestLineFeature
 		double value;
 		if (sequence_info != null)
 		{
-			// Get channel with the highest average pitch
-			int channel_with_highest_average_pitch = 0;
-			for (int chan = 0; chan < 16; chan++)
-				if (chan != 10 - 1) // Exclude Channel 10 (Percussion)
-					if (sequence_info.channel_statistics[chan][6] > sequence_info.channel_statistics[channel_with_highest_average_pitch][6])
-						channel_with_highest_average_pitch = chan;
-			
-			LinkedList<LinkedList<Integer>>[][] slices_by_track_and_channel = sequence_info.note_onset_slice_container.getNoteOnsetSlicesByTrackAndChannelMelodicLinesOnly();
-			
-			// Build structure containing onset slices only for the channel with the highest line
-			LinkedList<LinkedList<Integer>> slices_for_channel_with_highest_line = new LinkedList<>();
-			for (int slice = 0; slice < slices_by_track_and_channel[0][channel_with_highest_average_pitch].size(); slice++)
-			{
-				// Create new slice
-				slices_for_channel_with_highest_line.add(new LinkedList<>());
-				for (int n_track = 0; n_track < sequence.getTracks().length; n_track++)
-					for (int i = 0; i < slices_by_track_and_channel[n_track][channel_with_highest_average_pitch].get(slice).size(); i++)
-						slices_for_channel_with_highest_line.get(slice).add(slices_by_track_and_channel[n_track][channel_with_highest_average_pitch].get(slice).get(i));
-
-				// Sort slice by increasing pitch
-				slices_for_channel_with_highest_line.get(slice).sort((s1, s2) -> s1.compareTo(s2));
-			}
+			int track_with_highest_average_pitch = sequence_info.track_and_channel_with_highest_average_pitch[0];
+			int channel_with_highest_average_pitch = sequence_info.track_and_channel_with_highest_average_pitch[1];
 					
 			// The total number of notes for which a repeated note is found
-			double number_of_repeated_notes_found = 0.0;
+			int number_of_repeated_notes_found = 0;
 
 			// The total number of notes that go by before a note is repeated, all added together for all
 			// note that are repeated within max_notes_that_can_go_by
-			double summed_number_of_notes_before_pitch_repeated = 0.0;
+			int summed_number_of_notes_before_pitch_repeated = 0;
 			
 			// The maximum number of notes that can go by before a note is discounted for the purposes
 			// of this feature
@@ -103,13 +83,16 @@ public class MelodicPitchVarietyInHighestLineFeature
 			// Create array that contains, for each pitch, the count of notes gone by since the last 
 			// time a note with that pitch was encountered
 			int[] counts_since_pitch_last_encountered = new int [128];
+			for (int i = 0; i < counts_since_pitch_last_encountered.length; i++)
+						counts_since_pitch_last_encountered[i] = 0;
 
-			// Go through onset slices
-			for (int slice = 0; slice < slices_for_channel_with_highest_line.size(); slice++)
-				if (!slices_for_channel_with_highest_line.get(slice).isEmpty())
+			// Go through onset slices of the track and channel with the highest average pitch
+			LinkedList<LinkedList<Integer>> onset_slices = sequence_info.note_onset_slice_container.getNoteOnsetSlicesByTrackAndChannelMelodicLinesOnly()[track_with_highest_average_pitch][channel_with_highest_average_pitch];
+			for (int slice = 0; slice < onset_slices.size(); slice++)
+				if (!onset_slices.get(slice).isEmpty())
 				{
-					// Get pitch belonging to the melody (the last pitch in the slice)
-					int melodic_pitch = slices_for_channel_with_highest_line.get(slice).get(slices_for_channel_with_highest_line.get(slice).size() - 1);
+					// Get pitch belonging to the melody (the highest pitch in the slice)
+					int melodic_pitch = onset_slices.get(slice).get(onset_slices.get(slice).size() - 1);
 
 					if (!pitches_encountered.contains(melodic_pitch))
 					{
@@ -120,7 +103,7 @@ public class MelodicPitchVarietyInHighestLineFeature
 						if (counts_since_pitch_last_encountered[melodic_pitch] <= max_notes_that_can_go_by)
 						{
 							number_of_repeated_notes_found++;
-							summed_number_of_notes_before_pitch_repeated += counts_since_pitch_last_encountered[melodic_pitch];
+							summed_number_of_notes_before_pitch_repeated += counts_since_pitch_last_encountered[melodic_pitch] + 1;
 						}
 						counts_since_pitch_last_encountered[melodic_pitch] = 0;
 					}
@@ -135,7 +118,7 @@ public class MelodicPitchVarietyInHighestLineFeature
 			if (number_of_repeated_notes_found == 0)
 				value = 0.0;
 			else
-				value = summed_number_of_notes_before_pitch_repeated / number_of_repeated_notes_found;
+				value = (double) summed_number_of_notes_before_pitch_repeated / number_of_repeated_notes_found;
 		}
 		else value = -1.0;
 

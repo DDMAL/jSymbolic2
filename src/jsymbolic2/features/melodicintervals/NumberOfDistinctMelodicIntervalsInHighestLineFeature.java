@@ -61,19 +61,14 @@ public class NumberOfDistinctMelodicIntervalsInHighestLineFeature
 		double value;
 		if (sequence_info != null)
 		{
-			// Get channel with the highest average pitch
-			int channel_with_highest_average_pitch = 0;
-			for (int chan = 0; chan < 16; chan++)
-				if (chan != 10 - 1) // Exclude Channel 10 (Percussion)
-					if (sequence_info.channel_statistics[chan][6] > sequence_info.channel_statistics[channel_with_highest_average_pitch][6])
-						channel_with_highest_average_pitch = chan;
+			int track_with_highest_average_pitch = sequence_info.track_and_channel_with_highest_average_pitch[0];
+			int channel_with_highest_average_pitch = sequence_info.track_and_channel_with_highest_average_pitch[1];
 			
-			// Create list of unique melodic intervals in the MIDI channel with the highest average pitch
+			// Create list of unique melodic intervals
 			LinkedList<Integer> unique_melodic_intervals = new LinkedList<>();
-			for (int n_track = 0; n_track < sequence.getTracks().length; n_track++)
-				for (int i = 0; i < sequence_info.melodic_intervals_by_track_and_channel.get(n_track)[channel_with_highest_average_pitch].size(); i++)
-					if (!unique_melodic_intervals.contains(sequence_info.melodic_intervals_by_track_and_channel.get(n_track)[channel_with_highest_average_pitch].get(i)))
-						unique_melodic_intervals.add(sequence_info.melodic_intervals_by_track_and_channel.get(n_track)[channel_with_highest_average_pitch].get(i));
+			for (int i = 0; i < sequence_info.melodic_intervals_by_track_and_channel.get(track_with_highest_average_pitch)[channel_with_highest_average_pitch].size(); i++)
+				if (!unique_melodic_intervals.contains(sequence_info.melodic_intervals_by_track_and_channel.get(track_with_highest_average_pitch)[channel_with_highest_average_pitch].get(i)))
+					unique_melodic_intervals.add(sequence_info.melodic_intervals_by_track_and_channel.get(track_with_highest_average_pitch)[channel_with_highest_average_pitch].get(i));
 			
 			value = unique_melodic_intervals.size();
 		} 

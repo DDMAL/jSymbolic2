@@ -63,114 +63,107 @@ public class AverageLengthOfMelodicArcsInHighestLineFeature
 		double value;
 		if (sequence_info != null)
 		{
-			// Get channel with the highest average pitch
-			int channel_with_highest_average_pitch = 0;
-			for (int chan = 0; chan < 16; chan++)
-				if (chan != 10 - 1) // Exclude Channel 10 (Percussion)
-					if (sequence_info.channel_statistics[chan][6] > sequence_info.channel_statistics[channel_with_highest_average_pitch][6])
-						channel_with_highest_average_pitch = chan;
+			int track_with_highest_average_pitch = sequence_info.track_and_channel_with_highest_average_pitch[0];
+			int channel_with_highest_average_pitch = sequence_info.track_and_channel_with_highest_average_pitch[1];
 			
 			int total_lengths_of_melodic_arcs = 0;
 			int number_arcs = 0;
 			
-			for (int track = 0; track < sequence_info.melodic_intervals_by_track_and_channel.size(); track++)
+			int direction = 0;
+			// The number of notes separating a peak from a trough. It is reset to 0 once the next
+			// peak is met and the distance from the last peak to the new peak is calculated.
+			int length_of_descent = 0;
+			// The number of notes separating a trough from a peak. It is reset to 0 once the next
+			// trough is met and the distance from the last trough to the new trough is 
+			// calculated.
+			int length_of_ascent = 0;
+
+			// Find the lengths of each melodic arc
+			LinkedList<Integer> intervals = sequence_info.melodic_intervals_by_track_and_channel.get(track_with_highest_average_pitch)[channel_with_highest_average_pitch];
+			for (int i = 0; i < intervals.size(); i++)
 			{
-				int direction = 0;
-				// The number of notes separating a peak from a trough. It is reset to 0 once the next
-				// peak is met and the distance from the last peak to the new peak is calculated.
-				int length_of_descent = 0;
-				// The number of notes separating a trough from a peak. It is reset to 0 once the next
-				// trough is met and the distance from the last trough to the new trough is 
-				// calculated.
-				int length_of_ascent = 0;
-
-				// Find the lengths of each melodic arc
-				LinkedList<Integer> intervals = sequence_info.melodic_intervals_by_track_and_channel.get(track)[channel_with_highest_average_pitch];
-				for (int i = 0; i < intervals.size(); i++)
+				// If arc is currently decending
+				if (direction == -1)
 				{
-					// If arc is currently decending
-					if (direction == -1)
+					if (intervals.get(i) < 0)
+						length_of_descent++;
+					else if (intervals.get(i) > 0)
 					{
-						if (intervals.get(i) < 0)
-							length_of_descent++;
-						else if (intervals.get(i) > 0)
-						{
-							if (length_of_ascent != 0)
-							{
-								total_lengths_of_melodic_arcs += length_of_ascent + length_of_descent + 1;
-								length_of_ascent = 0;
-								number_arcs++;
-							}
-							direction = 1;
-							length_of_ascent++;
-						}
-						else if (intervals.get(i) == 0)
-						{
-							// A lookahead to find the next non-zero interval; unison intervals only 
-							// contribute to the arc's length if they occur mid-arc.
-							for (int j = i; j < intervals.size(); j++)
-								if (intervals.get(j) < 0)
-								{
-									length_of_descent++;
-									break;
-								}
-								else if (intervals.get(j) > 0)
-									break;
-						}	
-					}
-
-					// If arc is currently ascending
-					else if (direction == 1)
-					{
-						if (intervals.get(i) > 0)
-							length_of_ascent++;
-						else if (intervals.get(i) < 0)
-						{
-							if (length_of_descent != 0)
-							{
-								total_lengths_of_melodic_arcs += length_of_ascent + length_of_descent + 1;
-								length_of_descent = 0;
-								number_arcs++;
-							}
-							direction = -1;
-							length_of_descent++;
-						}
-						else if (intervals.get(i) == 0)
-						{
-							// A lookahead to find the next non-zero interval; unison intervals only 
-							// contribute to the arc's length if they occur mid-arc.
-							for (int j = i; j < intervals.size(); j++)
-								if (intervals.get(j) < 0)
-									break;
-								else if (intervals.get(j) > 0)
-								{
-									length_of_ascent++;
-									break;
-								}
-						}
-					}
-
-					// Handle the first interval
-					else if (direction == 0)
-						if (intervals.get(i) > 0)
-						{
-							direction = 1;
-							length_of_ascent++;
-						}
-						else if (intervals.get(i) < 0)
-						{
-							direction = -1;
-							length_of_descent++;
-						}
-
-					// Handle case when last interval is encountered
-					if (i == intervals.size() - 1)
-						if (length_of_descent != 0 && length_of_ascent != 0)
+						if (length_of_ascent != 0)
 						{
 							total_lengths_of_melodic_arcs += length_of_ascent + length_of_descent + 1;
+							length_of_ascent = 0;
 							number_arcs++;
 						}
+						direction = 1;
+						length_of_ascent++;
+					}
+					else if (intervals.get(i) == 0)
+					{
+						// A lookahead to find the next non-zero interval; unison intervals only 
+						// contribute to the arc's length if they occur mid-arc.
+						for (int j = i; j < intervals.size(); j++)
+							if (intervals.get(j) < 0)
+							{
+								length_of_descent++;
+								break;
+							}
+							else if (intervals.get(j) > 0)
+								break;
+					}	
 				}
+
+				// If arc is currently ascending
+				else if (direction == 1)
+				{
+					if (intervals.get(i) > 0)
+						length_of_ascent++;
+					else if (intervals.get(i) < 0)
+					{
+						if (length_of_descent != 0)
+						{
+							total_lengths_of_melodic_arcs += length_of_ascent + length_of_descent + 1;
+							length_of_descent = 0;
+							number_arcs++;
+						}
+						direction = -1;
+						length_of_descent++;
+					}
+					else if (intervals.get(i) == 0)
+					{
+						// A lookahead to find the next non-zero interval; unison intervals only 
+						// contribute to the arc's length if they occur mid-arc.
+						for (int j = i; j < intervals.size(); j++)
+							if (intervals.get(j) < 0)
+								break;
+							else if (intervals.get(j) > 0)
+							{
+								length_of_ascent++;
+								break;
+							}
+					}
+				}
+
+				// Handle the first interval
+				else if (direction == 0)
+					if (intervals.get(i) > 0)
+					{
+						direction = 1;
+						length_of_ascent++;
+					}
+					else if (intervals.get(i) < 0)
+					{
+						direction = -1;
+						length_of_descent++;
+					}
+
+				// Handle case when last interval is encountered
+				if (i == intervals.size() - 1)
+					if (length_of_descent != 0 && length_of_ascent != 0)
+					{
+						total_lengths_of_melodic_arcs += length_of_ascent + length_of_descent + 1;
+						number_arcs++;
+					}
 			}
 			
 			// Calculate the value

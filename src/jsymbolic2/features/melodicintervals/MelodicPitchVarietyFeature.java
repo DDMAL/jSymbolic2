@@ -87,11 +87,11 @@ public class MelodicPitchVarietyFeature
 			}
 					
 			// The total number of notes for which a repeated note is found
-			double number_of_repeated_notes_found = 0.0;
+			int number_of_repeated_notes_found = 0;
 
 			// The total number of notes that go by before a note is repeated, all added together for all
 			// note that are repeated within max_notes_that_can_go_by
-			double summed_number_of_notes_before_pitch_repeated = 0.0;
+			int summed_number_of_notes_before_pitch_repeated = 0;
 			
 			// The maximum number of notes that can go by before a note is discounted for the purposes
 			// of this feature
@@ -107,12 +107,14 @@ public class MelodicPitchVarietyFeature
 					// Create array that contains, for each pitch, the count of notes gone by since the last 
 					// time a note with that pitch was encountered
 					int[] counts_since_pitch_last_encountered = new int [128];
+					for (int i = 0; i < counts_since_pitch_last_encountered.length; i++)
+						counts_since_pitch_last_encountered[i] = 0;
 					
 					// Go through onset slices
 					for (int slice = 0; slice < slices_by_channel[channel].size(); slice++)
 						if (!slices_by_channel[channel].get(slice).isEmpty())
 						{
-							// Get pitch belonging to the melody (the last pitch in the slice)
+							// Get pitch belonging to the melody (the highest pitch in the slice)
 							int melodic_pitch = slices_by_channel[channel].get(slice).get(slices_by_channel[channel].get(slice).size() - 1);
 							
 							if (!pitches_encountered_on_channel.contains(melodic_pitch))
@@ -124,7 +126,7 @@ public class MelodicPitchVarietyFeature
 								if (counts_since_pitch_last_encountered[melodic_pitch] <= max_notes_that_can_go_by)
 								{
 									number_of_repeated_notes_found++;
-									summed_number_of_notes_before_pitch_repeated += counts_since_pitch_last_encountered[melodic_pitch];
+									summed_number_of_notes_before_pitch_repeated += counts_since_pitch_last_encountered[melodic_pitch] + 1;
 								}
 								counts_since_pitch_last_encountered[melodic_pitch] = 0;
 							}
@@ -142,7 +144,7 @@ public class MelodicPitchVarietyFeature
 			if (number_of_repeated_notes_found == 0)
 				value = 0.0;
 			else
-				value = summed_number_of_notes_before_pitch_repeated / number_of_repeated_notes_found;
+				value = (double) summed_number_of_notes_before_pitch_repeated / number_of_repeated_notes_found;
 		}
 		else value = -1.0;
 

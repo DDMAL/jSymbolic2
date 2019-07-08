@@ -481,6 +481,28 @@ public class MIDIIntermediateRepresentations
 	 * in fact unpitched percussion patches.
 	 */
 	public List<List<Integer>> list_of_note_on_pitches_by_channel;	
+	
+	/**
+	 * A table with rows (first index) corresponding to track number and columns (second index) corresponding
+	 * to MIDI channel. Each entry is the average MIDI pitch occurring on that combination of track and
+	 * channel. Unpitched notes on Channel 10 (percussion) are excluded from this calculation. If no notes 
+	 * occur for a combination of track and channel, then the entry is set to 0.
+	 */
+	public double[][] average_pitch_by_track_and_channel;
+	
+	/**
+	 * An array representing the combination of the track (first index) and the MIDI channel (second index) 
+	 * with the highest average MIDI pitch. Unpitched notes on Channel 10 (percussion) are excluded from this 
+	 * calculation.
+	 */
+	public int[] track_and_channel_with_highest_average_pitch;
+	
+	/**
+	 * An array representing the combination of the track (first index) and the MIDI channel (second index) 
+	 * with the lowest average MIDI pitch. Unpitched notes on Channel 10 (percussion) are excluded from this 
+	 * calculation.
+	 */
+	public int[] track_and_channel_with_lowest_average_pitch;
 
 	/**
 	 * The MIDI pitches of all pitched note ons in the piece (unpitched notes on Channel 10 are excluded).
@@ -939,7 +961,9 @@ public class MIDIIntermediateRepresentations
 		}
 		System.out.println("Number of active voices: " + number_of_active_voices);*/
 		
-		generatePitchAndPitchClaessesOfAllNoteOns();
+		generateAveragePitchIntermediateRepresentations();
+		
+		generatePitchAndPitchClassesOfAllNoteOns();
 		/*
 		for (int i = 0; i < pitch_classes_of_all_note_ons.length; i++)
 			System.out.println("NOTE " + (i + 1) + ": Pitch " + pitches_of_all_note_ons[i] + "  Pitch Class:" + pitch_classes_of_all_note_ons[i]);
@@ -2218,9 +2242,64 @@ public class MIDIIntermediateRepresentations
 
 	
 	/**
+	 * Calculate the average_pitch_by_track_and_channel, track_and_channel_with_highest_average_pitch, and
+	 * track_and_channel_with_lowest_average_pitch fields.
+	 */
+	private void generateAveragePitchIntermediateRepresentations()
+	{
+		// Initialize arrays to contain the sum of and the number of pitches in each combination of track and
+		// channel
+		int[][] sum_of_pitches_by_track_and_channel = new int[tracks.length][16];
+		int[][] number_of_pitches_by_track_and_channel = new int[tracks.length][16];
+		for (int n_track = 0; n_track < sum_of_pitches_by_track_and_channel.length; n_track++)
+			for (int chan = 0; chan < sum_of_pitches_by_track_and_channel[n_track].length; chan++)
+			{
+				sum_of_pitches_by_track_and_channel[n_track][chan] = 0;
+				number_of_pitches_by_track_and_channel[n_track][chan] = 0;
+			}
+		
+		// Sum the pitches in each combination of track and channel
+		for (NoteInfo note: all_notes.getNoteList())
+			if (note.getChannel() != 10 - 1) // Exclude Channel 10 (Percussion)
+			{
+				sum_of_pitches_by_track_and_channel[note.getTrack()][note.getChannel()] += note.getPitch();
+				number_of_pitches_by_track_and_channel[note.getTrack()][note.getChannel()]++;
+			}
+
+		// Intialize the average_pitch_by_track_and_channel field and fill each entry with the average pitch
+		// for that combination of track and channel.
+		average_pitch_by_track_and_channel = new double[tracks.length][16];
+		for (int n_track = 0; n_track < average_pitch_by_track_and_channel.length; n_track++)
+			for (int chan = 0; chan < average_pitch_by_track_and_channel[n_track].length; chan++)
+				if (chan != 10 - 1 && number_of_pitches_by_track_and_channel[n_track][chan] > 0)
+					average_pitch_by_track_and_channel[n_track][chan] = (double) sum_of_pitches_by_track_and_channel[n_track][chan] / number_of_pitches_by_track_and_channel[n_track][chan];
+				else
+					average_pitch_by_track_and_channel[n_track][chan] = 0.0;
+		
+		// Calculate the track_and_channel_with_highest_average_pitch field
+		track_and_channel_with_highest_average_pitch = mckay.utilities.staticlibraries.MathAndStatsMethods.getIndicesOfLargest(average_pitch_by_track_and_channel);
+		
+		// Build a 2D array containing the average pitch for each combination of track and channel. Entries of
+		// value 0 (the MIDI channel is the unpitched percussion channel, or there are no note ons for
+		// a combination of track and channel) are set to 129 for the purpose of comparing entries in 
+		// calculating the track_and_channel_with_lowest_average_pitch field.
+		double[][] average_pitch_by_track_and_channel_smallest_value_calculation = new double[tracks.length][16];
+		for (int n_track = 0; n_track < tracks.length; n_track++)
+			for (int chan = 0; chan < 16; chan++)
+				if (average_pitch_by_track_and_channel[n_track][chan] == 0.0)
+					average_pitch_by_track_and_channel_smallest_value_calculation[n_track][chan] = 129;
+				else
+					average_pitch_by_track_and_channel_smallest_value_calculation[n_track][chan] = average_pitch_by_track_and_channel[n_track][chan];
+		
+		// Calculate the track_and_channel_with_lowest_average_pitch field
+		track_and_channel_with_lowest_average_pitch = mckay.utilities.staticlibraries.MathAndStatsMethods.getIndicesOfSmallest(average_pitch_by_track_and_channel_smallest_value_calculation);
+	}
+	
+	
+	/**
 	 * Calculate the value of the pitch_classes_of_all_note_ons field.
 	 */
-	private void generatePitchAndPitchClaessesOfAllNoteOns()
+	private void generatePitchAndPitchClassesOfAllNoteOns()
 	{
 		List<NoteInfo> all_notes_in_piece = all_notes.getNoteList();
 		List<Short> list_of_midi_pitches_of_all_notes_in_piece = new ArrayList<>();

@@ -62,7 +62,7 @@ public class SmallestMelodicIntervalFeature
 		if (sequence_info != null)
 		{
 			// Initialize with default value
-			int smallest_melodic_interval = 0;
+			int smallest_melodic_interval = 128;
 
 			// Find smallest melodic interval that is not a repeated note (i.e. bin 0 of the melodic interval
 			// histogram)

@@ -3,6 +3,7 @@ package jsymbolic2.features.melodicintervals;
 import javax.sound.midi.*;
 import ace.datatypes.FeatureDefinition;
 import jsymbolic2.featureutils.MIDIFeatureExtractor;
+import jsymbolic2.featureutils.NoteInfo;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
@@ -77,18 +78,11 @@ public class WrappedMelodicIntervalHistogramForLowestLineFeature
 			for (int i = 0; i < result.length; i++)
 				result[i] = 0.0;
 			
-			// Get channel with the lowest average pitch
-			int channel_with_lowest_average_pitch = -1;
-			for (int chan = 0; chan < 16; chan++)
-				// Exclude Channel 10 (Percussion) and check that there are notes on the given channel
-				if (chan != 10 - 1 && sequence_info.channel_statistics[chan][0] > 0)
-					if (channel_with_lowest_average_pitch == -1 || sequence_info.channel_statistics[chan][6] < sequence_info.channel_statistics[channel_with_lowest_average_pitch][6])
-						channel_with_lowest_average_pitch = chan;
-			
 			// Fill histogram
-			for (int n_track = 0; n_track < sequence.getTracks().length; n_track++)
-				for (int i = 0; i < sequence_info.melodic_intervals_by_track_and_channel.get(n_track)[channel_with_lowest_average_pitch].size(); i++)
-					result[Math.abs(sequence_info.melodic_intervals_by_track_and_channel.get(n_track)[channel_with_lowest_average_pitch].get(i)) % 12]++;
+			int track_with_lowest_average_pitch = sequence_info.track_and_channel_with_lowest_average_pitch[0];
+			int channel_with_lowest_average_pitch = sequence_info.track_and_channel_with_lowest_average_pitch[1];
+			for (int i = 0; i < sequence_info.melodic_intervals_by_track_and_channel.get(track_with_lowest_average_pitch)[channel_with_lowest_average_pitch].size(); i++)
+				result[Math.abs(sequence_info.melodic_intervals_by_track_and_channel.get(track_with_lowest_average_pitch)[channel_with_lowest_average_pitch].get(i)) % 12]++;
 			
 			// Normalize histogram
 			result = mckay.utilities.staticlibraries.MathAndStatsMethods.normalize(result);

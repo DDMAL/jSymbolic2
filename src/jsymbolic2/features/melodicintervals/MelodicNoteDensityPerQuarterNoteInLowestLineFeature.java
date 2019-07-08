@@ -64,25 +64,16 @@ public class MelodicNoteDensityPerQuarterNoteInLowestLineFeature
 		
 		if (sequence_info != null)
 		{
-			// Get channel with the lowest average pitch
-			int channel_with_lowest_average_pitch = -1;
-			for (int chan = 0; chan < 16; chan++)
-				// Exclude Channel 10 (Percussion) and check that there are notes on the given channel
-				if (chan != 10 - 1 && sequence_info.channel_statistics[chan][0] > 0)
-					if (channel_with_lowest_average_pitch == -1 || sequence_info.channel_statistics[chan][6] < sequence_info.channel_statistics[channel_with_lowest_average_pitch][6])
-						channel_with_lowest_average_pitch = chan;
+			int track_with_lowest_average_pitch = sequence_info.track_and_channel_with_lowest_average_pitch[0];
+			int channel_with_lowest_average_pitch = sequence_info.track_and_channel_with_lowest_average_pitch[1];
 			
 			LinkedList<LinkedList<Integer>>[][] slices_by_track_and_channel = sequence_info.note_onset_slice_container.getNoteOnsetSlicesByTrackAndChannelMelodicLinesOnly();
 			
 			// Count the number of note onsets that belong to the melody
 			int number_of_note_onsets = 0;
-			for (int slice = 0; slice < slices_by_track_and_channel[0][channel_with_lowest_average_pitch].size(); slice++)
-				for (int n_track = 0; n_track < sequence.getTracks().length; n_track++)
-					if (sequence_info.note_onset_slice_container.isHighestPitchInSliceNewOnset(slice, n_track, channel_with_lowest_average_pitch))
-					{
-						number_of_note_onsets++;
-						break;
-					}
+			for (int slice = 0; slice < slices_by_track_and_channel[track_with_lowest_average_pitch][channel_with_lowest_average_pitch].size(); slice++)
+				if (sequence_info.note_onset_slice_container.isHighestPitchInSliceNewOnset(slice, track_with_lowest_average_pitch, channel_with_lowest_average_pitch))
+					number_of_note_onsets++;
 			
 			// Calculate the feature value
 			if (sequence_info.average_quarter_note_duration_in_seconds == 0.0)

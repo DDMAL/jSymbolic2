@@ -64,34 +64,22 @@ public class MelodicNoteDensityPerQuarterNoteInHighestLineFeature
 		
 		if (sequence_info != null)
 		{
-			// Get channel with the highest average pitch
-			int channel_with_highest_average_pitch = 0;
-			for (int chan = 0; chan < 16; chan++)
-				if (chan != 10 - 1) // Exclude Channel 10 (Percussion)
-					if (sequence_info.channel_statistics[chan][6] > sequence_info.channel_statistics[channel_with_highest_average_pitch][6])
-						channel_with_highest_average_pitch = chan;
-			
 			LinkedList<LinkedList<Integer>>[][] slices_by_track_and_channel = sequence_info.note_onset_slice_container.getNoteOnsetSlicesByTrackAndChannelMelodicLinesOnly();
+			
+			int track_with_highest_average_pitch = sequence_info.track_and_channel_with_highest_average_pitch[0];
+			int channel_with_highest_average_pitch = sequence_info.track_and_channel_with_highest_average_pitch[1];
 			
 			// Count the number of note onsets that belong to the melody
 			int number_of_note_onsets = 0;
-			for (int slice = 0; slice < slices_by_track_and_channel[0][channel_with_highest_average_pitch].size(); slice++)
-				for (int n_track = 0; n_track < sequence.getTracks().length; n_track++)
-					if (sequence_info.note_onset_slice_container.isHighestPitchInSliceNewOnset(slice, n_track, channel_with_highest_average_pitch))
-					{
-						number_of_note_onsets++;
-						break;
-					}
+			for (int slice = 0; slice < slices_by_track_and_channel[track_with_highest_average_pitch][channel_with_highest_average_pitch].size(); slice++)
+				if (sequence_info.note_onset_slice_container.isHighestPitchInSliceNewOnset(slice, track_with_highest_average_pitch, channel_with_highest_average_pitch))
+					number_of_note_onsets++;
 			
 			// Calculate the feature value
 			if (sequence_info.average_quarter_note_duration_in_seconds == 0.0)
-			{
 				value = 0.0;
-			}
 			else
-			{
 				value = (double) number_of_note_onsets / sequence_info.average_quarter_note_duration_in_seconds;
-			}
 		} 
 		else value = -1.0;
 		

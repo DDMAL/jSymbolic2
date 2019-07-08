@@ -5,6 +5,7 @@ import javax.sound.midi.*;
 import ace.datatypes.FeatureDefinition;
 import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
+import static mckay.utilities.staticlibraries.MathAndStatsMethods.getAverage;
 
 /**
  * A feature calculator that finds the standard deviation of the number of notes that separate consecutive 
@@ -185,7 +186,7 @@ public class VariabilityInLengthOfMelodicArcsFeature
 				value = 0.0;
 			else
 				value = mckay.utilities.staticlibraries.MathAndStatsMethods.getStandardDeviation(lengths_of_melodic_arcs_in_array);
-		} 
+		}
 		else value = -1.0;
 
 		double[] result = new double[1];

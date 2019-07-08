@@ -63,83 +63,76 @@ public class VariabilityOfIntervalSpannedByMelodicArcsInHighestLineFeature
 		double value;
 		if (sequence_info != null)
 		{
-			// Get channel with the highest average pitch
-			int channel_with_highest_average_pitch = 0;
-			for (int chan = 0; chan < 16; chan++)
-				if (chan != 10 - 1) // Exclude Channel 10 (Percussion)
-					if (sequence_info.channel_statistics[chan][6] > sequence_info.channel_statistics[channel_with_highest_average_pitch][6])
-						channel_with_highest_average_pitch = chan;
+			int track_with_highest_average_pitch = sequence_info.track_and_channel_with_highest_average_pitch[0];
+			int channel_with_highest_average_pitch = sequence_info.track_and_channel_with_highest_average_pitch[1];
 			
 			LinkedList<Integer> intervals_spanned_by_melodic_arcs = new LinkedList<>();
-			
-			for (int track = 0; track < sequence_info.melodic_intervals_by_track_and_channel.size(); track++)
+
+			int direction = 0;
+			// The interval separating a peak from a trough. It is reset to 0 once the next peak 
+			// is met and the interval from the last peak to the new peak is calculated.
+			int interval_of_descent = 0;
+			// The interval separating a trough from a peak. It is reset to 0 once the next trough 
+			// is met and the distance from the last trough to the new trough is calculated.
+			int interval_of_ascent = 0;
+
+			// Find the interval spanned by each melodic arc
+			LinkedList<Integer> intervals = sequence_info.melodic_intervals_by_track_and_channel.get(track_with_highest_average_pitch)[channel_with_highest_average_pitch];
+			for (int i = 0; i < intervals.size(); i++)
 			{
-				int direction = 0;
-				// The interval separating a peak from a trough. It is reset to 0 once the next peak 
-				// is met and the interval from the last peak to the new peak is calculated.
-				int interval_of_descent = 0;
-				// The interval separating a trough from a peak. It is reset to 0 once the next trough 
-				// is met and the distance from the last trough to the new trough is calculated.
-				int interval_of_ascent = 0;
-
-				// Find the interval spanned by each melodic arc
-				LinkedList<Integer> intervals = sequence_info.melodic_intervals_by_track_and_channel.get(track)[channel_with_highest_average_pitch];
-				for (int i = 0; i < intervals.size(); i++)
+				// If arc is currently descending
+				if (direction == -1)
 				{
-					// If arc is currently descending
-					if (direction == -1)
+					if (intervals.get(i) < 0)
+						interval_of_descent += intervals.get(i);
+					else if (intervals.get(i) > 0)
 					{
-						if (intervals.get(i) < 0)
-							interval_of_descent += intervals.get(i);
-						else if (intervals.get(i) > 0)
+						if (interval_of_ascent != 0)
 						{
-							if (interval_of_ascent != 0)
-							{
-								intervals_spanned_by_melodic_arcs.add(Math.abs(interval_of_descent + interval_of_ascent));
-								interval_of_ascent = 0;
-							}
-							direction = 1;
-							interval_of_ascent += intervals.get(i);
-						}
-					}
-
-					// If arc is currently ascending
-					else if (direction == 1)
-					{
-						if (intervals.get(i) > 0)
-							interval_of_ascent += intervals.get(i);
-						else if (intervals.get(i) < 0)
-						{
-							if (interval_of_descent != 0)
-							{
-								intervals_spanned_by_melodic_arcs.add(Math.abs(interval_of_descent + interval_of_ascent));
-								interval_of_descent = 0;
-							}
-							direction = -1;
-							interval_of_descent += intervals.get(i);
-						}
-					}
-
-					// Handle the first interval
-					else if (direction == 0)
-					{
-						if (intervals.get(i) > 0)
-						{
-							direction = 1;
-							interval_of_ascent += intervals.get(i);
-						}
-						if (intervals.get(i) < 0)
-						{
-							direction = -1;
-							interval_of_descent += intervals.get(i);
-						}
-					}
-
-					// Handle case when last interval is encountered
-					if (i == intervals.size() - 1)
-						if (interval_of_descent != 0 && interval_of_ascent != 0)
 							intervals_spanned_by_melodic_arcs.add(Math.abs(interval_of_descent + interval_of_ascent));
+							interval_of_ascent = 0;
+						}
+						direction = 1;
+						interval_of_ascent += intervals.get(i);
+					}
 				}
+
+				// If arc is currently ascending
+				else if (direction == 1)
+				{
+					if (intervals.get(i) > 0)
+						interval_of_ascent += intervals.get(i);
+					else if (intervals.get(i) < 0)
+					{
+						if (interval_of_descent != 0)
+						{
+							intervals_spanned_by_melodic_arcs.add(Math.abs(interval_of_descent + interval_of_ascent));
+							interval_of_descent = 0;
+						}
+						direction = -1;
+						interval_of_descent += intervals.get(i);
+					}
+				}
+
+				// Handle the first interval
+				else if (direction == 0)
+				{
+					if (intervals.get(i) > 0)
+					{
+						direction = 1;
+						interval_of_ascent += intervals.get(i);
+					}
+					if (intervals.get(i) < 0)
+					{
+						direction = -1;
+						interval_of_descent += intervals.get(i);
+					}
+				}
+
+				// Handle case when last interval is encountered
+				if (i == intervals.size() - 1)
+					if (interval_of_descent != 0 && interval_of_ascent != 0)
+						intervals_spanned_by_melodic_arcs.add(Math.abs(interval_of_descent + interval_of_ascent));
 			}
 			
 			// Prepare array for standard deviation calculation
