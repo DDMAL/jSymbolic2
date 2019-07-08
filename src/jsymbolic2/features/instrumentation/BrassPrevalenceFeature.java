@@ -23,7 +23,7 @@ public class BrassPrevalenceFeature
 	public BrassPrevalenceFeature()
 	{
 		String name = "Brass Prevalence";
-		String code = "I-16";
+		String code = "I-26";
 		String description = "Fraction of all Note Ons played by brass instruments, including saxophones (General MIDI patches 56 to 67).";
 		boolean is_sequential = true;
 		int dimensions = 1;

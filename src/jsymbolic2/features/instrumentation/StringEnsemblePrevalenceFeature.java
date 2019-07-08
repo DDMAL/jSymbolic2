@@ -23,7 +23,7 @@ public class StringEnsemblePrevalenceFeature
 	public StringEnsemblePrevalenceFeature()
 	{
 		String name = "String Ensemble Prevalence";
-		String code = "I-19";
+		String code = "I-29";
 		String description = "Fraction of all Note Ons played by orchestral string ensemble instruments (General MIDI patches 48 to 51).";
 		boolean is_sequential = true;
 		int dimensions = 1;

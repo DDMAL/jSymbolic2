@@ -23,7 +23,7 @@ public class AcousticGuitarPrevalenceFeature
 	public AcousticGuitarPrevalenceFeature()
 	{
 		String name = "Acoustic Guitar Prevalence";
-		String code = "I-12";
+		String code = "I-22";
 		String description = "Fraction of all Note Ons played by acoustic guitar instruments (General MIDI patches 24 and 25).";
 		boolean is_sequential = true;
 		int dimensions = 1;

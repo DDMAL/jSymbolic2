@@ -23,7 +23,7 @@ public class ElectricGuitarPrevalenceFeature
 	public ElectricGuitarPrevalenceFeature()
 	{
 		String name = "Electric Guitar Prevalence";
-		String code = "I-13";
+		String code = "I-23";
 		String description = "Fraction of all Note Ons played by electric guitar instruments (General MIDI patches 26 to 31).";
 		boolean is_sequential = true;
 		int dimensions = 1;

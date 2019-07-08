@@ -23,7 +23,7 @@ public class OrchestralStringsPrevalenceFeature
 	public OrchestralStringsPrevalenceFeature()
 	{
 		String name = "Orchestral Strings Prevalence";
-		String code = "I-18";
+		String code = "I-28";
 		String description = "Fraction of all Note Ons played by orchestral string instruments (General MIDI patches 40 to 46).";
 		boolean is_sequential = true;
 		int dimensions = 1;

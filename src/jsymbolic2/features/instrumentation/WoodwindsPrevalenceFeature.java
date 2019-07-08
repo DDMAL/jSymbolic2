@@ -23,7 +23,7 @@ public class WoodwindsPrevalenceFeature
 	public WoodwindsPrevalenceFeature()
 	{
 		String name = "Woodwinds Prevalence";
-		String code = "I-17";
+		String code = "I-27";
 		String description = "Fraction of all Note Ons played by woodwind instruments (General MIDI patches 68 to 75).";
 		boolean is_sequential = true;
 		int dimensions = 1;

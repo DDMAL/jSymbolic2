@@ -23,7 +23,7 @@ public class StringKeyboardPrevalenceFeature
 	public StringKeyboardPrevalenceFeature()
 	{
 		String name = "String Keyboard Prevalence";
-		String code = "I-11";
+		String code = "I-21";
 		String description = "Fraction of all Note Ons played by string keyboard instruments (General MIDI patches 0 to 7).";
 		boolean is_sequential = true;
 		int dimensions = 1;

@@ -23,7 +23,7 @@ public class SaxophonePrevalenceFeature
 	public SaxophonePrevalenceFeature()
 	{
 		String name = "Saxophone Prevalence";
-		String code = "I-15";
+		String code = "I-25";
 		String description = "Fraction of all Note Ons played by saxophone instruments (General MIDI patches 64 to 67).";
 		boolean is_sequential = true;
 		int dimensions = 1;

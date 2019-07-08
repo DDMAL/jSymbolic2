@@ -23,7 +23,7 @@ public class ViolinPrevalenceFeature
 	public ViolinPrevalenceFeature()
 	{
 		String name = "Violin Prevalence";
-		String code = "I-14";
+		String code = "I-24";
 		String description = "Fraction of all Note Ons played by violin instruments (General MIDI patches 40 or 110).";
 		boolean is_sequential = true;
 		int dimensions = 1;

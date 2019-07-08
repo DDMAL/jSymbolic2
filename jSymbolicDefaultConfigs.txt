@@ -350,7 +350,17 @@ Variability of Note Prevalence of Pitched Instruments
 Variability of Note Prevalence of Unpitched Instruments
 Number of Pitched Instruments
 Number of Unpitched Instruments
+Number of Common Pitched Instruments
+Number of Common Unpitched Instruments
+Number of Very Common Pitched Instruments
+Number of Very Common Unpitched Instruments
+Most Common Pitched Instrument
+Most Common Unpitched Instrument
+Prevalance of Most Common Pitched Instrument
+Prevalance of Most Common Unpitched Instrument
 Unpitched Percussion Instrument Prevalence
+Has Lyrics
+Voice Prevalence
 String Keyboard Prevalence
 Acoustic Guitar Prevalence
 Electric Guitar Prevalence

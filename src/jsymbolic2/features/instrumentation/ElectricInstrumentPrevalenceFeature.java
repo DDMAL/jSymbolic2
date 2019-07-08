@@ -22,7 +22,7 @@ public class ElectricInstrumentPrevalenceFeature
 	 */
 	public ElectricInstrumentPrevalenceFeature()
 	{
-		String code = "I-20";
+		String code = "I-30";
 		String name = "Electric Instrument Prevalence";
 		String description = "Fraction of all Note Ons played by electric non-\"synth\" instruments (General MIDI patches 4, 5, 16, 18, 26 to 31, 33 to 39).";
 		boolean is_sequential = true;
