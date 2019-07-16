@@ -23,12 +23,12 @@ public class PrevalenceOfSecondMostCommonWrappedVerticalIntervalFeature
 	public PrevalenceOfSecondMostCommonWrappedVerticalIntervalFeature()
 	{
 		String name = "Prevalence of Second Most Common Wrapped Vertical Interval";
-		String code = "C-12";
+		String code = "C-31";
 		String description = "Fraction of vertical intervals on the wrapped vertical interval histogram corresponding to the second most common vertical interval.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
-		dependencies = new String[] { "Wrapped Vertical Interval Histogram", "Second Most Common Wrapped Vertical Interval"	};
+		dependencies = new String[] { "Wrapped Vertical Interval Histogram", "Second Most Common Wrapped Vertical Interval", "Number of Distinct Wrapped Vertical Intervals"	};
 		offsets = null;
 		is_default = true;
 		is_secure = true;
@@ -60,9 +60,18 @@ public class PrevalenceOfSecondMostCommonWrappedVerticalIntervalFeature
 		double value;
 		if (sequence_info != null)
 		{
+			// Get wrapped vertical interval histogram
 			double[] wrapped_vertical_interval_histogram = other_feature_values[0];
-			int second_most_common_vertical_interval = (int) Math.round(other_feature_values[1][0]);
-			value = wrapped_vertical_interval_histogram[second_most_common_vertical_interval];
+			
+			double number_of_distinct_wrapped_vertical_intervals = other_feature_values[2][0];
+			
+			if (number_of_distinct_wrapped_vertical_intervals <= 1)
+				value = 0.0;
+			else
+			{
+				int second_most_common_wrapped_vertical_interval = (int) other_feature_values[1][0];
+				value = wrapped_vertical_interval_histogram[second_most_common_wrapped_vertical_interval];	
+			}
 		}
 		else value = -1.0;
 

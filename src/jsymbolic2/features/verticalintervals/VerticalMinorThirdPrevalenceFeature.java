@@ -25,7 +25,7 @@ public class VerticalMinorThirdPrevalenceFeature
 	public VerticalMinorThirdPrevalenceFeature()
 	{
 		String name = "Vertical Minor Third Prevalence";
-		String code = "C-25";
+		String code = "C-55";
 		String description = "Fraction of the music by time where at least one wrapped vertical minor third is sounding (regardless of whatever other vertical intervals may or may not be sounding at the same time). Only that part of the music where one or more pitched notes is sounding is included in this calculation (rests and sections containing only unpitched notes are ignored).";
 		boolean is_sequential = true;
 		int dimensions = 1;

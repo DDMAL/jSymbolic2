@@ -24,7 +24,7 @@ public class VariabilityOfNumberOfSimultaneousPitchesFeature
 	public VariabilityOfNumberOfSimultaneousPitchesFeature()
 	{
 		String name = "Variability of Number of Simultaneous Pitches";
-		String code = "C-6";
+		String code = "C-8";
 		String description = "Standard deviation of the number of distinct pitches sounding simultaneously. Rests are excluded from this calculation. Unisons are also excluded from this calculation, but octave multiples are included in it.";
 		boolean is_sequential = true;
 		int dimensions = 1;

@@ -24,7 +24,7 @@ public class VerticalOctavesFeature
 	public VerticalOctavesFeature()
 	{
 		String name = "Vertical Octaves";
-		String code = "C-22";
+		String code = "C-48";
 		String description = "Fraction of all wrapped vertical intervals that are octaves. This is weighted by how long intervals are held (e.g. an interval lasting a whole note will be weighted four times as strongly as an interval lasting a quarter note).";
 		boolean is_sequential = true;
 		int dimensions = 1;

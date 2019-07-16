@@ -23,12 +23,12 @@ public class DistanceBetweenTwoMostCommonWrappedVerticalIntervalsFeature
 	public DistanceBetweenTwoMostCommonWrappedVerticalIntervalsFeature()
 	{
 		String name = "Distance Between Two Most Common Wrapped Vertical Intervals";
-		String code = "C-10";
+		String code = "C-27";
 		String description = "Absolute value of the difference (in semitones) between the most common and second most common wrapped vertical intervals in the piece.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
-		dependencies = new String[] {"Most Common Wrapped Vertical Interval", "Second Most Common Wrapped Vertical Interval"};
+		dependencies = new String[] {"Most Common Wrapped Vertical Interval", "Second Most Common Wrapped Vertical Interval", "Number of Distinct Wrapped Vertical Intervals"};
 		offsets = null;
 		is_default = true;
 		is_secure = true;
@@ -60,9 +60,17 @@ public class DistanceBetweenTwoMostCommonWrappedVerticalIntervalsFeature
 		double value;
 		if (sequence_info != null)
 		{
+			// Get the most common and the second most common vertical intervals
 			double most_common_vertical_interval = other_feature_values[0][0];
-			double second_common_vertical_interval = other_feature_values[1][0];
-			value = Math.round(Math.abs(most_common_vertical_interval - second_common_vertical_interval));
+			double second_most_common_vertical_interval = other_feature_values[1][0];
+			
+			double number_of_distinct_wrapped_vertical_intervals = other_feature_values[2][0];
+			
+			// Calculate the feature value
+			if (number_of_distinct_wrapped_vertical_intervals <= 1)
+				value = 0.0;
+			else
+				value = (double) Math.abs(most_common_vertical_interval - second_most_common_vertical_interval);		
 		}
 		else value = -1.0;
 

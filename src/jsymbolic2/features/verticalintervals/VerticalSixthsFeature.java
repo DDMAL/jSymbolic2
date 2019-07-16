@@ -25,7 +25,7 @@ public class VerticalSixthsFeature
 	public VerticalSixthsFeature()
 	{
 		String name = "Vertical Sixths";
-		String code = "C-20";
+		String code = "C-46";
 		String description = "Fraction all wrapped vertical intervals that are minor or major sixths. This is weighted by how long intervals are held (e.g. an interval lasting a whole note will be weighted four times as strongly as an interval lasting a quarter note).";
 		boolean is_sequential = true;
 		int dimensions = 1;

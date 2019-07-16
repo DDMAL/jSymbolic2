@@ -25,7 +25,7 @@ public class PerfectVerticalIntervalsFeature
 	public PerfectVerticalIntervalsFeature()
 	{
 		String name = "Perfect Vertical Intervals";
-		String code = "C-23";
+		String code = "C-49";
 		String description = "Fraction of all wrapped vertical intervals that are unisons, perfect fourths, perfect fifths or octaves. This is weighted by how long intervals are held (e.g. an interval lasting a whole note will be weighted four times as strongly as an interval lasting a quarter note).";
 		boolean is_sequential = true;
 		int dimensions = 1;

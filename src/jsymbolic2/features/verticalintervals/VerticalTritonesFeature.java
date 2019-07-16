@@ -25,7 +25,7 @@ public class VerticalTritonesFeature
 	public VerticalTritonesFeature()
 	{
 		String name = "Vertical Tritones";
-		String code = "C-17";
+		String code = "C-43";
 		String description = "Fraction of all wrapped vertical intervals that are tritones. This is weighted by how long intervals are held (e.g. an interval lasting a whole note will be weighted four times as strongly as an interval lasting a quarter note).";
 		boolean is_sequential = true;
 		int dimensions = 1;

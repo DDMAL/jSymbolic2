@@ -194,17 +194,43 @@ Variability in Interval Spanned by Falling Melodic Runs in Lowest Line
 Melodic Pitch Variety in Lowest Line
 Vertical Interval Histogram
 Wrapped Vertical Interval Histogram
-Chord Type Histogram
+Average Vertical Note Density
 Average Number of Simultaneous Pitches
 Average Number of Simultaneous Pitch Classes
+Average Amount of Vertical Pitch Class Doubling
+Variability of Vertical Note Density
 Variability of Number of Simultaneous Pitches
 Variability of Number of Simultaneous Pitch Classes
+Variability of Amount of Vertical Pitch Class Doubling
+Number of Distinct Vertical Intervals
+Number of Distinct Wrapped Vertical Intervals
+Number of Common Vertical Intervals
+Number of Common Wrapped Vertical Intervals
+Number of Very Common Vertical Intervals
+Number of Very Common Wrapped Vertical Intervals
+Smallest Vertical Interval
+Largest Vertical Interval
+Largest Wrapped Vertical Interval
+Mean Vertical Interval
+Mean Wrapped Vertical Interval
+Most Common Vertical Interval
 Most Common Wrapped Vertical Interval
+Second Most Common Vertical Interval
 Second Most Common Wrapped Vertical Interval
+Distance Between Two Most Common Vertical Intervals
 Distance Between Two Most Common Wrapped Vertical Intervals
+Prevalence of Most Common Vertical Interval
 Prevalence of Most Common Wrapped Vertical Interval
+Prevalence of Second Most Common Vertical Interval
 Prevalence of Second Most Common Wrapped Vertical Interval
+Prevalence Ratio of Two Most Common Vertical Intervals
 Prevalence Ratio of Two Most Common Wrapped Vertical Intervals
+Vertical Interval Variability
+Wrapped Vertical Interval Variability
+Vertical Interval Skewness
+Wrapped Vertical Interval Skewness
+Vertical Interval Kurtosis
+Wrapped Vertical Interval Kurtosis
 Vertical Unisons
 Vertical Minor Seconds
 Vertical Thirds
@@ -216,9 +242,16 @@ Vertical Sevenths
 Vertical Octaves
 Perfect Vertical Intervals
 Vertical Dissonance Ratio - Fourths Not Dissonant
+Vertical Dissonance Ratio - Fourths Dissonant
+Prevalence of Minor Vertical Intervals
+Prevalence of Major Vertical Intervals
+Minor to Major Vertical Intervals Ratio
 Vertical Minor Third Prevalence
 Vertical Major Third Prevalence
-Chord Duration
+Minor to Major Vertical Thirds Ratio
+Average Instantaneous Vertical Range
+Variability of Instantaneous Vertical Range
+Chord Type Histogram
 Partial Chords
 Standard Triads
 Diminished and Augmented Triads
@@ -227,6 +260,7 @@ Seventh Chords
 Non-Standard Chords
 Complex Chords
 Minor Major Triad Ratio
+Chord Duration
 Initial Time Signature
 Simple Initial Meter
 Compound Initial Meter

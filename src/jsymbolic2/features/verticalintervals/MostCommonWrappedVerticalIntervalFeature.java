@@ -23,7 +23,7 @@ public class MostCommonWrappedVerticalIntervalFeature
 	public MostCommonWrappedVerticalIntervalFeature()
 	{
 		String name = "Most Common Wrapped Vertical Interval";
-		String code = "C-8";
+		String code = "C-23";
 		String description = "The interval in semitones corresponding to the wrapped vertical interval histogram bin with the highest magnitude.";
 		boolean is_sequential = true;
 		int dimensions = 1;

@@ -24,14 +24,12 @@ public class SecondMostCommonWrappedVerticalIntervalFeature
 	public SecondMostCommonWrappedVerticalIntervalFeature()
 	{
 		String name = "Second Most Common Wrapped Vertical Interval";
-		String code = "C-9";
+		String code = "C-25";
 		String description = "The interval in semitones corresponding to the wrapped vertical interval histogram bin with the second highest magnitude.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
-		dependencies = new String[2];
-		dependencies[0] = "Wrapped Vertical Interval Histogram";
-		dependencies[1] = "Most Common Wrapped Vertical Interval";
+		dependencies = new String[] { "Wrapped Vertical Interval Histogram", "Number of Distinct Wrapped Vertical Intervals" };
 		offsets = null;
 		is_default = true;
 		is_secure = true;
@@ -63,19 +61,16 @@ public class SecondMostCommonWrappedVerticalIntervalFeature
 		double value;
 		if (sequence_info != null)
 		{
+			// Get wrapped vertical interval histogram
 			double[] wrapped_vertical_interval_histogram = other_feature_values[0];
-			int most_common_vertical_interval = (int) Math.round(other_feature_values[1][0]);
-			value = 0.0;
-			double max_magnitude = 0.0;
-			for (int interval = 0; interval < wrapped_vertical_interval_histogram.length; interval++)
-			{
-				if ( interval != most_common_vertical_interval &&
-				     wrapped_vertical_interval_histogram[interval] > max_magnitude )
-				{
-					max_magnitude = wrapped_vertical_interval_histogram[interval];
-					value = interval;
-				}
-			}
+			
+			double number_of_distinct_wrapped_vertical_intervals = other_feature_values[1][0];
+			
+			// Calculate the feature value
+			if (number_of_distinct_wrapped_vertical_intervals <= 1)
+				value = 0.0;
+			else
+				value = mckay.utilities.staticlibraries.MathAndStatsMethods.getIndexOfSecondLargest(wrapped_vertical_interval_histogram);
 		}
 		else value = -1.0;
 

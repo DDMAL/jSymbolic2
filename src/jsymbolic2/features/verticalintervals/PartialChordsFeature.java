@@ -25,7 +25,7 @@ public class PartialChordsFeature
 	public PartialChordsFeature()
 	{
 		String name = "Partial Chords";
-		String code = "C-28";
+		String code = "C-61";
 		String description = "Fraction of simultaneously sounding pitch groups that consist of only two pitch classes. This is weighted by how long pitch groups are held (e.g. a pitch group lasting a whole note will be weighted four times as strongly as a pitch group lasting a quarter note).";
 		boolean is_sequential = true;
 		int dimensions = 1;

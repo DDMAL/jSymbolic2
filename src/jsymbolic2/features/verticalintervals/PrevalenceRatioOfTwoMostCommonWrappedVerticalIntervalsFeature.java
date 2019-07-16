@@ -25,7 +25,7 @@ public class PrevalenceRatioOfTwoMostCommonWrappedVerticalIntervalsFeature
 	public PrevalenceRatioOfTwoMostCommonWrappedVerticalIntervalsFeature()
 	{
 		String name = "Prevalence Ratio of Two Most Common Wrapped Vertical Intervals";
-		String code = "C-13";
+		String code = "C-33";
 		String description = "Ratio between the fraction of vertical intervals corresponding to the second most common vertical interval on the wrapped vertical interval histogram and the fraction of vertical intervals corresponding to the most common vertical interval. Set to 0 if either of these prevalences are 0.";
 		boolean is_sequential = true;
 		int dimensions = 1;

@@ -25,7 +25,7 @@ public class VerticalPerfectFifthsFeature
 	public VerticalPerfectFifthsFeature()
 	{
 		String name = "Vertical Perfect Fifths";
-		String code = "C-19";
+		String code = "C-45";
 		String description = "Fraction of all wrapped vertical intervals that are perfect fifths. This is weighted by how long intervals are held (e.g. an interval lasting a whole note will be weighted four times as strongly as an interval lasting a quarter note).";
 		boolean is_sequential = true;
 		int dimensions = 1;

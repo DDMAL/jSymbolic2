@@ -28,7 +28,7 @@ public class ChordDurationFeature
 	public ChordDurationFeature()
 	{
 		String name = "Chord Duration";
-		String code = "C-27";
+		String code = "C-69";
 		String description = "Average duration a chord in units of time corresponding to the duration of an idealized quarter note. A \"chord\" here is considered to stay the same as long as no new pitch classes are added, and no pitch classes are taken away. This \"chord\" may consist of any number of pitch classes, even only one. A \"chord\" is not considered to end if it is split by one or more rests (although the rests themselves are not counted in the duration of the \"chord\").";
 		boolean is_sequential = true;
 		int dimensions = 1;

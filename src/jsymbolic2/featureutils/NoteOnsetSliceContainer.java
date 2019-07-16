@@ -278,7 +278,7 @@ public class NoteOnsetSliceContainer
 						for (NoteInfo note_sounding : notes_sounding)
 						{
 							// Remove a note from notes_sounding if it ended before this tick
-							if (note_sounding.getEndTick() <= tick)
+							if (note_sounding.getEndTick() < tick)
 							{
 								to_remove.add(note_sounding);
 								

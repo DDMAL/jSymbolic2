@@ -25,7 +25,7 @@ public class VerticalMinorSecondsFeature
 	public VerticalMinorSecondsFeature()
 	{
 		String name = "Vertical Minor Seconds";
-		String code = "C-15";
+		String code = "C-41";
 		String description = "Fraction of all wrapped vertical intervals that are minor seconds. This is weighted by how long intervals are held (e.g. an interval lasting a whole note will be weighted four times as strongly as an interval lasting a quarter note).";
 		boolean is_sequential = true;
 		int dimensions = 1;

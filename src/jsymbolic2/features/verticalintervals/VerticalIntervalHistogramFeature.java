@@ -12,12 +12,13 @@ import jsymbolic2.processing.MIDIIntermediateRepresentations;
  * number of semitones in that corresponding interval. More specifically, these are numbered from 0 (a unison)
  * to 127 (a vertical interval of 127 semitones). The magnitude of each bin is found by going through a
  * recoding MIDI tick by MIDI tick and noting all vertical intervals that are sounding at each tick, as well
- * as the MIDI velocities of the pair of notes involved in each vertical interval. The end result is a
- * histogram that indicates which vertical intervals are present, and how significant these vertical intervals
- * are relative to one another, with a weighting based on both MIDI velocity and the aggregated durations with
- * which each interval is held throughout the piece. Finally, the histogram is normalized.
+ * as the MIDI velocities of the pair of notes involved in each vertical interval. The result is a histogram 
+ * that indicates which vertical intervals are present, and how significant these vertical intervals are 
+ * relative to one another, with a weighting based on both MIDI velocity and the aggregated durations with
+ * which each interval is held throughout the piece. This histogram is first normalized, then bin magnitudes 
+ * under .001 are filtered out and set to 0 to reduce noise. Finally, the histogram is re-normalized.
  *
- * @author Tristano Tenaglia and Cory McKay
+ * @author Tristano Tenaglia, Cory McKay, and radamian
  */
 public class VerticalIntervalHistogramFeature
 		extends MIDIFeatureExtractor
@@ -32,7 +33,7 @@ public class VerticalIntervalHistogramFeature
 	{
 		String name = "Vertical Interval Histogram";
 		String code = "C-1";
-		String description = "A feature vector consisting of bin magnitudes of the vertical interval histogram described in the jSymbolic manual. Each of the bins is associated with a different vertical pitch interval, and is labeled with the number of semitones in that corresponding interval. More specifically, these are numbered from 0 (a unison) to 127 (a vertical interval of 127 semitones). The magnitude of each bin is found by going through a recoding MIDI tick by MIDI tick and noting all vertical intervals that are sounding at each tick, as well as the MIDI velocities of the pair of notes involved in each vertical interval. The end result is a histogram that indicates which vertical intervals are present, and how significant these vertical intervals are relative to one another, with a weighting based on both MIDI velocity and the aggregated durations with which each interval is held throughout the piece. Finally, the histogram is normalized.";
+		String description = "A feature vector consisting of bin magnitudes of the vertical interval histogram described in the jSymbolic manual. Each of the bins is associated with a different vertical pitch interval, and is labeled with the number of semitones in that corresponding interval. More specifically, these are numbered from 0 (a unison) to 127 (a vertical interval of 127 semitones). The magnitude of each bin is found by going through a recoding MIDI tick by MIDI tick and noting all vertical intervals that are sounding at each tick, as well as the MIDI velocities of the pair of notes involved in each vertical interval. The result is a histogram that indicates which vertical intervals are present, and how significant these vertical intervals are relative to one another, with a weighting based on both MIDI velocity and the aggregated durations with which each interval is held throughout the piece. This histogram is first normalized, then bin magnitudes under .001 are filtered out and set to 0 to reduce noise. Finally, the histogram is re-normalized.";
 		boolean is_sequential = true;
 		int dimensions = 128; // One for each possible MIDI pitch
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
@@ -69,7 +70,7 @@ public class VerticalIntervalHistogramFeature
 		
 		if (sequence_info != null)
 		{
-			// // Initialize the vertical_interval_histogram and get the value for unisons
+			// Initialize the vertical_interval_histogram and get the value for unisons
 			vertical_interval_histogram = new double[128];
 			vertical_interval_histogram[0] = sequence_info.total_vertical_unison_velocity;
 
@@ -97,8 +98,17 @@ public class VerticalIntervalHistogramFeature
 					}
 				}
 			}
-
+			
 			// Normalize the histogram
+			vertical_interval_histogram = MathAndStatsMethods.normalize(vertical_interval_histogram);
+			
+			// Filter out vertical intervals that have a prevalence of less than .001. These intervals are
+			// considered infrequent enough that they add noise to the dataset.
+			for (int bin = 0; bin < vertical_interval_histogram.length; bin++)
+				if (vertical_interval_histogram[bin] < .001)
+					vertical_interval_histogram[bin] = 0.0;
+			
+			// Re-normalize the histogram
 			vertical_interval_histogram = MathAndStatsMethods.normalize(vertical_interval_histogram);
 		}
 		

@@ -24,7 +24,7 @@ public class VerticalSeventhsFeature
 	public VerticalSeventhsFeature()
 	{
 		String name = "Vertical Sevenths";
-		String code = "C-21";
+		String code = "C-47";
 		String description = "Fraction all wrapped vertical intervals that are minor or major sevenths. This is weighted by how long intervals are held (e.g. an interval lasting a whole note will be weighted four times as strongly as an interval lasting a quarter note).";
 		boolean is_sequential = true;
 		int dimensions = 1;

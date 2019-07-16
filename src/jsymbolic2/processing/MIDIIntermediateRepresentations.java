@@ -1,8 +1,10 @@
 package jsymbolic2.processing;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import javax.sound.midi.*;
 import jsymbolic2.featureutils.CollectedNoteInfo;
 import jsymbolic2.featureutils.NoteInfo;
@@ -295,6 +297,13 @@ public class MIDIIntermediateRepresentations
 	 * getNotesOnChannel method).
 	 */
 	public CollectedNoteInfo all_notes;
+	
+	/**
+	 * A map indicating all notes sounding on any given MIDI tick, where the tick value serves as the map key
+	 * and the map value is a list of all notes sounding on the specified tick, on any track and on any 
+	 * channel. The particular ordering of notes in this List value is not necessarily meaningful.
+	 */
+	public Map<Integer, List<NoteInfo>> all_notes_by_tick_map;
 	
 	/**
 	 * A normalized histogram with bins corresponding to MIDI pitches (0 to 127). The magnitude of each bin
@@ -850,6 +859,18 @@ public class MIDIIntermediateRepresentations
 		}*/
 		
 		generateAllNotes();
+		
+		generateAllNotesByTickMap();
+		/*System.out.println("\n\n\n\n\n\n\n\n\n");
+		for (Integer tick: all_notes_by_tick_map.keySet())
+		{
+			System.out.print("Notes on tick " + tick + ": ");
+			for (NoteInfo note: all_notes_by_tick_map.get(tick))
+				if (note.getChannel() != 10 - 1)
+					System.out.print(mckay.utilities.sound.midi.MIDIMethods.midiPitchToPitch(note.getPitch()) + ", ");
+			
+			System.out.print("\n");
+		}*/
 		
 		generatePitchHistogramsIntermediateRepresentations();
 		/*System.out.println("basic_pitch_histogram");
@@ -1833,6 +1854,59 @@ public class MIDIIntermediateRepresentations
 	private void generateAllNotes()
 	{
 		all_notes = new CollectedNoteInfo(tracks);
+	}
+	
+	
+	/**
+	 * Create the all_notes_by_tick_map field.
+	 */
+	private void generateAllNotesByTickMap()
+	{
+		// Initialize the all_notes_by_tick_map field
+		all_notes_by_tick_map = new HashMap<>();
+		
+		// Get the start tick note map. This map stores all notes starting on any given MIDI tick, where the 
+		// start tick value serves as the map key and the map value is a list of all notes starting on the 
+		// specified tick.
+		Map<Integer, List<NoteInfo>> start_tick_note_map = all_notes.getStartTickNoteMap();
+		// A list of all notes that are currently sounding. Notes are added to it when their onsets are
+		// encountered and are removed from it when the current tick is greater than their end tick.
+		LinkedList<NoteInfo> notes_sounding = new LinkedList<>();
+		
+		for (int tick = 0; tick < sequence.getTickLength(); tick++)
+		{
+			// A working list of all notes sounding on the current tick
+			List<NoteInfo> all_notes_sounding_on_tick = new LinkedList<>();
+			// A working list of notes no longer sounding that must be removed from notes_sounding.
+			List<NoteInfo> to_remove = new LinkedList<>();
+			
+			// If a note has ended, add it to to_remove. If not, add it to all_notes_sounding_on_current_tick.
+			for (NoteInfo note_sounding: notes_sounding)
+			{
+				if (note_sounding.getEndTick() < tick)
+					to_remove.add(note_sounding);
+				else
+					all_notes_sounding_on_tick.add(note_sounding);
+			}
+			
+			notes_sounding.removeAll(to_remove);
+			
+			// Add all notes that begin on the current tick to all_notes_sounding_on_tick and notes_sounding
+			List<NoteInfo> notes_starting_on_tick = start_tick_note_map.get(tick);
+			if (notes_starting_on_tick != null)
+			{
+				for (NoteInfo note: notes_starting_on_tick)
+				{
+					all_notes_sounding_on_tick.add(note);
+					notes_sounding.add(note);
+				}
+			}
+			
+			// Add all the notes currently sounding to the all_notes_by_tick_map with the current tick as the
+			// key
+			if (!all_notes_sounding_on_tick.isEmpty())
+				all_notes_by_tick_map.put(tick, all_notes_sounding_on_tick);
+		}
 	}
 	
 	
