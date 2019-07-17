@@ -25,7 +25,7 @@ public class ComplexChordsFeature
 	public ComplexChordsFeature()
 	{
 		String name = "Complex Chords";
-		String code = "C-67";
+		String code = "C-76";
 		String description = "Fraction of all simultaneously sounding pitch groups that contain more that four pitch classes. This is weighted by how long pitch groups are held (e.g. a pitch group lasting a whole note will be weighted four times as strongly as a pitch group lasting a quarter note).";
 		boolean is_sequential = true;
 		int dimensions = 1;

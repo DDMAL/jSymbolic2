@@ -1,19 +1,17 @@
 package jsymbolic2.features.verticalintervals;
 
-import javax.sound.midi.Sequence;
+import javax.sound.midi.*;
 import ace.datatypes.FeatureDefinition;
-import jsymbolic2.featureutils.ChordTypeEnum;
 import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the fraction of simultaneously sounding pitch groups that consist of only
- * two pitch classes. This is weighted by how long pitch groups are held (e.g. a pitch group lasting a whole
- * note will be weighted four times as strongly as a pitch group lasting a quarter note).
+ * A feature calculator that finds the number of distinct chord types (as defined by the Chord Type Histogram 
+ * feature) that appear at least once in the piece.
  *
- * @author Tristano Tenaglia and Cory McKay
+ * @author radamian
  */
-public class PartialChordsFeature
+public class NumberOfDistinctChordTypesFeature
 		extends MIDIFeatureExtractor
 {
 	/* CONSTRUCTOR ******************************************************************************************/
@@ -22,11 +20,11 @@ public class PartialChordsFeature
 	/**
 	 * Basic constructor that sets the values of the fields inherited from this class' superclass.
 	 */
-	public PartialChordsFeature()
+	public NumberOfDistinctChordTypesFeature()
 	{
-		String name = "Partial Chords";
-		String code = "C-70";
-		String description = "Fraction of simultaneously sounding pitch groups that consist of only two pitch classes. This is weighted by how long pitch groups are held (e.g. a pitch group lasting a whole note will be weighted four times as strongly as a pitch group lasting a quarter note).";
+		String name = "Number of Distinct Chord Types";
+		String code = "C-61";
+		String description = "Number of distinct chord types (as defined by the Chord Type Histogram feature) that appear at least once in the piece.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
@@ -62,13 +60,21 @@ public class PartialChordsFeature
 		double value;
 		if (sequence_info != null)
 		{
+			// Get the Chord Type Histogram
 			double[] chord_type_histogram = other_feature_values[0];
-			value = chord_type_histogram[ChordTypeEnum.PARTIAL_CHORD.getChordTypeCode()];			
+			
+			// Count the number of distinct chord types in the piece
+			int number_of_chord_types = 0;
+			for (int bin = 0; bin < chord_type_histogram.length; bin++)
+				if (chord_type_histogram[bin] > 0)
+					number_of_chord_types++;
+			
+			value = (double) number_of_chord_types;		
 		}
 		else value = -1.0;
-
+		
 		double[] result = new double[1];
 		result[0] = value;
 		return result;
-	}
+    }
 }

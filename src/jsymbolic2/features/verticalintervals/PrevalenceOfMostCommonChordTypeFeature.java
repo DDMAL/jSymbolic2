@@ -1,19 +1,17 @@
 package jsymbolic2.features.verticalintervals;
 
-import javax.sound.midi.Sequence;
+import javax.sound.midi.*;
 import ace.datatypes.FeatureDefinition;
-import jsymbolic2.featureutils.ChordTypeEnum;
 import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the fraction of simultaneously sounding pitch groups that consist of only
- * two pitch classes. This is weighted by how long pitch groups are held (e.g. a pitch group lasting a whole
- * note will be weighted four times as strongly as a pitch group lasting a quarter note).
+ * A feature calculator that finds the fraction of chords on the Chord Type Histogram corresponding to the 
+ * most common chord type.
  *
- * @author Tristano Tenaglia and Cory McKay
+ * @author radamian
  */
-public class PartialChordsFeature
+public class PrevalenceOfMostCommonChordTypeFeature
 		extends MIDIFeatureExtractor
 {
 	/* CONSTRUCTOR ******************************************************************************************/
@@ -22,15 +20,15 @@ public class PartialChordsFeature
 	/**
 	 * Basic constructor that sets the values of the fields inherited from this class' superclass.
 	 */
-	public PartialChordsFeature()
+	public PrevalenceOfMostCommonChordTypeFeature()
 	{
-		String name = "Partial Chords";
-		String code = "C-70";
-		String description = "Fraction of simultaneously sounding pitch groups that consist of only two pitch classes. This is weighted by how long pitch groups are held (e.g. a pitch group lasting a whole note will be weighted four times as strongly as a pitch group lasting a quarter note).";
+		String name = "Prevalence of Most Common Chord Type";
+		String code = "C-66";
+		String description = "Fraction of chords on the Chord Type Histogram corresponding to the most common chord type.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
-		dependencies = new String[] { "Chord Type Histogram" };
+		dependencies = new String[] { "Chord Type Histogram", "Most Common Chord Type" };
 		offsets = null;
 		is_default = true;
 		is_secure = true;
@@ -62,13 +60,16 @@ public class PartialChordsFeature
 		double value;
 		if (sequence_info != null)
 		{
+			// Get the Chord Type Histogram and the Most Common Chord Type
 			double[] chord_type_histogram = other_feature_values[0];
-			value = chord_type_histogram[ChordTypeEnum.PARTIAL_CHORD.getChordTypeCode()];			
+			int most_common_chord_type = (int) other_feature_values[1][0];
+			
+			value = chord_type_histogram[most_common_chord_type];		
 		}
 		else value = -1.0;
-
+		
 		double[] result = new double[1];
 		result[0] = value;
 		return result;
-	}
+    }
 }

@@ -252,6 +252,15 @@ Minor to Major Vertical Thirds Ratio
 Average Instantaneous Vertical Range
 Variability of Instantaneous Vertical Range
 Chord Type Histogram
+Number of Distinct Chord Types
+Number of Common Chord Types
+Number of Very Common Chord Types
+Most Common Chord Type
+Second Most Common Chord Type
+Prevalence of Most Common Chord Type
+Prevalence of Second Most Common Chord Type
+Prevalence Ratio of Two Most Common Chord Types
+Chord Type Variability
 Partial Chords
 Standard Triads
 Diminished and Augmented Triads

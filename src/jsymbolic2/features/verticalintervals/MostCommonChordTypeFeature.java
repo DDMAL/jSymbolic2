@@ -1,19 +1,21 @@
 package jsymbolic2.features.verticalintervals;
 
-import javax.sound.midi.Sequence;
+import javax.sound.midi.*;
 import ace.datatypes.FeatureDefinition;
-import jsymbolic2.featureutils.ChordTypeEnum;
 import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the fraction of simultaneously sounding pitch groups that consist of only
- * two pitch classes. This is weighted by how long pitch groups are held (e.g. a pitch group lasting a whole
- * note will be weighted four times as strongly as a pitch group lasting a quarter note).
+ * A feature calculator that finds the Chord Type Histogram feature bin index corresponding to the Chord 
+ * Type Histogram bin with the highest magnitude. The bins are indexed as follows: partial chords consisting 
+ * of just two pitch classes [0], minor triads [1], major triads [2], diminished triads [3], augmented triads 
+ * [4], other triads [5], minor seventh chords [6], dominant seventh chords [7], major seventh chords [8], 
+ * other chords consisting of four pitch classes [9], and complex chords with more than four pitch classes 
+ * [10].
  *
- * @author Tristano Tenaglia and Cory McKay
+ * @author radamian
  */
-public class PartialChordsFeature
+public class MostCommonChordTypeFeature
 		extends MIDIFeatureExtractor
 {
 	/* CONSTRUCTOR ******************************************************************************************/
@@ -22,11 +24,11 @@ public class PartialChordsFeature
 	/**
 	 * Basic constructor that sets the values of the fields inherited from this class' superclass.
 	 */
-	public PartialChordsFeature()
+	public MostCommonChordTypeFeature()
 	{
-		String name = "Partial Chords";
-		String code = "C-70";
-		String description = "Fraction of simultaneously sounding pitch groups that consist of only two pitch classes. This is weighted by how long pitch groups are held (e.g. a pitch group lasting a whole note will be weighted four times as strongly as a pitch group lasting a quarter note).";
+		String name = "Most Common Chord Type";
+		String code = "C-64";
+		String description = "The Chord Type Histogram feature bin index corresponding to the Chord Type Histogram bin with the highest magnitude. The bins are indexed as follows: partial chords consisting of just two pitch classes [0], minor triads [1], major triads [2], diminished triads [3], augmented triads [4], other triads [5], minor seventh chords [6], dominant seventh chords [7], major seventh chords [8], other chords consisting of four pitch classes [9], and complex chords with more than four pitch classes [10].";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
@@ -62,13 +64,16 @@ public class PartialChordsFeature
 		double value;
 		if (sequence_info != null)
 		{
+			// Get the Chord Type Histogram
 			double[] chord_type_histogram = other_feature_values[0];
-			value = chord_type_histogram[ChordTypeEnum.PARTIAL_CHORD.getChordTypeCode()];			
+			
+			// Calculate the feature value
+			value = mckay.utilities.staticlibraries.MathAndStatsMethods.getIndexOfLargest(chord_type_histogram);		
 		}
 		else value = -1.0;
-
+		
 		double[] result = new double[1];
 		result[0] = value;
 		return result;
-	}
+    }
 }

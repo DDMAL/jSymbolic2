@@ -1,19 +1,18 @@
 package jsymbolic2.features.verticalintervals;
 
-import javax.sound.midi.Sequence;
+import javax.sound.midi.*;
 import ace.datatypes.FeatureDefinition;
-import jsymbolic2.featureutils.ChordTypeEnum;
 import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the fraction of simultaneously sounding pitch groups that consist of only
- * two pitch classes. This is weighted by how long pitch groups are held (e.g. a pitch group lasting a whole
- * note will be weighted four times as strongly as a pitch group lasting a quarter note).
+ * A feature calculator that finds the ratio between the fraction of chords corresponding to the second most 
+ * common chord type on the Chord Type Histogram and the fraction of chords corresponding to the most common 
+ * chord type. Set to 0 if either of these prevalences are 0.
  *
- * @author Tristano Tenaglia and Cory McKay
+ * @author radamian
  */
-public class PartialChordsFeature
+public class PrevalenceRatioOfTwoMostCommonChordTypesFeature
 		extends MIDIFeatureExtractor
 {
 	/* CONSTRUCTOR ******************************************************************************************/
@@ -22,15 +21,15 @@ public class PartialChordsFeature
 	/**
 	 * Basic constructor that sets the values of the fields inherited from this class' superclass.
 	 */
-	public PartialChordsFeature()
+	public PrevalenceRatioOfTwoMostCommonChordTypesFeature()
 	{
-		String name = "Partial Chords";
-		String code = "C-70";
-		String description = "Fraction of simultaneously sounding pitch groups that consist of only two pitch classes. This is weighted by how long pitch groups are held (e.g. a pitch group lasting a whole note will be weighted four times as strongly as a pitch group lasting a quarter note).";
+		String name = "Prevalence Ratio of Two Most Common Chord Types";
+		String code = "C-68";
+		String description = "Ratio between the fraction of chords corresponding to the second most common chord type on the Chord Type Histogram and the fraction of chords corresponding to the most common chord type. Set to 0 if either of these prevalences are 0.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
-		dependencies = new String[] { "Chord Type Histogram" };
+		dependencies = new String[] { "Prevalence of Most Common Chord Type", "Prevalence of Second Most Common Chord Type" };
 		offsets = null;
 		is_default = true;
 		is_secure = true;
@@ -62,13 +61,18 @@ public class PartialChordsFeature
 		double value;
 		if (sequence_info != null)
 		{
-			double[] chord_type_histogram = other_feature_values[0];
-			value = chord_type_histogram[ChordTypeEnum.PARTIAL_CHORD.getChordTypeCode()];			
+			double prevalence_most_common_chord_type = other_feature_values[0][0];
+			double prevalence_second_most_common_chord_type = other_feature_values[1][0];
+			
+			if (prevalence_most_common_chord_type == 0.0)
+				value = 0.0;
+			else
+				value = prevalence_second_most_common_chord_type / prevalence_most_common_chord_type;		
 		}
 		else value = -1.0;
-
+		
 		double[] result = new double[1];
 		result[0] = value;
 		return result;
-	}
+    }
 }

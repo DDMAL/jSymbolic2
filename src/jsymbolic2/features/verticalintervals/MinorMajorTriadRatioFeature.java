@@ -26,7 +26,7 @@ public class MinorMajorTriadRatioFeature
 	public MinorMajorTriadRatioFeature()
 	{
 		String name = "Minor Major Triad Ratio";
-		String code = "C-68";
+		String code = "C-77";
 		String description = "The prevalence of minor triads divided by the prevalence of major triads. This is weighted by how long the chords are held (e.g. a chord lasting a whole note will be weighted four times as strongly as a chord lasting a quarter note). Set to 0 if there are no minor triads or if there are no major triads.";
 		boolean is_sequential = true;
 		int dimensions = 1;
