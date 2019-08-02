@@ -122,22 +122,50 @@ public class NoteOnsetSliceContainer
 	 * on that track and channel (in this case, the list of pitches will always be empty or hold only one
 	 * pitch). Each slice of this type includes ONLY the note presumed to belong to the melody; if multiple
 	 * notes occur simultaneously in the same slice (on the same MIDI track and channel), then all notes but
-	 * the highest note in the track and channel's slice are removed from the list. Also, if the highest note
-	 * is sustained from one note onset slice to the next, and is still the highest note in the second slice,
+	 * the highest note in the track and channel's slice are removed from the list. Slices of this type 
+	 * exclude notes belonging to the melody that are held from previous slices, and only include notes whose
+	 * onsets occur between the start and the end of that particular slice. Also, if the highest note is 
+	 * sustained from one note onset slice to the next, and is still the highest note in the second slice,
 	 * then this is treated as if there is no change in melody, even if lower pitches in the same track and
 	 * channel change (this will result in the second slice being left empty). Pitches occurring very close to
 	 * one another rhythmically are merged into the same slice, despite not being simultaneous. Only pitched
 	 * notes are included (which is to say that Channel 10 unpitched instrument notes are excluded). The list
 	 * for every track and channel has the same number of slices and the same slice synchronization as
 	 * note_onset_slices, note_onset_slices_only_new_onsets, note_onset_slices_by_track_and_channel and
-	 * note_onset_slices_by_track_and_channel_only_new_onsets.
+	 * note_onset_slices_by_track_and_channel_only_new_onsets. 
 	 */
 	private final LinkedList<LinkedList<Integer>>[][] note_onset_slices_by_track_and_channel_only_melodic_lines;
+	
+	/**
+	 * The note onset slices for the music passed to this object at instantiation, separated out by track
+	 * (first array index) and by channel (second array index). The outer list index specifies the slice (the
+	 * slices are listed in temporal order), and the inner list index specifies the MIDI pitches in that slice
+	 * on that track and channel (in this case, the list of pitches will always be empty or hold only one
+	 * pitch). Each slice of this type includes ONLY the note presumed to belong to the melody; if multiple
+	 * notes occur simultaneously in the same slice (on the same MIDI track and channel), then all notes but
+	 * the highest note in the track and channel's slice are removed from the list. Unlike the 
+	 * note_onset_slices_by_track_and_channel_only_melodic_lines field, slices of this type include notes 
+	 * belonging to the melody that are held from previous slices. Also, if the highest note is sustained from 
+	 * one note onset slice to the next, and is still the highest note in the second slice, then this is 
+	 * treated as if there is no change in melody, even if lower pitches in the same track and channel change 
+	 * (this will result in the second slice being left empty). Pitches occurring very close to one another 
+	 * rhythmically are merged into the same slice, despite not being simultaneous. Only pitched notes are 
+	 * included (which is to say that Channel 10 unpitched instrument notes are excluded). The list for every 
+	 * track and channel has the same number of slices and the same slice synchronization as 
+	 * note_onset_slices, note_onset_slices_only_new_onsets, note_onset_slices_by_track_and_channel and
+	 * note_onset_slices_by_track_and_channel_only_new_onsets.
+	 */
+	private final LinkedList<LinkedList<Integer>>[][] note_onset_slices_by_track_and_channel_only_melodic_lines_held_notes_included;
 	
 	/**
 	 * The number of channels supported by the MIDI protocol.
 	 */
 	private final int NUMBER_OF_MIDI_CHANNELS = 16;
+	
+	/**
+	 * The number of note onset slices generated for the piece of music.
+	 */
+	public final int NUMBER_OF_ONSET_SLICES;
 
 	
 	/* CONSTRUCTOR ******************************************************************************************/
@@ -208,12 +236,14 @@ public class NoteOnsetSliceContainer
 		note_onset_slices_only_new_onsets = new LinkedList<>();
 		note_onset_slices_by_track_and_channel_only_new_onsets = new LinkedList[tracks_from_sequence.length][NUMBER_OF_MIDI_CHANNELS];
 		note_onset_slices_by_track_and_channel_only_melodic_lines = new LinkedList[tracks_from_sequence.length][NUMBER_OF_MIDI_CHANNELS];
+		note_onset_slices_by_track_and_channel_only_melodic_lines_held_notes_included = new LinkedList[tracks_from_sequence.length][NUMBER_OF_MIDI_CHANNELS];
 		for (int n_track = 0; n_track < tracks_from_sequence.length; n_track++)
 			for (int chan = 0; chan < NUMBER_OF_MIDI_CHANNELS; chan++)
 			{
 				note_onset_slices_by_track_and_channel[n_track][chan] = new LinkedList();
 				note_onset_slices_by_track_and_channel_only_new_onsets[n_track][chan] = new LinkedList();
 				note_onset_slices_by_track_and_channel_only_melodic_lines[n_track][chan] = new LinkedList();
+				note_onset_slices_by_track_and_channel_only_melodic_lines_held_notes_included[n_track][chan] = new LinkedList();
 			}
 
 		// A working list of notes sounding on a given MIDI tick, including both notes starting on this tick
@@ -264,6 +294,7 @@ public class NoteOnsetSliceContainer
 							note_onset_slices_by_track_and_channel[n_track][chan].add(new LinkedList<>());
 							note_onset_slices_by_track_and_channel_only_new_onsets[n_track][chan].add(new LinkedList<>());
 							note_onset_slices_by_track_and_channel_only_melodic_lines[n_track][chan].add(new LinkedList<>());	
+							note_onset_slices_by_track_and_channel_only_melodic_lines_held_notes_included[n_track][chan].add(new LinkedList<>());
 						}
 
 					// Remove notes no longer sounding from notes_sounding, and add notes still sounding
@@ -278,7 +309,7 @@ public class NoteOnsetSliceContainer
 						for (NoteInfo note_sounding : notes_sounding)
 						{
 							// Remove a note from notes_sounding if it ended before this tick
-							if (note_sounding.getEndTick() < tick)
+							if (note_sounding.getEndTick() <= tick)
 							{
 								to_remove.add(note_sounding);
 								
@@ -286,7 +317,7 @@ public class NoteOnsetSliceContainer
 								// remove it if so
 								if (melodic_notes[note_sounding.getTrack()][note_sounding.getChannel()] == note_sounding)
 									melodic_notes[note_sounding.getTrack()][note_sounding.getChannel()] = null;
-							}
+								}
 							
 							// If the remove_notes_held_too_long option is selected, then only add those held
 							// notes whose end tick is past the start of this slice by a margin of
@@ -492,11 +523,15 @@ public class NoteOnsetSliceContainer
 						{
 							NoteInfo melody_note = melodic_notes[n_track][chan];
 							if (melody_note != null)
+							{
+								note_onset_slices_by_track_and_channel_only_melodic_lines_held_notes_included[n_track][chan].get(slice).add(melody_note.getPitch());
+								
 								// Check if the onset of the note belonging to the melody is between the
 								// start and end of this particular slice (i.e. exclude notes held from 
 								// previous slices)
 								if (melody_note.getStartTick() >= original_tick && melody_note.getStartTick() <= tick) 
 									note_onset_slices_by_track_and_channel_only_melodic_lines[n_track][chan].get(slice).add(melody_note.getPitch());
+							}
 						}
 					
 					// Sort pitches in each slices to be in order of increasing pitch
@@ -521,6 +556,9 @@ public class NoteOnsetSliceContainer
 				}
 			}
 		}
+		
+		// Set the NUMBER_OF_ONSET_SLICES field equal to the number of slices created for the piece of music
+		NUMBER_OF_ONSET_SLICES = note_onset_slices.size();
 	}
 
 	
@@ -629,12 +667,40 @@ public class NoteOnsetSliceContainer
 	 * returned by the methods of this class.
 	 * 
 	 * @return	The list of note onset slices in the MIDI parsed by this object at instantiation, segregated
-	 *			by track and channel. Only melodic notes are included, so thre will only be no or one note
+	 *			by track and channel. Only melodic notes are included, so there will only be no or one note
 	 *			per slice.
 	 */
 	public LinkedList<LinkedList<Integer>>[][] getNoteOnsetSlicesByTrackAndChannelMelodicLinesOnly()
 	{
 		return note_onset_slices_by_track_and_channel_only_melodic_lines;
+	}
+	
+	
+	/**
+	 * Returns note onset slices for the music passed to this object at instantiation, separated out by track
+	 * (first array index) and by channel (second array index). The outer list index specifies the slice (the
+	 * slices are listed in temporal order), and the inner list index specifies the MIDI pitches in that slice
+	 * on that track and channel (in this case, the list of pitches will always be empty or hold only one
+	 * pitch). Each slice of this type includes ONLY the note presumed to belong to the melody; if multiple
+	 * notes occur simultaneously in the same slice (on the same MIDI track and channel), then all notes but
+	 * the highest note in the track and channel's slice are removed from the list. Unlike the 
+	 * note_onset_slices_by_track_and_channel_only_melodic_lines field, slices of this type include notes 
+	 * belonging to the melody that are held from previous slices. Also, if the highest note is sustained from 
+	 * one note onset slice to the next, and is still the highest note in the second slice, then this is 
+	 * treated as if there is no change in melody, even if lower pitches in the same track and channel change 
+	 * (this will result in the second slice being left empty). Pitches occurring very close to one another 
+	 * rhythmically are merged into the same slice, despite not being simultaneous. Only pitched notes are 
+	 * included (which is to say that Channel 10 unpitched instrument notes are excluded). This list has the 
+	 * same number of slices and the same slice synchronization as the other slice data structures returned by 
+	 * the methods of this class.
+	 * 
+	 * @return	The list of note onset slices in the MIDI parsed by this object at instantiation, segregated
+	 *			by track and channel. Only melodic notes are included, so there will only be no or one note
+	 *			per slice.
+	 */
+	public LinkedList<LinkedList<Integer>>[][] getNoteOnsetSlicesByTrackAndChannelMelodicLinesOnlyHeldNotesIncluded()
+	{
+		return note_onset_slices_by_track_and_channel_only_melodic_lines_held_notes_included;
 	}
 	
 	

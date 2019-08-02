@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import javax.sound.midi.*;
 import jsymbolic2.featureutils.CollectedNoteInfo;
+import jsymbolic2.ngrams.NGramGenerator;
 import jsymbolic2.featureutils.NoteInfo;
 import jsymbolic2.featureutils.NoteOnsetSliceContainer;
 import mckay.utilities.staticlibraries.ArrayMethods;
@@ -195,6 +196,15 @@ public class MIDIIntermediateRepresentations
 	 * same channel and track before a new rhythmic value was encountered on that channel and track.
 	 */
 	public LinkedList<Integer>[] runs_of_same_rhythmic_value;
+	
+	/**
+	 * The rhythmic values of each note in the piece, quantized to the nearest duration in quarter notes (e.g. 
+	 * a value of 0.5 corresponds to a duration of an eighth note) and separated out by MIDI track and 
+	 * channel. The row (first array index) corresponds to the MIDI track number and the column (second array 
+	 * index) corresponds to the MIDI channel on which notes occur. Each entry is a list of rhythmic values
+	 * occurring on that track and channel, in the order that they occur.
+	 */
+	public LinkedList<Double>[][] rhythmic_values_in_quarter_notes_by_track_and_channel;
 	
 	/**
 	 * An array with one entry for each note, where the value of each entry indicates the quantized duration
@@ -433,6 +443,16 @@ public class MIDIIntermediateRepresentations
 	 * their own track and channel).
 	 */
 	public LinkedList<LinkedList<Integer>[]> melodic_intervals_by_track_and_channel;
+	
+	/**
+	 * An object that generates n-grams of sequences of melodic intervals, rhythmic values, and vertical 
+	 * intervals in the piece. Passed to this object at instantiation are the 
+	 * melodic_intervals_by_track_and_channel and rhythmic_values_in_quarter_notes_by_track_and_channel fields
+	 * already listing the melodic intervals and rhythmic values in the piece in the order they occur. This
+	 * object uses the note_onset_slice_container field to calculate the vertical intervals in the piece in
+	 * the order they appear.
+	 */
+	public NGramGenerator n_gram_generator;
 
 	/**
 	 * A table with rows (first index) corresponding to MIDI channels and column (second index) designations
@@ -498,6 +518,14 @@ public class MIDIIntermediateRepresentations
 	 * occur for a combination of track and channel, then the entry is set to 0.
 	 */
 	public double[][] average_pitch_by_track_and_channel;
+	
+	/**
+	 * A list of arrays representing combinations of track (first index) and MIDI channel (second index), 
+	 * in increasing order of average pitch occurring on that combination of track and channel. Combinations
+	 * of track and channel for which there are no notes in the piece are excluded from this list, as are all
+	 * combinations with MIDI Channel 10 (unpitched percussion).
+	 */
+	public LinkedList<int[]> track_and_channel_pairs_by_average_pitch;
 	
 	/**
 	 * An array representing the combination of the track (first index) and the MIDI channel (second index) 
@@ -907,12 +935,12 @@ public class MIDIIntermediateRepresentations
 		
 		generateNoteOnsetSliceContainer();
 		/*
-		System.out.println("\n\n\n\n\nGENERATING NOTE ONSET SLICE LISTS\n\n");
+		System.out.println("\n\n\n\n\nGENERATING NOTE ONSET SLICES\n");
 		for (int slice = 0; slice < note_onset_slice_container.getNoteOnsetSlices().size(); slice++)
 		{
-			System.out.println("\n\nSLICE: " + slice + " in note onset slices:");
+			System.out.println("Slice " + slice + ": ");
 			for (int pitch: note_onset_slice_container.getNoteOnsetSlices().get(slice))
-				System.out.println(pitch + ", ");
+				System.out.print(mckay.utilities.sound.midi.MIDIMethods.midiPitchToPitch(pitch) + ", ");
 			System.out.print("\n");
 		}
 		*/
@@ -983,6 +1011,13 @@ public class MIDIIntermediateRepresentations
 		System.out.println("Number of active voices: " + number_of_active_voices);*/
 		
 		generateAveragePitchIntermediateRepresentations();
+		
+		generateNGramGenerator();
+		/*
+		n_gram_generator.getVerticalIntervalNGramAggregate(3, track_and_channel_with_lowest_average_pitch, track_and_channel_pairs_by_average_pitch, true, false, false);
+		n_gram_generator.getMelodicIntervalNGramAggregate(3, track_and_channel_with_lowest_average_pitch, true, false, false);
+		n_gram_generator.getRhythmicValueNGramAggregate(3, track_and_channel_with_highest_average_pitch);
+		*/
 		
 		generatePitchAndPitchClassesOfAllNoteOns();
 		/*
@@ -1490,6 +1525,12 @@ public class MIDIIntermediateRepresentations
 		// value, expressed as a fraction of the duration of an idealized quarter note
 		LinkedList<Double> quantization_offsets_in_quarter_note_fractions = new LinkedList<>();
 		
+		// Initialize rhythmic_values_in_quarter_notes_by_track_and_channel
+		rhythmic_values_in_quarter_notes_by_track_and_channel = new LinkedList[tracks.length][16];
+		for (int n_track = 0; n_track < tracks.length; n_track++)
+			for (int chan = 0; chan < 16; chan++)
+				rhythmic_values_in_quarter_notes_by_track_and_channel[n_track][chan] = new LinkedList<>();
+		
 		// Fill rhythmic_duration_note_counts for the entire sequence
 		for (int n_track = 0; n_track < tracks.length; n_track++)
 		{
@@ -1599,6 +1640,33 @@ public class MIDIIntermediateRepresentations
 					// System.out.println("\t2) ADD Rhythmic Value: " + last_rhythmic_value + " Run Length: " + current_run_length);
 				}
 			}
+			
+			// Update rhythmic_values_in_quarter_notes_by_track_and_channel
+			for (int chan = 0; chan < ordered_rhythmic_values_by_channel.length; chan++)
+				for (int i = 0; i < ordered_rhythmic_values_by_channel[chan].size(); i++)
+				{
+					double rhythmic_value = 0.0;
+					
+					// Convert the value in ordered_rhythmic_values_by_channel to the corresponding rhythmic 
+					// value in quarter notes
+					switch (ordered_rhythmic_values_by_channel[chan].get(i))
+					{
+						case 0: rhythmic_value = 1.0 / 8.0; break;
+						case 1: rhythmic_value = 1.0 / 4.0; break;
+						case 2: rhythmic_value = 1.0 / 2.0; break;
+						case 3: rhythmic_value = 1.0 * 3.0 / 4.0; break;
+						case 4: rhythmic_value = 1.0; break;
+						case 5: rhythmic_value = 1.0 * 1.5; break;
+						case 6: rhythmic_value = 1.0 * 2.0; break;
+						case 7: rhythmic_value = 1.0 * 3.0; break;
+						case 8: rhythmic_value = 1.0 * 4.0; break;
+						case 9: rhythmic_value = 1.0 * 6.0; break;
+						case 10: rhythmic_value = 1.0 * 8.0; break;
+						case 11: rhythmic_value = 1.0 * 12.0; break;
+					}
+					
+					rhythmic_values_in_quarter_notes_by_track_and_channel[n_track][chan].add(rhythmic_value);
+				}
 		}
 
 		// Debugging code
@@ -2110,6 +2178,15 @@ public class MIDIIntermediateRepresentations
 		melodic_interval_histogram_rising_intervals_only = MathAndStatsMethods.normalize(melodic_interval_histogram_rising_intervals_only);
 		melodic_interval_histogram_falling_intervals_only = MathAndStatsMethods.normalize(melodic_interval_histogram_falling_intervals_only);
 	}
+	
+	
+	/**
+	 * Generate the n_gram_generator field.
+	 */
+	private void generateNGramGenerator()
+	{
+		n_gram_generator = new NGramGenerator(tracks, note_onset_slice_container, melodic_intervals_by_track_and_channel, rhythmic_values_in_quarter_notes_by_track_and_channel, track_and_channel_pairs_by_average_pitch);
+	}
 
 
 	/**
@@ -2340,8 +2417,8 @@ public class MIDIIntermediateRepresentations
 				number_of_pitches_by_track_and_channel[note.getTrack()][note.getChannel()]++;
 			}
 
-		// Intialize the average_pitch_by_track_and_channel field and fill each entry with the average pitch
-		// for that combination of track and channel.
+		// Intialize the average_pitch_by_track_and_channel and fill each entry with the average pitch for 
+		// that combination of track and channel.
 		average_pitch_by_track_and_channel = new double[tracks.length][16];
 		for (int n_track = 0; n_track < average_pitch_by_track_and_channel.length; n_track++)
 			for (int chan = 0; chan < average_pitch_by_track_and_channel[n_track].length; chan++)
@@ -2352,6 +2429,38 @@ public class MIDIIntermediateRepresentations
 		
 		// Calculate the track_and_channel_with_highest_average_pitch field
 		track_and_channel_with_highest_average_pitch = mckay.utilities.staticlibraries.MathAndStatsMethods.getIndicesOfLargest(average_pitch_by_track_and_channel);
+		
+		// Initialize the track_and_channel_pairs_by_average_pitch field and add the pair of track and MIDI
+		// channel with the highest average pitch to it.
+		track_and_channel_pairs_by_average_pitch = new LinkedList<>();
+		track_and_channel_pairs_by_average_pitch.add(track_and_channel_with_highest_average_pitch);
+		
+		// Add each pair of track and channel to track_and_channel_pairs_by_average_pitch in increasing order
+		// of their average pitch
+		for (int n_track = 0; n_track < average_pitch_by_track_and_channel.length; n_track++)
+			for (int chan = 0; chan < average_pitch_by_track_and_channel[n_track].length; chan++)
+			{
+				// Exclude Channel 10 (Percussion), and add only pairs of track and channel for which there 
+				// are pitched notes in the piece
+				if (chan != 10 - 1 && number_of_pitches_by_track_and_channel[n_track][chan] > 0)
+				{
+					int[] pair_to_add = new int[] {n_track, chan};
+					
+					// Compare the average pitch of the current pair of MIDI track and channel to the average 
+					// those of the pairs already added to track_and_channel_pairs_by_average_pitch, and add 
+					// it to the proper position
+					for (int i = 0; i < track_and_channel_pairs_by_average_pitch.size(); i++)
+						if (!track_and_channel_pairs_by_average_pitch.contains(pair_to_add))
+						{
+							int other_track = track_and_channel_pairs_by_average_pitch.get(i)[0];
+							int other_channel = track_and_channel_pairs_by_average_pitch.get(i)[1];
+							
+							if (average_pitch_by_track_and_channel[n_track][chan] < average_pitch_by_track_and_channel[other_track][other_channel])
+								track_and_channel_pairs_by_average_pitch.add(i, pair_to_add);
+						}
+						else break;
+				}
+			}
 		
 		// Build a 2D array containing the average pitch for each combination of track and channel. Entries of
 		// value 0 (the MIDI channel is the unpitched percussion channel, or there are no note ons for
