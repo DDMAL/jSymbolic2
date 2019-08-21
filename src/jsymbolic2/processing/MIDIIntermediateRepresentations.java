@@ -446,11 +446,11 @@ public class MIDIIntermediateRepresentations
 	
 	/**
 	 * An object that generates n-grams of sequences of melodic intervals, rhythmic values, and vertical 
-	 * intervals in the piece. Passed to this object at instantiation are the 
+	 * intervals in the piece, and aggregates of those n-grams. Passed to this object at instantiation are the 
 	 * melodic_intervals_by_track_and_channel and rhythmic_values_in_quarter_notes_by_track_and_channel fields
 	 * already listing the melodic intervals and rhythmic values in the piece in the order they occur. This
-	 * object uses the note_onset_slice_container field to calculate the vertical intervals in the piece in
-	 * the order they appear.
+	 * object uses this object's note_onset_slice_container field to calculate the vertical intervals between 
+	 * the notes of the melodic lines in each voice.
 	 */
 	public NGramGenerator n_gram_generator;
 
@@ -1013,11 +1013,16 @@ public class MIDIIntermediateRepresentations
 		generateAveragePitchIntermediateRepresentations();
 		
 		generateNGramGenerator();
-		/*
-		n_gram_generator.getVerticalIntervalNGramAggregate(3, track_and_channel_with_lowest_average_pitch, track_and_channel_pairs_by_average_pitch, true, false, false);
-		n_gram_generator.getMelodicIntervalNGramAggregate(3, track_and_channel_with_lowest_average_pitch, true, false, false);
-		n_gram_generator.getRhythmicValueNGramAggregate(3, track_and_channel_with_highest_average_pitch);
-		*/
+		
+		n_gram_generator.getVerticalIntervalNGramAggregate(3, track_and_channel_with_lowest_average_pitch, track_and_channel_pairs_by_average_pitch, true, false, false, true);
+		n_gram_generator.getMelodicIntervalNGramAggregateForVoice(3, track_and_channel_with_lowest_average_pitch, true, false, false);
+		n_gram_generator.getRhythmicValueNGramAggregateForVoice(3, track_and_channel_with_highest_average_pitch);
+		n_gram_generator.getVerticalAndMelodicIntervalNGramAggregate(3, track_and_channel_with_lowest_average_pitch, track_and_channel_pairs_by_average_pitch, true, false, false, false);
+		
+		LinkedList<int[]> highest_and_lowest_voice = new LinkedList<>();
+		highest_and_lowest_voice.add(track_and_channel_with_lowest_average_pitch);
+		highest_and_lowest_voice.add(track_and_channel_with_highest_average_pitch);
+		//n_gram_generator.getVerticalAndMelodicIntervalNGrams(3, track_and_channel_with_lowest_average_pitch, highest_and_lowest_voice, true, false, false, false);
 		
 		generatePitchAndPitchClassesOfAllNoteOns();
 		/*
@@ -2185,7 +2190,12 @@ public class MIDIIntermediateRepresentations
 	 */
 	private void generateNGramGenerator()
 	{
-		n_gram_generator = new NGramGenerator(tracks, note_onset_slice_container, melodic_intervals_by_track_and_channel, rhythmic_values_in_quarter_notes_by_track_and_channel, track_and_channel_pairs_by_average_pitch);
+		/*
+		LinkedList<int[]> highest_and_lowest_voice = new LinkedList<>();
+		highest_and_lowest_voice.add(track_and_channel_with_lowest_average_pitch);
+		highest_and_lowest_voice.add(track_and_channel_with_highest_average_pitch);
+		*/
+		n_gram_generator = new NGramGenerator(note_onset_slice_container, melodic_intervals_by_track_and_channel, rhythmic_values_in_quarter_notes_by_track_and_channel, track_and_channel_pairs_by_average_pitch);
 	}
 
 
