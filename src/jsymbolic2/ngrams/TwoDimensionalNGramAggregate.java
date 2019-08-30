@@ -10,56 +10,60 @@ import java.util.LinkedList;
  * 
  * This object inherits the fields linking unique identifiers and their respective frequencies, though it 
  * should be noted that the function of these fields is different when aggregating two-dimensional n-grams 
- * because the n-grams have a secondary identifier, and consequently a joint identifier that is composed of 
- * the n-gram's (primary) identifier and its secondary identifier. For example, the 
- * n_gram_by_unique_id_to_frequency_map field then does not map all n-grams in the list passed to this object 
- * at instantiation, but only the n-grams with unique primary identifiers (two NGram object keys may share the 
- * same secondary identifier). For analysis by secondary or joint identifier only, this object creates the 
- * same structures (a hash map and two corresponding arrays) for them.
+ * because two-dimensional n-grams have a secondary identifier, and consequently a joint identifier composed 
+ * of the n-gram's (primary) identifier and its secondary identifier. For example, this object's 
+ * n_gram_by_unique_id_to_frequency_map field does not map all n-grams in the list of n-grams passed to this 
+ * object, but only the n-grams with unique primary identifiers (two two-dimensional n-grams may share the 
+ * same secondary identifier). To facilitate analysis of the n-grams by secondary or joint identifier only, 
+ * this object creates the same structures (a hash map and two corresponding arrays) for them at 
+ * instantiation.
  * 
  * @author radamian
  */
 public class TwoDimensionalNGramAggregate 
 		extends NGramAggregate
 {
-	
 	/**
-	 * A HashMap linking an n-gram having a unique secondary identifier with its normalized frequency.
+	 * A HashMap linking a two-dimensional n-gram's secondary string identifier with the normalized frequency 
+	 * at which n-grams with that secondary string identifier occur among n-grams from this object's list of 
+	 * n-grams that have a unique secondary identifier.
 	 */
-	private HashMap<NGram, Double> n_gram_by_unique_secondary_id_to_frequency_map;
+	private HashMap<String, Double> secondary_string_id_to_frequency_map;
 	
 	/**
-	 * An array of n-grams having a unique secondary identifier. Each entry corresponds to the entry at the 
-	 * same index in frequencies_by_unique_secondary_id, the normalized frequency of that n-gram among n-grams 
-	 * having a unique secondary identifier. Each entry is also a key in the 
-	 * n_gram_by_unique_secondary_id_to_frequency_map field.
+	 * An array of two-dimensional n-grams having a unique secondary identifier among this object's list of 
+	 * n-grams. The length of this array is the same of the length of frequencies_by_unique_secondary_id. The 
+	 * n-gram at each index occurs among n-grams from this object's list of n-grams that have a unique 
+	 * secondary identifier at the frequency found at the same index in frequencies_by_unique_secondary_id.
 	 */
-	private NGram[] n_grams_by_unique_secondary_id;
+	private TwoDimensionalNGram[] n_grams_by_unique_secondary_id;
 	
 	/**
-	 * A normalized histogram containing the frequencies of each n-gram having a unique secondary identifier. 
-	 * Each entry corresponds to the entry at the same index in n_grams_by_unique_secondary_id, the n-gram 
-	 * having a unique secondary identifier that occurs with that frequency.
+	 * A normalized histogram containing the frequencies at which each n-gram having a unique secondary 
+	 * identifier occurs among n-grams from this object's list of n-grams that have a unique secondary 
+	 * identifier. The length of this array is the same of the length of n_grams_by_unique_secondary_id.
 	 */
 	private double[] frequencies_by_unique_secondary_id;
 	
 	/**
-	 * A HashMap linking an n-gram having a unique joint identifier with its normalized frequency.
+	 * A HashMap linking a two-dimensional n-gram's joint string identifier with the normalized frequency at 
+	 * which n-grams with that joint string identifier occur among n-grams from this object's list of n-grams 
+	 * that have a unique joint identifier.
 	 */
-	private HashMap<NGram, Double> n_gram_by_unique_joint_id_to_frequency_map;
+	private HashMap<String, Double> joint_string_id_to_frequency_map;
 	
 	/**
-	 * An array of n-grams having a unique joint identifier. Each entry corresponds to the entry at the 
-	 * same index in frequencies_by_unique_joint_id, the normalized frequency of that n-gram among n-grams 
-	 * having a unique joint identifier. Each entry is also a key in the 
-	 * n_gram_by_unique_joint_id_to_frequency_map field.
+	 * An array of n-grams having a unique joint identifier among this object's list of n-grams. The length of 
+	 * this array is the same of the length of frequencies_by_unique_joint_id. The n-gram at each index occurs 
+	 * among n-grams from this object's list of n-grams that have a unique joint identifier at the frequency 
+	 * found at the same index in frequencies_by_unique_joint_id.
 	 */
-	private NGram[] n_grams_by_unique_joint_id;
+	private TwoDimensionalNGram[] n_grams_by_unique_joint_id;
 	
 	/**
-	 * A normalized histogram containing the frequencies of each n-gram having a unique joint identifier. Each 
-	 * entry corresponds to the entry at the same index in n_grams_by_unique_joint_id, the n-gram having a 
-	 * unique joint identifier that occurs with that frequency.
+	 * A normalized histogram containing the frequencies at which each n-gram having a unique joint 
+	 * identifier occurs among n-grams from this object's list of n-grams that have a unique joint 
+	 * identifier. The length of this array is the same as the length of n_grams_by_unique_joint_id.
 	 */
 	private double[] frequencies_by_unique_joint_id;
 	
@@ -76,135 +80,101 @@ public class TwoDimensionalNGramAggregate
 	{
 		super(n_gram_list);
 		
-		n_gram_by_unique_secondary_id_to_frequency_map = new HashMap<>();
-		n_gram_by_unique_joint_id_to_frequency_map = new HashMap<>();
+		secondary_string_id_to_frequency_map = new HashMap<>();
+		joint_string_id_to_frequency_map = new HashMap<>();
 		
-		LinkedList<NGram> n_grams_by_unique_secondary_id_ll = new LinkedList<>();
-		LinkedList<NGram> n_grams_by_unique_joint_id_ll = new LinkedList<>();
+		LinkedList<TwoDimensionalNGram> n_grams_by_unique_secondary_id_ll = new LinkedList<>();
+		LinkedList<TwoDimensionalNGram> n_grams_by_unique_joint_id_ll = new LinkedList<>();
 		
-		// Iterate through the n-grams passed to the constructor, creating the key sets of
-		// n_gram_by_unique_secondary_id_to_frequency_map and n_gram_by_unique_joint_id_to_frequency_map.
-		for (NGram n_gram1: n_grams)
+		for (NGram n_gram: n_grams)
 		{
-			boolean equivalent_secondary_id_found = false;
-			boolean equivalent_joint_id_found = false;
+			String secondary_string_id = ((TwoDimensionalNGram) n_gram).getSecondaryStringIdentifier();
+			String joint_string_id = ((TwoDimensionalNGram) n_gram).getJointStringIdentifier();
 			
-			// Verify whether n-grams with the same secondary or joint identifier have been encountered
-			for (NGram n_gram2: n_gram_by_unique_joint_id_to_frequency_map.keySet())
+			// Verify whether an n-gram having the same secondary identifier has been encountered yet
+			if (secondary_string_id_to_frequency_map.get(secondary_string_id) == null)
 			{
-				equivalent_secondary_id_found = equivalentIdentifiers(((TwoDimensionalNGram) n_gram1).getSecondaryIdentifier(), ((TwoDimensionalNGram) n_gram2).getSecondaryIdentifier());
-				equivalent_joint_id_found = equivalentIdentifiers(n_gram1.getIdentifier(), n_gram2.getIdentifier()) && equivalent_secondary_id_found;
-				
-				if (equivalent_secondary_id_found)
-				{
-					double frequency = n_gram_by_unique_secondary_id_to_frequency_map.get(n_gram2);
-					n_gram_by_unique_secondary_id_to_frequency_map.remove(n_gram2);
-					n_gram_by_unique_secondary_id_to_frequency_map.put(n_gram2, frequency + 1);
-					break;
-				}
-				
-				if (equivalent_joint_id_found)
-				{
-					double frequency = n_gram_by_unique_joint_id_to_frequency_map.get(n_gram2);
-					n_gram_by_unique_joint_id_to_frequency_map.remove(n_gram2);
-					n_gram_by_unique_joint_id_to_frequency_map.put(n_gram2, frequency + 1);
-					break;
-				}
+				secondary_string_id_to_frequency_map.put(secondary_string_id, 1.0);
+				n_grams_by_unique_secondary_id_ll.add((TwoDimensionalNGram) n_gram);
+			}
+			else
+			{
+				double old_frequency = secondary_string_id_to_frequency_map.get(secondary_string_id);
+				secondary_string_id_to_frequency_map.put(secondary_string_id, old_frequency + 1);
 			}
 			
-			if (!equivalent_secondary_id_found)
+			// Verify whether an n-gram having the same joint identifier has been encountered yet
+			if (joint_string_id_to_frequency_map.get(joint_string_id) == null)
 			{
-				n_gram_by_unique_secondary_id_to_frequency_map.put(n_gram1, 1.0);
-				n_grams_by_unique_secondary_id_ll.add(n_gram1);
+				joint_string_id_to_frequency_map.put(joint_string_id, 1.0);
+				n_grams_by_unique_joint_id_ll.add((TwoDimensionalNGram) n_gram);
 			}
-			
-			if (!equivalent_joint_id_found) 
+			else
 			{
-				n_gram_by_unique_joint_id_to_frequency_map.put(n_gram1, 1.0);
-				n_grams_by_unique_joint_id_ll.add(n_gram1);
+				double old_frequency = joint_string_id_to_frequency_map.get(joint_string_id);
+				joint_string_id_to_frequency_map.put(joint_string_id, old_frequency + 1);
 			}
 		}
 		
-		n_grams_by_unique_secondary_id = new NGram[n_grams_by_unique_secondary_id_ll.size()];
-		for (int n_gram = 0; n_gram < n_grams_by_unique_secondary_id.length; n_gram++)
-			n_grams_by_unique_secondary_id[n_gram] = n_grams_by_unique_secondary_id_ll.get(n_gram);
+		n_grams_by_unique_secondary_id = new TwoDimensionalNGram[n_grams_by_unique_secondary_id_ll.size()];
+		for (int i = 0; i < n_grams_by_unique_secondary_id.length; i++)
+			n_grams_by_unique_secondary_id[i] = n_grams_by_unique_secondary_id_ll.get(i);
 		
 		// Prepare array for normalization
 		double[] frequencies_by_unique_secondary_id_to_normalize = new double[n_grams_by_unique_secondary_id.length];
 		for (int i = 0; i < frequencies_by_unique_secondary_id_to_normalize.length; i++)
-			frequencies_by_unique_secondary_id_to_normalize[i] = n_gram_by_unique_secondary_id_to_frequency_map.get(n_grams_by_unique_secondary_id[i]);
+			frequencies_by_unique_secondary_id_to_normalize[i] = secondary_string_id_to_frequency_map.get(n_grams_by_unique_secondary_id[i].getSecondaryStringIdentifier());
 		
 		frequencies_by_unique_secondary_id = mckay.utilities.staticlibraries.MathAndStatsMethods.normalize(frequencies_by_unique_secondary_id_to_normalize);
 		
-		// Update the values returned by n_gram_by_unique_secondary_id_to_frequency_map to the normalized 
-		// frequencies
+		// Update the values returned by secondary_string_id_to_frequency_map to the normalized frequencies
 		for (int i = 0; i < n_grams_by_unique_secondary_id.length; i++)
 		{
-			NGram n_gram = n_grams_by_unique_secondary_id[i];
-			n_gram_by_unique_secondary_id_to_frequency_map.remove(n_gram);
-			n_gram_by_unique_secondary_id_to_frequency_map.put(n_gram, frequencies_by_unique_secondary_id[i]);
+			String secondary_string_id = n_grams_by_unique_secondary_id[i].getSecondaryStringIdentifier();
+			secondary_string_id_to_frequency_map.remove(secondary_string_id);
+			secondary_string_id_to_frequency_map.put(secondary_string_id, frequencies_by_unique_secondary_id[i]);
 		}
 		
-		n_grams_by_unique_joint_id = new NGram[n_grams_by_unique_joint_id_ll.size()];
-		for (int n_gram = 0; n_gram < n_grams_by_unique_joint_id.length; n_gram++)
-			n_grams_by_unique_joint_id[n_gram] = n_grams_by_unique_joint_id_ll.get(n_gram);
+		n_grams_by_unique_joint_id = new TwoDimensionalNGram[n_grams_by_unique_joint_id_ll.size()];
+		for (int i = 0; i < n_grams_by_unique_joint_id.length; i++)
+			n_grams_by_unique_joint_id[i] = n_grams_by_unique_joint_id_ll.get(i);
 		
 		// Prepare array for normalization
 		double[] frequencies_by_unique_joint_id_to_normalize = new double[n_grams_by_unique_joint_id.length];
 		for (int i = 0; i < frequencies_by_unique_joint_id_to_normalize.length; i++)
-			frequencies_by_unique_joint_id_to_normalize[i] = n_gram_by_unique_joint_id_to_frequency_map.get(n_grams_by_unique_joint_id[i]);
+			frequencies_by_unique_joint_id_to_normalize[i] = joint_string_id_to_frequency_map.get(n_grams_by_unique_joint_id[i].getJointStringIdentifier());
 		
 		frequencies_by_unique_joint_id = mckay.utilities.staticlibraries.MathAndStatsMethods.normalize(frequencies_by_unique_joint_id_to_normalize);
 		
-		// Update the values returned by n_gram_by_unique_joint_id_to_frequency_map to the normalized 
-		// frequencies
+		// Update the values returned by joint_string_id_to_frequency_map to the normalized frequencies
 		for (int i = 0; i < n_grams_by_unique_joint_id.length; i++)
 		{
-			NGram n_gram = n_grams_by_unique_joint_id[i];
-			n_gram_by_unique_joint_id_to_frequency_map.remove(n_gram);
-			n_gram_by_unique_joint_id_to_frequency_map.put(n_gram, frequencies_by_unique_secondary_id[i]);
+			String joint_string_id = n_grams_by_unique_joint_id[i].getJointStringIdentifier();
+			joint_string_id_to_frequency_map.remove(joint_string_id);
+			joint_string_id_to_frequency_map.put(joint_string_id, frequencies_by_unique_joint_id[i]);
 		}
 	}
-	
-	
-	/* PRIVATE METHODS **************************************************************************************/
-	
-	
-	/**
-	 * Returns a boolean indicating whether the two two-dimensional n-grams share both the same primary
-	 * and secondary identifiers.
-	 * 
-	 * @param	n_gram1		The first two-dimensional n-gram.
-	 * @param	n_gram2		The second two-dimensional n-gram.
-	 * @return				Whether the two n-grams share the same primary and secondary identifier.
-	 */
-	private boolean equivalentJointIdentifiers(	TwoDimensionalNGram n_gram1, 
-												TwoDimensionalNGram n_gram2)
-	{
-		return equivalentIdentifiers(n_gram1.getIdentifier(), n_gram2.getIdentifier()) && equivalentIdentifiers(n_gram1.getSecondaryIdentifier(), n_gram2.getSecondaryIdentifier());
-	}
-	
+
 	
 	/* PUBLIC METHODS ***************************************************************************************/
 	
 	
 	/**
-	 * Returns the normalized frequency of the n-grams having the given secondary identifier among n-grams 
-	 * having a unique secondary identifier. If there is no n-gram with the given secondary identifier, then a 
-	 * value of -1.0 is returned. Note that the returned value may not be the frequency of the n-gram having 
-	 * the given secondary identifier among n-grams having a unique primary identifier, nor among n-grams 
-	 * having a unique joint identifier.
+	 * Returns the normalized frequency at which the n-gram having the given secondary identifier occurs among
+	 * n-grams having a unique secondary identifier.
 	 * 
 	 * @param	secondary_id	The secondary identifier of the n-gram.
 	 * @return					The frequency of the n-gram with the given secondary identifier.
 	 */
-	public double getFrequencyOfSecondaryIdentifier(LinkedList<Double>[] secondary_id)
+	public double getFrequencyOfSecondaryIdentifier(LinkedList<double[]> secondary_id)
 	{
-		double frequency = -1.0;
+		double frequency;
+		String s = NGram.identifierToString(secondary_id);
 		
-		for (NGram n_gram: n_gram_by_unique_secondary_id_to_frequency_map.keySet())
-			if (equivalentIdentifiers(((TwoDimensionalNGram) n_gram).getSecondaryIdentifier(), secondary_id))
-				return n_gram_by_unique_secondary_id_to_frequency_map.get(n_gram);
+		if (secondary_string_id_to_frequency_map.get(s) != null)
+			frequency = secondary_string_id_to_frequency_map.get(s);
+		else
+			frequency = 0.0;
 		
 		return frequency;
 	}
@@ -218,33 +188,34 @@ public class TwoDimensionalNGramAggregate
 	 * 
 	 * @return	The secondary identifier of the n-gram that occurs the most frequently.
 	 */
-	public LinkedList<Double>[] getMostCommonSecondaryIdentifier()
+	public LinkedList<double[]> getMostCommonSecondaryIdentifier()
 	{
 		int index_of_highest_frequency = mckay.utilities.staticlibraries.MathAndStatsMethods.getIndexOfLargest(frequencies_by_unique_secondary_id);
-		LinkedList<Double>[] most_common_secondary_identifier = n_grams_by_unique_secondary_id[index_of_highest_frequency].getIdentifier();
+		LinkedList<double[]> most_common_secondary_identifier = n_grams_by_unique_secondary_id[index_of_highest_frequency].getSecondaryIdentifier();
 		
 		return most_common_secondary_identifier;
 	}
 	
 	
 	/**
-	 * Returns the normalized frequency of the n-gram having the given primary and secondary identifiers. If 
-	 * there is no n-gram with the given identifiers (composing a joint identifier), then a value of -1.0 is 
-	 * returned. 
+	 * Returns the normalized frequency at which the n-gram having the given primary and secondary identifiers 
+	 * (together composing a joint identifier) occurs among n-grams having unique joint identifiers.
 	 * 
 	 * @param	primary_id		The primary identifier of the n-gram.
 	 * @param	secondary_id	The secondary identifier of the n-gram.
 	 * @return					The frequency of the n-gram with the given joint identifier.
 	 */
-	public double getFrequencyOfJointIdentifier(LinkedList<Double>[] primary_id,
-												LinkedList<Double>[] secondary_id)
+	public double getFrequencyOfJointIdentifier(LinkedList<double[]> primary_id,
+												LinkedList<double[]>  secondary_id)
 	{
-		double frequency = -1.0;
+		double frequency;
+		String s = TwoDimensionalNGram.jointIdentifierToString(primary_id, secondary_id);
 		
-		for (NGram n_gram: n_gram_by_unique_joint_id_to_frequency_map.keySet())
-			if (equivalentIdentifiers(n_gram.getIdentifier(), primary_id) && equivalentIdentifiers(((TwoDimensionalNGram) n_gram).getSecondaryIdentifier(), secondary_id))
-				return n_gram_by_unique_joint_id_to_frequency_map.get(n_gram);
+		if (joint_string_id_to_frequency_map.get(s) != null)
+			frequency = joint_string_id_to_frequency_map.get(s);
+		else
+			frequency = 0.0;
 		
 		return frequency;
-	}	
+	}
 }
