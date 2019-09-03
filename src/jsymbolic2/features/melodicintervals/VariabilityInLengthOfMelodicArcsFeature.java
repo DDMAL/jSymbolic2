@@ -5,11 +5,10 @@ import javax.sound.midi.*;
 import ace.datatypes.FeatureDefinition;
 import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
-import static mckay.utilities.staticlibraries.MathAndStatsMethods.getAverage;
 
 /**
- * A feature calculator that finds the standard deviation of the number of notes that separate consecutive 
- * melodic peaks and consecutive melodic troughs. Similar assumptions are made in the calculation of this 
+ * A feature calculator that finds the standard deviation of the number of notes comprising melodic arcs,
+ * including the notes at the peaks and troughs. Similar assumptions are made in the calculation of this
  * feature as for the Melodic Interval Histogram. Set to 0 if no melodic arcs are found.
  *
  * @author radamian and Cory McKay
@@ -27,7 +26,7 @@ public class VariabilityInLengthOfMelodicArcsFeature
 	{
 		String name = "Variability in Length of Melodic Arcs";
 		String code = "M-83";
-		String description = "Standard deviation of the number of notes that separate consecutive melodic peaks and consecutive melodic troughs. Similar assumptions are made in the calculation of this feature as for the Melodic Interval Histogram. Set to 0 if no melodic arcs are found.";
+		String description = "Standard deviation of the number of notes comprising melodic arcs, including the notes at the peaks and troughs. Similar assumptions are made in the calculation of this feature as for the Melodic Interval Histogram. Set to 0 if no melodic arcs are found.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);

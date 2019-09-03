@@ -7,12 +7,12 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * Average number of notes that go by in a MIDI channel before a note's pitch is repeated (including the
- * repeated note itself). This is calculated across each channel individually before being combined. Similar
- * assumptions are made in the calculation of this feature as for the Melodic Interval Histogram. Notes that
- * do not recur after 16 notes in the same channel are not included in this calculation. Set to 0 if there are
- * no qualifying repeated notes in the piece.
- *
+ * Average number of notes that go by in a MIDI track and channel before a note's pitch is repeated (including
+ * the repeated note itself). This is calculated across each track and channel individually before being
+ * combined. Similar assumptions are made in the calculation of this feature as for the Melodic Interval
+ * Histogram. Notes that do not recur after 16 notes in the same channel are not included in this calculation.
+ * Set to 0 if there are no qualifying repeated notes in the piece.
+ * *
  * @author Cory McKay, Tristano Tenaglia and radamian
  */
 public class MelodicPitchVarietyFeature
@@ -28,7 +28,7 @@ public class MelodicPitchVarietyFeature
 	{
 		String name = "Melodic Pitch Variety";
 		String code = "M-89";
-		String description = "Average number of notes that go by in a MIDI channel before a note's pitch is repeated (including the repeated note itself). This is calculated across each channel individually before being combined. Similar assumptions are made in the calculation of this feature as for the Melodic Interval Histogram. Notes that do not recur after 16 notes in the same channel are not included in this calculation. Set to 0 if there are no qualifying repeated notes in the piece.";
+		String description = "Average number of notes that go by in a MIDI track and channel before a note's pitch is repeated (including the repeated note itself). This is calculated across each track and channel individually before being combined. Similar assumptions are made in the calculation of this feature as for the Melodic Interval Histogram. Notes that do not recur after 16 notes in the same channel are not included in this calculation. Set to 0 if there are no qualifying repeated notes in the piece. ";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
@@ -66,6 +66,7 @@ public class MelodicPitchVarietyFeature
 		{
 			// Get onset slices for track and channel containing melodic lines only
 			LinkedList<LinkedList<Integer>>[][] slices_by_track_and_channel = sequence_info.note_onset_slice_container.getNoteOnsetSlicesByTrackAndChannelMelodicLinesOnly();
+			
 			// Initialize structure containing onset slices by channel only
 			LinkedList<LinkedList<Integer>>[] slices_by_channel = new LinkedList[16];
 			

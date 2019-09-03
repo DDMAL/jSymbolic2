@@ -11,11 +11,11 @@ import jsymbolic2.featureutils.NoteInfo;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the fraction of all notes that are surrounded on at least one side by a 
- * MIDI Note On on the same MIDI channel that has a duration at least three times as long as it. Set to 0 if 
- * there are no notes in the piece.
+ * A feature calculator that finds the fraction of all notes that are surrounded on at least one side by a
+ * MIDI Note On on the same MIDI track and channel that has a duration at least three times as long as it. Set
+ * to 0 if there are no notes in the piece.
  *
- * @author Tristano Tenaglia, Cory McKay and radamian
+ * @author Cory McKay and radamian
  */
 public class MelodicEmbellishmentsOneSidedFeature
 		extends MIDIFeatureExtractor
@@ -30,7 +30,7 @@ public class MelodicEmbellishmentsOneSidedFeature
 	{
 		String name = "Melodic Embellishments - One-Sided";
 		String code = "M-69";
-		String description = "Fraction of all notes that are surrounded on at least one side by a MIDI Note On on the same MIDI channel that has a duration at least three times as long as it. Set to 0 if there are no notes in the piece.";
+		String description = "Fraction of all notes that are surrounded on at least one side by a MIDI Note On on the same MIDI track and channel that has a duration at least three times as long as it. Set to 0 if there are no notes in the piece.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);

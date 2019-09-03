@@ -440,7 +440,9 @@ public class MIDIIntermediateRepresentations
 	 * melody, even if lower pitches in the same track and channel change). Other than this, all notes on the
 	 * same track and the same channel are treated as if they are part of a single melody. It is also assumed
 	 * that melodies do not cross MIDI tracks or channels (i.e. that they are each separately contained in
-	 * their own track and channel).
+	 * their own track and channel). There is always an entry for every channel on every track present, but
+	 * the entry for a given channel will be an empty list if there are no melodic intervals on that track
+	 * and channel.
 	 */
 	public LinkedList<LinkedList<Integer>[]> melodic_intervals_by_track_and_channel;
 	

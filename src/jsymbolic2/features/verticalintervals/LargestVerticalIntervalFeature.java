@@ -21,7 +21,7 @@ public class LargestVerticalIntervalFeature
 	 */
 	public LargestVerticalIntervalFeature()
 	{
-		String name = "Largest Vertical Interval Feature";
+		String name = "Largest Vertical Interval";
 		String code = "C-18";
 		String description = "The largest vertical interval present in the piece, measured in semitones.";
 		boolean is_sequential = true;

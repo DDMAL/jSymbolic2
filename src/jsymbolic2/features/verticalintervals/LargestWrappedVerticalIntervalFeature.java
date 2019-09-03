@@ -22,7 +22,7 @@ public class LargestWrappedVerticalIntervalFeature
 	 */
 	public LargestWrappedVerticalIntervalFeature()
 	{
-		String name = "Largest Wrapped Vertical Interval Feature";
+		String name = "Largest Wrapped Vertical Interval";
 		String code = "C-19";
 		String description = "The largest wrapped vertical interval present in the piece, measured in semitones.";
 		boolean is_sequential = true;
