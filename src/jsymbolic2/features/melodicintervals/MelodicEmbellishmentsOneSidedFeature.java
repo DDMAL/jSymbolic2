@@ -67,61 +67,65 @@ public class MelodicEmbellishmentsOneSidedFeature
 		if (sequence_info != null)
 		{
 			// The total number of notes that are embellishemnets
-			double number_embelleshing_notes = 0;
+			double number_embellishing_notes = 0;
 			
-			// For each channel get all the notes in the channel
-			for (int channel = 0; channel < 16; channel++)
+			// For each MIDI track and channel get all the notes in the track and channel
+			for (int n_track = 0; n_track < sequence.getTracks().length; n_track++)
 			{
-				if (channel != 10 - 1)  // Skip over the unpitched percussion channel
+				System.out.println(n_track);
+				for (int channel = 0; channel < 16; channel++)
 				{
-					// Prepare a list of all notes on this channel sorted by start tick
-					List<NoteInfo> all_notes_in_this_channel = sequence_info.all_notes.getNotesOnChannel(channel);
-					all_notes_in_this_channel = CollectedNoteInfo.noteListToSortedNoteList(all_notes_in_this_channel);
-
-					// Prepare a map indicating all notes starting on any given MIDI tick, where the start tick
-					// value serves as the map key and the map value is a list of all notes starting on the
-					// specified tick. The particular ordering of notes in this List value is not necessarily
-					// meaningful.
-					Map<Integer, List<NoteInfo>> note_start_tick_map_this_channel = CollectedNoteInfo.noteListToStartTickNoteMap(all_notes_in_this_channel);
-
-					// Prepare a sorted set of all ticks containing one or more note on messages
-					Integer[] sorted_note_on_ticks_this_channel = note_start_tick_map_this_channel.keySet().toArray(new Integer[0]);
-					Arrays.sort(sorted_note_on_ticks_this_channel);
-
-					// Compare the duration of each note in this channel with the duration of the notes on each
-					// side of it on this channel
-					for (NoteInfo current_note : all_notes_in_this_channel)
+					if (channel != 10 - 1)  // Skip over the unpitched percussion channel
 					{
-						int current_tick_index = 0;
-						int current_tick = current_note.getStartTick();
-						for (int tick_index = 0; tick_index < sorted_note_on_ticks_this_channel.length; tick_index++)
+						// Prepare a list of all notes on this track and channel sorted by start tick
+						List<NoteInfo> all_notes_in_this_track_and_channel = sequence_info.all_notes.getNotesOnTrackAndChannel(n_track, channel);
+						all_notes_in_this_track_and_channel = CollectedNoteInfo.noteListToSortedNoteList(all_notes_in_this_track_and_channel);
+
+						// Prepare a map indicating all notes starting on any given MIDI tick, where the start 
+						// tick value serves as the map key and the map value is a list of all notes starting 
+						// on the specified tick. The particular ordering of notes in this List value is not 
+						// necessarily meaningful.
+						Map<Integer, List<NoteInfo>> note_start_tick_map_this_track_and_channel = CollectedNoteInfo.noteListToStartTickNoteMap(all_notes_in_this_track_and_channel);
+
+						// Prepare a sorted set of all ticks containing one or more note on messages
+						Integer[] sorted_note_on_ticks_this_track_and_channel = note_start_tick_map_this_track_and_channel.keySet().toArray(new Integer[0]);
+						Arrays.sort(sorted_note_on_ticks_this_track_and_channel);
+
+						// Compare the duration of each note in this track and channel with the duration of 
+						// the notes on each side of it on this track and channel
+						for (NoteInfo current_note : all_notes_in_this_track_and_channel)
 						{
-							if (sorted_note_on_ticks_this_channel[tick_index] == current_tick)
+							int current_tick_index = 0;
+							int current_tick = current_note.getStartTick();
+							for (int tick_index = 0; tick_index < sorted_note_on_ticks_this_track_and_channel.length; tick_index++)
 							{
-								current_tick_index = tick_index;
-								break;
+								if (sorted_note_on_ticks_this_track_and_channel[tick_index] == current_tick)
+								{
+									current_tick_index = tick_index;
+									break;
+								}
 							}
-						}
 
-						if (current_tick_index > 0 && current_tick_index < sorted_note_on_ticks_this_channel.length - 1)
-						{
-							int previous_tick_with_note = sorted_note_on_ticks_this_channel[current_tick_index - 1];
-							int next_tick_with_note = sorted_note_on_ticks_this_channel[current_tick_index + 1];
+							if (current_tick_index > 0 && current_tick_index < sorted_note_on_ticks_this_track_and_channel.length - 1)
+							{
+								int previous_tick_with_note = sorted_note_on_ticks_this_track_and_channel[current_tick_index - 1];
+								int next_tick_with_note = sorted_note_on_ticks_this_track_and_channel[current_tick_index + 1];
 
-							List<NoteInfo> previous_notes = note_start_tick_map_this_channel.get(previous_tick_with_note);
-							List<NoteInfo> next_notes = note_start_tick_map_this_channel.get(next_tick_with_note);
+								List<NoteInfo> previous_notes = note_start_tick_map_this_track_and_channel.get(previous_tick_with_note);
+								List<NoteInfo> next_notes = note_start_tick_map_this_track_and_channel.get(next_tick_with_note);
 
-							boolean previous_check = false;
-							for (NoteInfo previous : previous_notes)
-								if (previous.getDuration() >= 3 * current_note.getDuration())
-									previous_check = true;
-							boolean next_check = false;
-							for (NoteInfo next : next_notes)
-								if (next.getDuration() >= 3 * current_note.getDuration())
-									next_check = true;
+								boolean previous_check = false;
+								for (NoteInfo previous : previous_notes)
+									if (previous.getDuration() >= 3 * current_note.getDuration())
+										previous_check = true;
+								boolean next_check = false;
+								for (NoteInfo next : next_notes)
+									if (next.getDuration() >= 3 * current_note.getDuration())
+										next_check = true;
 
-							if (next_check || previous_check)
-								number_embelleshing_notes++;
+								if (next_check || previous_check)
+									number_embellishing_notes++;
+							}
 						}
 					}
 				}
@@ -131,7 +135,7 @@ public class MelodicEmbellishmentsOneSidedFeature
 			if (sequence_info.total_number_note_ons == 0)
 				value = 0;
 			else
-				value = number_embelleshing_notes / sequence_info.total_number_note_ons;	
+				value = number_embellishing_notes / sequence_info.total_number_note_ons;	
 		}
 		else value = -1.0;
 

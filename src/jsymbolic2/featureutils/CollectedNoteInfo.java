@@ -190,6 +190,22 @@ public class CollectedNoteInfo
 	
 
 	/**
+	 * Get a list of notes in the combination of the given MIDI track and channel.
+	 *
+	 * @param	track	The MIDI track to find notes from.
+	 * @param	channel	The MIDI channel to find notes from.
+	 * @return			A list of all notes added so far from a MIDI stream with the given track and channel 
+	 *					numbers. Temporal order is not necessarily guaranteed.
+	 */
+	public List<NoteInfo> getNotesOnTrackAndChannel(int track, 
+													int channel)
+	{
+		List<NoteInfo> notes_on_track = note_list.stream().filter(n -> n.getTrack() == track).collect(Collectors.toList());
+		return notes_on_track.stream().filter(n -> n.getChannel() == channel).collect(Collectors.toList());
+	}
+	
+	
+	/**
 	 * Get a list of notes starting on the given MIDI start_tick.
 	 * 
 	 * @param tick	The MIDI start_tick to find notes starting on.

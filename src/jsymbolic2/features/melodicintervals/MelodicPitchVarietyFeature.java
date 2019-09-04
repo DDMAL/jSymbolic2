@@ -13,7 +13,7 @@ import jsymbolic2.processing.MIDIIntermediateRepresentations;
  * Histogram. Notes that do not recur after 16 notes in the same channel are not included in this calculation.
  * Set to 0 if there are no qualifying repeated notes in the piece.
  * *
- * @author Cory McKay, Tristano Tenaglia and radamian
+ * @author Cory McKay, Tristano Tenaglia, and radamian
  */
 public class MelodicPitchVarietyFeature
 		extends MIDIFeatureExtractor
@@ -66,26 +66,6 @@ public class MelodicPitchVarietyFeature
 		{
 			// Get onset slices for track and channel containing melodic lines only
 			LinkedList<LinkedList<Integer>>[][] slices_by_track_and_channel = sequence_info.note_onset_slice_container.getNoteOnsetSlicesByTrackAndChannelMelodicLinesOnly();
-			
-			// Initialize structure containing onset slices by channel only
-			LinkedList<LinkedList<Integer>>[] slices_by_channel = new LinkedList[16];
-			
-			// Fill structure containing onset slices by channel only
-			for (int chan = 0; chan < 16; chan++)
-			{
-				slices_by_channel[chan] = new LinkedList<>();
-				for (int slice = 0; slice < slices_by_track_and_channel[0][chan].size(); slice++)
-				{
-					// Create new slice
-					slices_by_channel[chan].add(new LinkedList<>());
-					for (int n_track = 0; n_track < sequence.getTracks().length; n_track++)
-						for (int i = 0; i < slices_by_track_and_channel[n_track][chan].get(slice).size(); i++)
-							slices_by_channel[chan].get(slice).add(slices_by_track_and_channel[n_track][chan].get(slice).get(i));
-					
-					// Sort slice by increasing pitch
-					slices_by_channel[chan].get(slice).sort((s1, s2) -> s1.compareTo(s2));
-				}
-			}
 					
 			// The total number of notes for which a repeated note is found
 			int number_of_repeated_notes_found = 0;
@@ -98,46 +78,49 @@ public class MelodicPitchVarietyFeature
 			// of this feature
 			final int max_notes_that_can_go_by = 16;
 
-			// Go through channel by channel
-			for (int channel = 0; channel < 16; channel++)
+			// Go through by track and channel
+			for (int n_track = 0; n_track < sequence.getTracks().length; n_track++)
 			{
-				if (channel != (10 - 1))  // Skip over the unpitched percussion channel
+				for (int channel = 0; channel < 16; channel++)
 				{
-					// Create a list of pitches encountered
-					LinkedList<Integer> pitches_encountered_on_channel = new LinkedList<>();
-					// Create array that contains, for each pitch, the count of notes gone by since the last 
-					// time a note with that pitch was encountered
-					int[] counts_since_pitch_last_encountered = new int [128];
-					for (int i = 0; i < counts_since_pitch_last_encountered.length; i++)
-						counts_since_pitch_last_encountered[i] = 0;
-					
-					// Go through onset slices
-					for (int slice = 0; slice < slices_by_channel[channel].size(); slice++)
-						if (!slices_by_channel[channel].get(slice).isEmpty())
-						{
-							// Get pitch belonging to the melody (the highest pitch in the slice)
-							int melodic_pitch = slices_by_channel[channel].get(slice).get(slices_by_channel[channel].get(slice).size() - 1);
-							
-							if (!pitches_encountered_on_channel.contains(melodic_pitch))
+					if (channel != (10 - 1))  // Skip over the unpitched percussion channel
+					{
+						// Create a list of pitches encountered
+						LinkedList<Integer> pitches_encountered_on_channel = new LinkedList<>();
+						// Create array that contains, for each pitch, the count of notes gone by since the last 
+						// time a note with that pitch was encountered
+						int[] counts_since_pitch_last_encountered = new int [128];
+						for (int i = 0; i < counts_since_pitch_last_encountered.length; i++)
+							counts_since_pitch_last_encountered[i] = 0;
+
+						// Go through onset slices
+						for (int slice = 0; slice < slices_by_track_and_channel[n_track][channel].size(); slice++)
+							if (!slices_by_track_and_channel[n_track][channel].get(slice).isEmpty())
 							{
-								pitches_encountered_on_channel.add(melodic_pitch);
-							}
-							else
-							{
-								if (counts_since_pitch_last_encountered[melodic_pitch] <= max_notes_that_can_go_by)
+								// Get pitch belonging to the melody (the highest pitch in the slice)
+								int melodic_pitch = slices_by_track_and_channel[n_track][channel].get(slice).get(slices_by_track_and_channel[n_track][channel].get(slice).size() - 1);
+
+								if (!pitches_encountered_on_channel.contains(melodic_pitch))
 								{
-									number_of_repeated_notes_found++;
-									summed_number_of_notes_before_pitch_repeated += counts_since_pitch_last_encountered[melodic_pitch] + 1;
+									pitches_encountered_on_channel.add(melodic_pitch);
 								}
-								counts_since_pitch_last_encountered[melodic_pitch] = 0;
+								else
+								{
+									if (counts_since_pitch_last_encountered[melodic_pitch] <= max_notes_that_can_go_by)
+									{
+										number_of_repeated_notes_found++;
+										summed_number_of_notes_before_pitch_repeated += counts_since_pitch_last_encountered[melodic_pitch] + 1;
+									}
+									counts_since_pitch_last_encountered[melodic_pitch] = 0;
+								}
+
+								// Increment the count of notes gone by since the last time a pitch was 
+								// encountered
+								for (Integer pitch: pitches_encountered_on_channel)
+									if (pitch != melodic_pitch)
+										counts_since_pitch_last_encountered[pitch]++;
 							}
-							
-							// Increment the count of notes gone by since the last time a pitch was 
-							// encountered
-							for (Integer pitch: pitches_encountered_on_channel)
-								if (pitch != melodic_pitch)
-									counts_since_pitch_last_encountered[pitch]++;
-						}
+					}
 				}
 			}
 			

@@ -1016,15 +1016,18 @@ public class MIDIIntermediateRepresentations
 		
 		generateNGramGenerator();
 		
+		/*
 		n_gram_generator.getVerticalIntervalNGramAggregate(3, track_and_channel_with_lowest_average_pitch, track_and_channel_pairs_by_average_pitch, true, false, false, true);
 		n_gram_generator.getMelodicIntervalNGramAggregateForVoice(3, track_and_channel_with_lowest_average_pitch, true, false, false);
 		n_gram_generator.getRhythmicValueNGramAggregateForVoice(3, track_and_channel_with_highest_average_pitch);
 		n_gram_generator.getVerticalAndMelodicIntervalNGramAggregate(3, track_and_channel_with_lowest_average_pitch, track_and_channel_pairs_by_average_pitch, true, false, false, false);
-		
+		*/
+		/*
 		LinkedList<int[]> highest_and_lowest_voice = new LinkedList<>();
 		highest_and_lowest_voice.add(track_and_channel_with_lowest_average_pitch);
 		highest_and_lowest_voice.add(track_and_channel_with_highest_average_pitch);
-		//n_gram_generator.getVerticalAndMelodicIntervalNGrams(3, track_and_channel_with_lowest_average_pitch, highest_and_lowest_voice, true, false, false, false);
+		n_gram_generator.getVerticalAndMelodicIntervalNGramAggregate(3, track_and_channel_with_lowest_average_pitch, highest_and_lowest_voice, true, false, false, false);
+		*/
 		
 		generatePitchAndPitchClassesOfAllNoteOns();
 		/*
@@ -2192,12 +2195,65 @@ public class MIDIIntermediateRepresentations
 	 */
 	private void generateNGramGenerator()
 	{
-		/*
-		LinkedList<int[]> highest_and_lowest_voice = new LinkedList<>();
-		highest_and_lowest_voice.add(track_and_channel_with_lowest_average_pitch);
-		highest_and_lowest_voice.add(track_and_channel_with_highest_average_pitch);
-		*/
-		n_gram_generator = new NGramGenerator(note_onset_slice_container, melodic_intervals_by_track_and_channel, rhythmic_values_in_quarter_notes_by_track_and_channel, track_and_channel_pairs_by_average_pitch);
+		// Create a structure containing all vertical intervals between the melodic lines of each MIDI track
+		// and channel, for each MIDI track and channel
+		LinkedList[][] vertical_intervals_by_track_and_channel = new LinkedList[tracks.length][16];
+		for (int n_track = 0; n_track < vertical_intervals_by_track_and_channel.length; n_track++)
+			for (int chan = 0; chan < 16; chan++)
+				vertical_intervals_by_track_and_channel[n_track][chan] = new LinkedList<>();
+		
+		// Get the note onset slices separated out by track and by channel. The outer list index specifies the 
+		// slice (the slices are listed in temporal order), and the inner list index specifies the MIDI 
+		// pitches in that slice on that track and channel (this list of pitches will always be empty or hold 
+		// only one pitch). 
+		LinkedList<LinkedList<Integer>>[][] note_onset_slices_only_melodic_lines_held_notes_included = note_onset_slice_container.getNoteOnsetSlicesByTrackAndChannelMelodicLinesOnlyHeldNotesIncluded();
+		
+		// Iterate by note onset slice
+		for (int slice = 0; slice < note_onset_slice_container.NUMBER_OF_ONSET_SLICES; slice++)
+		{
+			// Calculate vertical intervals for each pair of MIDI track and channel
+			for (int pair = 0; pair < track_and_channel_pairs_by_average_pitch.size(); pair++)
+			{
+				int track = track_and_channel_pairs_by_average_pitch.get(pair)[0];
+				int channel = track_and_channel_pairs_by_average_pitch.get(pair)[1];
+		
+				// A list of vertical intervals between the melodic note on the current track and channel and 
+				// those on the other pairs of track and channel
+				LinkedList<Integer> vertical_intervals = new LinkedList<>();
+				
+				// If the onset slice for the current track and channel pair is not empty (i.e. that voice 
+				// does not have a rest), get the vertical intervals between the melodic note of the current 
+				// voice and those of all other voices
+				if (!note_onset_slices_only_melodic_lines_held_notes_included[track][channel].get(slice).isEmpty())
+				{                                           
+					for (int other_pair = 0; other_pair < track_and_channel_pairs_by_average_pitch.size(); other_pair++)
+					{	
+						if (pair != other_pair)
+						{
+							int other_track = track_and_channel_pairs_by_average_pitch.get(other_pair)[0];
+							int other_channel = track_and_channel_pairs_by_average_pitch.get(other_pair)[1];
+
+							int vertical_interval;
+							
+							// If the current onset slice for another track and channel is empty (i.e. that 
+							// voice has a rest), then the vertical interval is recorded as 128 (an interval 
+							// that is impossible in MIDI)
+							if (note_onset_slices_only_melodic_lines_held_notes_included[other_track][other_channel].get(slice).isEmpty())
+								vertical_interval = 128;
+							else
+								vertical_interval = note_onset_slices_only_melodic_lines_held_notes_included[other_track][other_channel].get(slice).get(0) - 
+													note_onset_slices_only_melodic_lines_held_notes_included[track][channel].get(slice).get(0);
+
+							vertical_intervals.add(vertical_interval);
+						}
+					}
+				}
+				
+				vertical_intervals_by_track_and_channel[track][channel].add(vertical_intervals);
+			}
+		}
+		
+		n_gram_generator = new NGramGenerator(tracks, note_onset_slice_container, melodic_intervals_by_track_and_channel, rhythmic_values_in_quarter_notes_by_track_and_channel, vertical_intervals_by_track_and_channel);
 	}
 
 

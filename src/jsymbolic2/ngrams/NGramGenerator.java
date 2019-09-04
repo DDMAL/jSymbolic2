@@ -1,6 +1,7 @@
 package jsymbolic2.ngrams;
 
 import java.util.LinkedList;
+import javax.sound.midi.Track;
 import jsymbolic2.featureutils.NoteOnsetSliceContainer;
 
 /**
@@ -26,40 +27,12 @@ public class NGramGenerator
 	/* PRIVATE FIELDS ***************************************************************************************/
 	
 	/**
-	 * A list of arrays of integers, where each entry represents a different voice in the piece. Each array is
-	 * of length two, with the value at the first index being the MIDI track number, and the value at the 
-	 * second index being the MIDI channel number. Vertical intervals are calculated between the melodic lines
-	 * of each pair of track and channel listed in this field.
-	 */
-	private final LinkedList<int[]> track_and_channel_pairs;
-	
-	/**
 	 * The music divided into note onset slices. A note onset slice, in its most basic form, is defined here 
 	 * as a set of pitched notes that start simultaneously, or nearly simultaneously. A new onset slice is 
 	 * created whenever a new pitched note (in any voice) occurs with sufficient rhythmic separation from 
 	 * previous pitched notes. 
 	 */
-	private final NoteOnsetSliceContainer note_onset_slice_container;
-	
-	/** 
-	 * A 2-D array containing the vertical intervals between the notes of the melodic lines in the piece, 
-	 * separated out by MIDI track (first array index) and channel (second array index). Each entry is a list
-	 * of lists, where each inner list contains the vertical intervals, in number of semitones, calculated for 
-	 * each note onset slice. Each entry in the 2-D array that corresponds to a pair of MIDI track and channel 
-	 * in the list passed to this object's constructor will have the same number of inner lists with the same 
-	 * synchronization. Entries in the 2-D array that correspond to a MIDI track and channel not included in
-	 * the list passed to this object's constructor are empty lists. The inner lists of each entry contain 
-	 * only vertical intervals between the melodic note on the corresponding pair of track and channel and the 
-	 * melodic notes on the other pairs of MIDI track and channel (this follows jSymbolic's convention that 
-	 * the highest note sounding at a given time is that belonging to the melody). They are listed in the 
-	 * order that the other track and channel pairs appear in the list of pairs passed to this object's
-	 * constructor. If there is a rest for a MIDI track and channel pair (i.e. its note onset slice is empty), 
-	 * then the inner list created for the corresponding entry will be empty. In this case, the vertical 
-	 * interval between the notes on other track and channel pairs and those on the track and channel with a 
-	 * rest will be recorded as 128 (an impossible interval in MIDI). Notes on MIDI channel 10 (unpitched 
-	 * percussion) are excluded from these calculations.
-	 */
-	private final LinkedList<LinkedList<Integer>>[][] vertical_intervals_by_track_and_channel;	
+	private final NoteOnsetSliceContainer note_onset_slice_container;	
 	
 	/**
 	 * A list of data structures, where the outer list contains a separate entry for each MIDI track. The
@@ -84,6 +57,26 @@ public class NGramGenerator
 	 */
 	private final LinkedList<Double>[][] rhythmic_values_by_track_and_channel;
 	
+	/** 
+	 * A 2-D array containing the vertical intervals between the notes of the melodic lines in the piece, 
+	 * separated out by MIDI track (first array index) and channel (second array index). Each entry is a list
+	 * of lists, where each inner list contains the vertical intervals, in number of semitones, calculated for 
+	 * each note onset slice. Each entry in the 2-D array that corresponds to a pair of MIDI track and channel 
+	 * in the list passed to this object's constructor will have the same number of inner lists with the same 
+	 * synchronization. Entries in the 2-D array that correspond to a MIDI track and channel not included in
+	 * the list passed to this object's constructor are empty lists. The inner lists of each entry contain 
+	 * only vertical intervals between the melodic note on the corresponding pair of track and channel and the 
+	 * melodic notes on the other pairs of MIDI track and channel (this follows jSymbolic's convention that 
+	 * the highest note sounding at a given time is that belonging to the melody). They are listed in the 
+	 * order that the other track and channel pairs appear in the list of pairs passed to this object's
+	 * constructor. If there is a rest for a MIDI track and channel pair (i.e. its note onset slice is empty), 
+	 * then the inner list created for the corresponding entry will be empty. In this case, the vertical 
+	 * interval between the notes on other track and channel pairs and those on the track and channel with a 
+	 * rest will be recorded as 128 (an impossible interval in MIDI). Notes on MIDI channel 10 (unpitched 
+	 * percussion) are excluded from these calculations.
+	 */
+	private final LinkedList<LinkedList<Integer>>[][] vertical_intervals_by_track_and_channel;
+	
 	/**
 	 * The number of channels supported by the MIDI protocol.
 	 */
@@ -94,89 +87,29 @@ public class NGramGenerator
 	
 	
 	/**
-	 * Create structures for all supported musical moments from which n-grams can be generated. Structures
-	 * containing all melodic intervals and rhythmic values in the piece already calculated are passed to this
-	 * constructor, while the given note onset slice container is used to create a structure containing all
-	 * vertical intervals in the piece, separated out by track and channel.
+	 * Create structures for all supported musical moments from which n-grams can be generated.
 	 * 
+	 * @param tracks									An array of tracks contained in the MIDI sequence for
+	 *													the piece of music.
 	 * @param note_onset_slice_container				The object containing the note onset slices from which 
 	 *													vertical intervals will be calculated.
 	 * @param melodic_intervals_by_track_and_channel	The melodic intervals in the piece, separated out by
 	 *													track and channel.
 	 * @param rhythmic_values_by_track_and_channel		The rhythmic values of the melodic notes in the piece, 
 	 *													separated out by track and channel.
-	 * @param track_and_channel_pairs					A list of arrays of integers, each representing a 
-	 *													combination of track and MIDI channel, a different 
-	 *													voice in the piece. The entry at index 0 is the number 
-	 *													of the track and the entry at index 1 is the number of 
-	 *													the MIDI channel.
+	 * @param vertical_intervals_by_track_and_channel	The vertical intervals between the melodic notes in
+	 *													piece, separated out by track and channel.
 	 */
-	public NGramGenerator(	NoteOnsetSliceContainer note_onset_slice_container,
+	public NGramGenerator(	Track[] tracks,
+							NoteOnsetSliceContainer note_onset_slice_container,
 							LinkedList<LinkedList<Integer>[]> melodic_intervals_by_track_and_channel,
 							LinkedList[][] rhythmic_values_by_track_and_channel,
-							LinkedList<int[]> track_and_channel_pairs)
+							LinkedList[][] vertical_intervals_by_track_and_channel)
 	{
-		this.track_and_channel_pairs = track_and_channel_pairs;
 		this.note_onset_slice_container = note_onset_slice_container;
 		this.melodic_intervals_by_track_and_channel = melodic_intervals_by_track_and_channel;
 		this.rhythmic_values_by_track_and_channel = rhythmic_values_by_track_and_channel;
-		
-		// Initialize the vertical_intervals_by_track_and_channel field
-		vertical_intervals_by_track_and_channel = new LinkedList[note_onset_slice_container.NUMBER_OF_ONSET_SLICES][NUMBER_OF_MIDI_CHANNELS];
-		for (int n_track = 0; n_track < vertical_intervals_by_track_and_channel.length; n_track++)
-			for (int chan = 0; chan < NUMBER_OF_MIDI_CHANNELS; chan++)
-				vertical_intervals_by_track_and_channel[n_track][chan] = new LinkedList<>();
-		
-		// Get the note onset slices separated out by track and by channel. The outer list index specifies the 
-		// slice (the slices are listed in temporal order), and the inner list index specifies the MIDI 
-		// pitches in that slice on that track and channel (this list of pitches will always be empty or hold 
-		// only one pitch). 
-		LinkedList<LinkedList<Integer>>[][] note_onset_slices_only_melodic_lines_held_notes_included = note_onset_slice_container.getNoteOnsetSlicesByTrackAndChannelMelodicLinesOnlyHeldNotesIncluded();
-		
-		// Iterate by note onset slice
-		for (int slice = 0; slice < note_onset_slice_container.NUMBER_OF_ONSET_SLICES; slice++)
-		{
-			// Calculate vertical intervals for each pair of MIDI track and channel
-			for (int pair = 0; pair < track_and_channel_pairs.size(); pair++)
-			{
-				int track = track_and_channel_pairs.get(pair)[0];
-				int channel = track_and_channel_pairs.get(pair)[1];
-				
-				// A list of vertical intervals between the melodic note on the current track and channel and 
-				// those on the other pairs of track and channel
-				LinkedList<Integer> vertical_intervals = new LinkedList<>();
-				
-				// If the onset slice for the current track and channel pair is not empty (i.e. that voice 
-				// does not have a rest), get the vertical intervals between the melodic note of the current 
-				// voice and those of all other voices
-				if (!note_onset_slices_only_melodic_lines_held_notes_included[track][channel].get(slice).isEmpty())
-				{                                           
-					for (int other_pair = 0; other_pair < track_and_channel_pairs.size(); other_pair++)
-					{	
-						if (pair != other_pair)
-						{
-							int other_track = track_and_channel_pairs.get(other_pair)[0];
-							int other_channel = track_and_channel_pairs.get(other_pair)[1];
-
-							int vertical_interval;
-							
-							// If the current onset slice for another track and channel is empty (i.e. that 
-							// voice has a rest), then the vertical interval is recorded as 128 (an interval 
-							// that is impossible in MIDI)
-							if (note_onset_slices_only_melodic_lines_held_notes_included[other_track][other_channel].get(slice).isEmpty())
-								vertical_interval = 128;
-							else
-								vertical_interval = note_onset_slices_only_melodic_lines_held_notes_included[other_track][other_channel].get(slice).get(0) - 
-													note_onset_slices_only_melodic_lines_held_notes_included[track][channel].get(slice).get(0);
-
-							vertical_intervals.add(vertical_interval);
-						}
-					}
-				}
-				
-				vertical_intervals_by_track_and_channel[track][channel].add(vertical_intervals);
-			}
-		}
+		this.vertical_intervals_by_track_and_channel = vertical_intervals_by_track_and_channel;
 	}
 
 	
@@ -288,9 +221,9 @@ public class NGramGenerator
 			}
 		}
 		
-		System.out.println("\n\n\n VERTICAL INTERVALS: ");
-		for (int i = 0; i < n_grams_ll.size(); i++)
-			System.out.println("\n" + i + ": " + n_grams_ll.get(i).getStringIdentifier());
+//		System.out.println("\n\n\n VERTICAL INTERVALS: ");
+//		for (int i = 0; i < n_grams_ll.size(); i++)
+//			System.out.println("\n" + i + ": " + n_grams_ll.get(i).getStringIdentifier());
 
 		return n_grams_ll;
 	}
@@ -349,9 +282,9 @@ public class NGramGenerator
 			}
 		}
 		
-		System.out.println("\n\n\n MELODIC INTERVALS: ");
-		for (int i = 0; i < n_grams_ll.size(); i++)
-			System.out.println("\n" + i + ": " + n_grams_ll.get(i).getStringIdentifier());
+//		System.out.println("\n\n\n MELODIC INTERVALS: ");
+//		for (int i = 0; i < n_grams_ll.size(); i++)
+//			System.out.println("\n" + i + ": " + n_grams_ll.get(i).getStringIdentifier());
 
 		return n_grams_ll;
 	}
@@ -401,9 +334,9 @@ public class NGramGenerator
 			}
 		}
 		
-		System.out.println("\n\n\n RHYTHMIC VALUES: ");
-		for (int i = 0; i < n_grams_ll.size(); i++)
-			System.out.println("\n" + i + ": " + n_grams_ll.get(i).getStringIdentifier());
+//		System.out.println("\n\n\n RHYTHMIC VALUES: ");
+//		for (int i = 0; i < n_grams_ll.size(); i++)
+//			System.out.println("\n" + i + ": " + n_grams_ll.get(i).getStringIdentifier());
 
 		return n_grams_ll;
 	}
