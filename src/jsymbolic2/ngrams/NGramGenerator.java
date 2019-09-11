@@ -1,7 +1,6 @@
 package jsymbolic2.ngrams;
 
 import java.util.LinkedList;
-import javax.sound.midi.Track;
 import jsymbolic2.featureutils.NoteOnsetSliceContainer;
 
 /**
@@ -10,15 +9,13 @@ import jsymbolic2.featureutils.NoteOnsetSliceContainer;
  * or more voices (a voice is represented by a pair of MIDI track and channel). This object returns aggregates 
  * of the n-grams that it creates to facilitate easy usage and analysis by feature calculators.
  * 
- * At instantiation, this object create a structure for each supported musical moment (vertical intervals, 
- * melodic intervals, rhythmic values), from which n-grams can later be generated for a subset of voices and 
- * specifications. Each structure contains values in the order that they occur, and separated out by MIDI
- * track and channel. This object is passed a structure containing all melodic intervals piece, and a 
- * structure containing all the rhythmic values of these notes. It uses note onset slices from the given 
- * NoteOnsetSliceContainer object to calculate the vertical intervals between the melodic notes of each voice 
- * in given list of voices. All calculations follow the convention that the highest note sounding at a given 
- * time is presumed to belong to the melody. So, only moments involving such notes are analyzed by the n-grams 
- * generated and the features dependent on them.
+ * Structures for each supported musical moment (vertical intervals, melodic intervals, rhythmic values), from 
+ * which n-grams can later be generated for a subset of voices and specifications, are passed to this object's 
+ * constructor. Each structure lists values for these moments in the order that they occur, and separated out 
+ * by MIDI track and channel. The calculation of these values are done beforehand in the 
+ * MIDIIntermediateRepresentations file, and follow the convention that the highest note sounding at a given 
+ * time is presumed to belong to the melody. So, the n-grams that this object generates and the features
+ * dependent on them analyze only moments involving such notes.
  *
  * @author radamian
  */
@@ -89,19 +86,17 @@ public class NGramGenerator
 	/**
 	 * Create structures for all supported musical moments from which n-grams can be generated.
 	 * 
-	 * @param tracks									An array of tracks contained in the MIDI sequence for
-	 *													the piece of music.
 	 * @param note_onset_slice_container				The object containing the note onset slices from which 
 	 *													vertical intervals will be calculated.
 	 * @param melodic_intervals_by_track_and_channel	The melodic intervals in the piece, separated out by
 	 *													track and channel.
 	 * @param rhythmic_values_by_track_and_channel		The rhythmic values of the melodic notes in the piece, 
 	 *													separated out by track and channel.
-	 * @param vertical_intervals_by_track_and_channel	The vertical intervals between the melodic notes in
-	 *													piece, separated out by track and channel.
+	 * @param vertical_intervals_by_track_and_channel	The vertical intervals between the melodic notes on 
+	 *													each track and channel, separated out by track and 
+	 *													channel.
 	 */
-	public NGramGenerator(	Track[] tracks,
-							NoteOnsetSliceContainer note_onset_slice_container,
+	public NGramGenerator(	NoteOnsetSliceContainer note_onset_slice_container,
 							LinkedList<LinkedList<Integer>[]> melodic_intervals_by_track_and_channel,
 							LinkedList[][] rhythmic_values_by_track_and_channel,
 							LinkedList[][] vertical_intervals_by_track_and_channel)
@@ -514,6 +509,83 @@ public class NGramGenerator
 		
 		return n_grams_ll;
 	}
+	
+	
+	/**
+	 * Return a list of n-grams that encode rhythmic values and the melodic intervals between the notes having
+	 * those rhythmic values. Rhythmic values are quantized to the nearest duration in quarter notes (e.g. a 
+	 * value of 0.5 corresponds to the duration of an eighth note, possible values being 0.125, 0.25, 0.5, 
+	 * 0.75, 1.0, 2.0, 3.0, 4.0, 6.0, 8.0, 10.0, 12.0). Only rhythmic values of the melodic line on the given 
+	 * MIDI track and channel are encoded in the return n-grams. 
+	 *	
+	 * @param	n_value					The value of n of the n-grams.
+	 * @param	track_and_channel_pair	An array representing the voice whose rhythmic values and melodic 
+	 *									intervals are encoded in the n-grams. The entry at the first index is 
+	 *									the MIDI track number and the entry at the second index is the MIDI 
+	 *									channel number.
+	 * @param	direction				Whether the direction of the melodic interval is encoded.
+	 * @param	wrapping				Whether intervals are wrapped.
+	 * @param	generic_intervals		Whether n-grams are generated when there is a rest in the base voice.
+	 * @return							A list of rhythmic value and melodic interval n-grams.
+	 * @throws	Exception				Throws an informative exception if n-grams cannot be created for the 
+	 *									specified values.
+	 */
+	private LinkedList<NGram> getRhythmicValueAndMelodicIntervalNGrams(	int n_value,
+																		int[] track_and_channel_pair,
+																		boolean direction,
+																		boolean wrapping, 
+																		boolean generic_intervals)
+			throws Exception
+	{	
+		// The list of n-grams to return
+		LinkedList<NGram> n_grams_ll = new LinkedList<>();
+		
+		// Get the track and channel for which rhythmic values and melodic intervals will be collected
+		int track = track_and_channel_pair[0];
+		int channel = track_and_channel_pair[1];
+		
+		// A list of up to n arrays containing rhythmic values within a sliding window
+		LinkedList<double[]> rhythmic_values_in_window = new LinkedList<>();
+		// A list of up to n - 1 arrays containing melodic intervals within a sliding window
+		LinkedList<double[]> melodic_intervals_in_window = new LinkedList<>();
+		
+		for (int i = 0; i < rhythmic_values_by_track_and_channel[track][channel].size(); i++)
+		{
+			double copy = rhythmic_values_by_track_and_channel[track][channel].get(i);
+			
+			// Add an array containing the current rhythmic value to the list of rhythmic values in the
+			// current window
+			rhythmic_values_in_window.add(new double[] { copy });
+			
+			if (i > 0)
+			{
+				int melodic_interval = melodic_intervals_by_track_and_channel.get(track)[channel].get(i - 1);
+				
+				// If direction, wrapping, or generic intervals has been specified, apply the 
+				// necessary changes to the melodic interval
+				if (!direction) melodic_interval = Math.abs(melodic_interval);
+				if (wrapping) melodic_interval = melodic_interval % 12;
+				if (generic_intervals) melodic_interval = mckay.utilities.staticlibraries.MiscellaneousMethods.semitonesToGenericInterval(melodic_interval);
+			
+				melodic_intervals_in_window.add(new double[] { melodic_interval });
+			}
+			
+			// If rhythmic_values_in_window contains n lists, create a new n-gram and remove the first element 
+			// from rhythmic_values_in_window and melodic_intervals_in_window to slide the window forward
+			if (rhythmic_values_in_window.size() == n_value)
+			{
+				n_grams_ll.add(new TwoDimensionalNGram(rhythmic_values_in_window, melodic_intervals_in_window));
+				rhythmic_values_in_window.remove(0);
+				melodic_intervals_in_window.remove(0);
+			}	
+		}
+		
+//		System.out.println("\n\n\n RHYTHMIC VALUES AND MELODIC INTERVALS: ");
+//		for (int i = 0; i < n_grams_ll.size(); i++)
+//			System.out.println("\n" + i + ": " + ((TwoDimensionalNGram) n_grams_ll.get(i)).nGramToString());
+		
+		return n_grams_ll;
+	}
 
 	
 	/**
@@ -771,9 +843,37 @@ public class NGramGenerator
 																					boolean wrapping, 
 																					boolean generic_intervals,
 																					boolean ignore_rests_in_base_voice)
-	throws Exception
+			throws Exception
 	{
 		LinkedList<NGram> n_grams = getVerticalAndMelodicIntervalNGrams(n_value, base_voice, track_and_channel_pairs, direction, wrapping, generic_intervals, ignore_rests_in_base_voice);
+		return new TwoDimensionalNGramAggregate(n_grams);
+	}
+	
+	
+	/**
+	 * Return an aggregate of rhythmic value and melodic interval n-grams according to the specified values.
+	 * 
+	 * @param	n_value						The value of n of the n-grams.
+	 * @param	track_and_channel			An array representing the voice whose rhythmic values and melodic
+	 *										intervals are encoded in the n-grams. The entry at the first index 
+	 *										is the MIDI track number and the entry at the second index is the 
+	 *										MIDI channel number.
+	 * @param	direction					Whether the direction of the interval is encoded.
+	 * @param	wrapping					Whether intervals are wrapped.
+	 * @param	generic_intervals			Whether intervals are represented by generic interval, as opposed 
+	 *										to number of semitones.
+	 * @return								An aggregate of rhythmic value and melodic interval n-grams.
+	 * @throws	Exception					Throws an informative exception if n-grams cannot be created for
+	 *										the specified values.
+	 */
+	public TwoDimensionalNGramAggregate getRhythmicValueAndMelodicIntervalNGramAggregateForVoice(	int n_value,
+																									int[] track_and_channel,
+																									boolean direction,
+																									boolean wrapping, 
+																									boolean generic_intervals)
+			throws Exception
+	{
+		LinkedList<NGram> n_grams = getRhythmicValueAndMelodicIntervalNGrams(n_value, track_and_channel, direction, wrapping, generic_intervals);
 		return new TwoDimensionalNGramAggregate(n_grams);
 	}
 }

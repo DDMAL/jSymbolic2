@@ -158,6 +158,15 @@ public class NoteOnsetSliceContainer
 	private final LinkedList<LinkedList<Integer>>[][] note_onset_slices_by_track_and_channel_only_melodic_lines_held_notes_included;
 	
 	/**
+	 * The notes belonging to the melodic lines in the piece, separated out by track (first array index) and 
+	 * by channel (second array index). Each array entry is a list of NoteInfo objects in the order they
+	 * occur, representing the melodic line on that track and channel. If multiple notes occur simultaneously
+	 * or near-simultaneously on the same MIDI track and channel, then only the NoteInfo object with the
+	 * highest pitch is added to the list. 
+	 */
+	private final LinkedList<NoteInfo>[][] melodic_notes_by_track_and_channel;
+	
+	/**
 	 * The number of channels supported by the MIDI protocol.
 	 */
 	private final int NUMBER_OF_MIDI_CHANNELS = 16;
@@ -230,13 +239,15 @@ public class NoteOnsetSliceContainer
 		
 		// Initialize the note_onset_slices, note_onset_slices_by_track_and_channel, 
 		// note_onset_slices_only_new_onsets, note_onset_slices_by_track_and_channel_only_new_onsets, 
-		// and note_onset_slices_by_track_and_channel_only_melodic_lines fields.
+		// note_onset_slices_by_track_and_channel_only_melodic_lines fields, and 
+		// melodic_notes_by_track_and_channel fields.
 		note_onset_slices = new LinkedList<>();
 		note_onset_slices_by_track_and_channel = new LinkedList[tracks_from_sequence.length][NUMBER_OF_MIDI_CHANNELS];
 		note_onset_slices_only_new_onsets = new LinkedList<>();
 		note_onset_slices_by_track_and_channel_only_new_onsets = new LinkedList[tracks_from_sequence.length][NUMBER_OF_MIDI_CHANNELS];
 		note_onset_slices_by_track_and_channel_only_melodic_lines = new LinkedList[tracks_from_sequence.length][NUMBER_OF_MIDI_CHANNELS];
 		note_onset_slices_by_track_and_channel_only_melodic_lines_held_notes_included = new LinkedList[tracks_from_sequence.length][NUMBER_OF_MIDI_CHANNELS];
+		melodic_notes_by_track_and_channel = new LinkedList[tracks_from_sequence.length][NUMBER_OF_MIDI_CHANNELS];
 		for (int n_track = 0; n_track < tracks_from_sequence.length; n_track++)
 			for (int chan = 0; chan < NUMBER_OF_MIDI_CHANNELS; chan++)
 			{
@@ -244,6 +255,7 @@ public class NoteOnsetSliceContainer
 				note_onset_slices_by_track_and_channel_only_new_onsets[n_track][chan] = new LinkedList();
 				note_onset_slices_by_track_and_channel_only_melodic_lines[n_track][chan] = new LinkedList();
 				note_onset_slices_by_track_and_channel_only_melodic_lines_held_notes_included[n_track][chan] = new LinkedList();
+				melodic_notes_by_track_and_channel[n_track][chan] = new LinkedList();
 			}
 
 		// A working list of notes sounding on a given MIDI tick, including both notes starting on this tick
@@ -517,7 +529,8 @@ public class NoteOnsetSliceContainer
 					}
 					
 					// Add melody pitches to note_onset_slices_by_track_and_channel_only_melodic_lines and
-					// note_onset_slices_by_channel_only_melodic_lines
+					// note_onset_slices_by_channel_only_melodic_lines, and corresponding NoteInfo objects to 
+					// melodic_notes_by_track_and_channel.
 					for (int n_track = 0; n_track < tracks_from_sequence.length; n_track++)
 						for (int chan = 0; chan < NUMBER_OF_MIDI_CHANNELS; chan++)
 						{
@@ -530,7 +543,10 @@ public class NoteOnsetSliceContainer
 								// start and end of this particular slice (i.e. exclude notes held from 
 								// previous slices)
 								if (melody_note.getStartTick() >= original_tick && melody_note.getStartTick() <= tick) 
+								{
 									note_onset_slices_by_track_and_channel_only_melodic_lines[n_track][chan].get(slice).add(melody_note.getPitch());
+									melodic_notes_by_track_and_channel[n_track][chan].add(melody_note);
+								}
 							}
 						}
 					
@@ -701,6 +717,22 @@ public class NoteOnsetSliceContainer
 	public LinkedList<LinkedList<Integer>>[][] getNoteOnsetSlicesByTrackAndChannelMelodicLinesOnlyHeldNotesIncluded()
 	{
 		return note_onset_slices_by_track_and_channel_only_melodic_lines_held_notes_included;
+	}
+	
+	
+	/**
+	 * Returns the notes belonging to the melodic lines in the piece, separated out by track (first array 
+	 * index) and by channel (second array index). Each array entry is a list of NoteInfo objects in the order 
+	 * they occur, representing the melodic line on that track and channel. If multiple notes occur 
+	 * simultaneously or near-simultaneously on the same MIDI track and channel, then only the NoteInfo object 
+	 * with the highest pitch is added to the list. 
+	 * 
+	 * @return	The list of melodic notes in the MIDI parsed by this object at instantiation, segregated by
+	 *			track and channel. 
+	 */
+	public LinkedList<NoteInfo>[][] getMelodicNotesByTrackAndChannel()
+	{
+		return melodic_notes_by_track_and_channel;
 	}
 	
 	
