@@ -86,12 +86,13 @@ public class TwoDimensionalNGramAggregate
 		LinkedList<TwoDimensionalNGram> n_grams_by_unique_secondary_id_ll = new LinkedList<>();
 		LinkedList<TwoDimensionalNGram> n_grams_by_unique_joint_id_ll = new LinkedList<>();
 		
-		for (NGram n_gram: n_grams)
+		// Iterate through the given n-grams and add pairs of unique n-grams and their frequency count to the
+		// string_id_to_frequency_map field
+		for (NGram n_gram: n_gram_list)
 		{
 			String secondary_string_id = ((TwoDimensionalNGram) n_gram).getSecondaryStringIdentifier();
 			String joint_string_id = ((TwoDimensionalNGram) n_gram).getJointStringIdentifier();
 			
-			// Verify whether an n-gram having the same secondary identifier has been encountered yet
 			if (secondary_string_id_to_frequency_map.get(secondary_string_id) == null)
 			{
 				secondary_string_id_to_frequency_map.put(secondary_string_id, 1.0);
@@ -102,8 +103,7 @@ public class TwoDimensionalNGramAggregate
 				double old_frequency = secondary_string_id_to_frequency_map.get(secondary_string_id);
 				secondary_string_id_to_frequency_map.put(secondary_string_id, old_frequency + 1);
 			}
-			
-			// Verify whether an n-gram having the same joint identifier has been encountered yet
+
 			if (joint_string_id_to_frequency_map.get(joint_string_id) == null)
 			{
 				joint_string_id_to_frequency_map.put(joint_string_id, 1.0);
@@ -116,18 +116,62 @@ public class TwoDimensionalNGramAggregate
 			}
 		}
 		
+		// The purpose of this code is to filter out n-grams that occur at a rate less than a specified 
+		// percentage theshold. Currently, jSymbolic includes all n-grams in its feature calculations, no 
+		// matter how rare.
+		/*
+		double filtering_threshold = .01;
+		
+		// Iterate through the list of n-grams, filtering out those that account for less than 1% of all
+		// n-grams
+		for (NGram n_gram: n_grams)
+		{
+			String string_id = n_gram.getStringIdentifier();
+			
+			if (secondary_string_id_to_frequency_map.get(string_id) != null)
+			{
+				// If the n-gram with a unique secondary identifier accounts for less than the filtering 
+				// threshold percentage value of all n-grams by unique secondary identifiers, then its 
+				// secondary string identifier is removed from the secondary_string_id_to_frequency_map field, 
+				// and the n-gram is removed from the n_grams_by_unique_secondary_id_ll field.
+				if (string_id_to_frequency_map.get(string_id) < n_grams.size() * filtering_threshold)
+				{
+					System.out.println("N-gram " + n_gram.getStringIdentifier() + " with frequency " + (secondary_string_id_to_frequency_map.get(string_id) / n_grams.size()) + " removed");
+					secondary_string_id_to_frequency_map.remove(string_id);
+					n_grams_by_unique_secondary_id_ll.remove(n_gram);
+				}
+			}
+		
+			if (joint_string_id_to_frequency_map.get(string_id) != null)
+			{
+				// If the n-gram with a unique joint identifier accounts for less than the filtering threshold 
+				// percentage value of all n-grams by unique joint identifiers, then its joint string 
+				// identifier is removed from the joint_string_id_to_frequency_map field, and the n-gram 
+				// is removed from the n_grams_by_unique_joint_id_ll field.
+				if (string_id_to_frequency_map.get(string_id) < n_grams.size() * filtering_threshold)
+				{
+					System.out.println("N-gram " + n_gram.getStringIdentifier() + " with frequency " + (joint_string_id_to_frequency_map.get(string_id) / n_grams.size()) + " removed");
+					joint_string_id_to_frequency_map.remove(string_id);
+					n_grams_by_unique_joint_id_ll.remove(n_gram);
+				}
+			}
+		}
+		*/
+		
+		// Initialize the n_grams_by_unique_secondary_id field
 		n_grams_by_unique_secondary_id = new TwoDimensionalNGram[n_grams_by_unique_secondary_id_ll.size()];
 		for (int i = 0; i < n_grams_by_unique_secondary_id.length; i++)
 			n_grams_by_unique_secondary_id[i] = n_grams_by_unique_secondary_id_ll.get(i);
 		
-		// Prepare array for normalization
-		double[] frequencies_by_unique_secondary_id_to_normalize = new double[n_grams_by_unique_secondary_id.length];
-		for (int i = 0; i < frequencies_by_unique_secondary_id_to_normalize.length; i++)
-			frequencies_by_unique_secondary_id_to_normalize[i] = secondary_string_id_to_frequency_map.get(n_grams_by_unique_secondary_id[i].getSecondaryStringIdentifier());
+		// Initialize the frequencies_by_unique_secondary_id field
+		frequencies_by_unique_secondary_id = new double[n_grams_by_unique_secondary_id.length];
+		for (int i = 0; i < frequencies_by_unique_secondary_id.length; i++)
+			frequencies_by_unique_secondary_id[i] = secondary_string_id_to_frequency_map.get(n_grams_by_unique_secondary_id[i].getSecondaryStringIdentifier());
 		
-		frequencies_by_unique_secondary_id = mckay.utilities.staticlibraries.MathAndStatsMethods.normalize(frequencies_by_unique_secondary_id_to_normalize);
+		// Normalize the frequencies_by_unique_secondary_id field
+		frequencies_by_unique_secondary_id = mckay.utilities.staticlibraries.MathAndStatsMethods.normalize(frequencies_by_unique_secondary_id);
 		
-		// Update the values returned by secondary_string_id_to_frequency_map to the normalized frequencies
+		// Update the values in the secondary_string_id_to_frequency_map field to the normalized frequencies
 		for (int i = 0; i < n_grams_by_unique_secondary_id.length; i++)
 		{
 			String secondary_string_id = n_grams_by_unique_secondary_id[i].getSecondaryStringIdentifier();
@@ -135,18 +179,20 @@ public class TwoDimensionalNGramAggregate
 			secondary_string_id_to_frequency_map.put(secondary_string_id, frequencies_by_unique_secondary_id[i]);
 		}
 		
+		// Initialize the n_grams_by_unique_joint_id field
 		n_grams_by_unique_joint_id = new TwoDimensionalNGram[n_grams_by_unique_joint_id_ll.size()];
 		for (int i = 0; i < n_grams_by_unique_joint_id.length; i++)
 			n_grams_by_unique_joint_id[i] = n_grams_by_unique_joint_id_ll.get(i);
 		
-		// Prepare array for normalization
-		double[] frequencies_by_unique_joint_id_to_normalize = new double[n_grams_by_unique_joint_id.length];
-		for (int i = 0; i < frequencies_by_unique_joint_id_to_normalize.length; i++)
-			frequencies_by_unique_joint_id_to_normalize[i] = joint_string_id_to_frequency_map.get(n_grams_by_unique_joint_id[i].getJointStringIdentifier());
+		// Initialize the frequencies_by_unique_joint_id field
+		frequencies_by_unique_joint_id = new double[n_grams_by_unique_joint_id.length];
+		for (int i = 0; i < frequencies_by_unique_joint_id.length; i++)
+			frequencies_by_unique_joint_id[i] = joint_string_id_to_frequency_map.get(n_grams_by_unique_joint_id[i].getJointStringIdentifier());
 		
-		frequencies_by_unique_joint_id = mckay.utilities.staticlibraries.MathAndStatsMethods.normalize(frequencies_by_unique_joint_id_to_normalize);
+		// Normalize the frequencies_by_unique_joint_id field
+		frequencies_by_unique_joint_id = mckay.utilities.staticlibraries.MathAndStatsMethods.normalize(frequencies_by_unique_joint_id);
 		
-		// Update the values returned by joint_string_id_to_frequency_map to the normalized frequencies
+		// Update the values in the joint_string_id_to_frequency_map field to the normalized frequencies
 		for (int i = 0; i < n_grams_by_unique_joint_id.length; i++)
 		{
 			String joint_string_id = n_grams_by_unique_joint_id[i].getJointStringIdentifier();

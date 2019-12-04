@@ -3,20 +3,14 @@ package jsymbolic2.ngrams;
 import java.util.LinkedList;
 
 /**
- * An n-gram, defined as an identifier that numerically represents a sequence of variable n musical moments 
- * associated with one or more voices (here, a voice is represented by a pair of MIDI track and channel). The 
- * musical moments that are currently supported are vertical intervals, melodic intervals, and rhythmic 
- * values. A vertical interval or rhythmic value n-gram can be generated for every variable n note onsets, and 
- * a melodic interval n-gram can be created for every n + 1 note onsets. Intervals are in number of semitones 
- * or their generic interval value, and rhythmic values are in a quantized fraction of a quarter note (e.g. a 
- * value of 0.5 corresponds to the duration of an eighth note, possible values being 0.125, 0.25, 0.5, 0.75, 
- * 1.0, 2.0, 3.0, 4.0, 6.0, 8.0, 10.0, 12.0). Here, n-grams only capture musical moments in the melodic line 
- * of each voice; this follows jSymbolic's convention that the highest note sounding at a given time is that 
- * belonging to the melodic line. Note that objects of this class do not retain what kind of moment their
- * identifier represents (however, this can be deduced from the values therein).
+ * An n-gram contains information extracted from a contiguous sequence of either n or n+1 note onset slices, 
+ * such that the n-gram encodes n musical events or transitions in this sequence. An n-gram will require n 
+ * slices if it encodes events, and n+1 slices if it encodes transitions. N-grams can encode a variety of
+ * meaningful information. The types of n-grams that jSymbolic currently supports are melodic interval,
+ * vertical interval (complete, lowest and highest lines), and rhythmic value n-grams.
  * 
  * Objects of this class are instantiated by an NGramGenerator object for a given value of n and subset of 
- * voices, and are aggregated by objects of the NGramAggregate class to facilitate easy usage and analysis by 
+ * voices, and are aggregated in objects of the NGramAggregate class, to facilitate easy usage and analysis by 
  * feature calculators. Objects of this class have an additional String field that also functions as an 
  * identifier.
  * 
@@ -25,12 +19,12 @@ import java.util.LinkedList;
 public class NGram
 {
 	/**
-	 * A list of arrays of doubles that identifies this n-gram. Each array in this list contains values for
-	 * a musical moment (vertical interval, melodic interval, rhythmic value), in the order that they occur
-	 * in the piece for a specific voice. If this is a melodic interval or a rhythmic value n-gram, then each 
-	 * array will be of size 1. In the case of vertical interval n-grams, a single moment may involve multiple
-	 * vertical intervals, so the size of each array may vary. The size of this list is the n-value of the 
-	 * n-gram.
+	 * The identifier that defines this n-gram. There are n-value number of entries in this list for n
+	 * sequential musical events or transitions (e.g. a 3-gram will have three double arrays). Each array 
+	 * contains double values for these moments (vertical interval, melodic interval, or rhythmic value). If 
+	 * this is a melodic interval or a rhythmic value n-gram, then each array will be of size 1. If this is a 
+	 * vertical interval n-gram, each array will be of variable size, depending on the number of unique
+	 * vertical intervals at each moment. 
 	 */
 	private final LinkedList<double[]> id;
 	

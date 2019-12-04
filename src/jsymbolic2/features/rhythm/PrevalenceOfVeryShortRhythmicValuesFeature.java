@@ -11,7 +11,7 @@ import jsymbolic2.processing.MIDIIntermediateRepresentations;
  * quantization, is not influenced by tempo, and is calculated without regard to the dynamics, voice or
  * instrument of any given note.
  *
- * @author Cory McKay
+ * @author Cory McKay and radamian
  */
 public class PrevalenceOfVeryShortRhythmicValuesFeature
 		extends MIDIFeatureExtractor
@@ -63,7 +63,7 @@ public class PrevalenceOfVeryShortRhythmicValuesFeature
 		if (sequence_info != null)
 		{
 			double[] rhythmic_value_histogram = other_feature_values[0];
-			value = rhythmic_value_histogram[0] + rhythmic_value_histogram[1];
+			value = rhythmic_value_histogram[0] + rhythmic_value_histogram[1] + rhythmic_value_histogram[2];
 		}
 		else value = -1.0;
 
