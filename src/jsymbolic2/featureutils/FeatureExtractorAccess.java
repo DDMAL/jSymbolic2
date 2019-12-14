@@ -8,6 +8,7 @@ import jsymbolic2.features.pitchstatistics.*;
 import jsymbolic2.features.rhythm.*;
 import jsymbolic2.features.texture.*;
 import jsymbolic2.features.verticalintervals.*;
+import jsymbolic2.features.ngrams.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -564,7 +565,22 @@ public final class FeatureExtractorAccess
 			
 			// Add MEI-specific features
 			new NumberOfGraceNotesMeiFeature(),
-			new NumberOfSlursMeiFeature()
+			new NumberOfSlursMeiFeature(),
+            
+            // Add features based on melodic interval n-grams
+            new MostCommonMelodicInterval3GramTypeFeature(),
+            new SecondMostCommonMelodicInterval3GramTypeFeature(),
+            new PrevalenceOfMostCommonMelodicInterval3GramTypeFeature(),
+            new PrevalenceOfSecondMostCommonMelodicInterval3GramTypeFeature(),
+            new PrevalenceOfMedianMelodicInterval3GramTypeFeature(),
+            new NumberOfDistinctMelodicInterval3GramTypesFeature(),
+            new NumberOfRareMelodicInterval3GramTypesFeature(),
+            new NumberOfCommonMelodicInterval3GramTypesFeature(),
+            new NumberOfVeryCommonMelodicInterval3GramTypesFeature(),
+            new PrevalenceOfMelodicInterval3GramTypesOccurringOnlyOnceFeature(),
+            new PrevalenceOfRareMelodicInterval3GramTypesFeature(),
+            new PrevalenceOfCommonMelodicInterval3GramTypesFeature(),
+            new PrevalenceOfVeryCommonMelodicInterval3GramTypesFeature()
 		};
 
 		default_features_to_save = new boolean[all_implemented_feature_extractors.length];

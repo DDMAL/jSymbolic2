@@ -72,7 +72,6 @@ public class MelodicEmbellishmentsOneSidedFeature
 			// For each MIDI track and channel get all the notes in the track and channel
 			for (int n_track = 0; n_track < sequence.getTracks().length; n_track++)
 			{
-				System.out.println(n_track);
 				for (int channel = 0; channel < 16; channel++)
 				{
 					if (channel != 10 - 1)  // Skip over the unpitched percussion channel

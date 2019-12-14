@@ -442,3 +442,16 @@ Dynamic Range
 Variation of Dynamics
 Variation of Dynamics In Each Voice
 Average Note to Note Change in Dynamics
+Most Common Melodic Interval 3-gram Type
+Second Most Common Melodic Interval 3-gram Type
+Prevalence of Most Common Melodic Interval 3-gram Type
+Prevalence of Second Most Common Melodic Interval 3-gram Type
+Prevalence of Median Melodic Interval 3-gram Type
+Number of Distinct Melodic Interval 3-gram Types
+Number of Rare Melodic Interval 3-gram Types
+Number of Common Melodic Interval 3-gram Types
+Number of Very Common Melodic Interval 3-gram Types
+Prevalence of Melodic Interval 3-gram Types Occurring Only Once
+Prevalence of Rare Melodic Interval 3-gram Types
+Prevalence of Common Melodic Interval 3-gram Types
+Prevalence of Very Common Melodic Interval 3-gram Types

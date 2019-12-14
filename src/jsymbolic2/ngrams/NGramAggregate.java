@@ -124,10 +124,20 @@ public class NGramAggregate
 		
 		/*
 		// See all n-grams and their frequencies
-		System.out.println("\n\nN-grams and their frequencies: ");
+        double single_occurrence_frequency = (double) 1 / ngrams_ll.size();
+        System.out.println("\n\n\nSingle occurrence frequency is: " + single_occurrence_frequency);
+		System.out.println("\nN-grams and their frequencies: ");
 		for (int i = 0; i < unique_ngrams.length; i++)
-			System.out.println(unique_ngrams[i].getStringIdentifier() + " with frequency " + frequencies_of_unique_ngrams[i]);
-		*/
+        {
+			System.out.print(unique_ngrams[i].getStringIdentifier() + " with frequency " + frequencies_of_unique_ngrams[i]);
+            if (frequencies_of_unique_ngrams[i] ==  single_occurrence_frequency) System.out.print(" (OCCURS ONLY ONCE)");
+            System.out.print("\n");
+        }
+		
+        System.out.println("\nTop 10 n-grams: ");
+        for (int i = 0; i < getTopTenMostCommonStringIdentifiers().size(); i++)
+            System.out.println((i + 1) + ": " + getTopTenMostCommonStringIdentifiers().get(i));
+        */
 	}
 	
 	
@@ -144,7 +154,7 @@ public class NGramAggregate
 	}
 
 	
-	/**
+    /**
 	 * @return	The normalized histogram containing the frequencies at which each unique n-grams occurs among 
 	 *			all aggregated n-grams.
 	 */
@@ -152,8 +162,34 @@ public class NGramAggregate
 	{
 		return frequencies_of_unique_ngrams;
 	}
+    
+    
+	/**
+	 * @return	The array of unique n-grams in the ngrams_ll field.
+	 */
+	public NGram[] getUniqueNGrams()
+	{
+		return unique_ngrams;
+	}
 	
 	
+    /**
+     * @return  Whether there are no aggregated n-grams.
+     */
+    public boolean noNGrams()
+    {
+        return ngrams_ll.isEmpty();
+    }
+    
+    /**
+     * @return  The number of aggregated n-grams.
+     */
+    public int getNumberOfNGrams()
+    {
+        return ngrams_ll.size();
+    }
+    
+    
 	/**
 	 * Returns a boolean indicating whether two given identifiers are the same.
 	 * 
