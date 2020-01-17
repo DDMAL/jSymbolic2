@@ -455,3 +455,29 @@ Prevalence of Melodic Interval 3-gram Types Occurring Only Once
 Prevalence of Rare Melodic Interval 3-gram Types
 Prevalence of Common Melodic Interval 3-gram Types
 Prevalence of Very Common Melodic Interval 3-gram Types
+Most Common Melodic Interval 3-gram Type in Highest Line
+Second Most Common Melodic Interval 3-gram Type in Highest Line
+Prevalence of Most Common Melodic Interval 3-gram Type in Highest Line
+Prevalence of Second Most Common Melodic Interval 3-gram Type in Highest Line
+Prevalence of Median Melodic Interval 3-gram Type in Highest Line
+Number of Distinct Melodic Interval 3-gram Types in Highest Line
+Number of Rare Melodic Interval 3-gram Types in Highest Line
+Number of Common Melodic Interval 3-gram Types in Highest Line
+Number of Very Common Melodic Interval 3-gram Types in Highest Line
+Prevalence of Melodic Interval 3-gram Types Occurring Only Once in Highest Line
+Prevalence of Rare Melodic Interval 3-gram Types in Highest Line
+Prevalence of Common Melodic Interval 3-gram Types in Highest Line
+Prevalence of Very Common Melodic Interval 3-gram Types in Highest Line
+Most Common Melodic Interval 3-gram Type in Lowest Line
+Second Most Common Melodic Interval 3-gram Type in Lowest Line
+Prevalence of Most Common Melodic Interval 3-gram Type in Lowest Line
+Prevalence of Second Most Common Melodic Interval 3-gram Type in Lowest Line
+Prevalence of Median Melodic Interval 3-gram Type in Lowest Line
+Number of Distinct Melodic Interval 3-gram Types in Lowest Line
+Number of Rare Melodic Interval 3-gram Types in Lowest Line
+Number of Common Melodic Interval 3-gram Types in Lowest Line
+Number of Very Common Melodic Interval 3-gram Types in Lowest Line
+Prevalence of Melodic Interval 3-gram Types Occurring Only Once in Lowest Line
+Prevalence of Rare Melodic Interval 3-gram Types in Lowest Line
+Prevalence of Common Melodic Interval 3-gram Types in Lowest Line
+Prevalence of Very Common Melodic Interval 3-gram Types in Lowest Line

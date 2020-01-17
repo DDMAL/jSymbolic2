@@ -472,6 +472,26 @@ public class MIDIIntermediateRepresentations
 	public NGramAggregate melodic_interval_3gram_aggregate;
 	
 	/**
+	 * An aggregate of all melodic interval 3-grams in the MIDI track and channel with the highest average 
+	 * pitch. A melodic interval 3-gram consists of a set of 3 values, where each value specifies the interval 
+	 * between successive highest-pitched notes on a MIDI track and channel pair. Melodic interval 3-grams are 
+	 * aggregated for each MIDI track and channel pair (Channel 10 is excluded) and are aggregated into this 
+	 * field. Melodic intervals are in number of semitones (with 0 indicating a melodic unison) and are 
+	 * unwrapped.
+	 */
+	public NGramAggregate melodic_interval_3gram_in_highest_line_aggregate;
+	
+	/**
+	 * An aggregate of all melodic interval 3-grams in the MIDI track and channel with the lowest average 
+	 * pitch. A melodic interval 3-gram consists of a set of 3 values, where each value specifies the interval 
+	 * between successive highest-pitched notes on a MIDI track and channel pair. Melodic interval 3-grams are 
+	 * aggregated for each MIDI track and channel pair (Channel 10 is excluded) and are aggregated into this 
+	 * field. Melodic intervals are in number of semitones (with 0 indicating a melodic unison) and are 
+	 * unwrapped.
+	 */
+	public NGramAggregate melodic_interval_3gram_in_lowest_line_aggregate;
+	
+	/**
 	 * An aggregate of complete vertical interval 3-grams. A complete vertical interval n-gram consists of a 
 	 * set of 3 lists, with one list for each of 3 qualifying sequential note onset slices, and where each 
 	 * list specifies the vertical intervals between the lowest pitch in the slice and every other unique 
@@ -2445,10 +2465,13 @@ public class MIDIIntermediateRepresentations
 		// Initialize the ngram_generator field
 		ngram_generator = new NGramGenerator(note_onset_slice_container, melodic_intervals_by_track_and_channel, rhythmic_values_in_melodic_line_by_track_and_channel, complete_vertical_intervals, vertical_intervals_between_highest_and_lowest_lines);
 		
-		// Initialize the melodic_interval_3gram_aggregate, complete_vertical_interval_3gram_aggregate, 
+		// Initialize the melodic_interval_3gram_aggregate, melodic_interval_3gram_in_highest_line_aggregate,
+		// melodic_interval_3gram_in_lowest_line_aggregate, complete_vertical_interval_3gram_aggregate, 
 		// lowest_and_highest_lines_vertical_interval_3gram_aggregate, and rhythmic_value_3gram_aggregate 
 		// fields
 		melodic_interval_3gram_aggregate = ngram_generator.getMelodicIntervalNGramAggregate(3, track_and_channel_pairs_by_average_pitch, true, false, false);
+		melodic_interval_3gram_in_highest_line_aggregate = ngram_generator.getMelodicIntervalNGramAggregateForVoice(3, track_and_channel_with_highest_average_pitch, true, false, false);
+		melodic_interval_3gram_in_lowest_line_aggregate = ngram_generator.getMelodicIntervalNGramAggregateForVoice(3, track_and_channel_with_lowest_average_pitch, true, false, false);
 		complete_vertical_interval_3gram_aggregate = ngram_generator.getCompleteVerticalIntervalNGramAggregate(3, false, false);
 		lowest_and_highest_lines_vertical_interval_3gram_aggregate = ngram_generator.getLowestAndHighestLinesVerticalIntervalNGramAggregate(3, true, false, false);
 		rhythmic_value_3gram_aggregate = ngram_generator.getRhythmicValueNGramAggregate(3, track_and_channel_pairs_by_average_pitch);

@@ -2,18 +2,20 @@ package jsymbolic2.features.ngrams;
 
 import javax.sound.midi.*;
 import ace.datatypes.FeatureDefinition;
+import java.util.LinkedList;
 import jsymbolic2.ngrams.*;
 import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the fraction of all melodic interval 3-grams that correspond to the melodic 
- * interval 3-gram type with the median prevalence. Set to 0 if there are no melodic interval 3-grams in the 
- * music (e.g. music with only MIDI Channel 10 unpitched notes).
+ * A feature calculator that finds the fraction of all melodic interval 3-grams that correspond to the second 
+ * most common melodic interval 3-gram type in the MIDI track and channel pairing with the lowest average 
+ * pitch in the music. Set to 0 if there are no melodic interval 3-grams in this line (e.g. music with only 
+ * MIDI Channel 10 unpitched notes).
  *
  * @author radamian
  */
-public class PrevalenceOfMedianMelodicInterval3GramTypeFeature
+public class PrevalenceOfSecondMostCommonMelodicInterval3GramTypeInLowestLineFeature
 		extends MIDIFeatureExtractor
 {
 	/* CONSTRUCTOR ******************************************************************************************/
@@ -22,11 +24,11 @@ public class PrevalenceOfMedianMelodicInterval3GramTypeFeature
 	/**
 	 * Basic constructor that sets the values of the fields inherited from this class' superclass.
 	 */
-	public PrevalenceOfMedianMelodicInterval3GramTypeFeature()
+	public PrevalenceOfSecondMostCommonMelodicInterval3GramTypeInLowestLineFeature()
 	{
-		String name = "Prevalence of Median Melodic Interval 3-gram Type";
-		String code = "NM-5";
-		String description = "Fraction of all melodic interval 3-grams that correspond to the melodic interval 3-gram type with the median prevalence. Set to 0 if there are no melodic interval 3-grams in the music (e.g. music with only MIDI Channel 10 unpitched notes).";
+		String name = "Prevalence of Second Most Common Melodic Interval 3-gram Type in Lowest Line";
+		String code = "NM-30";
+		String description = "Fraction of all melodic interval 3-grams that correspond to the second most common melodic interval 3-gram type in the MIDI track and channel pairing with the lowest average pitch in the music. Set to 0 if there are no melodic interval 3-grams in this line (e.g. music with only MIDI Channel 10 unpitched notes).";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
@@ -62,16 +64,17 @@ public class PrevalenceOfMedianMelodicInterval3GramTypeFeature
 		double value = 0.0;
 		if (sequence_info != null)
 		{
-            // The aggregate of melodic interval 3-grams in the piece
-			NGramAggregate melodic_interval_3gram_aggregate = sequence_info.melodic_interval_3gram_aggregate;
+            // The aggregate of melodic interval 3-grams in the lowest line
+			NGramAggregate melodic_interval_3gram_in_lowest_line_aggregate = sequence_info.melodic_interval_3gram_in_lowest_line_aggregate;
             
             // Verify there is at least one melodic interval 3-gram
-            if (!melodic_interval_3gram_aggregate.noNGrams())
+            if (!melodic_interval_3gram_in_lowest_line_aggregate.noNGrams())
             {
-                double[] frequencies_of_unique_3grams = melodic_interval_3gram_aggregate.getFrequenciesOfUniqueNGrams();
-            
-                int index_of_median = mckay.utilities.staticlibraries.MathAndStatsMethods.getIndexOfMedian(frequencies_of_unique_3grams);
-                value = frequencies_of_unique_3grams[index_of_median];
+                // Get the second most common melodic interval 3-gram
+                LinkedList<double[]> second_most_common_melodic_interval_3gram = melodic_interval_3gram_in_lowest_line_aggregate.getSecondMostCommonIdentifier();
+                
+                // The normalized frequency of that 3-gram among melodic interval 3-grams in the lowest line
+                value = melodic_interval_3gram_in_lowest_line_aggregate.getFrequencyOfIdentifier(second_most_common_melodic_interval_3gram);
             }
 		}
 

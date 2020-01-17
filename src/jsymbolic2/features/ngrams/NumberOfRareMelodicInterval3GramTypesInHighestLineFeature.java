@@ -7,13 +7,13 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the fraction of all melodic interval 3-grams that correspond to the melodic 
- * interval 3-gram type with the median prevalence. Set to 0 if there are no melodic interval 3-grams in the 
- * music (e.g. music with only MIDI Channel 10 unpitched notes).
+ * A feature calculator that finds the number of different melodic interval 3-gram types that each account 
+ * individually for 3% or less of all melodic interval 3-grams that occur in the MIDI track and channel 
+ * pairing with the highest average pitch in the music.
  *
  * @author radamian
  */
-public class PrevalenceOfMedianMelodicInterval3GramTypeFeature
+public class NumberOfRareMelodicInterval3GramTypesInHighestLineFeature
 		extends MIDIFeatureExtractor
 {
 	/* CONSTRUCTOR ******************************************************************************************/
@@ -22,11 +22,11 @@ public class PrevalenceOfMedianMelodicInterval3GramTypeFeature
 	/**
 	 * Basic constructor that sets the values of the fields inherited from this class' superclass.
 	 */
-	public PrevalenceOfMedianMelodicInterval3GramTypeFeature()
+	public NumberOfRareMelodicInterval3GramTypesInHighestLineFeature()
 	{
-		String name = "Prevalence of Median Melodic Interval 3-gram Type";
-		String code = "NM-5";
-		String description = "Fraction of all melodic interval 3-grams that correspond to the melodic interval 3-gram type with the median prevalence. Set to 0 if there are no melodic interval 3-grams in the music (e.g. music with only MIDI Channel 10 unpitched notes).";
+		String name = "Number of Rare Melodic Interval 3-gram Types in Highest Line";
+		String code = "NM-20";
+		String description = "The number of different melodic interval 3-gram types that each account individually for 3% or less of all melodic interval 3-grams that occur in the MIDI track and channel pairing with the highest average pitch in the music.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
@@ -62,16 +62,21 @@ public class PrevalenceOfMedianMelodicInterval3GramTypeFeature
 		double value = 0.0;
 		if (sequence_info != null)
 		{
-            // The aggregate of melodic interval 3-grams in the piece
-			NGramAggregate melodic_interval_3gram_aggregate = sequence_info.melodic_interval_3gram_aggregate;
+            // The aggregate of melodic interval 3-grams in the highest line
+			NGramAggregate melodic_interval_3gram_in_highest_line_aggregate = sequence_info.melodic_interval_3gram_in_highest_line_aggregate;
             
             // Verify there is at least one melodic interval 3-gram
-            if (!melodic_interval_3gram_aggregate.noNGrams())
+            if (!melodic_interval_3gram_in_highest_line_aggregate.noNGrams())
             {
-                double[] frequencies_of_unique_3grams = melodic_interval_3gram_aggregate.getFrequenciesOfUniqueNGrams();
-            
-                int index_of_median = mckay.utilities.staticlibraries.MathAndStatsMethods.getIndexOfMedian(frequencies_of_unique_3grams);
-                value = frequencies_of_unique_3grams[index_of_median];
+                double[] frequencies_of_unique_3grams = melodic_interval_3gram_in_highest_line_aggregate.getFrequenciesOfUniqueNGrams();
+                
+                // Count number of rare melodic interval 3-grams
+                int number_of_rare_3grams = 0;
+                for (int i = 0; i < frequencies_of_unique_3grams.length; i++)
+                    if (frequencies_of_unique_3grams[i] <= 0.03)
+                        number_of_rare_3grams++;
+                
+                value = (double) number_of_rare_3grams;
             }
 		}
 
