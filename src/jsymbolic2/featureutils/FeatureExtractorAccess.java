@@ -606,7 +606,33 @@ public final class FeatureExtractorAccess
 			new PrevalenceOfMelodicInterval3GramTypesOccurringOnlyOnceInLowestLineFeature(),
             new PrevalenceOfRareMelodicInterval3GramTypesInLowestLineFeature(),
             new PrevalenceOfCommonMelodicInterval3GramTypesInLowestLineFeature(),
-            new PrevalenceOfVeryCommonMelodicInterval3GramTypesInLowestLineFeature()
+            new PrevalenceOfVeryCommonMelodicInterval3GramTypesInLowestLineFeature(),
+			
+			// Add features based on vertical interval n-grams
+			new MostCommonVerticalInterval3GramTypeBetweenLowestAndHighestLinesFeature(),
+            new SecondMostCommonVerticalInterval3GramTypeBetweenLowestAndHighestLinesFeature(),
+            new PrevalenceOfMostCommonVerticalInterval3GramTypeBetweenLowestAndHighestLinesFeature(),
+            new PrevalenceOfSecondMostCommonVerticalInterval3GramTypeBetweenLowestAndHighestLinesFeature(),
+            new PrevalenceOfMedianVerticalInterval3GramTypeBetweenLowestAndHighestLinesFeature(),
+            new NumberOfDistinctVerticalInterval3GramTypesBetweenLowestAndHighestLinesFeature(),
+            new NumberOfRareVerticalInterval3GramTypesBetweenLowestAndHighestLinesFeature(),
+            new NumberOfCommonVerticalInterval3GramTypesBetweenLowestAndHighestLinesFeature(),
+            new NumberOfVeryCommonVerticalInterval3GramTypesBetweenLowestAndHighestLinesFeature(),
+            new PrevalenceOfVerticalInterval3GramTypesOccurringOnlyOnceBetweenLowestAndHighestLinesFeature(),
+            new PrevalenceOfRareVerticalInterval3GramTypesBetweenLowestAndHighestLinesFeature(),
+            new PrevalenceOfCommonVerticalInterval3GramTypesBetweenLowestAndHighestLinesFeature(),
+            new PrevalenceOfVeryCommonVerticalInterval3GramTypesBetweenLowestAndHighestLinesFeature(),
+			new PrevalenceOfMostCommonVerticalInterval3GramTypeFeature(),
+            new PrevalenceOfSecondMostCommonVerticalInterval3GramTypeFeature(),
+            new PrevalenceOfMedianVerticalInterval3GramTypeFeature(),
+            new NumberOfDistinctVerticalInterval3GramTypesFeature(),
+            new NumberOfRareVerticalInterval3GramTypesFeature(),
+            new NumberOfCommonVerticalInterval3GramTypesFeature(),
+            new NumberOfVeryCommonVerticalInterval3GramTypesFeature(),
+            new PrevalenceOfVerticalInterval3GramTypesOccurringOnlyOnceFeature(),
+            new PrevalenceOfRareVerticalInterval3GramTypesFeature(),
+            new PrevalenceOfCommonVerticalInterval3GramTypesFeature(),
+            new PrevalenceOfVeryCommonVerticalInterval3GramTypesFeature()
 		};
 
 		default_features_to_save = new boolean[all_implemented_feature_extractors.length];

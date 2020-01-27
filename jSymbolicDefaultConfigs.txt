@@ -481,3 +481,28 @@ Prevalence of Melodic Interval 3-gram Types Occurring Only Once in Lowest Line
 Prevalence of Rare Melodic Interval 3-gram Types in Lowest Line
 Prevalence of Common Melodic Interval 3-gram Types in Lowest Line
 Prevalence of Very Common Melodic Interval 3-gram Types in Lowest Line
+Most Common Vertical Interval 3-gram Type - Between Lowest and Highest Lines
+Second Most Common Vertical Interval 3-gram Type - Between Lowest and Highest Lines
+Prevalence of Most Common Vertical Interval 3-gram Type - Between Lowest and Highest Lines
+Prevalence of Second Most Common Vertical Interval 3-gram Type - Between Lowest and Highest Lines
+Prevalence of Median Vertical Interval 3-gram Type - Between Lowest and Highest Lines
+Number of Distinct Vertical Interval 3-gram Types - Between Lowest and Highest Lines
+Number of Rare Vertical Interval 3-gram Types - Between Lowest and Highest Lines
+Number of Common Vertical Interval 3-gram Types - Between Lowest and Highest Lines
+Number of Very Common Vertical Interval 3-gram Types - Between Lowest and Highest Lines
+Prevalence of Vertical Interval 3-gram Types Occurring Only Once - Between Lowest and Highest Lines
+Prevalence of Rare Vertical Interval 3-gram Types - Between Lowest and Highest Lines
+Prevalence of Common Vertical Interval 3-gram Types - Between Lowest and Highest Lines
+Prevalence of Very Common Vertical Interval 3-gram Types - Between Lowest and Highest Lines
+Prevalence of Most Common Vertical Interval 3-gram Type
+Prevalence of Second Most Common Vertical Interval 3-gram Type
+Prevalence of Median Vertical Interval 3-gram Type
+Number of Distinct Vertical Interval 3-gram Types
+Number of Rare Vertical Interval 3-gram Types
+Number of Common Vertical Interval 3-gram Types
+Number of Very Common Vertical Interval 3-gram Types
+Prevalence of Vertical Interval 3-gram Types Occurring Only Once
+Prevalence of Rare Vertical Interval 3-gram Types
+Prevalence of Common Vertical Interval 3-gram Types
+Prevalence of Very Common Vertical Interval 3-gram Types
+

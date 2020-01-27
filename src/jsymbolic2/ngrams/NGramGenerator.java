@@ -210,16 +210,29 @@ public class NGramGenerator
 		{
 			LinkedList<Integer> vertical_intervals_in_slice_ll = complete_vertical_intervals.get(i);
 			
-			double[] vertical_intervals_in_slice = new double[vertical_intervals_in_slice_ll.size()];
+			// Create a list of vertical intervals, modified according to parameters wrapping and 
+			// generic_intervals, to encode in the n-grams
+			LinkedList<Integer> vertical_intervals_in_slice_modified_ll = new LinkedList<>();
 			for (int vi = 0; vi < vertical_intervals_in_slice_ll.size(); vi++)
 			{
 				int vertical_interval = vertical_intervals_in_slice_ll.get(vi);
 				
+				// Modify the vertical interval if wrapping or representation by generic interval value is
+				// specified
 				if (wrapping) vertical_interval = vertical_interval % 12;
 				if (generic_intervals) vertical_interval = mckay.utilities.staticlibraries.MiscellaneousMethods.semitonesToGenericInterval(vertical_interval);
-						
-				vertical_intervals_in_slice[vi] = vertical_interval;
+				
+				// Avoid duplicate values
+				if (!vertical_intervals_in_slice_modified_ll.contains(vertical_interval))
+					vertical_intervals_in_slice_modified_ll.add(vertical_interval);
 			}
+		
+			vertical_intervals_in_slice_modified_ll.sort((s1, s2) -> s1.compareTo(s2));
+		
+			// Copy vertical intervals to an array
+			double[] vertical_intervals_in_slice = new double[vertical_intervals_in_slice_modified_ll.size()];
+			for (int vi = 0; vi < vertical_intervals_in_slice.length; vi++)
+				vertical_intervals_in_slice[vi] = vertical_intervals_in_slice_modified_ll.get(vi);
 			
 			slices_in_window.add(vertical_intervals_in_slice);
 

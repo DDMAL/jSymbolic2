@@ -34,7 +34,7 @@ public class RhythmicValueHistogramFeature
 		String code = "R-14";
 		String description = "A feature vector, representing a normalized histogram where the value of each bin specifies the fraction of all notes in the music with a rhythmic value corresponding to that of the given bin. The bins are numbered as follows: thirty second notes (or less) [0], sixteenth notes [1], eighth note triplets [2], eighth notes [3], quarter note triplets [4], dotted eighth notes [5], quarter notes [6], dotted quarter notes [7], half notes [8], dotted half notes [9], whole notes [10], dotted whole notes [11], double whole notes [12], and dotted double whole notes (or more) [13]. Both pitched and unpitched notes are included in this histogram. Tempo is, of course, not relevant to this histogram. Notes with durations not precisely matching one of these rhythmic note values are mapped to the closest note value (to filter out the effects of rubato or uneven human rhythmic performances, for example). This histogram is calculated without regard to the dynamics, voice or instrument of any given note.";
 		boolean is_sequential = true;
-		int dimensions = 12;
+		int dimensions = 14;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
 		dependencies = null;
 		offsets = null;

@@ -125,18 +125,24 @@ public class NGramAggregate
 		/*
 		// See all n-grams and their frequencies
         double single_occurrence_frequency = (double) 1 / ngrams_ll.size();
-        System.out.println("\n\n\nSingle occurrence frequency is: " + single_occurrence_frequency);
-		System.out.println("\nN-grams and their frequencies: ");
+		int number_of_ngrams_occurring_more_than_once = 0;
+       // System.out.println("\n\n\nSingle occurrence frequency is: " + single_occurrence_frequency);
+		//System.out.println("\nN-grams and their frequencies: ");
 		for (int i = 0; i < unique_ngrams.length; i++)
         {
-			System.out.print(unique_ngrams[i].getStringIdentifier() + " with frequency " + frequencies_of_unique_ngrams[i]);
-            if (frequencies_of_unique_ngrams[i] ==  single_occurrence_frequency) System.out.print(" (OCCURS ONLY ONCE)");
-            System.out.print("\n");
+			//System.out.print(unique_ngrams[i].getStringIdentifier() + " with frequency " + frequencies_of_unique_ngrams[i]);
+            if (frequencies_of_unique_ngrams[i] >  single_occurrence_frequency) number_of_ngrams_occurring_more_than_once++;
+            //System.out.print("\n");
         }
+		
+		System.out.println(number_of_ngrams_occurring_more_than_once + " n-grams occur more than once.");
 		
         System.out.println("\nTop 10 n-grams: ");
         for (int i = 0; i < getTopTenMostCommonStringIdentifiers().size(); i++)
-            System.out.println((i + 1) + ": " + getTopTenMostCommonStringIdentifiers().get(i));
+		{
+			String id = getTopTenMostCommonStringIdentifiers().get(i);
+            System.out.println((i + 1) + ": " + id + " with frequency " + string_id_to_frequency_map.get(id));
+		}
         */
 	}
 	

@@ -2315,26 +2315,30 @@ public class MIDIIntermediateRepresentations
 		int lowest_line_track = track_and_channel_with_lowest_average_pitch[0];
 		int lowest_line_channel = track_and_channel_with_lowest_average_pitch[1];
 		
-		// Get the melodic note onset slices for the highest line and the lowest note onset slices for the
-		// lowest line
-		LinkedList<LinkedList<Integer>> highest_line = note_onset_slice_container.getNoteOnsetSlicesByTrackAndChannelMelodicLinesOnlyHeldNotesIncluded()[highest_line_track][highest_line_channel];
-		LinkedList<LinkedList<Integer>> lowest_line = note_onset_slice_container.getNoteOnsetSlicesByTrackAndChannelLowestPitchesOnlyHeldNotesIncluded()[lowest_line_track][lowest_line_channel];
-		
-		// Iterate by note onset slice
-		for (int i = 0; i < note_onset_slice_container.NUMBER_OF_ONSET_SLICES; i++)
-			// Verify neither slice is empty (i.e. neither line has a rest)
-			if (!highest_line.get(i).isEmpty() && !lowest_line.get(i).isEmpty())
-			{
-				int highest_line_pitch = highest_line.get(i).get(0);
-				int lowest_line_pitch = lowest_line.get(i).get(0);
-				
-				// Verify that at least one of these pitches belongs to a new note onset
-				if (note_onset_slice_container.isPitchInSliceNewOnset(highest_line_pitch, i, highest_line_track, highest_line_channel) || 
-					note_onset_slice_container.isPitchInSliceNewOnset(lowest_line_pitch, i, lowest_line_track, lowest_line_channel))
+		// Verify that the lowest and highest lines are distinct
+		if (highest_line_track != lowest_line_track || highest_line_channel != lowest_line_channel)
+		{
+			// Get the melodic note onset slices for the highest line and the lowest note onset slices for the
+			// lowest line
+			LinkedList<LinkedList<Integer>> highest_line = note_onset_slice_container.getNoteOnsetSlicesByTrackAndChannelMelodicLinesOnlyHeldNotesIncluded()[highest_line_track][highest_line_channel];
+			LinkedList<LinkedList<Integer>> lowest_line = note_onset_slice_container.getNoteOnsetSlicesByTrackAndChannelLowestPitchesOnlyHeldNotesIncluded()[lowest_line_track][lowest_line_channel];
+
+			// Iterate by note onset slice
+			for (int i = 0; i < note_onset_slice_container.NUMBER_OF_ONSET_SLICES; i++)
+				// Verify neither slice is empty (i.e. neither line has a rest)
+				if (!highest_line.get(i).isEmpty() && !lowest_line.get(i).isEmpty())
 				{
-					vertical_intervals_between_highest_and_lowest_lines.add(highest_line_pitch - lowest_line_pitch);
+					int highest_line_pitch = highest_line.get(i).get(0);
+					int lowest_line_pitch = lowest_line.get(i).get(0);
+
+					// Verify that at least one of these pitches belongs to a new note onset
+					if (note_onset_slice_container.isPitchInSliceNewOnset(highest_line_pitch, i, highest_line_track, highest_line_channel) || 
+						note_onset_slice_container.isPitchInSliceNewOnset(lowest_line_pitch, i, lowest_line_track, lowest_line_channel))
+					{
+						vertical_intervals_between_highest_and_lowest_lines.add(highest_line_pitch - lowest_line_pitch);
+					}
 				}
-			}
+		}
 		
 		/*
 		// Print lowest and highest lines vertical intervals
@@ -2472,7 +2476,7 @@ public class MIDIIntermediateRepresentations
 		melodic_interval_3gram_aggregate = ngram_generator.getMelodicIntervalNGramAggregate(3, track_and_channel_pairs_by_average_pitch, true, false, false);
 		melodic_interval_3gram_in_highest_line_aggregate = ngram_generator.getMelodicIntervalNGramAggregateForVoice(3, track_and_channel_with_highest_average_pitch, true, false, false);
 		melodic_interval_3gram_in_lowest_line_aggregate = ngram_generator.getMelodicIntervalNGramAggregateForVoice(3, track_and_channel_with_lowest_average_pitch, true, false, false);
-		complete_vertical_interval_3gram_aggregate = ngram_generator.getCompleteVerticalIntervalNGramAggregate(3, false, false);
+		complete_vertical_interval_3gram_aggregate = ngram_generator.getCompleteVerticalIntervalNGramAggregate(3, false, false); 
 		lowest_and_highest_lines_vertical_interval_3gram_aggregate = ngram_generator.getLowestAndHighestLinesVerticalIntervalNGramAggregate(3, true, false, false);
 		rhythmic_value_3gram_aggregate = ngram_generator.getRhythmicValueNGramAggregate(3, track_and_channel_pairs_by_average_pitch);
 		

@@ -301,6 +301,7 @@ part/voice (i.e. for each MIDI track/channel pairing), and the resulting n-grams
   and highest lines vertical interval n-grams. Pitches still held in a given note 
   onset slice from a previous slice are included in the list of pitches in the 
   new note onset slice.</p>
+  <p>Note that the percentage values by which n-grams are considered rare, common, and very common are different for vertical interval n-gram features than for features based on other varieties of n-grams. The thresholds here are lower because there are generally more unique lowest and highest lines vertical interval n-grams, and even more unique complete vertical interval n-grams, in a piece than there are unique n-grams of other varieties. This is due to the fact that vertical interval n-grams are dependent on changes in more than one MIDI track/channel pairing, and consequently are greater in number and more varied. So, the percentage values have been lowered for both types of vertical interval n-grams in order to generate a number of unique n-grams that are considered rare, common, and very common. The adjusted values were determined through empirical testing on a body of four-voice pieces, which generally are the focus of jSymbolic's machine learning applications, and which also serve as a middle ground between pieces with fewer voices, and pieces with fuller, more complex arrangements. However, these values are still arbitrary indicators of frequency.</p>
 <ul>
   <li><font color="#FF0000"><strong>NC-1 Most Common Vertical Interval 3-gram Type
     - Between Lowest and Highest Lines:</strong> A feature vector of size 3 consisting 
@@ -349,13 +350,13 @@ part/voice (i.e. for each MIDI track/channel pairing), and the resulting n-grams
     music. This value is unrelated to the frequency with which each of these 3-grams types occur in the music.</font></li>
   <li><font color="#FF0000"><strong>NC-7 Number of Rare Vertical Interval 3-gram 
     Types - Between Lowest and Highest Lines:</strong> The number of different lowest and highest lines vertical interval 3-gram types that each account individually 
-    for 3% or less of all lowest and highest lines vertical interval 3-grams that occur in the music.</font></li>
+    for 1% or less of all lowest and highest lines vertical interval 3-grams that occur in the music.</font></li>
   <li><font color="#FF0000"><strong>NC-</strong></font><strong><font color="#FF0000">8</font></strong><font color="#FF0000"><strong> Number of Common Vertical Interval 3-gram 
     Types - Between Lowest and Highest Lines:</strong> The number of different lowest and highest lines vertical interval 3-gram types that each account individually 
-    for at least 9% of all lowest and highest lines vertical interval 3-grams that occur in the music.</font></li>
+    for at least 4% of all lowest and highest lines vertical interval 3-grams that occur in the music.</font></li>
   <li><font color="#FF0000"><strong>NC-</strong></font><strong><font color="#FF0000">9</font></strong><font color="#FF0000"><strong> Number of Very Common Vertical Interval 
     3-gram Types - Between Lowest and Highest Lines:</strong> The number of vertical 
-    interval 3-gram types that each account individually for at least 15% of all vertical 
+    interval 3-gram types that each account individually for at least 10% of all vertical 
     interval 3-grams that occur in the music.</font></li>
   <li><font color="#FF0000"><strong>NC-10</strong></font><font color="#FF0000"><strong> Prevalence of Vertical Interval 
     3-gram Types Occurring Only Once - Between Lowest and Highest Lines:</strong> The  
@@ -365,19 +366,19 @@ part/voice (i.e. for each MIDI track/channel pairing), and the resulting n-grams
     only of a melody, or with only MIDI Channel 10 notes).</font></li>
   <li><font color="#FF0000"><strong>NC-</strong></font><strong><font color="#FF0000">11</font></strong><font color="#FF0000"><strong> Prevalence of Rare Vertical Interval 3-gram Types 
     - Between Lowest and Highest Lines:</strong> The number of different lowest and highest lines vertical interval 3-gram types that each account individually 
-    for 3% or less of all lowest and highest lines vertical interval 3-grams that occur in the music, divided by the total number of unique lowest and highest lines vertical interval 3-gram types that exist in the  
+    for 1% or less of all lowest and highest lines vertical interval 3-grams that occur in the music, divided by the total number of unique lowest and highest lines vertical interval 3-gram types that exist in the  
     music. Set 
     to 0 if there are no lowest and highest lines vertical interval 3-grams in the music (e.g. music consisting 
     only of a melody, or with only MIDI Channel 10 notes).</font></li>
   <li><font color="#FF0000"><strong>NC-12 Prevalence of Common Vertical Interval 3-gram Types 
     - Between Lowest and Highest Lines:</strong> The number of different lowest and highest lines vertical interval 3-gram types that each account individually 
-    for 9% or more of all lowest and highest lines vertical interval 3-grams that occur in the music, divided by the total number of unique lowest and highest lines vertical interval 3-gram types that exist in the  
+    for 4% or more of all lowest and highest lines vertical interval 3-grams that occur in the music, divided by the total number of unique lowest and highest lines vertical interval 3-gram types that exist in the  
     music. Set 
     to 0 if there are no lowest and highest lines vertical interval 3-grams in the music (e.g. music consisting 
     only of a melody, or with only MIDI Channel 10 notes).</font></li>
   <li><font color="#FF0000"><strong>NC-13 Prevalence of Very Common Vertical Interval 
     3-gram Types - Between Lowest and Highest Lines:</strong> The number of different lowest and highest lines vertical interval 3-gram types that each account individually 
-    for 15% or more of all lowest and highest lines vertical interval 3-grams that occur in the music, divided by the total number of unique lowest and highest lines vertical interval 3-gram types that exist in the  
+    for 10% or more of all lowest and highest lines vertical interval 3-grams that occur in the music, divided by the total number of unique lowest and highest lines vertical interval 3-gram types that exist in the  
     music. Set 
     to 0 if there are no lowest and highest lines vertical interval 3-grams in the music (e.g. music consisting 
     only of a melody, or with only MIDI Channel 10 notes).</font></li>
@@ -404,13 +405,13 @@ part/voice (i.e. for each MIDI track/channel pairing), and the resulting n-grams
     music. This value is unrelated to the frequency with which each of these n-grams types occur in the music.</font></li>
   <li><font color="#FF0000"><strong>NC-18 Number of Rare Vertical Interval 3-gram 
     Types:</strong> The number of different complete vertical interval 3-gram types that each account individually 
-    for 3% or less of all complete vertical interval 3-grams that occur in the music.</font></li>
+    for 0.5% or less of all complete vertical interval 3-grams that occur in the music.</font></li>
   <li><font color="#FF0000"><strong>NC-19 Number of Common Vertical Interval 3-gram 
     Types:</strong> The number of different complete vertical interval 3-gram types that each account individually 
-    for  9% or more of all complete vertical interval 3-grams that occur in the music.</font></li>
+    for  1% or more of all complete vertical interval 3-grams that occur in the music.</font></li>
   <li><font color="#FF0000"><strong>NC-20 Number of Very Common Vertical Interval 
     3-gram Types:</strong> The number of vertical 
-    interval 3-gram types that each account individually for 15% or more of all vertical 
+    interval 3-gram types that each account individually for 2% or more of all vertical 
     interval 3-grams that occur in the music.</font></li>
   <li><font color="#FF0000"><strong>NC-21 Prevalence of Vertical Interval 
     3-gram Types Occurring Only Once:</strong> The  
@@ -419,18 +420,18 @@ part/voice (i.e. for each MIDI track/channel pairing), and the resulting n-grams
     to 0 if there are no complete vertical interval 3-grams in the music (e.g. music consisting 
     only of a melody, or with only MIDI Channel 10 notes).</font></li>
   <li><font color="#FF0000"><strong>NC-</strong></font><strong><font color="#FF0000">22</font></strong><font color="#FF0000"><strong> Prevalence of Rare Vertical Interval 3-gram Types:</strong> The number of different complete vertical interval 3-gram types that each account individually 
-    for 3% or less of all complete vertical interval 3-grams that occur in the music, divided by the total number of unique complete vertical interval 3-gram types that exist in the  
+    for 0.5% or less of all complete vertical interval 3-grams that occur in the music, divided by the total number of unique complete vertical interval 3-gram types that exist in the  
     music. Set 
     to 0 if there are no complete vertical interval 3-grams in the music (e.g. music consisting 
     only of a melody, or with only MIDI Channel 10 notes).</font></li>
   <li><font color="#FF0000"><strong>NC-23 Prevalence of Common Vertical Interval 3-gram Types:</strong> The number of different complete vertical interval 3-gram types that each account individually 
-    for 9% or more of all complete vertical interval 3-grams that occur in the music, divided by the total number of unique complete vertical interval 3-gram types that exist in the  
+    for 1% or more of all complete vertical interval 3-grams that occur in the music, divided by the total number of unique complete vertical interval 3-gram types that exist in the  
     music. Set 
     to 0 if there are no complete vertical interval 3-grams in the music (e.g. music consisting 
     only of a melody, or with only MIDI Channel 10 notes).</font></li>
   <li><font color="#FF0000"><strong>NC-24 Prevalence of Very Common Vertical Interval 
     3-gram Types:</strong> The number of different complete vertical interval 3-gram types that each account individually 
-    for 15% or more of all complete vertical interval 3-grams that occur in the music, divided by the total number of unique complete vertical interval 3-gram types that exist in the  
+    for 2% or more of all complete vertical interval 3-grams that occur in the music, divided by the total number of unique complete vertical interval 3-gram types that exist in the  
     music. Set 
     to 0 if there are no complete vertical interval 3-grams in the music (e.g. music consisting 
     only of a melody, or with only MIDI Channel 10 notes).</font></li>
