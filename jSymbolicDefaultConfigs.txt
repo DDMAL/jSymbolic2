@@ -505,4 +505,16 @@ Prevalence of Vertical Interval 3-gram Types Occurring Only Once
 Prevalence of Rare Vertical Interval 3-gram Types
 Prevalence of Common Vertical Interval 3-gram Types
 Prevalence of Very Common Vertical Interval 3-gram Types
-
+Most Common Rhythmic Value 3-gram Type
+Second Most Common Rhythmic Value 3-gram Type
+Prevalence of Most Common Rhythmic Value 3-gram Type
+Prevalence of Second Most Common Rhythmic Value 3-gram Type
+Prevalence of Median Rhythmic Value 3-gram Type
+Number of Distinct Rhythmic Value 3-gram Types
+Number of Rare Rhythmic Value 3-gram Types
+Number of Common Rhythmic Value 3-gram Types
+Number of Very Common Rhythmic Value 3-gram Types
+Prevalence of Rhythmic Value 3-gram Types Occurring Only Once
+Prevalence of Rare Rhythmic Value 3-gram Types
+Prevalence of Common Rhythmic Value 3-gram Types
+Prevalence of Very Common Rhythmic Value 3-gram Types

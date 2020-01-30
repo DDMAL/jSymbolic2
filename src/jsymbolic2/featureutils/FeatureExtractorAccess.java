@@ -632,7 +632,22 @@ public final class FeatureExtractorAccess
             new PrevalenceOfVerticalInterval3GramTypesOccurringOnlyOnceFeature(),
             new PrevalenceOfRareVerticalInterval3GramTypesFeature(),
             new PrevalenceOfCommonVerticalInterval3GramTypesFeature(),
-            new PrevalenceOfVeryCommonVerticalInterval3GramTypesFeature()
+            new PrevalenceOfVeryCommonVerticalInterval3GramTypesFeature(),
+			
+			// Add features based on rhythmic value n-grams
+			new MostCommonRhythmicValue3GramTypeFeature(),
+			new SecondMostCommonRhythmicValue3GramTypeFeature(),
+			new PrevalenceOfMostCommonRhythmicValue3GramTypeFeature(),
+			new PrevalenceOfSecondMostCommonRhythmicValue3GramTypeFeature(),
+			new PrevalenceOfMedianRhythmicValue3GramTypeFeature(),
+			new NumberOfDistinctRhythmicValue3GramTypesFeature(),
+			new NumberOfRareRhythmicValue3GramTypesFeature(),
+			new NumberOfCommonRhythmicValue3GramTypesFeature(),
+			new NumberOfVeryCommonRhythmicValue3GramTypesFeature(),
+			new PrevalenceOfRhythmicValue3GramTypesOccurringOnlyOnceFeature(),
+			new PrevalenceOfRareRhythmicValue3GramTypesFeature(),
+			new PrevalenceOfCommonRhythmicValue3GramTypesFeature(),
+			new PrevalenceOfVeryCommonRhythmicValue3GramTypesFeature()
 		};
 
 		default_features_to_save = new boolean[all_implemented_feature_extractors.length];
