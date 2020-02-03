@@ -11,7 +11,7 @@ import jsymbolic2.processing.MIDIIntermediateRepresentations;
  *
  * @author Tristano Tenaglia and Cory McKay
  */
-public class RelativeNoteDurationsOfLowestLineFeature
+public class RelativeNoteDurationsOfLowestVoiceFeature
 		extends MIDIFeatureExtractor
 {
 	/* CONSTRUCTOR ******************************************************************************************/
@@ -20,9 +20,9 @@ public class RelativeNoteDurationsOfLowestLineFeature
 	/**
 	 * Basic constructor that sets the values of the fields inherited from this class' superclass.
 	 */
-	public RelativeNoteDurationsOfLowestLineFeature()
+	public RelativeNoteDurationsOfLowestVoiceFeature()
 	{
-		String name = "Relative Note Durations of Lowest Line";
+		String name = "Relative Note Durations of Lowest Voice";
 		String code = "T-14";
 		String description = "Average duration of notes (in seconds) in the channel with the lowest average pitch, divided by the average duration of notes in all channels that contain at least one note.";
 		boolean is_sequential = true;

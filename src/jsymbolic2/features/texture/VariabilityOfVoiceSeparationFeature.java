@@ -6,8 +6,8 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the average separation in semi-tones between the average pitches of
- * consecutive channels (after sorting based on average pitch) that contain at least one note.
+ * A feature calculator that finds the standard deviation of the separations in semi-tones between the average
+ * pitches of consecutive channels (after sorting based on average pitch) that contain at least one note.
  *
  * @author Cory McKay
  */
@@ -24,7 +24,7 @@ public class VariabilityOfVoiceSeparationFeature
 	{
 		String name = "Variability of Voice Separation";
 		String code = "T-18";
-		String description = "Average separation in semi-tones between the average pitches of consecutive channels (after sorting based on average pitch) that contain at least one note.";
+		String description = "Standard deviation of the separations in semi-tones between the average pitches of consecutive channels (after sorting based on average pitch) that contain at least one note.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
@@ -71,7 +71,7 @@ public class VariabilityOfVoiceSeparationFeature
 				value = 0.0;
 			else
 			{
-				// Store the average melodic interval of notes in the other channels
+				// Store the average average pitches of channels
 				double[] average_pitches = new double[sequence_info.channel_statistics.length - silent_count];
 				int count = 0;
 				for (int chan = 0; chan < sequence_info.channel_statistics.length; chan++)
@@ -91,7 +91,7 @@ public class VariabilityOfVoiceSeparationFeature
 				for (int i = 0; i < average_pitches.length - 1; i++)
 					intervals[i] = average_pitches[i + 1] - average_pitches[i];
 
-				// Find the average interval
+				// Find the standard deviation of the intervals
 				if (intervals == null || intervals.length == 0)
 					value = 0.0;
 				else

@@ -6,24 +6,25 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the average melodic interval in semitones in the channel with the lowest
- * average pitch, divided by the average melodic interval in all channels that contain at least two notes.
+ * A feature calculator that finds the number of Note Ons in the channel with the highest average pitch,
+ * divided by the average number of Note Ons in all channels that contain at least one note.
  *
  * @author Cory McKay
  */
-public class RelativeSizeOfMelodicIntervalsInLowestLineFeature
+public class RelativeNoteDensityOfHighestVoiceFeature
 		extends MIDIFeatureExtractor
 {
 	/* CONSTRUCTOR ******************************************************************************************/
 
+	
 	/**
 	 * Basic constructor that sets the values of the fields inherited from this class' superclass.
 	 */
-	public RelativeSizeOfMelodicIntervalsInLowestLineFeature()
+	public RelativeNoteDensityOfHighestVoiceFeature()
 	{
-		String name = "Relative Size of Melodic Intervals in Lowest Line";
-		String code = "T-15";
-		String description = "Average melodic interval in semitones in the channel with the lowest average pitch, divided by the average melodic interval in all channels that contain at least two notes.";
+		String name = "Relative Note Density of Highest Voice";
+		String code = "T-13";
+		String description = "Number of Note Ons in the channel with the highest average pitch, divided by the average number of Note Ons in all channels that contain at least one note.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
@@ -59,48 +60,45 @@ public class RelativeSizeOfMelodicIntervalsInLowestLineFeature
 		double value;
 		if (sequence_info != null)
 		{
-			// Find the channel with the lowest average pitch
-			int min_so_far = 0;
-			int lowest_chan = 0;
+			// Find the channel with the highest average pitch
+			int max_so_far = 0;
+			int highest_chan = 0;
 			for (int chan = 0; chan < sequence_info.channel_statistics.length; chan++)
 			{
 				if (sequence_info.channel_statistics[chan][6] != 0 && chan != (10 - 1))
 				{
-					if (sequence_info.channel_statistics[chan][6] < min_so_far)
+					if (sequence_info.channel_statistics[chan][6] > max_so_far)
 					{
-						min_so_far = sequence_info.channel_statistics[chan][6];
-						lowest_chan = chan;
+						max_so_far = sequence_info.channel_statistics[chan][6];
+						highest_chan = chan;
 					}
 				}
 			}
 
-			// Find the number of channels with no note ons (or that is channel 10 or that is the highest 
-			// channel)
+			// Find the number of channels with no note ons (or that is channel 10)
 			int silent_count = 0;
 			for (int chan = 0; chan < sequence_info.channel_statistics.length; chan++)
 				if (sequence_info.channel_statistics[chan][0] == 0 || chan == (10 - 1))
 					silent_count++;
 
-			// Find the average melodic interval of notes in the other channels
-			double[] intervals = new double[sequence_info.channel_statistics.length - silent_count];
+			// Find the average number of notes in each channel
+			double[] number_of_notes = new double[sequence_info.channel_statistics.length - silent_count];
 			int count = 0;
 			for (int chan = 0; chan < sequence_info.channel_statistics.length; chan++)
 			{
 				if (sequence_info.channel_statistics[chan][0] != 0 && chan != (10 - 1))
 				{
-					intervals[count] = (double) sequence_info.channel_statistics[chan][3];
+					number_of_notes[count] = (double) sequence_info.channel_statistics[chan][0];
 					count++;
 				}
 			}
-			
+			double total_average = mckay.utilities.staticlibraries.MathAndStatsMethods.getAverage(number_of_notes);
+
 			// Set value
-			if (intervals == null || intervals.length == 0 || sequence_info.channel_statistics[lowest_chan][3] == 0)
+			if (Double.isNaN(total_average) || total_average == 0.0)
 				value = 0.0;
-			else
-			{
-				double average = mckay.utilities.staticlibraries.MathAndStatsMethods.getAverage(intervals);
-				value = ((double) sequence_info.channel_statistics[lowest_chan][3]) / ((double) average);
-			}
+			else 
+				value = ((double) max_so_far) / total_average;
 		}
 		else value = -1.0;
 

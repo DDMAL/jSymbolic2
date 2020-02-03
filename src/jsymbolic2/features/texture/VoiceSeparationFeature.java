@@ -71,7 +71,7 @@ public class VoiceSeparationFeature
 				value = 0.0;
 			else
 			{
-				// Store the average melodic interval of notes in the other channels
+				// Store the average pitches of channels
 				double[] average_pitches = new double[sequence_info.channel_statistics.length - silent_count];
 				int count = 0;
 				for (int chan = 0; chan < sequence_info.channel_statistics.length; chan++)

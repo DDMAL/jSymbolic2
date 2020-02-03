@@ -6,7 +6,7 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the average number of different channels in which notes are sounded
+ * A feature calculator that finds the mean number of different channels in which notes are sounded
  * simultaneously. Rests are not included in this calculation.
  *
  * @author Cory McKay
@@ -24,7 +24,7 @@ public class AverageNumberOfIndependentVoicesFeature
 	{
 		String name = "Average Number of Independent Voices";
 		String code = "T-2";
-		String description = "Average number of different channels in which notes are sounded simultaneously. Rests are not included in this calculation.";
+		String description = "Mean number of different channels in which notes are sounded simultaneously. Rests are not included in this calculation.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);

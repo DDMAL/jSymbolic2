@@ -13,7 +13,7 @@ import jsymbolic2.processing.MIDIIntermediateRepresentations;
  *
  * @author Cory McKay
  */
-public class RelativeRangeOfHighestLineFeature
+public class RelativeRangeOfHighestVoiceFeature
 		extends MIDIFeatureExtractor
 {
 	/* CONSTRUCTOR ******************************************************************************************/
@@ -22,9 +22,9 @@ public class RelativeRangeOfHighestLineFeature
 	/**
 	 * Basic constructor that sets the values of the fields inherited from this class' superclass.
 	 */
-	public RelativeRangeOfHighestLineFeature()
+	public RelativeRangeOfHighestVoiceFeature()
 	{
-		String name = "Relative Range of Highest Line";
+		String name = "Relative Range of Highest Voice";
 		String code = "T-12";
 		String description = "Pitch difference in semitones between the highest note and the lowest note played in the channel with the highest average pitch, divided by the difference between the highest note and the lowest note in the piece overall. Set to 0 if there if there are fewer than 2 pitches in the music.";
 		boolean is_sequential = true;
