@@ -6,10 +6,10 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the maximum number of different channels in which notes are sounded
- * simultaneously.
+ * A feature calculator that finds the maximum number of different MIDI track/channel voices in which notes 
+ * are sounded simultaneously. Set to 0 if there are no voices containing pitched notes.
  *
- * @author Cory McKay
+ * @author Cory McKay and radamian
  */
 public class MaximumNumberOfIndependentVoicesFeature
 		extends MIDIFeatureExtractor
@@ -24,7 +24,7 @@ public class MaximumNumberOfIndependentVoicesFeature
 	{
 		String name = "Maximum Number of Independent Voices";
 		String code = "T-1";
-		String description = "Maximum number of different channels in which notes are sounded simultaneously.";
+		String description = "Maximum number of different channels in which MIDI track/channel voices are sounded simultaneously. Set to 0 if there are no voices containing pitched notes.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
@@ -61,15 +61,14 @@ public class MaximumNumberOfIndependentVoicesFeature
 		if (sequence_info != null)
 		{
 			int max_so_far = 0;
-			for (int tick = 0; tick < sequence_info.note_sounding_on_a_channel_tick_map.length; tick++)
+			for (int tick = 0; tick < sequence_info.note_sounding_on_a_track_and_channel_tick_map.length; tick++)
 			{
 				int count = 0;
-				for (int chan = 0; chan < sequence_info.note_sounding_on_a_channel_tick_map[tick].length; chan++)
-				{
-					if (sequence_info.note_sounding_on_a_channel_tick_map[tick][chan])
-						count++;
-				}
-
+				for (int n_track = 0; n_track < sequence_info.note_sounding_on_a_track_and_channel_tick_map[tick].length; n_track++)
+					for (int chan = 0; chan < sequence_info.note_sounding_on_a_track_and_channel_tick_map[tick][n_track].length; chan++)
+						if (sequence_info.note_sounding_on_a_track_and_channel_tick_map[tick][n_track][chan] && chan != 10 - 1)
+							count++;
+					
 				if (count > max_so_far)
 					max_so_far = count;
 			}

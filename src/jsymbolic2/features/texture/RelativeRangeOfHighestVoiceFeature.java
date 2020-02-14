@@ -7,11 +7,11 @@ import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
  * A feature calculator that finds the pitch difference in semitones between the highest note and the lowest
- * note played in the channel with the highest average pitch, divided by the difference between the highest
- * note and the lowest note in the piece overall. Set to 0 if there if there are fewer than 2 pitches in the
- * music.
+ * note played in the MIDI track/channel voice with the highest average pitch, divided by the difference 
+ * between the highest note and the lowest note in the piece overall. Set to 0 if there if there are fewer 
+ * than 2 pitches in the music.
  *
- * @author Cory McKay
+ * @author Cory McKay and radamian
  */
 public class RelativeRangeOfHighestVoiceFeature
 		extends MIDIFeatureExtractor
@@ -25,12 +25,12 @@ public class RelativeRangeOfHighestVoiceFeature
 	public RelativeRangeOfHighestVoiceFeature()
 	{
 		String name = "Relative Range of Highest Voice";
-		String code = "T-12";
-		String description = "Pitch difference in semitones between the highest note and the lowest note played in the channel with the highest average pitch, divided by the difference between the highest note and the lowest note in the piece overall. Set to 0 if there if there are fewer than 2 pitches in the music.";
+		String code = "T-15";
+		String description = "Pitch difference in semitones between the highest note and the lowest note played in the MIDI track/channel voice with the highest average pitch, divided by the difference between the highest note and the lowest note in the piece overall. Set to 0 if there if there are fewer than 2 pitches in the music.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
-		dependencies = null;
+		dependencies = new String[] { "Range" };
 		offsets = null;
 		is_default = true;
 		is_secure = true;
@@ -63,50 +63,28 @@ public class RelativeRangeOfHighestVoiceFeature
 		double value;
 		if (sequence_info != null)
 		{
-			// Find the channel with the highest average pitch
-			int max_so_far = -1;
-			int highest_chan = -1;
-			for (int chan = 0; chan < sequence_info.channel_statistics.length; chan++)
-			{
-				if (sequence_info.channel_statistics[chan][6] != 0 && chan != (10 - 1))
-				{
-					if (sequence_info.channel_statistics[chan][6] > max_so_far)
-					{
-						max_so_far = sequence_info.channel_statistics[chan][6];
-						highest_chan = chan;
-					}
-				}
-			}
-
-			if (highest_chan == -1)
+			if (sequence_info.total_number_pitched_note_ons < 2)
 				value = 0.0;
 			else
 			{
-				// Find the range of the highest channel
-				double range_of_highest = (double) (sequence_info.channel_statistics[highest_chan][5]
-						- sequence_info.channel_statistics[highest_chan][4]);
-
-				// Finde the overall range
-				int lowest = 128;
-				int highest = -1;
-				for (int chan = 0; chan < sequence_info.channel_statistics.length; chan++)
-				{
-					if (sequence_info.channel_statistics[chan][0] != 0 && chan != (10 - 1))
-					{
-						if (sequence_info.channel_statistics[chan][4] < lowest)
-							lowest = sequence_info.channel_statistics[chan][4];
-						if (sequence_info.channel_statistics[chan][5] > highest)
-							highest = sequence_info.channel_statistics[chan][5];
-					}
-				}
-
-				// Set value
-					// Set value
-				if (lowest == 128 || highest == -1 || lowest == highest)
+				// Get the track and channel numbers of the MIDI track/channel voice with the highest average 
+				// pitch
+				int track_highest_voice = sequence_info.track_and_channel_with_highest_average_pitch[0];
+				int channel_highest_voice = sequence_info.track_and_channel_with_highest_average_pitch[1];
+				
+				// Get the range in that MIDI track/channel voice
+				int lowest = sequence_info.track_and_channel_statistics[track_highest_voice][channel_highest_voice][4];
+				int highest = sequence_info.track_and_channel_statistics[track_highest_voice][channel_highest_voice][5];
+				int range_in_highest_voice = highest - lowest;
+				
+				// The overall range in the piece
+				double overall_range = other_feature_values[0][0];
+				
+				if (overall_range == 0)
 					value = 0.0;
 				else
-					value = range_of_highest / ((double) (highest - lowest));
-			}
+					value = (double) range_in_highest_voice / overall_range;
+			}	
 		}
 		else value = -1.0;
 

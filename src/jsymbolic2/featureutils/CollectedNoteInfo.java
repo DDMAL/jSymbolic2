@@ -218,6 +218,34 @@ public class CollectedNoteInfo
 	}
 	
 	
+	/**
+	 * Get a list of notes sounding at the given MIDI tick, in the combination of the given MIDI track and 
+	 * channel.
+	 * 
+	 * @param	tick	The tick to find notes sounding at.
+	 * @param	track	The MIDI track to find notes from.
+	 * @param	channel	The MIDI channel to find notes from.
+	 * @return			A list holding all notes parsed from a MIDI stream so far that sound at the specified
+	 *					MIDI tick, with the given track and channel order. The list is in order of increasing
+	 *					pitch.
+	 */
+	public List<NoteInfo> getNotesSoundingAtTickOnTrackAndChannel(int tick,
+																  int track,
+																  int channel)
+	{
+		List<NoteInfo> notes_on_track = note_list.stream().filter(n -> n.getTrack() == track).collect(Collectors.toList());
+		List<NoteInfo> notes_on_track_and_channel = notes_on_track.stream().filter(n -> n.getChannel() == channel).collect(Collectors.toList());
+		
+		List<NoteInfo> notes_sounding_at_tick_on_track_and_channel = new ArrayList<>();
+		for (int i = 0; i < notes_on_track_and_channel.size(); i++)
+			if (notes_on_track_and_channel.get(i).getStartTick() <= tick && notes_on_track_and_channel.get(i).getEndTick() >= tick)
+				notes_sounding_at_tick_on_track_and_channel.add(notes_on_track_and_channel.get(i));
+		
+		notes_sounding_at_tick_on_track_and_channel.sort((s1, s2) -> ((Integer) s1.getPitch()).compareTo(s2.getPitch()));
+		return notes_sounding_at_tick_on_track_and_channel;
+	}
+	
+	
 	/* PUBLIC STATIC METHODS ********************************************************************************/
 
 

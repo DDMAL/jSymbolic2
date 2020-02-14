@@ -6,10 +6,11 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the mean number of different channels in which notes are sounded
- * simultaneously. Rests are not included in this calculation.
+ * A feature calculator that finds the mean number of different MIDI track/channel voices in which notes are 
+ * sounded simultaneously. Rests are not included in this calculation. Set to 0 if there are no voices 
+ * containing pitched notes.
  *
- * @author Cory McKay
+ * @author Cory McKay and radamian
  */
 public class AverageNumberOfIndependentVoicesFeature
 		extends MIDIFeatureExtractor
@@ -24,7 +25,7 @@ public class AverageNumberOfIndependentVoicesFeature
 	{
 		String name = "Average Number of Independent Voices";
 		String code = "T-2";
-		String description = "Mean number of different channels in which notes are sounded simultaneously. Rests are not included in this calculation.";
+		String description = "Mean number of different MIDI track/channel voices in which notes are sounded simultaneously. Rests are not included in this calculation. Set to 0 if there are no voices containing pitched notes.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
@@ -60,20 +61,19 @@ public class AverageNumberOfIndependentVoicesFeature
 		double value;
 		if (sequence_info != null)
 		{
-			// Instantiate of the variable holding the number of voices sounding at each tick
-			int[] number_sounding = new int[sequence_info.note_sounding_on_a_channel_tick_map.length];
+			// An array holding the number of voices sounding at each tick
+			int[] number_sounding = new int[sequence_info.note_sounding_on_a_track_and_channel_tick_map.length];
 			for (int i = 0; i < number_sounding.length; i++)
 				number_sounding[i] = 0;
 
 			// Find the number of voices sounding at each tick
 			int rest_count = 0;
-			for (int tick = 0; tick < sequence_info.note_sounding_on_a_channel_tick_map.length; tick++)
+			for (int tick = 0; tick < sequence_info.note_sounding_on_a_track_and_channel_tick_map.length; tick++)
 			{
-				for (int chan = 0; chan < sequence_info.note_sounding_on_a_channel_tick_map[tick].length; chan++)
-				{
-					if (sequence_info.note_sounding_on_a_channel_tick_map[tick][chan])
-						number_sounding[tick]++;
-				}
+				for (int n_track = 0; n_track < sequence_info.note_sounding_on_a_track_and_channel_tick_map[tick].length; n_track++)
+					for (int chan = 0; chan < sequence_info.note_sounding_on_a_track_and_channel_tick_map[tick][n_track].length; chan++)
+						if (sequence_info.note_sounding_on_a_track_and_channel_tick_map[tick][n_track][chan] && chan != 10 - 1)
+							number_sounding[tick]++;
 
 				// Keep track of number of ticks with no notes sounding
 				if (number_sounding[tick] == 0)

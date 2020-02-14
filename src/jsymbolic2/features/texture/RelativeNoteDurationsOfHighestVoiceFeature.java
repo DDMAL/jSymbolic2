@@ -9,12 +9,12 @@ import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
  * A feature calculator that finds the average duration of notes (in seconds) in the MIDI track/channel voice 
- * with the lowest average pitch, divided by the average duration of notes in all MIDI track/channel voices 
- * that contain at least one note. Set to 0 if there are no voices containing pitched notes.
+ * with the highest average pitch, divided by the average duration of notes in all voices that contain at 
+ * least one note. Set to 0 if there are no voices containing pitched notes.
  *
- * @author Tristano Tenaglia, Cory McKay and radamian
+ * @author radamian
  */
-public class RelativeNoteDurationsOfLowestVoiceFeature
+public class RelativeNoteDurationsOfHighestVoiceFeature
 		extends MIDIFeatureExtractor
 {
 	/* CONSTRUCTOR ******************************************************************************************/
@@ -23,10 +23,10 @@ public class RelativeNoteDurationsOfLowestVoiceFeature
 	/**
 	 * Basic constructor that sets the values of the fields inherited from this class' superclass.
 	 */
-	public RelativeNoteDurationsOfLowestVoiceFeature()
+	public RelativeNoteDurationsOfHighestVoiceFeature()
 	{
-		String name = "Relative Note Durations of Lowest Voice";
-		String code = "T-23";
+		String name = "Relative Note Durations of Highest Voice";
+		String code = "T-19";
 		String description = "Average duration of notes (in seconds) in the MIDI track/channel voice with the lowest average pitch, divided by the average duration of notes in all MIDI track/channel voices that contain at least one note. Set to 0 if there are no voices containing pitched notes.";
 		boolean is_sequential = true;
 		int dimensions = 1;
@@ -63,16 +63,17 @@ public class RelativeNoteDurationsOfLowestVoiceFeature
 		double value;
 		if (sequence_info != null)
 		{
-			// Get the track and channel numbers of the MIDI track/channel voice with the lowest average pitch
-			int track_lowest_voice = sequence_info.track_and_channel_with_lowest_average_pitch[0];
-			int channel_lowest_voice = sequence_info.track_and_channel_with_lowest_average_pitch[1];
+			// Get the track and channel numbers of the MIDI track/channel voice with the highest average 
+			// pitch
+			int track_highest_voice = sequence_info.track_and_channel_with_highest_average_pitch[0];
+			int channel_highest_voice = sequence_info.track_and_channel_with_highest_average_pitch[1];
 
-			double total_durations_in_lowest_voice = 0.0;
+			double total_durations_in_highest_voice = 0.0;
 			double total_durations_across_pitched_voices = 0.0;
 			int total_number_of_pitched_notes = 0;
 			
 			// Sum the total duration of notes across all pitched voices, and separately sum the total 
-			// duration of notes in the MIDI track/channel voice with the lowest average pitch
+			// duration of notes in the MIDI track/channel voice with the highest average pitch
 			for (int n_track = 0; n_track < sequence_info.track_and_channel_statistics.length; n_track++)
 				for (int chan = 0; chan < sequence_info.track_and_channel_statistics[n_track].length; chan++)
 					if (sequence_info.track_and_channel_statistics[n_track][chan][0] != 0 && chan != 10 - 1)
@@ -86,8 +87,8 @@ public class RelativeNoteDurationsOfLowestVoiceFeature
 							{
 								total_durations_across_pitched_voices += sequence_info.duration_of_ticks_in_seconds[tick];
 								
-								if (n_track == track_lowest_voice && chan == channel_lowest_voice)
-									total_durations_in_lowest_voice += sequence_info.duration_of_ticks_in_seconds[tick];
+								if (n_track == track_highest_voice && chan == channel_highest_voice)
+									total_durations_in_highest_voice += sequence_info.duration_of_ticks_in_seconds[tick];
 							}
 						}
 						
@@ -98,13 +99,13 @@ public class RelativeNoteDurationsOfLowestVoiceFeature
 				value = 0.0;
 			else
 			{
-				double avg_duration_in_lowest_voice = (double) total_durations_in_lowest_voice / sequence_info.track_and_channel_statistics[track_lowest_voice][channel_lowest_voice][0];
+				double avg_duration_in_highest_voice = (double) total_durations_in_highest_voice / sequence_info.track_and_channel_statistics[track_highest_voice][channel_highest_voice][0];
 				double avg_duration_across_voices = (double) total_durations_across_pitched_voices / total_number_of_pitched_notes;
 
 				if (avg_duration_across_voices == 0)
 					value = 0.0;
 				else
-					value = avg_duration_in_lowest_voice / avg_duration_across_voices;
+					value = avg_duration_in_highest_voice / avg_duration_across_voices;
 			}
 		}
 		else value = -1.0;

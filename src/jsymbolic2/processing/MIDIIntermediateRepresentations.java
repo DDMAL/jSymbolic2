@@ -557,6 +557,40 @@ public class MIDIIntermediateRepresentations
 	public int[][] channel_statistics;
 	
 	/**
+	 * A three-dimensional array with first index corresponding to MIDI track number, second index 
+	 * corresponding to MIDI channel number, and third index corresponding as follows:
+	 *
+	 * <ul>
+	 * <li><i>Column 0:</i> Total number of Note Ons on the given track and channel.</li>
+	 *
+	 * <li><i>Column 1:</i> Total amount of time in seconds that one or more notes were sounding on the given
+	 * track and channel. Warning: This could suffer from rounding error. Use 
+	 * total_time_notes_sounding_per_channel if more precision is needed.</li>
+	 *
+	 * <li><i>Column 2:</i> Average loudness (velocity scaled by track and channel volume, still falls between 
+	 * 0 and 127) of notes on the given track and channel.</li>
+	 *
+	 * <li><i>Column 3:</i> Average melodic leap on the given track and channel (in semitones). This includes 
+	 * leaps across rests, and ignores direction. Note that this will give potentially problematic values if 
+	 * there is more than one melody per track and channel pairing, or if a track and channel pairing is 
+	 * polyphonic.</li>
+	 *
+	 * <li><i>Column 4:</i> Lowest MIDI pitch on the given track and channel pairing (a value of 1000 means no 
+	 * pitches on the given track and channel).</li>
+	 *
+	 * <li><i>Column 5:</i> Highest MIDI pitch on the given track and channel pairing (a value of -1000 means 
+	 * no pitches on the given track and channel).</li>
+	 *
+	 * <li><i>Column 6:</i> Mean MIDI pitch on the given track and channel pairing (a value of 0 means there 
+	 * are no pitches on the given track and channel).</li>
+	 * </ul>
+	 *
+	 * <p>NOTE: This data includes MIDI Channel 10 pairings, even though it is understood that notes on 
+	 * Channel 10 are in fact unpitched percussion patches.
+	 */
+	public int[][][] track_and_channel_statistics;
+	
+	/**
 	 * The number of MIDI channels that contain at least one note. This DOES include MIDI Channel 10.
 	 */
 	public double number_of_active_voices;
@@ -567,6 +601,14 @@ public class MIDIIntermediateRepresentations
 	 * are in fact unpitched percussion patches. This data combines data in all MIDI tracks.
 	 */
 	public double[] total_time_notes_sounding_per_channel;
+	
+	/**
+	 * Total amount of time in seconds that one or more notes were sounding on each MIDI track/channel
+	 * pairing, with the first index corresponding to track number and the second index corresponding to MIDI
+	 * channel. This data includes MIDI Channel 10, even though it is understood that notes on Channel 10 are 
+	 * in fact unpitched percussion patches.
+	 */
+	public double[][] total_time_notes_sounding_per_track_and_channel;
 	
 	/**
 	 * The first list contains a list for each channel. Each channel's list in turn contains the MIDI pitch
@@ -632,6 +674,16 @@ public class MIDIIntermediateRepresentations
 	 * in fact unpitched percussion patches.
 	 */
 	public boolean[][] note_sounding_on_a_channel_tick_map;
+	
+	/**
+	 * A table with rows (first index) corresponding to MIDI ticks. The second and third indices correspond to
+	 * the MIDI tracks and channels, respectively. An entry is set to true if one or more notes was sounding 
+	 * on the given track and channel during the given MIDI tick.
+	 *
+	 * <p>NOTE: This data includes MIDI Channel 10, even though it is understood that notes on Channel 10 are
+	 * in fact unpitched percussion patches.
+	 */
+	public boolean[][][] note_sounding_on_a_track_and_channel_tick_map;
 	
 	/**
 	 * A table indicating what pitches are sounding during each MIDI tick. The first index indicates tick and
@@ -1076,6 +1128,30 @@ public class MIDIIntermediateRepresentations
 			System.out.print("\n");
 		}
 		System.out.println("Number of active voices: " + number_of_active_voices);*/
+		
+		/*
+		// Test track_and_channel_statistics
+		System.out.print("\n\n\n");
+		for (int trk = 0; trk < track_and_channel_statistics.length; trk++)
+		{
+			for (int ch = 0; ch < track_and_channel_statistics[trk].length; ch++)
+			{
+				if (track_and_channel_statistics[trk][ch][0] != 0)
+				{
+					System.out.println("ON TRACK " + trk + " AND CHANNEL " + (ch + 1) + ": ");
+					
+					// Print statistics for this MIDI track/channel pairing
+					System.out.println("Total number of Note Ons: " + track_and_channel_statistics[trk][ch][0]);
+					System.out.println("Total amount of time that one or more notes were sounding: " + track_and_channel_statistics[trk][ch][1]);
+					System.out.println("Average loudness: " + track_and_channel_statistics[trk][ch][2]);
+					System.out.println("Average melodic leap: " + track_and_channel_statistics[trk][ch][3]);
+					System.out.println("Lowest pitch: " + track_and_channel_statistics[trk][ch][4]);
+					System.out.println("Highest pitch: " + track_and_channel_statistics[trk][ch][5]);
+					System.out.println("Average pitch: " + track_and_channel_statistics[trk][ch][6]);
+				}
+			}
+		}
+		*/
 		
 		generateAveragePitchIntermediateRepresentations();
 		
@@ -2522,7 +2598,7 @@ public class MIDIIntermediateRepresentations
 	/**
 	 * Calculate the values of the channel_statistics, number_of_active_voices,
 	 * total_time_notes_sounding_per_channel, list_of_note_on_pitches_by_channel and 
-	 * note_sounding_on_a_channel_tick_map fields.
+	 * note_sounding_on_a_channel_tick_map, and note_sounding_on_a_track_and_channel_tick_map fields.
 	 */
 	private void generateChannelNoteOnIntermediateRepresentations()
 	{
@@ -2531,6 +2607,12 @@ public class MIDIIntermediateRepresentations
 		for (int i = 0; i < channel_statistics.length; i++)
 			for (int j = 0; j < channel_statistics[i].length; j++)
 				channel_statistics[i][j] = 0;
+		
+		track_and_channel_statistics = new int[tracks.length][16][7];
+		for (int i = 0; i < track_and_channel_statistics.length; i++)
+			for (int j = 0; j < track_and_channel_statistics[i].length; j++)
+				for (int k = 0; k < track_and_channel_statistics[i][j].length; k++)
+					track_and_channel_statistics[i][j][k] = 0;
 
 		// Instantiate list_of_note_on_pitches_by_channel with one empty list per channel
 		list_of_note_on_pitches_by_channel = new ArrayList<>(16);
@@ -2542,16 +2624,29 @@ public class MIDIIntermediateRepresentations
 		for (int i = 0; i < note_sounding_on_a_channel_tick_map.length; i++)
 			for (int j = 0; j < note_sounding_on_a_channel_tick_map[i].length; j++)
 				note_sounding_on_a_channel_tick_map[i][j] = false;
+		
+		// Instantiate note_sounding_on_a_track_and_channel_tick_map and initialize entries to false
+		note_sounding_on_a_track_and_channel_tick_map = new boolean[(int) sequence.getTickLength() + 1][tracks.length][16];
+		for (int ti = 0; ti < note_sounding_on_a_track_and_channel_tick_map.length; ti++)
+			for (int trk = 0; trk < note_sounding_on_a_track_and_channel_tick_map[ti].length; trk++)
+				for (int ch = 0; ch < note_sounding_on_a_track_and_channel_tick_map[ti][trk].length; ch++)
+					note_sounding_on_a_track_and_channel_tick_map[ti][trk][ch] = false;
 
 		// Last MIDI tick on which a Note On was encountered, by channel, initialized to -1 for none
 		int[] tick_of_last_note_on = new int[16];
 		for (int i = 0; i < tick_of_last_note_on.length; i++)
 			tick_of_last_note_on[i] = -1;
 
-		// Total sum of the MIDI pitches of al Note Ons encountered, by channel
+		// Total sum of the MIDI pitches of all Note Ons encountered, by channel
 		int[] sum_of_pitches = new int[16];
 		for (int i = 0; i < sum_of_pitches.length; i++)
 			sum_of_pitches[i] = 0;
+		
+		// Total sum of the MIDI pitches of all Note Ons encountered, by track and channel
+		int[][] sum_of_pitches_track_and_channel = new int[tracks.length][16];
+		for (int trk = 0; trk < sum_of_pitches_track_and_channel.length; trk++)
+			for (int ch = 0; ch < sum_of_pitches_track_and_channel[trk].length; ch++)
+				sum_of_pitches_track_and_channel[trk][ch] = 0;
 
 		// Lowest MIDI pitch encountered on each channel, initialized to 1000 for none
 		int[] lowest_pitch_so_far = new int[16];
@@ -2562,6 +2657,18 @@ public class MIDIIntermediateRepresentations
 		int[] highest_pitch_so_far = new int[16];
 		for (int i = 0; i < highest_pitch_so_far.length; i++)
 			highest_pitch_so_far[i] = -1000;
+		
+		// Lowest MIDI pitch encountered on each track and channel pairing, initialized to 1000 for none
+		int[][] lowest_pitch_so_far_track_and_channel = new int[tracks.length][16];
+		for (int trk = 0; trk < lowest_pitch_so_far_track_and_channel.length; trk++)
+			for (int ch = 0; ch < lowest_pitch_so_far_track_and_channel[trk].length; ch++)
+				lowest_pitch_so_far_track_and_channel[trk][ch] = 1000;
+		
+		// Highest MIDI pitch encountered on each track and channel pairing, initialized to -1000 for none
+		int[][] highest_pitch_so_far_track_and_channel = new int[tracks.length][16];
+		for (int trk = 0; trk < highest_pitch_so_far_track_and_channel.length; trk++)
+			for (int ch = 0; ch < highest_pitch_so_far_track_and_channel[trk].length; ch++)
+				highest_pitch_so_far_track_and_channel[trk][ch] = -1000;
 
 		// Total number of melodic intervals, by channel
 		int[] total_number_melodic_intervals = new int[16];
@@ -2604,12 +2711,16 @@ public class MIDIIntermediateRepresentations
 
 							// Update the total number of Note Ons
 							channel_statistics[on_channel][0]++;
+							track_and_channel_statistics[track_i][on_channel][0]++;
 
-							// Total the loudnesses of Note Ons for each channel
+							// Total the loudnesses of Note Ons for each channel, and for each track and
+							// channel pairing
 							channel_statistics[on_channel][2] += (int) (((double) on_velocity) * volume_of_channels_tick_map[on_tick][on_channel]);
+							track_and_channel_statistics[track_i][on_channel][2] += (int) (((double) on_velocity) * volume_of_channels_tick_map[on_tick][on_channel]);
 
-							// Update sum_of_pitches
+							// Update sum_of_pitches and sum_of_pitches_track_and_channel
 							sum_of_pitches[on_channel] += on_pitch;
+							sum_of_pitches_track_and_channel[track_i][on_channel] += on_pitch;
 
 							// Update lowest_pitch_so_far, if appropriate
 							if (on_pitch < lowest_pitch_so_far[on_channel])
@@ -2618,6 +2729,14 @@ public class MIDIIntermediateRepresentations
 							// Update highest_pitch_so_far, if appropriate
 							if (on_pitch > highest_pitch_so_far[on_channel])
 								highest_pitch_so_far[on_channel] = on_pitch;
+							
+							// Update lowest_pitch_so_far_track_and_channel, if appropriate
+							if (on_pitch < lowest_pitch_so_far_track_and_channel[track_i][on_channel])
+								lowest_pitch_so_far_track_and_channel[track_i][on_channel] = on_pitch;
+
+							// Update highest_pitch_so_far_track_and_channel, if appropriate
+							if (on_pitch > highest_pitch_so_far_track_and_channel[track_i][on_channel])
+								highest_pitch_so_far_track_and_channel[track_i][on_channel] = on_pitch;
 
 							// Update variables relating to melodic intervals
 							if (previous_pitch[on_channel] != -1)
@@ -2668,7 +2787,10 @@ public class MIDIIntermediateRepresentations
 
 							// Fill in note_sounding_on_a_channel_tick_map for all the ticks corresponding to this note
 							for (int i = on_tick; i < end_tick; i++)
+							{
 								note_sounding_on_a_channel_tick_map[i][on_channel] = true;
+								note_sounding_on_a_track_and_channel_tick_map[i][track_i][on_channel] = true;
+							}
 						}
 					}
 				}
@@ -2686,24 +2808,24 @@ public class MIDIIntermediateRepresentations
 					total_time_notes_sounding_per_channel[ch] += duration_of_ticks_in_seconds[ti];
 		for (int ch = 0; ch < channel_statistics.length; ch++)
 			channel_statistics[ch][1] = (int) total_time_notes_sounding_per_channel[ch];
-
+		
 		// Fill column 2 of channel_statistics by dividing by the total number of notes per channel notes on
 		// each channel
 		for (int i = 0; i < channel_statistics.length; i++)
 			channel_statistics[i][2] = (int) (((double) channel_statistics[i][2]) / ((double) channel_statistics[i][0]));
-
+		
 		// Fill column 3 of channel_statistics by dividing the total melodic leaps in semi-tones by the number
 		// of melodic intervals for each channel
 		for (int i = 0; i < channel_statistics.length; i++)
 			channel_statistics[i][3] = (int) (((double) sum_of_melodic_intervals[i]) / ((double) total_number_melodic_intervals[i]));
-
+		
 		// Fill columns 4 and 5 (lowest and highest pitches) of channel_statistics
 		for (int i = 0; i < channel_statistics.length; i++)
 		{
 			channel_statistics[i][4] = lowest_pitch_so_far[i];
 			channel_statistics[i][5] = highest_pitch_so_far[i];
 		}
-
+		
 		// Fill column 6 of channel_statistics
 		for (int i = 0; i < channel_statistics.length; i++)
 		{
@@ -2712,6 +2834,57 @@ public class MIDIIntermediateRepresentations
 			else
 				channel_statistics[i][6] = sum_of_pitches[i] / channel_statistics[i][0];
 		}
+		
+		// Fill column 1 of track_and_channel_statistics by finding the total amount of time that one or more 
+		// notes were playing on each MIDI track/channel pairing
+		total_time_notes_sounding_per_track_and_channel = new double[tracks.length][16];
+		for (int trk = 0; trk < total_time_notes_sounding_per_track_and_channel.length; trk++)
+			for (int ch = 0; ch < total_time_notes_sounding_per_track_and_channel[trk].length; ch++)
+				total_time_notes_sounding_per_track_and_channel[trk][ch] = 0.0;
+		for (int ti = 0; ti < note_sounding_on_a_track_and_channel_tick_map.length; ti++)
+			for (int trk = 0; trk < note_sounding_on_a_track_and_channel_tick_map[ti].length; trk++)
+				for (int ch = 0; ch < note_sounding_on_a_track_and_channel_tick_map[ti][trk].length; ch++)
+					if (note_sounding_on_a_track_and_channel_tick_map[ti][trk][ch])
+						total_time_notes_sounding_per_track_and_channel[trk][ch] += duration_of_ticks_in_seconds[ti];
+		for (int trk = 0; trk < track_and_channel_statistics.length; trk++)
+			for (int ch = 0; ch < track_and_channel_statistics[trk].length; ch++)
+				track_and_channel_statistics[trk][ch][1] += (int) total_time_notes_sounding_per_track_and_channel[trk][ch];
+		
+		// Fill column 2 of track_and_channel_statistics by dividing by the total number of notes on each
+		// MIDI track/channel pairing
+		for (int trk = 0; trk < track_and_channel_statistics.length; trk++)
+			for (int ch = 0; ch < track_and_channel_statistics[trk].length; ch++)
+				track_and_channel_statistics[trk][ch][2] = (int) (((double) track_and_channel_statistics[trk][ch][2]) / ((double) track_and_channel_statistics[trk][ch][0]));
+		
+		// Fill column 3 of track_and_channel_statistics
+		for (int trk = 0; trk < melodic_intervals_by_track_and_channel.size(); trk++)
+			for (int ch = 0; ch < melodic_intervals_by_track_and_channel.get(trk).length; ch++)
+			{
+				// Sum the absolute values of each melodic interval on this MIDI track/channel pairing
+				for (int leap = 0; leap < melodic_intervals_by_track_and_channel.get(trk)[ch].size(); leap++)
+					track_and_channel_statistics[trk][ch][3] += Math.abs(melodic_intervals_by_track_and_channel.get(trk)[ch].get(leap));
+				
+				// Divide by the total number of melodic intervals on this MIDI track/channel pairing
+				track_and_channel_statistics[trk][ch][3] = (int) (((double) track_and_channel_statistics[trk][ch][3]) / ((double) melodic_intervals_by_track_and_channel.get(trk)[ch].size()));
+			}
+		
+		// Fill columns 4 and 5 (lowest and highest pitches) of track_and_channel_statistics
+		for (int trk = 0; trk < track_and_channel_statistics.length; trk++)
+			for (int ch = 0; ch < track_and_channel_statistics[trk].length; ch++)
+			{
+				track_and_channel_statistics[trk][ch][4] = lowest_pitch_so_far_track_and_channel[trk][ch];
+				track_and_channel_statistics[trk][ch][5] = highest_pitch_so_far_track_and_channel[trk][ch];
+			}
+		
+		// Fill column 6 of track_and_channel_statistics
+		for (int trk = 0; trk < track_and_channel_statistics.length; trk++)
+			for (int ch = 0; ch < track_and_channel_statistics[trk].length; ch++)
+			{
+				if (track_and_channel_statistics[trk][ch][0] == 0)
+					track_and_channel_statistics[trk][ch][6] = 0;
+				else
+					track_and_channel_statistics[trk][ch][6] = sum_of_pitches_track_and_channel[trk][ch] / track_and_channel_statistics[trk][ch][0];
+			}
 		
 		// Calculate number_of_active_voices
 		int num_of_active_voices = 0;

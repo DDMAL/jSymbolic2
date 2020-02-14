@@ -32,7 +32,7 @@ public class SimilarMotionFeature
 	public SimilarMotionFeature()
 	{
 		String name = "Similar Motion";
-		String code = "T-20";
+		String code = "T-31";
 		String description = "Fraction of movements between voices that consist of similar motion (the fraction is calculated relative to the total amount of qualifying transitions, including all parallel, similar, contrary and oblique transitions). If more than two voices are involved in a given pitch transition, then each possible pair of voices comprising the transition is included in the calculation. Note that only transitions from one set of pitches to another set of pitches comprising the same number of pitches as the first are included in this calculation, although a brief lookahead is performed in order to accommodate small rhythmic desynchronizations (e.g. if a MIDI file is a transcription of a human performance). Only unique pitches are included in this calculation (unisons are treated as a single pitch). All pitches present are considered, regardless of their MIDI channel or track; this has the advantage of accomodating polyphonic instruments such as piano or guitar, but the consequence is that this feature does not incorporate an awareness of voice crossing.";
 		boolean is_sequential = true;
 		int dimensions = 1;

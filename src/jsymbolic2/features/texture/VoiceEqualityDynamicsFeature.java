@@ -7,9 +7,10 @@ import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
  * A feature calculator that finds the standard deviation of the average loudness (MIDI velocity) of notes in
- * each channel that contains at least one note.
+ * each MIDI track/channel voice that contains at least one note. Set to 0 if there are no voices containing 
+ * pitched notes.
  *
- * @author Cory McKay
+ * @author Cory McKay and radamian
  */
 public class VoiceEqualityDynamicsFeature
 		extends MIDIFeatureExtractor
@@ -23,8 +24,8 @@ public class VoiceEqualityDynamicsFeature
 	public VoiceEqualityDynamicsFeature()
 	{
 		String name = "Voice Equality - Dynamics";
-		String code = "T-6";
-		String description = "Standard deviation of the average loudness (MIDI velocity) of notes in each channel that contains at least one note.";
+		String code = "T-8";
+		String description = "Standard deviation of the average loudness (MIDI velocity) of notes in each channel that contains at least one note. Set to 0 if there are no voices containing pitched notes.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
@@ -60,30 +61,28 @@ public class VoiceEqualityDynamicsFeature
 		double value;
 		if (sequence_info != null)
 		{
-			// Find the number of channels with no note ons
-			int silent_count = 0;
-			for (int chan = 0; chan < sequence_info.channel_statistics.length; chan++)
-			{
-				if (sequence_info.channel_statistics[chan][0] == 0)
-					silent_count++;
-			}
+			// Find the number of pitched MIDI track/channnel pairings with at least one note on
+			int active_voices_count = 0;
+			for (int n_track = 0; n_track < sequence_info.track_and_channel_statistics.length; n_track++)
+				for (int chan = 0; chan < sequence_info.track_and_channel_statistics[n_track].length; chan++)
+					if (sequence_info.track_and_channel_statistics[n_track][chan][0] != 0 && chan != 10 - 1)
+						active_voices_count++;
 
-			// Store the number of note ons in each channel with note ons
-			double[] dynamics = new double[sequence_info.channel_statistics.length - silent_count];
+			// Store the combined dynamics on each pitched MIDI track/channel pairing with note ons
+			double[] dynamics = new double[active_voices_count];
 			int count = 0;
-			for (int chan = 0; chan < sequence_info.channel_statistics.length; chan++)
-			{
-				if (sequence_info.channel_statistics[chan][0] != 0)
-				{
-					dynamics[count] = (double) sequence_info.channel_statistics[chan][2];
-					count++;
-				}
-			}
+			for (int n_track = 0; n_track < sequence_info.track_and_channel_statistics.length; n_track++)
+				for (int chan = 0; chan < sequence_info.track_and_channel_statistics[n_track].length; chan++)
+					if (sequence_info.track_and_channel_statistics[n_track][chan][0] != 0 && chan != 10 - 1)
+					{
+						dynamics[count] = (double) sequence_info.track_and_channel_statistics[n_track][chan][2];
+						count++;
+					}
 
 			// Calculate the standard deviation
-			if (dynamics == null || dynamics.length == 0)
+			if (dynamics == null || dynamics.length == 0.0)
 				value = 0.0;
-			else 
+			else
 				value = mckay.utilities.staticlibraries.MathAndStatsMethods.getStandardDeviation(dynamics);
 		}
 		else value = -1.0;

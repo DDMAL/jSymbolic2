@@ -7,9 +7,10 @@ import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
  * A feature calculator that finds the average separation in semitones between the average pitches of
- * consecutive channels (after sorting based on average pitch) that contain at least one note.
+ * consecutive MIDI track/channel voices (after sorting based on average pitch) that contain at least one 
+ * note. Set to 0 if there are only 0 or 1 voices containing pitched notes.
  *
- * @author Cory McKay
+ * @author Cory McKay and radamian
  */
 public class VoiceSeparationFeature
 		extends MIDIFeatureExtractor
@@ -23,8 +24,8 @@ public class VoiceSeparationFeature
 	public VoiceSeparationFeature()
 	{
 		String name = "Voice Separation";
-		String code = "T-17";
-		String description = "Average separation in semitones between the average pitches of consecutive channels (after sorting based on average pitch) that contain at least one note. ";
+		String code = "T-26";
+		String description = "Average separation in semitones between the average pitches of consecutive MIDI track/channel voices (after sorting based on average pitch) that contain at least one note. Set to 0 if there are only 0 or 1 voices containing pitched notes.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
@@ -60,42 +61,30 @@ public class VoiceSeparationFeature
 		double value;
 		if (sequence_info != null)
 		{
-			// Find the number of channels with no note ons (or that is channel 10)
-			int silent_count = 0;
-			for (int chan = 0; chan < sequence_info.channel_statistics.length; chan++)
-				if (sequence_info.channel_statistics[chan][0] == 0 || chan == (10 - 1))
-					silent_count++;
-
-			// If there's only one voice
-			if (silent_count > 14)
+			// Set value to 0 if there are fewer than two pitched MIDI track/channel voices
+			if (sequence_info.track_and_channel_pairs_by_average_pitch.size() < 2)
 				value = 0.0;
 			else
 			{
-				// Store the average pitches of channels
-				double[] average_pitches = new double[sequence_info.channel_statistics.length - silent_count];
-				int count = 0;
-				for (int chan = 0; chan < sequence_info.channel_statistics.length; chan++)
+				double[] separations = new double[sequence_info.track_and_channel_pairs_by_average_pitch.size() - 1];
+				
+				// Store the differences in semitones between the average pitches of consecutive MIDI track
+				// and channel pairings
+				int average_pitch_in_previous_voice = 0; 
+				for (int i = 0; i < sequence_info.track_and_channel_pairs_by_average_pitch.size(); i++)
 				{
-					if (sequence_info.channel_statistics[chan][0] != 0 && chan != (10 - 1))
-					{
-						average_pitches[count] = (double) sequence_info.channel_statistics[chan][6];
-						count++;
-					}
+					int track = sequence_info.track_and_channel_pairs_by_average_pitch.get(i)[0];
+					int channel = sequence_info.track_and_channel_pairs_by_average_pitch.get(i)[1];
+					int avergage_pitch_in_this_voice = sequence_info.track_and_channel_statistics[track][channel][3];
+					
+					if (i > 0)
+						separations[i - 1] = avergage_pitch_in_this_voice - average_pitch_in_previous_voice;
+					
+					average_pitch_in_previous_voice = avergage_pitch_in_this_voice;
 				}
-
-				// Sort the average pitches
-				average_pitches = mckay.utilities.staticlibraries.SortingMethods.sortDoubleArray(average_pitches);
-
-				// Find the intervals
-				double[] intervals = new double[average_pitches.length - 1];
-				for (int i = 0; i < average_pitches.length - 1; i++)
-					intervals[i] = average_pitches[i + 1] - average_pitches[i];
-
-				// Find the average interval
-				if (intervals == null || intervals.length == 0)
-					value = 0.0;
-				else
-					value = mckay.utilities.staticlibraries.MathAndStatsMethods.getAverage(intervals);
+				
+				// Set value
+				value = mckay.utilities.staticlibraries.MathAndStatsMethods.getAverage(separations);
 			}
 		}
 		else value = -1.0;

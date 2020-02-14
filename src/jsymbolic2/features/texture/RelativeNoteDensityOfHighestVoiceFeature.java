@@ -6,10 +6,11 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the number of Note Ons in the channel with the highest average pitch,
- * divided by the average number of Note Ons in all channels that contain at least one note.
+ * A feature calculator that finds the number of Note Ons in the MIDI track/channel voice with the highest 
+ * average pitch, divided by the average number of Note Ons in all MIDI track/channel voices that contain at 
+ * least one note. Set to 0 if there are no voices containing pitched notes.
  *
- * @author Cory McKay
+ * @author Cory McKay and radamian
  */
 public class RelativeNoteDensityOfHighestVoiceFeature
 		extends MIDIFeatureExtractor
@@ -23,8 +24,8 @@ public class RelativeNoteDensityOfHighestVoiceFeature
 	public RelativeNoteDensityOfHighestVoiceFeature()
 	{
 		String name = "Relative Note Density of Highest Voice";
-		String code = "T-13";
-		String description = "Number of Note Ons in the channel with the highest average pitch, divided by the average number of Note Ons in all channels that contain at least one note.";
+		String code = "T-17";
+		String description = "Number of Note Ons in the MIDI track/channel voice with the highest average pitch, divided by the average number of Note Ons in all MIDI track/channel voices that contain at least one note. Set to 0 if there are no voices containing pitched notes.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
@@ -60,45 +61,39 @@ public class RelativeNoteDensityOfHighestVoiceFeature
 		double value;
 		if (sequence_info != null)
 		{
-			// Find the channel with the highest average pitch
-			int max_so_far = 0;
-			int highest_chan = 0;
-			for (int chan = 0; chan < sequence_info.channel_statistics.length; chan++)
-			{
-				if (sequence_info.channel_statistics[chan][6] != 0 && chan != (10 - 1))
-				{
-					if (sequence_info.channel_statistics[chan][6] > max_so_far)
-					{
-						max_so_far = sequence_info.channel_statistics[chan][6];
-						highest_chan = chan;
-					}
-				}
-			}
+			// Get the track and channel numbers of the MIDI track/channel voice with the highest average 
+			// pitch
+			int track_highest_voice = sequence_info.track_and_channel_with_highest_average_pitch[0];
+			int channel_highest_voice = sequence_info.track_and_channel_with_highest_average_pitch[1];
 
-			// Find the number of channels with no note ons (or that is channel 10)
-			int silent_count = 0;
-			for (int chan = 0; chan < sequence_info.channel_statistics.length; chan++)
-				if (sequence_info.channel_statistics[chan][0] == 0 || chan == (10 - 1))
-					silent_count++;
+			// The number of note ons in the highest MIDI track/channel voice
+			int number_of_notes_in_highest_voice = sequence_info.track_and_channel_statistics[track_highest_voice][channel_highest_voice][0];
+			
+			// Find the number of pitched MIDI track/channnel pairings with at least one note on
+			int active_voices_count = 0;
+			for (int n_track = 0; n_track < sequence_info.track_and_channel_statistics.length; n_track++)
+				for (int chan = 0; chan < sequence_info.track_and_channel_statistics[n_track].length; chan++)
+					if (sequence_info.track_and_channel_statistics[n_track][chan][0] != 0 && chan != 10 - 1)
+						active_voices_count++;
 
-			// Find the average number of notes in each channel
-			double[] number_of_notes = new double[sequence_info.channel_statistics.length - silent_count];
+			// Find the average number of notes in each pitched MIDI track/channnel pairing
+			double[] number_of_notes = new double[active_voices_count];
 			int count = 0;
-			for (int chan = 0; chan < sequence_info.channel_statistics.length; chan++)
-			{
-				if (sequence_info.channel_statistics[chan][0] != 0 && chan != (10 - 1))
-				{
-					number_of_notes[count] = (double) sequence_info.channel_statistics[chan][0];
-					count++;
-				}
-			}
+			for (int n_track = 0; n_track < sequence_info.track_and_channel_statistics.length; n_track++)
+				for (int chan = 0; chan < sequence_info.track_and_channel_statistics[n_track].length; chan++)
+					if (sequence_info.track_and_channel_statistics[n_track][chan][0] != 0 && chan != 10 - 1)
+					{
+						number_of_notes[count] = (double) sequence_info.track_and_channel_statistics[n_track][chan][0];
+						count++;
+					}
+			
 			double total_average = mckay.utilities.staticlibraries.MathAndStatsMethods.getAverage(number_of_notes);
 
 			// Set value
 			if (Double.isNaN(total_average) || total_average == 0.0)
 				value = 0.0;
 			else 
-				value = ((double) max_so_far) / total_average;
+				value = (double) number_of_notes_in_highest_voice / total_average;
 		}
 		else value = -1.0;
 

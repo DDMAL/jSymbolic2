@@ -416,22 +416,33 @@ String Ensemble Prevalence
 Electric Instrument Prevalence
 Maximum Number of Independent Voices
 Average Number of Independent Voices
+Median Number of Independent Voices
 Variability of Number of Independent Voices
 Voice Equality - Number of Notes
 Voice Equality - Note Duration
+Voice Equality – Rests
 Voice Equality - Dynamics
 Voice Equality - Melodic Leaps
+Voice Equality – Stepwise Motion
 Voice Equality - Range
 Importance of Loudest Voice
 Relative Range of Loudest Voice
 Relative Range Isolation of Loudest Voice
-Relative Range of Highest Line
-Relative Note Density of Highest Line
-Relative Note Durations of Lowest Line
-Relative Size of Melodic Intervals in Lowest Line
-Voice Overlap
+Relative Range of Highest Voice
+Relative Range Isolation of Highest Voice
+Relative Note Density of Highest Voice
+Relative Size of Melodic Intervals in Highest Voice
+Relative Note Durations of Highest Voice
+Relative Range of Lowest Voice
+Relative Range Isolation of Lowest Voice
+Relative Note Density of Lowest Voice
+Relative Note Durations of Lowest Voice
+Relative Size of Melodic Intervals in Lowest Voice
+Average Range of Individual Voices
 Voice Separation
 Variability of Voice Separation
+Voice Overlap
+Voice Crossing
 Parallel Motion
 Similar Motion
 Contrary Motion

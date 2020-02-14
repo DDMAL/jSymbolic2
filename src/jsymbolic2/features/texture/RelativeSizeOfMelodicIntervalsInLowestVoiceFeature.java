@@ -6,10 +6,11 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the average melodic interval in semitones in the channel with the lowest
- * average pitch, divided by the average melodic interval in all channels that contain at least two notes.
+ * A feature calculator that finds the average melodic interval in semitones in the MIDI track/channel voice 
+ * with the lowest average pitch, divided by the average melodic interval in all MIDI track/channel voices 
+ * that contain at least one melodic interval. Set to 0 if there are no voices containing melodic intervals.
  *
- * @author Cory McKay
+ * @author Cory McKay and radamian
  */
 public class RelativeSizeOfMelodicIntervalsInLowestVoiceFeature
 		extends MIDIFeatureExtractor
@@ -22,8 +23,8 @@ public class RelativeSizeOfMelodicIntervalsInLowestVoiceFeature
 	public RelativeSizeOfMelodicIntervalsInLowestVoiceFeature()
 	{
 		String name = "Relative Size of Melodic Intervals in Lowest Voice";
-		String code = "T-15";
-		String description = "Average melodic interval in semitones in the channel with the lowest average pitch, divided by the average melodic interval in all channels that contain at least two notes.";
+		String code = "T-24";
+		String description = "Average melodic interval in semitones in the MIDI track/channel voice with the lowest average pitch, divided by the average melodic interval in all MIDI track/channel voices that contain at least two notes. Set to 0 if there are no voices containing melodic intervals.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
@@ -59,48 +60,37 @@ public class RelativeSizeOfMelodicIntervalsInLowestVoiceFeature
 		double value;
 		if (sequence_info != null)
 		{
-			// Find the channel with the lowest average pitch
-			int min_so_far = 0;
-			int lowest_chan = 0;
-			for (int chan = 0; chan < sequence_info.channel_statistics.length; chan++)
-			{
-				if (sequence_info.channel_statistics[chan][6] != 0 && chan != (10 - 1))
-				{
-					if (sequence_info.channel_statistics[chan][6] < min_so_far)
+			// Get the track and channel numbers of the MIDI track/channel voice with the lowest average pitch
+			int track_lowest_voice = sequence_info.track_and_channel_with_lowest_average_pitch[0];
+			int channel_lowest_voice = sequence_info.track_and_channel_with_lowest_average_pitch[1];
+
+			// Find the average melodic interval across all voices with at least one melodic interval
+			int total_melodic_intervals = 0;
+			int number_of_melodic_intervals = 0;
+			for (int n_track = 0; n_track < sequence_info.melodic_intervals_by_track_and_channel.size(); n_track++)
+				for (int chan = 0; chan < sequence_info.melodic_intervals_by_track_and_channel.get(n_track).length; chan++)
+					if (!sequence_info.melodic_intervals_by_track_and_channel.get(n_track)[chan].isEmpty())
 					{
-						min_so_far = sequence_info.channel_statistics[chan][6];
-						lowest_chan = chan;
+						for (int i = 0; i < sequence_info.melodic_intervals_by_track_and_channel.get(n_track)[chan].size(); i++)
+							total_melodic_intervals += Math.abs(sequence_info.melodic_intervals_by_track_and_channel.get(n_track)[chan].get(i));
+						
+						number_of_melodic_intervals += sequence_info.melodic_intervals_by_track_and_channel.get(n_track)[chan].size();
 					}
-				}
-			}
-
-			// Find the number of channels with no note ons (or that is channel 10 or that is the highest 
-			// channel)
-			int silent_count = 0;
-			for (int chan = 0; chan < sequence_info.channel_statistics.length; chan++)
-				if (sequence_info.channel_statistics[chan][0] == 0 || chan == (10 - 1))
-					silent_count++;
-
-			// Find the average melodic interval of notes in the other channels
-			double[] intervals = new double[sequence_info.channel_statistics.length - silent_count];
-			int count = 0;
-			for (int chan = 0; chan < sequence_info.channel_statistics.length; chan++)
-			{
-				if (sequence_info.channel_statistics[chan][0] != 0 && chan != (10 - 1))
-				{
-					intervals[count] = (double) sequence_info.channel_statistics[chan][3];
-					count++;
-				}
-			}
 			
-			// Set value
-			if (intervals == null || intervals.length == 0 || sequence_info.channel_statistics[lowest_chan][3] == 0)
+			if (number_of_melodic_intervals == 0)
 				value = 0.0;
 			else
 			{
-				double average = mckay.utilities.staticlibraries.MathAndStatsMethods.getAverage(intervals);
-				value = ((double) sequence_info.channel_statistics[lowest_chan][3]) / ((double) average);
+				int avg_melodic_interval_in_lowest_voice = sequence_info.track_and_channel_statistics[track_lowest_voice][channel_lowest_voice][3];
+				double avg_melodic_interval_across_voices = (double) total_melodic_intervals / number_of_melodic_intervals;
+				
+				// Set value
+				if (avg_melodic_interval_across_voices == 0)
+					value = 0.0;
+				else
+					value = (double) avg_melodic_interval_in_lowest_voice / avg_melodic_interval_across_voices;
 			}
+			
 		}
 		else value = -1.0;
 

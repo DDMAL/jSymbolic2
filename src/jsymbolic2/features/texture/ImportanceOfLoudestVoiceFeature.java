@@ -7,9 +7,10 @@ import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
  * A feature calculator that finds the difference between the average loudness (MIDI velocity) of the loudest
- * channel and the average loudness of the other channels that contain at least one note.
+ * MIDI track/channel voice and the average loudness of the other MIDI track/channel voices that contain at 
+ * least one note. Set to 0 if there are no voices containing pitched notes.
  *
- * @author Cory McKay
+ * @author Cory McKay and radamian
  */
 public class ImportanceOfLoudestVoiceFeature
 		extends MIDIFeatureExtractor
@@ -23,8 +24,8 @@ public class ImportanceOfLoudestVoiceFeature
 	public ImportanceOfLoudestVoiceFeature()
 	{
 		String name = "Importance of Loudest Voice";
-		String code = "T-9";
-		String description = "Difference between the average loudness (MIDI velocity) of the loudest channel and the average loudness of the other channels that contain at least one note.";
+		String code = "T-12";
+		String description = "Difference between the average loudness (MIDI velocity) of the loudest MIDI track/channel voice and the average loudness of the other MIDI track/channel voices that contain at least one note. Set to 0 if there are no voices containing pitched notes.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
@@ -60,47 +61,46 @@ public class ImportanceOfLoudestVoiceFeature
 		double value;
 		if (sequence_info != null)
 		{
-			// Find the number of channels with no note ons
-			int silent_count = 0;
-			for (int chan = 0; chan < sequence_info.channel_statistics.length; chan++)
-			{
-				if (sequence_info.channel_statistics[chan][0] == 0)
-					silent_count++;
-			}
+			// Find the number of MIDI track/channnel pairings with at least one note on
+			int active_voices_count = 0;
+			for (int n_track = 0; n_track < sequence_info.track_and_channel_statistics.length; n_track++)
+				for (int chan = 0; chan < sequence_info.track_and_channel_statistics[n_track].length; chan++)
+					if (sequence_info.track_and_channel_statistics[n_track][chan][0] != 0 && chan != 10 - 1)
+						active_voices_count++;
 
-			// Find the loudest channel
-			int max_so_far = 0;
-			int loudest_chan = 0;
-			for (int chan = 0; chan < sequence_info.channel_statistics.length; chan++)
-			{
-				if (sequence_info.channel_statistics[chan][0] != 0)
-				{
-					if (sequence_info.channel_statistics[chan][2] > max_so_far)
-					{
-						max_so_far = sequence_info.channel_statistics[chan][2];
-						loudest_chan = chan;
-					}
-				}
-			}
-			double loudest_average = (double) max_so_far;
-
-			// Find the average of the other channels and set value
-			int number_voices = sequence_info.channel_statistics.length - silent_count;
-			if (number_voices < 2)
+			if (active_voices_count < 2)
 				value = 0.0;
 			else
 			{
-				double[] other_averages = new double[number_voices - 1];
+				// Find the loudest MIDI track/channel pairing
+				int max_so_far = 0;
+				int loudest_track = 0;
+				int loudest_channel = 0;
+				for (int n_track = 0; n_track < sequence_info.track_and_channel_statistics.length; n_track++)
+					for (int chan = 0; chan < sequence_info.track_and_channel_statistics[n_track].length; chan++)
+						if (sequence_info.track_and_channel_statistics[n_track][chan][0] != 0 && chan != 10 - 1)
+							if (sequence_info.track_and_channel_statistics[n_track][chan][2] > max_so_far)
+							{
+								max_so_far = sequence_info.track_and_channel_statistics[n_track][chan][2];
+								loudest_track = n_track;
+								loudest_channel = chan;
+							}
+				double loudest_average = (double) max_so_far;
+				
+				// Find the average pitches on all other MIDI track/channel pairings
+				double[] other_averages = new double[active_voices_count - 1];
 				int count = 0;
-				for (int chan = 0; chan < sequence_info.channel_statistics.length; chan++)
-				{
-					if (sequence_info.channel_statistics[chan][0] != 0 && chan != loudest_chan)
-					{
-						other_averages[count] = (double) sequence_info.channel_statistics[chan][2];
-						count++;
-					}
-				}
+				for (int n_track = 0; n_track < sequence_info.track_and_channel_statistics.length; n_track++)
+					for (int chan = 0; chan < sequence_info.track_and_channel_statistics[n_track].length; chan++)
+						if (sequence_info.track_and_channel_statistics[n_track][chan][0] != 0 && 
+							(n_track != loudest_track && chan != loudest_channel))
+						{
+							other_averages[count] = (double) sequence_info.track_and_channel_statistics[n_track][chan][2];
+							count++;
+						} 
 				double average = mckay.utilities.staticlibraries.MathAndStatsMethods.getAverage(other_averages);
+				
+				// Set value
 				value = loudest_average - average;
 			}
 		} 

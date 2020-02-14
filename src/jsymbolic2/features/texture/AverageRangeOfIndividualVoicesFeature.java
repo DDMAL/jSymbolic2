@@ -6,13 +6,12 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the standard deviation of the separations in semi-tones between the average
- * pitches of consecutive MIDI track/channel voices (after sorting based on average pitch) that contain at 
- * least one note. Set to 0 if there are only 0 or 1 voices containing pitched notes.
+ * A feature calculator that finds the mean range (in semitones) of all MIDI track/channel voices that contain 
+ * at least two pitched notes. Set to 0 if there are no voices containing at least two pitched notes.
  *
- * @author Cory McKay and radmian
+ * @author radamian
  */
-public class VariabilityOfVoiceSeparationFeature
+public class AverageRangeOfIndividualVoicesFeature
 		extends MIDIFeatureExtractor
 {
 	/* CONSTRUCTOR ******************************************************************************************/
@@ -21,11 +20,11 @@ public class VariabilityOfVoiceSeparationFeature
 	/**
 	 * Basic constructor that sets the values of the fields inherited from this class' superclass.
 	 */
-	public VariabilityOfVoiceSeparationFeature()
+	public AverageRangeOfIndividualVoicesFeature()
 	{
-		String name = "Variability of Voice Separation";
-		String code = "T-27";
-		String description = "Standard deviation of the separations in semi-tones between the average pitches of consecutive MIDI track/channel voices (after sorting based on average pitch) that contain at least one note. Set to 0 if there are only 0 or 1 voices containing pitched notes.";
+		String name = "Average Range of Individual Voices";
+		String code = "T-25";
+		String description = "Mean range (in semitones) of all MIDI track/channel voices that contain at least two pitched notes. Set to 0 if there are no voices containing at least two pitched notes.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
@@ -61,30 +60,30 @@ public class VariabilityOfVoiceSeparationFeature
 		double value;
 		if (sequence_info != null)
 		{
-			// Set value to 0 if there are fewer than two pitched MIDI track/channel voices
-			if (sequence_info.track_and_channel_pairs_by_average_pitch.size() < 2)
+			// Find the number of pitched MIDI track/channnel pairings with at least two note ons
+			int active_voices_count = 0;
+			for (int n_track = 0; n_track < sequence_info.track_and_channel_statistics.length; n_track++)
+				for (int chan = 0; chan < sequence_info.track_and_channel_statistics[n_track].length; chan++)
+					if (sequence_info.track_and_channel_statistics[n_track][chan][0] >= 2 && chan != 10 - 1)
+						active_voices_count++;
+
+			if (active_voices_count == 0)
 				value = 0.0;
 			else
 			{
-				double[] separations = new double[sequence_info.track_and_channel_pairs_by_average_pitch.size() - 1];
-				
-				// Store the differences in semitones between the average pitches of consecutive MIDI track
-				// and channel pairings
-				int average_pitch_in_previous_voice = 0; 
-				for (int i = 0; i < sequence_info.track_and_channel_pairs_by_average_pitch.size(); i++)
-				{
-					int track = sequence_info.track_and_channel_pairs_by_average_pitch.get(i)[0];
-					int channel = sequence_info.track_and_channel_pairs_by_average_pitch.get(i)[1];
-					int avergage_pitch_in_this_voice = sequence_info.track_and_channel_statistics[track][channel][3];
-					
-					if (i > 0)
-						separations[i - 1] = avergage_pitch_in_this_voice - average_pitch_in_previous_voice;
-					
-					average_pitch_in_previous_voice = avergage_pitch_in_this_voice;
-				}
-				
+				// Store the ranges in each pitched MIDI track/channnel pairing
+				double[] ranges = new double[active_voices_count];
+				int count = 0;
+				for (int n_track = 0; n_track < sequence_info.track_and_channel_statistics.length; n_track++)
+					for (int chan = 0; chan < sequence_info.track_and_channel_statistics[n_track].length; chan++)
+						if (sequence_info.track_and_channel_statistics[n_track][chan][0] >= 2 && chan != 10 - 1)
+						{
+							ranges[count] = sequence_info.track_and_channel_statistics[n_track][chan][5] - sequence_info.track_and_channel_statistics[n_track][chan][4];
+							count++;
+						}
+
 				// Set value
-				value = mckay.utilities.staticlibraries.MathAndStatsMethods.getStandardDeviation(separations);
+				value = mckay.utilities.staticlibraries.MathAndStatsMethods.getAverage(ranges);
 			}
 		}
 		else value = -1.0;

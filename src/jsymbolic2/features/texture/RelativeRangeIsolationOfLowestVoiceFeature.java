@@ -8,14 +8,14 @@ import jsymbolic2.featureutils.NoteInfo;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the number of pitched notes in the MIDI track/channel voice with the 
- * highest average loudness that fall outside the range of any other pitched MIDI track/channel voice, divided 
- * by the total number of notes in the MIDI track/channel voice with the highest average loudness. Set to 0 if 
- * there are only 0 or 1 voices containing pitched notes.
+ * A feature calculator that finds the number of pitched notes in the MIDI track/channel voice with the lowest 
+ * average pitch that fall outside the range of any other pitched voice, divided by the total number of notes 
+ * in the voice with the lowest average pitch. Set to 0 if there are only 0 or 1 voices containing pitched 
+ * notes.
  *
- * @author Cory McKay, Tristano Tenaglia and radamian
+ * @author radamian
  */
-public class RelativeRangeIsolationOfLoudestVoiceFeature
+public class RelativeRangeIsolationOfLowestVoiceFeature
 		extends MIDIFeatureExtractor
 {
 	/* CONSTRUCTOR ******************************************************************************************/
@@ -24,11 +24,11 @@ public class RelativeRangeIsolationOfLoudestVoiceFeature
 	/**
 	 * Basic constructor that sets the values of the fields inherited from this class' superclass.
 	 */
-	public RelativeRangeIsolationOfLoudestVoiceFeature()
+	public RelativeRangeIsolationOfLowestVoiceFeature()
 	{
-		String name = "Relative Range Isolation of Loudest Voice";
-		String code = "T-14";
-		String description = "Number of pitched notes in the MIDI track/channel voice with the highest average loudness that fall outside the range of any other pitched MIDI track/channel voice, divided by the total number of notes in the MIDI track/channel voice with the highest average loudness. Set to 0 if there are only 0 or 1 voices containing pitched notes.";
+		String name = "Relative Range Isolation of Lowest Voice";
+		String code = "T-21";
+		String description = "Number of pitched notes in the MIDI track/channel voice with the lowest average pitch that fall outside the range of any other pitched voice, divided by the total number of notes in the voice with the lowest average pitch. Set to 0 if there are only 0 or 1 voices containing pitched notes.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
@@ -75,31 +75,20 @@ public class RelativeRangeIsolationOfLoudestVoiceFeature
 				value = 0.0;
 			else
 			{
-				// Find the loudest MIDI track/channel pairing with pitched notes
-				int max_so_far = 0;
-				int loudest_track = 0;
-				int loudest_channel = 0;
-				for (int n_track = 0; n_track < sequence_info.track_and_channel_statistics.length; n_track++)
-					for (int chan = 0; chan < sequence_info.track_and_channel_statistics[n_track].length; chan++)
-						if (sequence_info.track_and_channel_statistics[n_track][chan][0] != 0 && chan != 10 - 1)
-						{
-							if (sequence_info.track_and_channel_statistics[n_track][chan][2] > max_so_far)
-							{
-								max_so_far = sequence_info.track_and_channel_statistics[n_track][chan][2];
-								loudest_track = n_track;
-								loudest_channel = chan;
-							}
-						}
+				// Get the track and channel numbers of the MIDI track/channel voice with the lowest average 
+				// pitch
+				int track_lowest_voice = sequence_info.track_and_channel_with_lowest_average_pitch[0];
+				int channel_lowest_voice = sequence_info.track_and_channel_with_lowest_average_pitch[1];
 
 				// Find the lowest and highest pitches across all pitched MIDI track/channel pairnings but the 
-				// loudest MIDI track/channel pairing
+				// MIDI track/channel pairing with the lowest average pitch
 				int lowest = 128;
 				int highest = -1;
 				for (int n_track = 0; n_track < sequence_info.track_and_channel_statistics.length; n_track++)
 					for (int chan = 0; chan < sequence_info.track_and_channel_statistics[n_track].length; chan++)
 					{
 						if ((sequence_info.track_and_channel_statistics[n_track][chan][0] != 0 && chan != 10 - 1) &&
-							(n_track != loudest_track && chan != loudest_channel))
+							(n_track != track_lowest_voice && chan != channel_lowest_voice))
 						{
 							if (sequence_info.track_and_channel_statistics[n_track][chan][4] < lowest)
 								lowest = sequence_info.track_and_channel_statistics[n_track][chan][4];
@@ -108,19 +97,18 @@ public class RelativeRangeIsolationOfLoudestVoiceFeature
 						}
 					}	
 				
-				// All notes on the loudest MIDI track/channel pairing
-				List<NoteInfo> notes_on_loudest_track_and_channel = sequence_info.all_notes.getNotesOnTrackAndChannel(loudest_track, loudest_channel);
+				// All notes in the lowest voice
+				List<NoteInfo> notes_in_lowest_voice = sequence_info.all_notes.getNotesOnTrackAndChannel(track_lowest_voice, channel_lowest_voice);
 				
-				// Count the notes on the loudest MIDI track/channel pairing that fall outside the range of
-				// any other pitched MIDI track/channel pairing
+				// Count the notes in the lowest voice that fall outside the range of any other voice
 				int outside_of_range_count = 0;
-				for (int i = 0; i < notes_on_loudest_track_and_channel.size(); i++)
-					if (notes_on_loudest_track_and_channel.get(i).getPitch() < lowest || 
-						notes_on_loudest_track_and_channel.get(i).getPitch() > highest)
+				for (int i = 0; i < notes_in_lowest_voice.size(); i++)
+					if (notes_in_lowest_voice.get(i).getPitch() < lowest || 
+						notes_in_lowest_voice.get(i).getPitch() > highest)
 						outside_of_range_count++;
 				
 				// Set value
-				value = (double) outside_of_range_count / notes_on_loudest_track_and_channel.size();
+				value = (double) outside_of_range_count / notes_in_lowest_voice.size();
 			}
 		}
 		else value = -1.0;

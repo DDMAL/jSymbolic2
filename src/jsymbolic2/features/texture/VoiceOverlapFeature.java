@@ -4,13 +4,15 @@ import java.util.List;
 import javax.sound.midi.Sequence;
 import ace.datatypes.FeatureDefinition;
 import jsymbolic2.featureutils.MIDIFeatureExtractor;
+import jsymbolic2.featureutils.NoteInfo;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the number of notes played within the range of another channel, divided by
- * the total number of notes in the piece as a whole.
+ * A feature calculator that finds the number of notes played within the range of another MIDI track/channel 
+ * voice, divided by the total number of notes in the piece as a whole. Set to 0 if there if there are fewer 
+ * than 2 pitches in the music.
  *
- * @author Tristano Tenaglia and Cory McKay
+ * @author Tristano Tenaglia, Cory McKay, and radamian
  */
 public class VoiceOverlapFeature
 		extends MIDIFeatureExtractor
@@ -24,8 +26,8 @@ public class VoiceOverlapFeature
 	public VoiceOverlapFeature()
 	{
 		String name = "Voice Overlap";
-		String code = "T-16";
-		String description = "Number of notes played within the range of another channel, divided by the total number of notes in the piece as a whole.";
+		String code = "T-28";
+		String description = "Number of notes played within the range of another MIDI track/channel voice, divided by the total number of notes in the piece as a whole. Set to 0 if there if there are fewer than 2 pitches in the music.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
@@ -61,39 +63,48 @@ public class VoiceOverlapFeature
 		double value;
 		if (sequence_info != null)
 		{
-			// Access pre-calculated information in sequence_info
-			int[][] channel_stats = sequence_info.channel_statistics;
-			List<List<Integer>> channel_pitch = sequence_info.list_of_note_on_pitches_by_channel;
-
-			// Find notes that are within the range of any other channel
-			int notes_inside_range = 0;
-			for (int channel = 0; channel < channel_pitch.size(); channel++)
+			// Sum the number of notes that fall within the range of at least one other MIDI track/channel
+			// voice
+			int number_of_notes_within_range = 0;
+			int total_number_of_notes = 0;
+			for (int voice = 0; voice < sequence_info.track_and_channel_pairs_by_average_pitch.size(); voice++)
 			{
-				List<Integer> channel_notes = channel_pitch.get(channel);
-				for (Integer current_pitch : channel_notes)
+				int track = sequence_info.track_and_channel_pairs_by_average_pitch.get(voice)[0];
+				int channel = sequence_info.track_and_channel_pairs_by_average_pitch.get(voice)[1];
+				
+				// Iterate over all notes in this voice
+				List<NoteInfo> notes_in_voice = sequence_info.all_notes.getNotesOnTrackAndChannel(track, channel);
+				for (int i = 0; i < notes_in_voice.size(); i++)
 				{
-					// Compare pitch of current_pitch to the range of every other channel
-					for (int other_channel = 0; other_channel < channel_stats.length; other_channel++)
-					{
-						if (channel == other_channel)
-							continue;
+					int pitch = notes_in_voice.get(i).getPitch();
 
-						int highest_pitch = channel_stats[other_channel][5];
-						int lowest_pitch = channel_stats[other_channel][4];
-						if (current_pitch <= highest_pitch && current_pitch >= lowest_pitch)
+					for (int other_voice = 0; other_voice < sequence_info.track_and_channel_pairs_by_average_pitch.size(); other_voice++)
+						if (voice != other_voice)
 						{
-							notes_inside_range++;
-							break; // only current_pitch on channel once
+							int other_track = sequence_info.track_and_channel_pairs_by_average_pitch.get(other_voice)[0];
+							int other_channel = sequence_info.track_and_channel_pairs_by_average_pitch.get(other_voice)[1];
+							
+							int lowest = sequence_info.track_and_channel_statistics[other_track][other_channel][4];
+							int highest = sequence_info.track_and_channel_statistics[other_track][other_channel][5];
+							
+							// If this pitch is within the range of one other voice, increment 
+							// number_of_notes_within_range and continue to the next note
+							if (pitch <= highest && pitch >= lowest)
+							{
+								number_of_notes_within_range++;
+								break;
+							}
 						}
-					}
+					
+					total_number_of_notes += notes_in_voice.size();
 				}
 			}
-
-			double total_notes = sequence_info.total_number_note_ons;
-			if (total_notes == 0.0)
+			
+			// Set value
+			if (total_number_of_notes < 2)
 				value = 0.0;
-			else 
-				value = notes_inside_range / total_notes;
+			else
+				value = (double) number_of_notes_within_range / total_number_of_notes;
 		}
 		else value = -1.0;
 
