@@ -14,34 +14,34 @@ import javax.sound.midi.Track;
  * voice) occurs with sufficient rhythmic separation from previous pitched notes. A variety of different slice
  * types are calculated, including ones where notes are grouped from all MIDI tracks and channels, and ones
  * where they are kept segregated, as well as ones where notes being held from previous slices are included in
- * subsequent slices during which they are still sounding, and ones where they are not. There is also a 
+ * subsequent slices during which they are still sounding, and ones where they are not. There is also a
  * melodic slice type where all notes but the highest are filtered out in each given slice in each given MIDI
  * track and channel. All of these slice types are calculated when an object of this class is instantiated.
- * 
+ *
  * There are several different ways to determine whether two notes are sufficiently close enough to fall
  * within the same note onset slice. Although for perfectly rhythmically quantized music and for reasonably
  * long note durations one need only consider notes that are exactly simultaneous when grouping notes into
- * slices, in practice notes that are effectively simultaneous are not necessarily coded as precisely
+ * slices, in practice notes that are effectively simultaneous are not necessarily encoded as precisely
  * simultaneous, especially in MIDI files. Grouping notes that occur with a slight rhythmic offset into the
- * same onset slice is therefore necessary when accounting for MIDI files where notes meant to be simultaneous
+ * same onset slice is therefore necessary when dealing with MIDI files where notes meant to be simultaneous
  * are in fact time coded such that they are not (due to manual encoding or due to encoding software settings
- * meant to incorporate "natural" rubato), as well as to account for very short notes (such as grace notes)
- * that are not significant enough to merit their own slice.
- * 
- * The details of how this grouping of near-simultaneous notes is to be performed is specified in the
+ * meant to incorporate "natural" rubato), as well as to deal properly with very short notes (such as grace
+ * notes) that are not significant enough to merit their own slice.
+ *
+ * The details of how this grouping of near-simultaneous notes is performed is specified in more detail in the
  * constructor of this class. To begin with, a threshold is specified indicating the fraction of a quarter
  * note that is small enough to be considered "simultaneous." There are then two different algorithms provided
- * for forming note onset slices, each of which use this threshold in different ways, and either one of which
- * may be used: 1) A new slice is started whenever a new note is encountered outside an existing slice, and a
- * look-ahead is then performed to also include in this slice notes falling within the specified threshold
- * after the first note, OR 2) A new slice is once again initiated whenever a new note is encountered outside
- * an existing slice, but the new slice is centered at or after the start of this note, at the location of the
- * closest quantized (for the entire piece) rhythmic interval indicated by the specified threshold; a
- * look-ahead and a look-behind are then both performed, each of a width specified by the given threshold, and
- * any notes falling within these intervals are merged into the slice.
- * 
+ * as options for constructing note onset slices, each of which use this threshold in different ways, and 
+ * either one of which may be used: 1) A new slice is started whenever a new note is encountered outside an 
+ * existing slice, and a look-ahead is then performed to also include in this slice notes falling within the 
+ * specified threshold after the first note, OR 2) A new slice is once again initiated whenever a new note is 
+ * encountered outside an existing slice, but the new slice is centered at or after the start of this note, at 
+ * the location of the closest quantized (for the entire piece) rhythmic interval indicated by the specified 
+ * threshold; a look-ahead and a look-behind are then both performed, each of a width specified by the given 
+ * threshold, and any note onsets falling within these intervals are merged into the slice.
+ *
  * For those versions of the onset slices that include notes held from previous slices, it is also possible to
- * specify at the constructor an additional threshold to filter out notes that are held just slightly past the
+ * specify to the constructor an additional threshold to filter out notes that are held just slightly past the
  * point at which a new slice is initiated. This is, once again, to account for encoding issues associated
  * with erroneous non-simultaneity, as discussed above.
  *
@@ -49,21 +49,32 @@ import javax.sound.midi.Track;
  */
 public class NoteOnsetSliceContainer 
 {
+	/* PUBLIC FIELDS ****************************************************************************************/
+
+	
+	/**
+	 * The total number of note onset slices that the piece of music this object was given at instantiation
+	 * was divided into. This value corresponds to the size of all the note onset slice data structures
+	 * returned by the methods of this class.
+	 */
+	public final int NUMBER_OF_ONSET_SLICES;
+
+	
 	/* PRIVATE FIELDS ***************************************************************************************/
 
 	
 	/**
 	 * The note onset slices for the music passed to this object at instantiation, listed in the order that
-	 * the slices occur temporally. The outer list index specifies the slice, and the inner list index
+	 * the slices occur temporally. The outer list index specifies the slice, and the inner list
 	 * specifies the MIDI pitches in that slice, sorted from lowest pitch to highest pitch, and with duplicate
 	 * pitches (in the same octave) removed. Pitches occurring very close to one another rhythmically are
 	 * merged into the same slice, despite not being simultaneous. Only pitched notes are included (which is
 	 * to say that Channel 10 unpitched instrument notes are excluded). Each slice of this type includes not
 	 * only the notes starting in it, but also notes being sustained from previous slices. Notes from all MIDI
 	 * tracks and channels are grouped together. This list has the same number of slices and the same slice
-	 * synchronization as note_onset_slices_duplicate_pitches_included, note_onset_slices_only_new_onsets, 
+	 * synchronization as note_onset_slices_duplicate_pitches_included, note_onset_slices_only_new_onsets,
 	 * note_onset_slices_by_track_and_channel, note_onset_slices_by_track_and_channel_only_new_onsets,
-	 * note_onset_slices_by_track_and_channel_only_melodic_lines, 
+	 * note_onset_slices_by_track_and_channel_only_melodic_lines,
 	 * note_onset_slices_by_track_and_channel_only_melodic_lines_held_notes_included,
 	 * note_onset_slices_by_track_and_channel_lowest_pitches_only, and
 	 * note_onset_slices_by_track_and_channel_lowest_pitches_only_held_notes_included.
@@ -72,15 +83,15 @@ public class NoteOnsetSliceContainer
 	
 	/**
 	 * The note onset slices for the music passed to this object at instantiation, listed in the order that
-	 * the slices occur temporally. The outer list index specifies the slice, and the inner list index
-	 * specifies the MIDI pitches in that slice, sorted from lowest pitch to highest pitch. Pitches occurring 
-	 * very close to one another rhythmically are merged into the same slice, despite not being simultaneous. 
-	 * Only pitched notes are included (which is to say that Channel 10 unpitched instrument notes are 
-	 * excluded). Each slice of this type includes not only the notes starting in it, but also notes being 
-	 * sustained from previous slices. Notes from all MIDI tracks and channels are grouped together. This list 
-	 * has the same number of slices and the same slice synchronization as note_onset_slices,
-	 * note_onset_slices_only_new_onsets, note_onset_slices_by_track_and_channel,
-	 * note_onset_slices_by_track_and_channel_only_new_onsets,
+	 * the slices occur temporally. The outer list index specifies the slice, and the inner list 
+	 * specifies the MIDI pitches in that slice, sorted from lowest pitch to highest pitch (if a pitch occurs
+	 * multiple times, it IS included multiple times in the list). Pitches occurring very close to one another
+	 * rhythmically are merged into the same slice, despite not being simultaneous. Only pitched notes are
+	 * included (which is to say that Channel 10 unpitched instrument notes are excluded). Each slice of this 
+	 * type includes not only the notes starting in it, but also notes being sustained from previous slices. 
+	 * Notes from all MIDI tracks and channels are grouped together. This list has the same number of slices
+	 * and the same slice synchronization as note_onset_slices, note_onset_slices_only_new_onsets, 
+	 * note_onset_slices_by_track_and_channel,note_onset_slices_by_track_and_channel_only_new_onsets,
 	 * note_onset_slices_by_track_and_channel_only_melodic_lines, 
 	 * note_onset_slices_by_track_and_channel_only_melodic_lines_held_notes_included,
 	 * note_onset_slices_by_track_and_channel_lowest_pitches_only, and
@@ -90,7 +101,7 @@ public class NoteOnsetSliceContainer
 	
 	/**
 	 * The note onset slices for the music passed to this object at instantiation, listed in the order that
-	 * the slices occur temporally. The outer list index specifies the slice, and the inner list index
+	 * the slices occur temporally. The outer list index specifies the slice, and the inner list 
 	 * specifies the MIDI pitches in that slice, sorted from lowest pitch to highest pitch, and with duplicate
 	 * pitches (in the same octave) removed. Pitches occurring very close to one another rhythmically are
 	 * merged into the same slice, despite not being simultaneous. Only pitched notes are included (which is
@@ -108,7 +119,7 @@ public class NoteOnsetSliceContainer
 	
 	/**
 	 * The note onset slices for the music passed to this object at instantiation, separated out by track
-	 * (first array index) and by channel (second array index). The outer list index specifies the slice (the
+	 * (first array index) and by channel (second array index). The outer list specifies the slice (the
 	 * slices are listed in temporal order), and the inner list index specifies the MIDI pitches in that slice
 	 * on that track and channel, sorted from lowest pitch to highest pitch, and with duplicate pitches (in
 	 * the same octave) in the same track and channel removed. Pitches occurring very close to one another
@@ -130,17 +141,17 @@ public class NoteOnsetSliceContainer
 	/**
 	 * The note onset slices for the music passed to this object at instantiation, separated out by track
 	 * (first array index) and by channel (second array index). The outer list index specifies the slice (the
-	 * slices are listed in temporal order), and the inner list index specifies the MIDI pitches in that slice
-	 * on that track and channel, sorted from lowest pitch to highest pitch, and with duplicate pitches (in
-	 * the same octave) in the same track and channel removed. Pitches occurring very close to one another
+	 * slices are listed in temporal order), and the inner list specifies the MIDI pitches in that slice on
+	 * that track and channel, sorted from lowest pitch to highest pitch, and with duplicate pitches (in the
+	 * same octave) in the same track and channel removed. Pitches occurring very close to one another
 	 * rhythmically are merged into the same slice, despite not being simultaneous. Only pitched notes are
 	 * included (which is to say that Channel 10 unpitched instrument notes are excluded). Each slice of this
-	 * type includes ONLY the notes starting in it, and does NOT notes being sustained from previous slices.
-	 * If a note occurs in any track and channel, a matching (but potentially empty) slice will be created for
-	 * every other track and channel. The list for every track and channel has the same number of slices and
-	 * the same slice synchronization as note_onset_slices, note_onset_slices_duplicate_pitches_included, 
-	 * note_onset_slices_only_new_onsets, note_onset_slices_by_track_and_channel, 
-	 * note_onset_slices_by_track_and_channel_only_melodic_lines,
+	 * type includes ONLY the notes starting in it, and does NOT include notes being sustained from previous
+	 * slices. If a note occurs in any track and channel, a matching (but potentially empty) slice will be
+	 * created for every other track and channel. The list for every track and channel has the same number of
+	 * slices and the same slice synchronization as note_onset_slices,
+	 * note_onset_slices_duplicate_pitches_included, note_onset_slices_only_new_onsets,
+	 * note_onset_slices_by_track_and_channel, note_onset_slices_by_track_and_channel_only_melodic_lines,
 	 * note_onset_slices_by_track_and_channel_only_melodic_lines_held_notes_included,
 	 * note_onset_slices_by_track_and_channel_lowest_pitches_only, and
 	 * note_onset_slices_by_track_and_channel_lowest_pitches_only_held_notes_included.
@@ -150,12 +161,12 @@ public class NoteOnsetSliceContainer
 	/**
 	 * The note onset slices for the music passed to this object at instantiation, separated out by track
 	 * (first array index) and by channel (second array index). The outer list index specifies the slice (the
-	 * slices are listed in temporal order), and the inner list index specifies the MIDI pitches in that slice
+	 * slices are listed in temporal order), and the inner list specifies the MIDI pitches in that slice
 	 * on that track and channel (in this case, the list of pitches will always be empty or hold only one
 	 * pitch). Each slice of this type includes ONLY the note presumed to belong to the melody; if multiple
 	 * notes occur simultaneously in the same slice (on the same MIDI track and channel), then all notes but
 	 * the highest note in the track and channel's slice are removed from the list. Slices of this type 
-	 * exclude notes belonging to the melody that are held from previous slices, and only include notes whose
+	 * exclude notes belonging to the melody that are held from previous slices, and ONLY include notes whose
 	 * onsets occur between the start and the end of that particular slice. Also, if the highest note is 
 	 * sustained from one note onset slice to the next, and is still the highest note in the second slice,
 	 * then this is treated as if there is no change in melody, even if lower pitches in the same track and
@@ -175,16 +186,13 @@ public class NoteOnsetSliceContainer
 	/**
 	 * The note onset slices for the music passed to this object at instantiation, separated out by track
 	 * (first array index) and by channel (second array index). The outer list index specifies the slice (the
-	 * slices are listed in temporal order), and the inner list index specifies the MIDI pitches in that slice
+	 * slices are listed in temporal order), and the inner list specifies the MIDI pitches in that slice
 	 * on that track and channel (in this case, the list of pitches will always be empty or hold only one
 	 * pitch). Each slice of this type includes ONLY the note presumed to belong to the melody; if multiple
 	 * notes occur simultaneously in the same slice (on the same MIDI track and channel), then all notes but
 	 * the highest note in the track and channel's slice are removed from the list. Unlike the 
-	 * note_onset_slices_by_track_and_channel_only_melodic_lines field, slices of this type include notes 
-	 * belonging to the melody that are held from previous slices. Also, if the highest note is sustained from 
-	 * one note onset slice to the next, and is still the highest note in the second slice, then this is 
-	 * treated as if there is no change in melody, even if lower pitches in the same track and channel change 
-	 * (this will result in the second slice being left empty). Pitches occurring very close to one another 
+	 * note_onset_slices_by_track_and_channel_only_melodic_lines field, slices of this type DO include notes 
+	 * belonging to the melody that are held from previous slices. Pitches occurring very close to one another 
 	 * rhythmically are merged into the same slice, despite not being simultaneous. Only pitched notes are 
 	 * included (which is to say that Channel 10 unpitched instrument notes are excluded). The list for every 
 	 * track and channel has the same number of slices and the same slice synchronization as 
@@ -199,16 +207,16 @@ public class NoteOnsetSliceContainer
 	/**
 	 * The note onset slices for the music passed to this object at instantiation, separated out by track
 	 * (first array index) and by channel (second array index). The outer list index specifies the slice (the
-	 * slices are listed in temporal order), and the inner list index specifies the MIDI pitches in that slice
+	 * slices are listed in temporal order), and the inner list specifies the MIDI pitches in that slice
 	 * on that track and channel (in this case, the list of pitches will always be empty or hold only one
 	 * pitch). Each slice of this type includes ONLY the lowest note sounding; if multiple notes occur 
 	 * simultaneously in the same slice (on the same MIDI track and channel), then all notes but the lowest 
-	 * note in the track and channel's slice are removed from the list. Slices of this type 
-	 * exclude notes that are held from previous slices, and only include notes whose
-	 * onsets occur between the start and the end of that particular slice. Pitches occurring very close to one 
-	 * another rhythmically are merged into the same slice, despite not being simultaneous. Only pitched notes 
-	 * are included (which is to say that Channel 10 unpitched instrument notes are excluded). The list for 
-	 * every track and channel has the same number of slices and the same slice synchronization as 
+	 * note in the track and channel's slice are removed from the list. Slices of this type exclude notes that
+	 * are held from previous slices, and ONLY include notes whose onsets occur between the start and the end
+	 * of that particular slice. Pitches occurring very close to one another rhythmically are merged into the 
+	 * same slice, despite not being simultaneous. Only pitched notes are included (which is to say that 
+	 * Channel 10 unpitched instrument notes are excluded). The list for every track and channel has the same
+	 * number of slices and the same slice synchronization as 
 	 * note_onset_slices, note_onset_slices_duplicate_pitches_included, note_onset_slices_only_new_onsets, 
 	 * note_onset_slices_by_track_and_channel, note_onset_slices_by_track_and_channel_only_new_onsets,
 	 * note_onset_slices_by_track_and_channel_only_melodic_lines,
@@ -220,14 +228,16 @@ public class NoteOnsetSliceContainer
 	/**
 	 * The note onset slices for the music passed to this object at instantiation, separated out by track
 	 * (first array index) and by channel (second array index). The outer list index specifies the slice (the
-	 * slices are listed in temporal order), and the inner list index specifies the MIDI pitches in that slice
+	 * slices are listed in temporal order), and the inner list specifies the MIDI pitches in that slice
 	 * on that track and channel (in this case, the list of pitches will always be empty or hold only one
 	 * pitch). Each slice of this type includes ONLY the lowest note sounding; if multiple notes occur 
 	 * simultaneously in the same slice (on the same MIDI track and channel), then all notes but the lowest 
-	 * note in the track and channel's slice are removed from the list. Pitches occurring very close to one 
-	 * another rhythmically are merged into the same slice, despite not being simultaneous. Only pitched notes 
-	 * are included (which is to say that Channel 10 unpitched instrument notes are excluded). The list for 
-	 * every track and channel has the same number of slices and the same slice synchronization as 
+	 * note in the track and channel's slice are removed from the list. Unlike 
+	 * note_onset_slices_by_track_and_channel_lowest_pitches_only, lowest notes held from previous slices ARE
+	 * included in slices. Pitches occurring very close to one another rhythmically are merged into the same
+	 * slice, despite not being simultaneous. Only pitched notes are included (which is to say that Channel 10
+	 * unpitched instrument notes are excluded). The list for every track and channel has the same number of
+	 * slices and the same slice synchronization as 
 	 * note_onset_slices, note_onset_slices_duplicate_pitches_included, note_onset_slices_only_new_onsets, 
 	 * note_onset_slices_by_track_and_channel, note_onset_slices_by_track_and_channel_only_new_onsets,
 	 * note_onset_slices_by_track_and_channel_only_melodic_lines,
@@ -237,11 +247,10 @@ public class NoteOnsetSliceContainer
 	private final LinkedList<LinkedList<Integer>>[][] note_onset_slices_by_track_and_channel_lowest_pitches_only_held_notes_included;
 	
 	/**
-	 * The notes belonging to the melodic lines in the piece, separated out by track (first array index) and 
-	 * by channel (second array index). Each array entry is a list of NoteInfo objects in the order they
-	 * occur, representing the melodic line on that track and channel. If multiple notes occur simultaneously
-	 * or near-simultaneously on the same MIDI track and channel, then only the NoteInfo object with the
-	 * highest pitch is added to the list. 
+	 * The notes belonging to the melodic lines (defined here as the highest pitch in each note onset slice
+	 * from which this data structure is built) in the music, separated out by track (first array index)
+	 * and by channel (second array index). Each array entry is a list of NoteInfo objects in the order they 
+	 * occur, representing the melodic line on that track and channel.
 	 */
 	private final LinkedList<NoteInfo>[][] melodic_notes_by_track_and_channel;
 	
@@ -250,12 +259,10 @@ public class NoteOnsetSliceContainer
 	 */
 	private final int NUMBER_OF_MIDI_CHANNELS = 16;
 	
-	/**
-	 * The number of note onset slices generated for the piece of music.
-	 */
-	public final int NUMBER_OF_ONSET_SLICES;
+	// For testing
+	//private List<NoteInfo> all_pitched_notes_encountered;
 
-	
+
 	/* CONSTRUCTOR ******************************************************************************************/
 	
 	
@@ -282,8 +289,8 @@ public class NoteOnsetSliceContainer
 	 *										note, at the location of the closest quantized (for the entire 
 	 *										piece) rhythmic interval specified by note_simultaneity_threshold; 
 	 *										a look-ahead and a look-behind are then both performed, each of
-	 *										width note_simultaneity_threshold, and any notes falling within
-	 *										these intervals are merged into the slice.
+	 *										width note_simultaneity_threshold, and any note onsets falling
+	 *										within these intervals are merged into the slice.
 	 * @param	remove_notes_held_too_long	Whether to exclude from new slices notes held from previous slices
 	 *										whose offsets are slightly past the edge of the new onset slice 
 	 *										being created.
@@ -326,8 +333,8 @@ public class NoteOnsetSliceContainer
 		// melodic_notes_by_track_and_channel fields.
 		note_onset_slices = new LinkedList<>();
 		note_onset_slices_duplicate_pitches_included = new LinkedList<>();
-		note_onset_slices_by_track_and_channel = new LinkedList[tracks_from_sequence.length][NUMBER_OF_MIDI_CHANNELS];
 		note_onset_slices_only_new_onsets = new LinkedList<>();
+		note_onset_slices_by_track_and_channel = new LinkedList[tracks_from_sequence.length][NUMBER_OF_MIDI_CHANNELS];
 		note_onset_slices_by_track_and_channel_only_new_onsets = new LinkedList[tracks_from_sequence.length][NUMBER_OF_MIDI_CHANNELS];
 		note_onset_slices_by_track_and_channel_only_melodic_lines = new LinkedList[tracks_from_sequence.length][NUMBER_OF_MIDI_CHANNELS];
 		note_onset_slices_by_track_and_channel_only_melodic_lines_held_notes_included = new LinkedList[tracks_from_sequence.length][NUMBER_OF_MIDI_CHANNELS];
@@ -347,7 +354,7 @@ public class NoteOnsetSliceContainer
 			}
 
 		// A working list of notes sounding on a given MIDI tick, including both notes starting on this tick
-		// and notes still sounding from earlier ticks.
+		// and notes still sounding from earlier ticks. Numbers indicate MIDI pitch.
 		LinkedList<NoteInfo> notes_sounding = new LinkedList<>();
 		
 		// Working tables of the last note encountered in each track and channel that is considered to 
@@ -365,7 +372,7 @@ public class NoteOnsetSliceContainer
 		// A map of all notes in the piece, indexed by starting tick
 		Map<Integer, List<NoteInfo>> note_tick_map = all_notes_from_sequence.getStartTickNoteMap();
 		
-		// Index of note onset slice being built
+		// Index of note onset slice currently being built
 		int slice = 0; 
 		
 		// Testing code to verify that no pitched notes in the piece are missed
@@ -406,7 +413,7 @@ public class NoteOnsetSliceContainer
 						}
 
 					// Remove notes no longer sounding from notes_sounding, and add notes still sounding
-					// to onset_slide and note_onset_slices_by_track_and_channel. Update melodic_notes.
+					// to onset_slice and note_onset_slices_by_track_and_channel. Update melodic_notes.
 					if (!(notes_sounding.isEmpty()))
 					{
 						// Notes to remove from notes_sounding
@@ -732,7 +739,7 @@ public class NoteOnsetSliceContainer
 		}
 		*/
 		
-		// Set the NUMBER_OF_ONSET_SLICES field equal to the number of slices created for the piece of music
+		// Set the NUMBER_OF_ONSET_SLICES field equal to the number of slices created for the music as a whole
 		NUMBER_OF_ONSET_SLICES = note_onset_slices.size();
 	}
 
@@ -742,7 +749,7 @@ public class NoteOnsetSliceContainer
 	
 	/**
 	 * Returns the note onset slices for the music passed to this object at instantiation, listed in the order 
-	 * that the slices occur temporally. The outer list index specifies the slice, and the inner list index
+	 * that the slices occur temporally. The outer list index specifies the slice, and the inner list 
 	 * specifies the MIDI pitches in that slice, sorted from lowest pitch to highest pitch, and with duplicate
 	 * pitches (in the same octave) removed. Pitches occurring very close to one another rhythmically are
 	 * merged into the same slice, despite not being simultaneous. Only pitched notes are included (which is
@@ -751,7 +758,8 @@ public class NoteOnsetSliceContainer
 	 * tracks and channels are grouped together.  This list has the same number of slices and the same slice
 	 * synchronization as the other slice data structures returned by the methods of this class.
 	 * 
-	 * @return	The list of note onset slices in the MIDI parsed by this object at instantiation.
+	 * @return	The list of note onset slices of this type derived from the MIDI parsed by this object at
+	 *			instantiation.
 	 */
 	public LinkedList<LinkedList<Integer>> getNoteOnsetSlices()
 	{
@@ -760,17 +768,19 @@ public class NoteOnsetSliceContainer
 	
 	
 	/**
-	 * Returns the note onset slices for the music passed to this object at instantiation, listed in the order 
-	 * that the slices occur temporally. The outer list index specifies the slice, and the inner list index
-	 * specifies the MIDI pitches in that slice, sorted from lowest pitch to highest pitch. Pitches occurring 
-	 * very close to one another rhythmically are merged into the same slice, despite not being simultaneous. 
-	 * Only pitched notes are included (which is to say that Channel 10 unpitched instrument notes are 
-	 * excluded). Each slice of this type includes not only the notes starting in it, but also notes being 
-	 * sustained from previous slices. Notes from all MIDI tracks and channels are grouped together. This list 
-	 * has the same number of slices and the same slice synchronization as the other slice data structures 
-	 * returned by the methods of this class.
+	 * Returns the note onset slices for the music passed to this object at instantiation, listed in the order
+	 * that the slices occur temporally. The outer list index specifies the slice, and the inner list
+	 * specifies the MIDI pitches in that slice, sorted from lowest pitch to highest pitch (if a pitch occurs
+	 * multiple times, it IS included multiple times in the list). Pitches occurring very close to one another
+	 * rhythmically are merged into the same slice, despite not being simultaneous. Only pitched notes are
+	 * included (which is to say that Channel 10 unpitched instrument notes are excluded). Each slice of this
+	 * type includes not only the notes starting in it, but also notes being sustained from previous slices.
+	 * Notes from all MIDI tracks and channels are grouped together. This list has the same number of slices
+	 * and the same slice synchronization as the other slice data structures returned by the methods of this
+	 * class.
 	 * 
-	 * @return	The list of note onset slices in the MIDI parsed by this object at instantiation.
+	 * @return	The list of note onset slices of this type derived from the MIDI parsed by this object at
+	 *			instantiation.
 	 */
 	public LinkedList<LinkedList<Integer>> getNoteOnsetSlicesDuplicatePitchesIncluded()
 	{
@@ -780,7 +790,7 @@ public class NoteOnsetSliceContainer
 	
 	/**
 	 * Returns the note onset slices for the music passed to this object at instantiation, listed in the order 
-	 * that the slices occur temporally. The outer list index specifies the slice, and the inner list index
+	 * that the slices occur temporally. The outer list index specifies the slice, and the inner list 
 	 * specifies the MIDI pitches in that slice, sorted from lowest pitch to highest pitch, and with duplicate
 	 * pitches (in the same octave) removed. Pitches occurring very close to one another rhythmically are
 	 * merged into the same slice, despite not being simultaneous. Only pitched notes are included (which is
@@ -789,8 +799,8 @@ public class NoteOnsetSliceContainer
 	 * all MIDI tracks and channels are grouped together. This list has the same number of slices and the same
 	 * slice synchronization as the other slice data structures returned by the methods of this class.
 	 * 
-	 * @return	The list of note onset slices in the MIDI parsed by this object at instantiation. Only new 
-	 *			note onsets are included (notes sustained from previous onset slices are excluded).
+	 * @return	The list of note onset slices of this type derived from the MIDI parsed by this object at
+	 *			instantiation.
 	 */
 	public LinkedList<LinkedList<Integer>> getNoteOnsetSlicesOnlyNewOnsets()
 	{
@@ -812,8 +822,8 @@ public class NoteOnsetSliceContainer
 	 * and the same slice synchronization as the other slice data structures returned by the methods of this 
 	 * class.
 	 * 
-	 * @return	The list of note onset slices in the MIDI parsed by this object at instantiation, segregated
-	 *			by track and channel. 
+	 * @return	The list of note onset slices of this type derived from the MIDI parsed by this object at
+	 *			instantiation.
 	 */
 	public LinkedList<LinkedList<Integer>>[][] getNoteOnsetSlicesByTrackAndChannel()
 	{
@@ -822,21 +832,20 @@ public class NoteOnsetSliceContainer
 	
 	
 	/**
-	 * Returns the note onset slices for the music passed to this object at instantiation, separated out by 
-	 * track (first array index) and by channel (second array index). The outer list index specifies the slice 
-	 * (the slices are listed in temporal order), and the inner list index specifies the MIDI pitches in that 
-	 * slice on that track and channel, sorted from lowest pitch to highest pitch, and with duplicate pitches 
+	 * Returns the note onset slices for the music passed to this object at instantiation, separated out by
+	 * track (first array index) and by channel (second array index). The outer list index specifies the slice
+	 * (the slices are listed in temporal order), and the inner list index specifies the MIDI pitches in that
+	 * slice on that track and channel, sorted from lowest pitch to highest pitch, and with duplicate pitches
 	 * (in the same octave) in the same track and channel removed. Pitches occurring very close to one another
 	 * rhythmically are merged into the same slice, despite not being simultaneous. Only pitched notes are
 	 * included (which is to say that Channel 10 unpitched instrument notes are excluded). Each slice of this
-	 * type includes ONLY the notes starting in it, and does NOT notes being sustained from previous slices.
-	 * If a note occurs in any track and channel, a matching (but potentially empty) slice will be created for
-	 * every other track and channel. This list has the same number of slices and the same slice 
+	 * type includes ONLY the notes starting in it, and does NOT include notes being sustained from previous
+	 * slices. If a note occurs in any track and channel, a matching (but potentially empty) slice will be
+	 * created for every other track and channel. This list has the same number of slices and the same slice
 	 * synchronization as the other slice data structures returned by the methods of this class.
 	 * 
-	 * @return	The list of note onset slices in the MIDI parsed by this object at instantiation, segregated
-	 *			by track and channel. Only new note onsets are included (notes sustained from previous onset
-	 *			slices are excluded).
+	 * @return	The list of note onset slices of this type derived from the MIDI parsed by this object at
+	 *			instantiation.
 	 */
 	public LinkedList<LinkedList<Integer>>[][] getNoteOnsetSlicesByTrackAndChannelOnlyNewOnsets()
 	{
@@ -860,9 +869,8 @@ public class NoteOnsetSliceContainer
 	 * has the same number of slices and the same slice synchronization as the other slice data structures
 	 * returned by the methods of this class.
 	 * 
-	 * @return	The list of note onset slices in the MIDI parsed by this object at instantiation, segregated
-	 *			by track and channel. Only melodic notes are included, so there will only be no or one note
-	 *			per slice.
+	 * @return	The list of note onset slices of this type derived from the MIDI parsed by this object at
+	 *			instantiation.
 	 */
 	public LinkedList<LinkedList<Integer>>[][] getNoteOnsetSlicesByTrackAndChannelMelodicLinesOnly()
 	{
@@ -877,20 +885,16 @@ public class NoteOnsetSliceContainer
 	 * on that track and channel (in this case, the list of pitches will always be empty or hold only one
 	 * pitch). Each slice of this type includes ONLY the note presumed to belong to the melody; if multiple
 	 * notes occur simultaneously in the same slice (on the same MIDI track and channel), then all notes but
-	 * the highest note in the track and channel's slice are removed from the list. Unlike the 
-	 * note_onset_slices_by_track_and_channel_only_melodic_lines field, slices of this type include notes 
-	 * belonging to the melody that are held from previous slices. Also, if the highest note is sustained from 
-	 * one note onset slice to the next, and is still the highest note in the second slice, then this is 
-	 * treated as if there is no change in melody, even if lower pitches in the same track and channel change 
-	 * (this will result in the second slice being left empty). Pitches occurring very close to one another 
-	 * rhythmically are merged into the same slice, despite not being simultaneous. Only pitched notes are 
-	 * included (which is to say that Channel 10 unpitched instrument notes are excluded). This list has the 
-	 * same number of slices and the same slice synchronization as the other slice data structures returned by 
+	 * the highest note in the track and channel's slice are removed from the list. Unlike the slices returned
+	 * by the getNoteOnsetSlicesByTrackAndChannelMelodicLinesOnly method, slices of this type include notes
+	 * belonging to the melody that are held from previous slices. Pitches occurring very close to one another
+	 * rhythmically are merged into the same slice, despite not being simultaneous. Only pitched notes are
+	 * included (which is to say that Channel 10 unpitched instrument notes are excluded). This list has the
+	 * same number of slices and the same slice synchronization as the other slice data structures returned by
 	 * the methods of this class.
 	 * 
-	 * @return	The list of note onset slices in the MIDI parsed by this object at instantiation, segregated
-	 *			by track and channel. Only melodic notes are included, so there will only be no or one note
-	 *			per slice.
+	 * @return	The list of note onset slices of this type derived from the MIDI parsed by this object at
+	 *			instantiation.
 	 */
 	public LinkedList<LinkedList<Integer>>[][] getNoteOnsetSlicesByTrackAndChannelMelodicLinesOnlyHeldNotesIncluded()
 	{
@@ -903,24 +907,20 @@ public class NoteOnsetSliceContainer
 	 * (first array index) and by channel (second array index). The outer list index specifies the slice (the
 	 * slices are listed in temporal order), and the inner list index specifies the MIDI pitches in that slice
 	 * on that track and channel (in this case, the list of pitches will always be empty or hold only one
-	 * pitch). Each slice of this type includes ONLY the lowest note sounding; if multiple
-	 * notes occur simultaneously in the same slice (on the same MIDI track and channel), then all notes but
-	 * the lowest note in the track and channel's slice are removed from the list. Slices of this type 
-	 * exclude notes that are held from previous slices, and only include notes whose onsets occur between the 
-	 * start and the end of that particular slice. Unlike the 
-	 * note_onset_slices_by_track_and_channel_only_melodic_lines field, slices of this type include notes 
-	 * belonging to the melody that are held from previous slices. Also, if the highest note is sustained from 
-	 * one note onset slice to the next, and is still the highest note in the second slice, then this is 
-	 * treated as if there is no change in melody, even if lower pitches in the same track and channel change 
-	 * (this will result in the second slice being left empty). Pitches occurring very close to one another 
-	 * rhythmically are merged into the same slice, despite not being simultaneous. Only pitched notes are 
-	 * included (which is to say that Channel 10 unpitched instrument notes are excluded). This list has the 
-	 * same number of slices and the same slice synchronization as the other slice data structures returned by 
-	 * the methods of this class.
+	 * pitch). Each slice of this type includes ONLY the lowest note sounding; if multiple notes occur
+	 * simultaneously in the same slice (on the same MIDI track and channel), then all notes but the lowest
+	 * note in the track and channel's slice are removed from the list. Slices of this type exclude notes that
+	 * are held from previous slices, and only include notes whose onsets occur between the start and the end
+	 * of that particular slice. Also, if the lowest note is sustained from one note onset slice to the next,
+	 * and is still the lowest note in the second slice, then this is treated as if there is no change in
+	 * bassline, even if higher pitches in the same track and channel change (this will result in the second
+	 * slice being left empty). Pitches occurring very close to one another rhythmically are merged into the
+	 * same slice, despite not being simultaneous. Only pitched notes are included (which is to say that
+	 * Channel 10 unpitched instrument notes are excluded). This list has the same number of slices and the
+	 * same slice synchronization as the other slice data structures returned by the methods of this class.
 	 * 
-	 * @return	The list of note onset slices in the MIDI parsed by this object at instantiation, segregated
-	 *			by track and channel. Only the lowest pitched notes are included, so there will only be no or 
-	 *			one note per slice.
+	 * @return	The list of note onset slices of this type derived from the MIDI parsed by this object at
+	 *			instantiation.
 	 */
 	public LinkedList<LinkedList<Integer>>[][] getNoteOnsetSlicesByTrackAndChannelLowestPitchesOnly()
 	{
@@ -933,22 +933,18 @@ public class NoteOnsetSliceContainer
 	 * (first array index) and by channel (second array index). The outer list index specifies the slice (the
 	 * slices are listed in temporal order), and the inner list index specifies the MIDI pitches in that slice
 	 * on that track and channel (in this case, the list of pitches will always be empty or hold only one
-	 * pitch). Each slice of this type includes ONLY the lowest note sounding; if multiple
-	 * notes occur simultaneously in the same slice (on the same MIDI track and channel), then all notes but
-	 * the lowest note in the track and channel's slice are removed from the list. Unlike the 
-	 * note_onset_slices_by_track_and_channel_only_melodic_lines field, slices of this type include notes 
-	 * belonging to the melody that are held from previous slices. Also, if the highest note is sustained from 
-	 * one note onset slice to the next, and is still the highest note in the second slice, then this is 
-	 * treated as if there is no change in melody, even if lower pitches in the same track and channel change 
-	 * (this will result in the second slice being left empty). Pitches occurring very close to one another 
-	 * rhythmically are merged into the same slice, despite not being simultaneous. Only pitched notes are 
-	 * included (which is to say that Channel 10 unpitched instrument notes are excluded). This list has the 
-	 * same number of slices and the same slice synchronization as the other slice data structures returned by 
-	 * the methods of this class.
+	 * pitch). Each slice of this type includes ONLY the lowest note sounding; if multiple notes occur
+	 * simultaneously in the same slice (on the same MIDI track and channel), then all notes but the lowest
+	 * note in the track and channel's slice are removed from the list. Unlike the slices returned by the
+	 * getNoteOnsetSlicesByTrackAndChannelLowestPitchesOnly method, slices of this type DO include notes
+	 * belonging to the bassline that are held from previous slices. Pitches occurring very close to one
+	 * another rhythmically are merged into the same slice, despite not being simultaneous. Only pitched notes
+	 * are included (which is to say that Channel 10 unpitched instrument notes are excluded). This list has
+	 * the same number of slices and the same slice synchronization as the other slice data structures
+	 * returned by the methods of this class.
 	 * 
-	 * @return	The list of note onset slices in the MIDI parsed by this object at instantiation, segregated
-	 *			by track and channel. Only the lowest pitched notes are included, so there will only be no or 
-	 *			one note per slice.
+	 * @return	The list of note onset slices of this type derived from the MIDI parsed by this object at
+	 *			instantiation.
 	 */
 	public LinkedList<LinkedList<Integer>>[][] getNoteOnsetSlicesByTrackAndChannelLowestPitchesOnlyHeldNotesIncluded()
 	{
@@ -957,11 +953,10 @@ public class NoteOnsetSliceContainer
 	
 	
 	/**
-	 * Returns the notes belonging to the melodic lines in the piece, separated out by track (first array 
-	 * index) and by channel (second array index). Each array entry is a list of NoteInfo objects in the order 
-	 * they occur, representing the melodic line on that track and channel. If multiple notes occur 
-	 * simultaneously or near-simultaneously on the same MIDI track and channel, then only the NoteInfo object 
-	 * with the highest pitch is added to the list. 
+	 * Returns the notes belonging to the melodic lines (defined here as the highest pitch in each note onset
+	 * slice) in the music, separated out by track (first array index) and by channel (second array index).
+	 * Each array entry is a list of NoteInfo objects in the order they occur, representing the melodic line
+	 * on that track and channel.
 	 * 
 	 * @return	The list of melodic notes in the MIDI parsed by this object at instantiation, segregated by
 	 *			track and channel. 
@@ -973,22 +968,23 @@ public class NoteOnsetSliceContainer
 	
 	
 	/**
-	 * Returns the note onset slices for the music passed to this object at instantiation, listed in the order
-	 * that the slices occur temporally, where each list of MIDI pitches is converted to a list of MIDI pitch
-	 * classes. The outer list index specifies the slice, and the inner list index specifies the pitch
+	 * Returns the basic note onset slices (of the type returned by the getNoteOnsetSlices() method) for the
+	 * music passed to this object at instantiation, but where the values in a slice indicate pitch class
+	 * rather than pitch (i.e. octaves are collapsed). Slices are listed in the order that they occur
+	 * temporally. The outer list index specifies the slice, and the inner list index specifies the pitch
 	 * classes in that slice, sorted from lowest pitch class to highest pitch class, and with duplicate pitch
 	 * classes removed. Pitches occurring very close to one another rhythmically are merged into the same
 	 * slice, despite not being simultaneous. Only pitched notes are included (which is to say that Channel 10
 	 * unpitched instrument notes are excluded). Each slice of this type includes not only the notes starting
 	 * in it, but also notes being sustained from previous slices. Notes from all MIDI tracks and channels are
-	 * grouped together. This list has the same number of slices and the same slice synchronization as
-	 * the other slice data structures returned by the methods of this class.
+	 * grouped together. This list has the same number of slices and the same slice synchronization as the
+	 * other slice data structures returned by the methods of this class.
 	 * 
 	 * @return	The list of note onset slices in the MIDI parsed by this object at instantiation. Values
-	 *			indicate unique pitch class rather than MIDI pitch (a value of 0 corresponds to C, 1 to C#/Db,
-	 *			etc.).
+	 *			in each slice indicate unique pitch class rather than MIDI pitch. A value of 0 corresponds to
+	 *			C, 1 to C#/Db, etc.).
 	 */
-	public LinkedList<LinkedList<Integer>> getNoteOnsetSlicesInPitchClasses()
+	public LinkedList<LinkedList<Integer>> getNoteOnsetSlicesUsingPitchClasses()
 	{
 		LinkedList<LinkedList<Integer>> result = new LinkedList<>();
 		
@@ -1012,23 +1008,22 @@ public class NoteOnsetSliceContainer
 
 	
 	/**
-	 * Returns the note onset slices for the music passed to this object at instantiation, listed in the order
-	 * that the slices occur temporally, where each list of MIDI pitches is converted to a list of MIDI pitch
-	 * classes. The outer list index specifies the slice, and the inner list index specifies the pitch classes
-	 * in that slice, sorted from lowest pitch class to highest pitch class, and with duplicate pitch classes
-	 * removed. Pitches occurring very close to one another rhythmically are merged into the same slice,
-	 * despite not being simultaneous. Only pitched notes are included (which is to say that Channel 10
-	 * unpitched instrument notes are excluded). Each slice of this type includes ONLY the notes starting in
-	 * that slice, and does NOT include notes sustained from previous slices. Notes from all MIDI tracks and
-	 * channels are grouped together. This list has the same number of slices and the same slice
-	 * synchronization as the other slice data structures returned by the methods of this class.
+	 * Returns the note onset slices of the type returned by the getNoteOnsetSlicesOnlyNewOnsets() method for
+	 * the music passed to this object at instantiation, but where the values in a slice indicate pitch class
+	 * rather than pitch (i.e. octaves are collapsed). The outer list index specifies the slice, and the inner
+	 * list specifies the pitch classes in that slice, sorted from lowest pitch class to highest pitch class,
+	 * and with duplicate pitch classes removed. Pitches occurring very close to one another rhythmically are
+	 * merged into the same slice, despite not being simultaneous. Only pitched notes are included (which is
+	 * to say that Channel 10 unpitched instrument notes are excluded). Each slice of this type includes ONLY
+	 * the notes starting in that slice, and does NOT include notes sustained from previous slices. Notes from
+	 * all MIDI tracks and channels are grouped together. This list has the same number of slices and the same
+	 * slice synchronization as the other slice data structures returned by the methods of this class.
 	 * 
-	 * @return	The list of note onset slices in the MIDI parsed by this object at instantiation. Only new 
-	 *			note onsets are included (notes sustained from previous onset slices are excluded). Values
-	 *			indicate unique pitch class rather than MIDI pitch (a value of 0 corresponds to C, 1 to C#/Db,
-	 *			etc.).
+	 * @return	The list of note onset slices in the MIDI parsed by this object at instantiation. Values
+	 *			in each slice indicate unique pitch class rather than MIDI pitch. A value of 0 corresponds to
+	 *			C, 1 to C#/Db, etc.).
 	 */
-	public LinkedList<LinkedList<Integer>> getNoteOnsetSlicesOnlyNewOnsetsInPitchClasses()
+	public LinkedList<LinkedList<Integer>> getNoteOnsetSlicesOnlyNewOnsetsUsingPitchClasses()
 	{
 		LinkedList<LinkedList<Integer>> result = new LinkedList<>();
 		
@@ -1052,24 +1047,25 @@ public class NoteOnsetSliceContainer
 
 	
 	/**
-	 * Returns the note onset slices for the music passed to this object at instantiation, separated out by
-	 * track (first array index) and by channel (second array index), where each list of MIDI pitches is
-	 * converted to a list of pitch classes. The outer list index specifies the slice (the slices are listed
-	 * in temporal order), and the inner list index specifies the pitch classes in that slice on that track
-	 * and channel, sorted from lowest pitch class to highest pitch class, and with duplicate pitch classes in
-	 * the same track and channel removed. Pitches occurring very close to one another rhythmically are merged
-	 * into the same slice, despite not being simultaneous. Only pitched notes are included (which is to say
-	 * that Channel 10 unpitched instrument notes are excluded). Each slice of this type includes not only the
-	 * notes starting in it, but also notes being sustained from previous slices in the same track and
-	 * channel. If a note occurs in any track and channel, a matching (but potentially empty) slice will be
-	 * created for every other track and channel. This list has the same number of slices and the same slice
-	 * synchronization as the other slice data structures returned by the methods of this class.
+	 * Returns the note onset slices of the type returned by the getNoteOnsetSlicesByTrackAndChannel() method
+	 * for the music passed to this object at instantiation, but where the values in a slice indicate pitch
+	 * class rather than pitch (i.e. octaves are collapsed). The outer list index specifies the slice (the
+	 * slices are listed in temporal order), and the inner list index specifies the pitch classes in that
+	 * slice on that track and channel, sorted from lowest pitch class to highest pitch class, and with
+	 * duplicate pitch classes in the same track and channel removed. Pitches occurring very close to one
+	 * another rhythmically are merged into the same slice, despite not being simultaneous. Only pitched notes
+	 * are included (which is to say that Channel 10 unpitched instrument notes are excluded). Each slice of
+	 * this type includes not only the notes starting in it, but also notes being sustained from previous
+	 * slices in the same track and channel. If a note occurs in any track and channel, a matching (but
+	 * potentially empty) slice will be created for every other track and channel. This list has the same
+	 * number of slices and the same slice synchronization as the other slice data structures returned by the
+	 * methods of this class.
 	 * 
-	 * @return	The list of note onset slices in the MIDI parsed by this object at instantiation, segregated
-	 *			by track and channel. Values indicate unique pitch class rather than MIDI pitch (a value of 0
-	 *			corresponds to C, 1 to C#/Db, etc.). 
+	 * @return	The list of note onset slices in the MIDI parsed by this object at instantiation. Values
+	 *			in each slice indicate unique pitch class rather than MIDI pitch. A value of 0 corresponds to
+	 *			C, 1 to C#/Db, etc.).
 	 */
-	public LinkedList<LinkedList<Integer>>[][] getNoteOnsetSlicesByTrackAndChannelInPitchClasses()
+	public LinkedList<LinkedList<Integer>>[][] getNoteOnsetSlicesByTrackAndChannelUsingPitchClasses()
 	{
 		LinkedList<LinkedList<Integer>>[][] result = new LinkedList[note_onset_slices_by_track_and_channel.length][NUMBER_OF_MIDI_CHANNELS];
 		
@@ -1098,25 +1094,25 @@ public class NoteOnsetSliceContainer
 
 	
 	/**
-	 * Returns the note onset slices for the music passed to this object at instantiation, separated out by
-	 * track (first array index) and by channel (second array index), where each list of MIDI pitches is
-	 * converted to a list of pitch classes. The outer list index specifies the slice (the slices are listed
-	 * in temporal order), and the inner list index specifies the pitch classes in that slice on that track
-	 * and channel, sorted from lowest pitch class to highest pitch class, and with duplicate pitch classes in
-	 * the same track and channel removed. Pitches occurring very close to one another rhythmically are merged
-	 * into the same slice, despite not being simultaneous. Only pitched notes are included (which is to say
-	 * that Channel 10 unpitched instrument notes are excluded). Each slice of this type includes ONLY the
-	 * notes starting in it, and does NOT notes being sustained from previous slices. If a note occurs in any
-	 * track and channel, a matching (but potentially empty) slice will be created for every other track and
-	 * channel. This list has the same number of slices and the same slice synchronization as the other slice
-	 * data structures returned by the methods of this class.
+	 * Returns the note onset slices of the type returned by the
+	 * getNoteOnsetSlicesByTrackAndChannelOnlyNewOnsets() method for the music passed to this object at
+	 * instantiation, but where the values in a slice indicate pitch class rather than pitch (i.e. octaves are
+	 * collapsed). The outer list index specifies the slice (the slices are listed in temporal order), and the
+	 * inner list index specifies the pitch classes in that slice on that track and channel, sorted from
+	 * lowest pitch class to highest pitch class, and with duplicate pitch classes in the same track and
+	 * channel removed. Pitches occurring very close to one another rhythmically are merged into the same
+	 * slice, despite not being simultaneous. Only pitched notes are included (which is to say that Channel 10
+	 * unpitched instrument notes are excluded). Each slice of this type includes ONLY the notes starting in
+	 * it, and does NOT notes being sustained from previous slices. If a note occurs in any track and channel,
+	 * a matching (but potentially empty) slice will be created for every other track and channel. This list
+	 * has the same number of slices and the same slice synchronization as the other slice data structures
+	 * returned by the methods of this class.
 	 * 
-	 * @return	The list of note onset slices in the MIDI parsed by this object at instantiation, segregated
-	 *			by track and channel. Only new note onsets are included (notes sustained from previous onset
-	 *			slices are excluded). Values indicate unique pitch class rather than MIDI pitch (a value of 0
-	 *			corresponds to C, 1 to C#/Db, etc.). 
+	 * @return	The list of note onset slices in the MIDI parsed by this object at instantiation. Values
+	 *			in each slice indicate unique pitch class rather than MIDI pitch. A value of 0 corresponds to
+	 *			C, 1 to C#/Db, etc.).
 	 */
-	public LinkedList<LinkedList<Integer>>[][] getNoteOnsetSlicesByTrackAndChannelOnlyNewOnsetsInPitchClasses()
+	public LinkedList<LinkedList<Integer>>[][] getNoteOnsetSlicesByTrackAndChannelOnlyNewOnsetsUsingPitchClasses()
 	{
 		LinkedList<LinkedList<Integer>>[][] result = new LinkedList[note_onset_slices_by_track_and_channel_only_new_onsets.length][NUMBER_OF_MIDI_CHANNELS];
 		
@@ -1144,54 +1140,42 @@ public class NoteOnsetSliceContainer
 	}
 	
 	
-//	public List<NoteInfo> getAllPitchedNotesEncountered()
-//	{
-//		return all_pitched_notes_encountered;
-//	}
-	
-	
 	/**
-	 * Check to see if the given pitch is found in the given slice, and in the given track and channel, is
-	 * newly occurring in that slice, or is being sustained from a previous slice for the same track and
-	 * channel.
-	 * 
-	 * @param	pitch		The pitch
-	 * @param	slice_index	The index of the onset slice.
-	 * @param	track		The track of the onset slice to check.
-	 * @param	channel		The channel of the onset slice to check.
-	 * @return				True if the specified pitch in the specified slice is a new onset in that slice, 
-	 *						false if it is being sustained from a previous slice.	
+	 * Check to see if the specified pitch is found in the specified note onset slice for the specified track
+	 * and channel. True is only returned if the pitch is present as a new attack in that slice, not if it is
+	 * only sustained from a previous slice.
+	 *
+	 * @param	pitch		The pitch to check for.
+	 * @param	slice_index	The index of the onset slice to check.
+	 * @param	track		The MIDI track of the onset slice to check.
+	 * @param	channel		The MIDI channel of the onset slice to check.
+	 * @return				True if the specified pitch is found in the specified note onset slice as a new
+	 *						note attack.
 	 */	
 	public boolean isPitchInSliceNewOnset(int pitch, int slice_index, int track, int channel)
 	{
 		if (note_onset_slices_by_track_and_channel_only_new_onsets[track][channel].get(slice_index).isEmpty())
-		{
 			return false;
-		}
 		else
-		{
 			return note_onset_slices_by_track_and_channel_only_new_onsets[track][channel].get(slice_index).contains(pitch);
-		}
 	}
 	
 	
 	/**
-	 * Check to see if the highest pitch found in the given slice, and in the given track and channel, is
-	 * newly occurring in that slice, or is being sustained from a previous slice for the same track and 
-	 * channel.
+	 * Check to see if the specified note onset slice in the specified track and channel contains the note 
+	 * attack for the highest pitch sounding in that track and channel at that moment. False will be returned
+	 * if the highest note is being sustained from a previous note onset for that track and channel.
 	 * 
 	 * @param	slice_index	The index of the onset slice to check.
-	 * @param	track		The track of the onset slice to check.
-	 * @param	channel		The channel of the onset slice to check.
-	 * @return				True if the highest pitch in the specified slice is a new onset in that slice, 
-	 *						false if it is being sustained from a previous slice.
+	 * @param	track		The MIDI track of the onset slice to check.
+	 * @param	channel		The MIDI channel of the onset slice to check.
+	 * @return				True only if the highest pitch sounding in the specified slice is present in that 
+	 *						slice as a new attack, and not as a note sustained from a previous slice.
 	 */
 	public boolean isHighestPitchInSliceNewOnset(int slice_index, int track, int channel)
 	{
 		if (note_onset_slices_by_track_and_channel[track][channel].get(slice_index).isEmpty())
-		{
 			return false;
-		}
 		else
 		{
 			int index_of_highest_pitch = note_onset_slices_by_track_and_channel[track][channel].get(slice_index).size() - 1;
@@ -1199,4 +1183,11 @@ public class NoteOnsetSliceContainer
 			return 	note_onset_slices_by_track_and_channel_only_new_onsets[track][channel].get(slice_index).contains(highest_pitch);
 		}
 	}
+
+
+	// Testing method to return all pitched notes encountered.
+	/* public List<NoteInfo> getAllPitchedNotesEncountered()
+	{
+		return all_pitched_notes_encountered;
+	} */
 }

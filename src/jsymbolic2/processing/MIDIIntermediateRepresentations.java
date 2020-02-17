@@ -357,13 +357,20 @@ public class MIDIIntermediateRepresentations
 	public LinkedList<LinkedList<Integer>> pitch_bends_list;
 	
 	/**
-	 * The music divided into note onset slices. This can be used to access the data structures for all note
-	 * onset slices, note onset slices divided by track and channel, and versions of each containing
-	 * exclusively pitches of new note onsets (i.e. excluding notes sustained from previous slices). An onset
-	 * slice is represented by a list of pitches, in increasing order, created each time a pitched note is
-	 * encountered. A lookahead value (in ticks) is calculated to include slightly desynchronized notes (e.g.
-	 * if a MIDI file is a transcription of a human performance) in the same onset slice. The minimum
-	 * lookahead value is set to the duration of a thirty-second note in ticks.
+	 * The music divided into a variety of different kinds of sequentially ordered note onset slices: such a
+	 * slice is generally defined as a list of MIDI pitches that sound together (with pitches sorted in
+	 * increasing order with duplicates removed), and a new slice is created whenever a new pitched note
+	 * attack occurs. A lookahead is performed during slice formation so that slightly desynchronized notes
+	 * (e.g. due imperfectly quantized rhythms in MIDI files that are transcriptions of human performances)
+	 * are merged into the same slice (this merge threshold is set to the duration of a thirty-second note).
+	 *
+	 * <p> Several different versions of these slices are generated. Some are calculated separately for each
+	 * MIDI track and channel, and some are calculated across all voices simultaneously. Some versions only
+	 * includes pitches starting in the given slice, and others also include notes still sounding from
+	 * previous slices. Further variants filter out all but the highest note in each slice, or all but the
+	 * lowest note in each slice. It is also possible to access lists of pitch classes (rather than MIDI
+	 * pitches) for each slice. The indexes of all these note onset slice variants are synchronized, with the
+	 * consequence that some variants include empty slices as placeholders.
 	 */
 	public NoteOnsetSliceContainer note_onset_slice_container;
 
@@ -1063,11 +1070,11 @@ public class MIDIIntermediateRepresentations
 			System.out.print("\n");
 		}
 		*/
-		/*
+		
 		System.out.println("__________________________________________________________________________________________________________________________");
 		LinkedList<LinkedList<Integer>>[][] melodic_lines_by_track_and_channel = note_onset_slice_container.getNoteOnsetSlicesByTrackAndChannelMelodicLinesOnly();
 		LinkedList<LinkedList<Integer>> onset_slices = note_onset_slice_container.getNoteOnsetSlices();
-		for (NoteInfo note: all_notes.getNoteList())
+/*		for (NoteInfo note: all_notes.getNoteList())
 			if (note.getChannel() != 10 - 1)
 				if (!note_onset_slice_container.getAllPitchedNotesEncountered().contains(note))
 				{
@@ -1075,7 +1082,7 @@ public class MIDIIntermediateRepresentations
 					System.out.println("Missed " + mckay.utilities.sound.midi.MIDIMethods.midiPitchToPitch(note.getPitch()) + " at tick " + note.getStartTick());
 					break;
 				}
-		System.out.println("\n\n\n\nNOTE ONSET SLICES CREATED:");
+*/		System.out.println("\n\n\n\nNOTE ONSET SLICES CREATED:");
 		for (int slice = 0; slice < melodic_lines_by_track_and_channel[0][0].size(); slice++)
 		{
 			System.out.println("\nSlice " + slice);
@@ -1093,9 +1100,8 @@ public class MIDIIntermediateRepresentations
 						System.out.print("\n");
 					}
 		}
-		*/
 		
-		// System.out.println("\n\n\n\nGENERATING MELODIC INTERMEDIATE REPRESENTATIONS");	
+		
 		generateMelodicIntermediateRepresentations();
 		/*
 		for (int i = 0; i < melodic_interval_histogram.length; i++)
@@ -2253,12 +2259,13 @@ public class MIDIIntermediateRepresentations
 	
 	
 	/**
-	 * Generate the note_onset_slice_container field. The default settings to account for encoding issues are
-	 * hard-coded: To group near-simultaneous notes in the same onset slice are that both a lookahead and a 
-	 * lookbehind, each a 32nd note's duration in ticks, are performed from the next tick based on an 
-	 * idealized 32nd note division. To filter out notes that are held only sightly past the point at which a 
-	 * new note onset slice is created, there is a threshold, a 32nd note's duration in ticks, past which a 
-	 * note must be held in order for it to be included in the new note onset slice.
+	 * Fill the note_onset_slice_container field. This method specifies the particular settings used to merge
+	 * slightly desynchronized note attacks into single note onset slices. Both a lookahead and a lookbehind
+	 * are performed, each with a threshold corresponding to the duration of a 32nd note, starting on the next
+	 * tick past the precise onset of the first new note corresponding to an idealized 32nd note division in
+	 * the music. Additionally, in order to filter out notes from previous slices that are held only sightly
+	 * past the point at which a new note onset slice is created, a threshold corresponding to a 32nd note's
+	 * duration is set; notes from previous slices ending before this slice are not included in the new slice.
 	 */
 	private void generateNoteOnsetSliceContainer() 
 	{
