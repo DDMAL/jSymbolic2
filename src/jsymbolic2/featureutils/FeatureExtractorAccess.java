@@ -567,6 +567,14 @@ public final class FeatureExtractorAccess
 			new ObliqueMotionFeature(),
 			new ParallelFifthsFeature(),
 			new ParallelOctavesFeature(),
+			new TexturalFullnessFeature(),
+			new RhythmicIndependanceOfVoicesFeature(),
+			new RhythmicIndependenceOfHighestVoiceFeature(),
+			new RhythmicIndependenceOfLowestVoiceFeature(),
+			new HomorhythmAllVoicesFeature(),
+			new HomorhythmOuterVoicesFeature(),
+			// new MonophonyUnisonsAndOctavesOnlyFeature(),
+			// new MonophonyFixedIntervalBetweenVoicesFeature(),
 			
 			// Add features based on dynamics
 			new DynamicRangeFeature(),

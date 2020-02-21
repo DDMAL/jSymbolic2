@@ -23,7 +23,7 @@ public class VoiceEqualityStepwiseMotionFeature
 	 */
 	public VoiceEqualityStepwiseMotionFeature()
 	{
-		String name = "Voice Equality – Stepwise Motion";
+		String name = "Voice Equality - Stepwise Motion";
 		String code = "T-10";
 		String description = "Standard deviation across MIDI track/channel voices of the fraction of melodic motion that is stepwise in each voice that contains at least two pitched notes. Set to 0 if there are no voices containing melodic intervals.";
 		boolean is_sequential = true;

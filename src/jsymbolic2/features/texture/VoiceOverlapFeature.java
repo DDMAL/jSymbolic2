@@ -95,9 +95,9 @@ public class VoiceOverlapFeature
 								break;
 							}
 						}
-					
-					total_number_of_notes += notes_in_voice.size();
 				}
+				
+				total_number_of_notes += notes_in_voice.size();
 			}
 			
 			// Set value

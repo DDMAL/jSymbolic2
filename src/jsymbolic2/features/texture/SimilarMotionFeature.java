@@ -66,8 +66,14 @@ public class SimilarMotionFeature
 									double[][] other_feature_values )
 	throws Exception
 	{
+		double value;
+		if (sequence_info != null)
+			value = sequence_info.similar_motion_fraction;
+		else
+			value = -1.0;
+		
 		double[] result = new double[1];
-		result[0] = sequence_info.similar_motion_fraction;
+		result[0] = value;
 		return result;
 	}
 }

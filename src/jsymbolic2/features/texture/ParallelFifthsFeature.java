@@ -66,8 +66,14 @@ public class ParallelFifthsFeature
 									double[][] other_feature_values )
 	throws Exception
 	{
+		double value;
+		if (sequence_info != null)
+			value = sequence_info.parallel_fifths_fraction;
+		else
+			value = -1.0;
+		
 		double[] result = new double[1];
-		result[0] = sequence_info.parallel_fifths_fraction;
+		result[0] = value;
 		return result;
 	}
 }

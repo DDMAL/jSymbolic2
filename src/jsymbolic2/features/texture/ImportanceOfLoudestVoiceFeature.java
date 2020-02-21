@@ -85,7 +85,7 @@ public class ImportanceOfLoudestVoiceFeature
 								loudest_track = n_track;
 								loudest_channel = chan;
 							}
-				double loudest_average = (double) max_so_far;
+				double average_loudness_of_loudest_voice = (double) max_so_far;
 				
 				// Find the average pitches on all other MIDI track/channel pairings
 				double[] other_averages = new double[active_voices_count - 1];
@@ -98,10 +98,10 @@ public class ImportanceOfLoudestVoiceFeature
 							other_averages[count] = (double) sequence_info.track_and_channel_statistics[n_track][chan][2];
 							count++;
 						} 
-				double average = mckay.utilities.staticlibraries.MathAndStatsMethods.getAverage(other_averages);
+				double average_loudness_of_other_voices = mckay.utilities.staticlibraries.MathAndStatsMethods.getAverage(other_averages);
 				
 				// Set value
-				value = loudest_average - average;
+				value = average_loudness_of_loudest_voice - average_loudness_of_other_voices;
 			}
 		} 
 		else value = -1.0;

@@ -2,17 +2,18 @@ package jsymbolic2.features.texture;
 
 import javax.sound.midi.*;
 import ace.datatypes.FeatureDefinition;
+import java.util.LinkedList;
 import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the number of Note Ons in the MIDI track/channel voice with the lowest 
- * average pitch, divided by the average number of Note Ons in all channels that contain at least one note. 
- * Set to 0 if there are no voices containing pitched notes.
+ * A feature calculator that finds the fraction of note onset slices where only one MIDI track/channel voice 
+ * has a new note onset. Set to 0 if there are only zero or one voices containing pitched notes. MIDI Chanel 
+ * 10 notes are ignored.
  *
  * @author radamian
  */
-public class RelativeNoteDensityOfLowestVoiceFeature
+public class RhythmicIndependanceOfVoicesFeature
 		extends MIDIFeatureExtractor
 {
 	/* CONSTRUCTOR ******************************************************************************************/
@@ -21,11 +22,11 @@ public class RelativeNoteDensityOfLowestVoiceFeature
 	/**
 	 * Basic constructor that sets the values of the fields inherited from this class' superclass.
 	 */
-	public RelativeNoteDensityOfLowestVoiceFeature()
+	public RhythmicIndependanceOfVoicesFeature()
 	{
-		String name = "Relative Note Density of Lowest Voice";
-		String code = "T-22";
-		String description = "Number of Note Ons in the MIDI track/channel voice with the lowest average pitch, divided by the average number of Note Ons in all channels that contain at least one note. Set to 0 if there are no voices containing pitched notes.";
+		String name = "Rhythmic Independence of Voices";
+		String code = "T-37";
+		String description = "Fraction of note onset slices where only one MIDI track/channel voice has a new note onset. Set to 0 if there are only zero or one voices containing pitched notes. MIDI Chanel 10 notes are ignored.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
@@ -61,39 +62,40 @@ public class RelativeNoteDensityOfLowestVoiceFeature
 		double value;
 		if (sequence_info != null)
 		{
-			// Get the track and channel numbers of the MIDI track/channel voice with the lowest average 
-			// pitch
-			int track_lowest_voice = sequence_info.track_and_channel_with_lowest_average_pitch[0];
-			int channel_lowest_voice = sequence_info.track_and_channel_with_lowest_average_pitch[1];
-
-			// The number of note ons in the lowest MIDI track/channel voice
-			int number_of_notes_in_lowest_voice = sequence_info.track_and_channel_statistics[track_lowest_voice][channel_lowest_voice][0];
-			
 			// Find the number of pitched MIDI track/channnel pairings with at least one note on
 			int active_voices_count = 0;
 			for (int n_track = 0; n_track < sequence_info.track_and_channel_statistics.length; n_track++)
 				for (int chan = 0; chan < sequence_info.track_and_channel_statistics[n_track].length; chan++)
 					if (sequence_info.track_and_channel_statistics[n_track][chan][0] != 0 && chan != 10 - 1)
 						active_voices_count++;
-
-			// Find the average number of notes in each pitched MIDI track/channnel pairing
-			double[] number_of_notes = new double[active_voices_count];
-			int count = 0;
-			for (int n_track = 0; n_track < sequence_info.track_and_channel_statistics.length; n_track++)
-				for (int chan = 0; chan < sequence_info.track_and_channel_statistics[n_track].length; chan++)
-					if (sequence_info.track_and_channel_statistics[n_track][chan][0] != 0 && chan != 10 - 1)
-					{
-						number_of_notes[count] = (double) sequence_info.track_and_channel_statistics[n_track][chan][0];
-						count++;
-					}
 			
-			double total_average = mckay.utilities.staticlibraries.MathAndStatsMethods.getAverage(number_of_notes);
-
-			// Set value
-			if (Double.isNaN(total_average) || total_average == 0.0)
+			if (active_voices_count < 2)
 				value = 0.0;
-			else 
-				value = (double) number_of_notes_in_lowest_voice / total_average;
+			else
+			{
+				// The note onset slices in the piece, divided by MIDI track and channel and containing only
+				// notes from new onsets
+				LinkedList<LinkedList<Integer>>[][] note_onset_slices_by_track_and_channel = sequence_info.note_onset_slice_container.getNoteOnsetSlicesByTrackAndChannelOnlyNewOnsets();
+				
+				// The number of note onset slices where only one MIDI track/channel voice has a new note
+				// onset
+				int number_of_slices_with_independent_voice = 0;
+				
+				for (int i = 0; i < sequence_info.note_onset_slice_container.NUMBER_OF_ONSET_SLICES; i++)
+				{
+					int voices_with_new_onset = 0;
+					for (int n_track = 0; n_track < note_onset_slices_by_track_and_channel.length; n_track++)
+						for (int chan = 0; chan < note_onset_slices_by_track_and_channel[n_track].length; chan++)
+							if (!note_onset_slices_by_track_and_channel[n_track][chan].get(i).isEmpty())
+								voices_with_new_onset++;
+					
+					if (voices_with_new_onset == 1)
+						number_of_slices_with_independent_voice++;
+				}
+				
+				// Set value
+				value = (double) number_of_slices_with_independent_voice / sequence_info.note_onset_slice_container.NUMBER_OF_ONSET_SLICES;
+			}
 		}
 		else value = -1.0;
 

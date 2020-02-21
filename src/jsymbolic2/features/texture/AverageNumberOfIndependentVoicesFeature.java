@@ -91,7 +91,7 @@ public class AverageNumberOfIndependentVoicesFeature
 					count++;
 				}
 			}
-
+			
 			// Calculate the average
 			if (final_number_sounding == null || final_number_sounding.length == 0)
 				value = 0.0;

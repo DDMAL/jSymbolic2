@@ -24,7 +24,7 @@ public class VoiceEqualityRestsFeature
 	 */
 	public VoiceEqualityRestsFeature()
 	{
-		String name = "Voice Equality – Rests";
+		String name = "Voice Equality - Rests";
 		String code = "T-7";
 		String description = "Standard deviation of the cumulative amount of time during which no notes were sounding in each MIDI track/channel voice that contains at least one note. Calculation for each voice excludes any time before the first note in the voice and after the last note in the voice. Set to 0 if there are no voices containing pitched notes.";
 		boolean is_sequential = true;
@@ -94,7 +94,10 @@ public class VoiceEqualityRestsFeature
 								if (sequence_info.note_sounding_on_a_track_and_channel_tick_map[tick][n_track][chan])
 								{
 									if (!note_encountered_so_far[count])
+									{
 										ticks_of_first_notes[count] = tick;
+										note_encountered_so_far[count] = true;
+									}
 									else
 										ticks_of_last_notes[count] = tick;
 								}

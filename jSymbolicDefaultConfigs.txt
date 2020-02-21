@@ -420,10 +420,10 @@ Median Number of Independent Voices
 Variability of Number of Independent Voices
 Voice Equality - Number of Notes
 Voice Equality - Note Duration
-Voice Equality – Rests
+Voice Equality - Rests
 Voice Equality - Dynamics
 Voice Equality - Melodic Leaps
-Voice Equality – Stepwise Motion
+Voice Equality - Stepwise Motion
 Voice Equality - Range
 Importance of Loudest Voice
 Relative Range of Loudest Voice
@@ -449,6 +449,12 @@ Contrary Motion
 Oblique Motion
 Parallel Fifths
 Parallel Octaves
+Textural Fullness
+Rhythmic Independence of Voices
+Rhythmic Independence of Highest Voice
+Rhythmic Independence of Lowest Voice
+Homorhythm – All Voices
+Homorhythm – Outer Voices
 Dynamic Range
 Variation of Dynamics
 Variation of Dynamics In Each Voice

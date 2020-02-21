@@ -255,6 +255,23 @@ public class NoteOnsetSliceContainer
 	private final LinkedList<NoteInfo>[][] melodic_notes_by_track_and_channel;
 	
 	/**
+	 * A structure containing the rhythmic values of the notes contained in 
+	 * note_onset_slices_by_track_and_channel_only_melodic_lines. Each rhythmic value specifies a 
+	 * tempo-independent note duration: each (quantized) duration is expressed as a fraction of a quarter note 
+	 * (e.g. a value of 0.5 corresponds to the duration of an eighth note). The possible (rhythmically 
+	 * quantized) values are 0.125, 0.25, 0.33333333, 0.5, 0.66666667, 0.75, 1.0, 2.0, 3.0, 4.0, 6.0, 8.0, 
+	 * 10.0 and 12.0. Like the note_onset_slices_by_track_and_channel_only_melodic_lines field, the rhythmic 
+	 * values are separated out by track (first array index) and by channel (second array index). The outer 
+	 * list index specifies the slice (the slices are listed in temporal order), and the inner list specifies 
+	 * the rhythmic value of the note presumed to belong to the melody in that slice on that track and channel 
+	 * (the list of will always be empty or hold only one rhythmic value). This structure excludes rhythmic 
+	 * values of notes belonging to the melody that are held from previous slices. The list
+	 * for every track and channel has the same number of slices and the same slice synchronization as all
+	 * varieties of note onset slice.
+	 */
+	private final LinkedList<LinkedList<Double>>[][] rhythmic_value_slices_by_track_and_channel_only_melodic_lines;
+	
+	/**
 	 * The number of channels supported by the MIDI protocol.
 	 */
 	private final int NUMBER_OF_MIDI_CHANNELS = 16;
@@ -323,6 +340,32 @@ public class NoteOnsetSliceContainer
 		// else
 		// 	System.out.println("No held note offset correction \n");
 		
+		// The number of ticks per quarter note for the entire sequence
+		int ppqn_ticks_per_beat = midi_sequence.getResolution();
+		
+		// The number of ticks corresponding to each note value in the form of an array
+		int central_ticks_per_note_value[] = new int[] { ppqn_ticks_per_beat / 8, // i=0
+														 ppqn_ticks_per_beat / 4, // i=1
+														 ppqn_ticks_per_beat / 3, // i=2
+														 ppqn_ticks_per_beat / 2, // i=3
+														 ppqn_ticks_per_beat * 2 / 3, // i=4
+														 ppqn_ticks_per_beat * 3 / 4, // i=5
+														 ppqn_ticks_per_beat, // i=6
+														 ppqn_ticks_per_beat * 3 / 2, // i=7
+														 ppqn_ticks_per_beat * 2, // i=8
+														 ppqn_ticks_per_beat * 3, // i=9
+														 ppqn_ticks_per_beat * 4, // i=10
+														 ppqn_ticks_per_beat * 6, // i=11
+														 ppqn_ticks_per_beat * 8, // i=12
+														 ppqn_ticks_per_beat * 12 }; // i=13
+		
+		// The lowest number of ticks that a note of the given value can have
+		int lower_bound_ticks_per_note_value[] = new int[central_ticks_per_note_value.length];
+		lower_bound_ticks_per_note_value[0] = 0;
+		for (int i = 1; i < lower_bound_ticks_per_note_value.length; i++)
+			lower_bound_ticks_per_note_value[i] = central_ticks_per_note_value[i-1] + ((central_ticks_per_note_value[i] - central_ticks_per_note_value[i-1]) / 2);
+		
+		
 		// Initialize the note_onset_slices, note_onset_slices_duplicate_pitches_included, 
 		// note_onset_slices_by_track_and_channel, note_onset_slices_only_new_onsets, 
 		// note_onset_slices_by_track_and_channel_only_new_onsets, 
@@ -340,6 +383,7 @@ public class NoteOnsetSliceContainer
 		note_onset_slices_by_track_and_channel_only_melodic_lines_held_notes_included = new LinkedList[tracks_from_sequence.length][NUMBER_OF_MIDI_CHANNELS];
 		note_onset_slices_by_track_and_channel_lowest_pitches_only = new LinkedList[tracks_from_sequence.length][NUMBER_OF_MIDI_CHANNELS];
 		note_onset_slices_by_track_and_channel_lowest_pitches_only_held_notes_included = new LinkedList[tracks_from_sequence.length][NUMBER_OF_MIDI_CHANNELS];
+		rhythmic_value_slices_by_track_and_channel_only_melodic_lines = new LinkedList[tracks_from_sequence.length][NUMBER_OF_MIDI_CHANNELS];
 		melodic_notes_by_track_and_channel = new LinkedList[tracks_from_sequence.length][NUMBER_OF_MIDI_CHANNELS];
 		for (int n_track = 0; n_track < tracks_from_sequence.length; n_track++)
 			for (int chan = 0; chan < NUMBER_OF_MIDI_CHANNELS; chan++)
@@ -350,6 +394,7 @@ public class NoteOnsetSliceContainer
 				note_onset_slices_by_track_and_channel_only_melodic_lines_held_notes_included[n_track][chan] = new LinkedList();
 				note_onset_slices_by_track_and_channel_lowest_pitches_only[n_track][chan] = new LinkedList();
 				note_onset_slices_by_track_and_channel_lowest_pitches_only_held_notes_included[n_track][chan] = new LinkedList();
+				rhythmic_value_slices_by_track_and_channel_only_melodic_lines[n_track][chan] = new LinkedList();
 				melodic_notes_by_track_and_channel[n_track][chan] = new LinkedList();
 			}
 
@@ -410,6 +455,7 @@ public class NoteOnsetSliceContainer
 							note_onset_slices_by_track_and_channel_only_melodic_lines_held_notes_included[n_track][chan].add(new LinkedList<>());
 							note_onset_slices_by_track_and_channel_lowest_pitches_only[n_track][chan].add(new LinkedList<>());
 							note_onset_slices_by_track_and_channel_lowest_pitches_only_held_notes_included[n_track][chan].add(new LinkedList<>());
+							rhythmic_value_slices_by_track_and_channel_only_melodic_lines[n_track][chan].add(new LinkedList<>());
 						}
 
 					// Remove notes no longer sounding from notes_sounding, and add notes still sounding
@@ -686,6 +732,46 @@ public class NoteOnsetSliceContainer
 								{
 									note_onset_slices_by_track_and_channel_only_melodic_lines[n_track][chan].get(slice).add(melody_note.getPitch());
 									melodic_notes_by_track_and_channel[n_track][chan].add(melody_note);
+									
+									// The duration in ticks of this melodic note
+									int duration_in_ticks = melody_note.getEndTick() - melody_note.getStartTick();
+									// The index of lower_bound_ticks_per_note_value to which the note's 
+									// duration in ticks corresponds
+									int lower_bound_ticks_per_note_value_index = 0;
+
+									// Map the melodic note's duration in ticks to its appropriate rhythmic 
+									// value
+									for (int i = 0; i < lower_bound_ticks_per_note_value.length; i++)
+									{
+										if (i == lower_bound_ticks_per_note_value.length - 1)
+											lower_bound_ticks_per_note_value_index = i;
+										else if (duration_in_ticks < lower_bound_ticks_per_note_value[i+1])
+										{
+											lower_bound_ticks_per_note_value_index = i;
+											break;
+										}
+									}
+									
+									// Add the fraction of a quarter note corresponding to the quantized 
+									// rhythmic value of the melodic note to 
+									// rhythmic_value_slices_by_track_and_channel_only_melodic_lines
+									switch (lower_bound_ticks_per_note_value_index)
+									{
+										case 0: rhythmic_value_slices_by_track_and_channel_only_melodic_lines[n_track][chan].get(slice).add(1.0 / 8.0);
+										case 1: rhythmic_value_slices_by_track_and_channel_only_melodic_lines[n_track][chan].get(slice).add(1.0 / 4.0);
+										case 2: rhythmic_value_slices_by_track_and_channel_only_melodic_lines[n_track][chan].get(slice).add(1.0 / 3.0);
+										case 3: rhythmic_value_slices_by_track_and_channel_only_melodic_lines[n_track][chan].get(slice).add(1.0 / 2.0);
+										case 4: rhythmic_value_slices_by_track_and_channel_only_melodic_lines[n_track][chan].get(slice).add(2.0 / 3.0);
+										case 5: rhythmic_value_slices_by_track_and_channel_only_melodic_lines[n_track][chan].get(slice).add(1.0 * 3.0 / 4.0);
+										case 6: rhythmic_value_slices_by_track_and_channel_only_melodic_lines[n_track][chan].get(slice).add(1.0);
+										case 7: rhythmic_value_slices_by_track_and_channel_only_melodic_lines[n_track][chan].get(slice).add(1.5);
+										case 8: rhythmic_value_slices_by_track_and_channel_only_melodic_lines[n_track][chan].get(slice).add(1.0 * 2.0);
+										case 9: rhythmic_value_slices_by_track_and_channel_only_melodic_lines[n_track][chan].get(slice).add(1.0 * 3.0);
+										case 10: rhythmic_value_slices_by_track_and_channel_only_melodic_lines[n_track][chan].get(slice).add(1.0 * 4.0);
+										case 11: rhythmic_value_slices_by_track_and_channel_only_melodic_lines[n_track][chan].get(slice).add(1.0 * 6.0);
+										case 12: rhythmic_value_slices_by_track_and_channel_only_melodic_lines[n_track][chan].get(slice).add(1.0 * 8.0);
+										case 13: rhythmic_value_slices_by_track_and_channel_only_melodic_lines[n_track][chan].get(slice).add(1.0 * 12.0);
+									}
 								}
 							}
 							
@@ -964,6 +1050,30 @@ public class NoteOnsetSliceContainer
 	public LinkedList<NoteInfo>[][] getMelodicNotesByTrackAndChannel()
 	{
 		return melodic_notes_by_track_and_channel;
+	}
+	
+	
+	/**
+	 * Returns the structure containing the rhythmic values of the notes contained in 
+	 * note_onset_slices_by_track_and_channel_only_melodic_lines. Each rhythmic value specifies a 
+	 * tempo-independent note duration: each (quantized) duration is expressed as a fraction of a quarter note 
+	 * (e.g. a value of 0.5 corresponds to the duration of an eighth note). The possible (rhythmically 
+	 * quantized) values are 0.125, 0.25, 0.33333333, 0.5, 0.66666667, 0.75, 1.0, 2.0, 3.0, 4.0, 6.0, 8.0, 
+	 * 10.0 and 12.0. Like the note_onset_slices_by_track_and_channel_only_melodic_lines field, the rhythmic 
+	 * values are separated out by track (first array index) and by channel (second array index). The outer 
+	 * list index specifies the slice (the slices are listed in temporal order), and the inner list specifies 
+	 * the rhythmic value of the note presumed to belong to the melody in that slice on that track and channel 
+	 * (the list of will always be empty or hold only one rhythmic value). This structure excludes rhythmic 
+	 * values of notes belonging to the melody that are held from previous slices. The list for every track 
+	 * and channel has the same number of slices and the same slice synchronization as all varieties of note 
+	 * onset slice.
+	 * 
+	 * @return	The quantized rhythmic values of the melodic notes in the MIDI parsed by this object at 
+	 *			instantiation, segregated by track and channel. 
+	 */
+	public LinkedList<LinkedList<Double>>[][] getRhythmicValueSlicesByTrackAndChannelOnlyMelodicLines()
+	{
+		return rhythmic_value_slices_by_track_and_channel_only_melodic_lines;
 	}
 	
 	

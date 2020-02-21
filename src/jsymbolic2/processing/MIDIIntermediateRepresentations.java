@@ -1073,6 +1073,7 @@ public class MIDIIntermediateRepresentations
 		
 		System.out.println("__________________________________________________________________________________________________________________________");
 		LinkedList<LinkedList<Integer>>[][] melodic_lines_by_track_and_channel = note_onset_slice_container.getNoteOnsetSlicesByTrackAndChannelMelodicLinesOnly();
+		LinkedList<LinkedList<Double>>[][] rhythmic_value_slices_by_track_and_channel_only_melodic_lines = note_onset_slice_container.getRhythmicValueSlicesByTrackAndChannelOnlyMelodicLines();
 		LinkedList<LinkedList<Integer>> onset_slices = note_onset_slice_container.getNoteOnsetSlices();
 /*		for (NoteInfo note: all_notes.getNoteList())
 			if (note.getChannel() != 10 - 1)
@@ -1096,7 +1097,10 @@ public class MIDIIntermediateRepresentations
 					{
 						System.out.println("On track " + n_track + " and channel " + chan);
 						for (int pitch = 0; pitch < melodic_lines_by_track_and_channel[n_track][chan].get(slice).size(); pitch++)
-							System.out.print(mckay.utilities.sound.midi.MIDIMethods.midiPitchToPitch(melodic_lines_by_track_and_channel[n_track][chan].get(slice).get(pitch)) + ", ");
+						{
+							System.out.print(mckay.utilities.sound.midi.MIDIMethods.midiPitchToPitch(melodic_lines_by_track_and_channel[n_track][chan].get(slice).get(pitch)));
+							System.out.print(" with rhythmic value " + rhythmic_value_slices_by_track_and_channel_only_melodic_lines[n_track][chan].get(slice).get(pitch) + ", ");
+						}
 						System.out.print("\n");
 					}
 		}
@@ -1384,7 +1388,7 @@ public class MIDIIntermediateRepresentations
 		duration_of_ticks_in_seconds = new double[(int) sequence.getTickLength() + 1];
 		for (int i = 0; i < duration_of_ticks_in_seconds.length; i++)
 			duration_of_ticks_in_seconds[i] = 1.0 / mean_ticks_per_second;
-
+		
 		// Instantiate volume_of_channels_tick_map and initialize entries to 1.0
 		volume_of_channels_tick_map = new double[(int) sequence.getTickLength() + 1][16];
 		for (int i = 0; i < volume_of_channels_tick_map.length; i++)
@@ -1650,6 +1654,7 @@ public class MIDIIntermediateRepresentations
 	
 		// The average duration in seconds of a quarter note 
 		average_quarter_note_duration_in_seconds = (double) ticks_per_quarter_note * average_tick_duration;
+		//System.out.println("Average quarter note duration in seconds: " + average_quarter_note_duration_in_seconds);
 		
 		// The number of ticks corresponding to each note value in the form of an array
 		int central_ticks_per_note_value[] = new int[] { ticks_per_thirty_second_note, // i=0
@@ -3144,6 +3149,230 @@ public class MIDIIntermediateRepresentations
 	 */
 	private void generateContrapuntalCounts()
 	{
+		// The number of times each type of movement occurs
+		int parallel_count = 0;
+		int similar_count = 0;
+		int contrary_count = 0;
+		int oblique_count = 0;
+		int parallel_fifths_count = 0;
+		int parallel_octaves_count = 0;
+		
+		// If there is only 1 MIDI track and channel pairing, follow an implementation that uses the variety
+		// of note onset slice that aggregates pitches across all voices, then treat each note within the MIDI 
+		// track and channel pairing is treated as an individual voice
+		if (track_and_channel_pairs_by_average_pitch.size() == 1)
+		{
+			LinkedList<LinkedList<Integer>> note_onset_slices = note_onset_slice_container.getNoteOnsetSlices();
+			
+			LinkedList<Integer> previous_pitches = new LinkedList<>();
+			LinkedList<Integer> current_pitches = new LinkedList<>();
+
+			// Iterate by note onset slice
+			for (int slice = 0; slice < note_onset_slice_container.NUMBER_OF_ONSET_SLICES; slice++)
+			{
+				// Fill previous_pitches and move to the next slice if it has not been filled or if it lists 
+				// fewer than two pitches (i.e. contrapuntal motion can not be measured)
+				if (previous_pitches.isEmpty() || previous_pitches.size() < 2)
+				{
+					previous_pitches.clear();
+					for (int i = 0; i < note_onset_slices.get(slice).size(); i++)
+						previous_pitches.add(note_onset_slices.get(slice).get(i));
+					previous_pitches.sort((s1, s2) -> s1.compareTo(s2));
+
+					continue;
+				}
+
+				// Fill current_pitches if it has not been filled or if it lists fewer than two pitches (i.e. 
+				// contrapuntal motion can not be measured)
+				if (current_pitches.isEmpty() || current_pitches.size() < 2)
+				{
+					current_pitches.clear();
+							for (int i = 0; i < note_onset_slices.get(slice).size(); i++)
+								current_pitches.add(note_onset_slices.get(slice).get(i));
+					current_pitches.sort((s1, s2) -> s1.compareTo(s2));
+				}
+				else
+				{
+					// Clear previous_pitches and add all pitches in current_pitches (from the previous note 
+					// onset slice) to it
+					previous_pitches.clear();
+					for (int i = 0; i < current_pitches.size(); i++)
+						previous_pitches.add(current_pitches.get(i));
+					current_pitches.clear();
+
+					// Fill current_pitches with all pitches in the current note onset slice
+					for (int i = 0; i < note_onset_slices.get(slice).size(); i++)
+						current_pitches.add(note_onset_slices.get(slice).get(i));
+					current_pitches.sort((s1, s2) -> s1.compareTo(s2));
+				}
+
+				// Count the different types of motion by comparing each pair of voices
+				for (int cur_bottom_index = 0; cur_bottom_index < current_pitches.size() - 1; cur_bottom_index++)
+					for (int cur_top_index = cur_bottom_index + 1; cur_top_index < current_pitches.size(); cur_top_index++)
+					{
+						for (int prev_bottom_index = 0; prev_bottom_index < previous_pitches.size() - 1; prev_bottom_index++)
+							for (int prev_top_index = prev_bottom_index + 1; prev_top_index < previous_pitches.size(); prev_top_index++)
+							{
+								int prev_bottom_pitch = previous_pitches.get(prev_bottom_index);
+								int prev_top_pitch = previous_pitches.get(prev_top_index);
+								int cur_bottom_pitch = current_pitches.get(cur_bottom_index);
+								int cur_top_pitch = current_pitches.get(cur_top_index);
+
+								// Output the pair's pitch transition for debugging
+								//System.out.println(slice + ": " + prev_bottom_pitch + " to " + cur_bottom_pitch + " and " + prev_top_pitch + " to " + cur_top_pitch);
+
+								// Move to the next pair if there is no change between this pair's pitches
+								if (prev_bottom_pitch == cur_bottom_pitch && prev_top_pitch == cur_top_pitch)
+									continue;
+
+								// Note oblique motion
+								if (prev_bottom_pitch == cur_bottom_pitch || prev_top_pitch == cur_top_pitch)
+									oblique_count++;
+
+								// Note contrary motion
+								else if ( ((cur_bottom_pitch - prev_bottom_pitch) < 0 && (cur_top_pitch - prev_top_pitch) > 0) ||
+										  ((cur_bottom_pitch - prev_bottom_pitch) > 0 && (cur_top_pitch - prev_top_pitch) < 0) )
+									contrary_count++;
+
+								// Note parallel motion
+								else if ( (cur_top_pitch - cur_bottom_pitch) == (prev_top_pitch - prev_bottom_pitch) )
+								{
+									parallel_count++;
+
+									// Also look for parallel fifths and octaves
+									if ( (cur_top_pitch - cur_bottom_pitch) == 7)
+										parallel_fifths_count++;
+									if ( (cur_top_pitch - cur_bottom_pitch) == 12)
+										parallel_octaves_count++;
+								}
+
+								// Note similar motion
+								else similar_count++;
+							}
+					}
+				}
+		}
+		else if (track_and_channel_pairs_by_average_pitch.size() > 1)
+		{
+			// The melodic variety of note onset slices, separated by track and channel
+			LinkedList<LinkedList<Integer>>[][] note_onset_slices_by_track_and_channel = note_onset_slice_container.getNoteOnsetSlicesByTrackAndChannelMelodicLinesOnlyHeldNotesIncluded();
+
+			LinkedList<Integer> previous_pitches = new LinkedList<>();
+			LinkedList<Integer> current_pitches = new LinkedList<>();
+
+			// Iterate by note onset slice
+			for (int slice = 0; slice < note_onset_slice_container.NUMBER_OF_ONSET_SLICES; slice++)
+			{
+				// Fill previous_pitches and move to the next slice if it has not been filled or if it lists 
+				// fewer than two pitches (i.e. contrapuntal motion can not be measured)
+				if (previous_pitches.isEmpty() || previous_pitches.size() < 2)
+				{
+					previous_pitches.clear();
+					for (int n_track = 0; n_track < note_onset_slices_by_track_and_channel.length; n_track++)
+						for (int chan = 0; chan < note_onset_slices_by_track_and_channel[n_track].length; chan++)
+							for (int i = 0; i < note_onset_slices_by_track_and_channel[n_track][chan].get(slice).size(); i++)
+								previous_pitches.add(note_onset_slices_by_track_and_channel[n_track][chan].get(slice).get(i));
+					previous_pitches.sort((s1, s2) -> s1.compareTo(s2));
+
+					continue;
+				}
+
+				// Fill current_pitches if it has not been filled or if it lists fewer than two pitches (i.e. 
+				// contrapuntal motion can not be measured)
+				if (current_pitches.isEmpty() || current_pitches.size() < 2)
+				{
+					current_pitches.clear();
+					for (int n_track = 0; n_track < note_onset_slices_by_track_and_channel.length; n_track++)
+						for (int chan = 0; chan < note_onset_slices_by_track_and_channel[n_track].length; chan++)
+							for (int i = 0; i < note_onset_slices_by_track_and_channel[n_track][chan].get(slice).size(); i++)
+								current_pitches.add(note_onset_slices_by_track_and_channel[n_track][chan].get(slice).get(i));
+					current_pitches.sort((s1, s2) -> s1.compareTo(s2));
+				}
+				else
+				{
+					// Clear previous_pitches and add all pitches in current_pitches (from the previous note 
+					// onset slice) to it
+					previous_pitches.clear();
+					for (int i = 0; i < current_pitches.size(); i++)
+						previous_pitches.add(current_pitches.get(i));
+					current_pitches.clear();
+
+					// Fill current_pitches with all pitches in the current note onset slice
+					for (int n_track = 0; n_track < note_onset_slices_by_track_and_channel.length; n_track++)
+						for (int chan = 0; chan < note_onset_slices_by_track_and_channel[n_track].length; chan++)
+							for (int i = 0; i < note_onset_slices_by_track_and_channel[n_track][chan].get(slice).size(); i++)
+								current_pitches.add(note_onset_slices_by_track_and_channel[n_track][chan].get(slice).get(i));
+					current_pitches.sort((s1, s2) -> s1.compareTo(s2));
+				}
+
+				// Count the different types of motion by comparing each pair of voices
+				for (int cur_bottom_index = 0; cur_bottom_index < current_pitches.size() - 1; cur_bottom_index++)
+					for (int cur_top_index = cur_bottom_index + 1; cur_top_index < current_pitches.size(); cur_top_index++)
+					{
+						for (int prev_bottom_index = 0; prev_bottom_index < previous_pitches.size() - 1; prev_bottom_index++)
+							for (int prev_top_index = prev_bottom_index + 1; prev_top_index < previous_pitches.size(); prev_top_index++)
+							{
+								int prev_bottom_pitch = previous_pitches.get(prev_bottom_index);
+								int prev_top_pitch = previous_pitches.get(prev_top_index);
+								int cur_bottom_pitch = current_pitches.get(cur_bottom_index);
+								int cur_top_pitch = current_pitches.get(cur_top_index);
+
+								// Output the pair's pitch transition for debugging
+								//System.out.println(slice + ": " + prev_bottom_pitch + " to " + cur_bottom_pitch + " and " + prev_top_pitch + " to " + cur_top_pitch);
+
+								// Move to the next pair if there is no change between this pair's pitches
+								if (prev_bottom_pitch == cur_bottom_pitch && prev_top_pitch == cur_top_pitch)
+									continue;
+
+								// Note oblique motion
+								if (prev_bottom_pitch == cur_bottom_pitch || prev_top_pitch == cur_top_pitch)
+									oblique_count++;
+
+								// Note contrary motion
+								else if ( ((cur_bottom_pitch - prev_bottom_pitch) < 0 && (cur_top_pitch - prev_top_pitch) > 0) ||
+										  ((cur_bottom_pitch - prev_bottom_pitch) > 0 && (cur_top_pitch - prev_top_pitch) < 0) )
+									contrary_count++;
+
+								// Note parallel motion
+								else if ( (cur_top_pitch - cur_bottom_pitch) == (prev_top_pitch - prev_bottom_pitch) )
+								{
+									parallel_count++;
+
+									// Also look for parallel fifths and octaves
+									if ( (cur_top_pitch - cur_bottom_pitch) == 7)
+										parallel_fifths_count++;
+									if ( (cur_top_pitch - cur_bottom_pitch) == 12)
+										parallel_octaves_count++;
+								}
+
+								// Note similar motion
+								else similar_count++;
+							}
+					}
+				}
+		}
+		
+		// Caculate the total amount of qualifying motion
+		double total_motion_count = (double) parallel_count + (double) similar_count + 
+									(double) contrary_count + (double) oblique_count;
+
+		// Calculate the fractions of each type of motion
+		if (total_motion_count > 0.0)
+		{
+			parallel_motion_fraction = ((double) parallel_count) / total_motion_count;
+			similar_motion_fraction = ((double) similar_count) / total_motion_count;
+			contrary_motion_fraction = ((double) contrary_count) / total_motion_count;
+			oblique_motion_fraction = ((double) oblique_count) / total_motion_count;
+			parallel_fifths_fraction = ((double) parallel_fifths_count) / total_motion_count;
+			parallel_octaves_fraction = ((double) parallel_octaves_count) / total_motion_count;
+		}
+		
+		// The following code making the original calculations of the parallel_motion_fraction, 
+		// similar_motion_fraction, contrary_motion_fraction, oblique_motion_fraction, 
+		// parallel_fifths_fraction and parallel_octaves_fraction fields, has been deprecated following the
+		// addition of intermediate note onset slices to jSymbolic. 
+		
+		/*
 		// The number of ticks that this method will look ahead if the number of sounding voices changes from
 		// one tick to the next (this is because of rhythmic desynching that can occur between note onsets and
 		// offsets. Note that this is counted in addition to ticks on which no notes are sounding (rests).
@@ -3281,6 +3510,7 @@ public class MIDIIntermediateRepresentations
 			parallel_fifths_fraction = ((double) parallel_fifths_count) / total_motion_count;
 			parallel_octaves_fraction = ((double) parallel_octaves_count) / total_motion_count;
 		}
+		*/
 	}
 	
 

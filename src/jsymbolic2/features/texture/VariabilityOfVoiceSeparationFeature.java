@@ -70,12 +70,12 @@ public class VariabilityOfVoiceSeparationFeature
 				
 				// Store the differences in semitones between the average pitches of consecutive MIDI track
 				// and channel pairings
-				int average_pitch_in_previous_voice = 0; 
+				double average_pitch_in_previous_voice = 0; 
 				for (int i = 0; i < sequence_info.track_and_channel_pairs_by_average_pitch.size(); i++)
 				{
 					int track = sequence_info.track_and_channel_pairs_by_average_pitch.get(i)[0];
 					int channel = sequence_info.track_and_channel_pairs_by_average_pitch.get(i)[1];
-					int avergage_pitch_in_this_voice = sequence_info.track_and_channel_statistics[track][channel][3];
+					double avergage_pitch_in_this_voice = sequence_info.average_pitch_by_track_and_channel[track][channel];
 					
 					if (i > 0)
 						separations[i - 1] = avergage_pitch_in_this_voice - average_pitch_in_previous_voice;
