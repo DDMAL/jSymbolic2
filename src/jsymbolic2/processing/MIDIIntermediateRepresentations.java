@@ -1070,12 +1070,14 @@ public class MIDIIntermediateRepresentations
 			System.out.print("\n");
 		}
 		*/
-		
+		/*
 		System.out.println("__________________________________________________________________________________________________________________________");
 		LinkedList<LinkedList<Integer>>[][] melodic_lines_by_track_and_channel = note_onset_slice_container.getNoteOnsetSlicesByTrackAndChannelMelodicLinesOnly();
 		LinkedList<LinkedList<Double>>[][] rhythmic_value_slices_by_track_and_channel_only_melodic_lines = note_onset_slice_container.getRhythmicValueSlicesByTrackAndChannelOnlyMelodicLines();
 		LinkedList<LinkedList<Integer>> onset_slices = note_onset_slice_container.getNoteOnsetSlices();
-/*		for (NoteInfo note: all_notes.getNoteList())
+		*/
+		/*		
+		for (NoteInfo note: all_notes.getNoteList())
 			if (note.getChannel() != 10 - 1)
 				if (!note_onset_slice_container.getAllPitchedNotesEncountered().contains(note))
 				{
@@ -1083,7 +1085,9 @@ public class MIDIIntermediateRepresentations
 					System.out.println("Missed " + mckay.utilities.sound.midi.MIDIMethods.midiPitchToPitch(note.getPitch()) + " at tick " + note.getStartTick());
 					break;
 				}
-*/		System.out.println("\n\n\n\nNOTE ONSET SLICES CREATED:");
+		*/
+		/*
+		System.out.println("\n\n\n\nNOTE ONSET SLICES CREATED:");
 		for (int slice = 0; slice < melodic_lines_by_track_and_channel[0][0].size(); slice++)
 		{
 			System.out.println("\nSlice " + slice);
@@ -1104,7 +1108,7 @@ public class MIDIIntermediateRepresentations
 						System.out.print("\n");
 					}
 		}
-		
+		*/
 		
 		generateMelodicIntermediateRepresentations();
 		/*

@@ -453,8 +453,10 @@ Textural Fullness
 Rhythmic Independence of Voices
 Rhythmic Independence of Highest Voice
 Rhythmic Independence of Lowest Voice
-Homorhythm – All Voices
-Homorhythm – Outer Voices
+Homorhythm - All Voices
+Homorhythm - Outer Voices
+Monophony - Unisons and Octaves Only
+Monophony - Fixed Interval Between Voices
 Dynamic Range
 Variation of Dynamics
 Variation of Dynamics In Each Voice

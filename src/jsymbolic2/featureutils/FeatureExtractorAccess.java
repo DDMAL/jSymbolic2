@@ -573,8 +573,8 @@ public final class FeatureExtractorAccess
 			new RhythmicIndependenceOfLowestVoiceFeature(),
 			new HomorhythmAllVoicesFeature(),
 			new HomorhythmOuterVoicesFeature(),
-			// new MonophonyUnisonsAndOctavesOnlyFeature(),
-			// new MonophonyFixedIntervalBetweenVoicesFeature(),
+			new MonophonyUnisonsAndOctavesOnlyFeature(),
+			new MonophonyFixedIntervalBetweenVoicesFeature(),
 			
 			// Add features based on dynamics
 			new DynamicRangeFeature(),

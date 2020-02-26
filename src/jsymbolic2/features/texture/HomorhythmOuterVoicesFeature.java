@@ -26,7 +26,7 @@ public class HomorhythmOuterVoicesFeature
 	 */
 	public HomorhythmOuterVoicesFeature()
 	{
-		String name = "Homorhythm – Outer Voices";
+		String name = "Homorhythm - Outer Voices";
 		String code = "T-41";
 		String description = "Fraction of note onset slices (considering only the MIDI track/channel voices with the highest average pitch and the lowest average pitch) where all notes sounding in the slice have the same rhythmic value (as defined by the Rhythmic Value Histogram, as described here). Has a (trivial) value of 1 if there are only zero or one voices with pitched notes in the piece. MIDI Channel 10 notes are ignored.";
 		boolean is_sequential = true;
@@ -104,12 +104,12 @@ public class HomorhythmOuterVoicesFeature
 					if (!rhythmic_value_slices_by_track_and_channel[track_highest_voice][channel_highest_voice].get(i).isEmpty() &&
 						!rhythmic_value_slices_by_track_and_channel[track_lowest_voice][channel_lowest_voice].get(i).isEmpty())
 					{
+						double rhythmic_value_highest_voice = rhythmic_value_slices_by_track_and_channel[track_highest_voice][channel_highest_voice].get(i).get(0);
+						double rhythmic_value_lowest_voice = rhythmic_value_slices_by_track_and_channel[track_lowest_voice][channel_lowest_voice].get(i).get(0);
+						
 						// Verify the notes in the highest and lowest voices have the same rhythmic value
-						if (rhythmic_value_slices_by_track_and_channel[track_highest_voice][channel_highest_voice].get(i).get(0) ==
-							rhythmic_value_slices_by_track_and_channel[track_lowest_voice][channel_lowest_voice].get(i).get(0))
-						{
+						if (rhythmic_value_highest_voice == rhythmic_value_lowest_voice)
 							number_of_slices_with_outer_voices_homorhythm++;
-						}
 					}
 				}
 				

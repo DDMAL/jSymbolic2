@@ -7,13 +7,13 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the average number of different MIDI track/channel voices sounding in each 
- * note onset window, divided by the total number of voices in the piece containing at least one pitched note. 
- * Set to 0 if there are no voices containing at least one pitched notes. MIDI Channel 10 notes are ignored.
+ * A feature calculator that finds the fraction of note onset slices where either there is only one note, or 
+ * where the only vertical intervals present are unisons or octaves. Set to 1 if there are only zero or one 
+ * voices containing pitched notes. MIDI Channel 10 notes are ignored.
  *
  * @author radamian
  */
-public class TexturalFullnessFeature
+public class MonophonyUnisonsAndOctavesOnlyFeature
 		extends MIDIFeatureExtractor
 {
 	/* CONSTRUCTOR ******************************************************************************************/
@@ -22,11 +22,11 @@ public class TexturalFullnessFeature
 	/**
 	 * Basic constructor that sets the values of the fields inherited from this class' superclass.
 	 */
-	public TexturalFullnessFeature()
+	public MonophonyUnisonsAndOctavesOnlyFeature()
 	{
-		String name = "Textural Fullness";
-		String code = "T-36";
-		String description = "Average number of different MIDI track/channel voices sounding in each note onset window, divided by the total number of voices in the piece containing at least one pitched note. Set to 0 if there are no voices containing at least one pitched notes. MIDI Channel 10 notes are ignored.";
+		String name = "Monophony - Unisons and Octaves Only";
+		String code = "T-42";
+		String description = "Fraction of note onset slices where either there is only one note, or where the only vertical intervals present are unisons or octaves. Set to 1 if there are only zero or one voices containing pitched notes. MIDI Channel 10 notes are ignored.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
@@ -69,28 +69,23 @@ public class TexturalFullnessFeature
 					if (sequence_info.track_and_channel_statistics[n_track][chan][0] != 0 && chan != 10 - 1)
 						active_voices_count++;
 			
-			if (active_voices_count == 0)
-				value = 0.0;
+			if (active_voices_count < 2)
+				value = 1.0;
 			else
 			{
-				// The note onset slices in the piece, divided by MIDI track and channel
-				LinkedList<LinkedList<Integer>>[][] note_onset_slices_by_track_and_channel = sequence_info.note_onset_slice_container.getNoteOnsetSlicesByTrackAndChannel();
+				// The note onset slices in the piece, where octaves are collapsed (i.e. the list of pitches
+				// for a slice where there is one note, or where the only vertical intervals present are 
+				// unisons or octaves, will have a size of one)
+				LinkedList<LinkedList<Integer>> note_onset_slices_in_pitch_classes = sequence_info.note_onset_slice_container.getNoteOnsetSlicesUsingPitchClasses();
 				
-				// An array holding the number of different MIDI track/channel voices sounding in each note
-				// onset slice
-				double[] number_of_voices_in_slices = new double[sequence_info.note_onset_slice_container.NUMBER_OF_ONSET_SLICES];
-				for (int i = 0; i < number_of_voices_in_slices.length; i++)
-					number_of_voices_in_slices[i] = 0.0;
-				
-				// Iterate by slice
-				for (int i = 0; i < sequence_info.note_onset_slice_container.NUMBER_OF_ONSET_SLICES; i++)
-					for (int n_track = 0; n_track < note_onset_slices_by_track_and_channel.length; n_track++)
-						for (int chan = 0; chan < note_onset_slices_by_track_and_channel[n_track].length; chan++)
-							if (!note_onset_slices_by_track_and_channel[n_track][chan].get(i).isEmpty())
-								number_of_voices_in_slices[i]++;
+				// Count the number of monophonic slices
+				int number_of_monophonic_slices = 0;
+				for (int slice = 0; slice < note_onset_slices_in_pitch_classes.size(); slice++)
+					if (note_onset_slices_in_pitch_classes.get(slice).size() == 1)
+						number_of_monophonic_slices++;
 				
 				// Set value
-				value = (double) mckay.utilities.staticlibraries.MathAndStatsMethods.getAverage(number_of_voices_in_slices) / active_voices_count;
+				value = (double) number_of_monophonic_slices / sequence_info.note_onset_slice_container.NUMBER_OF_ONSET_SLICES;
 			}
 		}
 		else value = -1.0;

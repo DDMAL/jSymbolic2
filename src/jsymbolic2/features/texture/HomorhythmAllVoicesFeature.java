@@ -25,7 +25,7 @@ public class HomorhythmAllVoicesFeature
 	 */
 	public HomorhythmAllVoicesFeature()
 	{
-		String name = "Homorhythm – All Voices";
+		String name = "Homorhythm - All Voices";
 		String code = "T-40";
 		String description = "Fraction of note onset slices where all notes sounding in the slice have the same rhythmic value (as defined by the Rhythmic Value Histogram, as described here). Has a (trivial) value of 1 if there are only zero or one voices with pitched notes in the piece. MIDI Channel 10 notes are ignored.";
 		boolean is_sequential = true;
