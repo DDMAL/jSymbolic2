@@ -1,6 +1,6 @@
 # jSymbolic 2.3
 by Cory McKay
-Copyright (C) 2019 (GNU GPL)
+Copyright (C) 2021 (GNU GPL)
 
 
 ### OVERVIEW
@@ -107,10 +107,10 @@ OS X, Solaris or any other operating system with the JRE installed on it,
 users should be advised that jSymbolic has not yet been fully tested on these
 platforms, so difficulties may be encountered.
 
-This software was developed with version 8 of the JDK (Java Development Kit)
-and because it uses features from Java 8, it is required that users have
-Java 8 or newer installed on their systems in order to run jSymbolic
-properly.
+The current version of jSymbolic was developed and tested with version 16 of the
+JDK (Java Development Kit), and because it uses certain features not necessarily
+present in earlier versions of Java, it is suggested that users have Java 16 or
+later installed on their systems in order to run jSymbolic properly.
 
 
 ### INSTALLING THE JAVA RUNTIME ENVIRONMENT
@@ -119,9 +119,7 @@ If your system already has the JRE installed, as will most typically be the
 case, you may skip this section. If not, you will need to install the JRE in
 order to run this project. The JRE can be downloaded for free from the Java web
 site. The JDK typically includes the JRE, or the JRE can simply be installed
-alone. Warning: Some versions of the Macintosh operating system have reportedly
-not supported Java 9, so users may wish to install Java 8 if they are using a
-Macintosh just to be safe.
+alone.
 
 When the JRE download is complete, follow the installation instructions that
 come with it in order to install it

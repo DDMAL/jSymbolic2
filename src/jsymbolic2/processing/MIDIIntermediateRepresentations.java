@@ -1311,9 +1311,9 @@ public class MIDIIntermediateRepresentations
 						if (!key_sig_found)
 						{
 							if (data[1] == 0) // major
-								overall_metadata[0] = new Integer(0);
+								overall_metadata[0] = 0;
 							else if (data[1] == 1) // minor
-								overall_metadata[0] = new Integer(1);
+								overall_metadata[0] = 1;
 								key_sig_found = true;
 						}
 						
@@ -1327,8 +1327,8 @@ public class MIDIIntermediateRepresentations
 					// Check time signature, based on first time signature
 					if (((MetaMessage) message).getType() == 0x58)
 					{
-						((LinkedList) overall_metadata[1]).add(new Integer((int) (data[0] & 0xFF)));
-						((LinkedList) overall_metadata[2]).add(new Integer((int) (1 << (data[1] & 0xFF))));
+						((LinkedList) overall_metadata[1]).add((int) (data[0] & 0xFF));
+						((LinkedList) overall_metadata[2]).add((int) (1 << (data[1] & 0xFF)));
 					}
 
 					// Check initial tempo
@@ -2033,7 +2033,7 @@ public class MIDIIntermediateRepresentations
 								duration += duration_of_ticks_in_seconds[i];
 
 							// Add note to list
-							note_durations.add(new Double(duration));
+							note_durations.add(duration);
 						}
 					}
 				}

@@ -267,7 +267,7 @@ public class MIDIReporter
 							int tempo_bpm = (int) Math.round(60000000.0f / ms_tempo_float);
 
 							// Note the tempo
-							tempo_values.add((new Integer(tempo_bpm)).toString());
+							tempo_values.add((Integer.valueOf(tempo_bpm)).toString());
 						}
 						
 						// If this is a time signature meta-message, then note it
@@ -319,10 +319,10 @@ public class MIDIReporter
 							int patch_number = short_message.getData1() + 1;
 
 							// Note the General MIDI patch
-							general_midi_patch_values.add((new Integer(patch_number)).toString());
+							general_midi_patch_values.add((Integer.valueOf(patch_number)).toString());
 
 							// Note the patch in this particular track and channel
-							patches_per_channel_per_track[tr][channel].add((new Integer(patch_number)).toString());
+							patches_per_channel_per_track[tr][channel].add((Integer.valueOf(patch_number)).toString());
 						}
 
 						// If this is a MIDI Channel Volume message
@@ -332,7 +332,7 @@ public class MIDIReporter
 							long channel_volume = short_message.getData2();
 
 							// Note the channel volume
-							channel_volume_values.add((new Long(channel_volume)).toString());
+							channel_volume_values.add((Long.valueOf(channel_volume)).toString());
 						}
 						
 						// If this is a non-terminal (i.e. has a non-zero velocity) MIDI Note On message
@@ -344,7 +344,7 @@ public class MIDIReporter
 								int velocity = short_message.getData2();
 
 								// Note the General MIDI patch
-								velocity_values.add((new Integer(velocity)).toString());
+								velocity_values.add((Integer.valueOf(velocity)).toString());
 								
 								// Count this note
 								note_on_count[tr][channel]++;
@@ -359,7 +359,7 @@ public class MIDIReporter
 							int pitch_bend_value = short_message.getData2();
 
 							// Note the General MIDI patch
-							pitch_bend_values.add((new Integer(pitch_bend_value)).toString());
+							pitch_bend_values.add((Integer.valueOf(pitch_bend_value)).toString());
 						}						
 					}					
 				}
@@ -393,7 +393,7 @@ public class MIDIReporter
 						total_separate_voices_count += multiplexed_voices_on_this_track_channel;
 					}
 				}
-			unique_voices_found[file][0] = (new Long(total_separate_voices_count)).toString();
+			unique_voices_found[file][0] = (Long.valueOf(total_separate_voices_count)).toString();
 			if (!multiplexed_track_channels.isEmpty())
 				unique_multiplexed_track_channels_found[file] = multiplexed_track_channels.toArray(new String[multiplexed_track_channels.size()]);
 			else unique_multiplexed_track_channels_found[file] = null;
@@ -425,7 +425,7 @@ public class MIDIReporter
 						tracks_using_each_channel[ch].add(tr);
 			for (int ch = 0; ch < tracks_using_each_channel.length; ch++)
 				if (tracks_using_each_channel[ch].size() > 1)
-					chans_duplicated_on_multiple_tracks.add((new Integer(ch)).toString());
+					chans_duplicated_on_multiple_tracks.add((Integer.valueOf(ch)).toString());
 			if (!chans_duplicated_on_multiple_tracks.isEmpty())
 				channels_duplicated_on_multiple_tracks[file] = chans_duplicated_on_multiple_tracks.toArray(new String[chans_duplicated_on_multiple_tracks.size()]);
 			else channels_duplicated_on_multiple_tracks[file] = null;
