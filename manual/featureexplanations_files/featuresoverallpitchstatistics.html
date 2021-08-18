@@ -48,7 +48,7 @@
     For example, bin 3 corresponds to D#/Eb. The magnitude of of each bin is proportional to the the number of times notes 
     occurred at the bin's pitch class in the piece, relative to notes of all other pitch 
     classes in the piece (the histogram is normalized).</font></li>
-  <li><font color="#000000"><strong>P-2 Pitch Class Histogram - Transposed:</strong> A feature vector consisting 
+  <li><font color="#000000"><strong>P-3 Pitch Class Histogram - Transposed:</strong> A feature vector consisting 
     of bin magnitudes of the pitch class histogram described above. Each bin corresponds 
     to one of the 12 pitch classes, with pitch classes increasing by a semitone from one bin to the next (enharmonic equivalents are assigned the same pitch 
     class number). The first bin corresponds to the most common pitch class in 
@@ -56,7 +56,7 @@
     The magnitude of of each bin is proportional to the the number of times notes 
     occurred at the bin's pitch class in the piece, relative to notes of all other pitch 
     classes in the piece (the histogram is normalized).</font></li>
-  <li><font color="#000000"><strong>P-3 Folded Fifths Pitch Class Histogram:</strong> A feature vector 
+  <li><font color="#000000"><strong>P-4 Folded Fifths Pitch Class Histogram:</strong> A feature vector 
     consisting of bin magnitudes of the folded fifths pitch class histogram described 
     above. Each bin corresponds to one of the 12 pitch classes, and the bins are 
     ordered such that adjacent bins are separated by an ascending perfect fifth. 
@@ -64,156 +64,145 @@
     class number. The magnitude of of each bin is proportional to the the number 
     of times notes occurred at the bin's pitch class in the piece, relative to 
     all other pitch classes in the piece (the histogram is normalized).</font></li>
-  <li><font color="#000000"><strong>P-4 Number of Pitches:</strong> Number of unique pitches that occur 
+  <li><font color="#000000"><strong>P-5 Number of Pitches:</strong> Number of unique pitches that occur 
     at least once in the piece. Enharmonic equivalents are grouped together for 
     the purpose of this calculation.</font></li>
-  <li><font color="#000000"><strong>P-5 Number of Pitch Classes:</strong> Number of pitch classes that 
+  <li><font color="#000000"><strong>P-6 Number of Pitch Classes:</strong> Number of pitch classes that 
     occur at least once in the piece. Enharmonic equivalents are grouped together 
     for the purpose of this calculation.</font></li>
-  <li><font color="#000000"><strong>P-6 Number of Common Pitches:</strong> Number of unique pitches 
+  <li><font color="#000000"><strong>P-7 Number of Common Pitches:</strong> Number of unique pitches 
     that account individually for at least 9% of all notes. Enharmonic equivalents 
     are grouped together for the purpose of this calculation.</font></li>
-  <li><font color="#000000"><strong>P-7 Number of Common Pitch Classes:</strong> Number of pitch classes 
+  <li><font color="#000000"><strong>P-8 Number of Common Pitch Classes:</strong> Number of pitch classes 
     that account individually for at least 20% of all notes. Enharmonic equivalents 
     are grouped together for the purpose of this calculation.</font></li>
-  <li><font color="#000000"><strong>P-8 Range:</strong> Difference in semitones between the highest 
+  <li><font color="#000000"><strong>P-9 Range:</strong> Difference in semitones between the highest 
     and lowest pitches.</font></li>
-  <li><font color="#000000"><strong>P-9 Lowest Pitch:</strong> 
+  <li><font color="#000000"><strong>P-10 Lowest Pitch:</strong> 
     MIDI pitch of the lowest pitch in the piece. Set to zero if there are no pitched notes.</font></li>
-  <li><font color="#000000"><strong>P-10 Highest Pitch:</strong> MIDI pitch of 
+  <li><font color="#000000"><strong>P-11 Highest Pitch:</strong> MIDI pitch of 
     the highest pitch in the piece. Set to zero if there are no pitched notes.</font></li>
-  <li><font color="#000000"><strong>P-11 Importance of Bass Register:</strong> Fraction of notes between 
+  <li><font color="#000000"><strong>P-12 Importance of Bass Register:</strong> Fraction of notes between 
     MIDI pitches 0 and 54.</font></li>
-  <li><font color="#000000"><strong>P-12 Importance of Middle Register:</strong> Fraction of notes between 
+  <li><font color="#000000"><strong>P-13 Importance of Middle Register:</strong> Fraction of notes between 
     MIDI pitches 55 and 72.</font></li>
-  <li><font color="#000000"><strong>P-13 Importance of High Register:</strong> Fraction of notes between 
+  <li><font color="#000000"><strong>P-14 Importance of High Register:</strong> Fraction of notes between 
     MIDI pitches 73 and 127.</font></li>
-  <li><font color="#000000"><strong>P-14 Dominant Spread:</strong> Largest number of consecutive pitch 
+  <li><font color="#000000"><strong>P-15 Dominant Spread:</strong> Largest number of consecutive pitch 
     classes separated by perfect 5ths that each individually account for at least 
     9% of the total notes in the piece.</font></li>
-  <li><font color="#000000"><strong>P-15 Strong Tonal Centres:</strong> Number of isolated peaks in 
+  <li><font color="#000000"><strong>P-16 Strong Tonal Centres:</strong> Number of isolated peaks in 
     the fifths pitch histogram that each individually account for at least 9% 
     of all notes in the piece.</font></li>
-  <li><font color="#000000"><strong>P-16 Mean Pitch:</strong> Mean MIDI pitch value, averaged across 
+  <li><font color="#000000"><strong>P-17 Mean Pitch:</strong> Mean MIDI pitch value, averaged across 
     all pitched notes in the piece. Set to 0 if there are no pitched notes.</font></li>
-  <li><font color="#000000"><strong>P-17 Mean Pitch Class:</strong> Mean pitch class value, averaged 
+  <li><font color="#000000"><strong>P-18 Mean Pitch Class:</strong> Mean pitch class value, averaged 
     across all pitched notes in the piece. A value of 0 corresponds to a mean 
     pitch class of C, and pitches increase chromatically by semitone in integer 
     units from there (e.g. a value of 2 would mean that D is the mean pitch class). 
     Enharmonic equivalents are treated as a single pitch class. </font></li>
-  <li><font color="#000000"><strong>P-18 Most Common Pitch:</strong> MIDI pitch value of the most frequently 
+  <li><font color="#000000"><strong>P-19 Most Common Pitch:</strong> MIDI pitch value of the most frequently 
     occurring pitch.</font></li>
-  <li><font color="#000000"><strong>P-19 Most Common Pitch Class:</strong> The pitch class that occurs 
+  <li><font color="#000000"><strong>P-20 Most Common Pitch Class:</strong> The pitch class that occurs 
     most frequently compared to other pitch classes. A value of 0 corresponds 
     to C, and pitches increase chromatically by semitone in integer units (e.g. 
     a value of 2 would mean that D is the most common pitch class). Enharmonic 
     equivalents are treated as a single pitch class.</font></li>
-  <li><font color="#000000"><strong>P-20 Prevalence of Most Common Pitch:</strong> Fraction of notes 
+  <li><font color="#000000"><strong>P-21 Prevalence of Most Common Pitch:</strong> Fraction of notes 
     that correspond to the most common pitch.</font></li>
-  <li><font color="#000000"><strong>P-21 Prevalence of Most Common Pitch Class:</strong> Fraction of 
+  <li><font color="#000000"><strong>P-22 Prevalence of Most Common Pitch Class:</strong> Fraction of 
     notes that correspond to the most common pitch class.</font></li>
-  <li><font color="#000000"><strong>P-22 Relative Prevalence of Top Pitches:</strong> Relative frequency 
+  <li><font color="#000000"><strong>P-23 Relative Prevalence of Top Pitches:</strong> Relative frequency 
     of the second most common pitch in the piece, divided by the relative frequency 
     of the most common pitch.</font></li>
-  <li><font color="#000000"><strong>P-23 Relative Prevalence of Top Pitch Classes:</strong> Relative 
+  <li><font color="#000000"><strong>P-24 Relative Prevalence of Top Pitch Classes:</strong> Relative 
     frequency of the of the second most common pitch class in the piece, divided 
     by the relative frequency of the most common pitch class.</font></li>
-  <li><font color="#000000"><strong>P-24 Interval Between Most Prevalent Pitches:</strong> Absolute 
+  <li><font color="#000000"><strong>P-25 Interval Between Most Prevalent Pitches:</strong> Absolute 
     value of the difference (in semitones) between the pitches of the two most 
     frequently occurring pitches.</font></li>
-  <li><font color="#000000"><strong>P-25 Interval Between Most Prevalent Pitch Classes:</strong> Absolute 
+  <li><font color="#000000"><strong>P-26 Interval Between Most Prevalent Pitch Classes:</strong> Absolute 
     value of the difference (in semitones) between the pitches of the two most 
     frequently occurring pitch classes.</font></li>
-  <li><font color="#000000"><strong>P-26 Pitch Variability:</strong> Standard deviation of the MIDI 
+  <li><font color="#000000"><strong>P-27 Pitch Variability:</strong> Standard deviation of the MIDI 
     pitches of all pitched notes in the piece. Provides a measure of how close 
     the pitches as a whole are to the mean pitch.</font></li>
-  <li><font color="#000000"><strong>P-27 Pitch Class Variability:</strong> Standard deviation of the 
+  <li><font color="#000000"><strong>P-28 Pitch Class Variability:</strong> Standard deviation of the 
     pitch classes (where 0 corresponds to C, 1 to C#/Db, etc.) of all pitched 
     notes in the piece. Provides a measure of how close the pitch classes as a 
     whole are to the mean pitch class. </font></li>
-  <li><font color="#000000"><strong>P-28 Pitch Class Variability After Folding:</strong> Standard deviation 
+  <li><font color="#000000"><strong>P-29 Pitch Class Variability After Folding:</strong> Standard deviation 
     of the pitch classes in the piece after being folded by perfect fifths as 
     described for the folded fifths pitch class histogram. Provides a measure 
     of how close the pitch classes are as a whole from the mean pitch class from 
     a dominant-tonic perspective. </font></li>
-  <li><font color="#000000"><strong>P-29 Pitch Skewness:</strong> Skewness of the MIDI pitches of all 
-    pitched notes in the piece. Provides a measure of how asymmetrical the pitch 
-    distribution is to either the left or the right of the mean pitch. A value 
-    of zero indicates no skew.</font></li>
-  <li><font color="#000000"><strong>P-30 Pitch Class Skewness:</strong> Skewness of the pitch classes 
+  <li><font color="#000000"><strong>P-30 Pitch Skewness:</strong> Skewness of the MIDI pitches of all 
+    pitched notes in the piece. Provides a measure of how asymmetrical the distribution is: a value of zero indicates a symmetrical distribution, a negative value indicates a left skew and a positive value indicates a right skew.</font></li>
+  <li><font color="#000000"><strong>P-31 Pitch Class Skewness:</strong> Skewness of the pitch classes 
     (where 0 corresponds to C, 1 to C#/Db, etc.) of all pitched notes in the piece. 
-    Provides a measure of how asymmetrical the pitch class distribution is to 
-    either the left or the right of the mean pitch class. A value of zero indicates 
-    no skew.</font></li>
-  <li><font color="#000000"><strong>P-31 Pitch Class Skewness After Folding:</strong> Skewness of the 
+    Provides a measure of how asymmetrical the distribution is: a value of zero indicates a symmetrical distribution, a negative value indicates a left skew and a positive value indicates a right skew.</font></li>
+  <li><font color="#000000"><strong>P-32 Pitch Class Skewness After Folding:</strong> Skewness of the 
     pitch classes after being folded by perfect fifths as described for the folded 
-    fifths pitch class histogram. Provides a measure of how asymmetrical the pitch 
-    class distribution after folding is to either the left or the right of the 
-    mean from a dominant-tonic perspective. A value of zero indicates no skew.</font></li>
-  <li><font color="#000000"><strong>P-32 Pitch Kurtosis:</strong> Kurtosis of the MIDI pitches of all 
-    pitched notes in the piece. Provides a measure of how peaked or flat the pitch 
-    distribution is. The higher the kurtosis, the more the pitches are clustered 
-    near the mean and the fewer outliers there are.</font></li>
-  <li><font color="#000000"><strong>P-33 Pitch Class Kurtosis:</strong> Kurtosis of the pitch classes 
+    fifths pitch class histogram. Provides a measure of how asymmetrical the distribution is: a value of zero indicates a symmetrical distribution, a negative value indicates a left skew and a positive value indicates a right skew.</font></li>
+  <li><font color="#000000"><strong>P-33 Pitch Kurtosis:</strong> Excess kurtosis of the MIDI pitches of all 
+    pitched notes in the piece. A higher kurtosis means that the tails are fatter and a lower kurtosis means that they are skinnier. A normal distribution has a value of 0. A distribution with a higher kurtosis is more likely to have extreme values.</font></li>
+  <li><font color="#000000"><strong>P-34 Pitch Class Kurtosis:</strong> Excess kurtosis of the pitch classes 
     (where 0 corresponds to C, 1 to C#/Db, etc.) of all pitched notes in the piece. 
-    Provides a measure of how peaked or flat the pitch class distribution is. 
-    The higher the kurtosis, the more the pitch classes are clustered near the 
-    mean and the fewer outliers there are.</font></li>
-  <li><font color="#000000"><strong>P-34 Pitch Class Kurtosis After Folding:</strong> Kurtosis of the 
+    A higher kurtosis means that the tails are fatter and a lower kurtosis means that they are skinnier. A normal distribution has a value of 0. A distribution with a higher kurtosis is more likely to have extreme values.</font></li>
+  <li><font color="#000000"><strong>P-35 Pitch Class Kurtosis After Folding:</strong> Excess kurtosis of the 
     pitch classes after being folded by perfect fifths as described for the folded 
-    fifths pitch class histogram. Provides a measure of how peaked or flat the 
-    pitch classes are from a dominant-tonic perspective.</font></li>
-  <li><font color="#000000"><strong>P-35 Key Signature Diversity:</strong> The number of different (unique) key signatures found in the piece. Set to 1 if no key signature is specified.</font></li>
+    fifths pitch class histogram. A higher kurtosis means that the tails are fatter and a lower kurtosis means that they are skinnier. A normal distribution has a value of 0. A distribution with a higher kurtosis is more likely to have extreme values.</font></li>
+  <li><font color="#000000"><strong>P-36 Key Signature Diversity:</strong> The number of different (unique) key signatures found in the piece. Set to 1 if no key signature is specified.</font></li>
   <li><font color="#000000"><strong>P-37 Pitch Deviation from First Key Signature:</strong> The fraction of notes in the piece that do not belong to one of the 7 pitch classes specified by the first key signature in the piece. 0 if there is no key signature specified in the piece.</font></li>
   <li><font color="#000000"><strong>P-38 Pitch Deviation from  Key Signature:</strong> The fraction of notes in the piece that do not belong to one of the 7 pitch classes specified by the key signature in effect at the time that they occur. 0 if there is no key signature specified in the piece.</font></li>
-  <li><font color="#000000"><strong>P-36 Major or Minor:</strong> Whether the piece is major or minor, 
+  <li><font color="#000000"><strong>P-39 Major or Minor:</strong> Whether the piece is major or minor, 
     as indicated by the first encountered major/minor metadata tag in the piece. 
     Set to 0 if the metadata indicates that the piece is major, or set to 1 if 
     the metadata indicates that it is minor. Defaults to 0 if the key signature 
     is unknown.</font></li>
-  <li><font color="#000000"><strong>P-37 Number of Flats in  First Key Signature:</strong> 
+  <li><font color="#000000"><strong>P-40 Number of Flats in  First Key Signature:</strong> 
     The number of flats in the first key signature appearing in the piece. Set 
     to 0 if no key signatures are specified or if the first key signature does 
     not have any flats.</font></li>
-  <li><font color="#000000"><strong>P-38 Number of Sharps in First Key Signature:</strong> 
+  <li><font color="#000000"><strong>P-41 Number of Sharps in First Key Signature:</strong> 
     The number of sharps in the first key signature appearing in the piece. Set 
     to 0 if no key signatures are specified or if the first key signature does 
     not have any sharps.</font></li>
-  <li><font color="#000000"><strong>P-39 First Pitch:</strong> The MIDI pitch value of the first note 
+  <li><font color="#000000"><strong>P-42 First Pitch:</strong> The MIDI pitch value of the first note 
     in the piece. If there are multiple notes with simultaneous attacks at the 
     beginning of the piece, then the one with the lowest pitch is selected. Set to 0 if there are no 
     pitched notes.</font></li>
-  <li><font color="#000000"><strong>P-40 First Pitch Class:</strong> The pitch class of the first note 
+  <li><font color="#000000"><strong>P-43 First Pitch Class:</strong> The pitch class of the first note 
     in the piece. If there are multiple notes with simultaneous attacks at the 
     beginning of the piece, then the one with the lowest pitch is selected. A 
     value of 0 corresponds to C, and pitches increase chromatically by semitone 
     in integer units (e.g. a value of 2 would mean that D is the most common pitch 
     class). Enharmonic equivalents are treated as a single pitch class. Set to 
     0 if there are no pitched notes.</font></li>
-  <li><font color="#000000"><strong>P-41 Last Pitch:</strong> The MIDI pitch value of the last note 
+  <li><font color="#000000"><strong>P-44 Last Pitch:</strong> The MIDI pitch value of the last note 
     in the piece. If there are multiple notes with simultaneous attacks at the 
     end of the piece, then the one with the lowest pitch is selected. Set to 0 
     if there are no pitched notes.</font></li>
-  <li><font color="#000000"><strong>P-42 Last Pitch Class:</strong> The pitch class of the last note 
+  <li><font color="#000000"><strong>P-45 Last Pitch Class:</strong> The pitch class of the last note 
     in the piece. If there are multiple notes with simultaneous attacks at the 
     end of the piece, then the one with the lowest pitch is selected. A value 
     of 0 corresponds to C, and pitches increase chromatically by semitone in integer 
     units (e.g. a value of 2 would mean that D is the most common pitch class). 
     Enharmonic equivalents are treated as a single pitch class. Set to 0 if there 
     are no pitched notes.</font></li>
-  <li><font color="#000000"><strong>P-43 Glissando Prevalence:</strong> Number of pitched MIDI Note 
+  <li><font color="#000000"><strong>P-46 Glissando Prevalence:</strong> Number of pitched MIDI Note 
     Ons that have at least one MIDI Pitch Bend associated with them, divided by 
     the total number of pitched Note Ons in the piece.</font></li>
-  <li><font color="#000000"><strong>P-44 Average Range of Glissandos:</strong> Average range of MIDI 
+  <li><font color="#000000"><strong>P-47 Average Range of Glissandos:</strong> Average range of MIDI 
     Pitch Bends, where &quot;range&quot; is defined as the greatest value of the 
     absolute difference between 64 and the second data byte of all MIDI Pitch 
     Bend messages falling between the Note On and Note Off messages of any note 
     in the piece. Set to 0 if there are no MIDI Pitch Bends in the piece.</font></li>
-  <li><font color="#000000"><strong>P-45 Vibrato Prevalence:</strong> Number of pitched notes that have 
+  <li><font color="#000000"><strong>P-48 Vibrato Prevalence:</strong> Number of pitched notes that have 
     associated MIDI Pitch Bend messages change direction at least twice in connection 
     with the note in question, divided by the total number of pitched Note Ons 
     in the piece.</font></li>
-  <li><font color="#000000"><strong>P-46 Microtone Prevalence:</strong> Number of pitched notes that 
+  <li><font color="#000000"><strong>P-49 Microtone Prevalence:</strong> Number of pitched notes that 
     are each associated with exactly one MIDI Pitch Bend message, divided by the 
     total number of pitched Note Ons in the piece. Set to 0 if there are no pitched 
     Note Ons in the piece.</font></li>

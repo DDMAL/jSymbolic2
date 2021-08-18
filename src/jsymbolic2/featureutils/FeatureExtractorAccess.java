@@ -906,7 +906,7 @@ public final class FeatureExtractorAccess
 		int total_sequential_features = 0;
 		
 		// Information relating to feature types
-		String[] feature_type_labels = {"Overall Pitch Statistics", "Melodic Intervals", "Chords and Vertical Intervals", "Rhythm", "Instrumentation", "Musical Texture", "Dynamics", "MEI-Specific"};
+		String[] feature_type_labels = {"Overall Pitch Statistics", "Melodic Intervals", "Chords and Vertical Intervals", "Rhythm", "Instrumentation", "Musical Texture", "Dynamics", "MEI-Specific", "N-gram"};
 		int[] unique_features_by_type = new int[feature_type_labels.length];
 		int[] total_dimensions_by_type = new int[feature_type_labels.length];
         for (int i = 0; i < feature_type_labels.length; i++)
@@ -966,6 +966,10 @@ public final class FeatureExtractorAccess
                     case 'S':
                         unique_features_by_type[7]++;
                         total_dimensions_by_type[7] += feat.getFeatureDefinition().dimensions;
+                        break;
+                    case 'N':
+                        unique_features_by_type[8]++;
+                        total_dimensions_by_type[8] += feat.getFeatureDefinition().dimensions;
                         break;
                 }
             }

@@ -10,11 +10,11 @@ import jsymbolic2.featureutils.NoteInfo;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the skewness of the vertical interval distribution of the piece. Provides a 
- * measure of how asymmetrical the vertical interval distribution is to either the left or the right of the 
- * mean vertical interval. A value of zero indicates no skew. Unlike the calculation of the Vertical Interval 
- * Histogram and its dependent features, each vertical interval is not weighted by the MIDI velocity at which 
- * it is played in the calculation of this feature.
+ * A feature calculator that finds the skewness of the vertical interval distribution of the piece. Provides a
+ * measure of how asymmetrical the distribution is: a value of zero indicates a symmetrical distribution, a
+ * negative value indicates a left skew and a positive value indicates a right skew. Unlike the calculation of
+ * the Vertical Interval Histogram and its dependent features, each vertical interval is not weighted by the
+ * MIDI velocity at which it is played in the calculation of this feature.
  *
  * @author radamian
  */
@@ -31,7 +31,7 @@ public class VerticalIntervalSkewnessFeature
 	{
 		String name = "Vertical Interval Skewness";
 		String code = "C-36";
-		String description = "Skewness of the vertical interval distribution of the piece. Provides a measure of how asymmetrical the vertical interval distribution is to either the left or the right of the mean vertical interval. A value of zero indicates no skew. Unlike the calculation of the Vertical Interval Histogram and its dependent features, each vertical interval is not weighted by the MIDI velocity at which it is played in the calculation of this feature.";
+		String description = "Skewness of the vertical interval distribution of the piece. Provides a measure of how asymmetrical the distribution is: a value of zero indicates a symmetrical distribution, a negative value indicates a left skew and a positive value indicates a right skew. Unlike the calculation of the Vertical Interval Histogram and its dependent features, each vertical interval is not weighted by the MIDI velocity at which it is played in the calculation of this feature.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
@@ -101,7 +101,7 @@ public class VerticalIntervalSkewnessFeature
 				vertical_intervals[i] = vertical_intervals_arli.get(i);
 
 			// Calculate the feature value
-			value = mckay.utilities.staticlibraries.MathAndStatsMethods.getMedianSkewness(vertical_intervals);
+			value = mckay.utilities.staticlibraries.MathAndStatsMethods.getSkewness(vertical_intervals);
 		}
 		else value = -1.0;
 		

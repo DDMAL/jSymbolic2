@@ -6,12 +6,12 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the kurtosis of the note durations in quarter notes of all notes in the
- * music. Provides a measure of how peaked or flat the rhythmic value distribution is. The higher the
- * kurtosis, the more the rhythmic values are clustered near the mean and the fewer outliers there are. This
- * calculation includes both pitched and unpitched notes, is calculated after rhythmic quantization, is not
- * influenced by tempo, and is calculated without regard to the dynamics, voice or instrument of any given
- * note.
+ * A feature calculator that finds the excess kurtosis of the note durations in quarter notes of all notes in
+ * the music. A higher kurtosis means that the tails are fatter and a lower kurtosis means that they are
+ * skinnier. A normal distribution has a value of 0. A distribution with a higher kurtosis is more likely to
+ * have extreme values. This calculation includes both pitched and unpitched notes, is calculated after
+ * rhythmic quantization, is not influenced by tempo, and is calculated without regard to the dynamics, voice
+ * or instrument of any given note.
  *
  * @author Cory McKay
  */
@@ -28,7 +28,7 @@ public class RhythmicValueKurtosisFeature
 	{
 		String name = "Rhythmic Value Kurtosis";
 		String code = "R-33";
-		String description = "Kurtosis of the note durations in quarter notes of all notes in the music. Provides a measure of how peaked or flat the rhythmic value distribution is. The higher the kurtosis, the more the rhythmic values are clustered near the mean and the fewer outliers there are. This calculation includes both pitched and unpitched notes, is calculated after rhythmic quantization, is not influenced by tempo, and is calculated without regard to the dynamics, voice or instrument of any given note.";
+		String description = "Excess kurtosis of the note durations in quarter notes of all notes in the music. A higher kurtosis means that the tails are fatter and a lower kurtosis means that they are skinnier. A normal distribution has a value of 0. A distribution with a higher kurtosis is more likely to have extreme values. This calculation includes both pitched and unpitched notes, is calculated after rhythmic quantization, is not influenced by tempo, and is calculated without regard to the dynamics, voice or instrument of any given note.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
@@ -63,7 +63,7 @@ public class RhythmicValueKurtosisFeature
 	{
 		double value;
 		if (sequence_info != null)
-			value = mckay.utilities.staticlibraries.MathAndStatsMethods.getSampleExcessKurtosis(sequence_info.rhythmic_value_of_each_note_in_quarter_notes);
+			value = mckay.utilities.staticlibraries.MathAndStatsMethods.getExcessKurtosis(sequence_info.rhythmic_value_of_each_note_in_quarter_notes);
 		else value = -1.0;
 
 		double[] result = new double[1];

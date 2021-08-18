@@ -11,9 +11,9 @@ import jsymbolic2.processing.MIDIIntermediateRepresentations;
  * A feature calculator that calculates how much the note density (average number of notes per second) varies
  * throughout the piece. Takes into account all notes in all voices, including both pitched and unpitched
  * notes. In order to calculate this, the piece is broken into windows of 5 second duration, and the note
- * density of each window is calculated. The final value of this feature is then found by calculating the
- * standard deviation of the note densities of these windows. Set to 0 if there is insufficient music for more
- * than one window.
+ * density of each window is calculated. A note sounding across a window boundary will be included in each of
+ * the windows. The final value of this feature is then found by calculating the standard deviation of the
+ * note densities of these windows. Set to 0 if there is insufficient music for more than one window.
  *
  * @author Tristano Tenaglia and Cory McKay
  */
@@ -30,7 +30,7 @@ public class NoteDensityVariabilityFeature
 	{
 		String name = "Note Density Variability";
 		String code = "RT-6";
-		String description = "How much the note density (average number of notes per second) varies throughout the piece.  Takes into account all notes in all voices, including both pitched and unpitched notes. In order to calculate this, the piece is broken into windows of 5 second duration, and the note density of each window is calculated. The final value of this feature is then found by calculating the standard deviation of the note densities of these windows. Set to 0 if there is insufficient music for more than one window.";
+		String description = "How much the note density (average number of notes per second) varies throughout the piece. Takes into account all notes in all voices, including both pitched and unpitched notes. In order to calculate this, the piece is broken into windows of 5 second duration, and the note density of each window is calculated. A note sounding across a window boundary will be included in each of the windows. The final value of this feature is then found by calculating the standard deviation of the note densities of these windows. Set to 0 if there is insufficient music for more than one window.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);

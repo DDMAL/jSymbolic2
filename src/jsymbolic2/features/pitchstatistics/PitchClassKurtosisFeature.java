@@ -6,10 +6,10 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the kurtosis of the pitch classes (where 0 corresponds to C, 1 to C#/Db,
- * etc.) of all pitched notes in the piece. Provides a measure of how peaked or flat the pitch class 
- * distribution is. The higher the kurtosis, the more the pitch classes are clustered near the mean and the
- * fewer outliers there are.
+ * A feature calculator that finds the excess kurtosis of the pitch classes (where 0 corresponds to C, 1 to
+ * C#/Db, etc.) of all pitched notes in the piece. A higher kurtosis means that the tails are fatter and a
+ * lower kurtosis means that they are skinnier. A normal distribution has a value of 0. A distribution with a
+ * higher kurtosis is more likely to have extreme values.
  *
  * @author Cory McKay
  */
@@ -26,7 +26,7 @@ public class PitchClassKurtosisFeature
 	{
 		String name = "Pitch Class Kurtosis";
 		String code = "P-34";
-		String description = "Kurtosis of the pitch classes (where 0 corresponds to C, 1 to C#/Db, etc.) of all pitched notes in the piece. Provides a measure of how peaked or flat the pitch class distribution is. The higher the kurtosis, the more the pitch classes are clustered near the mean and the fewer outliers there are.";
+		String description = "Excess kurtosis of the pitch classes (where 0 corresponds to C, 1 to C#/Db, etc.) of all pitched notes in the piece. A higher kurtosis means that the tails are fatter and a lower kurtosis means that they are skinnier. A normal distribution has a value of 0. A distribution with a higher kurtosis is more likely to have extreme values.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
@@ -61,7 +61,7 @@ public class PitchClassKurtosisFeature
 	{
 		double value;
 		if (sequence_info != null)
-			value = mckay.utilities.staticlibraries.MathAndStatsMethods.getSampleExcessKurtosis(sequence_info.pitch_classes_of_all_note_ons);
+			value = mckay.utilities.staticlibraries.MathAndStatsMethods.getExcessKurtosis(sequence_info.pitch_classes_of_all_note_ons);
 		else value = -1.0;
 
 		double[] result = new double[1];

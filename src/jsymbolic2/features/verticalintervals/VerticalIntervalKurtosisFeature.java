@@ -10,10 +10,11 @@ import jsymbolic2.featureutils.NoteInfo;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the kurtosis of the vertical interval distribution of the piece. The higher 
- * the kurtosis, the more the vertical intervals are clustered near the mean and the fewer outliers there are.
- * Unlike the calculation of Vertical Interval Histogram and its dependent features, each vertical interval is 
- * not weighted by the MIDI velocity at which it is played in the calculation of this feature.
+ * A feature calculator that finds the excess kurtosis of the vertical interval distribution of the piece. A
+ * higher kurtosis means that the tails are fatter and a lower kurtosis means that they are skinnier. A normal
+ * distribution has a value of 0. A distribution with a higher kurtosis is more likely to have extreme values.
+ * Unlike the calculation of the Wrapped Vertical Interval Histogram and its dependent features, each vertical
+ * interval is not weighted by the MIDI velocity at which it is played in the calculation of this feature.
  *
  * @author radamian
  */
@@ -30,7 +31,7 @@ public class VerticalIntervalKurtosisFeature
 	{
 		String name = "Vertical Interval Kurtosis";
 		String code = "C-38";
-		String description = "Kurtosis of the vertical interval distribution of the piece. The higher the kurtosis, the more the vertical intervals are clustered near the mean and the fewer outliers there are. Unlike the calculation of Vertical Interval Histogram and its dependent features, each vertical interval is not weighted by the MIDI velocity at which it is played in the calculation of this feature.";
+		String description = "Excess kurtosis of the vertical interval distribution of the piece. A higher kurtosis means that the tails are fatter and a lower kurtosis means that they are skinnier. A normal distribution has a value of 0. A distribution with a higher kurtosis is more likely to have extreme values. Unlike the calculation of the Wrapped Vertical Interval Histogram and its dependent features, each vertical interval is not weighted by the MIDI velocity at which it is played in the calculation of this feature.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
@@ -100,7 +101,7 @@ public class VerticalIntervalKurtosisFeature
 				vertical_intervals[i] = vertical_intervals_arli.get(i);
 
 			// Calculate the feature value
-			value = mckay.utilities.staticlibraries.MathAndStatsMethods.getSampleExcessKurtosis(vertical_intervals);
+			value = mckay.utilities.staticlibraries.MathAndStatsMethods.getExcessKurtosis(vertical_intervals);
 		}
 		else value = -1.0;
 		

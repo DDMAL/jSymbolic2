@@ -6,10 +6,10 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the skewness of the wrapped melodic intervals in the piece. Melodies are 
- * calculated using the same conventions described for the Wrapped Melodic Interval Histogram. Provides a 
- * measure of how asymmetrical the wrapped melodic interval distribution is to either the left or the right of 
- * the mean wrapped melodic interval. A value of zero indicates no skew.
+ * A feature calculator that finds the skewness of the wrapped melodic intervals in the piece. Melodic
+ * intervals are calculated using the same conventions described for the Wrapped Melodic Interval Histogram.
+ * Provides a measure of how asymmetrical the distribution is: a value of zero indicates a symmetrical
+ * distribution, a negative value indicates a left skew and a positive value indicates a right skew.
  *
  * @author radamian
  */
@@ -26,7 +26,7 @@ public class OverallWrappedMelodicSkewnessFeature
 	{
 		String name = "Overall Wrapped Melodic Skewness";
 		String code = "M-42";
-		String description = "Skewness of the wrapped melodic intervals in the piece. Melodies are calculated using the same conventions described for the Wrapped Melodic Interval Histogram. Provides a measure of how asymmetrical the wrapped melodic interval distribution is to either the left or the right of the mean wrapped melodic interval. A value of zero indicates no skew.";
+		String description = "Skewness of the wrapped melodic intervals in the piece. Melodic intervals are calculated using the same conventions described for the Wrapped Melodic Interval Histogram. Provides a measure of how asymmetrical the distribution is: a value of zero indicates a symmetrical distribution, a negative value indicates a left skew and a positive value indicates a right skew.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
@@ -81,7 +81,7 @@ public class OverallWrappedMelodicSkewnessFeature
 					}
 			
 			// Calculate the feature value
-			value = mckay.utilities.staticlibraries.MathAndStatsMethods.getMedianSkewness(all_melodic_intervals);
+			value = mckay.utilities.staticlibraries.MathAndStatsMethods.getSkewness(all_melodic_intervals);
 		} 
 		else value = -1.0;
 

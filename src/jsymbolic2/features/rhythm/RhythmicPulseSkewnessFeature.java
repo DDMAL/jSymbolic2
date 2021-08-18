@@ -6,7 +6,9 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the skewness of the rhythmic pulses in the beat histogram. 
+ * A feature calculator that finds the skewness of the rhythmic pulses in the beat histogram. Provides a
+ * measure of how asymmetrical the distribution is: a value of zero indicates a symmetrical distribution, a
+ * negative value indicates a left skew and a positive value indicates a right skew.
  *
  * @author radamian
  */
@@ -23,7 +25,7 @@ public class RhythmicPulseSkewnessFeature
 	{
 		String name = "Rhythmic Pulse Skewness";
 		String code = "RT-35";
-		String description = "Skewness of the rhythmic pulses in the beat histogram. Provides a measure of how asymmetrical the pulse distribution is to either the left or the right of the mean pulse. A value of zero indicates no skew.";
+		String description = "Skewness of the rhythmic pulses in the beat histogram. Provides a measure of how asymmetrical the distribution is: a value of zero indicates a symmetrical distribution, a negative value indicates a left skew and a positive value indicates a right skew.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
@@ -64,7 +66,7 @@ public class RhythmicPulseSkewnessFeature
 			for (int i = 0; i < beat_histogram.length; i++)
 				beat_histogram[i] = sequence_info.beat_histogram[i + 40];
 			
-			skewness = mckay.utilities.staticlibraries.MathAndStatsMethods.getMedianSkewness(beat_histogram);
+			skewness = mckay.utilities.staticlibraries.MathAndStatsMethods.getSkewness(beat_histogram);
 		}
 		else return null;
 		

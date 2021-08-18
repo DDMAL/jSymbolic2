@@ -6,7 +6,10 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the kurtosis of the rhythmic pulses in the tempo-standardized beat histogram. 
+ * A feature calculator that finds the excess kurtosis of the rhythmic pulses in the tempo-standardized beat
+ * histogram. A higher kurtosis means that the tails are fatter and a lower kurtosis means that they are
+ * skinnier. A normal distribution has a value of 0. A distribution with a higher kurtosis is more likely to
+ * have extreme values.
  *
  * @author radamian
  */
@@ -23,7 +26,7 @@ public class RhythmicPulseKurtosisTempoStandardizedFeature
 	{
 		String name = "Rhythmic Pulse Kurtosis - Tempo Standardized";
 		String code = "R-74";
-		String description = "Kurtosis of the rhythmic pulses in the tempo-standardized beat histogram. Provides a measure of how peaked or flat the pulse distribution is. The higher the kurtosis, the more the pulses are clustered near the mean and the fewer outliers there are.";
+		String description = "Excess kurtosis of the rhythmic pulses in the tempo-standardized beat histogram. A higher kurtosis means that the tails are fatter and a lower kurtosis means that they are skinnier. A normal distribution has a value of 0. A distribution with a higher kurtosis is more likely to have extreme values.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
@@ -64,7 +67,7 @@ public class RhythmicPulseKurtosisTempoStandardizedFeature
 			for (int i = 0; i < beat_histogram_standardized.length; i++)
 				beat_histogram_standardized[i] = sequence_info.beat_histogram_120_bpm_standardized[i + 40];
 			
-			kurtosis = mckay.utilities.staticlibraries.MathAndStatsMethods.getSampleExcessKurtosis(beat_histogram_standardized);
+			kurtosis = mckay.utilities.staticlibraries.MathAndStatsMethods.getExcessKurtosis(beat_histogram_standardized);
 		}
 		else kurtosis = -1.0;
 		

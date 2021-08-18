@@ -6,9 +6,7 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the skewness of the pitch classes (where 0 corresponds to C, 1 to C#/Db, 
- * etc.) of all pitched notes in the piece. Provides a measure of how asymmetrical the pitch class 
- * distribution is to either the left or the right of the mean pitch class. A value of zero indicates no skew.
+ * A feature calculator that finds the skewness skewness of the pitch classes (where 0 corresponds to C, 1 to C#/Db, etc.) of all pitched notes in the piece. Provides a measure of how asymmetrical the distribution is: a value of zero indicates a symmetrical distribution, a negative value indicates a left skew and a positive value indicates a right skew.
  *
  * @author Cory McKay
  */
@@ -25,7 +23,7 @@ public class PitchClassSkewnessFeature
 	{
 		String name = "Pitch Class Skewness";
 		String code = "P-31";
-		String description = "Skewness of the pitch classes (where 0 corresponds to C, 1 to C#/Db, etc.) of all pitched notes in the piece. Provides a measure of how asymmetrical the pitch class distribution is to either the left or the right of the mean pitch class. A value of zero indicates no skew.";
+		String description = "Skewness of the pitch classes (where 0 corresponds to C, 1 to C#/Db, etc.) of all pitched notes in the piece. Provides a measure of how asymmetrical the distribution is: a value of zero indicates a symmetrical distribution, a negative value indicates a left skew and a positive value indicates a right skew.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
@@ -60,7 +58,7 @@ public class PitchClassSkewnessFeature
 	{
 		double value;
 		if (sequence_info != null)
-			value = mckay.utilities.staticlibraries.MathAndStatsMethods.getMedianSkewness(sequence_info.pitch_classes_of_all_note_ons);
+			value = mckay.utilities.staticlibraries.MathAndStatsMethods.getSkewness(sequence_info.pitch_classes_of_all_note_ons);
 		else value = -1.0;
 
 		double[] result = new double[1];

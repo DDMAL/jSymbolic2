@@ -6,10 +6,10 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the kurtosis of the wrapped melodic intervals in the piece. Melodies are 
- * calculated using the same conventions described for the Melodic Interval Histogram. The higher the 
- * kurtosis, the more the wrapped melodic intervals are clustered near the mean and the fewer outliers there 
- * are.
+ * A feature calculator that finds the excess kurtosis of the wrapped melodic intervals in the piece. Melodic
+ * intervals are calculated using the same conventions described for the Melodic Interval Histogram. A higher
+ * kurtosis means that the tails are fatter and a lower kurtosis means that they are skinnier. A normal
+ * distribution has a value of 0. A distribution with a higher kurtosis is more likely to have extreme values.
  *
  * @author radamian
  */
@@ -26,7 +26,7 @@ public class OverallWrappedMelodicKurtosisFeature
 	{
 		String name = "Overall Wrapped Melodic Kurtosis";
 		String code = "M-44";
-		String description = "Kurtosis of the wrapped melodic intervals in the piece. Melodies are calculated using the same conventions described for the Melodic Interval Histogram. The higher the kurtosis, the more the wrapped melodic intervals are clustered near the mean and the fewer outliers there are.";
+		String description = "Excess kurtosis of the wrapped melodic intervals in the piece. Melodic intervals are calculated using the same conventions described for the Melodic Interval Histogram. A higher kurtosis means that the tails are fatter and a lower kurtosis means that they are skinnier. A normal distribution has a value of 0. A distribution with a higher kurtosis is more likely to have extreme values.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
@@ -81,7 +81,7 @@ public class OverallWrappedMelodicKurtosisFeature
 					}
 			
 			// Calculate the feature value
-			value = mckay.utilities.staticlibraries.MathAndStatsMethods.getSampleExcessKurtosis(all_melodic_intervals);
+			value = mckay.utilities.staticlibraries.MathAndStatsMethods.getExcessKurtosis(all_melodic_intervals);
 		} 
 		else value = -1.0;
 
