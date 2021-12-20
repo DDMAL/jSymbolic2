@@ -1,6 +1,6 @@
 # jSymbolic 2.3
 by Cory McKay
-Copyright (C) 2021 (GNU GPL)
+Copyright (C) 2022 (GNU GPL)
 
 
 ### OVERVIEW
@@ -107,9 +107,9 @@ OS X, Solaris or any other operating system with the JRE installed on it,
 users should be advised that jSymbolic has not yet been fully tested on these
 platforms, so difficulties may be encountered.
 
-The current version of jSymbolic was developed and tested with version 16 of the
+The current version of jSymbolic was developed and tested with version 17 of the
 JDK (Java Development Kit), and because it uses certain features not necessarily
-present in earlier versions of Java, it is suggested that users have Java 16 or
+present in earlier versions of Java, it is suggested that users have Java 17 or
 later installed on their systems in order to run jSymbolic properly.
 
 
