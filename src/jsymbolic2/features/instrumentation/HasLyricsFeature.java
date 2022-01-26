@@ -6,7 +6,7 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that sets the feature value to 1 if the MIDI file includes encdoded lyrics, and to 0 
+ * A feature calculator that sets the feature value to 1 if the MIDI file includes encoded lyrics, and to 0 
  * if it does not.
  *
  * @author radamian
@@ -24,7 +24,7 @@ public class HasLyricsFeature
 	{
 		String name = "Has Lyrics";
 		String code = "I-19";
-		String description = "Set to 1 if the MIDI file includes encdoded lyrics, and to 0 if it does not.";
+		String description = "Set to 1 if the MIDI file includes encoded lyrics, and to 0 if it does not.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);

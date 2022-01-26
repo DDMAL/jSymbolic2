@@ -8,7 +8,7 @@ import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
  * A feature calculator that finds the fraction of note onset slices where only one MIDI track/channel voice 
- * has a new note onset. Set to 0 if there are only zero or one voices containing pitched notes. MIDI Chanel 
+ * has a new note onset. Set to 0 if there are only zero or one voices containing pitched notes. MIDI Channel 
  * 10 notes are ignored.
  *
  * @author radamian
@@ -26,7 +26,7 @@ public class RhythmicIndependanceOfVoicesFeature
 	{
 		String name = "Rhythmic Independence of Voices";
 		String code = "T-37";
-		String description = "Fraction of note onset slices where only one MIDI track/channel voice has a new note onset. Set to 0 if there are only zero or one voices containing pitched notes. MIDI Chanel 10 notes are ignored.";
+		String description = "Fraction of note onset slices where only one MIDI track/channel voice has a new note onset. Set to 0 if there are only zero or one voices containing pitched notes. MIDI Channel 10 notes are ignored.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);

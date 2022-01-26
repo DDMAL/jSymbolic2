@@ -237,7 +237,7 @@ public class MIDIIntermediateRepresentations
 	 * bin's rhythmic periodicity, and calculation is done using autocorrelation. All bins below 40 BPM are
 	 * set to 0 because autocorrelation was not performed at these lags (because the results are too noisy in
 	 * this range). Bins only go up to 260 BPM. Calculations use the overall average tempo of the piece, in
-	 * order to emphasize the metrical notation of the recording, and do thus do not take into account tempo
+	 * order to emphasize the metrical notation of the recording, and thus do not take into account tempo
 	 * variations in the piece.
 	 */
 	public double[] beat_histogram;

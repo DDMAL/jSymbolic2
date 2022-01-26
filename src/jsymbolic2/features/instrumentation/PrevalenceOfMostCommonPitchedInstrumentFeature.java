@@ -23,7 +23,7 @@ public class PrevalenceOfMostCommonPitchedInstrumentFeature
 	 */
 	public PrevalenceOfMostCommonPitchedInstrumentFeature()
 	{
-		String name = "Prevalance of Most Common Pitched Instrument";
+		String name = "Prevalence of Most Common Pitched Instrument";
 		String code = "I-16";
 		String description = "The fraction of notes played by the pitched instrument that is used to play more notes than any other pitched instrument. Set to 0 if there are no notes in the piece played by pitched instruments.";
 		boolean is_sequential = true;

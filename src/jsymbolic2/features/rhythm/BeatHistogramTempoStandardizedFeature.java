@@ -6,16 +6,18 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature extractor that calculates a feature vector consisting of the bin magnitudes of the beat histogram
- * described in the jSymbolic manual. However, the tempo of the music is standardized to 120 BPM throughout
- * the piece before this histogram is calculated. This means that variations in tempo within a single piece
- * are in effect eliminated for the purposes of this histogram. The tempo-independent beat histograms of
- * different pieces can also be compared in a way that is independent of potential tempo differences between
- * the pieces. Rubato and dynamics do still influence the tempo-independent beat histogram, however. Also, the
- * first 40 bins are not included in this feature vector, as is the case with the basic beat histogram. Each
- * bin corresponds to a different beats per minute periodicity, with tempo increasing with the bin index. The
- * magnitude of each bin is proportional to the cumulative loudness (MIDI velocity) of the notes that occur at
- * that bin's rhythmic periodicity. The histogram is normalized.
+ * A feature extractor that calculates a feature vector consisting of the bin magnitudes of the
+ * autocorrelation-based beat histogram described in the jSymbolic manual, but with the music mapped to a
+ * standardized overall tempo of 120 BPM before this histogram is calculated. This means that
+ * tempo-independent beat histograms of different pieces can be compared in a way that is independent of
+ * potential tempo differences between the pieces. Any variations in tempo are ignored, so for the purposes of
+ * this feature the tempo is consistently 120 BPM throughout the music. Rubato-related aspects encapsulated in
+ * note onsets do still influence the tempo-independent beat histogram, however. Each bin corresponds to a
+ * different (virtual) beats per minute periodicity, with periodicity tempo increasing by 1 BPM with each bin
+ * index. The first bin corresponds to (a virtual) 40 BPM (lower BPM values are not included, as they tend to
+ * be too noisy), and the last bin corresponds to (a virtual) 260 BPM. The magnitude of each bin is
+ * proportional to the cumulative loudness (MIDI velocity) of all the notes that occur at that bin's (virtual)
+ * rhythmic periodicity. The histogram is normalized.
  *
  * @author Cory McKay
  */
@@ -32,7 +34,7 @@ public class BeatHistogramTempoStandardizedFeature
 	{
 		String name = "Beat Histogram Tempo Standardized";
 		String code = "R-54";
-		String description = "A feature vector consisting of the bin magnitudes of the beat histogram described in the jSymbolic manual. However, the tempo of the music is standardized to 120 BPM throughout the piece before this histogram is calculated. This means that variations in tempo within a single piece are in effect eliminated for the purposes of this histogram. The tempo-independent beat histograms of different pieces can also be compared in a way that is independent of potential tempo differences between the pieces. Rubato and dynamics do still influence the tempo-independent beat histogram, however. Also, the first 40 bins are not included in this feature vector, as is the case with the basic beat histogram. Each bin corresponds to a different beats per minute periodicity, with tempo increasing with the bin index. The magnitude of each bin is proportional to the cumulative loudness (MIDI velocity) of the notes that occur at that bin's rhythmic periodicity. The histogram is normalized.";
+		String description = "A feature vector consisting of the bin magnitudes of the autocorrelation-based beat histogram described in the jSymbolic manual, but with the music mapped to a standardized overall tempo of 120 BPM before this histogram is calculated. This means that tempo-independent beat histograms of different pieces can be compared in a way that is independent of potential tempo differences between the pieces. Any variations in tempo are ignored, so for the purposes of this feature the tempo is consistently 120 BPM throughout the music. Rubato-related aspects encapsulated in note onsets do still influence the tempo-independent beat histogram, however. Each bin corresponds to a different (virtual) beats per minute periodicity, with periodicity tempo increasing by 1 BPM with each bin index. The first bin corresponds to (a virtual) 40 BPM (lower BPM values are not included, as they tend to be too noisy), and the last bin corresponds to (a virtual) 260 BPM. The magnitude of each bin is proportional to the cumulative loudness (MIDI velocity) of all the notes that occur at that bin's (virtual) rhythmic periodicity. The histogram is normalized.";
 		boolean is_sequential = true;
 		int dimensions = 221;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);

@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<!DOCTYPE classifications_file [
+   <!ELEMENT classifications_file (comments, data_set+)>
+   <!ELEMENT comments (#PCDATA)>
+   <!ELEMENT data_set (data_set_id, misc_info*, role?, classification)>
+   <!ELEMENT data_set_id (#PCDATA)>
+   <!ELEMENT misc_info (#PCDATA)>
+   <!ATTLIST misc_info info_type CDATA "">
+   <!ELEMENT role (#PCDATA)>
+   <!ELEMENT classification (section*, class*)>
+   <!ELEMENT section (start, stop, class+)>
+   <!ELEMENT class (#PCDATA)>
+   <!ELEMENT start (#PCDATA)>
+   <!ELEMENT stop (#PCDATA)>
+]>
+
+<classifications_file>
+
+   <comments></comments>
+
+   <data_set>
+      <data_set_id>C:\Users\corym\Desktop\MIDI\Jazz - Swing\Count Basie - April In Paris.mid</data_set_id>
+      <classification>
+         <class>Jazz - Swing</class>
+      </classification>
+   </data_set>
+
+   <data_set>
+      <data_set_id>C:\Users\corym\Desktop\MIDI\Jazz - Swing\Count Basie - Autumn Leaves.mid</data_set_id>
+      <classification>
+         <class>Jazz - Swing</class>
+      </classification>
+   </data_set>
+
+   <data_set>
+      <data_set_id>C:\Users\corym\Desktop\MIDI\Jazz - Swing\Count Basie - Corner Pocket.mid</data_set_id>
+      <classification>
+         <class>Jazz - Swing</class>
+      </classification>
+   </data_set>
+
+   <data_set>
+      <data_set_id>C:\Users\corym\Desktop\MIDI\Jazz - Swing\Count Basie - Freckle Face.mid</data_set_id>
+      <classification>
+         <class>Jazz - Swing</class>
+      </classification>
+   </data_set>
+
+</classifications_file>

@@ -399,8 +399,8 @@ Number of Very Common Pitched Instruments
 Number of Very Common Unpitched Instruments
 Most Common Pitched Instrument
 Most Common Unpitched Instrument
-Prevalance of Most Common Pitched Instrument
-Prevalance of Most Common Unpitched Instrument
+Prevalence of Most Common Pitched Instrument
+Prevalence of Most Common Unpitched Instrument
 Unpitched Percussion Instrument Prevalence
 Has Lyrics
 Voice Prevalence

@@ -65,8 +65,9 @@ The simplest way to run jSymbolic from a terminal prompt is to type the followin
   <li>jSymbolic's operation can also be governed by its <a href="../configuration_files/configuration.html">configuration settings file</a>, as explained further below.</li>
   <li>If the user does not specify a <a href="../configuration_files/configuration.html">configuration settings file</a> at runtime, then jSymboic will look for a default one in the same folder as the jSymbolic2.jar file, and with the file name <i>jSymbolicDefaultConfigs.txt</i>. If no such file exists, or if it is not a valid jSymbolic configuration settings file, then the jSymbolic will simply run with hard-coded default settings.
 	
+  <li>Only valid MIDI or MEI files may be parsed by jSymbolic; in the particular case of MEI, only MEI files conforming to the &quot;standard&quot;  MEI encoding specification as it existed in 2017 (when the jSymbolic MEI parser was implemented) can be parsed by jSymbolic.</li>
   <li>All file or directory paths specified in command line arguments must either be absolute or relative to the directory containing the jSymbolic2.jar file.</li>
-  <li>All recursive directory searches for symbolic files (as mentioned below) will only return files that have valid .mid, .midi or .mei extensions (with any mix of upper-case or lower-case letters).</li>
+  <li>All recursive directory searches for symbolic files (as mentioned below) will only return files that have valid .mid, .midi or .mei extensions (with any mix of upper-case or lower-case letters). </li>
   <li>Errors that occur during batch processing of multiple files will be logged to the terminal. Processing of other files will not be interrupted by this.</li>
   <li>jSymbolic can currently process the following kinds of symbolic music files: MIDI files and MEI files. Any files that cannot be parsed by jSymbolic will cause an error message to be generated.</li>
   <li>If an MEI-specific feature (e.g. Number of Grace Notes) is set to be extracted, then it will only be extracted from MEI files. It will be ignored by other files, such as MIDI files.</li>

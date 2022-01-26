@@ -11,7 +11,7 @@
     </tr></tbody>
 </table>
 
-<p>The manual pages comprising this section describe all of the features that jSymbolic extracts. The features are divided into the following groups:</p>
+<p>The manual pages comprising this section describe all of the features that jSymbolic extracts, as well as important introductory information for each feature type. The features are divided into the following groups:</p>
 <ul>
   <li><a href="featuresoverallpitchstatistics.html">Overall pitch statistics</a></li>
   <li><a href="featuresmelodicintervals.html">Melody + melodic intervals</a></li>
@@ -20,11 +20,12 @@
   <li><a href="featuresinstrumentation.html">Instrumentation</a></li>
   <li><a href="featurestexture.html">Texture</a></li>
   <li><a href="featuresdynamics.html">Dynamics</a></li>
+  <li><a href="featuresngrams.html">N-gram sequences</a></li>
   <li><a href="featuresmeispecific.html">MEI-specific features</a></li>
 </ul>
 <p>These manual pages were originally drawn largely from Chapter 4 of <a href="http://www.music.mcgill.ca/~cmckay/papers/musictech/mckay10dissertation.pdf" target="top">Cory McKay's dissertation</a>, although many improvements and clarifications have been made since then, and many new features have been added.</p>
-<p>Note that, although many of the feature descriptions use MIDI-specific terminology, they are  all compatible with alternative formats that jSymbolic can extract features from, such as MEI. Part of what jSybmolic does when encountering MEI files is to convert them to MIDI data in a very rich way, such that all the MIDI-related features can be extracted from them. MEI data that cannot be encoded as MIDI is maintained in a separate data pipeline, and features can be extracted from this pipeline as well (see the section  on <a href="featuresmeispecific.html">MEI-specific features</a>).</p>
-<p>If a feature cannot be calculated for whatever reason for a given piece of music, the default behavior is to save a value of -1 for one-dimensional features, and null for multi-dimensional features.</p>
+<p>Note that, although many of the feature descriptions use MIDI-specific terminology, they are  all compatible with alternative formats that jSymbolic can extract features from, namely MEI. Part of what jSymbolic does when encountering MEI files is to convert them to MIDI data in a very rich way, such that all the MIDI-related features can be extracted from them. MEI data that cannot be encoded as MIDI is maintained in a separate data pipeline, and features can be extracted from this pipeline as well (see the section  on <a href="featuresmeispecific.html">MEI-specific features</a>).</p>
+<p>If a feature cannot be calculated for whatever reason for a given piece of music, the default jSymbolic behavior is to save a value of -1 for one-dimensional features, and null for multi-dimensional features.</p>
 
 <p></p>
 <table height="5" width="100%" bgcolor="#0033C4" border="0"><tbody><tr><th></th></tr></tbody></table>

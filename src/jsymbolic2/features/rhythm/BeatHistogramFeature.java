@@ -6,11 +6,14 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature extractor that calculates a feature vector consisting of the bin magnitudes of the beat histogram
- * described in the jSymbolic manual. The first 40 bins are not included in this feature vector, however. Each
- * bin corresponds to a different beats per minute periodicity, with tempo increasing with the bin index. The
- * magnitude of each bin is proportional to the cumulative loudness (MIDI velocity) of the notes that occur at
- * that bin's rhythmic periodicity. The histogram is normalized.
+ * A feature extractor that calculates a feature vector consisting of the bin magnitudes of the
+ * autocorrelation-based beat histogram described in the jSymbolic manual. Each bin corresponds to a different
+ * beats per minute periodicity, with periodicity tempo increasing by 1 BPM with each bin index. The first bin
+ * corresponds to 40 BPM (lower BPM values are not included, as they tend to be too noisy), and the last bin
+ * corresponds to 260 BPM. The magnitude of each bin is proportional to the cumulative loudness (MIDI
+ * velocity) of all the notes that occur at that bin's rhythmic periodicity. The histogram is normalized.
+ * Calculations use the overall mean tempo of the piece, in order to emphasize the metrical notation of the
+ * recording, and thus do not take into account tempo variations in the piece.
  *
  * @author Cory McKay
  */
@@ -27,7 +30,7 @@ public class BeatHistogramFeature
 	{
 		String name = "Beat Histogram";
 		String code = "RT-16";
-		String description = "A feature vector consisting of the bin magnitudes of the beat histogram described in the jSymbolic manual. The first 40 bins are not included in this feature vector, however. Each bin corresponds to a different beats per minute periodicity, with tempo increasing with the bin index. The magnitude of each bin is proportional to the cumulative loudness (MIDI velocity) of the notes that occur at that bin's rhythmic periodicity. The histogram is normalized.";
+		String description = "A feature vector consisting of the bin magnitudes of the autocorrelation-based beat histogram described in the jSymbolic manual. Each bin corresponds to a different beats per minute periodicity, with periodicity tempo increasing by 1 BPM with each bin index. The first bin corresponds to 40 BPM (lower BPM values are not included, as they tend to be too noisy), and the last bin corresponds to 260 BPM. The magnitude of each bin is proportional to the cumulative loudness (MIDI velocity) of all the notes that occur at that bin's rhythmic periodicity. The histogram is normalized. Calculations use the overall mean tempo of the piece, in order to emphasize the metrical notation of the recording, and thus do not take into account tempo variations in the piece.";
 		boolean is_sequential = true;
 		int dimensions = 221;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);

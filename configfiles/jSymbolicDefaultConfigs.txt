@@ -7,9 +7,533 @@ convert_to_arff=true
 convert_to_csv=true
 <features_to_extract>
 Basic Pitch Histogram
+Pitch Class Histogram - Untransposed
+Pitch Class Histogram - Transposed
+Folded Fifths Pitch Class Histogram
+Number of Pitches
+Number of Pitch Classes
+Number of Common Pitches
+Number of Common Pitch Classes
 Range
 Lowest Pitch
 Highest Pitch
+Importance of Bass Register
+Importance of Middle Register
+Importance of High Register
+Dominant Spread
+Strong Tonal Centres
+Mean Pitch
+Mean Pitch Class
+Most Common Pitch
+Most Common Pitch Class
+Prevalence of Most Common Pitch
+Prevalence of Most Common Pitch Class
+Relative Prevalence of Top Pitches
+Relative Prevalence of Top Pitch Classes
+Interval Between Most Prevalent Pitches
+Interval Between Most Prevalent Pitch Classes
+Pitch Variability
+Pitch Class Variability
+Pitch Class Variability After Folding
+Pitch Skewness
+Pitch Class Skewness
+Pitch Class Skewness After Folding
+Pitch Kurtosis
+Pitch Class Kurtosis
+Pitch Class Kurtosis After Folding
 Key Signature Diversity
-Number of Flats in the First Key Signature
-Number of Sharps in the First Key Signature
+Pitch Deviation from First Key Signature
+Pitch Deviation from Key Signature
+Major or Minor
+Number of Flats in First Key Signature
+Number of Sharps in First Key Signature
+First Pitch
+First Pitch Class
+Last Pitch
+Last Pitch Class
+Glissando Prevalence
+Average Range of Glissandos
+Vibrato Prevalence
+Microtone Prevalence
+Melodic Interval Histogram
+Wrapped Melodic Interval Histogram
+Wrapped Melodic Interval Histogram - Rising Intervals Only
+Wrapped Melodic Interval Histogram - Falling Intervals Only
+Most Common Melodic Interval
+Most Common Wrapped Melodic Interval
+Most Common Rising Wrapped Melodic Interval
+Most Common Falling Wrapped Melodic Interval
+Mean Melodic Interval
+Mean Wrapped Melodic Interval
+Mean Rising Wrapped Melodic Interval
+Mean Falling Wrapped Melodic Interval
+Number of Melodic Intervals
+Number of Wrapped Melodic Intervals
+Number of Rising Wrapped Melodic Intervals
+Number of Falling Wrapped Melodic Intervals
+Number of Common Melodic Intervals
+Number of Common Wrapped Melodic Intervals
+Number of Common Rising Wrapped Melodic Intervals
+Number of Common Falling Wrapped Melodic Intervals
+Number of Very Common Melodic Intervals
+Number of Very Common Wrapped Melodic Intervals
+Number of Very Common Rising Wrapped Melodic Intervals
+Number of Very Common Falling Wrapped Melodic Intervals
+Distance Between Most Prevalent Melodic Intervals
+Distance Between Most Prevalent Wrapped Melodic Intervals
+Distance Between Most Prevalent Rising Wrapped Melodic Intervals
+Distance Between Most Prevalent Falling Wrapped Melodic Intervals
+Prevalence of Most Common Melodic Interval
+Prevalence of Most Common Wrapped Melodic Interval
+Prevalence of Most Common Rising Wrapped Melodic Interval
+Prevalence of Most Common Falling Wrapped Melodic Interval
+Relative Prevalence of Most Common Melodic Intervals
+Relative Prevalence of Most Common Wrapped Melodic Intervals
+Relative Prevalence of Most Common Rising Wrapped Melodic Intervals
+Relative Prevalence of Most Common Falling Wrapped Melodic Intervals
+Overall Melodic Variability
+Overall Wrapped Melodic Variability
+Overall Rising Wrapped Melodic Variability
+Overall Falling Wrapped Melodic Variability
+Overall Melodic Skewness
+Overall Wrapped Melodic Skewness
+Overall Melodic Kurtosis
+Overall Wrapped Melodic Kurtosis
+Smallest Melodic Interval
+Smallest Rising Melodic Interval
+Smallest Falling Melodic Interval
+Largest Melodic Interval
+Largest Wrapped Melodic Interval
+Largest Rising Melodic Interval
+Largest Falling Melodic Interval
+Repeated Notes
+Chromatic Motion
+Stepwise Motion
+Melodic Thirds
+Melodic Intervals Larger Than a Third
+Melodic Perfect Fourths
+Melodic Tritones
+Melodic Perfect Fifths
+Melodic Intervals Larger Than a Fifth
+Melodic Sixths
+Melodic Sevenths
+Melodic Octaves
+Melodic Intervals Larger Than an Octave
+Minor Major Melodic Third Ratio
+Melodic Dissonance Ratio - Fourths Not Dissonant
+Melodic Dissonance Ratio - Fourths Dissonant
+Amount of Arpeggiation
+Melodic Embellishments - One-Sided
+Melodic Embellishments - Two-Sided
+Amount of Rising Melodic Motion
+Amount of Falling Melodic Motion
+Average Length of Rising Melodic Runs
+Average Length of Falling Melodic Runs
+Variability in Length of Rising Melodic Runs
+Variability in Length of Falling Melodic Runs
+Average Interval Spanned by Rising Melodic Runs
+Average Interval Spanned by Falling Melodic Runs
+Variability in Interval Spanned by Rising Melodic Runs
+Variability in Interval Spanned by Falling Melodic Runs
+Average Length of Melodic Arcs
+Average Length of Melodic Half-Arcs
+Variability in Length of Melodic Arcs
+Variability in Length of Melodic Half-Arcs
+Average Interval Spanned by Melodic Arcs
+Average Interval Spanned by Melodic Half-Arcs
+Variability of Interval Spanned by Melodic Arcs
+Variability of Interval Spanned by Melodic Half-Arcs
+Melodic Pitch Variety
+Wrapped Melodic Interval Histogram for Highest Line
+Wrapped Melodic Interval Histogram for Highest Line - Rising Intervals Only
+Wrapped Melodic Interval Histogram for Highest Line - Falling Intervals Only
+Melodic Note Density per Quarter Note in Highest Line
+Number of Distinct Melodic Intervals in Highest Line
+Mean Melodic Interval of Highest Line
+Prevalence of Most Common Melodic Interval in Highest Line
+Melodic Variability of Highest Line
+Smallest Melodic Interval in Highest Line
+Largest Melodic Interval in Highest Line
+Amount of Falling Melodic Motion in Highest Line
+Average Length of Rising Melodic Runs in Highest Line
+Average Length of Falling Melodic Runs in Highest Line
+Variability in Length of Rising Melodic Runs in Highest Line
+Variability in Length of Falling Melodic Runs in Highest Line
+Average Interval Spanned by Rising Melodic Runs in Highest Line
+Average Interval Spanned by Falling Melodic Runs in Highest Line
+Variability in Interval Spanned by Rising Melodic Runs in Highest Line
+Variability in Interval Spanned by Falling Melodic Runs in Highest Line
+Average Length of Melodic Arcs in Highest Line
+Average Length of Melodic Half-Arcs in Highest Line
+Variability in Length of Melodic Arcs in Highest Line
+Variability in Length of Melodic Half-Arcs in Highest Line
+Average Interval Spanned by Melodic Arcs in Highest Line
+Average Interval Spanned by Melodic Half-Arcs in Highest Line
+Variability of Interval Spanned by Melodic Arcs in Highest Line
+Variability of Interval Spanned by Melodic Half-Arcs in Highest Line
+Melodic Pitch Variety in Highest Line
+Wrapped Melodic Interval Histogram for Lowest Line
+Wrapped Melodic Interval Histogram for Lowest Line - Rising Intervals Only
+Wrapped Melodic Interval Histogram for Lowest Line - Falling Intervals Only
+Melodic Note Density per Quarter Note in Lowest Line
+Number of Distinct Melodic Intervals in Lowest Line
+Mean Melodic Interval of Lowest Line
+Prevalence of Most Common Melodic Interval in Lowest Line
+Melodic Variability of Lowest Line
+Smallest Melodic Interval in Lowest Line
+Largest Melodic Interval in Lowest Line
+Amount of Falling Melodic Motion in Lowest Line
+Average Length of Rising Melodic Runs in Lowest Line
+Average Length of Falling Melodic Runs in Lowest Line
+Variability in Length of Rising Melodic Runs in Lowest Line
+Variability in Length of Falling Melodic Runs in Lowest Line
+Average Interval Spanned by Rising Melodic Runs in Lowest Line
+Average Interval Spanned by Falling Melodic Runs in Lowest Line
+Variability in Interval Spanned by Rising Melodic Runs in Lowest Line
+Variability in Interval Spanned by Falling Melodic Runs in Lowest Line
+Melodic Pitch Variety in Lowest Line
+Vertical Interval Histogram
+Wrapped Vertical Interval Histogram
+Average Vertical Note Density
+Average Number of Simultaneous Pitches
+Average Number of Simultaneous Pitch Classes
+Average Amount of Vertical Pitch Class Doubling
+Variability of Vertical Note Density
+Variability of Number of Simultaneous Pitches
+Variability of Number of Simultaneous Pitch Classes
+Variability of Amount of Vertical Pitch Class Doubling
+Number of Distinct Vertical Intervals
+Number of Distinct Wrapped Vertical Intervals
+Number of Common Vertical Intervals
+Number of Common Wrapped Vertical Intervals
+Number of Very Common Vertical Intervals
+Number of Very Common Wrapped Vertical Intervals
+Smallest Vertical Interval
+Largest Vertical Interval
+Largest Wrapped Vertical Interval
+Mean Vertical Interval
+Mean Wrapped Vertical Interval
+Most Common Vertical Interval
+Most Common Wrapped Vertical Interval
+Second Most Common Vertical Interval
+Second Most Common Wrapped Vertical Interval
+Distance Between Two Most Common Vertical Intervals
+Distance Between Two Most Common Wrapped Vertical Intervals
+Prevalence of Most Common Vertical Interval
+Prevalence of Most Common Wrapped Vertical Interval
+Prevalence of Second Most Common Vertical Interval
+Prevalence of Second Most Common Wrapped Vertical Interval
+Prevalence Ratio of Two Most Common Vertical Intervals
+Prevalence Ratio of Two Most Common Wrapped Vertical Intervals
+Vertical Interval Variability
+Wrapped Vertical Interval Variability
+Vertical Interval Skewness
+Wrapped Vertical Interval Skewness
+Vertical Interval Kurtosis
+Wrapped Vertical Interval Kurtosis
+Vertical Unisons
+Vertical Minor Seconds
+Vertical Thirds
+Vertical Tritones
+Vertical Perfect Fourths
+Vertical Perfect Fifths
+Vertical Sixths
+Vertical Sevenths
+Vertical Octaves
+Perfect Vertical Intervals
+Vertical Dissonance Ratio - Fourths Not Dissonant
+Vertical Dissonance Ratio - Fourths Dissonant
+Prevalence of Minor Vertical Intervals
+Prevalence of Major Vertical Intervals
+Minor to Major Vertical Intervals Ratio
+Vertical Minor Third Prevalence
+Vertical Major Third Prevalence
+Minor to Major Vertical Thirds Ratio
+Average Instantaneous Vertical Range
+Variability of Instantaneous Vertical Range
+Chord Type Histogram
+Number of Distinct Chord Types
+Number of Common Chord Types
+Number of Very Common Chord Types
+Most Common Chord Type
+Second Most Common Chord Type
+Prevalence of Most Common Chord Type
+Prevalence of Second Most Common Chord Type
+Prevalence Ratio of Two Most Common Chord Types
+Chord Type Variability
+Partial Chords
+Standard Triads
+Diminished and Augmented Triads
+Dominant Seventh Chords
+Seventh Chords
+Non-Standard Chords
+Complex Chords
+Minor Major Triad Ratio
+Chord Duration
+Initial Time Signature
+Simple Initial Meter
+Compound Initial Meter
+Complex Initial Meter
+Duple Initial Meter
+Triple Initial Meter
+Quadruple Initial Meter
+Metrical Diversity
+Duration in Quarter Notes
+Total Number of Notes
+Note Density per Quarter Note
+Note Density per Quarter Note per Voice
+Note Density per Quarter Note Variability
+Rhythmic Value Histogram
+Range of Rhythmic Values
+Number of Different Rhythmic Values Present
+Number of Common Rhythmic Values Present
+Prevalence of Very Short Rhythmic Values
+Prevalence of Short Rhythmic Values
+Prevalence of Medium Rhythmic Values
+Prevalence of Long Rhythmic Values
+Prevalence of Very Long Rhythmic Values
+Prevalence of Dotted Notes
+Shortest Rhythmic Value
+Longest Rhythmic Value
+Mean Rhythmic Value
+Most Common Rhythmic Value
+Prevalence of Most Common Rhythmic Value
+Relative Prevalence of Most Common Rhythmic Values
+Difference Between Most Common Rhythmic Values
+Rhythmic Value Variability
+Rhythmic Value Skewness
+Rhythmic Value Kurtosis
+Rhythmic Value Median Run Lengths Histogram
+Mean Rhythmic Value Run Length
+Median Rhythmic Value Run Length
+Variability in Rhythmic Value Run Lengths
+Rhythmic Value Variability in Run Lengths Histogram
+Mean Rhythmic Value Offset
+Median Rhythmic Value Offset
+Variability of Rhythmic Value Offsets
+Complete Rests Fraction
+Partial Rests Fraction
+Average Rest Fraction Across Voices
+Longest Complete Rest
+Longest Partial Rest
+Mean Complete Rest Duration
+Mean Partial Rest Duration
+Median Complete Rest Duration
+Median Partial Rest Duration
+Variability of Complete Rest Durations
+Variability of Partial Rest Durations
+Variability Across Voices of Combined Rests
+Beat Histogram Tempo Standardized
+Range of Rhythmic Pulses - Tempo Standardized
+Number of Rhythmic Pulses - Tempo Standardized
+Number of Strong Rhythmic Pulses - Tempo Standardized
+Number of Moderate Rhythmic Pulses - Tempo Standardized
+Number of Relatively Strong Rhythmic Pulses - Tempo Standardized
+Prevalence of Slower Rhythmic Pulses - Tempo Standardized
+Prevalence of Mid-Tempo Rhythmic Pulses - Tempo Standardized
+Prevalence of Faster Rhythmic Pulses - Tempo Standardized
+Mean Rhythmic Pulse - Tempo Standardized
+Median Rhythmic Pulse - Tempo Standardized
+Strongest Rhythmic Pulse - Tempo Standardized
+Second Strongest Rhythmic Pulse - Tempo Standardized
+Harmonicity of Two Strongest Rhythmic Pulses - Tempo Standardized
+Strength of Strongest Rhythmic Pulse - Tempo Standardized
+Strength of Second Strongest Rhythmic Pulse - Tempo Standardized
+Strength Ratio of Two Strongest Rhythmic Pulses - Tempo Standardized
+Combined Strength of Two Strongest Rhythmic Pulses - Tempo Standardized
+Rhythmic Variability - Tempo Standardized
+Rhythmic Pulse Skewness - Tempo Standardized
+Rhythmic Pulse Kurtosis - Tempo Standardized
+Rhythmic Looseness - Tempo Standardized
+Polyrhythms - Tempo Standardized
+Initial Tempo
+Mean Tempo
+Tempo Variability
+Duration in Seconds
+Note Density
+Note Density Variability
+Average Time Between Attacks
+Average Time Between Attacks for Each Voice
+Variability of Time Between Attacks
+Average Variability of Time Between Attacks for Each Voice
+Minimum Note Duration
+Maximum Note Duration
+Average Note Duration
+Variability of Note Durations
+Amount of Staccato
+Beat Histogram
+Range of Rhythmic Pulses
+Number of Rhythmic Pulses
+Number of Strong Rhythmic Pulses
+Number of Moderate Rhythmic Pulses
+Number of Relatively Strong Rhythmic Pulses
+Prevalence of Slower Rhythmic Pulses
+Prevalence of Mid-Tempo Rhythmic Pulses
+Prevalence of Faster Rhythmic Pulses
+Mean Rhythmic Pulse
+Median Rhythmic Pulse
+Strongest Rhythmic Pulse
+Second Strongest Rhythmic Pulse
+Harmonicity of Two Strongest Rhythmic Pulses
+Strength of Strongest Rhythmic Pulse
+Strength of Second Strongest Rhythmic Pulse
+Strength Ratio of Two Strongest Rhythmic Pulses
+Combined Strength of Two Strongest Rhythmic Pulses
+Rhythmic Variability
+Rhythmic Pulse Skewness
+Rhythmic Pulse Kurtosis
+Rhythmic Looseness
+Polyrhythms
+Pitched Instruments Present
+Unpitched Instruments Present
+Note Prevalence of Pitched Instruments
+Note Prevalence of Unpitched Instruments
+Time Prevalence of Pitched Instruments
+Variability of Note Prevalence of Pitched Instruments
+Variability of Note Prevalence of Unpitched Instruments
+Number of Pitched Instruments
+Number of Unpitched Instruments
+Number of Common Pitched Instruments
+Number of Common Unpitched Instruments
+Number of Very Common Pitched Instruments
+Number of Very Common Unpitched Instruments
+Most Common Pitched Instrument
+Most Common Unpitched Instrument
+Prevalence of Most Common Pitched Instrument
+Prevalence of Most Common Unpitched Instrument
+Unpitched Percussion Instrument Prevalence
+Has Lyrics
+Voice Prevalence
+String Keyboard Prevalence
+Acoustic Guitar Prevalence
+Electric Guitar Prevalence
+Violin Prevalence
+Saxophone Prevalence
+Brass Prevalence
+Woodwinds Prevalence
+Orchestral Strings Prevalence
+String Ensemble Prevalence
+Electric Instrument Prevalence
+Maximum Number of Independent Voices
+Average Number of Independent Voices
+Median Number of Independent Voices
+Variability of Number of Independent Voices
+Voice Equality - Number of Notes
+Voice Equality - Note Duration
+Voice Equality - Rests
+Voice Equality - Dynamics
+Voice Equality - Melodic Leaps
+Voice Equality - Stepwise Motion
+Voice Equality - Range
+Importance of Loudest Voice
+Relative Range of Loudest Voice
+Relative Range Isolation of Loudest Voice
+Relative Range of Highest Voice
+Relative Range Isolation of Highest Voice
+Relative Note Density of Highest Voice
+Relative Size of Melodic Intervals in Highest Voice
+Relative Note Durations of Highest Voice
+Relative Range of Lowest Voice
+Relative Range Isolation of Lowest Voice
+Relative Note Density of Lowest Voice
+Relative Note Durations of Lowest Voice
+Relative Size of Melodic Intervals in Lowest Voice
+Average Range of Individual Voices
+Voice Separation
+Variability of Voice Separation
+Voice Overlap
+Voice Crossing
+Parallel Motion
+Similar Motion
+Contrary Motion
+Oblique Motion
+Parallel Fifths
+Parallel Octaves
+Textural Fullness
+Rhythmic Independence of Voices
+Rhythmic Independence of Highest Voice
+Rhythmic Independence of Lowest Voice
+Homorhythm - All Voices
+Homorhythm - Outer Voices
+Monophony - Unisons and Octaves Only
+Monophony - Fixed Interval Between Voices
+Dynamic Range
+Variation of Dynamics
+Variation of Dynamics In Each Voice
+Average Note to Note Change in Dynamics
+Most Common Melodic Interval 3-gram Type
+Second Most Common Melodic Interval 3-gram Type
+Prevalence of Most Common Melodic Interval 3-gram Type
+Prevalence of Second Most Common Melodic Interval 3-gram Type
+Prevalence of Median Melodic Interval 3-gram Type
+Number of Distinct Melodic Interval 3-gram Types
+Number of Rare Melodic Interval 3-gram Types
+Number of Common Melodic Interval 3-gram Types
+Number of Very Common Melodic Interval 3-gram Types
+Prevalence of Melodic Interval 3-gram Types Occurring Only Once
+Prevalence of Rare Melodic Interval 3-gram Types
+Prevalence of Common Melodic Interval 3-gram Types
+Prevalence of Very Common Melodic Interval 3-gram Types
+Most Common Melodic Interval 3-gram Type in Highest Line
+Second Most Common Melodic Interval 3-gram Type in Highest Line
+Prevalence of Most Common Melodic Interval 3-gram Type in Highest Line
+Prevalence of Second Most Common Melodic Interval 3-gram Type in Highest Line
+Prevalence of Median Melodic Interval 3-gram Type in Highest Line
+Number of Distinct Melodic Interval 3-gram Types in Highest Line
+Number of Rare Melodic Interval 3-gram Types in Highest Line
+Number of Common Melodic Interval 3-gram Types in Highest Line
+Number of Very Common Melodic Interval 3-gram Types in Highest Line
+Prevalence of Melodic Interval 3-gram Types Occurring Only Once in Highest Line
+Prevalence of Rare Melodic Interval 3-gram Types in Highest Line
+Prevalence of Common Melodic Interval 3-gram Types in Highest Line
+Prevalence of Very Common Melodic Interval 3-gram Types in Highest Line
+Most Common Melodic Interval 3-gram Type in Lowest Line
+Second Most Common Melodic Interval 3-gram Type in Lowest Line
+Prevalence of Most Common Melodic Interval 3-gram Type in Lowest Line
+Prevalence of Second Most Common Melodic Interval 3-gram Type in Lowest Line
+Prevalence of Median Melodic Interval 3-gram Type in Lowest Line
+Number of Distinct Melodic Interval 3-gram Types in Lowest Line
+Number of Rare Melodic Interval 3-gram Types in Lowest Line
+Number of Common Melodic Interval 3-gram Types in Lowest Line
+Number of Very Common Melodic Interval 3-gram Types in Lowest Line
+Prevalence of Melodic Interval 3-gram Types Occurring Only Once in Lowest Line
+Prevalence of Rare Melodic Interval 3-gram Types in Lowest Line
+Prevalence of Common Melodic Interval 3-gram Types in Lowest Line
+Prevalence of Very Common Melodic Interval 3-gram Types in Lowest Line
+Most Common Vertical Interval 3-gram Type - Between Lowest and Highest Lines
+Second Most Common Vertical Interval 3-gram Type - Between Lowest and Highest Lines
+Prevalence of Most Common Vertical Interval 3-gram Type - Between Lowest and Highest Lines
+Prevalence of Second Most Common Vertical Interval 3-gram Type - Between Lowest and Highest Lines
+Prevalence of Median Vertical Interval 3-gram Type - Between Lowest and Highest Lines
+Number of Distinct Vertical Interval 3-gram Types - Between Lowest and Highest Lines
+Number of Rare Vertical Interval 3-gram Types - Between Lowest and Highest Lines
+Number of Common Vertical Interval 3-gram Types - Between Lowest and Highest Lines
+Number of Very Common Vertical Interval 3-gram Types - Between Lowest and Highest Lines
+Prevalence of Vertical Interval 3-gram Types Occurring Only Once - Between Lowest and Highest Lines
+Prevalence of Rare Vertical Interval 3-gram Types - Between Lowest and Highest Lines
+Prevalence of Common Vertical Interval 3-gram Types - Between Lowest and Highest Lines
+Prevalence of Very Common Vertical Interval 3-gram Types - Between Lowest and Highest Lines
+Prevalence of Most Common Vertical Interval 3-gram Type
+Prevalence of Second Most Common Vertical Interval 3-gram Type
+Prevalence of Median Vertical Interval 3-gram Type
+Number of Distinct Vertical Interval 3-gram Types
+Number of Rare Vertical Interval 3-gram Types
+Number of Common Vertical Interval 3-gram Types
+Number of Very Common Vertical Interval 3-gram Types
+Prevalence of Vertical Interval 3-gram Types Occurring Only Once
+Prevalence of Rare Vertical Interval 3-gram Types
+Prevalence of Common Vertical Interval 3-gram Types
+Prevalence of Very Common Vertical Interval 3-gram Types
+Most Common Rhythmic Value 3-gram Type
+Second Most Common Rhythmic Value 3-gram Type
+Prevalence of Most Common Rhythmic Value 3-gram Type
+Prevalence of Second Most Common Rhythmic Value 3-gram Type
+Prevalence of Median Rhythmic Value 3-gram Type
+Number of Distinct Rhythmic Value 3-gram Types
+Number of Rare Rhythmic Value 3-gram Types
+Number of Common Rhythmic Value 3-gram Types
+Number of Very Common Rhythmic Value 3-gram Types
+Prevalence of Rhythmic Value 3-gram Types Occurring Only Once
+Prevalence of Rare Rhythmic Value 3-gram Types
+Prevalence of Common Rhythmic Value 3-gram Types
+Prevalence of Very Common Rhythmic Value 3-gram Types

@@ -23,7 +23,7 @@ public class PrevalenceOfMostCommonUnpitchedInstrumentFeature
 	 */
 	public PrevalenceOfMostCommonUnpitchedInstrumentFeature()
 	{
-		String name = "Prevalance of Most Common Unpitched Instrument";
+		String name = "Prevalence of Most Common Unpitched Instrument";
 		String code = "I-17";
 		String description = "The fraction of notes played by the unpitched instrument that is used to play more notes than any other unpitched instrument. Set to 0 if there are no notes in the piece played by unpitched instruments.";
 		boolean is_sequential = true;

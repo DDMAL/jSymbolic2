@@ -10,7 +10,7 @@ import jsymbolic2.processing.MIDIIntermediateRepresentations;
  * A feature calculator that finds the number of note onset slices where the MIDI track/channel voice with the 
  * highest average pitch has a new note onset and this is the only new note onset in the slice, divided by the 
  * total number of note onset slices where the MIDI track/channel voice with the highest average pitch has a 
- * new note onset. Set to 0 if there are only zero or one voices containing pitched notes. MIDI Chanel 10 
+ * new note onset. Set to 0 if there are only zero or one voices containing pitched notes. MIDI Channel 10 
  * notes are ignored.
  *
  * @author radamian
@@ -28,7 +28,7 @@ public class RhythmicIndependenceOfHighestVoiceFeature
 	{
 		String name = "Rhythmic Independence of Highest Voice";
 		String code = "T-38";
-		String description = "Number of note onset slices where the MIDI track/channel voice with the highest average pitch has a new note onset and this is the only new note onset in the slice, divided by the total number of note onset slices where the MIDI track/channel voice with the highest average pitch has a new note onset. Set to 0 if there are only zero or one voices containing pitched notes. MIDI Chanel 10 notes are ignored.";
+		String description = "Number of note onset slices where the MIDI track/channel voice with the highest average pitch has a new note onset and this is the only new note onset in the slice, divided by the total number of note onset slices where the MIDI track/channel voice with the highest average pitch has a new note onset. Set to 0 if there are only zero or one voices containing pitched notes. MIDI Channel 10 notes are ignored.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
