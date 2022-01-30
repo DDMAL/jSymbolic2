@@ -6,8 +6,8 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the bin index of the tempo-standardized beat histogram peak with the second 
- * highest magnitude.
+ * A feature calculator that finds the BPM periodicity of the tempo-standardized beat histogram peak with the 
+ * second highest magnitude.
  *
  * @author Cory McKay
  */
@@ -24,7 +24,7 @@ public class SecondStrongestRhythmicPulseTempoStandardizedFeature
 	{
 		String name = "Second Strongest Rhythmic Pulse - Tempo Standardized";
 		String code = "R-66";
-		String description = "Bin index of the tempo-standardized beat histogram peak with the second highest magnitude.";
+		String description = "BPM periodicity of the tempo-standardized beat histogram peak with the second highest magnitude.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);

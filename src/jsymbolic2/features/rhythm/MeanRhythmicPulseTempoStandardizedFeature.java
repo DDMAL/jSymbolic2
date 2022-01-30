@@ -6,8 +6,8 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the mean tempo-standardized beat periodicity, as averaged across the 
- * tempo-standardized beat histogram.
+ * A feature calculator that finds the mean tempo-standardized beat periodicity (in BPM), as averaged across
+ * the tempo-standardized beat histogram.
  *
  * @author radamian
  */
@@ -24,11 +24,12 @@ public class MeanRhythmicPulseTempoStandardizedFeature
 	{
 		String name = "Mean Rhythmic Pulse - Tempo Standardized";
 		String code = "R-63";
-		String description = "Mean tempo-standardized beat periodicity, as averaged across the tempo-standardized beat histogram.";
+		String description = "Mean tempo-standardized beat periodicity (in BPM), as averaged across the tempo-standardized beat histogram.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
-		dependencies = null;
+		dependencies = new String[1];
+		dependencies[0] = "Beat Histogram Tempo Standardized";
 		offsets = null;
 		is_default = true;
 		is_secure = true;
@@ -57,20 +58,23 @@ public class MeanRhythmicPulseTempoStandardizedFeature
 									double[][] other_feature_values )
 	throws Exception
 	{
-		double mean;
+		double value = 0;
 		if (sequence_info != null)
 		{
-			// Get tempo-standardized beat histogram
-			double[] beat_histogram_standardized = new double[sequence_info.beat_histogram_120_bpm_standardized.length - 40];
-			for (int i = 0; i < beat_histogram_standardized.length; i++)
-				beat_histogram_standardized[i] = sequence_info.beat_histogram_120_bpm_standardized[i + 40];
-			
-			mean = mckay.utilities.staticlibraries.MathAndStatsMethods.getAverage(beat_histogram_standardized);
+			// Access the beat histogram
+			double[] beat_histogram = other_feature_values[0];
+
+			// Calculate the mean value of the beat histogram
+			for (int i = 0; i < beat_histogram.length; i++)
+			{
+				double bin_value = 40.0 + (double) i;
+				value += bin_value * beat_histogram[i];
+			}
 		}
-		else mean = -1.0;
+		else value = -1.0;
 		
 		double[] result = new double[1];
-		result[0] = mean;
+		result[0] = value;
 		return result;
 	}
 }

@@ -1,5 +1,6 @@
 package jsymbolic2.features.rhythm;
 
+import java.util.LinkedList;
 import javax.sound.midi.*;
 import ace.datatypes.FeatureDefinition;
 import jsymbolic2.featureutils.MIDIFeatureExtractor;
@@ -7,9 +8,9 @@ import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
  * A feature calculator that finds the skewness of the rhythmic pulses in the tempo-standardized beat
- * histogram. Provides a measure of how asymmetrical the distribution is: a value of zero indicates a
- * symmetrical distribution, a negative value indicates a left skew and a positive value indicates a right
- * skew.
+ * histogram (in terms of beat periodicities). Provides a measure of how asymmetrical the distribution is: a
+ * value of zero indicates a symmetrical distribution, a negative value indicates a left skew and a positive
+ * value indicates a right skew.
  *
  * @author radamian
  */
@@ -26,11 +27,12 @@ public class RhythmicPulseSkewnessTempoStandardizedFeature
 	{
 		String name = "Rhythmic Pulse Skewness - Tempo Standardized";
 		String code = "R-73";
-		String description = "Skewness of the rhythmic pulses in the tempo-standardized beat histogram. Provides a measure of how asymmetrical the distribution is: a value of zero indicates a symmetrical distribution, a negative value indicates a left skew and a positive value indicates a right skew.";
+		String description = "Skewness of the rhythmic pulses in the tempo-standardized beat histogram (in terms of beat periodicities). Provides a measure of how asymmetrical the distribution is: a value of zero indicates a symmetrical distribution, a negative value indicates a left skew and a positive value indicates a right skew.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
-		dependencies = null;
+		dependencies = new String[1];
+		dependencies[0] = "Beat Histogram Tempo Standardized";
 		offsets = null;
 		is_default = true;
 		is_secure = true;
@@ -62,12 +64,23 @@ public class RhythmicPulseSkewnessTempoStandardizedFeature
 		double skewness;
 		if (sequence_info != null)
 		{
-			// Get tempo-standardized beat histogram
-			double[] beat_histogram_standardized = new double[sequence_info.beat_histogram_120_bpm_standardized.length - 40];
-			for (int i = 0; i < beat_histogram_standardized.length; i++)
-				beat_histogram_standardized[i] = sequence_info.beat_histogram_120_bpm_standardized[i + 40];
+			// Access the beat histogram
+			double[] beat_histogram = other_feature_values[0];
+
+			// Populate a list of periodicities (of size about 1000)
+			LinkedList<Integer> periodicities = new LinkedList<>();
+			for (int bin = 0; bin < beat_histogram.length; bin++)
+			{
+				int number_of_items_to_add = (int) (1000.0 * beat_histogram[bin]);
+				int this_beat = 40 + bin;
+				for (int i = 0; i < number_of_items_to_add; i++)
+					periodicities.add(this_beat);
+			}
+			double[] periodicities_array = new double[periodicities.size()];
+			for (int i = 0; i < periodicities_array.length; i++)
+				periodicities_array[i] = (double) periodicities.get(i);
 			
-			skewness = mckay.utilities.staticlibraries.MathAndStatsMethods.getSkewness(beat_histogram_standardized);
+			skewness = mckay.utilities.staticlibraries.MathAndStatsMethods.getSkewness(periodicities_array);
 		}
 		else return null;
 		

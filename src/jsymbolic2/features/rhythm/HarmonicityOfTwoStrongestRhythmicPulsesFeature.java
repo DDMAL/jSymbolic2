@@ -6,9 +6,9 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the bin index of the higher (in terms of bin index) of the two beat
- * histogram peaks with the highest magnitude, divided by the index of the lower (in terms of bin index) of
- * the two bins.
+ * A feature calculator that finds the BPM periodicity of the higher (in terms of BPM periodicity) of the two
+ * beat histogram peaks with the highest magnitude, divided by the index of the lower (in terms of BPM
+ * periodicity) of the two bins.
  *
  * @author Cory McKay
  */
@@ -25,7 +25,7 @@ public class HarmonicityOfTwoStrongestRhythmicPulsesFeature
 	{
 		String name = "Harmonicity of Two Strongest Rhythmic Pulses";
 		String code = "RT-29";
-		String description = "Bin index of the higher (in terms of bin index) of the two beat histogram peaks with the highest magnitude, divided by the index of the lower (in terms of bin index) of the two bins.";
+		String description = "BPM periodicity of the higher (in terms of BPM periodicity) of the two beat histogram peaks with the highest magnitude, divided by the index of the lower (in terms of BPM periodicity) of the two bins.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);

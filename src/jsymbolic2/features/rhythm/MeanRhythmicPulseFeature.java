@@ -6,7 +6,7 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the mean beat periodicity, as averaged across the beat histogram.
+ * A feature calculator that finds the mean beat periodicity (in BPM), as averaged across the beat histogram.
  *
  * @author radamian
  */
@@ -23,11 +23,12 @@ public class MeanRhythmicPulseFeature
 	{
 		String name = "Mean Rhythmic Pulse";
 		String code = "RT-25";
-		String description = "Mean beat periodicity, as averaged across the beat histogram.";
+		String description = "Mean beat periodicity (in BPM), as averaged across the beat histogram.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
-		dependencies = null;
+		dependencies = new String[1];
+		dependencies[0] = "Beat Histogram";
 		offsets = null;
 		is_default = true;
 		is_secure = false;
@@ -56,20 +57,23 @@ public class MeanRhythmicPulseFeature
 									double[][] other_feature_values )
 	throws Exception
 	{
-		double mean;
+		double value = 0;
 		if (sequence_info != null)
 		{
-			// Get beat histogram
-			double[] beat_histogram = new double[sequence_info.beat_histogram.length - 40];
+			// Access the beat histogram
+			double[] beat_histogram = other_feature_values[0];
+
+			// Calculate the mean value of the beat histogram
 			for (int i = 0; i < beat_histogram.length; i++)
-				beat_histogram[i] = sequence_info.beat_histogram[i + 40];
-			
-			mean = mckay.utilities.staticlibraries.MathAndStatsMethods.getAverage(beat_histogram);
+			{
+				double bin_value = 40.0 + (double) i;
+				value += bin_value * beat_histogram[i];
+			}
 		}
-		else mean = -1.0;
+		else value = -1.0;
 		
 		double[] result = new double[1];
-		result[0] = mean;
+		result[0] = value;
 		return result;
 	}
 }

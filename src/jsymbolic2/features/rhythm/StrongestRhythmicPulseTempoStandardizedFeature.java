@@ -6,8 +6,8 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the bin index of the tempo-standardized beat histogram bin with the highest
- * magnitude.
+ * A feature calculator that finds the BPM periodicity of the tempo-standardized beat histogram bin with the
+ * highest magnitude.
  *
  * @author Cory McKay
  */
@@ -24,11 +24,12 @@ public class StrongestRhythmicPulseTempoStandardizedFeature
 	{
 		String name = "Strongest Rhythmic Pulse - Tempo Standardized";
 		String code = "R-65";
-		String description = "Bin index of the tempo-standardized beat histogram bin with the highest magnitude.";
+		String description = "BPM periodicity of the tempo-standardized beat histogram bin with the highest magnitude.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
-		dependencies = null;
+		dependencies = new String[1];
+		dependencies[0] = "Beat Histogram Tempo Standardized";
 		offsets = null;
 		is_default = true;
 		is_secure = true;
@@ -60,20 +61,23 @@ public class StrongestRhythmicPulseTempoStandardizedFeature
 		double value;
 		if (sequence_info != null)
 		{
+			// Access the beat histogram
+			double[] beat_histogram = other_feature_values[0];
+
 			// Find the bin with the highest magnitude
 			double max = 0;
 			int max_index = 0;
-			for (int bin = 0; bin < sequence_info.beat_histogram_120_bpm_standardized.length; bin++)
+			for (int bin = 0; bin < beat_histogram.length; bin++)
 			{
-				if (sequence_info.beat_histogram_120_bpm_standardized[bin] > max)
+				if (beat_histogram[bin] > max)
 				{
-					max = sequence_info.beat_histogram_120_bpm_standardized[bin];
+					max = beat_histogram[bin];
 					max_index = bin;
 				}
 			}
 
-			// Calculate the value
-			value = (double) max_index;
+			// Calculate the value (add 40 since this is BPM value of first bin
+			value = (double) max_index + 40.0;
 		}
 		else value = -1.0;
 

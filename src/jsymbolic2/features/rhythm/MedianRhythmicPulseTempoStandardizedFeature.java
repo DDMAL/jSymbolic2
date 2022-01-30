@@ -1,13 +1,14 @@
 package jsymbolic2.features.rhythm;
 
+import java.util.LinkedList;
 import javax.sound.midi.*;
 import ace.datatypes.FeatureDefinition;
 import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the median tempo-standardized beat periodicity, as averaged across the 
- * tempo-standardized beat histogram.
+ * A feature calculator that finds the median tempo-standardized beat periodicity (in BPM), as averaged across
+ * the tempo-standardized beat histogram.
  *
  * @author radamian
  */
@@ -24,11 +25,12 @@ public class MedianRhythmicPulseTempoStandardizedFeature
 	{
 		String name = "Median Rhythmic Pulse - Tempo Standardized";
 		String code = "R-64";
-		String description = "Median tempo-standardized beat periodicity, as averaged across the tempo-standardized beat histogram.";
+		String description = "Median tempo-standardized beat periodicity (in BPM), as averaged across the tempo-standardized beat histogram.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
-		dependencies = null;
+		dependencies = new String[1];
+		dependencies[0] = "Beat Histogram Tempo Standardized";
 		offsets = null;
 		is_default = true;
 		is_secure = true;
@@ -60,12 +62,24 @@ public class MedianRhythmicPulseTempoStandardizedFeature
 		double median;
 		if (sequence_info != null)
 		{
-			// Get tempo-standardized beat histogram
-			double[] beat_histogram_standardized = new double[sequence_info.beat_histogram_120_bpm_standardized.length - 40];
-			for (int i = 0; i < beat_histogram_standardized.length; i++)
-				beat_histogram_standardized[i] = sequence_info.beat_histogram_120_bpm_standardized[i + 40];
+			// Access the beat histogram
+			double[] beat_histogram = other_feature_values[0];
+
+			// Populate a list of periodicities (of size about 1000)
+			LinkedList<Integer> periodicities = new LinkedList<>();
+			for (int bin = 0; bin < beat_histogram.length; bin++)
+			{
+				int number_of_items_to_add = (int) (1000.0 * beat_histogram[bin]);
+				int this_beat = 40 + bin;
+				for (int i = 0; i < number_of_items_to_add; i++)
+					periodicities.add(this_beat);
+			}
+			double[] periodicities_array = new double[periodicities.size()];
+			for (int i = 0; i < periodicities_array.length; i++)
+				periodicities_array[i] = (double) periodicities.get(i);
 			
-			median = mckay.utilities.staticlibraries.MathAndStatsMethods.getMedianValue(beat_histogram_standardized);
+			// Find the median periodicity
+			median = mckay.utilities.staticlibraries.MathAndStatsMethods.getMedianValue(periodicities_array);
 		}
 		else median = -1.0;
 		

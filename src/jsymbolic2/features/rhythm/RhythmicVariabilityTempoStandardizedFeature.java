@@ -1,13 +1,14 @@
 package jsymbolic2.features.rhythm;
 
+import java.util.LinkedList;
 import javax.sound.midi.*;
 import ace.datatypes.FeatureDefinition;
 import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the standard deviation of the tempo-standardized beat histogram bin 
- * magnitudes.
+ * A feature calculator that finds the standard deviation of the tempo-standardized beat histogram (in terms 
+ * of beat periodicities).
  *
  * @author Cory McKay
  */
@@ -24,11 +25,12 @@ public class RhythmicVariabilityTempoStandardizedFeature
 	{
 		String name = "Rhythmic Variability - Tempo Standardized";
 		String code = "R-72";
-		String description = "Standard deviation of the tempo-standardized beat histogram bin magnitudes";
+		String description = "Standard deviation of the tempo-standardized beat histogram bin magnitudes (in terms of beat periodicities).";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
-		dependencies = null;
+		dependencies = new String[1];
+		dependencies[0] = "Beat Histogram Tempo Standardized";
 		offsets = null;
 		is_default = true;
 		is_secure = true;
@@ -60,13 +62,24 @@ public class RhythmicVariabilityTempoStandardizedFeature
 		double value;
 		if (sequence_info != null)
 		{
-			// Make the reduced histogram (excluding the first 40 empty bins)
-			double[] reduced_histogram = new double[sequence_info.beat_histogram_120_bpm_standardized.length - 40];
-			for (int i = 0; i < reduced_histogram.length; i++)
-				reduced_histogram[i] = sequence_info.beat_histogram_120_bpm_standardized[i + 40];
+			// Access the beat histogram
+			double[] beat_histogram = other_feature_values[0];
+
+			// Populate a list of periodicities (of size about 1000)
+			LinkedList<Integer> periodicities = new LinkedList<>();
+			for (int bin = 0; bin < beat_histogram.length; bin++)
+			{
+				int number_of_items_to_add = (int) (1000.0 * beat_histogram[bin]);
+				int this_beat = 40 + bin;
+				for (int i = 0; i < number_of_items_to_add; i++)
+					periodicities.add(this_beat);
+			}
+			double[] periodicities_array = new double[periodicities.size()];
+			for (int i = 0; i < periodicities_array.length; i++)
+				periodicities_array[i] = (double) periodicities.get(i);
 
 			// Calculate the value
-			value = mckay.utilities.staticlibraries.MathAndStatsMethods.getStandardDeviation(reduced_histogram);
+			value = mckay.utilities.staticlibraries.MathAndStatsMethods.getStandardDeviation(periodicities_array);
 		}
 		else value = -1.0;
 		
