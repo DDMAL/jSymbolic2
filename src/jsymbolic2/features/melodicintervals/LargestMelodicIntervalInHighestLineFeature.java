@@ -6,8 +6,8 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the largest melodic interval in the MIDI channel with the highest average 
- * pitch.
+ * A feature calculator that finds the largest melodic interval in the MIDI track and channel with the highest
+ * average pitch. Rising and falling intervals are treated as equivalent.
  *
  * @author radamian
  */
@@ -24,7 +24,7 @@ public class LargestMelodicIntervalInHighestLineFeature
 	{
 		String name = "Largest Melodic Interval in Highest Line";
 		String code = "M-99";
-		String description = "The largest melodic interval in the MIDI channel with the highest average pitch.";
+		String description = "The largest melodic interval in the MIDI track and channel with the highest average pitch. Rising and falling intervals are treated as equivalent.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);

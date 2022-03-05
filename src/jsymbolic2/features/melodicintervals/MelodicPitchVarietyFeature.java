@@ -7,11 +7,11 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * Average number of notes that go by in a MIDI track and channel before a note's pitch is repeated (including
- * the repeated note itself). This is calculated across each track and channel individually before being
- * combined. Similar assumptions are made in the calculation of this feature as for the Melodic Interval
- * Histogram. Notes that do not recur after 16 notes in the same channel are not included in this calculation.
- * Set to 0 if there are no qualifying repeated notes in the piece.
+ * A feature calculator that finds the average number of notes that go by in a MIDI track and channel before a
+ * note's pitch is repeated (including the repeated note itself). This is calculated across each track and
+ * channel individually before being combined. Similar assumptions are made in the calculation of this feature
+ * as for the Melodic Interval Histogram. Notes that do not recur after 16 notes in the same channel are not
+ * included in this calculation. Set to 0 if there are no qualifying repeated notes in the piece.
  * *
  * @author Cory McKay, Tristano Tenaglia, and radamian
  */

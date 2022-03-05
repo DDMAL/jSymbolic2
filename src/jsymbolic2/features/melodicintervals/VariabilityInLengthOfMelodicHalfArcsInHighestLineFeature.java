@@ -8,8 +8,8 @@ import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
  * A feature calculator that finds the standard deviation of the number of notes that separate melodic peaks
- * and troughs (including the notes at the peaks and troughs) in the MIDI channel with the highest average
- * pitch. Similar assumptions are made in the calculation of this feature as for the Melodic Interval
+ * and troughs (including the notes at the peaks and troughs) in the MIDI track and channel with the highest
+ * average pitch. Similar assumptions are made in the calculation of this feature as for the Melodic Interval
  * Histogram. Set to 0 if no melodic arcs are found.
  *
  * @author radamian and Cory McKay
@@ -27,7 +27,7 @@ public class VariabilityInLengthOfMelodicHalfArcsInHighestLineFeature
 	{
 		String name = "Variability in Length of Melodic Half-Arcs in Highest Line";
 		String code = "M-112";
-		String description = "Standard deviation of the number of notes that separate melodic peaks and troughs (including the notes at the peaks and troughs) in the MIDI channel with the highest average pitch. Similar assumptions are made in the calculation of this feature as for the Melodic Interval Histogram. Set to 0 if no melodic arcs are found.";
+		String description = "Standard deviation of the number of notes that separate melodic peaks and troughs (including the notes at the peaks and troughs) in the MIDI track and channel with the highest average pitch. Similar assumptions are made in the calculation of this feature as for the Melodic Interval Histogram. Set to 0 if no melodic arcs are found.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);

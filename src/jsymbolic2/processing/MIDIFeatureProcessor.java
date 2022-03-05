@@ -310,17 +310,9 @@ public class MIDIFeatureProcessor
                full_sequence = mei_sequence.getSequence();
           }
   
-         /**
-          * Mei Specific Storage added here
-          * null is set if the file is not an mei file
-          **/
+          //MEI-specific Storage added here. Set to null if the file is not an MEI file.
           MeiSpecificStorage meiSpecificStorage = null;
-          if(mei_sequence != null) {
-               meiSpecificStorage = mei_sequence.getNonMidiStorage();
-          }
-         /**
-          *
-          */
+          if(mei_sequence != null) meiSpecificStorage = mei_sequence.getNonMidiStorage();
 
           // Prepare the windows for feature extraction with correct times
           // Tick arrays have been added to account for multiple windows
@@ -762,6 +754,12 @@ public class MIDIFeatureProcessor
                // Extract the features one by one
                for (int feat = 0; feat < feature_extractors.length; feat++)
                {
+				    /* 
+					// Note which feature is being extracted and start time count
+				    long start_time = System.currentTimeMillis();
+				    System.out.print("Considering feature: " + feature_extractors[feat].getFeatureDefinition().code + " " + feature_extractors[feat].getFeatureDefinition().name);
+				    */
+				   
                     // Only extract this feature if enough previous information
                     // is available to extract this feature
                     if (win >= max_feature_offsets[feat])
@@ -810,7 +808,15 @@ public class MIDIFeatureProcessor
                     }
                     else
                          results[win][feat] = null;
-               }
+				    
+					/*
+				    // Note how long processing took for this feature
+				    long end_time = System.currentTimeMillis();
+				    double seconds_taken = ((double) (end_time - start_time)) / 1000.0;
+				    if (seconds_taken > 1.0) System.out.print(" (" + seconds_taken + " seconds) ***\n");
+				    else System.out.print(" (" + seconds_taken + " seconds)\n");
+					*/
+			   }
           }
           
           // Return the results

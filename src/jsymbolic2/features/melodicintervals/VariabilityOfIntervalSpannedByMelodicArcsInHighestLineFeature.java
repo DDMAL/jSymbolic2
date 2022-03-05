@@ -7,10 +7,11 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the standard deviation of the melodic interval (in semitones) separating 
- * the top note of melodic peaks and the top note of the next peak, as well as the bottom note of melodic 
- * troughs and the bottom note of the next trough in the MIDI channel with the highest average pitch. Similar 
- * assumptions are made in the calculation of this feature as for the Melodic Interval Histogram.
+ * A feature calculator that finds the standard deviation of the melodic intervals (in semitones) separating
+ * the top note of melodic peaks and the top note of the next peak, as well as the bottom note of melodic
+ * troughs and the bottom note of the next trough in the MIDI track and channel with the highest average
+ * pitch. Similar assumptions are made in the calculation of this feature as for the Melodic Interval
+ * Histogram.
  *
  * @author radamian and Cory McKay
  */
@@ -27,7 +28,7 @@ public class VariabilityOfIntervalSpannedByMelodicArcsInHighestLineFeature
 	{
 		String name = "Variability of Interval Spanned by Melodic Arcs in Highest Line";
 		String code = "M-115";
-		String description = "Standard deviation of the melodic interval (in semitones) separating the top note of melodic peaks and the top note of the next peak, as well as the bottom note of melodic troughs and the bottom note of the next trough in the MIDI channel with the highest average pitch. Similar assumptions are made in the calculation of this feature as for the Melodic Interval Histogram.";
+		String description = "Standard deviation of the melodic intervals (in semitones) separating the top note of melodic peaks and the top note of the next peak, as well as the bottom note of melodic troughs and the bottom note of the next trough in the MIDI track and channel with the highest average pitch. Similar assumptions are made in the calculation of this feature as for the Melodic Interval Histogram.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
@@ -69,9 +70,11 @@ public class VariabilityOfIntervalSpannedByMelodicArcsInHighestLineFeature
 			LinkedList<Integer> intervals_spanned_by_melodic_arcs = new LinkedList<>();
 
 			int direction = 0;
+
 			// The interval separating a peak from a trough. It is reset to 0 once the next peak 
 			// is met and the interval from the last peak to the new peak is calculated.
 			int interval_of_descent = 0;
+
 			// The interval separating a trough from a peak. It is reset to 0 once the next trough 
 			// is met and the distance from the last trough to the new trough is calculated.
 			int interval_of_ascent = 0;

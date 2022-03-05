@@ -7,11 +7,11 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the average number of notes that go by in the MIDI channel with the highest 
- * average pitch before a note's pitch is repeated (including the repeated note itself). Similar assumptions 
- * are made in the calculation of this feature as for the Melodic Interval Histogram. Notes that do not recur 
- * after 16 notes in the same channel are not included in this calculation. Set to 0 if there are no 
- * qualifying repeated notes in the piece. 
+ * A feature calculator that finds the mean number of notes that go by in the MIDI track and channel with the
+ * highest average pitch before a note's pitch is repeated (including the repeated note itself). Similar
+ * assumptions are made in the calculation of this feature as for the Melodic Interval Histogram. Notes that
+ * do not recur after 16 notes in the same channel are not included in this calculation. Set to 0 if there are
+ * no qualifying repeated notes in the piece.
  *
  * @author radamian, Cory McKay and Tristano Tenaglia
  */
@@ -28,7 +28,7 @@ public class MelodicPitchVarietyInHighestLineFeature
 	{
 		String name = "Melodic Pitch Variety in Highest Line";
 		String code = "M-117";
-		String description = "Average number of notes that go by in the MIDI channel with the highest average pitch before a note's pitch is repeated (including the repeated note itself). Similar assumptions are made in the calculation of this feature as for the Melodic Interval Histogram. Notes that do not recur after 16 notes in the same channel are not included in this calculation. Set to 0 if there are no qualifying repeated notes in the piece. ";
+		String description = "Mean number of notes that go by in the MIDI track and channel with the highest average pitch before a note's pitch is repeated (including the repeated note itself). Similar assumptions are made in the calculation of this feature as for the Melodic Interval Histogram. Notes that do not recur after 16 notes in the same channel are not included in this calculation. Set to 0 if there are no qualifying repeated notes in the piece.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
@@ -80,6 +80,7 @@ public class MelodicPitchVarietyInHighestLineFeature
 
 			// Create a list of pitches encountered
 			LinkedList<Integer> pitches_encountered = new LinkedList<>();
+			
 			// Create array that contains, for each pitch, the count of notes gone by since the last 
 			// time a note with that pitch was encountered
 			int[] counts_since_pitch_last_encountered = new int [128];
@@ -95,9 +96,7 @@ public class MelodicPitchVarietyInHighestLineFeature
 					int melodic_pitch = onset_slices.get(slice).get(onset_slices.get(slice).size() - 1);
 
 					if (!pitches_encountered.contains(melodic_pitch))
-					{
 						pitches_encountered.add(melodic_pitch);
-					}
 					else
 					{
 						if (counts_since_pitch_last_encountered[melodic_pitch] <= max_notes_that_can_go_by)

@@ -8,9 +8,9 @@ import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
  * A feature calculator that finds the standard deviation of the number of notes comprising melodic arcs
- * (including the notes at the peaks and troughs) in the MIDI channel with the highest average pitch. Similar
- * assumptions are made in the calculation of this feature as for the Melodic Interval Histogram. Set to 0 if
- * no melodic arcs are found.
+ * (including the notes at the peaks and troughs) in the MIDI track and channel with the highest average
+ * pitch. Similar assumptions are made in the calculation of this feature as for the Melodic Interval
+ * Histogram. Set to 0 if no melodic arcs are found.
  *
  * @author radamian and Cory McKay
  */
@@ -27,7 +27,7 @@ public class VariabilityInLengthOfMelodicArcsInHighestLineFeature
 	{
 		String name = "Variability in Length of Melodic Arcs in Highest Line";
 		String code = "M-111";
-		String description = "Standard deviation of the number of notes comprising melodic arcs (including the notes at the peaks and troughs) in the MIDI channel with the highest average pitch. Similar assumptions are made in the calculation of this feature as for the Melodic Interval Histogram. Set to 0 if no melodic arcs are found.";
+		String description = "Standard deviation of the number of notes comprising melodic arcs (including the notes at the peaks and troughs) in the MIDI track and channel with the highest average pitch. Similar assumptions are made in the calculation of this feature as for the Melodic Interval Histogram. Set to 0 if no melodic arcs are found.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
@@ -69,9 +69,11 @@ public class VariabilityInLengthOfMelodicArcsInHighestLineFeature
 			LinkedList<Integer> lengths_of_melodic_arcs = new LinkedList<>();
 	
 			int direction = 0;
+
 			// The number of notes separating a peak from a trough. It is reset to 0 once the next
 			// peak is met and the distance from the last peak to the new peak is calculated.
 			int length_of_descent = 0;
+
 			// The number of notes separating a trough from a peak. It is reset to 0 once the next
 			// trough is met and the distance from the last trough to the new trough is 
 			// calculated.

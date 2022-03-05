@@ -7,11 +7,11 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the standard deviation of the number of consecutive melodically rising 
- * notes that occur before a melodic change of direction in the MIDI channel with the lowest average pitch, 
- * including the two end notes. Melodic unisons are not considered to break a run. Similar assumptions are 
- * made in the calculation of this feature as for the Melodic Interval Histogram. Set to 0 if no such runs are 
- * found.
+ * A feature calculator that finds the standard deviation of the number of consecutive melodically rising
+ * notes that occur before a melodic change of direction in the MIDI track and channel with the lowest average
+ * pitch, including the two end notes. Melodic unisons are not considered to break a run. Similar assumptions
+ * are made in the calculation of this feature as for the Melodic Interval Histogram. Set to 0 if no such runs
+ * are found.
  *
  * @author radamian
  */
@@ -28,14 +28,14 @@ public class VariabilityInLengthOfRisingMelodicRunsInLowestLineFeature
 	{
 		String name = "Variability in Length of Rising Melodic Runs in Lowest Line";
 		String code = "M-131";
-		String description = "Standard deviation of the number of consecutive melodically rising notes that occur before a melodic change of direction in the MIDI channel with the lowest average pitch, including the two end notes. Melodic unisons are not considered to break a run. Similar assumptions are made in the calculation of this feature as for the Melodic Interval Histogram. Set to 0 if no such runs are found.";
+		String description = "Standard deviation of the number of consecutive melodically rising notes that occur before a melodic change of direction in the MIDI track and channel with the lowest average pitch, including the two end notes. Melodic unisons are not considered to break a run. Similar assumptions are made in the calculation of this feature as for the Melodic Interval Histogram. Set to 0 if no such runs are found.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
 		dependencies = null;
 		offsets = null;
 		is_default = true;
-		is_secure = true;
+		is_secure = false;
 	}
 	
 

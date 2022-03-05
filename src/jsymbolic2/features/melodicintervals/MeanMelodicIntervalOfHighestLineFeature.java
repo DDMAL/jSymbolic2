@@ -7,8 +7,8 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the mean average (in semitones) of the intervals involved in each of the 
- * melodic intervals in the in the MIDI channel with the highest average pitch. 
+ * A feature calculator that finds the average (in semitones) of the melodic intervals in the MIDI track and
+ * channel with the highest average pitch. Rising and falling intervals are treated as equivalent.
  *
  * @author radamian
  */
@@ -25,7 +25,7 @@ public class MeanMelodicIntervalOfHighestLineFeature
 	{
 		String name = "Mean Melodic Interval of Highest Line";
 		String code = "M-95";
-		String description = "Mean average (in semitones) of the intervals involved in each of the melodic intervals in the in the MIDI channel with the highest average pitch.";
+		String description = "Average (in semitones) of the melodic intervals in the MIDI track and channel with the highest average pitch. Rising and falling intervals are treated as equivalent.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);

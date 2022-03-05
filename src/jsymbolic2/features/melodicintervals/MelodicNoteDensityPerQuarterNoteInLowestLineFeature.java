@@ -8,7 +8,7 @@ import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
  * A feature calculator that finds the average number of note onsets per unit of time corresponding to an 
- * idealized quarter note in the MIDI channel with the lowest average pitch. Multiple notes starting 
+ * idealized quarter note in the MIDI track and channel with the lowest average pitch. Multiple notes starting 
  * simultaneously are only treated as a single note in this calculation. 
  *
  * @author radamian
@@ -26,14 +26,14 @@ public class MelodicNoteDensityPerQuarterNoteInLowestLineFeature
 	{
 		String name = "Melodic Note Density per Quarter Note in Lowest Line";
 		String code = "M-121";
-		String description = "Average number of note onsets per unit of time corresponding to an idealized quarter note in the MIDI channel with the lowest average pitch. Multiple notes starting simultaneously are only treated as a single note in this calculation. ";
+		String description = "Average number of note onsets per unit of time corresponding to an idealized quarter note in the MIDI track and channel with the lowest average pitch. Multiple notes starting simultaneously are only treated as a single note in this calculation. ";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
 		dependencies = null;
 		offsets = null;
 		is_default = true;
-		is_secure = true;
+		is_secure = false;
 	}
 	
 
@@ -63,10 +63,10 @@ public class MelodicNoteDensityPerQuarterNoteInLowestLineFeature
 		
 		if (sequence_info != null)
 		{
+			LinkedList<LinkedList<Integer>>[][] slices_by_track_and_channel = sequence_info.note_onset_slice_container.getNoteOnsetSlicesByTrackAndChannelMelodicLinesOnly();
+			
 			int track_with_lowest_average_pitch = sequence_info.track_and_channel_with_lowest_average_pitch[0];
 			int channel_with_lowest_average_pitch = sequence_info.track_and_channel_with_lowest_average_pitch[1];
-			
-			LinkedList<LinkedList<Integer>>[][] slices_by_track_and_channel = sequence_info.note_onset_slice_container.getNoteOnsetSlicesByTrackAndChannelMelodicLinesOnly();
 			
 			// Count the number of note onsets that belong to the melody
 			int number_of_note_onsets = 0;
@@ -76,12 +76,11 @@ public class MelodicNoteDensityPerQuarterNoteInLowestLineFeature
 			
 			// Calculate the feature value
 			if (sequence_info.average_quarter_note_duration_in_seconds == 0.0)
-			{
 				value = 0.0;
-			}
 			else
 			{
-				value = (double) number_of_note_onsets / sequence_info.average_quarter_note_duration_in_seconds;
+				double duration_in_quarter_notes = (double) sequence_info.sequence_duration_precise / sequence_info.average_quarter_note_duration_in_seconds;
+				value = (double) number_of_note_onsets / duration_in_quarter_notes;
 			}
 		} 
 		else value = -1.0;

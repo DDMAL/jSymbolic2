@@ -7,10 +7,10 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the average melodic interval (in semitones) separating the lowest note and 
- * the highest note in runs of consecutive melodically rising notes in the MIDI channel with the highest 
- * average pitch. Melodic unisons are not considered to break a run. Similar assumptions are made in the 
- * calculation of this feature as for the Melodic Interval Histogram. Set to 0 if no melodic such runs are 
+ * A feature calculator that finds the mean melodic interval (in semitones) separating the lowest note and the
+ * highest note in runs of consecutive melodically rising notes in the MIDI track and channel with the highest
+ * average pitch. Melodic unisons are not considered to break a run. Similar assumptions are made in the
+ * calculation of this feature as for the Melodic Interval Histogram. Set to 0 if no such melodic runs are
  * found.
  *
  * @author radamian
@@ -28,7 +28,7 @@ public class AverageIntervalSpannedByRisingMelodicRunsInHighestLineFeature
 	{
 		String name = "Average Interval Spanned by Rising Melodic Runs in Highest Line";
 		String code = "M-105";
-		String description = "Average melodic interval (in semitones) separating the lowest note and the highest note in runs of consecutive melodically rising notes in the MIDI channel with the highest average pitch. Melodic unisons are not considered to break a run. Similar assumptions are made in the calculation of this feature as for the Melodic Interval Histogram. Set to 0 if no melodic such runs are found.";
+		String description = "Mean melodic interval (in semitones) separating the lowest note and the highest note in runs of consecutive melodically rising notes in the MIDI track and channel with the highest average pitch. Melodic unisons are not considered to break a run. Similar assumptions are made in the calculation of this feature as for the Melodic Interval Histogram. Set to 0 if no such melodic runs are found.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);

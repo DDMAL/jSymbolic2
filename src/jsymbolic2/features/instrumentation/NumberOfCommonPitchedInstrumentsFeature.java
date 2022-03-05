@@ -65,7 +65,7 @@ public class NumberOfCommonPitchedInstrumentsFeature
 			for (int instrument = 0; instrument < sequence_info.pitched_instrument_prevalence.length; instrument++)
 				if (sequence_info.pitched_instrument_prevalence[instrument][0] >= (.15 * sequence_info.total_number_note_ons))
 					number_of_common_instruments++;
-			
+
 			value = (double) number_of_common_instruments;
 		}
 		else value = -1.0;

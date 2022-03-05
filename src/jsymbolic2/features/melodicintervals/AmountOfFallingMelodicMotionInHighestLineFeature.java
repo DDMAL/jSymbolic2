@@ -6,9 +6,9 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the fraction of melodic intervals that are falling in pitch (repeated notes 
- * are not counted in this calculation) in the MIDI channel with the highest average pitch. Set to zero if no 
- * rising or falling melodic intervals are found.
+ * A feature calculator that finds the fraction of melodic intervals that are falling in pitch (repeated notes
+ * are not counted in this calculation) in the MIDI track and channel with the highest average pitch. Set to
+ * zero if no rising or falling melodic intervals are found.
  *
  * @author radamian
  */
@@ -25,7 +25,7 @@ public class AmountOfFallingMelodicMotionInHighestLineFeature
 	{
 		String name = "Amount of Falling Melodic Motion in Highest Line";
 		String code = "M-100";
-		String description = "Fraction of melodic intervals that are falling in pitch (repeated notes are not counted in this calculation) in the MIDI channel with the highest average pitch. Set to zero if no rising or falling melodic intervals are found.";
+		String description = "Fraction of melodic intervals that are falling in pitch (repeated notes are not counted in this calculation) in the MIDI track and channel with the highest average pitch. Set to zero if no rising or falling melodic intervals are found.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
@@ -68,7 +68,8 @@ public class AmountOfFallingMelodicMotionInHighestLineFeature
 			int number_of_falling_intervals = 0;
 			for (int i = 0; i < sequence_info.melodic_intervals_by_track_and_channel.get(track_with_highest_average_pitch)[channel_with_highest_average_pitch].size(); i++)
 			{
-				number_of_intervals++;
+				if (sequence_info.melodic_intervals_by_track_and_channel.get(track_with_highest_average_pitch)[channel_with_highest_average_pitch].get(i) != 0)
+					number_of_intervals++;
 				if (sequence_info.melodic_intervals_by_track_and_channel.get(track_with_highest_average_pitch)[channel_with_highest_average_pitch].get(i) < 0)
 					number_of_falling_intervals++;
 			}

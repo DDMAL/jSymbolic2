@@ -8,7 +8,8 @@ import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
  * A feature calculator that finds the number of distinct melodic intervals that occur at least once in the 
- * MIDI channel with the lowest average pitch.
+ * MIDI track and channel with the lowest average pitch. Rising and falling intervals are treated as 
+ * equivalent.
  *
  * @author radamian
  */
@@ -25,14 +26,14 @@ public class NumberOfDistinctMelodicIntervalsInLowestLineFeature
 	{
 		String name = "Number of Distinct Melodic Intervals in Lowest Line";
 		String code = "M-122";
-		String description = "Number of distinct melodic intervals that occur at least once in the MIDI channel with the lowest average pitch.";
+		String description = "Number of distinct melodic intervals that occur at least once in the MIDI track and channel with the lowest average pitch. Rising and falling intervals are treated as equivalent.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
 		dependencies = null;
 		offsets = null;
 		is_default = true;
-		is_secure = true;
+		is_secure = false;
 	}
 	
 
@@ -67,8 +68,8 @@ public class NumberOfDistinctMelodicIntervalsInLowestLineFeature
 			// Create list of unique melodic intervals
 			LinkedList<Integer> unique_melodic_intervals = new LinkedList<>();
 			for (int i = 0; i < sequence_info.melodic_intervals_by_track_and_channel.get(track_with_lowest_average_pitch)[channel_with_lowest_average_pitch].size(); i++)
-				if (!unique_melodic_intervals.contains(sequence_info.melodic_intervals_by_track_and_channel.get(track_with_lowest_average_pitch)[channel_with_lowest_average_pitch].get(i)))
-					unique_melodic_intervals.add(sequence_info.melodic_intervals_by_track_and_channel.get(track_with_lowest_average_pitch)[channel_with_lowest_average_pitch].get(i));
+				if (!unique_melodic_intervals.contains(Math.abs(sequence_info.melodic_intervals_by_track_and_channel.get(track_with_lowest_average_pitch)[channel_with_lowest_average_pitch].get(i))))
+					unique_melodic_intervals.add(Math.abs(sequence_info.melodic_intervals_by_track_and_channel.get(track_with_lowest_average_pitch)[channel_with_lowest_average_pitch].get(i)));
 			
 			value = unique_melodic_intervals.size();
 		} 

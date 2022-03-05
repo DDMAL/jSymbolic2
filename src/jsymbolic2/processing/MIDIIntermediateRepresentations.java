@@ -628,32 +628,30 @@ public class MIDIIntermediateRepresentations
 	public List<List<Integer>> list_of_note_on_pitches_by_channel;	
 	
 	/**
-	 * A table with rows (first index) corresponding to track number and columns (second index) corresponding
-	 * to MIDI channel. Each entry is the average MIDI pitch occurring on that combination of track and
+	 * A table with rows (first index) corresponding to track numbers and columns (second index) corresponding
+	 * to MIDI channels. Each entry is the average MIDI pitch occurring on that combination of track and
 	 * channel. Unpitched notes on Channel 10 (percussion) are excluded from this calculation. If no notes 
-	 * occur for a combination of track and channel, then the entry is set to 0.
+	 * occur on a given track and channel, then the entry is set to 0.
 	 */
 	public double[][] average_pitch_by_track_and_channel;
 	
 	/**
-	 * A list of arrays representing combinations of track (first index) and MIDI channel (second index), 
-	 * in increasing order of average pitch occurring on that combination of track and channel. Combinations
-	 * of track and channel for which there are no notes in the piece are excluded from this list, as are all
-	 * combinations with MIDI Channel 10 (unpitched percussion).
+	 * A list of arrays indicating MIDI track (first index) and MIDI channel (second index) pairs, in
+	 * increasing order of average pitch occurring on each combination of track and channel. Track and channel
+	 * pairings for which there are no notes in the piece are excluded from this list, as are all pairings
+	 * with MIDI Channel 10 (unpitched percussion).
 	 */
 	public LinkedList<int[]> track_and_channel_pairs_by_average_pitch;
 	
 	/**
-	 * An array representing the combination of the track (first index) and the MIDI channel (second index) 
-	 * with the highest average MIDI pitch. Unpitched notes on Channel 10 (percussion) are excluded from this 
-	 * calculation.
+	 * A 2-D array indicating the MIDI track (first index) and channel (second index) with the highest average
+	 * MIDI pitch. Unpitched notes on Channel 10 (percussion) are excluded from this calculation.
 	 */
 	public int[] track_and_channel_with_highest_average_pitch;
 	
 	/**
-	 * An array representing the combination of the track (first index) and the MIDI channel (second index) 
-	 * with the lowest average MIDI pitch. Unpitched notes on Channel 10 (percussion) are excluded from this 
-	 * calculation.
+	 * A 2-D array indicating the MIDI track (first index) and channel (second index) with the lowest average
+	 * MIDI pitch. Unpitched notes on Channel 10 (percussion) are excluded from this calculation.
 	 */
 	public int[] track_and_channel_with_lowest_average_pitch;
 
@@ -1249,7 +1247,7 @@ public class MIDIIntermediateRepresentations
 
 	/**
 	 * Return the fraction of Note Ons in the MIDI sequence from which the given 
-	 * MIDIIntermediateRepresentations has been generated that are played by one of the General MIDI patches
+	 * MIDIIntermediateRepresentations has been generated that are played by the General MIDI patches
 	 * included in the the given set of MIDI instrument patch numbers.
 	 *
 	 * @param	instruments		An array holding the General MIDI patches of interest.

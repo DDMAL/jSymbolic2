@@ -5,11 +5,11 @@ import javax.sound.midi.*;
 import ace.datatypes.FeatureDefinition;
 import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
-import mckay.utilities.staticlibraries.MathAndStatsMethods;
 
 /**
- * A feature calculator that finds the fraction of all melodic intervals that corresponds to the most common 
- * melodic interval in the in the MIDI channel with the lowest average pitch. 
+ * A feature calculator that finds the fraction of all melodic intervals in the MIDI track and channel with
+ * the lowest average pitch that correspond to the most common melodic interval in the same MIDI track and
+ * channel. Rising and falling intervals are treated as equivalent.
  *
  * @author radamian
  */
@@ -26,14 +26,14 @@ public class PrevalenceOfMostCommonMelodicIntervalInLowestLineFeature
 	{
 		String name = "Prevalence of Most Common Melodic Interval in Lowest Line";
 		String code = "M-124";
-		String description = "Fraction of all melodic intervals that corresponds to the most common melodic interval in the in the MIDI channel with the lowest average pitch.";
+		String description = "Fraction of all melodic intervals in the MIDI track and channel with the lowest average pitch that correspond to the most common melodic interval in the same MIDI track and channel. Rising and falling intervals are treated as equivalent.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
 		dependencies = null;
 		offsets = null;
 		is_default = true;
-		is_secure = true;
+		is_secure = false;
 	}
 	
 

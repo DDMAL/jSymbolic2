@@ -7,10 +7,10 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the average melodic interval (in semitones) separating the highest note and 
- * the lowest note in runs of consecutive melodically falling notes in the MIDI channel with the lowest 
- * average pitch. Melodic unisons are not considered to break a run. Similar assumptions are made in the 
- * calculation of this feature as for the Melodic Interval Histogram. Set to 0 if no melodic such runs are 
+ * A feature calculator that finds the mean melodic interval (in semitones) separating the highest note and
+ * the lowest note in runs of consecutive melodically falling notes in the MIDI track and channel with the
+ * lowest average pitch. Melodic unisons are not considered to break a run. Similar assumptions are made in
+ * the calculation of this feature as for the Melodic Interval Histogram. Set to 0 if no such melodic runs are
  * found.
  *
  * @author radamian and Cory McKay
@@ -28,14 +28,14 @@ public class AverageIntervalSpannedByFallingMelodicRunsInLowestLineFeature
 	{
 		String name = "Average Interval Spanned by Falling Melodic Runs in Lowest Line";
 		String code = "M-134";
-		String description = "Average melodic interval (in semitones) separating the highest note and the lowest note in runs of consecutive melodically falling notes in the MIDI channel with the lowest average pitch. Melodic unisons are not considered to break a run. Similar assumptions are made in the calculation of this feature as for the Melodic Interval Histogram. Set to 0 if no melodic such runs are found.";
+		String description = "Mean melodic interval (in semitones) separating the highest note and the lowest note in runs of consecutive melodically falling notes in the MIDI track and channel with the lowest average pitch. Melodic unisons are not considered to break a run. Similar assumptions are made in the calculation of this feature as for the Melodic Interval Histogram.Set to 0 if no such melodic runs are found.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
 		dependencies = null;
 		offsets = null;
 		is_default = true;
-		is_secure = true;
+		is_secure = false;
 	}
 	
 

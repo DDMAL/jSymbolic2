@@ -7,10 +7,10 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the standard deviation of the melodic interval (in semitones) separating 
- * the top note of melodic peaks and the bottom note of adjacent melodic troughs in the MIDI channel with the 
- * highest average pitch. Similar assumptions are made in the calculation of this feature as for the Melodic 
- * Interval Histogram.
+ * A feature calculator that finds the standard deviation of the melodic intervals (in semitones) separating
+ * the top note of melodic peaks and the bottom note of adjacent melodic troughs in the MIDI track and channel
+ * with the highest average pitch. Similar assumptions are made in the calculation of this feature as for the
+ * Melodic Interval Histogram.
  *
  * @author radamian and Cory McKay
  */
@@ -27,7 +27,7 @@ public class VariabilityOfIntervalSpannedByMelodicHalfArcsInHighestLineFeature
 	{
 		String name = "Variability of Interval Spanned by Melodic Half-Arcs in Highest Line";
 		String code = "M-116";
-		String description = "Standard deviation of the melodic interval (in semitones) separating the top note of melodic peaks and the bottom note of adjacent melodic troughs in the MIDI channel with the highest average pitch. Similar assumptions are made in the calculation of this feature as for the Melodic Interval Histogram.";
+		String description = "Standard deviation of the melodic intervals (in semitones) separating the top note of melodic peaks and the bottom note of adjacent melodic troughs in the MIDI track and channel with the highest average pitch. Similar assumptions are made in the calculation of this feature as for the Melodic Interval Histogram.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);

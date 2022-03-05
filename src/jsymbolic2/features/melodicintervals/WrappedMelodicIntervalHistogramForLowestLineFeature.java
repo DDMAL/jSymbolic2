@@ -3,23 +3,25 @@ package jsymbolic2.features.melodicintervals;
 import javax.sound.midi.*;
 import ace.datatypes.FeatureDefinition;
 import jsymbolic2.featureutils.MIDIFeatureExtractor;
-import jsymbolic2.featureutils.NoteInfo;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A wrapped feature vector consisting of the bin magnitudes of the Melodic Interval Histogram described 
- * above, but only considering melodic intervals in the MIDI channel with the lowest average pitch. Entries 
- * for melodic intervals over an octave are amalgamated (e.g. 2nds and 9ths are combined). Each bin 
- * corresponds to a melodic interval, and the bin index indicates the number of semitones comprising the 
- * interval associated with the bin (there are 12 bins in all). For example, bin 0 corresponds to repeated 
- * pitches (and octave multiples), bin 1 to a melodic interval of one semitone (and octave multiples), bin 2 
- * to a melodic interval of 2 semitones (and octave multiples), etc. The magnitude of each bin is proportional 
- * to the fraction of melodic intervals in the lowest voice that are of the kind associated with the bin (this 
- * histogram is normalized). Rising and falling intervals are treated as identical. If a given note onset 
- * slice for the highest voice contains multiple pitches, then only the highest pitched note in the slice is 
- * counted for the purpose of melody calculations. Also, if the highest note is sustained from one note onset 
- * slice to the next, and is still the highest note in the second slice, then this is treated as if there is 
- * no change in melody, even if lower pitches change. 
+ * A feature vector with bin magnitudes similar to those of the Wrapped Melodic Interval Histogram, but only
+ * considering melodic intervals in the voice with the lowest average pitch. Entries for melodic intervals
+ * over an octave are amalgamated (e.g. 2nds and 9ths are combined). Each bin corresponds to a melodic
+ * interval, and the bin index indicates the number of semitones comprising the interval associated with the
+ * bin (there are 12 bins in all). For example, bin 0 corresponds to repeated pitches (and octave multiples),
+ * bin 1 to a melodic interval of one semitone (and octave multiples), bin 2 to a melodic interval of 2
+ * semitones (and octave multiples), etc. The magnitude of each bin is proportional to the fraction of melodic
+ * intervals in the lowest voice that are of the kind associated with the bin (this histogram is normalized).
+ * Rising and falling intervals are treated as identical. If a given note onset slice for the lowest voice in
+ * a piece contains multiple pitches, then only the highest pitched note in that voice's slice is counted for
+ * the purpose of calculating this feature; although this works perfectly for music with only one line of
+ * notes per voice, note that this can note onset slice arrangement can cause problems for music where
+ * multiple simultaneous notes are encoded in a single MIDI track and channel, such as piano music, since in
+ * such cases it might be more proper to select the lowest note in a slice rather than the highest. Also, if
+ * the highest note is sustained from one note onset slice to the next, and is still the highest note in the
+ * second slice, then this is treated as if there is no change in melody, even if lower pitches change.
  *
  * @author radamian
  */
@@ -36,14 +38,14 @@ public class WrappedMelodicIntervalHistogramForLowestLineFeature
 	{
 		String name = "Wrapped Melodic Interval Histogram for Lowest Line";
 		String code = "M-118";
-		String description = "A wrapped feature vector consisting of the bin magnitudes of the Melodic Interval Histogram described above, but only considering melodic intervals in the MIDI channel with the lowest average pitch. Entries for melodic intervals over an octave are amalgamated (e.g. 2nds and 9ths are combined). Each bin corresponds to a melodic interval, and the bin index indicates the number of semitones comprising the interval associated with the bin (there are 12 bins in all). For example, bin 0 corresponds to repeated pitches (and octave multiples), bin 1 to a melodic interval of one semitone (and octave multiples), bin 2 to a melodic interval of 2 semitones (and octave multiples), etc. The magnitude of each bin is proportional to the fraction of melodic intervals in the lowest voice that are of the kind associated with the bin (this histogram is normalized). Rising and falling intervals are treated as identical. If a given note onset slice for the highest voice contains multiple pitches, then only the highest pitched note in the slice is counted for the purpose of melody calculations. Also, if the highest note is sustained from one note onset slice to the next, and is still the highest note in the second slice, then this is treated as if there is no change in melody, even if lower pitches change. ";
+		String description = "A feature vector with bin magnitudes similar to those of the Wrapped Melodic Interval Histogram, but only considering melodic intervals in the voice with the lowest average pitch. Entries for melodic intervals over an octave are amalgamated (e.g. 2nds and 9ths are combined). Each bin corresponds to a melodic interval, and the bin index indicates the number of semitones comprising the interval associated with the bin (there are 12 bins in all). For example, bin 0 corresponds to repeated pitches (and octave multiples), bin 1 to a melodic interval of one semitone (and octave multiples), bin 2 to a melodic interval of 2 semitones (and octave multiples), etc. The magnitude of each bin is proportional to the fraction of melodic intervals in the lowest voice that are of the kind associated with the bin (this histogram is normalized). Rising and falling intervals are treated as identical. If a given note onset slice for the lowest voice in a piece contains multiple pitches, then only the highest pitched note in that voice's slice is counted for the purpose of calculating this feature; although this works perfectly for music with only one line of notes per voice, note that this can note onset slice arrangement can cause problems for music where multiple simultaneous notes are encoded in a single MIDI track and channel, such as piano music, since in such cases it might be more proper to select the lowest note in a slice rather than the highest. Also, if the highest note is sustained from one note onset slice to the next, and is still the highest note in the second slice, then this is treated as if there is no change in melody, even if lower pitches change.";
 		boolean is_sequential = true;
 		int dimensions = 12;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
 		dependencies = null;
 		offsets = null;
 		is_default = true;
-		is_secure = true;
+		is_secure = false;
 	}
 	
 

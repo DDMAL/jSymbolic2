@@ -6,9 +6,9 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the fraction of notes played by the unpitched instrument that is used to 
- * play more notes than any other unpitched instrument. Set to 0 if there are no notes in the piece played by
- * unpitched instruments.
+ * A feature calculator that finds the fraction of all notes played by the unpitched instrument that is used
+ * to play more notes than any other unpitched instrument. Set to 0 if there are no notes in the piece played
+ * by unpitched instruments.
  *
  * @author radamian
  */
@@ -25,7 +25,7 @@ public class PrevalenceOfMostCommonUnpitchedInstrumentFeature
 	{
 		String name = "Prevalence of Most Common Unpitched Instrument";
 		String code = "I-17";
-		String description = "The fraction of notes played by the unpitched instrument that is used to play more notes than any other unpitched instrument. Set to 0 if there are no notes in the piece played by unpitched instruments.";
+		String description = "The fraction of all notes played by the unpitched instrument that is used to play more notes than any other unpitched instrument. Set to 0 if there are no notes in the piece played by unpitched instruments.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);

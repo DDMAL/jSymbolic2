@@ -7,9 +7,9 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the standard deviation of the melodic intervals in the MIDI channel with 
- * the highest average pitch. Provides a measure of how close the melodic intervals as a whole are to the mean 
- * melodic interval.
+ * A feature calculator that finds the standard deviation of the melodic intervals in the MIDI track and
+ * channel with the highest average pitch. Provides a measure of how varied the melodic intervals are around
+ * the mean melodic interval in that voice. Rising and falling intervals are treated as equivalent.
  *
  * @author radamian
  */
@@ -26,7 +26,7 @@ public class MelodicVariabilityOfHighestLineFeature
 	{
 		String name = "Melodic Variability of Highest Line";
 		String code = "M-97";
-		String description = "Standard deviation of the melodic intervals in the MIDI channel with the highest average pitch. Provides a measure of how close the melodic intervals as a whole are to the mean melodic interval.";
+		String description = "Standard deviation of the melodic intervals in the MIDI track and channel with the highest average pitch. Provides a measure of how varied the melodic intervals are around the mean melodic interval in that voice. Rising and falling intervals are treated as equivalent.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);

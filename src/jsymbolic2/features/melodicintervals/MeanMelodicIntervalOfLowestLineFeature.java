@@ -7,8 +7,8 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the mean average (in semitones) of the intervals involved in each of the 
- * melodic intervals in the in the MIDI channel with the lowest average pitch. 
+ * A feature calculator that finds the average (in semitones) of the melodic intervals in the MIDI track and
+ * channel with the lowest average pitch. Rising and falling intervals are treated as equivalent.
  *
  * @author radamian
  */
@@ -25,14 +25,14 @@ public class MeanMelodicIntervalOfLowestLineFeature
 	{
 		String name = "Mean Melodic Interval of Lowest Line";
 		String code = "M-123";
-		String description = "Mean average (in semitones) of the intervals involved in each of the melodic intervals in the in the MIDI channel with the lowest average pitch.";
+		String description = "Average (in semitones) of the melodic intervals in the MIDI track and channel with the lowest average pitch. Rising and falling intervals are treated as equivalent.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
 		dependencies = null;
 		offsets = null;
 		is_default = true;
-		is_secure = true;
+		is_secure = false;
 	}
 	
 

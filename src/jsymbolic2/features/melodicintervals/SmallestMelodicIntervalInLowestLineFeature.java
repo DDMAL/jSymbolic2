@@ -6,9 +6,10 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the smallest melodic interval in the MIDI channel with the lowest average 
- * pitch, measured in semitones. Repeated notes are not counted for this feature, so a value of 0 will only be 
- * returned if there are no melodic intervals of a semitone or larger.
+ * A feature calculator that finds the smallest melodic interval in the MIDI track and channel with the lowest
+ * average pitch, measured in semitones. Repeated notes are not counted for this feature, so a value of 0 will
+ * only be returned if there are no melodic intervals of a semitone or larger. Rising and falling intervals
+ * are treated as equivalent.
  *
  * @author radamian
  */
@@ -25,14 +26,14 @@ public class SmallestMelodicIntervalInLowestLineFeature
 	{
 		String name = "Smallest Melodic Interval in Lowest Line";
 		String code = "M-126";
-		String description = "The smallest melodic interval in the MIDI channel with the lowest average pitch, measured in semitones. Repeated notes are not counted for this feature, so a value of 0 will only be returned if there are no melodic intervals of a semitone or larger.";
+		String description = "The smallest melodic interval in the MIDI track and channel with the lowest average pitch, measured in semitones. Repeated notes are not counted for this feature, so a value of 0 will only be returned if there are no melodic intervals of a semitone or larger. Rising and falling intervals are treated as equivalent.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
 		dependencies = null;
 		offsets = null;
 		is_default = true;
-		is_secure = true;
+		is_secure = false;
 	}
 	
 

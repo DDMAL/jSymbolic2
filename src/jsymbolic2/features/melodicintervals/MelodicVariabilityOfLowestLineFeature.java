@@ -7,9 +7,9 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the standard deviation of the melodic intervals in the MIDI channel with 
- * the lowest average pitch. Provides a measure of how close the melodic intervals as a whole are to the mean 
- * melodic interval.
+ * Standard deviation of the melodic intervals in the MIDI track and channel with the lowest pitch. Provides a
+ * measure of how varied the melodic intervals are around the mean melodic interval in that voice. Rising and 
+ * falling intervals are treated as equivalent.
  *
  * @author radamian
  */
@@ -26,14 +26,14 @@ public class MelodicVariabilityOfLowestLineFeature
 	{
 		String name = "Melodic Variability of Lowest Line";
 		String code = "M-125";
-		String description = "Standard deviation of the melodic intervals in the MIDI channel with the lowest average pitch. Provides a measure of how close the melodic intervals as a whole are to the mean melodic interval.";
+		String description = "Standard deviation of the melodic intervals in the MIDI track and channel with the lowest pitch. Provides a measure of how varied the melodic intervals are around the mean melodic interval in that voice. Rising and falling intervals are treated as equivalent.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
 		dependencies = null;
 		offsets = null;
 		is_default = true;
-		is_secure = true;
+		is_secure = false;
 	}
 	
 
