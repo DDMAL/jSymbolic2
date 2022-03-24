@@ -9,8 +9,8 @@ import jsymbolic2.processing.MIDIIntermediateRepresentations;
  * A feature calculator that finds the ratio of all wrapped vertical intervals that are dissonant (2nds,
  * tritones and 7ths) to all wrapped vertical intervals that are consonant (unisons, 3rds, 4ths, 5ths, 6ths,
  * octaves). This is weighted by how long each of these intervals are held (e.g. an interval lasting a whole
- * note will be weighted four times as strongly as an interval lasting a quarter note). Set to 0 if there are
- * no dissonant vertical intervals or no consonant vertical intervals.
+ * note will be weighted four times as strongly as an interval lasting a quarter note) and based on MIDI
+ * velocity. Set to 0 if there are no dissonant vertical intervals or no consonant vertical intervals.
  *
  * @author Tristano Tenaglia Cory McKay
  */
@@ -27,7 +27,7 @@ public class VerticalDissonanceRatioFeatureFourthsNotDissonantFeature
 	{
 		String name = "Vertical Dissonance Ratio - Fourths Not Dissonant";
 		String code = "C-50";
-		String description = "Ratio of all wrapped vertical intervals that are dissonant (2nds, tritones and 7ths) to all wrapped vertical intervals that are consonant (unisons, 3rds, 4ths, 5ths, 6ths, octaves). This is weighted by how long each of these intervals are held (e.g. an interval lasting a whole note will be weighted four times as strongly as an interval lasting a quarter note). Set to 0 if there are no dissonant vertical intervals or no consonant vertical intervals.";
+		String description = "Ratio of all wrapped vertical intervals that are dissonant (2nds, tritones and 7ths) to all wrapped vertical intervals that are consonant (unisons, 3rds, 4ths, 5ths, 6ths, octaves). This is weighted by how long each of these intervals are held (e.g. an interval lasting a whole note will be weighted four times as strongly as an interval lasting a quarter note) and based on MIDI velocity. Set to 0 if there are no dissonant vertical intervals or no consonant vertical intervals.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);

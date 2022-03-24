@@ -9,7 +9,7 @@ import javax.sound.midi.Sequence;
 /**
  * A feature calculator that finds the fraction of all wrapped vertical intervals that are tritones. This is
  * weighted by how long intervals are held (e.g. an interval lasting a whole note will be weighted four times
- * as strongly as an interval lasting a quarter note).
+ * as strongly as an interval lasting a quarter note) and by MIDI velocity.
  *
  * @author Tristano Tenaglia and Cory McKay
  */
@@ -26,7 +26,7 @@ public class VerticalTritonesFeature
 	{
 		String name = "Vertical Tritones";
 		String code = "C-43";
-		String description = "Fraction of all wrapped vertical intervals that are tritones. This is weighted by how long intervals are held (e.g. an interval lasting a whole note will be weighted four times as strongly as an interval lasting a quarter note).";
+		String description = "Fraction of all wrapped vertical intervals that are tritones. This is weighted by how long intervals are held (e.g. an interval lasting a whole note will be weighted four times as strongly as an interval lasting a quarter note) and by MIDI velocity.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);

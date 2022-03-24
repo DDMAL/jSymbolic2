@@ -7,7 +7,8 @@ import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
  * A feature calculator that finds the fraction of vertical intervals on the wrapped vertical interval
- * histogram corresponding to the second most common vertical interval.
+ * histogram corresponding to the second most common vertical interval. Set to 0 if there are no vertical
+ * intervals.
  *
  * @author Tristano Tenaglia and Cory McKay
  */
@@ -24,11 +25,11 @@ public class PrevalenceOfSecondMostCommonWrappedVerticalIntervalFeature
 	{
 		String name = "Prevalence of Second Most Common Wrapped Vertical Interval";
 		String code = "C-31";
-		String description = "Fraction of vertical intervals on the wrapped vertical interval histogram corresponding to the second most common vertical interval.";
+		String description = "Fraction of vertical intervals on the wrapped vertical interval histogram corresponding to the second most common vertical interval. Set to 0 if there are no vertical intervals.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
-		dependencies = new String[] { "Wrapped Vertical Interval Histogram", "Second Most Common Wrapped Vertical Interval", "Number of Distinct Wrapped Vertical Intervals"	};
+		dependencies = new String[] {"Wrapped Vertical Interval Histogram", "Second Most Common Wrapped Vertical Interval", "Number of Distinct Wrapped Vertical Intervals", "Prevalence of Most Common Wrapped Vertical Interval"};
 		offsets = null;
 		is_default = true;
 		is_secure = true;
@@ -60,13 +61,13 @@ public class PrevalenceOfSecondMostCommonWrappedVerticalIntervalFeature
 		double value;
 		if (sequence_info != null)
 		{
-			// Get wrapped vertical interval histogram
+			// Get other needed features
 			double[] wrapped_vertical_interval_histogram = other_feature_values[0];
-			
 			double number_of_distinct_wrapped_vertical_intervals = other_feature_values[2][0];
-			
+
+			// Calculate the feature
 			if (number_of_distinct_wrapped_vertical_intervals <= 1)
-				value = 0.0;
+				value = other_feature_values[3][0];
 			else
 			{
 				int second_most_common_wrapped_vertical_interval = (int) other_feature_values[1][0];

@@ -7,7 +7,7 @@ import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
  * A feature calculator that finds the interval in semitones corresponding to the wrapped vertical interval
- * histogram bin with the highest magnitude.
+ * histogram bin with the highest magnitude. Set to 0 if there are no vertical intervals.
  *
  * @author Tristano Tenaglia and Cory McKay
  */
@@ -24,7 +24,7 @@ public class MostCommonWrappedVerticalIntervalFeature
 	{
 		String name = "Most Common Wrapped Vertical Interval";
 		String code = "C-23";
-		String description = "The interval in semitones corresponding to the wrapped vertical interval histogram bin with the highest magnitude.";
+		String description = "The interval in semitones corresponding to the wrapped vertical interval histogram bin with the highest magnitude. Set to 0 if there are no vertical intervals.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);

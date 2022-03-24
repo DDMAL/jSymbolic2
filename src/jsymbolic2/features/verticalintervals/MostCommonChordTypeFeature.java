@@ -11,7 +11,7 @@ import jsymbolic2.processing.MIDIIntermediateRepresentations;
  * of just two pitch classes [0], minor triads [1], major triads [2], diminished triads [3], augmented triads 
  * [4], other triads [5], minor seventh chords [6], dominant seventh chords [7], major seventh chords [8], 
  * other chords consisting of four pitch classes [9], and complex chords with more than four pitch classes 
- * [10].
+ * [10]. Set to 0 if there are no qualifying chords.
  *
  * @author radamian
  */
@@ -28,7 +28,7 @@ public class MostCommonChordTypeFeature
 	{
 		String name = "Most Common Chord Type";
 		String code = "C-64";
-		String description = "The Chord Type Histogram feature bin index corresponding to the Chord Type Histogram bin with the highest magnitude. The bins are indexed as follows: partial chords consisting of just two pitch classes [0], minor triads [1], major triads [2], diminished triads [3], augmented triads [4], other triads [5], minor seventh chords [6], dominant seventh chords [7], major seventh chords [8], other chords consisting of four pitch classes [9], and complex chords with more than four pitch classes [10].";
+		String description = "The Chord Type Histogram feature bin index corresponding to the Chord Type Histogram bin with the highest magnitude. The bins are indexed as follows: partial chords consisting of just two pitch classes [0], minor triads [1], major triads [2], diminished triads [3], augmented triads [4], other triads [5], minor seventh chords [6], dominant seventh chords [7], major seventh chords [8], other chords consisting of four pitch classes [9], and complex chords with more than four pitch classes [10]. Set to 0 if there are no qualifying chords.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);

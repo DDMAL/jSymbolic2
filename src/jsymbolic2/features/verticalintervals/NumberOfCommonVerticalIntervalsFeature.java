@@ -7,7 +7,7 @@ import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
  * A feature calculator that finds the number of distinct vertical intervals that each account individually 
- * for at least 12% of all vertical intervals present.
+ * for at least 12% of all vertical intervals present (weighted by duration and MIDI velocity).
  *
  * @author radamian
  */
@@ -24,7 +24,7 @@ public class NumberOfCommonVerticalIntervalsFeature
 	{
 		String name = "Number of Common Vertical Intervals";
 		String code = "C-13";
-		String description = "Number of distinct vertical intervals that each account individually for at least 12% of all vertical intervals present.";
+		String description = "Number of distinct vertical intervals that each account individually for at least 12% of all vertical intervals present (weighted by duration and MIDI velocity).";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
@@ -66,7 +66,7 @@ public class NumberOfCommonVerticalIntervalsFeature
 			// Count the number of common vertical intervals in the piece
 			int number_of_intervals = 0;
 			for (int bin = 0; bin < vertical_interval_histogram.length; bin++)
-				if (vertical_interval_histogram[bin] >= .12)
+				if (vertical_interval_histogram[bin] >= 0.12)
 					number_of_intervals++;
 			
 			value = (double) number_of_intervals;		

@@ -7,7 +7,7 @@ import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
  * A feature calculator that finds the interval in semitones corresponding to the vertical interval histogram 
- * bin with the second highest magnitude.
+ * bin with the second highest magnitude. Set to 0 if there are no vertical intervals.
  *
  * @author radamian
  */
@@ -24,11 +24,11 @@ public class SecondMostCommonVerticalIntervalFeature
 	{
 		String name = "Second Most Common Vertical Interval";
 		String code = "C-24";
-		String description = "The interval in semitones corresponding to the vertical interval histogram bin with the second highest magnitude.";
+		String description = "The interval in semitones corresponding to the vertical interval histogram bin with the second highest magnitude. Set to 0 if there are no vertical intervals.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
-		dependencies = new String[] { "Vertical Interval Histogram", "Number of Distinct Vertical Intervals" };
+		dependencies = new String[] { "Vertical Interval Histogram", "Number of Distinct Vertical Intervals", "Most Common Vertical Interval" };
 		offsets = null;
 		is_default = true;
 		is_secure = true;
@@ -60,14 +60,13 @@ public class SecondMostCommonVerticalIntervalFeature
 		double value;
 		if (sequence_info != null)
 		{
-			// Get vertical interval histogram
+			// Get necessary feature values
 			double[] vertical_interval_histogram = other_feature_values[0];
-			
 			double number_of_distinct_vertical_intervals = other_feature_values[1][0];
 			
 			// Calculate the feature value
 			if (number_of_distinct_vertical_intervals <= 1)
-				value = 0.0;
+				value = other_feature_values[2][0];
 			else
 				value = mckay.utilities.staticlibraries.MathAndStatsMethods.getIndexOfSecondLargest(vertical_interval_histogram);		
 		}

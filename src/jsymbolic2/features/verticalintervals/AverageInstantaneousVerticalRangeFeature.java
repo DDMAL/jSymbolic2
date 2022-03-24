@@ -1,16 +1,15 @@
 package jsymbolic2.features.verticalintervals;
 
 import javax.sound.midi.*;
-import java.util.ArrayList;
 import ace.datatypes.FeatureDefinition;
 import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the mean interval (in semitones) between the lowest pitch and the highest 
- * pitch sounding simultaneously. Calculated MIDI tick-by-tick, so is influenced by how long intervals are 
- * held. Rests are ignored in the calculation of this feature, but if only one note is sound at a given moment 
- * then this counts as a value of 0 for the purposes of calculating this feature.
+ * A feature calculator that finds the mean interval (in semitones) between the lowest pitch and the highest
+ * pitch sounding simultaneously. Calculated MIDI tick-by-tick, so is influenced by how long intervals are
+ * held. Rests are ignored in the calculation of this feature, but if only one note is sounding at a given
+ * moment then this counts as a value of 0 for the purposes of calculating this feature.
  *
  * @author radamian
  */
@@ -27,7 +26,7 @@ public class AverageInstantaneousVerticalRangeFeature
 	{
 		String name = "Average Instantaneous Vertical Range";
 		String code = "C-58";
-		String description = "Mean interval (in semitones) between the lowest pitch and the highest pitch sounding simultaneously. Calculated MIDI tick-by-tick, so is influenced by how long intervals are held. Rests are ignored in the calculation of this feature, but if only one note is sound at a given moment then this counts as a value of 0 for the purposes of calculating this feature.";
+		String description = "Mean interval (in semitones) between the lowest pitch and the highest pitch sounding simultaneously. Calculated MIDI tick-by-tick, so is influenced by how long intervals are held. Rests are ignored in the calculation of this feature, but if only one note is sounding at a given moment then this counts as a value of 0 for the purposes of calculating this feature.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);

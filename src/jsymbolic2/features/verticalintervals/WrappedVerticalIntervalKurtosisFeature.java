@@ -2,9 +2,9 @@ package jsymbolic2.features.verticalintervals;
 
 import javax.sound.midi.*;
 import java.util.ArrayList;
-import ace.datatypes.FeatureDefinition;
 import java.util.List;
 import java.util.Map;
+import ace.datatypes.FeatureDefinition;
 import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.featureutils.NoteInfo;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
@@ -14,7 +14,8 @@ import jsymbolic2.processing.MIDIIntermediateRepresentations;
  * piece. A higher kurtosis means that the tails are fatter and a lower kurtosis means that they are skinnier.
  * A normal distribution has a value of 0. A distribution with a higher kurtosis is more likely to have
  * extreme values.	Unlike the Wrapped Vertical Interval Histogram, each vertical interval is not weighted by
- * the MIDI velocity at which it is played in the calculation of this feature.
+ * the MIDI velocity at which it is played in the calculation of this feature. It is, however, weighted by the
+ * durations with which vertical intervals are held.
  *
  * @author radamian
  */
@@ -31,7 +32,7 @@ public class WrappedVerticalIntervalKurtosisFeature
 	{
 		String name = "Wrapped Vertical Interval Kurtosis";
 		String code = "C-39";
-		String description = "Excess kurtosis of the wrapped vertical interval distribution of the piece. A higher kurtosis means that the tails are fatter and a lower kurtosis means that they are skinnier. A normal distribution has a value of 0. A distribution with a higher kurtosis is more likely to have extreme values.	Unlike the Wrapped Vertical Interval Histogram, each vertical interval is not weighted by the MIDI velocity at which it is played in the calculation of this feature.";
+		String description = "Excess kurtosis of the wrapped vertical interval distribution of the piece. A higher kurtosis means that the tails are fatter and a lower kurtosis means that they are skinnier. A normal distribution has a value of 0. A distribution with a higher kurtosis is more likely to have extreme values.	Unlike the Wrapped Vertical Interval Histogram, each vertical interval is not weighted by the MIDI velocity at which it is played in the calculation of this feature. It is, however, weighted by the durations with which vertical intervals are held.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
@@ -71,7 +72,7 @@ public class WrappedVerticalIntervalKurtosisFeature
 			
 			// Iterate over each tick for which there is at least one note sounding, creating a list of all 
 			// wrapped vertical intervals in the piece
-			ArrayList<Integer> wrapped_vertical_intervals_arli = new ArrayList<>();
+			ArrayList<Integer> list_of_all_wrapped_vertical_intervals = new ArrayList<>();
 			for (Integer tick: all_notes_by_tick_map.keySet())
 			{
 				// Create a list of all pitches sounding on the current tick, including duplicate pitches so 
@@ -90,15 +91,15 @@ public class WrappedVerticalIntervalKurtosisFeature
 						for (int another_pitch = pitch + 1; another_pitch < pitches_on_tick.size(); another_pitch++)
 						{
 							int interval = pitches_on_tick.get(another_pitch) - pitches_on_tick.get(pitch);
-							wrapped_vertical_intervals_arli.add(interval % 12);
+							list_of_all_wrapped_vertical_intervals.add(interval % 12);
 						}
 				}
 			}
 			
 			// Create array of wrapped vertical intervals for feature calculation
-			double[] wrapped_vertical_intervals = new double[wrapped_vertical_intervals_arli.size()];
+			double[] wrapped_vertical_intervals = new double[list_of_all_wrapped_vertical_intervals.size()];
 			for (int i = 0; i < wrapped_vertical_intervals.length; i++)
-				wrapped_vertical_intervals[i] = wrapped_vertical_intervals_arli.get(i);
+				wrapped_vertical_intervals[i] = list_of_all_wrapped_vertical_intervals.get(i);
 
 			// Calculate the feature value
 			value = mckay.utilities.staticlibraries.MathAndStatsMethods.getExcessKurtosis(wrapped_vertical_intervals);

@@ -7,7 +7,7 @@ import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
  * A feature calculator that finds the fraction of vertical intervals on the vertical interval histogram 
- * corresponding to the second most common vertical interval.
+ * corresponding to the second most common vertical interval. Set to 0 if there are no vertical intervals.
  *
  * @author radamian
  */
@@ -24,11 +24,11 @@ public class PrevalenceOfSecondMostCommonVerticalIntervalFeature
 	{
 		String name = "Prevalence of Second Most Common Vertical Interval";
 		String code = "C-30";
-		String description = "Fraction of vertical intervals on the vertical interval histogram corresponding to the second most common vertical interval.";
+		String description = "Fraction of vertical intervals on the vertical interval histogram corresponding to the second most common vertical interval. Set to 0 if there are no vertical intervals.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
-		dependencies = new String[] { "Vertical Interval Histogram", "Second Most Common Vertical Interval", "Number of Distinct Vertical Intervals" };
+		dependencies = new String[] { "Vertical Interval Histogram", "Second Most Common Vertical Interval", "Number of Distinct Vertical Intervals", "Prevalence of Most Common Wrapped Vertical Interval" };
 		offsets = null;
 		is_default = true;
 		is_secure = true;
@@ -60,13 +60,12 @@ public class PrevalenceOfSecondMostCommonVerticalIntervalFeature
 		double value;
 		if (sequence_info != null)
 		{
-			// Get vertical interval histogram
+			// Get other needed features
 			double[] vertical_interval_histogram = other_feature_values[0];
-			
 			double number_of_distinct_vertical_intervals = other_feature_values[2][0];
 			
 			if (number_of_distinct_vertical_intervals <= 1)
-				value = 0.0;
+				value = other_feature_values[3][0];
 			else
 			{
 				int second_most_common_vertical_interval = (int) other_feature_values[1][0];

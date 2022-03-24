@@ -29,7 +29,7 @@ public class DifferenceBetweenMostCommonRhythmicValuesFeature
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
-		dependencies = new String[] { "Rhythmic Value Histogram" };
+		dependencies = new String[] { "Rhythmic Value Histogram", "Number of Different Rhythmic Values Present" };
 		offsets = null;
 		is_default = true;
 		is_secure = true;
@@ -61,13 +61,22 @@ public class DifferenceBetweenMostCommonRhythmicValuesFeature
 		double value;
 		if (sequence_info != null)
 		{
+			// Get necessary other features
 			double[] rhythmic_value_histogram = other_feature_values[0];
+			double number_of_distinct_rhythmic_values = other_feature_values[1][0];
 			
+			// Find peak bins
 			int most_common_index = mckay.utilities.staticlibraries.MathAndStatsMethods.getIndexOfLargest(rhythmic_value_histogram);
 			int second_most_common_index  = mckay.utilities.staticlibraries.MathAndStatsMethods.getIndexOfSecondLargest(rhythmic_value_histogram);
-			
-			int difference = Math.abs(most_common_index - second_most_common_index);
-			value = (double) difference;
+
+			// Calculate
+			if (number_of_distinct_rhythmic_values <= 1)
+				value = 0.0;
+			else
+			{
+				int difference = Math.abs(most_common_index - second_most_common_index);
+				value = (double) difference;
+			}
 		}
 		else value = -1.0;
 

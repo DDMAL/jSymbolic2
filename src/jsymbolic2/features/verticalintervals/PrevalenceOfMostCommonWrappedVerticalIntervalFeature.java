@@ -7,7 +7,7 @@ import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
  * A feature calculator that finds the fraction of vertical intervals on the wrapped vertical interval
- * histogram corresponding to the most common vertical interval.
+ * histogram corresponding to the most common vertical interval. Set to 0 if there are no vertical intervals.
  *
  * @author Tristano Tenaglia and Cory McKay
  */
@@ -24,7 +24,7 @@ public class PrevalenceOfMostCommonWrappedVerticalIntervalFeature
 	{
 		String name = "Prevalence of Most Common Wrapped Vertical Interval";
 		String code = "C-29";
-		String description = "Fraction of vertical intervals on the wrapped vertical interval histogram corresponding to the most common vertical interval.";
+		String description = "Fraction of vertical intervals on the wrapped vertical interval histogram corresponding to the most common vertical interval. Set to 0 if there are no vertical intervals.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);

@@ -8,7 +8,7 @@ import javax.sound.midi.Sequence;
 
 /**
  * A feature calculator that finds the interval in semitones corresponding to the wrapped vertical interval
- * histogram bin with the second highest magnitude.
+ * histogram bin with the second highest magnitude. Set to 0 if there are no vertical intervals.
  *
  * @author Tristano Tenaglia and Cory McKay
  */
@@ -25,11 +25,11 @@ public class SecondMostCommonWrappedVerticalIntervalFeature
 	{
 		String name = "Second Most Common Wrapped Vertical Interval";
 		String code = "C-25";
-		String description = "The interval in semitones corresponding to the wrapped vertical interval histogram bin with the second highest magnitude.";
+		String description = "The interval in semitones corresponding to the wrapped vertical interval histogram bin with the second highest magnitude. Set to 0 if there are no vertical intervals.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
-		dependencies = new String[] { "Wrapped Vertical Interval Histogram", "Number of Distinct Wrapped Vertical Intervals" };
+		dependencies = new String[] {"Wrapped Vertical Interval Histogram", "Number of Distinct Wrapped Vertical Intervals", "Most Common Wrapped Vertical Interval" };
 		offsets = null;
 		is_default = true;
 		is_secure = true;
@@ -61,14 +61,13 @@ public class SecondMostCommonWrappedVerticalIntervalFeature
 		double value;
 		if (sequence_info != null)
 		{
-			// Get wrapped vertical interval histogram
+			// Get relevant feature values
 			double[] wrapped_vertical_interval_histogram = other_feature_values[0];
-			
 			double number_of_distinct_wrapped_vertical_intervals = other_feature_values[1][0];
 			
 			// Calculate the feature value
 			if (number_of_distinct_wrapped_vertical_intervals <= 1)
-				value = 0.0;
+				value = other_feature_values[2][0];
 			else
 				value = mckay.utilities.staticlibraries.MathAndStatsMethods.getIndexOfSecondLargest(wrapped_vertical_interval_histogram);
 		}

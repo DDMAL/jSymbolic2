@@ -9,7 +9,7 @@ import javax.sound.midi.Sequence;
 /**
  * A feature calculator that finds the fraction of all wrapped vertical intervals that are minor seconds. This
  * is weighted by how long intervals are held (e.g. an interval lasting a whole note will be weighted four
- * times as strongly as an interval lasting a quarter note).
+ * times as strongly as an interval lasting a quarter note) and by MIDI velocity.
  *
  * @author Tristano Tenaglia and Cory McKay
  */
@@ -26,7 +26,7 @@ public class VerticalMinorSecondsFeature
 	{
 		String name = "Vertical Minor Seconds";
 		String code = "C-41";
-		String description = "Fraction of all wrapped vertical intervals that are minor seconds. This is weighted by how long intervals are held (e.g. an interval lasting a whole note will be weighted four times as strongly as an interval lasting a quarter note).";
+		String description = "Fraction of all wrapped vertical intervals that are minor seconds. This is weighted by how long intervals are held (e.g. an interval lasting a whole note will be weighted four times as strongly as an interval lasting a quarter note) and by MIDI velocity.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);

@@ -7,7 +7,7 @@ import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
  * A feature calculator that finds the largest vertical interval present in the piece, measured in semitones.
- *
+ * Set to 0 if there are no vertical intervals.
  * @author radamian
  */
 public class LargestVerticalIntervalFeature
@@ -23,7 +23,7 @@ public class LargestVerticalIntervalFeature
 	{
 		String name = "Largest Vertical Interval";
 		String code = "C-18";
-		String description = "The largest vertical interval present in the piece, measured in semitones.";
+		String description = "The largest vertical interval present in the piece, measured in semitones. Set to 0 if there are no vertical intervals.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);

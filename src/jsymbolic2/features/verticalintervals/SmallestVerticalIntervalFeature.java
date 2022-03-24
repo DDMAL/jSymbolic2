@@ -7,7 +7,8 @@ import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
  * A feature calculator that finds the smallest vertical interval present in the piece, measured in semitones.
- *
+ * Set to 0 if there are no vertical intervals.
+ * 
  * @author radamian
  */
 public class SmallestVerticalIntervalFeature
@@ -23,7 +24,7 @@ public class SmallestVerticalIntervalFeature
 	{
 		String name = "Smallest Vertical Interval";
 		String code = "C-17";
-		String description = "The smallest vertical interval present in the piece, measured in semitones.";
+		String description = "The smallest vertical interval present in the piece, measured in semitones. Set to 0 if there are no vertical intervals.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);

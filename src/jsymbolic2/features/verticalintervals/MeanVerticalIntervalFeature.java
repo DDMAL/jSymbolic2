@@ -12,7 +12,8 @@ import jsymbolic2.processing.MIDIIntermediateRepresentations;
 /**
  * A feature calculator that finds the mean average (in semitones) of the vertical intervals in the piece.
  * Unlike the calculation of Vertical Interval Histogram and its dependent features, each vertical interval is 
- * not weighted by the MIDI velocity at which it is played in the calculation of this feature.
+ * not weighted by the MIDI velocity at which it is played in the calculation of this feature. It is, however,
+ * weighted by the durations with which vertical intervals are held.
  *
  * @author radamian
  */
@@ -29,7 +30,7 @@ public class MeanVerticalIntervalFeature
 	{
 		String name = "Mean Vertical Interval";
 		String code = "C-20";
-		String description = "Mean average (in semitones) of the vertical intervals in the piece. Unlike the calculation of Vertical Interval Histogram and its dependent features, each vertical interval is not weighted by the MIDI velocity at which it is played in the calculation of this feature.";
+		String description = "Mean average (in semitones) of the vertical intervals in the piece. Unlike the calculation of Vertical Interval Histogram and its dependent features, each vertical interval is not weighted by the MIDI velocity at which it is played in the calculation of this feature. It is, however, weighted by the durations with which vertical intervals are held.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
@@ -69,7 +70,7 @@ public class MeanVerticalIntervalFeature
 			
 			// Iterate over each tick for which there is at least one note sounding, creating a list of all 
 			// vertical intervals in the piece
-			ArrayList<Integer> vertical_intervals_arli = new ArrayList<>();
+			ArrayList<Integer> all_vertical_intervals_entered_tick_by_tick = new ArrayList<>();
 			for (Integer tick: all_notes_by_tick_map.keySet())
 			{
 				// Create a list of all pitches sounding on the current tick, including duplicate pitches so 
@@ -88,15 +89,15 @@ public class MeanVerticalIntervalFeature
 						for (int another_pitch = pitch + 1; another_pitch < pitches_on_tick.size(); another_pitch++)
 						{
 							int interval = pitches_on_tick.get(another_pitch) - pitches_on_tick.get(pitch);
-							vertical_intervals_arli.add(interval);
+							all_vertical_intervals_entered_tick_by_tick.add(interval);
 						}
 				}
 			}
 			
 			// Create an array of vertical intervals for the feature calculation
-			int[] vertical_intervals = new int[vertical_intervals_arli.size()];
+			int[] vertical_intervals = new int[all_vertical_intervals_entered_tick_by_tick.size()];
 			for (int i = 0; i < vertical_intervals.length; i++)
-				vertical_intervals[i] = vertical_intervals_arli.get(i);
+				vertical_intervals[i] = all_vertical_intervals_entered_tick_by_tick.get(i);
 
 			// Calculate the feature value
 			value = mckay.utilities.staticlibraries.MathAndStatsMethods.getAverage(vertical_intervals);

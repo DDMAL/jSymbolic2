@@ -2099,7 +2099,7 @@ public class MIDIIntermediateRepresentations
 	
 	
 	/**
-	 * Create the all_notes_by_tick_map field.
+	 * Create and fill the all_notes_by_tick_map field.
 	 */
 	private void generateAllNotesByTickMap()
 	{
@@ -2110,6 +2110,7 @@ public class MIDIIntermediateRepresentations
 		// start tick value serves as the map key and the map value is a list of all notes starting on the 
 		// specified tick.
 		Map<Integer, List<NoteInfo>> start_tick_note_map = all_notes.getStartTickNoteMap();
+		
 		// A list of all notes that are currently sounding. Notes are added to it when their onsets are
 		// encountered and are removed from it when the current tick is greater than their end tick.
 		LinkedList<NoteInfo> notes_sounding = new LinkedList<>();
@@ -2118,11 +2119,12 @@ public class MIDIIntermediateRepresentations
 		{
 			// A working list of all notes sounding on the current tick
 			List<NoteInfo> all_notes_sounding_on_tick = new LinkedList<>();
-			// A working list of notes no longer sounding that must be removed from notes_sounding.
+			
+			// A working list of notes no longer sounding that must be removed from notes_sounding
 			List<NoteInfo> to_remove = new LinkedList<>();
 			
 			// If a note has ended, add it to to_remove. If not, add it to all_notes_sounding_on_current_tick.
-			for (NoteInfo note_sounding: notes_sounding)
+			for (NoteInfo note_sounding : notes_sounding)
 			{
 				if (note_sounding.getEndTick() < tick)
 					to_remove.add(note_sounding);
@@ -2130,6 +2132,7 @@ public class MIDIIntermediateRepresentations
 					all_notes_sounding_on_tick.add(note_sounding);
 			}
 			
+			// Remove the notes no longer sounding
 			notes_sounding.removeAll(to_remove);
 			
 			// Add all notes that begin on the current tick to all_notes_sounding_on_tick and notes_sounding
@@ -3040,7 +3043,7 @@ public class MIDIIntermediateRepresentations
 		// Intantiate a chart indicating the number of notes sounding at each pitch during each tick.
 		// The first index indicates the MIDI tick and the second index indicates the MIDI pitch (this is 
 		// always set to size 128). Each entry indicates the number of notes sounding. For example, a value of
-		// 1 means on note is sounding at the given tick and pitch, a value of 2 means 2 notes are sounding 
+		// 1 means one note is sounding at the given tick and pitch, a value of 2 means 2 notes are sounding 
 		// (and thus there is 1 unison), a value of 3 means 3 notes are sounding (and thus there are 2 
 		// unisons), etc. Instantiated with 0 values.
 		short[][] number_notes_sounding_by_tick_and_pitch_chart = new short[duration_in_ticks][candidate_midi_pitches];

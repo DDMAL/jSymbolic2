@@ -8,7 +8,7 @@ import jsymbolic2.processing.MIDIIntermediateRepresentations;
 /**
  * A feature calculator that finds the fraction of all wrapped vertical intervals that are minor 3rds, 6ths or 
  * 7ths. This is weighted by how long each of these intervals are held (e.g. an interval lasting a whole note 
- * will be weighted four times as strongly as an interval lasting a quarter note).
+ * will be weighted four times as strongly as an interval lasting a quarter note) and based on MIDI velocity.
  *
  * @author radamian
  */
@@ -25,7 +25,7 @@ public class PrevalenceOfMinorVerticalIntervalsFeature
 	{
 		String name = "Prevalence of Minor Vertical Intervals";
 		String code = "C-52";
-		String description = "Fraction of all wrapped vertical intervals that are minor 3rds, 6ths or 7ths. This is weighted by how long each of these intervals are held (e.g. an interval lasting a whole note will be weighted four times as strongly as an interval lasting a quarter note).";
+		String description = "Fraction of all wrapped vertical intervals that are minor 3rds, 6ths or 7ths. This is weighted by how long each of these intervals are held (e.g. an interval lasting a whole note will be weighted four times as strongly as an interval lasting a quarter note) and based on MIDI velocity.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);

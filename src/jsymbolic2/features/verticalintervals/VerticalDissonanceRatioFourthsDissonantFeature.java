@@ -10,7 +10,8 @@ import jsymbolic2.processing.MIDIIntermediateRepresentations;
  * perfect 4ths, tritones and 7ths) to all wrapped vertical intervals that are consonant (unisons, 3rds, 
  * perfect 5ths, 6ths, octaves). This is weighted by how long each of these intervals are held (e.g. an 
  * interval lasting a whole note will be weighted four times as strongly as an interval lasting a quarter 
- * note). Set to 0 if there are no dissonant vertical intervals or no consonant vertical intervals.
+ * note) and based on MIDI velocity. Set to 0 if there are no dissonant vertical intervals or no consonant 
+ * vertical intervals.
  *
  * @author radamian
  */
@@ -27,7 +28,7 @@ public class VerticalDissonanceRatioFourthsDissonantFeature
 	{
 		String name = "Vertical Dissonance Ratio - Fourths Dissonant";
 		String code = "C-51";
-		String description = "Ratio of all wrapped vertical intervals that are dissonant (2nds, perfect 4ths, tritones and 7ths) to all wrapped vertical intervals that are consonant (unisons, 3rds, perfect 5ths, 6ths, octaves). This is weighted by how long each of these intervals are held (e.g. an interval lasting a whole note will be weighted four times as strongly as an interval lasting a quarter note). Set to 0 if there are no dissonant vertical intervals or no consonant vertical intervals.";
+		String description = "Ratio of all wrapped vertical intervals that are dissonant (2nds, perfect 4ths, tritones and 7ths) to all wrapped vertical intervals that are consonant (unisons, 3rds, perfect 5ths, 6ths, octaves). This is weighted by how long each of these intervals are held (e.g. an interval lasting a whole note will be weighted four times as strongly as an interval lasting a quarter note) and based on MIDI velocity. Set to 0 if there are no dissonant vertical intervals or no consonant vertical intervals.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);

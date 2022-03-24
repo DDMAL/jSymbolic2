@@ -7,7 +7,8 @@ import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
  * A feature calculator that finds the absolute value of the difference (in semitones) between the most common
- * and second most common wrapped vertical intervals in the piece.
+ * and second most common wrapped vertical intervals in the piece. Set to 0 if there are less than two 
+ * distinct vertical intervals.
  *
  * @author Tristano Tenaglia and Cory McKay
  */
@@ -24,7 +25,7 @@ public class DistanceBetweenTwoMostCommonWrappedVerticalIntervalsFeature
 	{
 		String name = "Distance Between Two Most Common Wrapped Vertical Intervals";
 		String code = "C-27";
-		String description = "Absolute value of the difference (in semitones) between the most common and second most common wrapped vertical intervals in the piece.";
+		String description = "Absolute value of the difference (in semitones) between the most common and second most common wrapped vertical intervals in the piece. Set to 0 if there are less than two distinct vertical intervals.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
@@ -60,10 +61,9 @@ public class DistanceBetweenTwoMostCommonWrappedVerticalIntervalsFeature
 		double value;
 		if (sequence_info != null)
 		{
-			// Get the most common and the second most common vertical intervals
+			// Get other needed feature values
 			double most_common_vertical_interval = other_feature_values[0][0];
 			double second_most_common_vertical_interval = other_feature_values[1][0];
-			
 			double number_of_distinct_wrapped_vertical_intervals = other_feature_values[2][0];
 			
 			// Calculate the feature value

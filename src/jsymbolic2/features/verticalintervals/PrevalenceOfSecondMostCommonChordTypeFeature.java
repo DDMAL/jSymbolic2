@@ -28,7 +28,7 @@ public class PrevalenceOfSecondMostCommonChordTypeFeature
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
-		dependencies = new String[] { "Chord Type Histogram", "Second Most Common Chord Type", "Number of Distinct Chord Types" };
+		dependencies = new String[] {"Chord Type Histogram", "Second Most Common Chord Type"};
 		offsets = null;
 		is_default = true;
 		is_secure = true;
@@ -60,18 +60,9 @@ public class PrevalenceOfSecondMostCommonChordTypeFeature
 		double value;
 		if (sequence_info != null)
 		{
-			// Get chord type histogram
 			double[] chord_type_histogram = other_feature_values[0];
-			
-			double number_of_distinct_chord_types = other_feature_values[2][0];
-			
-			if (number_of_distinct_chord_types <= 1)
-				value = 0.0;
-			else
-			{
-				int second_most_common_chord_type = (int) other_feature_values[1][0];
-				value = chord_type_histogram[second_most_common_chord_type];	
-			}	
+			int second_most_common_chord_type = (int) other_feature_values[1][0];
+			value = chord_type_histogram[second_most_common_chord_type];	
 		}
 		else value = -1.0;
 		

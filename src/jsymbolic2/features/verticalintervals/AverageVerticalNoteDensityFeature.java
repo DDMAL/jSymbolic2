@@ -2,7 +2,6 @@ package jsymbolic2.features.verticalintervals;
 
 import javax.sound.midi.*;
 import ace.datatypes.FeatureDefinition;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import jsymbolic2.featureutils.MIDIFeatureExtractor;
@@ -11,7 +10,7 @@ import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
  * A feature calculator that finds the mean number of notes sounding simultaneously. This includes doubled 
- * pitches. Rests are excluded from this calculation.
+ * pitches. Rests are excluded from this calculation, as are unpitched notes.
  *
  * @author radamian
  */
@@ -28,7 +27,7 @@ public class AverageVerticalNoteDensityFeature
 	{
 		String name = "Average Vertical Note Density";
 		String code = "C-3";
-		String description = "Mean number of notes sounding simultaneously. This includes doubled pitches. Rests are excluded from this calculation.";
+		String description = "Mean number of notes sounding simultaneously. This includes doubled pitches. Rests are excluded from this calculation, as are unpitched notes.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
@@ -66,28 +65,29 @@ public class AverageVerticalNoteDensityFeature
 		{	
 			Map<Integer, List<NoteInfo>> all_notes_by_tick_map = sequence_info.all_notes_by_tick_map;
 			
-			int summed_vertical_note_densities = 0;
+			int summed_notes = 0;
 			int number_of_ticks_with_pitched_notes = 0;
 			
 			// Iterate over each tick for which there is at least one note sounding, summing the number of 
 			// notes sounding simultaneously on each tick
 			for (Integer tick: all_notes_by_tick_map.keySet())
 			{
-				int vertical_note_density_on_tick = 0;
+				int number_of_notes_on_tick = 0;
+
 				// Whether there is at least one pitched note sounding on the current tick
 				boolean are_pitched_notes_on_tick = false;
 				
 				// Count the number of pitched notes on the current tick
-				for (NoteInfo note: all_notes_by_tick_map.get(tick))
+				for (NoteInfo note : all_notes_by_tick_map.get(tick))
 					if (note.getChannel() != 10 - 1) // Exclude Channel 10 (Percussion)
 					{
 						are_pitched_notes_on_tick = true;
-						vertical_note_density_on_tick++;
+						number_of_notes_on_tick++;
 					}
 				
 				if (are_pitched_notes_on_tick)
 				{
-					summed_vertical_note_densities += vertical_note_density_on_tick;
+					summed_notes += number_of_notes_on_tick;
 					number_of_ticks_with_pitched_notes++;
 				}
 			} 
@@ -96,7 +96,7 @@ public class AverageVerticalNoteDensityFeature
 			if (number_of_ticks_with_pitched_notes == 0)
 				value = 0.0;
 			else
-				 value = (double) summed_vertical_note_densities / number_of_ticks_with_pitched_notes;
+				 value = (double) summed_notes / number_of_ticks_with_pitched_notes;
 		}
 		else value = -1.0;
 		

@@ -11,7 +11,7 @@ import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
  * A feature calculator that finds the standard deviation of the number of notes sounding simultaneously. This 
- * includes doubled pitches. Rests are excluded from this calculation.
+ * includes doubled pitches. Rests are excluded from this calculation, as are unpitched notes.
  *
  * @author radamian
  */
@@ -28,7 +28,7 @@ public class VariabilityOfVerticalNoteDensityFeature
 	{
 		String name = "Variability of Vertical Note Density";
 		String code = "C-7";
-		String description = "Standard deviation of the number of notes sounding simultaneously. This includes doubled pitches. Rests are excluded from this calculation.";
+		String description = "Standard deviation of the number of notes sounding simultaneously. This includes doubled pitches. Rests are excluded from this calculation, as are unpitched notes.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
@@ -66,13 +66,14 @@ public class VariabilityOfVerticalNoteDensityFeature
 		{
 			Map<Integer, List<NoteInfo>> all_notes_by_tick_map = sequence_info.all_notes_by_tick_map;
 			
-			ArrayList<Integer> vertical_note_densities_arli = new ArrayList<>();
+			ArrayList<Integer> number_of_notes_on_each_tick = new ArrayList<>();
 			
-			// Iterate over each tick for which there is at least one note sounding, summing the number of 
+			// Iterate over each tick for which there is at least one note sounding, noting the number of 
 			// notes sounding simultaneously on each tick
 			for (Integer tick: all_notes_by_tick_map.keySet())
 			{
-				int vertical_note_density_on_tick = 0;
+				int number_of_notes_on_tick = 0;
+				
 				// Whether there is at least one pitched note sounding on the current tick
 				boolean are_pitched_notes_on_tick = false;
 				
@@ -81,17 +82,17 @@ public class VariabilityOfVerticalNoteDensityFeature
 					if (note.getChannel() != 10 - 1) // Exclude Channel 10 (Percussion)
 					{
 						are_pitched_notes_on_tick = true;
-						vertical_note_density_on_tick++;
+						number_of_notes_on_tick++;
 					}
 				
 				if (are_pitched_notes_on_tick)
-					vertical_note_densities_arli.add(vertical_note_density_on_tick);
+					number_of_notes_on_each_tick.add(number_of_notes_on_tick);
 			} 
 			
 			// Create array for feature calculation
-			int[] vertical_note_densities = new int[vertical_note_densities_arli.size()];
+			int[] vertical_note_densities = new int[number_of_notes_on_each_tick.size()];
 			for (int i = 0; i < vertical_note_densities.length; i++)
-				vertical_note_densities[i] = vertical_note_densities_arli.get(i);
+				vertical_note_densities[i] = number_of_notes_on_each_tick.get(i);
 			
 			// Calculate the feature value
 			value = mckay.utilities.staticlibraries.MathAndStatsMethods.getStandardDeviation(vertical_note_densities);

@@ -11,9 +11,8 @@ import jsymbolic2.featureutils.NoteInfo;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the standard deviation of the number of notes sounding on a given MIDI tick 
- * that match the pitch class of another note sounding at the same time. Rests are excluded from this 
- * calculation.
+ * A feature calculator that finds the standard deviation of the number of notes sounding at a time that match
+ * the pitch class of another note sounding at the same time. Rests are excluded from this calculation.
  *
  * @author radamian
  */
@@ -30,7 +29,7 @@ public class VariabilityOfAmountOfVerticalPitchClassDoublingFeature
 	{
 		String name = "Variability of Amount of Vertical Pitch Class Doubling";
 		String code = "C-10";
-		String description = "Standard deviation of the number of notes sounding on a given MIDI tick that match the pitch class of another note sounding at the same time. Rests are excluded from this calculation.";
+		String description = "Standard deviation of the number of notes sounding at a time that match the pitch class of another note sounding at the same time. Rests are excluded from this calculation.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
@@ -68,19 +67,22 @@ public class VariabilityOfAmountOfVerticalPitchClassDoublingFeature
 		{
 			Map<Integer, List<NoteInfo>> all_notes_by_tick_map = sequence_info.all_notes_by_tick_map;
 
-			// Iterate over each tick for which there is at least one note sounding, summing the number of 
+			// Iterate over each tick for which there is at least one note sounding, storing the number of 
 			// notes on each tick that have the same pitch class of another note sounding at the same time 
-			ArrayList<Integer> vertical_pitch_class_doubling_arli = new ArrayList<>();
+			ArrayList<Integer> amount_of_doubling_on_each_tick_with_notes_sounding = new ArrayList<>();
 			for (Integer tick: all_notes_by_tick_map.keySet())
 			{
 				// Get the list of all notes sounding on the current tick
 				List<NoteInfo> notes_on_tick = all_notes_by_tick_map.get(tick);
+
 				// A working list of all pitch classes analyzed on the current tick so far
 				LinkedList<Integer> pitch_classes_encountered_on_tick = new LinkedList<>();
 				
-				int pitch_class_doubling_on_tick = 0;
 				// Whether there is at least one pitched note on the current tick
 				boolean are_pitched_notes_on_tick = false;
+				
+				// How many doubled pitch classes there are on the current tick
+				int doubled_pitch_classes_on_this_tick = 0;
 				
 				for (int note = 0; note < notes_on_tick.size(); note++)
 				{
@@ -93,6 +95,7 @@ public class VariabilityOfAmountOfVerticalPitchClassDoublingFeature
 						{
 							// Add the pitch class to the list of those encountered on this tick
 							pitch_classes_encountered_on_tick.add(pitch_class);
+							
 							// A boolean indicating whether there is pitch class doubling for the current 
 							// pitch
 							boolean doubling_encountered = false;
@@ -107,26 +110,23 @@ public class VariabilityOfAmountOfVerticalPitchClassDoublingFeature
 										// current pitch itself
 										if (!doubling_encountered)
 										{
-											pitch_class_doubling_on_tick += 2;
+											doubled_pitch_classes_on_this_tick += 2;
 											doubling_encountered = true;
 										}
-										else
-										{
-											pitch_class_doubling_on_tick++;
-										}
+										else doubled_pitch_classes_on_this_tick++;
 									}
 						}
 					}
 				}
 				
 				if (are_pitched_notes_on_tick) 
-					vertical_pitch_class_doubling_arli.add(pitch_class_doubling_on_tick);
+					amount_of_doubling_on_each_tick_with_notes_sounding.add(doubled_pitch_classes_on_this_tick);
 			}
 			
 			// Create array for feature caculation
-			int[] vertical_pitch_class_doubling = new int[vertical_pitch_class_doubling_arli.size()];
+			int[] vertical_pitch_class_doubling = new int[amount_of_doubling_on_each_tick_with_notes_sounding.size()];
 			for (int i = 0; i < vertical_pitch_class_doubling.length; i++)
-				vertical_pitch_class_doubling[i] = vertical_pitch_class_doubling_arli.get(i);
+				vertical_pitch_class_doubling[i] = amount_of_doubling_on_each_tick_with_notes_sounding.get(i);
 			
 			value = mckay.utilities.staticlibraries.MathAndStatsMethods.getStandardDeviation(vertical_pitch_class_doubling);
 		}

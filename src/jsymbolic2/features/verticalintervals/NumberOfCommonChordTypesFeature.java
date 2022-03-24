@@ -66,7 +66,7 @@ public class NumberOfCommonChordTypesFeature
 			// Count the number of common chord types in the piece
 			int number_of_chord_types = 0;
 			for (int bin = 0; bin < chord_type_histogram.length; bin++)
-				if (chord_type_histogram[bin] >= .09)
+				if (chord_type_histogram[bin] >= 0.09)
 					number_of_chord_types++;
 			
 			value = (double) number_of_chord_types;		

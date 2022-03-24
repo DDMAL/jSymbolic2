@@ -70,7 +70,7 @@ public class ChordTypeVariabilityFeature
 			short[][] pitch_strength_by_tick_chart = sequence_info.pitch_strength_by_tick_chart;
 
 			// Iterate tick by tick, creating an array list of all chord type codes in the piece
-			ArrayList<Integer> chord_type_codes_arli = new ArrayList<Integer>();
+			ArrayList<Integer> chord_type_list = new ArrayList<Integer>();
 			for (int tick = 0; tick < pitch_strength_by_tick_chart.length; tick++)
 			{
 				// Find the combined MIDI velocity of all (non-Channel 10) pitch classes sounding at this tick
@@ -85,13 +85,13 @@ public class ChordTypeVariabilityFeature
 				ChordTypeEnum chord_type = ChordTypeEnum.getChordType(pitch_class_strengths_this_tick);
 				
 				if (chord_type != null)
-					chord_type_codes_arli.add(chord_type.getChordTypeCode());
+					chord_type_list.add(chord_type.getChordTypeCode());
 			}
 			
 			// Create array of chord type codes for feature calculation
-			double[] chord_type_codes = new double[chord_type_codes_arli.size()];
+			double[] chord_type_codes = new double[chord_type_list.size()];
 			for (int i = 0; i < chord_type_codes.length; i++)
-				chord_type_codes[i] = chord_type_codes_arli.get(i);
+				chord_type_codes[i] = chord_type_list.get(i);
 
 			// Calculate the feature value
 			value = mckay.utilities.staticlibraries.MathAndStatsMethods.getStandardDeviation(chord_type_codes);

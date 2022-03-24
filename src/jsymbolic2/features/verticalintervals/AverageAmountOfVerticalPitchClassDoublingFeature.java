@@ -10,8 +10,8 @@ import jsymbolic2.featureutils.NoteInfo;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the mean number of notes sounding on a given MIDI tick that match the pitch 
- * class of another note sounding at the same time. Rests are excluded from this calculation.
+ * A feature calculator that finds the mean number of notes sounding at a time that match the pitch class of
+ * another note sounding at the same time. Rests are excluded from this calculation.
  *
  * @author radamian
  */
@@ -28,7 +28,7 @@ public class AverageAmountOfVerticalPitchClassDoublingFeature
 	{
 		String name = "Average Amount of Vertical Pitch Class Doubling";
 		String code = "C-6";
-		String description = "Mean number of notes sounding on a given MIDI tick that match the pitch class of another note sounding at the same time. Rests are excluded from this calculation.";
+		String description = "Mean number of notes sounding at a time that match the pitch class of another note sounding at the same time. Rests are excluded from this calculation.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
@@ -75,8 +75,10 @@ public class AverageAmountOfVerticalPitchClassDoublingFeature
 			{
 				// Get the list of all notes sounding on the current tick
 				List<NoteInfo> notes_on_tick = all_notes_by_tick_map.get(tick);
+				
 				// A working list of all pitch classes analyzed on the current tick so far
 				LinkedList<Integer> pitch_classes_encountered_on_tick = new LinkedList<>();
+				
 				// Whether there is at least one pitched note sounding on the current tick
 				boolean are_pitched_notes_on_tick = false;
 				
@@ -91,6 +93,7 @@ public class AverageAmountOfVerticalPitchClassDoublingFeature
 						{
 							// Add the pitch class to the list of those encountered on the current tick
 							pitch_classes_encountered_on_tick.add(pitch_class);
+							
 							// A boolean indicating whether there is pitch class doubling for the current 
 							// pitch
 							boolean doubling_encountered = false;
@@ -108,10 +111,7 @@ public class AverageAmountOfVerticalPitchClassDoublingFeature
 											sum_of_pitch_class_doubling += 2;
 											doubling_encountered = true;
 										}
-										else
-										{
-											sum_of_pitch_class_doubling++;
-										}
+										else sum_of_pitch_class_doubling++;
 									}
 						}
 					}

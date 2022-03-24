@@ -7,7 +7,8 @@ import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
  * A feature calculator that finds the absolute value of the difference (in semitones) between the most common 
- * and second most common vertical intervals in the piece.
+ * and second most common vertical intervals in the piece. Set to 0 if there are less than two distinct
+ * vertical intervals.
  *
  * @author radamian
  */
@@ -24,11 +25,11 @@ public class DistanceBetweenTwoMostCommonVerticalIntervalsFeature
 	{
 		String name = "Distance Between Two Most Common Vertical Intervals";
 		String code = "C-26";
-		String description = "Absolute value of the difference (in semitones) between the most common and second most common vertical intervals in the piece.";
+		String description = "Absolute value of the difference (in semitones) between the most common and second most common vertical intervals in the piece. Set to 0 if there are less than two distinct vertical intervals.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
-		dependencies = new String[] { "Most Common Vertical Interval", "Second Most Common Vertical Interval", "Number of Distinct Vertical Intervals" };
+		dependencies = new String[] {"Most Common Vertical Interval", "Second Most Common Vertical Interval", "Number of Distinct Vertical Intervals"};
 		offsets = null;
 		is_default = true;
 		is_secure = true;
@@ -60,10 +61,9 @@ public class DistanceBetweenTwoMostCommonVerticalIntervalsFeature
 		double value;
 		if (sequence_info != null)
 		{
-			// Get the most common and the second most common vertical intervals
+			// Get other needed feature values
 			double most_common_vertical_interval = other_feature_values[0][0];
 			double second_most_common_vertical_interval = other_feature_values[1][0];
-			
 			double number_of_distinct_vertical_intervals = other_feature_values[2][0];
 			
 			// Calculate the feature value

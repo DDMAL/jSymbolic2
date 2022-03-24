@@ -9,8 +9,8 @@ import jsymbolic2.processing.MIDIIntermediateRepresentations;
  * A feature calculator that finds the ratio of the fraction all wrapped vertical intervals that are minor 
  * 3rds, 6ths or 7ths to the fraction all wrapped vertical intervals that are major 3rds, 6ths or 7ths. This 
  * is weighted by how long each of these intervals are held (e.g. an interval lasting a whole note will be 
- * weighted four times as strongly as an interval lasting a quarter note). Set to 0 if there are no minor 
- * vertical intervals or no major vertical intervals.
+ * weighted four times as strongly as an interval lasting a quarter note) and based on MIDI velocity. Set to 0 
+ * if there are no minor vertical intervals or no major vertical intervals.
  *
  * @author radamian
  */
@@ -27,7 +27,7 @@ public class MinorToMajorVerticalIntervalsRatioFeature
 	{
 		String name = "Minor to Major Vertical Intervals Ratio";
 		String code = "C-54";
-		String description = "Ratio of the fraction all wrapped vertical intervals that are minor 3rds, 6ths or 7ths to the fraction all wrapped vertical intervals that are major 3rds, 6ths or 7ths. This is weighted by how long each of these intervals are held (e.g. an interval lasting a whole note will be weighted four times as strongly as an interval lasting a quarter note). Set to 0 if there are no minor vertical intervals or no major vertical intervals.";
+		String description = "Ratio of the fraction all wrapped vertical intervals that are minor 3rds, 6ths or 7ths to the fraction all wrapped vertical intervals that are major 3rds, 6ths or 7ths. This is weighted by how long each of these intervals are held (e.g. an interval lasting a whole note will be weighted four times as strongly as an interval lasting a quarter note) and based on MIDI velocity. Set to 0 if there are no minor vertical intervals or no major vertical intervals.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
