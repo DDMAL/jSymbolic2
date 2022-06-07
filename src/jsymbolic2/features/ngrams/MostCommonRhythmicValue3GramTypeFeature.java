@@ -73,7 +73,7 @@ public class MostCommonRhythmicValue3GramTypeFeature
             if (!rhythmic_value_3gram_aggregate.noNGrams())
             {
                 // Get the most common rhythmic value 3-gram
-                LinkedList<double[]> most_common_rhythmic_value_3gram = rhythmic_value_3gram_aggregate.getMostCommonIdentifier();
+                LinkedList<double[]> most_common_rhythmic_value_3gram = rhythmic_value_3gram_aggregate.getMostCommonNGramIdentifier();
 
                 // Copy the 3-gram to the result vector
                 result = new double[most_common_rhythmic_value_3gram.size()];

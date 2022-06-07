@@ -87,8 +87,9 @@ public class MelodicPitchVarietyFeature
 					{
 						// Create a list of pitches encountered
 						LinkedList<Integer> pitches_encountered_on_channel = new LinkedList<>();
-						// Create array that contains, for each pitch, the count of notes gone by since the last 
-						// time a note with that pitch was encountered
+						
+						// Create array that contains, for each pitch, the count of notes gone by since the  
+						// last time a note with that pitch was encountered
 						int[] counts_since_pitch_last_encountered = new int [128];
 						for (int i = 0; i < counts_since_pitch_last_encountered.length; i++)
 							counts_since_pitch_last_encountered[i] = 0;

@@ -69,10 +69,10 @@ public class PrevalenceOfMelodicInterval3GramTypesOccurringOnlyOnceFeature
             // Verify there is at least one melodic interval 3-gram
             if (!melodic_interval_3gram_aggregate.noNGrams())
             {
-                double[] frequencies_of_unique_3grams = melodic_interval_3gram_aggregate.getFrequenciesOfUniqueNGrams();
+                double[] frequencies_of_unique_3grams = melodic_interval_3gram_aggregate.getNormalizedFrequenciesOfUniqueNGrams();
                 
                 int total_number_of_unique_3grams = frequencies_of_unique_3grams.length;
-                double single_occurrence_frequency = (double) 1 / melodic_interval_3gram_aggregate.getNumberOfNGrams();
+                double single_occurrence_frequency = (double) 1 / melodic_interval_3gram_aggregate.getTotalNumberOfNGrams();
                 
                 // Count number of melodic interval 3-grams occurring only once
                 int number_of_3grams_occurring_once = 0;

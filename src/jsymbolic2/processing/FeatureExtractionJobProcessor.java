@@ -113,9 +113,9 @@ public final class FeatureExtractionJobProcessor
 	                                                           PrintStream error_print_stream,
 	                                                           boolean gui_processing )
 	{
-		// The system start time, in nanoseconds, of feature extraction. This variable is used by the code at 
-		// the bottom of this method to print the time in seconds of feature extraction.
-		//long feature_extraction_start_time = System.nanoTime();
+		// TEST CODE: Note the system start time, in nanoseconds, of feature extraction. This variable is used 
+		// by the code at the bottom of this method to print the time in seconds of feature extraction.
+		// long feature_extraction_start_time = System.nanoTime();
 		
 		// Prepare the feature extractor
 		MIDIFeatureProcessor processor = null;
@@ -158,13 +158,11 @@ public final class FeatureExtractionJobProcessor
 	                             status_print_stream,
 	                             error_print_stream );
 		
-		/*
-		// Print the time elapsed since the initialization of the above feature_extraction_start_time 
-		// variable
-		long feature_extraction_end_time = System.nanoTime();
-		long feature_extraction_time_in_seconds = (feature_extraction_end_time - feature_extraction_start_time) / 1000000;
-		System.out.println("Feature extraction time is " + feature_extraction_time_in_seconds + " seconds.");
-		*/
+		// TEST CODE: Print the time elapsed since the initialization of the above 
+		// feature_extraction_start_time variable
+		// long feature_extraction_end_time = System.nanoTime();
+		// long feature_extraction_time_in_seconds = (feature_extraction_end_time - feature_extraction_start_time) / 1000000;
+		// System.out.println("Feature extraction time is " + feature_extraction_time_in_seconds + " seconds.");
 		
 		// Indicate that processing is done
 		UserFeedbackGenerator.printExecutionFinished(status_print_stream);

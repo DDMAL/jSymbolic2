@@ -12,18 +12,18 @@
 </table>
 
 <p><strong>GENERAL NOTES</strong></p>
-<p>The features belonging to the jSymbolic feature groups described in other parts of this manual largely focus on descriptors of musical content that are globally aggregated across the entirety of the music from which features are being extracted, in a way that (in most but not all cases) ignores the particular sequence in which musical events occur. For example, the <a href="featuresmelodicintervals.html">melody and melodic interval features</a> mostly look at melodic transitions from one note to the next without regard to where and in what sequence these transitions occur relative to one another. This is not at all a bad thing to do, as such global features can be very helpful in capturing meaningful and important summary information about music; in a sense, it allows us to see the forest rather than focusing on the trees. However, it can also obviously be important to focus on the trees as well, by also extracting features that capture more local data that also encapsulate information about sequences of musical events. However, even features of this latter type still need to ultimately be representable as  directly comparable and consistently formulated single values or vectors that describe the music in an at least a somewhat aggregated way,  as these are base requirements of features. <strong>N-grams</strong> provide a convenient, meaningful and consistent way of capturing information about local sequences of musical events, and various features can then me calculated from the n-grams that summarize or derive meaning from the information they encapsulate.</p>
-<p>In order to understand what an n-gram is, it is first necessary to understand the concept of a <strong>note onset slice</strong>, which provides a necessary mechanism for calculating n-grams. A note onset slice can defined as a vertical group of pitches sounding simultaneously, where a new slice is created whenever a new note attack occurs. Figure 1  demonstrates how such slices can be divided. In the case of jSymbolic note onset slices, unpitched (MIDI Channel 10) notes are ignored in the formulation of note onset slices and all the n-grams calculated from them.</p>
+<p>The features belonging to the jSymbolic feature groups described in other parts of this manual largely focus on descriptors of musical content that are globally aggregated across the entirety of the music from which features are being extracted, in a way that (in most but not all cases) ignores the particular sequence in which musical events occur. For example, the <a href="featuresmelodicintervals.html">melody and melodic interval features</a> mostly look at melodic transitions from one note to the next without regard to where and in what sequence these transitions occur relative to one another. This is not at all a bad thing to do, as such global features can be  helpful in capturing meaningful and important summary information about music; in a sense, it allows us to see the forest rather than focusing on the trees. However, it can also obviously be important to focus on the trees as well, by also extracting features that capture more local data that also encapsulate information about sequences of musical events. However, even features of this latter type still need to ultimately be representable as  directly comparable and consistently formulated single values or feature vectors that describe the music in an aggregated way,  as these are base requirements of features. <strong>N-grams</strong> provide a convenient, meaningful and consistent way of capturing information about local sequences of musical events, and various features can then be calculated from the n-grams that summarize or derive meaning from the information they encapsulate.</p>
+<p>In order to understand what an n-gram is, it is first necessary to understand the concept of a <strong>note onset slice</strong>, which provides a necessary mechanism for calculating n-grams. A note onset slice can be defined as a vertical group of pitches sounding simultaneously, where a new slice is created whenever a new note attack occurs. Figure 1  demonstrates how such slices can be divided. In the case of jSymbolic note onset slices, unpitched (MIDI Channel 10) notes are ignored in the formulation of note onset slices and all the n-grams calculated from them.</p>
 <p><img src="Note_onset_slices.png" border="1"></p>
 <p><strong>Figure 1:</strong> Non-metrical example of how note onset slices (indicated by broken vertical lines) can be segmented.</p>
-<p>Most note onset slice implementations, including those used in jSymbolic n-gram calculations (unless otherwise noted in individual cases), include not only pitches that coincide with the start of the slice, but also notes sustained from previous slices. So, in the example shown in Figure 1, the tied E4 in the upper voice would be found in both the slice it begins in and the two slices following it (since it is sustained in these slices). These three slices would thus be: [A3,E4], [F3,E4] and [G3,E4]. Note that the A3 in this first slice is sustained from the previous slice, and the  G3 in this third slice would also be included in the two slices following it. </p>
-<p>Note onset slices can be extracted across all voices, as in the example above, but they can also be extracted separately for individual musical parts/voices. A part-segmented approach can be useful for capturing certain kinds of melodic or rhythmic information, while an approach considering all parts combined can be best for  capturing certain kinds of harmonic information. It should also be noted that individual parts corresponding to polyphonic instruments can themselves each contain more than one simultaneous note (e.g. guitar or piano parts), so it can also sometimes be useful to only consider onsets corresponding to the highest (or lowest, depending on the analytical purpose) pitch sounding in a given part, while other times it is better to consider all pitches for the part. In order to increase flexibility and the variety of n-grams and features that can be used, jSymbolic permits music to be broken into multiple different kinds of note onset slices. Please see the jSymbolic source code and its documentation for more details.</p>
+<p>Most note onset slice implementations, including those used in jSymbolic n-gram calculations (unless otherwise noted in individual feature descriptions), include not only pitches that coincide with the start of the slice, but also notes sustained from previous slices. So, in the example shown in Figure 1, the tied E4 in the upper voice would be found in both the slice it begins in and the two slices following it (since it is sustained in these slices). These three slices would thus be: [A3,E4], [F3,E4] and [G3,E4]. Note that the A3 in this first slice is sustained from the previous slice, and the  G3 in this third slice would also be included in the two slices following it. </p>
+<p>Note onset slices can be extracted across all voices, as in the example above, or they can be extracted separately for individual musical parts/voices. A part-segmented approach can be useful for capturing certain kinds of melodic or rhythmic information, while an approach considering all parts combined can be best for  capturing certain kinds of harmonic information. It should also be noted that individual parts corresponding to polyphonic instruments can themselves each contain more than one simultaneous note (e.g. guitar or piano parts), so it can also sometimes be useful to only consider onsets corresponding to the highest (or lowest, depending on the analytical purpose) pitch sounding in a given part, while other times it is better to consider all pitches for the part. In order to increase flexibility and the variety of n-grams and features that can be used, jSymbolic permits music to be broken into multiple different kinds of note onset slices. Please see the jSymbolic source code and its documentation for more details.</p>
 <p>An interesting property of note onset slices, or at least their most common 
   varieties, is that they are not weighted by duration. So for example, a slice 
   holding three complete whole notes starting simultaneously is treated identically during analysis to 
   a slice holding three complete half notes starting simultaneously. In effect, note duration is only 
   relevant in determining whether a given note is found in multiple slices or 
-  just the one it starts in. This can be a desirable property for many of the 
+  just the slice it starts in. This can be a desirable property for many of the 
   features described below. However, in some cases it may be preferable to filter 
   out notes whose duration is too short, such as in cases where one does not want 
   brief decorative notes to influence meaningful harmonic transitions encoded in note onset 
@@ -42,9 +42,9 @@
   MIDI performance or due to encodings by score editing software intended to make 
   the music sound more performance-realistic when synthesized. It is therefore 
   necessary to time-quantize both note onsets and offsets, in order to make sure 
-  that theoretically simultaneous events that are in reality encoded with a slight time offset do not result in multiple different 
+  that theoretically simultaneous events that are in reality MIDI-encoded with slight time offsets do not result in multiple different 
   slices, and to ensure that notes are not accidentally sustained to subsequent 
-  slices in which they should in theory no longer be sounding. This 
+  slices during which they should in theory no longer be sounding. This 
   is exactly what jSymbolic does: when it encounters a new note onset, it jumps 
   to the next idealized sub-beat that corresponds to a 32nd note division (if 
   it is not already at one), and performs a look-behind and a look-ahead, each 
@@ -65,12 +65,12 @@
   </em>slices if it encodes events, and <em>n+1</em> slices if it encodes transitions. </p>
 <p>
 One can now imagine a wide variety of meaningful sequence types that n-grams can be used 
-  to encode, and Figure 2  illustrates how n-grams of certain different types can be calculated. We can begin by noting that this musical example consists of three note onset slices: [D3,C4], [D3,B3] and [C3,C4]. From this, we can construct an n-gram consisting of the diatonic vertical intervals between the pitches in each slice: [7,6,8]. This type of n-gram is an example of a kind of 3-gram, since it consists of three pieces of information (i.e. <em>n=3</em>). In  practice jSymbolic intervals are usually expressed as semitone counts rather than as diatonic intervals (although the option of using generic intervals rather than semitone counts is already implemented in jSymbolic, it is in practice rarely used by the current feature catalogue), so this vertical 3-gram could alternatively be expressed using such a semitone-based encoding format as: [10,9,12].</p>
+  to encode, and Figure 2  illustrates how n-grams of certain different types can be calculated. We can begin by noting that this musical example consists of three note onset slices: [D3,C4], [D3,B3] and [C3,C4]. From this, we can construct an n-gram consisting of the diatonic vertical intervals between the pitches in each slice: [7,6,8]. This type of n-gram is an example of a kind of 3-gram, since it consists of three pieces of information (i.e. <em>n=3</em>). In  practice jSymbolic intervals are usually expressed as semitone counts rather than as diatonic intervals (although the option of using diatonic intervals rather than semitone counts is already implemented in jSymbolic, it is in practice rarely used by the current feature catalogue), so this vertical 3-gram could alternatively be expressed using such a semitone-based encoding format as: [10,9,12].</p>
 <p><img src="Ngram_example_01.jpg" border="1"></p>
 <p><strong>Figure 2:</strong> Example of a vertical 3-gram and two horizontal/melodic 2-grams, where in this case indicated intervals are diatonic (unlike the typical jSymbolic case, where intervals are represented as semitone counts).</p>
 <p>One could alternatively extract two melodic 2-grams from the example in Figure 2, one 
   for the upper part and one for the lower part:  [-2,2] and [1,-2], respectively. 
-  In this case, diatonic melodic intervals are used in the encoding, with a negative 
+  In this case diatonic melodic intervals are once again used in the encoding, with a negative 
   number indicating a descending interval. Note that the &quot;1&quot; in the lower 
   part 2-gram is used to indicate no melodic transition, since the D3 is held 
   in the second note onset slice. In practice, jSymbolic would also encode these 
@@ -79,7 +79,7 @@ One can now imagine a wide variety of meaningful sequence types that n-grams can
   is now used to represent the held D3, since there is a transition of 0 semitones). 
 </p>
 <p>One could even combine these vertical 3-grams and melodic 2-grams into a single <strong>contrapuntal 3-gram</strong> encapsulating all this information (diatonically, in this encoding): [7(1,-2),6(-2 2),8]. This type of n-gram is not currently used by any jSymbolic features, but could serve as the basis for the development of future features.</p>
-<p>Although n-grams of these types and others (such as rhythmic value n-grams, as described below) can encapsulate a wide variety of different kinds of musically meaningful information, it is difficult to use n-grams directly as features, partly because some can contain entries of variable size (e.g. vertical n-grams, where the number of notes in a chord contained in any given slice can vary), partly  because there can be a huge variety of different n-grams for any given piece and partly because there can also be substantial n-gram differences between different pieces. However, n-grams for a piece of music can be aggregated together into histograms and other intermediate data structures, which can in turn serve as the basis for calculating features that themselves capture information about sequences of musical events.  Aggregating 
+<p>Although n-grams of these types and others (such as rhythmic value n-grams, as described below) can encapsulate a wide variety of different kinds of musically meaningful information, it is difficult to use n-grams directly as features, partly because some can contain entries of variable size (e.g. vertical n-grams, where the number of notes in a chord contained in any given slice can vary), partly  because there can be a huge variety of different n-grams for any given piece and partly because there can also be substantial n-gram differences between different pieces. Fortunately, n-grams for a piece of music can be aggregated together into histograms and other intermediate data structures, which can in turn serve as the basis for calculating features that themselves capture information about sequences of musical events.  Aggregating 
   n-grams in this way can allow one to observe patterns in the music and quantify how frequently 
   different sequential patterns occur, for example.</p>
 <p>jSymbolic does exactly this: it calculates n-grams  from individual overlapping sliding windows of note onset slices and then aggregates groups of resulting n-grams to generate histograms and other intermediate representations, from which various features are then calculated. The jSymbolic features derived from n-grams can be divided into three types, each of which is catalogued separately below:</p>
@@ -90,14 +90,15 @@ One can now imagine a wide variety of meaningful sequence types that n-grams can
 </ul>
 <p>Different types of note onset slices and associated n-grams are used for calculating different types of features. Specific details are provided in each of the sections below.</p>
 <p>It should  be noted that jSymbolic includes implemented functionality for calculating a variety of note onset slices types and n-gram types beyond just those described on this manual page. This is intended to facilitate the development of future features that may be based on them; although this code is not currently set to be executed by default (in order to save processing time), it can easily be accessed by those wishing to extend the jSymbolic feature catalogue. Please see the jSymbolic code and its documentation for more details on the complete catalogue of note onset slices and n-grams that can be extracted by jSymbolic.</p>
-<p> jSymbolic also allows arbitrary values of <em>n </em>to be used when calculating n-grams, and  allows n-grams of potentially different sizes to be used in new features if desired. The implemented jSymbolic n-gram feature catalogue  generally focuses on features where <em>n=3</em>, however, since they seem to produce the most useful information; 2-grams capture sequences that are too limited in length to be as musically meaningful as 3-grams, and n-grams with <em>n&gt;3</em> tend to produce so many different permutations that it can be difficult to extract practically usable feature information from them. 3-grams also seem to nicely correspond to certain musically important types of events, such as simple cadential patterns. That being said, future development could certainly be performed that utilizes larger n-grams of particular interest.</p>
-<p>As a final note, it should be re-emphasized that unpitched MIDI Channel 10 unpitched percussion notes are excluded from all jSymbolic note onset slices and  n-grams including, of course, those described in the following sections.</p>
+<p> jSymbolic also allows arbitrary values of <em>n </em>to be used when calculating n-grams, and  allows n-grams of potentially different sizes to be used in new features if desired. The implemented jSymbolic n-gram feature catalogue   focuses on features where <em>n=3</em>, however, since they seem to produce the most useful information; 2-grams capture sequences that are too limited in length to be as musically meaningful as 3-grams, and n-grams with <em>n&gt;3</em> tend to produce so many different permutations that it can be difficult to extract practically usable feature information from them. 3-grams also seem to nicely correspond to certain musically important types of events, such as simple cadential patterns. That being said, future features could certainly be implemented that utilize larger n-grams of particular interest.</p>
+<p>As a final note, it should be re-emphasized that unpitched MIDI Channel 10 unpitched percussion notes are excluded from all jSymbolic note onset slices and  n-grams, including those described in the following sections.</p>
 <p></p>
 <a name="MelodicIntervalNgramFeatures"></a>
 <p><strong>JSYMBOLIC FEATURE CATALOGUE (MELODIC INTERVAL N-GRAMS SECTION)</strong></p>
 
 <p> A <strong>melodic interval n-gram</strong> consists of a set of <em>n</em> values,  where each value 
-  specifies the interval of a melodic transition in a musical line, and can be expressed as a count of semitones or as a generic interval (with 0 indicating a melodic unison). Each melodic 
+  specifies the interval of a melodic transition in a musical line, and can be expressed as a count of semitones (with 0 indicating a melodic unison) or as a diatonic interval (with 1 indicating a melodic unison). It is also possible to either wrap octaves or to keep them expanded. It is also possible to either dinstinguish between upwards (positive) and downards (negaitive) motion, or to treat them as equivalent (only positive values are reported). Unless otherwise indicated, the features below are generated using the following options: semitone intervals, unwrapped and direction preserved.</p>
+<p>Each melodic 
   interval n-gram  corresponds to <em>n+1 </em>sequential note onset slices. Melodic n-grams (and 
   their associated note onset slices) are first calculated independently for each musical
 part/voice (i.e. for each MIDI track/channel pairing), and the resulting n-grams  are 
@@ -262,13 +263,11 @@ part/voice (i.e. for each MIDI track/channel pairing), and the resulting n-grams
 
 <p> The  features in this section are based on two different types of vertical interval n-grams. Both types of vertical interval n-grams are calculated in sequential sliding windows, with one 
   n-gram for each note note onset slice that has <em>n-1</em> note onset slices 
-  following it.</p>
+  following it. Intervals can be expressed as a count of semitones (with 0 indicating a unison) or as a diatonic interval (with 1 indicating a unison). It is also possible to either wrap octaves or to keep them expanded. Unless otherwise indicated, the features below are generated using the following options: semitone intervals and unwrapped.</p>
 <p>A <strong>complete vertical interval n-gram</strong> consists of a set of <em>n 
   </em>lists, with one list for each of <em>n </em>qualifying sequential note 
   onset slices, and where each list specifies the vertical intervals between the 
-  lowest pitch in the slice and every other unique pitch in the slice (a unison is specified if the lowest pitch is doubled). The vertical intervals 
-  indicated by the entries for each list can be expressed in number of semitones, or by generic interval value, as preferred. 
-  The size of each of these lists can vary, depending on the number of unique vertical intervals found in 
+  lowest pitch in the slice and every other unique pitch in the slice. The size of each of these lists can vary, depending on the number of unique vertical intervals found in 
   each list's corresponding note onset slice. The ordering of each list is such 
   that the first number indicates the interval between the lowest pitch and the 
   second lowest pitch, the second number indicates the interval between the lowest 
@@ -286,20 +285,19 @@ part/voice (i.e. for each MIDI track/channel pairing), and the resulting n-grams
   the vertical intervals between the lowest and the highest lines in the music being considered. Such features are calculated using <strong>lowest and highest lines vertical interval n-grams</strong>. This kind of n-gram only considers notes in the lowest and highest lines in the piece, which is to say the two MIDI track/channel pairings with the lowest and highest average pitches, respectively, as calculated across the entire piece of music from which features are being extracted. Notes in all other MIDI track/channel pairings are ignored in lowest and highest lines vertical interval n-grams and the note onset slices they are derived from. This means that only note onset slices that involve 
   a new note in one of these two outer parts are considered; note onset slices 
   corresponding to only new notes in inner lines are ignored. 
-   If there are multiple 
+   Note onset slices with no vertical intervals 
+  (i.e. where zero notes or only one note are sounding in the two relevant voices) are also ignored during calculation of lowest 
+  and highest lines vertical interval n-grams. Pitches still held in a given note 
+  onset slice from a previous slice are included in the list of pitches in the 
+  new note onset slice, however. If there are multiple 
   notes sounding in a given note onset slice for either of the lowest or highest lines, then only 
   the lowest or highest note is considered, respectively, in the calculation of lowest and highest lines vertical interval n-grams.</p>
 <p>So, lowest and highest lines vertical n-grams each consists of a set of <em>n 
   </em>numbers, with one number for each of <em>n </em>qualifying sequential note 
   onset slices, and where each number specifies the vertical interval between 
   the lowest sounding pitch in the (overall) lowest line and the highest sounding 
-  pitch in the (overall) highest line. These vertical intervals can be expressed 
-  in number of semitones, with 0 representing a vertical unison, or as generic interval values. Aa negative 
-  value indicates voice crossing. Note onset slices with no vertical intervals 
-  (i.e. where only one note is sounding) are ignored during calculation of lowest 
-  and highest lines vertical interval n-grams. Pitches still held in a given note 
-  onset slice from a previous slice are included in the list of pitches in the 
-  new note onset slice.</p>
+  pitch in the (overall) highest line. A negative 
+  interval value indicates voice crossing. </p>
   
 <p>Note that the percentage values by which n-grams are considered rare, common, and very common are different for vertical interval n-gram features than for features based on other varieties of n-grams. The thresholds here are lower because there are usually more unique lowest and highest lines vertical interval n-grams, and even more unique complete vertical interval n-grams, in a piece than there are unique n-grams of other varieties. This is due to the fact that vertical interval n-grams are dependent on changes in more than one MIDI track/channel pairing, and consequently are greater in number and more varied. So, the percentage values have been lowered for both types of vertical interval n-grams in order to generate a number of unique n-grams that are considered rare, common, and very common. The adjusted threshold values were determined through rough empirical testing, but these values are still admittedly rather arbitrary.</p>
 <ul>
@@ -440,11 +438,11 @@ part/voice (i.e. for each MIDI track/channel pairing), and the resulting n-grams
 <a name="RhythmicValueNgramFeatures"></a>
 <p><strong>JSYMBOLIC FEATURE CATALOGUE (RHYTHMIC VALUE N-GRAMS SECTION)</strong></p>
 
-<p> A <strong>rhythmic value n-grams</strong> consists of a set of <em>n</em> values, with one value 
+<p> A <strong>rhythmic value n-gram</strong> consists of a set of <em>n</em> values, with one value 
   for each of <em>n </em>sequential note onset slices for a musical line. Each such value specifies 
   a tempo-independent note duration: each (quantized) duration is expressed as 
   a fraction of a quarter note (e.g. a value of 0.5 corresponds to the duration 
-  of an eighth note). The possible (rhythmically quantized) values are 0.125, 0.25, 0.33333333, 0.5, 0.66666667, 0.75, 
+  of an eighth note). The supported (rhythmically quantized) values are 0.125, 0.25, 0.33333333, 0.5, 0.66666667, 0.75, 
   1.0, 2.0, 3.0, 4.0, 6.0, 8.0, 10.0 and 12.0. Rhythmic value n-grams (and their 
   associated note onset slices) are first calculated independently for each line 
   (i.e. for each MIDI track/channel pairing), and the resulting n-grams are then 
@@ -455,8 +453,8 @@ part/voice (i.e. for each MIDI track/channel pairing), and the resulting n-grams
 occur in this particular type of n-gram if at least one new note in a line is higher in pitch 
   than any still-sounding notes from a previous slice in that line. Rests are  ignored.  MIDI Channel 10 unpitched notes are not included here, 
   as they often represent instruments that cannot hold notes. 
-  Rhythmic value n-grams are calculated in sequential sliding windows, with one 
-  n-gram for each note note onset slice that has <em>n-1</em> note onset slices 
+  Rhythmic value n-grams are calculated using sequential sliding windows, with one 
+  n-gram for each  note onset slice that has <em>n-1</em> note onset slices 
   following it.</p>
 <ul>
   <li><font color="#FF0000"><strong>NR-1 Most Common Rhythmic Value 3-gram Type:</strong> A feature vector of size 3 consisting 

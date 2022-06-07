@@ -70,10 +70,10 @@ public class PrevalenceOfVerticalInterval3GramTypesOccurringOnlyOnceBetweenLowes
             // Verify there is at least one lowest and highest lines vertical interval 3-gram
             if (!lowest_and_highest_lines_vertical_interval_3gram_aggregate.noNGrams())
             {
-                double[] frequencies_of_unique_3grams = lowest_and_highest_lines_vertical_interval_3gram_aggregate.getFrequenciesOfUniqueNGrams();
+                double[] frequencies_of_unique_3grams = lowest_and_highest_lines_vertical_interval_3gram_aggregate.getNormalizedFrequenciesOfUniqueNGrams();
                 
                 int total_number_of_unique_3grams = frequencies_of_unique_3grams.length;
-                double single_occurrence_frequency = (double) 1 / lowest_and_highest_lines_vertical_interval_3gram_aggregate.getNumberOfNGrams();
+                double single_occurrence_frequency = (double) 1 / lowest_and_highest_lines_vertical_interval_3gram_aggregate.getTotalNumberOfNGrams();
                 
                 // Count number of lowest and highest lines vertical interval 3-grams occurring only once
                 int number_of_3grams_occurring_once = 0;

@@ -2,176 +2,195 @@ package jsymbolic2.ngrams;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import mckay.utilities.staticlibraries.MathAndStatsMethods;
 
 /**
- * An aggregate of n-grams. This object is instantiated by the NGramGenerator object with a specified n-value
- * and other parameters, depending on the type of n-grams generated. Each instance is instantiated with a list 
- * of n-grams that have the same n-value and are of the same type of n-gram (jSymbolic currently supports
- * melodic interval, vertical interval, and rhythmic value n-grams).
+ * Objects of this class take a list of n-grams of the same type at instantiation (usually from an
+ * NGramGenerator object) and break them into unique n-grams. The normalized frequency of each unique n-gram
+ * present is also calculated. Unique n-grams and their corresponding frequencies may be accessed through
+ * matching arrays or via a hashmap. Infrequently occurring n-grams may also be filtered out from the set of
+ * unique n-grams, if desired. Objects of this class can be used as intermediate data structures for
+ * calculating a variety of n-gram global features based on n-grams.
  * 
- * Objects of this class have utility fields to facilitate easy usage by feature calculators. It has a hash 
- * map mapping the string identifier of a unique n-gram to the normalized frequency at which that n-gram 
- * occurs. It also has two arrays: one array containing each unique n-gram, and a corresponding array of equal 
- * length containing the normalized frequency at which the n-gram at the same index of the first array occurs.
- * 
- * @author radamian
+ * @author radamian and Cory McKay
  */
 public class NGramAggregate 
 {
 	/**
-	 * The n-grams this object aggregates. Each n-gram is of the same type (vertical interval, melodic 
-	 * interval, rhythmic value) and has the same n-value.
+	 * A reference to the complete ordered set of n-grams provided to an object of this class at
+	 * instantiation, and which it aggregates into its unique_ngrams field (without changing the original
+	 * list). Each NGram object should have the same value of n and should represent information of the same
+	 * type (melodic interval, rhythmic value, complete vertical interval or lowest and highest lines vertical
+	 * interval n-gram). Any n-grams filtered out by the constructor due to low frequency will NOT be filtered
+	 * out from all_ngrams.
 	 */
-	protected LinkedList<NGram> ngrams_ll;
+	protected LinkedList<NGram> all_ngrams;
 	
 	/**
-	 * A HashMap mapping the string identifier of a unique n-gram to that n-gram's normalized frequency among 
-	 * all aggregated n-grams.
-	 */
-	protected HashMap<String, Double> string_id_to_frequency_map;
-	
-	/**
-	 * An array of unique n-grams in the ngrams_ll field. Each n-gram in this array corresponds to the entry
-	 * found at the same index in the frequencies_of_unique_ngrams field, the normalized frequency of that 
-	 * n-gram among all aggregated n-grams.
+	 * Contains each unique n-gram that is present in the all_ngrams field. Duplicates are not included, so
+	 * each unique n-gram appears once and only once in this array. Index values of this array match the index
+	 * values of the normalized_frequencies_of_unique_ngrams array, so the relative frequency (in all_ngrams)
+	 * of each n-gram found in unique_ngrams can be found by looking at the entry of
+	 * normalized_frequencies_of_unique_ngrams with the matching index value. Any n-grams filtered out by the
+	 * constructor due to low frequency WILL be filtered out from unique_ngrams.
 	 */
 	protected NGram[] unique_ngrams;
 	
 	/**
-	 * A normalized histogram containing the frequencies at which each unique n-grams occurs among all 
-	 * aggregated n-grams. Each value in this array corresponds to the entry found at the same index in the 
-	 * unique_ngrams field, the unique n-gram that occurs with the normalized frequency of that value.
+	 * A normalized histogram indicating the relative frequencies (in all_ngrams) of each of the n-grams
+	 * contained in the unique_ngrams array. This array and the unique_ngrams array have matching index
+	 * values, so the relative frequency of each n-gram in unique_ngrams can be found by looking at the entry
+	 * of normalized_frequencies_of_unique_ngrams with the matching index value.Any n-grams filtered out by
+	 * the constructor due to low frequency WILL be filtered out from normalized_frequencies_of_unique_ngrams,
+	 * and will be treated in the remaining frequency calculations as if they never existed.
 	 */
-	protected double[] frequencies_of_unique_ngrams;
+	protected double[] normalized_frequencies_of_unique_ngrams;
 	
+	/**
+	 * A HashMap mapping an n-gram's string identifier (as returned by the NGram object's getStringIdentifier
+	 * method) to its normalized frequency in all_ngrams. There is one map for each unique n-gram contained in
+	 * the unique_ngrams field.
+	 */
+	protected HashMap<String, Double> string_id_to_normalized_frequency_map;
 	
+
 	/* CONSTRUCTOR ******************************************************************************************/
 	
 	
 	/**
-	 * Create an aggregate of n-grams.
+	 * Store a reference to the specified ngrams_to_aggregate, make note of all unique n-grams it contains
+	 * and calculate the normalized frequency with which each unique n-gram occurs in ngrams_to_aggregate.
+	 * N-grams with a relative frequency below a specified amount may optionally be filtered out.
 	 * 
-	 * @param	ngram_list		The list of n-grams that this object aggregates.
+	 * @param	ngrams_to_aggregate	The complete ordered set of n-grams to be aggregated by this object. The
+	 *								contents of the list itself will not be changed. Each NGram object in the
+	 *								list should have the same value of n and should represent information of
+	 *								the same type (melodic interval, rhythmic value, complete vertical
+	 *								interval or lowest and highest lines vertical interval n-gram).
+	 * @param	filtering_threshold	Filter out any unique n-grams with a normalized frequency below this value
+	 *								from the aggregated unique n-grams. For example, a value of 0.01 would
+	 *								mean that any n-grams that represent less than 1% of the n-grams in
+	 *								ngrams_to_aggregate will be included neither in the list of aggregated
+	 *								unique n-grams nor in the corresponding set of relative frequencies that
+	 *								this object	constructs. The final set of relative frequencies for 
+	 *								the remaining unique n-grams that occur above this threshold will be 
+	 *								calculated as if the n-grams below the threshold had never been there.
+	 *								No filtering will occur if this value is 0.0.
 	 */
-	public NGramAggregate(LinkedList<NGram> ngram_list)
+	public NGramAggregate( LinkedList<NGram>	ngrams_to_aggregate, 
+						   double				filtering_threshold )
 	{
-		ngrams_ll = ngram_list;
-		string_id_to_frequency_map = new HashMap<>();
+		// Store a reference to the n-grams provided
+		all_ngrams = ngrams_to_aggregate;
 		
-		LinkedList<NGram> unique_ngrams_ll = new LinkedList<>();
-		
-		// Iterate through the given n-grams and add pairs of unique n-grams and their frequency count to the
-		// string_id_to_frequency_map field
-		for (NGram ngram: ngrams_ll)
+		// Iterate through the given n-grams, noting unique n-grams and their frequencies
+		LinkedList<NGram> unique_ngrams_temp = new LinkedList<>(); // This copy is needed so that proper size is maintained after potential filtering
+		string_id_to_normalized_frequency_map = new HashMap<>();
+		for (NGram ng: all_ngrams)
 		{
-			String string_id = ngram.getStringIdentifier();
+			String string_id = ng.getStringIdentifier();
 			
-			if (string_id_to_frequency_map.get(string_id) == null)
+			if (string_id_to_normalized_frequency_map.get(string_id) == null)
 			{
-				string_id_to_frequency_map.put(string_id, 1.0);
-				unique_ngrams_ll.add(ngram);
+				unique_ngrams_temp.add(ng);
+				string_id_to_normalized_frequency_map.put(string_id, 1.0);
 			}
 			else
 			{
-				double old_frequency = string_id_to_frequency_map.get(string_id);
-				string_id_to_frequency_map.put(string_id, old_frequency + 1);
+				double old_frequency = string_id_to_normalized_frequency_map.get(string_id);
+				string_id_to_normalized_frequency_map.put(string_id, old_frequency + 1);
 			}
 		}
 		
-		/*
-		// Filter out n-grams that occur at a rate less than a specified percentage theshold.
-		double filtering_threshold = .01;
-		
-		// Iterate through the list of n-grams, filtering out those that account for less than 1% of all
-		// n-grams
-		for (NGram ngram: ngrams)
+		// Filter out n-grams that occur at a rate less than a specified percentage filtering_threshold
+		if (filtering_threshold != 0.0)
 		{
-			String string_id = ngram.getStringIdentifier();
-			
-			if (string_id_to_frequency_map.get(string_id) != null)
+			for (NGram ng: all_ngrams)
 			{
-				// If the unique n-gram accounts for less than the filtering threshold percentage value of 
-				// all n-grams by unique identifiers, then its string identifier is removed from the  
-				// string_id_to_frequency_map field, and the n-gram is removed from the unique_ngrams_ll
-				// field.
-				if (string_id_to_frequency_map.get(string_id) < ngrams.size() * filtering_threshold)
+				String string_id = ng.getStringIdentifier();
+				if (string_id_to_normalized_frequency_map.get(string_id) != null)
 				{
-					System.out.println("N-gram " + ngram.getStringIdentifier() + " with frequency " + (string_id_to_frequency_map.get(string_id) / ngrams.size()) + " removed");
-					string_id_to_frequency_map.remove(string_id);
-					unique_ngrams_ll.remove(ngram);
+					if ( string_id_to_normalized_frequency_map.get(string_id) < ( (double) all_ngrams.size() * filtering_threshold) )
+					{
+						unique_ngrams_temp.remove(ng);
+						string_id_to_normalized_frequency_map.remove(string_id);
+						// System.out.println("N-gram " + ng.getStringIdentifier() + " with frequency " + (string_id_to_frequency_map.get(string_id) / all_ngrams.size()) + " removed.");
+					}
 				}
 			}
 		}
-		*/
+	
+		// Set the unique_ngrams field
+		unique_ngrams = new NGram[unique_ngrams_temp.size()];
+		for (int ng = 0; ng < unique_ngrams.length; ng++)
+			unique_ngrams[ng] = unique_ngrams_temp.get(ng);
 		
-		// Initialize the ngrams_by_unique_id field
-		unique_ngrams = new NGram[unique_ngrams_ll.size()];
-		for (int ngram = 0; ngram < unique_ngrams.length; ngram++)
-			unique_ngrams[ngram] = unique_ngrams_ll.get(ngram);
+		// Set the normalized_frequencies_of_unique_ngrams field (BEFORE normalization)
+		normalized_frequencies_of_unique_ngrams = new double[unique_ngrams.length];
+		for (int i = 0; i < normalized_frequencies_of_unique_ngrams.length; i++)
+			normalized_frequencies_of_unique_ngrams[i] = string_id_to_normalized_frequency_map.get(unique_ngrams[i].getStringIdentifier());
 		
-		// Initialize the frequencies_of_unique_ngrams field
-		frequencies_of_unique_ngrams = new double[unique_ngrams.length];
-		for (int i = 0; i < frequencies_of_unique_ngrams.length; i++)
-			frequencies_of_unique_ngrams[i] = string_id_to_frequency_map.get(unique_ngrams[i].getStringIdentifier());
+		// Normalize the normalized_frequencies_of_unique_ngrams field
+		normalized_frequencies_of_unique_ngrams = MathAndStatsMethods.normalize(normalized_frequencies_of_unique_ngrams);
 		
-		// Normalize the frequencies_of_unique_ngrams field
-		frequencies_of_unique_ngrams = mckay.utilities.staticlibraries.MathAndStatsMethods.normalize(frequencies_of_unique_ngrams);
-		
-		// Update the values in the ngram_by_unique_id_to_frequency_map field to the normalized frequencies 
-		// of each unique n-gram
+		// Normalize the string_id_to_normalized_frequency_map field
 		for (int i = 0; i < unique_ngrams.length; i++)
-			string_id_to_frequency_map.put(unique_ngrams[i].getStringIdentifier(), frequencies_of_unique_ngrams[i]);
+			string_id_to_normalized_frequency_map.put(unique_ngrams[i].getStringIdentifier(), normalized_frequencies_of_unique_ngrams[i]);
 		
-		/*
-		// See all n-grams and their frequencies
-        double single_occurrence_frequency = (double) 1 / ngrams_ll.size();
-		int number_of_ngrams_occurring_more_than_once = 0;
-       // System.out.println("\n\n\nSingle occurrence frequency is: " + single_occurrence_frequency);
-		//System.out.println("\nN-grams and their frequencies: ");
+
+		/* TESTING CODE: Display aggregated n-gram stats.
+        double single_occurrence_frequency = 1.0 / (double) unique_ngrams.length;
+		System.out.println("\n\n\n" + all_ngrams.size() + " total n-grams, " + unique_ngrams.length + " of which are unique.");
+		System.out.println("\nSingle n-gram occurrence frequency is: " + single_occurrence_frequency);
+		System.out.println("\nN-grams appearing once (with their frequencies):");
 		for (int i = 0; i < unique_ngrams.length; i++)
-        {
-			//System.out.print(unique_ngrams[i].getStringIdentifier() + " with frequency " + frequencies_of_unique_ngrams[i]);
-            if (frequencies_of_unique_ngrams[i] >  single_occurrence_frequency) number_of_ngrams_occurring_more_than_once++;
-            //System.out.print("\n");
-        }
-		
-		System.out.println(number_of_ngrams_occurring_more_than_once + " n-grams occur more than once.");
-		
-        System.out.println("\nTop 10 n-grams: ");
+            if (normalized_frequencies_of_unique_ngrams[i] <=  single_occurrence_frequency) 
+				System.out.println("\t" + unique_ngrams[i].getStringIdentifier() + ": " + normalized_frequencies_of_unique_ngrams[i]);
+		System.out.println("\nN-grams appearing more than once (with their frequencies):");
+		for (int i = 0; i < unique_ngrams.length; i++)
+            if (normalized_frequencies_of_unique_ngrams[i] >  single_occurrence_frequency) 
+				System.out.println("\t" + unique_ngrams[i].getStringIdentifier() + ": " + normalized_frequencies_of_unique_ngrams[i]);
+        System.out.println("\nTen n-grams occuring most frequently (with their frequencies):");
         for (int i = 0; i < getTopTenMostCommonStringIdentifiers().size(); i++)
 		{
 			String id = getTopTenMostCommonStringIdentifiers().get(i);
-            System.out.println((i + 1) + ": " + id + " with frequency " + string_id_to_frequency_map.get(id));
+            System.out.println((i + 1) + ": " + getTopTenMostCommonStringIdentifiers().get(i) + ": " + string_id_to_normalized_frequency_map.get(id));
 		}
-        */
+		*/
 	}
 	
 	
 	/* PUBLIC METHODS ***************************************************************************************/
 		
 	
-	/**
-	 * @return	The map between the string identifier of a unique n-gram to that n-gram's normalized frequency 
-	 *			among all aggregated n-grams.
-	 */
-	public HashMap<String, Double> getStringIdToFrequencyMap()
-	{
-		return string_id_to_frequency_map;
-	}
-
-	
     /**
-	 * @return	The normalized histogram containing the frequencies at which each unique n-grams occurs among 
-	 *			all aggregated n-grams.
-	 */
-	public double[] getFrequenciesOfUniqueNGrams()
-	{
-		return frequencies_of_unique_ngrams;
-	}
+     * @return  The total number of n-grams that this object was instantiated with. N-grams that are 
+	 *			duplicated ARE counted here.
+     */
+    public int getTotalNumberOfNGrams()
+    {
+        return all_ngrams.size();
+    }
     
     
+   /**
+     * @return  True if this object was instantiated with an empty list of n-grams. False if one or more
+	 *			n-grams were presnt.
+     */
+    public boolean noNGrams()
+    {
+        return all_ngrams.isEmpty();
+    }
+    
+	
 	/**
-	 * @return	The array of unique n-grams in the ngrams_ll field.
+	 * @return	Each unique n-gram that was present in the list of n-grams this object was instantiated with. 
+	 *			Duplicates are not included, so each unique n-gram appears once and only once in the returned
+	 *			array. Infrequently occurring n-grams may have been filtered out by the constructor, depending
+	 *			on the filtering threshold parameter passed to it. Index values of the returned array match 
+	 *			the index values of the array returned by the getStringIdToNormalizedFrequencyMap method, so 
+	 *			the relative frequency of each unique n-gram can be found by looking at the entry with the 
+	 *			matching index value.
 	 */
 	public NGram[] getUniqueNGrams()
 	{
@@ -180,123 +199,116 @@ public class NGramAggregate
 	
 	
     /**
-     * @return  Whether there are no aggregated n-grams.
-     */
-    public boolean noNGrams()
-    {
-        return ngrams_ll.isEmpty();
-    }
-    
-    /**
-     * @return  The number of aggregated n-grams.
-     */
-    public int getNumberOfNGrams()
-    {
-        return ngrams_ll.size();
-    }
-    
-    
-	/**
-	 * Returns a boolean indicating whether two given identifiers are the same.
-	 * 
-	 * @param	id1			The first identifier.
-	 * @param	id2			The second identifier.
-	 * @return				Whether the two identifiers are the same.
+	 * @return	A normalized histogram indicating the relative frequencies of each of the unique n-grams 
+	 *			present in the array returned by the getUniqueNGrams method. The two arrays have matching 
+	 *			index values. Infrequently occurring n-grams may have been filtered out by the constructor,
+	 *			depending on the filtering threshold parameter passed to it, and frequencies are calculated as
+	 *			if any such n-grams were never present.
 	 */
-	public boolean equivalentIdentifiers(	LinkedList<double[]> id1, 
-											LinkedList<double[]> id2)
+	public double[] getNormalizedFrequenciesOfUniqueNGrams()
 	{
-		boolean equivalent_id = true;
-		
-		for (int i = 0; i < id2.size(); i++)
-		{
-			if (id1.get(i).length != id2.get(i).length)
-			{
-				equivalent_id = false;
-				break;
-			}
-
-			for (int j = 0; j < id2.get(i).length; j++)
-				if (id1.get(i)[j] != id2.get(i)[j])
-					equivalent_id = false;
-		}
-		
-		return equivalent_id;
+		return normalized_frequencies_of_unique_ngrams;
 	}
-	
+    
+    
+	/**
+	 * @return	A HashMap mapping an n-gram's string identifier (as returned by the NGram object's 
+	 *			getStringIdentifier method) to its normalized frequency in the list of arrays this object was 
+	 *			instantiated with. Has a mapping for each unique n-gram returned by the getUniqueNGrams 
+	 *			method. Infrequently occurring n-grams may have been filtered out by the constructor,
+	 *			depending on the filtering threshold parameter passed to it, and frequencies are calculated as
+	 *			if any such n-grams were never present.
+	 */
+	public HashMap<String, Double> getStringIdToNormalizedFrequencyMap()
+	{
+		return string_id_to_normalized_frequency_map;
+	}
+
 	
 	/**
-	 * Return the normalized frequency of the n-gram with the given identifier among all aggregated n-grams. 
-	 * If no n-gram has the given identifier, then a value of -1.0 is returned.
+	 * Return the normalized relative frequency of the n-gram with the given identifier among all aggregated 
+	 * n-grams.
 	 * 
-	 * @param	id			The identifier of the n-gram.
-	 * @return				The frequency of the n-gram with the given identifier among all n-grams. -1.0 if 
-	 *						there is no n-gram with the given identifier.
+	 * @param	id	The identifier (as returned by the NGram object's getIdentifier method) of the n-gram 
+	 *				whose normalized relative frequency is being requested.
+	 * @return		The normalized relative frequency of the n-gram with the specified id in the list of
+	 *				n-grams that this object was instantiated with. If no n-gram has the given identifier,
+	 *				then a value of -1.0 is returned. Infrequently occurring n-grams may have been filtered
+	 *				out by the constructor, depending on the filtering threshold parameter passed to it, and 
+	 *				frequencies are calculated as if any such n-grams were never present.
 	 */
-	public double getFrequencyOfIdentifier(LinkedList<double[]> id)
+	public double getNormalizedFrequency(LinkedList<double[]> id)
 	{
 		String string_id = NGram.identifierToString(id);
-		
-		return string_id_to_frequency_map.get(string_id);
+		if (string_id_to_normalized_frequency_map.get(string_id) == null)
+			return -1.0;
+		else return string_id_to_normalized_frequency_map.get(string_id);
 	}
 	
 	
 	/**
-	 * Return the identifier of the most common n-gram.
+	 * Return the identifier of the most common n-gram in the list of n-grams that this object was 
+	 * instantiated with.
 	 * 
-	 * @return	The identifier of the most common n-gram.
+	 * @return	The identifier (as returned by the NGram object's getIdentifier method) of the most common
+	 *			unique n-gram. The earliest occurrence is returned in the case	of a tie between unique 
+	 *			n-grams with equal frequency.
 	 */
-	public LinkedList<double[]> getMostCommonIdentifier()
+	public LinkedList<double[]> getMostCommonNGramIdentifier()
 	{
-		int index_of_highest_frequency = mckay.utilities.staticlibraries.MathAndStatsMethods.getIndexOfLargest(frequencies_of_unique_ngrams);
-		LinkedList<double[]> most_common_identifier = unique_ngrams[index_of_highest_frequency].getIdentifier();
-		
-		return most_common_identifier;
+		int index_of_highest_frequency = MathAndStatsMethods.getIndexOfLargest(normalized_frequencies_of_unique_ngrams);
+		return unique_ngrams[index_of_highest_frequency].getIdentifier();
 	}
 	
 	
 	/**
-	 * Return the identifier of the second most common n-gram.
+	 * Return the identifier of the second most common n-gram in the list of n-grams that this object was 
+	 * instantiated with.
 	 * 
-	 * @return	The identifier of the second most common n-gram.
+	 * @return	The identifier (as returned by the NGram object's getIdentifier method) of the second most 
+	 *			common unique n-gram. The second earliest occurrence is returned in the case of a tie between
+	 *			unique  n-grams with equal frequency.
 	 */
-	public LinkedList<double[]> getSecondMostCommonIdentifier()
+	public LinkedList<double[]> getSecondMostCommonNGramIdentifier()
 	{
-		int index_of_second_highest_frequency = mckay.utilities.staticlibraries.MathAndStatsMethods.getIndexOfSecondLargest(frequencies_of_unique_ngrams);
-		LinkedList<double[]> second_most_common_identifier = unique_ngrams[index_of_second_highest_frequency].getIdentifier();
-		
-		return second_most_common_identifier;
+		int index_of_second_highest_frequency = MathAndStatsMethods.getIndexOfSecondLargest(normalized_frequencies_of_unique_ngrams);
+		return unique_ngrams[index_of_second_highest_frequency].getIdentifier();
 	}
 	
 	
 	/**
-	 * Return a list of the string identifiers of the top ten most common n-grams, ordered from most to least
-	 * common.
+	 * Return a list of the string identifiers of the top ten most common unique n-grams in the list of
+	 * n-grams that this object was instantiated with, ordered from most to least common.
 	 * 
-	 * @return	The list of string identifiers of the top ten most common n-grams, ordered from most to least
-	 *			common.
+	 * @return	The list of string identifiers (as returned by the NGram object's getStringIdentifier method)
+	 *			of the top ten most common unique n-grams, ordered from most to least common. If fewer than 
+	 *			ten unique n-grams are present, then the list will have one entry for each unique n-gram that
+	 *			is present. Infrequently occurring n-grams may have been filtered out by the constructor,
+	 *			depending on the filtering threshold parameter passed to it.
 	 */
-	public LinkedList<String> getTopTenMostCommonStringIdentifiers()
+	public LinkedList<String> getTopTenMostCommonNGramStringIdentifiers()
 	{
+		// The n-gram string identifiers to return
 		LinkedList<String> top_ten_most_common_string_ids = new LinkedList<>();
-		
-		while (top_ten_most_common_string_ids.size() < 10 && top_ten_most_common_string_ids.size() != frequencies_of_unique_ngrams.length)
+
+		// Iterate through n-gram frequencies until the ten most common ones have been found or all n-grams
+		// have been tested.
+		while (top_ten_most_common_string_ids.size() < 10 && top_ten_most_common_string_ids.size() != normalized_frequencies_of_unique_ngrams.length)
 		{
 			String string_id = "";
-			double highest_frequency = 0;
-			
-			for (int i = 0; i < frequencies_of_unique_ngrams.length; i++)
+			double highest_frequency = 0.0;
+			for (int i = 0; i < normalized_frequencies_of_unique_ngrams.length; i++)
 			{
-				if (frequencies_of_unique_ngrams[i] > highest_frequency && !top_ten_most_common_string_ids.contains(unique_ngrams[i].getStringIdentifier()))
+				if (normalized_frequencies_of_unique_ngrams[i] > highest_frequency && !top_ten_most_common_string_ids.contains(unique_ngrams[i].getStringIdentifier()))
 				{
-					highest_frequency = frequencies_of_unique_ngrams[i];
+					highest_frequency = normalized_frequencies_of_unique_ngrams[i];
 					string_id = unique_ngrams[i].getStringIdentifier();
 				}
 			}
-			
 			top_ten_most_common_string_ids.add(string_id);
 		}
-		
+
+		// Return the list
 		return top_ten_most_common_string_ids;
 	}
 }

@@ -435,23 +435,22 @@ public class MIDIIntermediateRepresentations
 	public double[] melodic_interval_histogram_falling_intervals_only;
 
 	/**
-	 * A list of data structures, where the outer list contains a separate entry for each MIDI track. The
-	 * inner structure is an array of lists where the array index corresponds to MIDI channel, and each entry
-	 * in the array consists of a list of all melodic intervals that occurred in that channel on that track,
-	 * in the order that they occurred. Each entry in these lists of melodic intervals is an Integer that
-	 * indicates the number of semitones comprising the melodic interval, with positive values indicating
-	 * upwards motion and negative values indicating downwards motion. Any notes on Channel 10 (non-pitched
-	 * percussion) are ignored (i.e. the Channel 10 entry on the array is left empty). It is assumed that
-	 * there is only one melody at a time per MIDI track and channel (if multiple notes occur simultaneously
-	 * in the same note onset slice on the same MIDI track and channel, then all notes but the highest note in
-	 * the slice are ignored; also, if the highest note is sustained from one note onset slice to the next,
-	 * and is still the highest note in the second slice, then this is treated as if there is no change in
-	 * melody, even if lower pitches in the same track and channel change). Other than this, all notes on the
-	 * same track and the same channel are treated as if they are part of a single melody. It is also assumed
-	 * that melodies do not cross MIDI tracks or channels (i.e. that they are each separately contained in
-	 * their own track and channel). There is always an entry for every channel on every track present, but
-	 * the entry for a given channel will be an empty list if there are no melodic intervals on that track
-	 * and channel.
+	 * The melodic intervals in a piece of music, separated by voice. Each entry of the outer list corresponds
+	 * to a MIDI track, and each entry of the array it contains corresponds to a MIDI channel. Each entry in
+	 * this array corresponds to a list of the melodic intervals that occurred on that channel on that track,
+	 * in the order that they occurred. Each such interval is represented by a number indicating the
+	 * associated number of semitones, with positive values indicating upwards motion and negative values
+	 * indicating downwards motion. Any notes on Channel 10 (non-pitched percussion) are ignored (i.e. the
+	 * Channel 10 entry on the array is left empty). It is assumed that there is only one melody at a time per
+	 * MIDI track and channel (if multiple notes occur simultaneously in the same note onset slice on the same
+	 * MIDI track and channel, then all notes but the highest note in the slice are ignored; also, if the
+	 * highest note is sustained from one note onset slice to the next, and is still the highest note in the
+	 * second slice, then this is treated as if there is no change in melody, even if lower pitches in the
+	 * same track and channel change). Other than this, all notes on the same track and the same channel are
+	 * treated as if they are part of a single melody. It is also assumed that melodies do not cross MIDI
+	 * tracks or channels (i.e. that they are each separately contained in their own track and channel). There
+	 * is always an entry for every channel on every track present, but the entry for a given channel will be
+	 * an empty list if there are no melodic intervals on that track and channel.
 	 */
 	public LinkedList<LinkedList<Integer>[]> melodic_intervals_by_track_and_channel;
 	
@@ -465,45 +464,59 @@ public class MIDIIntermediateRepresentations
 	 * a list of vertical intervals between the notes comprising the lowest and highest lines in the piece (to
 	 * generate lowest and highest lines n-grams), and a structure containing the quantized rhythmic values of 
 	 * the melodic notes by MIDI track and channel (to generate rhythmic value n-grams). This object generates
-	 * n-grams using a sliding window of a specified size n over these structures.
+	 * n-grams using a sliding window over these structures.
 	 */
 	public NGramGenerator ngram_generator;
 	
 	/**
-	 * An aggregate of all melodic interval 3-grams in the piece. A melodic interval 3-gram consists of a set 
-	 * of 3 values, where each value specifies the interval between successive highest-pitched notes on a MIDI 
-	 * track and channel pair. Melodic interval 3-grams are aggregated for each MIDI track and channel pair 
-	 * (Channel 10 is excluded) and are aggregated into this field. Melodic intervals are in number of 
-	 * semitones (with 0 indicating a melodic unison) and are unwrapped.
+	 * An aggregate of all melodic interval 3-grams in the given music. A melodic interval 3-gram consists of
+	 * a set of 3 values, where each value specifies the interval between successive highest-pitched notes on
+	 * a MIDI track and channel pair. In cases where multiple notes were sounding simultaneously on a given
+	 * track and channel, then only the highest of these was used in finding these melodic intervals. Melodic
+	 * intervals are specified in number of semitones (with 0 indicating a melodic unison) and are unwrapped.
+	 * Positive values indicate upwards movement and negative values indicate downwards movement. Melodic
+	 * interval 3-grams are aggregated for each MIDI track and channel pair (Channel 10 is excluded). The 
+	 * 3-grams are formed based on note onset slices. These 3-grams are calculated using sequential sliding
+	 * windows.
 	 */
 	public NGramAggregate melodic_interval_3gram_aggregate;
 	
 	/**
-	 * An aggregate of all melodic interval 3-grams in the MIDI track and channel with the highest average 
-	 * pitch. A melodic interval 3-gram consists of a set of 3 values, where each value specifies the interval 
-	 * between successive highest-pitched notes on a MIDI track and channel pair. Melodic interval 3-grams are 
-	 * aggregated for each MIDI track and channel pair (Channel 10 is excluded) and are aggregated into this 
-	 * field. Melodic intervals are in number of semitones (with 0 indicating a melodic unison) and are 
-	 * unwrapped.
+	 * An aggregate of all melodic interval 3-grams in the MIDI track and channel with the highest average
+	 * pitch (Channel 10 is excluded). A melodic interval 3-gram consists of a set of 3 values, where each
+	 * value specifies the interval between successive highest-pitched notes on the MIDI track and channel
+	 * pair. In cases where multiple notes were sounding simultaneously on the track and channel, then only
+	 * the highest of these was used in finding these melodic intervals. Melodic intervals are specified in
+	 * number of semitones (with 0 indicating a melodic unison) and are unwrapped. Positive values indicate
+	 * upwards movement and negative values indicate downwards movement. The 3-grams are formed based on note
+	 * onset slices. These 3-grams are calculated using sequential sliding windows.
 	 */
-	public NGramAggregate melodic_interval_3gram_in_highest_line_aggregate;
+	public NGramAggregate melodic_interval_in_highest_line_3gram_aggregate;
 	
 	/**
-	 * An aggregate of all melodic interval 3-grams in the MIDI track and channel with the lowest average 
-	 * pitch. A melodic interval 3-gram consists of a set of 3 values, where each value specifies the interval 
-	 * between successive highest-pitched notes on a MIDI track and channel pair. Melodic interval 3-grams are 
-	 * aggregated for each MIDI track and channel pair (Channel 10 is excluded) and are aggregated into this 
-	 * field. Melodic intervals are in number of semitones (with 0 indicating a melodic unison) and are 
-	 * unwrapped.
+	 * An aggregate of all melodic interval 3-grams in the MIDI track and channel with the lowest average
+	 * pitch (Channel 10 is excluded). A melodic interval 3-gram consists of a set of 3 values, where each
+	 * value specifies the interval between successive highest-pitched notes on the MIDI track and channel
+	 * pair. In cases where multiple notes were sounding simultaneously on the track and channel, then only
+	 * the highest of these was used in finding these melodic intervals. Melodic intervals are specified in
+	 * number of semitones (with 0 indicating a melodic unison) and are unwrapped. Positive values indicate
+	 * upwards movement and negative values indicate downwards movement. The 3-grams are formed based on note
+	 * onset slices. These 3-grams are calculated using sequential sliding windows.
 	 */
-	public NGramAggregate melodic_interval_3gram_in_lowest_line_aggregate;
+	public NGramAggregate melodic_interval_in_lowest_line_3gram_aggregate;
 	
 	/**
-	 * An aggregate of complete vertical interval 3-grams. A complete vertical interval n-gram consists of a 
-	 * set of 3 lists, with one list for each of 3 qualifying sequential note onset slices, and where each 
-	 * list specifies the vertical intervals between the lowest pitch in the slice and every other unique 
-	 * pitch in the slice (a unison is specified if the lowest pitch is doubled). Vertical intervals are in 
-	 * number of semitones (with 0 indicating a harmonic unison) and are unwrapped.
+	 * An aggregate of complete vertical interval 3-grams. A complete vertical interval 3-gram consists of a
+	 * set of 3 lists, with one list for each of 3 qualifying sequential note onset slices, and where each
+	 * list specifies the vertical intervals between the lowest pitch in the slice and every other unique
+	 * pitch in the slice (a unison is specified if the lowest pitch is doubled). Intervals relative to
+	 * pitches other than the lowest are not included. Vertical intervals are in number of semitones (with 0
+	 * indicating a harmonic unison) and are unwrapped. The list for each slice only counts each vertical
+	 * interval once (e.g. a doubled major third above the lowest note will be stored as a single major
+	 * third), but one (or more) notes doubling the lowest note will be counted as a (single) unison (0
+	 * semitones). Notes in all voices (MIDI tracks and channels) are combined together, and treated
+	 * identically to multiple notes in a single voice (e.g. a guitar chord), so voice separation is
+	 * effectively ignored. These 3-grams are calculated using sequential sliding windows.
 	 */
 	public NGramAggregate complete_vertical_interval_3gram_aggregate;
 	
@@ -511,20 +524,31 @@ public class MIDIIntermediateRepresentations
 	 * An aggregate of lowest and highest lines vertical interval 3-grams. Here, the highest notes sounding on
 	 * the MIDI track and channel with the highest average pitch constitutes the highest line, and the lowest
 	 * notes sounding on the MIDI track and channel with the lowest average pitch constitutes the lowest line.
-	 * Vertical intervals are in number of semitones (with 0 indicating a harmonic unison) and are unwrapped. 
-	 * The direction of the vertical interval is encoded in the 3-grams, and a negative value indicates voice 
-	 * crossing between the lowest and highest lines.
+	 * Vertical intervals are in number of semitones (with 0 indicating a harmonic unison) and are unwrapped.
+	 * The direction of the vertical interval is encoded in the 3-grams, and a negative value indicates voice
+	 * crossing between the lowest and highest lines. If a given slice contains multiple sounding notes for
+	 * the upper voice, then only the highest of these is considered. If a given slice contains multiple
+	 * sounding notes for the lower voice, then only the lowest of these is considered. These 3-grams are
+	 * calculated using sequential sliding windows.
 	 */
 	public NGramAggregate lowest_and_highest_lines_vertical_interval_3gram_aggregate;
 	
 	/**
-	 * An aggregate of all rhythmic value 3-grams in the piece. Rhythmic value 3-grams are aggregated for 
-	 * each MIDI track and channel pair (Channel 10 is excluded). Only rhythmic values of the melodic
-	 * notes - the highest note sounding in each note onset slice - on each MIDI track and channel are 
-	 * recorded. Each rhythmic value specifies a tempo-independent note duration: each (quantized) duration is 
+	 * An aggregate of all rhythmic value 3-grams in the music under consideration. A rhythmic value 3-gram
+	 * consists of a set of 3 values, with one value for each of 3 sequential note onset slices for a musical
+	 * line. Each such value specifies a tempo-independent note duration: each (quantized) duration is
 	 * expressed as a fraction of a quarter note (e.g. a value of 0.5 corresponds to the duration of an eighth
-	 * note). The possible (rhythmically quantized) values are 0.125, 0.25, 0.33333333, 0.5, 0.66666667, 0.75, 
-	 * 1.0, 2.0, 3.0, 4.0, 6.0, 8.0, 10.0, and 12.0.
+	 * note). The supported (rhythmically quantized) values are 0.125, 0.25, 0.33333333, 0.5, 0.66666667,
+	 * 0.75, 1.0, 2.0, 3.0, 4.0, 6.0, 8.0, 10.0 and 12.0. Rhythmic value 3-grams (and their associated note
+	 * onset slices) are first calculated independently for each line (i.e. for each MIDI track/channel
+	 * pairing), and the resulting 3-grams are then all aggregated together into one collection for all lines
+	 * just before feature calculation. During the calculation for each line, if there are multiple notes in a
+	 * given note onset slice for a given line, then only the highest pitched note in the slice is included in
+	 * the calculation of the rhythmic value 3-gram. A new note onset slice is only considered to occur in
+	 * this particular type of 3-gram if at least one new note in a line is higher in pitch than any
+	 * still-sounding notes from a previous slice in that line. Rests are ignored. MIDI Channel 10 unpitched
+	 * notes are not included here, as they often represent instruments that cannot hold notes. These 3-grams
+	 * are calculated using sequential sliding windows.
 	 */
 	public NGramAggregate rhythmic_value_3gram_aggregate;
 
@@ -636,7 +660,7 @@ public class MIDIIntermediateRepresentations
 	public double[][] average_pitch_by_track_and_channel;
 	
 	/**
-	 * A list of arrays indicating MIDI track (first index) and MIDI channel (second index) pairs, in
+	 * A list of arrays indicating MIDI track (first entry) and MIDI channel (second entry) pairs, in
 	 * increasing order of average pitch occurring on each combination of track and channel. Track and channel
 	 * pairings for which there are no notes in the piece are excluded from this list, as are all pairings
 	 * with MIDI Channel 10 (unpitched percussion).
@@ -1170,17 +1194,8 @@ public class MIDIIntermediateRepresentations
 		generateNGramIntermediateRepresentations();
 		
 		/*
-		n_gram_generator.getVerticalIntervalNGramAggregate(3, track_and_channel_with_lowest_average_pitch, track_and_channel_pairs_by_average_pitch, true, false, false, true);
-		n_gram_generator.getMelodicIntervalNGramAggregateForVoice(3, track_and_channel_with_lowest_average_pitch, true, false, false);
-		n_gram_generator.getRhythmicValueNGramAggregateForVoice(3, track_and_channel_with_highest_average_pitch);
-		n_gram_generator.getVerticalAndMelodicIntervalNGramAggregate(3, track_and_channel_with_lowest_average_pitch, track_and_channel_pairs_by_average_pitch, true, false, false, false);
-		n_gram_generator.getRhythmicValueAndMelodicIntervalNGramAggregateForVoice(3, track_and_channel_with_lowest_average_pitch, true, false, false);
-		*/
-		/*
-		LinkedList<int[]> highest_and_lowest_voice = new LinkedList<>();
-		highest_and_lowest_voice.add(track_and_channel_with_lowest_average_pitch);
-		highest_and_lowest_voice.add(track_and_channel_with_highest_average_pitch);
-		n_gram_generator.getVerticalAndMelodicIntervalNGramAggregate(3, track_and_channel_with_lowest_average_pitch, highest_and_lowest_voice, true, false, false, false);
+		System.out.println(melodic_interval_3gram_aggregate.getTopTenMostCommonStringIdentifiers());
+		System.out.println(complete_vertical_interval_3gram_aggregate.getTopTenMostCommonStringIdentifiers());
 		*/
 		
 		generatePitchAndPitchClassesOfAllNoteOns();
@@ -2383,12 +2398,12 @@ public class MIDIIntermediateRepresentations
 			// one vertical interval)
 			if (pitches_sounding.size() > 1)
 			{
+				// Calculate vertical intervals above the lowest note in the slice, not counting duplicate
+				// vertical intervals (other than, potentially, a single unison)
 				LinkedList<Integer> vertical_intervals_in_slice = new LinkedList<>();
-			
 				for (int i = 1; i < pitches_sounding.size(); i++)
 				{
 					int vertical_interval = pitches_sounding.get(i) - pitches_sounding.get(0);
-					
 					if (!vertical_intervals_in_slice.contains(vertical_interval))
 						vertical_intervals_in_slice.add(vertical_interval);
 				}
@@ -2418,6 +2433,7 @@ public class MIDIIntermediateRepresentations
 
 			// Iterate by note onset slice
 			for (int i = 0; i < note_onset_slice_container.NUMBER_OF_ONSET_SLICES; i++)
+			{
 				// Verify neither slice is empty (i.e. neither line has a rest)
 				if (!highest_line.get(i).isEmpty() && !lowest_line.get(i).isEmpty())
 				{
@@ -2431,10 +2447,10 @@ public class MIDIIntermediateRepresentations
 						vertical_intervals_between_highest_and_lowest_lines.add(highest_line_pitch - lowest_line_pitch);
 					}
 				}
+			}
 		}
 		
-		/*
-		// Print lowest and highest lines vertical intervals
+		/* TESTING CODE: Print lowest and highest lines vertical intervals
 		System.out.println("\n\n\n");
 		for (int vi = 0; vi < vertical_intervals_between_highest_and_lowest_lines.size(); vi++)
 			System.out.println("Vertical interval " + (vi + 1) + ": " + vertical_intervals_between_highest_and_lowest_lines.get(vi));
@@ -2469,8 +2485,7 @@ public class MIDIIntermediateRepresentations
 														 ppqn_ticks_per_beat * 8, // i=12
 														 ppqn_ticks_per_beat * 12 }; // i=13
 		
-		/*
-		// Test difference in MIDI ticks between bins surrounding triplet rhythmic values
+		/* TESTING CODE: Test difference in MIDI ticks between bins surrounding triplet rhythmic values
 		System.out.print("\n");
 		for (int i = 1; i < 6; i++)
 			System.out.println("This rhythmic value bin in ticks is " + central_ticks_per_note_value[i]);
@@ -2482,11 +2497,13 @@ public class MIDIIntermediateRepresentations
 		for (int i = 1; i < lower_bound_ticks_per_note_value.length; i++)
 			lower_bound_ticks_per_note_value[i] = central_ticks_per_note_value[i-1] + ((central_ticks_per_note_value[i] - central_ticks_per_note_value[i-1]) / 2);
 		
+		// Access the melodic notes
 		LinkedList<NoteInfo>[][] melodic_notes_by_track_and_channel = note_onset_slice_container.getMelodicNotesByTrackAndChannel();
 		
-		// See numbers of the MIDI track and channel combination with the highest average pitch
-		// System.out.println("MIDI track + " + track_and_channel_with_highest_average_pitch[0] + " and channel " + track_and_channel_with_highest_average_pitch[1] + " have the highest avg pitch");
-		 
+		/* TESTING CODE: See numbers of the MIDI track and channel combination with the highest average pitch
+		System.out.println("MIDI track + " + track_and_channel_with_highest_average_pitch[0] + " and channel " + track_and_channel_with_highest_average_pitch[1] + " have the highest avg pitch");
+		*/
+		
 		// Iterate by MIDI track and channel
 		for (int n_track = 0; n_track < melodic_notes_by_track_and_channel.length; n_track++)
 		{
@@ -2495,7 +2512,9 @@ public class MIDIIntermediateRepresentations
 				// Iterate over each melodic note on the current track and channel
 				for (NoteInfo note: melodic_notes_by_track_and_channel[n_track][chan])
 				{
+					// The tick duration of this note
 					int duration_in_ticks = note.getEndTick() - note.getStartTick();
+					
 					// The index of lower_bound_ticks_per_note_value that to which the current note's duration
 					// in ticks corresponds
 					int lower_bound_ticks_per_note_value_index = 0;
@@ -2523,24 +2542,26 @@ public class MIDIIntermediateRepresentations
 						case 2: 
 						{ 
 							rhythmic_value = 1.0 / 3.0; 
-							/*
-							// Verify eighth note triplet detection
+							
+							/* TESTING CODE: Verify eighth note triplet detection
 							if (highest_line_track == n_track && highest_line_channel == channel)
 							System.out.println("Eighth note triplet with pitch " + mckay.utilities.sound.midi.MIDIMethods.midiPitchToPitch(note.getPitch()) +
 								" found at beat ~" + (note.getStartTick() / ppqn_ticks_per_beat)); 
 							*/
+							
 							break; 
 						}
 						case 3: rhythmic_value = 1.0 / 2.0; break;
 						case 4: 
 						{
 							rhythmic_value = 2.0 / 3.0;
-							/*
-							// Verify quarter note triplet detection
+							
+							/* TESTING CODE: Verify quarter note triplet detection
 							if (highest_line_track == n_track && chan == highest_line_channel)
 								System.out.println("Quarter note triplet with pitch " + mckay.utilities.sound.midi.MIDIMethods.midiPitchToPitch(note.getPitch()) +
 								" found at beat ~" + (note.getStartTick() / ppqn_ticks_per_beat)); 
 							*/
+							
 							break;
 						}
 						case 5: rhythmic_value = 1.0 * 3.0 / 4.0; break;
@@ -2560,23 +2581,26 @@ public class MIDIIntermediateRepresentations
 		}
 		
 		// Initialize the ngram_generator field
-		ngram_generator = new NGramGenerator(note_onset_slice_container, melodic_intervals_by_track_and_channel, rhythmic_values_in_melodic_line_by_track_and_channel, complete_vertical_intervals, vertical_intervals_between_highest_and_lowest_lines);
+		ngram_generator = new NGramGenerator( note_onset_slice_container,
+		                                      melodic_intervals_by_track_and_channel,
+		                                      rhythmic_values_in_melodic_line_by_track_and_channel,
+				                              complete_vertical_intervals,
+		                                      vertical_intervals_between_highest_and_lowest_lines );
 		
 		// Initialize the melodic_interval_3gram_aggregate, melodic_interval_3gram_in_highest_line_aggregate,
 		// melodic_interval_3gram_in_lowest_line_aggregate, complete_vertical_interval_3gram_aggregate, 
 		// lowest_and_highest_lines_vertical_interval_3gram_aggregate, and rhythmic_value_3gram_aggregate 
 		// fields
 		melodic_interval_3gram_aggregate = ngram_generator.getMelodicIntervalNGramAggregate(3, track_and_channel_pairs_by_average_pitch, true, false, false);
-		melodic_interval_3gram_in_highest_line_aggregate = ngram_generator.getMelodicIntervalNGramAggregateForVoice(3, track_and_channel_with_highest_average_pitch, true, false, false);
-		melodic_interval_3gram_in_lowest_line_aggregate = ngram_generator.getMelodicIntervalNGramAggregateForVoice(3, track_and_channel_with_lowest_average_pitch, true, false, false);
+		melodic_interval_in_highest_line_3gram_aggregate = ngram_generator.getMelodicIntervalNGramAggregateForVoice(3, track_and_channel_with_highest_average_pitch, true, false, false);
+		melodic_interval_in_lowest_line_3gram_aggregate = ngram_generator.getMelodicIntervalNGramAggregateForVoice(3, track_and_channel_with_lowest_average_pitch, true, false, false);
 		complete_vertical_interval_3gram_aggregate = ngram_generator.getCompleteVerticalIntervalNGramAggregate(3, false, false); 
 		lowest_and_highest_lines_vertical_interval_3gram_aggregate = ngram_generator.getLowestAndHighestLinesVerticalIntervalNGramAggregate(3, true, false, false);
 		rhythmic_value_3gram_aggregate = ngram_generator.getRhythmicValueNGramAggregate(3, track_and_channel_pairs_by_average_pitch);
 		
-		/*
-		System.out.println("\n\n\n");
-		
+		/* TESTING CODE:
 		// Print the track and channel numbers of each voice in order of average pitch
+		System.out.println("\n\n\n");
 		System.out.println("\nTRACK AND CHANNEL PAIRS IN ORDER OF AVERAGE PITCH:");
 		for (int pair = 0; pair < track_and_channel_pairs_by_average_pitch.size(); pair++)
 			System.out.println((pair + 1) + ": " + "Track " + (track_and_channel_pairs_by_average_pitch.get(pair)[0] + 1) + ", channel: " + (track_and_channel_pairs_by_average_pitch.get(pair)[1] + 1));

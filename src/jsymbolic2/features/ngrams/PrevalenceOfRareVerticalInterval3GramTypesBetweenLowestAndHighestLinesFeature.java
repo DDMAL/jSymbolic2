@@ -70,7 +70,7 @@ public class PrevalenceOfRareVerticalInterval3GramTypesBetweenLowestAndHighestLi
             // Verify there is at least one lowest and highest lines vertical interval 3-gram
             if (!lowest_and_highest_lines_vertical_interval_3gram_aggregate.noNGrams())
             {
-                double[] frequencies_of_unique_3grams = lowest_and_highest_lines_vertical_interval_3gram_aggregate.getFrequenciesOfUniqueNGrams();
+                double[] frequencies_of_unique_3grams = lowest_and_highest_lines_vertical_interval_3gram_aggregate.getNormalizedFrequenciesOfUniqueNGrams();
                 
                 // Count number of rare lowest and highest lines vertical interval 3-grams
                 int number_of_rare_3grams = 0;

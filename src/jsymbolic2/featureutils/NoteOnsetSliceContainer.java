@@ -258,7 +258,7 @@ public class NoteOnsetSliceContainer
 	 * A structure containing the rhythmic values of the notes contained in 
 	 * note_onset_slices_by_track_and_channel_only_melodic_lines. Each rhythmic value specifies a 
 	 * tempo-independent note duration: each (quantized) duration is expressed as a fraction of a quarter note 
-	 * (e.g. a value of 0.5 corresponds to the duration of an eighth note). The possible (rhythmically 
+	 * (e.g. a value of 0.5 corresponds to the duration of an eighth note). The supported (rhythmically 
 	 * quantized) values are 0.125, 0.25, 0.33333333, 0.5, 0.66666667, 0.75, 1.0, 2.0, 3.0, 4.0, 6.0, 8.0, 
 	 * 10.0 and 12.0. Like the note_onset_slices_by_track_and_channel_only_melodic_lines field, the rhythmic 
 	 * values are separated out by track (first array index) and by channel (second array index). The outer 
@@ -276,7 +276,9 @@ public class NoteOnsetSliceContainer
 	 */
 	private final int NUMBER_OF_MIDI_CHANNELS = 16;
 	
-	// For testing
+	/*
+	 * Used for testing.
+	 */
 	//private List<NoteInfo> all_pitched_notes_encountered;
 
 
@@ -1045,7 +1047,7 @@ public class NoteOnsetSliceContainer
 	 * on that track and channel.
 	 * 
 	 * @return	The list of melodic notes in the MIDI parsed by this object at instantiation, segregated by
-	 *			track and channel. 
+	 *			track (first array index) and channel (second array index). 
 	 */
 	public LinkedList<NoteInfo>[][] getMelodicNotesByTrackAndChannel()
 	{

@@ -67,13 +67,13 @@ public class SecondMostCommonMelodicInterval3GramTypeInLowestLineFeature
 		if (sequence_info != null)
 		{
             // The aggregate of melodic interval 3-grams in the lowest line
-			NGramAggregate melodic_interval_3gram_in_lowest_line_aggregate = sequence_info.melodic_interval_3gram_in_lowest_line_aggregate;
+			NGramAggregate melodic_interval_3gram_in_lowest_line_aggregate = sequence_info.melodic_interval_in_lowest_line_3gram_aggregate;
             
             // Verify there is at least one melodic interval 3-gram
             if (!melodic_interval_3gram_in_lowest_line_aggregate.noNGrams())
             {
                 // Get the second most common melodic interval 3-gram
-                LinkedList<double[]> second_most_common_melodic_interval_3gram = melodic_interval_3gram_in_lowest_line_aggregate.getSecondMostCommonIdentifier();
+                LinkedList<double[]> second_most_common_melodic_interval_3gram = melodic_interval_3gram_in_lowest_line_aggregate.getSecondMostCommonNGramIdentifier();
             
                 // Copy the 3-gram to the result vector
                 result = new double[second_most_common_melodic_interval_3gram.size()];

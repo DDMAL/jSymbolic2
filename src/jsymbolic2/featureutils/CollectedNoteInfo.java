@@ -190,7 +190,7 @@ public class CollectedNoteInfo
 	
 
 	/**
-	 * Get a list of notes in the combination of the given MIDI track and channel.
+	 * Get a list of all the notes in the specified MIDI track and channel pairing.
 	 *
 	 * @param	track	The MIDI track to find notes from.
 	 * @param	channel	The MIDI channel to find notes from.

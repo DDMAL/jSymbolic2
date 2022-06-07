@@ -69,7 +69,7 @@ public class PrevalenceOfMedianVerticalInterval3GramTypeFeature
             // Verify there is at least one complete vertical interval 3-gram
             if (!complete_vertical_interval_3gram_aggregate.noNGrams())
             {
-                double[] frequencies_of_unique_3grams = complete_vertical_interval_3gram_aggregate.getFrequenciesOfUniqueNGrams();
+                double[] frequencies_of_unique_3grams = complete_vertical_interval_3gram_aggregate.getNormalizedFrequenciesOfUniqueNGrams();
             
                 int index_of_median = mckay.utilities.staticlibraries.MathAndStatsMethods.getIndexOfMedian(frequencies_of_unique_3grams);
                 value = frequencies_of_unique_3grams[index_of_median];

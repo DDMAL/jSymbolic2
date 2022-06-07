@@ -68,7 +68,7 @@ public class PrevalenceOfMedianRhythmicValue3GramTypeFeature
             // Verify there is at least one rhythmic value 3-gram
             if (!rhythmic_value_3gram_aggregate.noNGrams())
             {
-                double[] frequencies_of_unique_3grams = rhythmic_value_3gram_aggregate.getFrequenciesOfUniqueNGrams();
+                double[] frequencies_of_unique_3grams = rhythmic_value_3gram_aggregate.getNormalizedFrequenciesOfUniqueNGrams();
             
                 int index_of_median = mckay.utilities.staticlibraries.MathAndStatsMethods.getIndexOfMedian(frequencies_of_unique_3grams);
                 value = frequencies_of_unique_3grams[index_of_median];

@@ -72,7 +72,7 @@ public class MostCommonMelodicInterval3GramTypeFeature
             if (!melodic_interval_3gram_aggregate.noNGrams())
             {
                 // Get the most common melodic interval 3-gram
-                LinkedList<double[]> most_common_melodic_interval_3gram = melodic_interval_3gram_aggregate.getMostCommonIdentifier();
+                LinkedList<double[]> most_common_melodic_interval_3gram = melodic_interval_3gram_aggregate.getMostCommonNGramIdentifier();
 
                 // Copy the 3-gram to the result vector
                 result = new double[most_common_melodic_interval_3gram.size()];

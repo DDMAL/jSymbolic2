@@ -63,7 +63,7 @@ public class NumberOfDistinctMelodicInterval3GramTypesInHighestLineFeature
 		if (sequence_info != null)
 		{
             // The aggregate of melodic interval 3-grams in the highest line
-			NGramAggregate melodic_interval_3gram_in_highest_line_aggregate = sequence_info.melodic_interval_3gram_in_highest_line_aggregate;
+			NGramAggregate melodic_interval_3gram_in_highest_line_aggregate = sequence_info.melodic_interval_in_highest_line_3gram_aggregate;
             
             // Verify there is at least one melodic interval 3-gram
             if (!melodic_interval_3gram_in_highest_line_aggregate.noNGrams())

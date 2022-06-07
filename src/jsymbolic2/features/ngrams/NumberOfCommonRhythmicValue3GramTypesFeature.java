@@ -67,7 +67,7 @@ public class NumberOfCommonRhythmicValue3GramTypesFeature
             // Verify there is at least one rhythmic value 3-gram
             if (!rhythmic_value_3gram_aggregate.noNGrams())
             {
-                double[] frequencies_of_unique_3grams = rhythmic_value_3gram_aggregate.getFrequenciesOfUniqueNGrams();
+                double[] frequencies_of_unique_3grams = rhythmic_value_3gram_aggregate.getNormalizedFrequenciesOfUniqueNGrams();
                 
                 // Count number of common rhythmic value 3-grams
                 int number_of_common_3grams = 0;

@@ -67,7 +67,7 @@ public class NumberOfCommonVerticalInterval3GramTypesFeature
             // Verify there is at least one complete vertical interval 3-gram
             if (!complete_vertical_interval_3gram_aggregate.noNGrams())
             {
-                double[] frequencies_of_unique_3grams = complete_vertical_interval_3gram_aggregate.getFrequenciesOfUniqueNGrams();
+                double[] frequencies_of_unique_3grams = complete_vertical_interval_3gram_aggregate.getNormalizedFrequenciesOfUniqueNGrams();
                 
                 // Count number of common complete vertical interval 3-grams
                 int number_of_common_3grams = 0;

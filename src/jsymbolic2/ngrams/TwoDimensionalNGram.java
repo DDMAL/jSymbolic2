@@ -3,6 +3,21 @@ package jsymbolic2.ngrams;
 import java.util.LinkedList;
 
 /**
+ * IMPORTANT NOTE: This class is currently not used by any active jSymbolic code, and is intended for future
+ * use only. This class is, however used by several (currently commented out) methods at the end of the
+ * otherwise active NGramGenerator class, and these methods can be used in the future once two-dimensional
+ * n-gram features are implemented. The contents of this class have not undergone code or documentation review
+ * yet, nor has this class been rigorously tested, so care should be taken when using it in the future.
+ * Ultimately, this class will be useful in the future once features are implemented for using two-dimensional
+ * n-grams. This class makes it possible to store two-dimensional n-grams by combining (for example) any two
+ * of melodic, rhythmic and vertical n-grams. For example, vertical interval and melodic interval n-grams can
+ * be combined to permit contrapuntal n-grams, similar to those proposed in the jSymbolic manual. Similarly,
+ * melodic interval and rhythmic value n-grams could be combined to produce n-grams facilitating isorhythmic
+ * analysis.
+ *
+ * 
+ * 
+ * 
  * A two-dimensional n-gram, defined by a primary and a secondary identifier that numerically represent a
  * sequence of variable n musical moments and a sequence of n - 1 musical moments, respectively. Moments
  * represented by the secondary identifier are temporally linked to those at the same index and the next index
@@ -50,6 +65,7 @@ public class TwoDimensionalNGram
 	 * delimiting the values of each moment of each identifier.
 	 */
 	private final String joint_string_id;
+
 	
 	/* CONSTRUCTOR ******************************************************************************************/
 	
@@ -64,7 +80,7 @@ public class TwoDimensionalNGram
 	 *								sequence is not one less than that of the given primary sequence.
 	 */
 	public TwoDimensionalNGram( LinkedList<double[]> primary_sequence,
-								LinkedList<double[]> secondary_sequence)
+								LinkedList<double[]> secondary_sequence )
 			throws Exception
 	{
 		super(primary_sequence);
@@ -165,7 +181,7 @@ public class TwoDimensionalNGram
 	}
 	
 	
-	/* PUBLIC STATIC METHODS ********************************************************************************/
+	/* PUBLIC STATIC METHOD *********************************************************************************/
 	
 	
 	/**

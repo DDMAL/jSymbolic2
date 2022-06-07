@@ -64,12 +64,12 @@ public class PrevalenceOfMedianMelodicInterval3GramTypeInLowestLineFeature
 		if (sequence_info != null)
 		{
             // The aggregate of melodic interval 3-grams in the lowest line
-			NGramAggregate melodic_interval_3gram_in_lowest_line_aggregate = sequence_info.melodic_interval_3gram_in_lowest_line_aggregate;
+			NGramAggregate melodic_interval_3gram_in_lowest_line_aggregate = sequence_info.melodic_interval_in_lowest_line_3gram_aggregate;
             
             // Verify there is at least one melodic interval 3-gram
             if (!melodic_interval_3gram_in_lowest_line_aggregate.noNGrams())
             {
-                double[] frequencies_of_unique_3grams = melodic_interval_3gram_in_lowest_line_aggregate.getFrequenciesOfUniqueNGrams();
+                double[] frequencies_of_unique_3grams = melodic_interval_3gram_in_lowest_line_aggregate.getNormalizedFrequenciesOfUniqueNGrams();
             
                 int index_of_median = mckay.utilities.staticlibraries.MathAndStatsMethods.getIndexOfMedian(frequencies_of_unique_3grams);
                 value = frequencies_of_unique_3grams[index_of_median];

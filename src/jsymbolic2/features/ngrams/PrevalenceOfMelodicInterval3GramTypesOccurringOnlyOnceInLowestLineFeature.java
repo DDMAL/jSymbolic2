@@ -64,15 +64,15 @@ public class PrevalenceOfMelodicInterval3GramTypesOccurringOnlyOnceInLowestLineF
 		if (sequence_info != null)
 		{
             // The aggregate of melodic interval 3-grams in the lowest line
-			NGramAggregate melodic_interval_3gram_in_lowest_line_aggregate = sequence_info.melodic_interval_3gram_in_lowest_line_aggregate;
+			NGramAggregate melodic_interval_3gram_in_lowest_line_aggregate = sequence_info.melodic_interval_in_lowest_line_3gram_aggregate;
             
             // Verify there is at least one melodic interval 3-gram
             if (!melodic_interval_3gram_in_lowest_line_aggregate.noNGrams())
             {
-                double[] frequencies_of_unique_3grams = melodic_interval_3gram_in_lowest_line_aggregate.getFrequenciesOfUniqueNGrams();
+                double[] frequencies_of_unique_3grams = melodic_interval_3gram_in_lowest_line_aggregate.getNormalizedFrequenciesOfUniqueNGrams();
                 
                 int total_number_of_unique_3grams = frequencies_of_unique_3grams.length;
-                double single_occurrence_frequency = (double) 1 / melodic_interval_3gram_in_lowest_line_aggregate.getNumberOfNGrams();
+                double single_occurrence_frequency = (double) 1 / melodic_interval_3gram_in_lowest_line_aggregate.getTotalNumberOfNGrams();
                 
                 // Count number of melodic interval 3-grams occurring only once
                 int number_of_3grams_occurring_once = 0;

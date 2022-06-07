@@ -70,10 +70,10 @@ public class PrevalenceOfSecondMostCommonVerticalInterval3GramTypeFeature
             if (!complete_vertical_interval_3gram_aggregate.noNGrams())
             {
                 // Get the second most common complete vertical interval 3-gram
-                LinkedList<double[]> second_most_common_vertical_interval_3gram = complete_vertical_interval_3gram_aggregate.getSecondMostCommonIdentifier();
+                LinkedList<double[]> second_most_common_vertical_interval_3gram = complete_vertical_interval_3gram_aggregate.getSecondMostCommonNGramIdentifier();
                 
                 // The normalized frequency of that 3-gram among all complete vertical interval 3-grams
-                value = complete_vertical_interval_3gram_aggregate.getFrequencyOfIdentifier(second_most_common_vertical_interval_3gram);
+                value = complete_vertical_interval_3gram_aggregate.getNormalizedFrequency(second_most_common_vertical_interval_3gram);
             }
 		}
 

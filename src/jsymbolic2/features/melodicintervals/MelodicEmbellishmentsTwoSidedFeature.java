@@ -11,9 +11,9 @@ import jsymbolic2.featureutils.NoteInfo;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the fraction of all notes that are surrounded on both sides by MIDI Note
- * Ons on the same MIDI track and channel that have durations at least three times as long as the central
- * note. Set to 0 if there are no notes in the piece.
+ * A feature calculator that finds the fraction of all pitched notes that are surrounded on both sides by
+ * pitched notes on the same MIDI track and channel that each have durations at least three times as long as
+ * the central note. Set to 0 if there are no pitched notes in the piece.
  *
  * @author Tristano Tenaglia, Cory McKay, and radamian
  */
@@ -30,7 +30,7 @@ public class MelodicEmbellishmentsTwoSidedFeature
 	{
 		String name = "Melodic Embellishments - Two-Sided";
 		String code = "M-70";
-		String description = "Fraction of all notes that are surrounded on both sides by MIDI Note Ons on the same MIDI track and channel that have durations at least three times as long as the central note. Set to 0 if there are no notes in the piece.";
+		String description = "Fraction of all pitched notes that are surrounded on both sides by pitched notes on the same MIDI track and channel that each have durations at least three times as long as the central note. Set to 0 if there are no pitched notes in the piece.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);

@@ -69,7 +69,7 @@ public class PrevalenceOfMedianVerticalInterval3GramTypeBetweenLowestAndHighestL
             // Verify there is at least one lowest and highest lines vertical interval 3-gram
             if (!lowest_and_highest_lines_vertical_interval_3gram_aggregate.noNGrams())
             {
-                double[] frequencies_of_unique_3grams = lowest_and_highest_lines_vertical_interval_3gram_aggregate.getFrequenciesOfUniqueNGrams();
+                double[] frequencies_of_unique_3grams = lowest_and_highest_lines_vertical_interval_3gram_aggregate.getNormalizedFrequenciesOfUniqueNGrams();
             
                 int index_of_median = mckay.utilities.staticlibraries.MathAndStatsMethods.getIndexOfMedian(frequencies_of_unique_3grams);
                 value = frequencies_of_unique_3grams[index_of_median];

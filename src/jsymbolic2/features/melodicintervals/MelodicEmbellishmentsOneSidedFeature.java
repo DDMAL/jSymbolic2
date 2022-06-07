@@ -11,9 +11,9 @@ import jsymbolic2.featureutils.NoteInfo;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds the fraction of all notes that are surrounded on at least one side by a
- * MIDI Note On on the same MIDI track and channel that has a duration at least three times as long as it. Set
- * to 0 if there are no notes in the piece.
+ * A feature calculator that finds the Fraction of all pitched notes that have, on at least one side, a
+ * pitched note on the same MIDI track and channel with a duration at least three times as long as it. Set to
+ * 0 if there are no pitched notes in the piece.
  *
  * @author Cory McKay and radamian
  */
@@ -30,7 +30,7 @@ public class MelodicEmbellishmentsOneSidedFeature
 	{
 		String name = "Melodic Embellishments - One-Sided";
 		String code = "M-69";
-		String description = "Fraction of all notes that are surrounded on at least one side by a MIDI Note On on the same MIDI track and channel that has a duration at least three times as long as it. Set to 0 if there are no notes in the piece.";
+		String description = "Fraction of all pitched notes that have, on at least one side, a pitched note on the same MIDI track and channel with a duration at least three times as long as it. Set to 0 if there are no pitched notes in the piece.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
@@ -86,7 +86,7 @@ public class MelodicEmbellishmentsOneSidedFeature
 						// necessarily meaningful.
 						Map<Integer, List<NoteInfo>> note_start_tick_map_this_track_and_channel = CollectedNoteInfo.noteListToStartTickNoteMap(all_notes_in_this_track_and_channel);
 
-						// Prepare a sorted set of all ticks containing one or more note on messages
+						// Prepare a sorted set of all ticks containing one or more Note On messages
 						Integer[] sorted_note_on_ticks_this_track_and_channel = note_start_tick_map_this_track_and_channel.keySet().toArray(new Integer[0]);
 						Arrays.sort(sorted_note_on_ticks_this_track_and_channel);
 

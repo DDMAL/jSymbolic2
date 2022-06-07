@@ -76,7 +76,7 @@ public class MostCommonVerticalInterval3GramTypeBetweenLowestAndHighestLinesFeat
             if (!lowest_and_highest_lines_vertical_interval_3gram_aggregate.noNGrams())
             {
                 // Get the most common lowest and highest lines vertical interval 3-gram
-                LinkedList<double[]> most_common_vertical_interval_3gram = lowest_and_highest_lines_vertical_interval_3gram_aggregate.getMostCommonIdentifier();
+                LinkedList<double[]> most_common_vertical_interval_3gram = lowest_and_highest_lines_vertical_interval_3gram_aggregate.getMostCommonNGramIdentifier();
 
                 // Copy the 3-gram to the result vector
                 result = new double[most_common_vertical_interval_3gram.size()];

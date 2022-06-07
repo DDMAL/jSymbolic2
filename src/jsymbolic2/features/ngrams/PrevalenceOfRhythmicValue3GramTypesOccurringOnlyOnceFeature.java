@@ -69,10 +69,10 @@ public class PrevalenceOfRhythmicValue3GramTypesOccurringOnlyOnceFeature
             // Verify there is at least one rhythmic value 3-gram
             if (!rhythmic_value_3gram_aggregate.noNGrams())
             {
-                double[] frequencies_of_unique_3grams = rhythmic_value_3gram_aggregate.getFrequenciesOfUniqueNGrams();
+                double[] frequencies_of_unique_3grams = rhythmic_value_3gram_aggregate.getNormalizedFrequenciesOfUniqueNGrams();
                 
                 int total_number_of_unique_3grams = frequencies_of_unique_3grams.length;
-                double single_occurrence_frequency = (double) 1 / rhythmic_value_3gram_aggregate.getNumberOfNGrams();
+                double single_occurrence_frequency = (double) 1 / rhythmic_value_3gram_aggregate.getTotalNumberOfNGrams();
                 
                 // Count number of rhythmic value 3-grams occurring only once
                 int number_of_3grams_occurring_once = 0;

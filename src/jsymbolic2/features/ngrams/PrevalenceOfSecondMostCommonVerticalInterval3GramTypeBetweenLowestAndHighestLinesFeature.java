@@ -71,10 +71,10 @@ public class PrevalenceOfSecondMostCommonVerticalInterval3GramTypeBetweenLowestA
             if (!lowest_and_highest_lines_vertical_interval_3gram_aggregate.noNGrams())
             {
                 // Get the second most common lowest and highest lines vertical interval 3-gram
-                LinkedList<double[]> second_most_common_vertical_interval_3gram = lowest_and_highest_lines_vertical_interval_3gram_aggregate.getSecondMostCommonIdentifier();
+                LinkedList<double[]> second_most_common_vertical_interval_3gram = lowest_and_highest_lines_vertical_interval_3gram_aggregate.getSecondMostCommonNGramIdentifier();
                 
                 // The normalized frequency of that 3-gram among all lowest and highest lines vertical interval 3-grams
-                value = lowest_and_highest_lines_vertical_interval_3gram_aggregate.getFrequencyOfIdentifier(second_most_common_vertical_interval_3gram);
+                value = lowest_and_highest_lines_vertical_interval_3gram_aggregate.getNormalizedFrequency(second_most_common_vertical_interval_3gram);
             }
 		}
 

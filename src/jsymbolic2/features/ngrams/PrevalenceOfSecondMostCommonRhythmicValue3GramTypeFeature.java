@@ -70,10 +70,10 @@ public class PrevalenceOfSecondMostCommonRhythmicValue3GramTypeFeature
             if (!rhythmic_value_3gram_aggregate.noNGrams())
             {
                 // Get the second most common rhythmic value 3-gram
-                LinkedList<double[]> second_most_common_rhythmic_value_3gram = rhythmic_value_3gram_aggregate.getSecondMostCommonIdentifier();
+                LinkedList<double[]> second_most_common_rhythmic_value_3gram = rhythmic_value_3gram_aggregate.getSecondMostCommonNGramIdentifier();
                 
                 // The normalized frequency of that 3-gram among all rhythmic value 3-grams
-                value = rhythmic_value_3gram_aggregate.getFrequencyOfIdentifier(second_most_common_rhythmic_value_3gram);
+                value = rhythmic_value_3gram_aggregate.getNormalizedFrequency(second_most_common_rhythmic_value_3gram);
             }
 		}
 

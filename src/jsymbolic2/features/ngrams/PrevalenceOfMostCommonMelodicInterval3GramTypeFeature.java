@@ -70,10 +70,10 @@ public class PrevalenceOfMostCommonMelodicInterval3GramTypeFeature
             if (!melodic_interval_3gram_aggregate.noNGrams())
             {
                 // Get the most common melodic interval 3-gram
-                LinkedList<double[]> most_common_melodic_interval_3gram = melodic_interval_3gram_aggregate.getMostCommonIdentifier();
+                LinkedList<double[]> most_common_melodic_interval_3gram = melodic_interval_3gram_aggregate.getMostCommonNGramIdentifier();
 
                 // The normalized frequency of that 3-gram among all melodic interval 3-grams 
-                value = melodic_interval_3gram_aggregate.getFrequencyOfIdentifier(most_common_melodic_interval_3gram);
+                value = melodic_interval_3gram_aggregate.getNormalizedFrequency(most_common_melodic_interval_3gram);
             }
 		}
 

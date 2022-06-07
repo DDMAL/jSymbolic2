@@ -15,7 +15,7 @@ public class Main
 	/**
 	 * The name and version of this jSymbolic version.
 	 */
-	public static final String SOFTWARE_NAME_AND_VERSION = "jSymbolic 2.3";
+	public static final String SOFTWARE_NAME_AND_VERSION = "jSymbolic 3.0";
 
 	/**
 	 * The string indicating licensing credit.
