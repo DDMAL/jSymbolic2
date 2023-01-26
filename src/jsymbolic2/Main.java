@@ -20,7 +20,7 @@ public class Main
 	/**
 	 * The string indicating licensing credit.
 	 */
-	public static final String YEAR_AND_LICENSING = "2022 (GNU GPL)";
+	public static final String YEAR_AND_LICENSING = "2023 (GNU GPL)";
 	
 	/**
 	 * The name of this software's author.

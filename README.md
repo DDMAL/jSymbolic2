@@ -1,6 +1,6 @@
-# jSymbolic 2.3
+# jSymbolic 3.0
 by Cory McKay
-Copyright (C) 2022 (GNU GPL)
+Copyright (C) 2023 (GNU GPL)
 
 
 ### OVERVIEW
@@ -59,7 +59,8 @@ and also posted on the  jMIR web site
 (http://jmir.sourceforge.net/manuals/jSymbolic_manual/home.html).
 
 jSymbolic is also packaged with a detailed HTML tutorial that includes worked
-examples. First-time users of jSymbolic may wish to follow this tutorial(http://jmir.sourceforge.net/manuals/jSymbolic_tutorial/home.html).
+examples. First-time users of jSymbolic may wish to follow this tutorial
+(http://jmir.sourceforge.net/manuals/jSymbolic_tutorial/home.html).
 
 The most recent development code for jSymbolic can be found on its GitHub
 page (https://github.com/DDMAL/jSymbolic2). However, it is strongly suggested

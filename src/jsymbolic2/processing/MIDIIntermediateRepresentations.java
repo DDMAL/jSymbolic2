@@ -2370,272 +2370,8 @@ public class MIDIIntermediateRepresentations
 		melodic_interval_histogram_rising_intervals_only = MathAndStatsMethods.normalize(melodic_interval_histogram_rising_intervals_only);
 		melodic_interval_histogram_falling_intervals_only = MathAndStatsMethods.normalize(melodic_interval_histogram_falling_intervals_only);
 	}
+
 	
-
-	/**
-	 * Generate the ngram_generator, melodic_interval_3gram_aggregate, 
-	 * complete_vertical_interval_3gram_aggregate, lowest_and_highest_lines_vertical_interval_3gram_aggregate,
-	 * and rhythmic_value_3gram_aggregate fields.
-	 */
-	private void generateNGramIntermediateRepresentations()
-	{
-		// The complete vertical intervals in the piece. There is an inner list for every intervallic moment,
-		// and each inner list contains the unique vertical intervals at that moment, in number of semitones.
-		LinkedList<LinkedList<Integer>> complete_vertical_intervals = new LinkedList<>();
-		
-		// Get the note onset slices with duplicate pitches included. This type of note onset slice is
-		// necessary in order to capture possible unison vertical intervals within the same MIDI track and
-		// channel combinations.
-		LinkedList<LinkedList<Integer>> note_onset_slices_duplicate_pitches_included = note_onset_slice_container.getNoteOnsetSlicesDuplicatePitchesIncluded();
-		
-		// Iterate by note onset slice
-		for (int slice = 0; slice < note_onset_slices_duplicate_pitches_included.size(); slice++)
-		{
-			// All pitches sounding in this note onset slice
-			LinkedList<Integer> pitches_sounding = note_onset_slices_duplicate_pitches_included.get(slice);
-			
-			// Verify there is more than one note sounding in this note onset slice (i.e. there is at least
-			// one vertical interval)
-			if (pitches_sounding.size() > 1)
-			{
-				// Calculate vertical intervals above the lowest note in the slice, not counting duplicate
-				// vertical intervals (other than, potentially, a single unison)
-				LinkedList<Integer> vertical_intervals_in_slice = new LinkedList<>();
-				for (int i = 1; i < pitches_sounding.size(); i++)
-				{
-					int vertical_interval = pitches_sounding.get(i) - pitches_sounding.get(0);
-					if (!vertical_intervals_in_slice.contains(vertical_interval))
-						vertical_intervals_in_slice.add(vertical_interval);
-				}
-				
-				// Add the list of vertical intervals in this note onset slice to complete_vertical_intervals
-				complete_vertical_intervals.add(vertical_intervals_in_slice);
-			}
-		}
-		
-		// A list of vertical intervals between the highest and lowest lines in the piece. A vertical interval
-		// is recorded for each moment when there is a note onset in at least one of the lines.
-		LinkedList<Integer> vertical_intervals_between_highest_and_lowest_lines = new LinkedList<>();
-		
-		// The track and channel numbers for the highest and lowest lines
-		int highest_line_track = track_and_channel_with_highest_average_pitch[0];
-		int highest_line_channel = track_and_channel_with_highest_average_pitch[1];
-		int lowest_line_track = track_and_channel_with_lowest_average_pitch[0];
-		int lowest_line_channel = track_and_channel_with_lowest_average_pitch[1];
-		
-		// Verify that the lowest and highest lines are distinct
-		if (highest_line_track != lowest_line_track || highest_line_channel != lowest_line_channel)
-		{
-			// Get the melodic note onset slices for the highest line and the lowest note onset slices for the
-			// lowest line
-			LinkedList<LinkedList<Integer>> highest_line = note_onset_slice_container.getNoteOnsetSlicesByTrackAndChannelMelodicLinesOnlyHeldNotesIncluded()[highest_line_track][highest_line_channel];
-			LinkedList<LinkedList<Integer>> lowest_line = note_onset_slice_container.getNoteOnsetSlicesByTrackAndChannelLowestPitchesOnlyHeldNotesIncluded()[lowest_line_track][lowest_line_channel];
-
-			// Iterate by note onset slice
-			for (int i = 0; i < note_onset_slice_container.NUMBER_OF_ONSET_SLICES; i++)
-			{
-				// Verify neither slice is empty (i.e. neither line has a rest)
-				if (!highest_line.get(i).isEmpty() && !lowest_line.get(i).isEmpty())
-				{
-					int highest_line_pitch = highest_line.get(i).get(0);
-					int lowest_line_pitch = lowest_line.get(i).get(0);
-
-					// Verify that at least one of these pitches belongs to a new note onset
-					if (note_onset_slice_container.isPitchInSliceNewOnset(highest_line_pitch, i, highest_line_track, highest_line_channel) || 
-						note_onset_slice_container.isPitchInSliceNewOnset(lowest_line_pitch, i, lowest_line_track, lowest_line_channel))
-					{
-						vertical_intervals_between_highest_and_lowest_lines.add(highest_line_pitch - lowest_line_pitch);
-					}
-				}
-			}
-		}
-		
-		/* TESTING CODE: Print lowest and highest lines vertical intervals
-		System.out.println("\n\n\n");
-		for (int vi = 0; vi < vertical_intervals_between_highest_and_lowest_lines.size(); vi++)
-			System.out.println("Vertical interval " + (vi + 1) + ": " + vertical_intervals_between_highest_and_lowest_lines.get(vi));
-		*/
-		
-		// A structure containing all rhythmic values of the melodic notes on each MIDI track and channel.
-		// This structure will be passed to the NGramGenerator object's constructor and serve as the source of 
-		// rhythmic values for the rhythmic value n-grams generated by it. Rhythmic values are calculate in a 
-		// similar way as they are for the rhythmic_value_of_each_note_in_quarter_notes intermediate 
-		// representation.
-		LinkedList[][] rhythmic_values_in_melodic_line_by_track_and_channel = new LinkedList[tracks.length][16];
-		for (int n_track = 0; n_track < rhythmic_values_in_melodic_line_by_track_and_channel.length; n_track++)
-			for (int chan = 0; chan < rhythmic_values_in_melodic_line_by_track_and_channel[n_track].length; chan++)
-				rhythmic_values_in_melodic_line_by_track_and_channel[n_track][chan] = new LinkedList<>();
-		
-		// The number of ticks per quarter note for the entire sequence
-		int ppqn_ticks_per_beat = sequence.getResolution();
-		
-		// The number of ticks corresponding to each note value in the form of an array
-		int central_ticks_per_note_value[] = new int[] { ppqn_ticks_per_beat / 8, // i=0
-														 ppqn_ticks_per_beat / 4, // i=1
-														 ppqn_ticks_per_beat / 3, // i=2
-														 ppqn_ticks_per_beat / 2, // i=3
-														 ppqn_ticks_per_beat * 2 / 3, // i=4
-														 ppqn_ticks_per_beat * 3 / 4, // i=5
-														 ppqn_ticks_per_beat, // i=6
-														 ppqn_ticks_per_beat * 3 / 2, // i=7
-														 ppqn_ticks_per_beat * 2, // i=8
-														 ppqn_ticks_per_beat * 3, // i=9
-														 ppqn_ticks_per_beat * 4, // i=10
-														 ppqn_ticks_per_beat * 6, // i=11
-														 ppqn_ticks_per_beat * 8, // i=12
-														 ppqn_ticks_per_beat * 12 }; // i=13
-		
-		/* TESTING CODE: Test difference in MIDI ticks between bins surrounding triplet rhythmic values
-		System.out.print("\n");
-		for (int i = 1; i < 6; i++)
-			System.out.println("This rhythmic value bin in ticks is " + central_ticks_per_note_value[i]);
-		*/
-		
-		// The lowest number of ticks that a note of the given value can have
-		int lower_bound_ticks_per_note_value[] = new int[central_ticks_per_note_value.length];
-		lower_bound_ticks_per_note_value[0] = 0;
-		for (int i = 1; i < lower_bound_ticks_per_note_value.length; i++)
-			lower_bound_ticks_per_note_value[i] = central_ticks_per_note_value[i-1] + ((central_ticks_per_note_value[i] - central_ticks_per_note_value[i-1]) / 2);
-		
-		// Access the melodic notes
-		LinkedList<NoteInfo>[][] melodic_notes_by_track_and_channel = note_onset_slice_container.getMelodicNotesByTrackAndChannel();
-		
-		/* TESTING CODE: See numbers of the MIDI track and channel combination with the highest average pitch
-		System.out.println("MIDI track + " + track_and_channel_with_highest_average_pitch[0] + " and channel " + track_and_channel_with_highest_average_pitch[1] + " have the highest avg pitch");
-		*/
-		
-		// Iterate by MIDI track and channel
-		for (int n_track = 0; n_track < melodic_notes_by_track_and_channel.length; n_track++)
-		{
-			for (int chan = 0; chan < melodic_notes_by_track_and_channel[n_track].length; chan++)
-			{
-				// Iterate over each melodic note on the current track and channel
-				for (NoteInfo note: melodic_notes_by_track_and_channel[n_track][chan])
-				{
-					// The tick duration of this note
-					int duration_in_ticks = note.getEndTick() - note.getStartTick();
-					
-					// The index of lower_bound_ticks_per_note_value that to which the current note's duration
-					// in ticks corresponds
-					int lower_bound_ticks_per_note_value_index = 0;
-					
-					// Map the current note note to its appropriate rhythmic value
-					for (int i = 0; i < lower_bound_ticks_per_note_value.length; i++)
-					{
-						if (i == lower_bound_ticks_per_note_value.length - 1)
-							lower_bound_ticks_per_note_value_index = i;
-						else if (duration_in_ticks < lower_bound_ticks_per_note_value[i+1])
-						{
-							lower_bound_ticks_per_note_value_index = i;
-							break;
-						}
-					}
-					
-					double rhythmic_value = 0.0;
-					
-					// Get the fraction of a quarter note corresponding to the quantized rhythmic value of the
-					// current note
-					switch (lower_bound_ticks_per_note_value_index)
-					{
-						case 0: rhythmic_value = 1.0 / 8.0; break;
-						case 1: rhythmic_value = 1.0 / 4.0; break;
-						case 2: 
-						{ 
-							rhythmic_value = 1.0 / 3.0; 
-							
-							/* TESTING CODE: Verify eighth note triplet detection
-							if (highest_line_track == n_track && highest_line_channel == channel)
-							System.out.println("Eighth note triplet with pitch " + mckay.utilities.sound.midi.MIDIMethods.midiPitchToPitch(note.getPitch()) +
-								" found at beat ~" + (note.getStartTick() / ppqn_ticks_per_beat)); 
-							*/
-							
-							break; 
-						}
-						case 3: rhythmic_value = 1.0 / 2.0; break;
-						case 4: 
-						{
-							rhythmic_value = 2.0 / 3.0;
-							
-							/* TESTING CODE: Verify quarter note triplet detection
-							if (highest_line_track == n_track && chan == highest_line_channel)
-								System.out.println("Quarter note triplet with pitch " + mckay.utilities.sound.midi.MIDIMethods.midiPitchToPitch(note.getPitch()) +
-								" found at beat ~" + (note.getStartTick() / ppqn_ticks_per_beat)); 
-							*/
-							
-							break;
-						}
-						case 5: rhythmic_value = 1.0 * 3.0 / 4.0; break;
-						case 6: rhythmic_value = 1.0; break;
-						case 7: rhythmic_value = 1.0 * 1.5; break;
-						case 8: rhythmic_value = 1.0 * 2.0; break;
-						case 9: rhythmic_value = 1.0 * 3.0; break;
-						case 10: rhythmic_value = 1.0 * 4.0; break;
-						case 11: rhythmic_value = 1.0 * 6.0; break;
-						case 12: rhythmic_value = 1.0 * 8.0; break;
-						case 13: rhythmic_value = 1.0 * 12.0; break;
-					}
-					
-					rhythmic_values_in_melodic_line_by_track_and_channel[n_track][chan].add(rhythmic_value);
-				}
-			}
-		}
-		
-		// Initialize the ngram_generator field
-		ngram_generator = new NGramGenerator( note_onset_slice_container,
-		                                      melodic_intervals_by_track_and_channel,
-		                                      rhythmic_values_in_melodic_line_by_track_and_channel,
-				                              complete_vertical_intervals,
-		                                      vertical_intervals_between_highest_and_lowest_lines );
-		
-		// Initialize the melodic_interval_3gram_aggregate, melodic_interval_3gram_in_highest_line_aggregate,
-		// melodic_interval_3gram_in_lowest_line_aggregate, complete_vertical_interval_3gram_aggregate, 
-		// lowest_and_highest_lines_vertical_interval_3gram_aggregate, and rhythmic_value_3gram_aggregate 
-		// fields
-		melodic_interval_3gram_aggregate = ngram_generator.getMelodicIntervalNGramAggregate(3, track_and_channel_pairs_by_average_pitch, true, false, false);
-		melodic_interval_in_highest_line_3gram_aggregate = ngram_generator.getMelodicIntervalNGramAggregateForVoice(3, track_and_channel_with_highest_average_pitch, true, false, false);
-		melodic_interval_in_lowest_line_3gram_aggregate = ngram_generator.getMelodicIntervalNGramAggregateForVoice(3, track_and_channel_with_lowest_average_pitch, true, false, false);
-		complete_vertical_interval_3gram_aggregate = ngram_generator.getCompleteVerticalIntervalNGramAggregate(3, false, false); 
-		lowest_and_highest_lines_vertical_interval_3gram_aggregate = ngram_generator.getLowestAndHighestLinesVerticalIntervalNGramAggregate(3, true, false, false);
-		rhythmic_value_3gram_aggregate = ngram_generator.getRhythmicValueNGramAggregate(3, track_and_channel_pairs_by_average_pitch);
-		
-		/* TESTING CODE:
-		// Print the track and channel numbers of each voice in order of average pitch
-		System.out.println("\n\n\n");
-		System.out.println("\nTRACK AND CHANNEL PAIRS IN ORDER OF AVERAGE PITCH:");
-		for (int pair = 0; pair < track_and_channel_pairs_by_average_pitch.size(); pair++)
-			System.out.println((pair + 1) + ": " + "Track " + (track_and_channel_pairs_by_average_pitch.get(pair)[0] + 1) + ", channel: " + (track_and_channel_pairs_by_average_pitch.get(pair)[1] + 1));
-		
-		// Print the average n-gram frequency in the aggregate
-		System.out.println("\nAVERAGE N-GRAM FREQUENCY: " + mckay.utilities.staticlibraries.MathAndStatsMethods.getAverage(aggregate.getFrequenciesByUniqueId()));
-		
-		// Test different thresholds for commonness and very-commonness
-		double commonness_threshold = .05;
-		double very_commonness_threshold = .1;
-		boolean has_top_ten_n_gram_above_common_threshold = false;
-		boolean has_top_ten_n_gram_above_very_common_threshold = false;
-		
-		// Print the top ten most common n-grams and their frequencies
-		System.out.println("\nTOP TEN N-GRAMS AND THEIR FREQUENCIES:");
-		LinkedList<String> top_ten_most_common_string_identifiers = aggregate.getTopTenMostCommonStringIdentifiers();
-		for (int i = 0; i < top_ten_most_common_string_identifiers.size(); i++)
-		{
-			String id = top_ten_most_common_string_identifiers.get(i);
-			double frequency = aggregate.getStringIdToFrequencyMap().get(id);
-			
-			System.out.println((i + 1) + ": " + id + ", " + frequency);
-			
-			if (frequency >= commonness_threshold) has_top_ten_n_gram_above_common_threshold = true;
-			if (frequency >= very_commonness_threshold) has_top_ten_n_gram_above_very_common_threshold = true;
-		}
-		
-		// Print results of commonness threshold testing
-		System.out.println("\nCOMMONNESS THRESHOLD TESTING RESULTS:");
-		if (!has_top_ten_n_gram_above_common_threshold) System.out.println("None equal to or greater than " + (commonness_threshold * 100) + "%");
-		if (has_top_ten_n_gram_above_very_common_threshold) System.out.println("Some greater than " + (very_commonness_threshold * 100) + "%");
-		*/
-	}
-
-
 	/**
 	 * Calculate the values of the channel_statistics, number_of_active_voices,
 	 * total_time_notes_sounding_per_channel, list_of_note_on_pitches_by_channel and 
@@ -3022,7 +2758,271 @@ public class MIDIIntermediateRepresentations
 		track_and_channel_with_lowest_average_pitch = mckay.utilities.staticlibraries.MathAndStatsMethods.getIndicesOfSmallest(average_pitch_by_track_and_channel_smallest_value_calculation);
 	}
 	
-	
+
+	/**
+	 * Generate the ngram_generator, melodic_interval_3gram_aggregate, 
+	 * complete_vertical_interval_3gram_aggregate, lowest_and_highest_lines_vertical_interval_3gram_aggregate,
+	 * and rhythmic_value_3gram_aggregate fields.
+	 */
+	private void generateNGramIntermediateRepresentations()
+	{
+		// The complete vertical intervals in the piece. There is an inner list for every intervallic moment,
+		// and each inner list contains the unique vertical intervals at that moment, in number of semitones.
+		LinkedList<LinkedList<Integer>> complete_vertical_intervals = new LinkedList<>();
+		
+		// Get the note onset slices with duplicate pitches included. This type of note onset slice is
+		// necessary in order to capture possible unison vertical intervals within the same MIDI track and
+		// channel combinations.
+		LinkedList<LinkedList<Integer>> note_onset_slices_duplicate_pitches_included = note_onset_slice_container.getNoteOnsetSlicesDuplicatePitchesIncluded();
+		
+		// Iterate by note onset slice
+		for (int slice = 0; slice < note_onset_slices_duplicate_pitches_included.size(); slice++)
+		{
+			// All pitches sounding in this note onset slice
+			LinkedList<Integer> pitches_sounding = note_onset_slices_duplicate_pitches_included.get(slice);
+			
+			// Verify there is more than one note sounding in this note onset slice (i.e. there is at least
+			// one vertical interval)
+			if (pitches_sounding.size() > 1)
+			{
+				// Calculate vertical intervals above the lowest note in the slice, not counting duplicate
+				// vertical intervals (other than, potentially, a single unison)
+				LinkedList<Integer> vertical_intervals_in_slice = new LinkedList<>();
+				for (int i = 1; i < pitches_sounding.size(); i++)
+				{
+					int vertical_interval = pitches_sounding.get(i) - pitches_sounding.get(0);
+					if (!vertical_intervals_in_slice.contains(vertical_interval))
+						vertical_intervals_in_slice.add(vertical_interval);
+				}
+				
+				// Add the list of vertical intervals in this note onset slice to complete_vertical_intervals
+				complete_vertical_intervals.add(vertical_intervals_in_slice);
+			}
+		}
+		
+		// A list of vertical intervals between the highest and lowest lines in the piece. A vertical interval
+		// is recorded for each moment when there is a note onset in at least one of the lines.
+		LinkedList<Integer> vertical_intervals_between_highest_and_lowest_lines = new LinkedList<>();
+		
+		// The track and channel numbers for the highest and lowest lines
+		int highest_line_track = track_and_channel_with_highest_average_pitch[0];
+		int highest_line_channel = track_and_channel_with_highest_average_pitch[1];
+		int lowest_line_track = track_and_channel_with_lowest_average_pitch[0];
+		int lowest_line_channel = track_and_channel_with_lowest_average_pitch[1];
+		
+		// Verify that the lowest and highest lines are distinct
+		if (highest_line_track != lowest_line_track || highest_line_channel != lowest_line_channel)
+		{
+			// Get the melodic note onset slices for the highest line and the lowest note onset slices for the
+			// lowest line
+			LinkedList<LinkedList<Integer>> highest_line = note_onset_slice_container.getNoteOnsetSlicesByTrackAndChannelMelodicLinesOnlyHeldNotesIncluded()[highest_line_track][highest_line_channel];
+			LinkedList<LinkedList<Integer>> lowest_line = note_onset_slice_container.getNoteOnsetSlicesByTrackAndChannelLowestPitchesOnlyHeldNotesIncluded()[lowest_line_track][lowest_line_channel];
+
+			// Iterate by note onset slice
+			for (int i = 0; i < note_onset_slice_container.NUMBER_OF_ONSET_SLICES; i++)
+			{
+				// Verify neither slice is empty (i.e. neither line has a rest)
+				if (!highest_line.get(i).isEmpty() && !lowest_line.get(i).isEmpty())
+				{
+					int highest_line_pitch = highest_line.get(i).get(0);
+					int lowest_line_pitch = lowest_line.get(i).get(0);
+
+					// Verify that at least one of these pitches belongs to a new note onset
+					if (note_onset_slice_container.isPitchInSliceNewOnset(highest_line_pitch, i, highest_line_track, highest_line_channel) || 
+						note_onset_slice_container.isPitchInSliceNewOnset(lowest_line_pitch, i, lowest_line_track, lowest_line_channel))
+					{
+						vertical_intervals_between_highest_and_lowest_lines.add(highest_line_pitch - lowest_line_pitch);
+					}
+				}
+			}
+		}
+		
+		/* TESTING CODE: Print lowest and highest lines vertical intervals
+		System.out.println("\n\n\n");
+		for (int vi = 0; vi < vertical_intervals_between_highest_and_lowest_lines.size(); vi++)
+			System.out.println("Vertical interval " + (vi + 1) + ": " + vertical_intervals_between_highest_and_lowest_lines.get(vi));
+		*/
+		
+		// A structure containing all rhythmic values of the melodic notes on each MIDI track and channel.
+		// This structure will be passed to the NGramGenerator object's constructor and serve as the source of 
+		// rhythmic values for the rhythmic value n-grams generated by it. Rhythmic values are calculate in a 
+		// similar way as they are for the rhythmic_value_of_each_note_in_quarter_notes intermediate 
+		// representation.
+		LinkedList[][] rhythmic_values_in_melodic_line_by_track_and_channel = new LinkedList[tracks.length][16];
+		for (int n_track = 0; n_track < rhythmic_values_in_melodic_line_by_track_and_channel.length; n_track++)
+			for (int chan = 0; chan < rhythmic_values_in_melodic_line_by_track_and_channel[n_track].length; chan++)
+				rhythmic_values_in_melodic_line_by_track_and_channel[n_track][chan] = new LinkedList<>();
+		
+		// The number of ticks per quarter note for the entire sequence
+		int ppqn_ticks_per_beat = sequence.getResolution();
+		
+		// The number of ticks corresponding to each note value in the form of an array
+		int central_ticks_per_note_value[] = new int[] { ppqn_ticks_per_beat / 8, // i=0
+														 ppqn_ticks_per_beat / 4, // i=1
+														 ppqn_ticks_per_beat / 3, // i=2
+														 ppqn_ticks_per_beat / 2, // i=3
+														 ppqn_ticks_per_beat * 2 / 3, // i=4
+														 ppqn_ticks_per_beat * 3 / 4, // i=5
+														 ppqn_ticks_per_beat, // i=6
+														 ppqn_ticks_per_beat * 3 / 2, // i=7
+														 ppqn_ticks_per_beat * 2, // i=8
+														 ppqn_ticks_per_beat * 3, // i=9
+														 ppqn_ticks_per_beat * 4, // i=10
+														 ppqn_ticks_per_beat * 6, // i=11
+														 ppqn_ticks_per_beat * 8, // i=12
+														 ppqn_ticks_per_beat * 12 }; // i=13
+		
+		/* TESTING CODE: Test difference in MIDI ticks between bins surrounding triplet rhythmic values
+		System.out.print("\n");
+		for (int i = 1; i < 6; i++)
+			System.out.println("This rhythmic value bin in ticks is " + central_ticks_per_note_value[i]);
+		*/
+		
+		// The lowest number of ticks that a note of the given value can have
+		int lower_bound_ticks_per_note_value[] = new int[central_ticks_per_note_value.length];
+		lower_bound_ticks_per_note_value[0] = 0;
+		for (int i = 1; i < lower_bound_ticks_per_note_value.length; i++)
+			lower_bound_ticks_per_note_value[i] = central_ticks_per_note_value[i-1] + ((central_ticks_per_note_value[i] - central_ticks_per_note_value[i-1]) / 2);
+		
+		// Access the melodic notes
+		LinkedList<NoteInfo>[][] melodic_notes_by_track_and_channel = note_onset_slice_container.getMelodicNotesByTrackAndChannel();
+		
+		/* TESTING CODE: See numbers of the MIDI track and channel combination with the highest average pitch
+		System.out.println("MIDI track + " + track_and_channel_with_highest_average_pitch[0] + " and channel " + track_and_channel_with_highest_average_pitch[1] + " have the highest avg pitch");
+		*/
+		
+		// Iterate by MIDI track and channel
+		for (int n_track = 0; n_track < melodic_notes_by_track_and_channel.length; n_track++)
+		{
+			for (int chan = 0; chan < melodic_notes_by_track_and_channel[n_track].length; chan++)
+			{
+				// Iterate over each melodic note on the current track and channel
+				for (NoteInfo note: melodic_notes_by_track_and_channel[n_track][chan])
+				{
+					// The tick duration of this note
+					int duration_in_ticks = note.getEndTick() - note.getStartTick();
+					
+					// The index of lower_bound_ticks_per_note_value that to which the current note's duration
+					// in ticks corresponds
+					int lower_bound_ticks_per_note_value_index = 0;
+					
+					// Map the current note note to its appropriate rhythmic value
+					for (int i = 0; i < lower_bound_ticks_per_note_value.length; i++)
+					{
+						if (i == lower_bound_ticks_per_note_value.length - 1)
+							lower_bound_ticks_per_note_value_index = i;
+						else if (duration_in_ticks < lower_bound_ticks_per_note_value[i+1])
+						{
+							lower_bound_ticks_per_note_value_index = i;
+							break;
+						}
+					}
+					
+					double rhythmic_value = 0.0;
+					
+					// Get the fraction of a quarter note corresponding to the quantized rhythmic value of the
+					// current note
+					switch (lower_bound_ticks_per_note_value_index)
+					{
+						case 0: rhythmic_value = 1.0 / 8.0; break;
+						case 1: rhythmic_value = 1.0 / 4.0; break;
+						case 2: 
+						{ 
+							rhythmic_value = 1.0 / 3.0; 
+							
+							/* TESTING CODE: Verify eighth note triplet detection
+							if (highest_line_track == n_track && highest_line_channel == channel)
+							System.out.println("Eighth note triplet with pitch " + mckay.utilities.sound.midi.MIDIMethods.midiPitchToPitch(note.getPitch()) +
+								" found at beat ~" + (note.getStartTick() / ppqn_ticks_per_beat)); 
+							*/
+							
+							break; 
+						}
+						case 3: rhythmic_value = 1.0 / 2.0; break;
+						case 4: 
+						{
+							rhythmic_value = 2.0 / 3.0;
+							
+							/* TESTING CODE: Verify quarter note triplet detection
+							if (highest_line_track == n_track && chan == highest_line_channel)
+								System.out.println("Quarter note triplet with pitch " + mckay.utilities.sound.midi.MIDIMethods.midiPitchToPitch(note.getPitch()) +
+								" found at beat ~" + (note.getStartTick() / ppqn_ticks_per_beat)); 
+							*/
+							
+							break;
+						}
+						case 5: rhythmic_value = 1.0 * 3.0 / 4.0; break;
+						case 6: rhythmic_value = 1.0; break;
+						case 7: rhythmic_value = 1.0 * 1.5; break;
+						case 8: rhythmic_value = 1.0 * 2.0; break;
+						case 9: rhythmic_value = 1.0 * 3.0; break;
+						case 10: rhythmic_value = 1.0 * 4.0; break;
+						case 11: rhythmic_value = 1.0 * 6.0; break;
+						case 12: rhythmic_value = 1.0 * 8.0; break;
+						case 13: rhythmic_value = 1.0 * 12.0; break;
+					}
+					
+					rhythmic_values_in_melodic_line_by_track_and_channel[n_track][chan].add(rhythmic_value);
+				}
+			}
+		}
+		
+		// Initialize the ngram_generator field
+		ngram_generator = new NGramGenerator( note_onset_slice_container,
+		                                      melodic_intervals_by_track_and_channel,
+		                                      rhythmic_values_in_melodic_line_by_track_and_channel,
+				                              complete_vertical_intervals,
+		                                      vertical_intervals_between_highest_and_lowest_lines );
+		
+		// Initialize the melodic_interval_3gram_aggregate, melodic_interval_3gram_in_highest_line_aggregate,
+		// melodic_interval_3gram_in_lowest_line_aggregate, complete_vertical_interval_3gram_aggregate, 
+		// lowest_and_highest_lines_vertical_interval_3gram_aggregate, and rhythmic_value_3gram_aggregate 
+		// fields
+		melodic_interval_3gram_aggregate = ngram_generator.getMelodicIntervalNGramAggregate(3, track_and_channel_pairs_by_average_pitch, true, false, false);
+		melodic_interval_in_highest_line_3gram_aggregate = ngram_generator.getMelodicIntervalNGramAggregateForVoice(3, track_and_channel_with_highest_average_pitch, true, false, false);
+		melodic_interval_in_lowest_line_3gram_aggregate = ngram_generator.getMelodicIntervalNGramAggregateForVoice(3, track_and_channel_with_lowest_average_pitch, true, false, false);
+		complete_vertical_interval_3gram_aggregate = ngram_generator.getCompleteVerticalIntervalNGramAggregate(3, false, false); 
+		lowest_and_highest_lines_vertical_interval_3gram_aggregate = ngram_generator.getLowestAndHighestLinesVerticalIntervalNGramAggregate(3, true, false, false);
+		rhythmic_value_3gram_aggregate = ngram_generator.getRhythmicValueNGramAggregate(3, track_and_channel_pairs_by_average_pitch);
+		
+		/* TESTING CODE:
+		// Print the track and channel numbers of each voice in order of average pitch
+		System.out.println("\n\n\n");
+		System.out.println("\nTRACK AND CHANNEL PAIRS IN ORDER OF AVERAGE PITCH:");
+		for (int pair = 0; pair < track_and_channel_pairs_by_average_pitch.size(); pair++)
+			System.out.println((pair + 1) + ": " + "Track " + (track_and_channel_pairs_by_average_pitch.get(pair)[0] + 1) + ", channel: " + (track_and_channel_pairs_by_average_pitch.get(pair)[1] + 1));
+		
+		// Print the average n-gram frequency in the aggregate
+		System.out.println("\nAVERAGE N-GRAM FREQUENCY: " + mckay.utilities.staticlibraries.MathAndStatsMethods.getAverage(aggregate.getFrequenciesByUniqueId()));
+		
+		// Test different thresholds for commonness and very-commonness
+		double commonness_threshold = .05;
+		double very_commonness_threshold = .1;
+		boolean has_top_ten_n_gram_above_common_threshold = false;
+		boolean has_top_ten_n_gram_above_very_common_threshold = false;
+		
+		// Print the top ten most common n-grams and their frequencies
+		System.out.println("\nTOP TEN N-GRAMS AND THEIR FREQUENCIES:");
+		LinkedList<String> top_ten_most_common_string_identifiers = aggregate.getTopTenMostCommonStringIdentifiers();
+		for (int i = 0; i < top_ten_most_common_string_identifiers.size(); i++)
+		{
+			String id = top_ten_most_common_string_identifiers.get(i);
+			double frequency = aggregate.getStringIdToFrequencyMap().get(id);
+			
+			System.out.println((i + 1) + ": " + id + ", " + frequency);
+			
+			if (frequency >= commonness_threshold) has_top_ten_n_gram_above_common_threshold = true;
+			if (frequency >= very_commonness_threshold) has_top_ten_n_gram_above_very_common_threshold = true;
+		}
+		
+		// Print results of commonness threshold testing
+		System.out.println("\nCOMMONNESS THRESHOLD TESTING RESULTS:");
+		if (!has_top_ten_n_gram_above_common_threshold) System.out.println("None equal to or greater than " + (commonness_threshold * 100) + "%");
+		if (has_top_ten_n_gram_above_very_common_threshold) System.out.println("Some greater than " + (very_commonness_threshold * 100) + "%");
+		*/
+	}
+
+
 	/**
 	 * Calculate the value of the pitch_classes_of_all_note_ons field.
 	 */
