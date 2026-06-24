@@ -67,16 +67,18 @@
     <ul>
       <li>Using the approaches covered in the previous sections of this tutorial, 
         use jSymbolic  to extract all secure features (only) from all the files in the &quot;JosquinNotJosquin_MIDI&quot; 
-        folder 
+        sub-folder 
         <ul>
+          <li>Remember to use only the secure feature subset</li>
           <li>Save the features as &quot;JosquinNotJosquinFeatureValues.xml&quot; 
             (and the associated ARFF and CSV files)</li>
-          <li>These will be the features we will use to train the model</li>
+          <li>These will be the features we will use to train the model that we will perform classifications with</li>
         </ul>
       </li>
       <li>Using jSymbolic, extract all secure features (only) from all the files in the &quot;MaybeJosquin_MIDI&quot; 
         folder 
         <ul>
+          <li>Again, use only the secure feature subset</li>
           <li>Save the features as &quot;MaybeJosquinFeatureValues.xml&quot; (and 
             the associated ARFF and CSV files)</li>
           <li>These will be the features we will classify with the model after 
@@ -91,7 +93,7 @@
       <li>Save a version of &quot;JosquinNotJosquinFeatureValues.csv&quot; called 
         &quot;JosquinNotJosquinFeatureValuesWekaReady.csv&quot; where: 
         <ul>
-          <li>A column has been added to the end called &quot;COMPOSER&quot;</li>
+          <li>A column has been added to the far right called &quot;COMPOSER&quot;</li>
           <li>This column has been filled with entries of either &quot;Josquin&quot; 
             or &quot;NotJosquin&quot; for each piece, as appropriate for the given 
             piece </li>
@@ -101,7 +103,7 @@
       <li>Save a version of &quot;MaybeJosquinFeatureValues.csv&quot; called &quot;MaybeJosquinFeatureValuesWekaReady.csv&quot; 
         where: 
         <ul>
-          <li>A column has been added to the end called &quot;COMPOSER&quot;</li>
+          <li>A column has been added to the far right called &quot;COMPOSER&quot;</li>
           <li>This column has been filled with entries of &quot;?&quot;' for each 
             and every piece 
             <ul>
@@ -195,7 +197,7 @@
       <li>In the <em>Test options </em>area, make sure <em>Cross-validation</em> 
         is selected</li>
       <li>Press the <em>Start </em>button</li>
-      <li>You should get an average classification accuracy of around 95%</li>
+      <li>You should get an average classification accuracy of around 96%</li>
       <li>If so, we are happy, since this data does a good job at doing what we 
         want it to</li>
     </ul>
@@ -216,7 +218,7 @@
   </li>
   <li>Save the model you just trained 
     <ul>
-      <li>In the <em>Results list </em> area, tight-click on the <em>last </em>entry 
+      <li>In the <em>Results list </em> area, right-click on the <em>last </em>entry 
         there and select <em>Save model</em></li>
       <li>Save it as &quot;JosquinNotJosquinTrainedModel.model&quot;</li>
       <li>We do not have to save it to use it, but it is good to keep a record 
@@ -321,9 +323,7 @@
     </ul>
   </li>
 </ul>
-<p><em>Now we are ready to do some entirely original work to practice the fantastic 
-  skills we have learned with jSymbolic and Weka <a href="portugueseresearch.html" target="right">. 
-  . .</a></em></p>
+<p><em>A few final words remain to be said about jSymbolic <a href="jsymbolicbitsandpieces.html" target="right">. . .</a></em></p>
 <table height="5" width="100%" bgcolor="#0033C4" border="0"><tbody><tr><th></th></tr></tbody></table>
 <p><tt><a href="trainingamodelandusingit.html#Top">-top of page-</a></tt></p>
 

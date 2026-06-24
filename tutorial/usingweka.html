@@ -56,7 +56,7 @@
         Josquin and which by Ockeghem
         <ul>
           <li>And no longer indicates which file each set of features was extracted 
-            from, since you delted the column that provided that information</li>
+            from, since you deleted the column that provided that information</li>
         </ul>
       </li>
     </ul>
@@ -89,17 +89,9 @@
   </li>
   <li>Run Weka 
     <ul>
-      <li>Macintosh: 
-        <ul>
-          <li>Double click the &quot;weka-3-8-2&quot; drive icon on your Desktop, 
-            and in the window that opens double click on the &quot;weka-3-8-2-oracle-jvm&quot; 
-            to run Weka</li>
-        </ul>
+      <li>e.g. on Windows press the Windows button and start typing &quot;weka&quot;, which should make the Weka applicaiton appear; click on it to run Weka 
       </li>
-      <li>Windows: 
-        <ul>
-          <li>Double click on the &quot;Weka 3.8&quot; icon on your desktop</li>
-        </ul>
+      <li>This will only work if you have installed Weka already on your computer, as noted earlier in this tutorial
       </li>
     </ul>
   </li>
@@ -121,12 +113,12 @@
     area of the Weka Explorer</li>
   <li>This includes the &quot;COMPOSER&quot; field that we created in our spreadsheet 
     <ul>
-      <li>Scroll to the bottom of the attributes and select &quot;COMPOSER&quot;</li>
+      <li>Scroll to the bottom of the attributes and select (select, don't check) &quot;COMPOSER&quot;</li>
       <li>This shows that there are 98 Ockeghem pieces, who is displayed in blue, 
         and 131 Josquin pieces, who is displayed in red</li>
     </ul>
   </li>
-  <li>Click, for example, on the Vertical_Sixths feature (number 506) 
+  <li>Now click, from the list of attributes / features, on the Vertical_Sixths feature (number 506) 
     <ul>
       <li>The Vertical Sixths feature definition, from the manual: 
         <ul>
@@ -157,11 +149,11 @@
           </li>
           <li>The colours show which pieces are associated with which composer</li>
           <li>This particular graph shows that Josquin tends to have fewer vertical 
-            sixths proportionately then Ockeghem, overall 
+            sixths proportionately than Ockeghem, overall 
             <ul>
               <li>Although there is certainly some overlap </li>
-              <li>e.g. a some Ockeghem pieces have fewer vertical sixths than 
-                a few Josquin pieces, but this is rare</li>
+              <li>e.g. certain Ockeghem pieces have fewer vertical sixths than 
+                certain Josquin pieces, but this is rare</li>
             </ul>
           </li>
         </ul>
@@ -198,7 +190,7 @@
         <ul>
           <li>In the scatterplot window that you just opened, choose &quot;X: 
             Average_Length_of_Melodic_Arcs (Num)&quot; in the X dropdown box (top 
-            left), and &quot;X: Vertical_Sixths (Num)&quot; in the Y dropdown 
+            left), and &quot;Y: Vertical_Sixths (Num)&quot; in the Y dropdown 
             box (top right)</li>
           <li>Notice how one could draw an imaginary curve on the graph that would 
             separate the composers relatively well 
@@ -237,13 +229,13 @@
   <li>However, it can also be time-consuming and sometimes overwhelming </li>
   <li>We will now look at a statistical technique called &quot;feature selection&quot; 
     that uses statistical processing to find the features that are most likely 
-    to be significant in discriminating between the musical classes under consideration 
+    to be useful in discriminating between the musical classes under consideration 
     (composers, in this case) 
     <ul>
       <li>Note that I wrote &quot;most likely&quot; above</li>
       <li>This is because feature selection and automatic classification are very 
-        complex operations, and they tend to give your results that are good but 
-        not necessarily optimal </li>
+        complex operations, and they tend to give you results that are good but 
+        not necessarily optimal</li>
     </ul>
   </li>
   <li>Click on the <em>Select attributes</em> tab in Weka</li>
@@ -296,8 +288,8 @@
         <ul>
           <li>Select <em>weka &gt; attributeSelection &gt; CorrelationAttributeEval</em></li>
           <li>Click <em>Yes </em> on the dialog box that comes up</li>
-          <li>This algorithm evaluates the worth of a feature by measuring the 
-            correlation (Pearson's) between it and a piece's class</li>
+          <li>This algorithm evaluates the worth of a feature by measuring the (Pearson's) 
+            correlation between it and a piece's class</li>
         </ul>
       </li>
       <li>Press the <em>Start </em>button</li>
@@ -344,10 +336,6 @@
   <li>Machine learning is a powerful set of techniques that, among other things, 
     can train on sets of extracted features to automatically &quot;learn&quot; 
     to distinguish between different classes (i.e. composers, in this case) 
-    <ul>
-      <li>e.g. recognize tumors or handwriting</li>
-      <li>e.g. recognize composers</li>
-    </ul>
   </li>
   <li>To use machine learning in Weka, click on the <em>Classify</em> tab</li>
   <li>In the <em>Classifier </em>area, click on the <em>Choose </em>button 
@@ -371,8 +359,8 @@
         <ul>
           <li>The <em>Correctly Classified Instances </em>percentage: 
             <ul>
-              <li>Indicates how accurately the algorithm was able to classify 
-                test pieces by composer after it was trained on separately partitioned 
+              <li>Indicates how accurately models were able to classify 
+                test pieces by composer after they were trained on separately partitioned 
                 training pieces</li>
             </ul>
           </li>

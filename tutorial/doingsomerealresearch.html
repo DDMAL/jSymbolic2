@@ -16,8 +16,8 @@
 <ul>
   <li>Let's now extract many more features, but still just for the two files we 
     have been working with so far, using the methodology we just covered in the earlier steps of this tutorial</li>
-  <li>Click the <em>Set to Default Features </em>button  in order to choose all implemented features for extraction (except the MEI-only 
-    features)</li>
+  <li>Quit and restart jSymbolic</li>
+  <li>As practice, try manually reloading the two MIDI files we were just dealing with (see the earlier sections of this tutorial if you forget how)</li>
   <li>Change the output file name (in the same directory as before) to &quot;MyJosqOckManyFeatureValues.xml&quot;</li>
   <li>Extract the features</li>
   <li>Open the resulting &quot;MyJosqOckManyFeatureValues.csv&quot; file to take 
@@ -25,7 +25,7 @@
   <li>Not sure what the meaning of a given feature is?</li>
   <ul>
     <li>Check the <a href="../manual/home.html" target="top">jSymbolic 
-      manual</a>, check the generated feature definitions file, or double click the feature 
+      manual</a>, examine the generated feature definitions file, or double click the feature 
       in the GUI</li>
   </ul>
   <li>Although comparing just two pieces of music can certainly be very useful 
@@ -41,8 +41,7 @@
   <li>This next part will involve extracting features from a collection of many 
     files by Josquin and Ockeghem 
     <ul>
-      <li>These include all the Ockeghem files in the <a href="http://josquin.stanford.edu/" target="top">Josquin 
-        Research Project (JRP)</a>, and all the Josquin files with the highest 
+      <li>These include Ockeghem files in the <a href="http://josquin.stanford.edu/" target="top">Josquin Research Project (JRP)</a>, and all the Josquin files with the highest 
         two Rodin attribution certainty levels</li>
     </ul>
   </li>
@@ -54,17 +53,18 @@
   <li>Quit and restart jSymbolic</li>
   <li>Click the <em>Set to Secure Features </em>button  in order to choose all &quot;secure&quot; features for extraction
     <ul>
+      <li>Or, if using version 2 of jSymbolic (which does not have this button implemented), then click on the <em>Load New Settings from a Config File</em> button and load the &quot;FeaturesThatAvoidBiasInRenMusictConfigs.txt&quot; configuration file in the &quot;02_Exploring_A_Larger_Dataset&quot; folder
+        </li>
       <li>This setting omits all features that are not relevant to 
         this kind of Renaissance music, and which could potentially introduce 
         problems due to systematic bias in the encoding source (as opposed to 
         in the music itself) 
         </li>
       <li>For example, features associated with dynamics, tempo, microtones 
-            and instrumentation are all left ou</li>
+            and instrumentation are all left out</li>
     </ul>
   </li>
-  <li>            In the jSybmolic GUI, add all 229 of the files in the &quot;JosquinVsOckeghem&quot; sub-folder 
-    of the &quot;02_Exploring_A_Larger_Dataset&quot; folder to be extracted jSymbolic</li>
+  <li>In the jSybmolic GUI, add all 229 of the files in the &quot;JosquinVsOckeghem&quot; sub-folder of the &quot;02_Exploring_A_Larger_Dataset&quot; folder to be extracted jSymbolic</li>
   <li>Set the feature values to be saved in the &quot;02_Exploring_A_Larger_Dataset&quot; 
     folder 
     <ul>
