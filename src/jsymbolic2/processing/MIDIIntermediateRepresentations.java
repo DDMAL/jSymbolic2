@@ -1,6 +1,7 @@
 package jsymbolic2.processing;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -875,6 +876,12 @@ public class MIDIIntermediateRepresentations
 	 * of sufficient duration in the piece.
 	 */
 	public double[] complete_rest_durations;
+
+	/**
+	 * This intermediate representation finds the first track with at least one note in it and then provides
+	 * the pitch histogram for this track only. To do so, it uses the same logic as basic_pitch_histogram.
+	 */
+	public double[] pitch_histogram_of_first_track;
 	
 
 	/* PRIVATE FIELDS ***************************************************************************************/
@@ -2177,8 +2184,10 @@ public class MIDIIntermediateRepresentations
 	{
 		// Initialize basic_pitch_histogram
 		basic_pitch_histogram = new double[128];
-		for (int i = 0; i < basic_pitch_histogram.length; i++)
-			basic_pitch_histogram[i] = 0.0;
+		pitch_histogram_of_first_track = new double[128];
+
+		int notes_added_from_first_track = 0;
+		boolean done_with_first_track = false;
 
 		// Fill basic_pitch_histogram
 		for (int n_track = 0; n_track < tracks.length; n_track++)
@@ -2195,14 +2204,20 @@ public class MIDIIntermediateRepresentations
 					ShortMessage short_message = (ShortMessage) message;
 					if (short_message.getChannel() != 10 - 1) // not channel 10 (percussion)
 						if (short_message.getCommand() == 0x90) // note on
-							if (short_message.getData2() != 0) // not velocity 0
+							if (short_message.getData2() != 0){ // not velocity 0
 								basic_pitch_histogram[short_message.getData1()]++;
+								notes_added_from_first_track++;
+								if(!done_with_first_track)
+									pitch_histogram_of_first_track[short_message.getData1()]++;
+							}
 				}
 			}
+			if(notes_added_from_first_track>0) done_with_first_track = true;
 		}
 
 		// Normalize basic_pitch_histogram
 		basic_pitch_histogram = MathAndStatsMethods.normalize(basic_pitch_histogram);
+		pitch_histogram_of_first_track = MathAndStatsMethods.normalize(pitch_histogram_of_first_track);
 
 		// Generate pitch_class_histogram
 		pitch_class_histogram = new double[12];

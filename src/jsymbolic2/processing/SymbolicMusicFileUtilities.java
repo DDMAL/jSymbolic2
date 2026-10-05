@@ -180,7 +180,9 @@ public class SymbolicMusicFileUtilities
 	public static MeiSequence getMeiSequenceFromMeiFile( File file, List<String> error_log )
 		throws InvalidMidiDataException, MeiXmlReadException
 	{
-		try { return new MeiSequence(file); }
+		try {
+			return new MeiSequence(file);
+		}
 		catch (InvalidMidiDataException | MeiXmlReadException e)
 		{
 			error_log.add("The specified file, " + file + ", is not a valid MEI file.");

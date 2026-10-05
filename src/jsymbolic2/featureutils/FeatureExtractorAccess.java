@@ -9,6 +9,7 @@ import jsymbolic2.features.rhythm.*;
 import jsymbolic2.features.texture.*;
 import jsymbolic2.features.verticalintervals.*;
 import jsymbolic2.features.ngrams.*;
+import jsymbolic2.features.renaissance.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -666,7 +667,19 @@ public final class FeatureExtractorAccess
 			new PrevalenceOfRhythmicValue3GramTypesOccurringOnlyOnceFeature(),
 			new PrevalenceOfRareRhythmicValue3GramTypesFeature(),
 			new PrevalenceOfCommonRhythmicValue3GramTypesFeature(),
-			new PrevalenceOfVeryCommonRhythmicValue3GramTypesFeature()
+			new PrevalenceOfVeryCommonRhythmicValue3GramTypesFeature(),
+
+			// Add renaissance features
+			new FinalSonorityFeature(),
+			new FinalSonorityClassesFeature(),
+			new FinalisNaiveFeature(),
+			new FinalisHeuristicFeature(),
+			new ModalFifthPrevalenceFeature(),
+			new ModalFifthMaximumPrevalenceFeature(),
+			new FinalisOctaveFeature(),
+			new LowerFourthPrevalenceFeature(),
+			new UpperFourthPrevalenceFeature(),
+			new PitchHistogramOfFirstTrackFeature()
 		};
 
 		default_features_to_save = new boolean[all_implemented_feature_extractors.length];
