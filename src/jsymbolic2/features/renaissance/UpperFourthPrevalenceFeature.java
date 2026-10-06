@@ -65,8 +65,10 @@ public class UpperFourthPrevalenceFeature
 		{
             int final_in_corr_octave = (int) other_feature_values[0][0];
             double upper_fourth_freq = 0.0;
-            for (int i = 0; i < 5; i++) {
-                upper_fourth_freq += sequence_info.pitch_histogram_of_first_track[final_in_corr_octave+8+i];
+			int max_increase = Math.min(12, // Ensure that there are no pitches higher than the maximum
+				sequence_info.pitch_histogram_of_first_track.length-final_in_corr_octave);
+            for (int i = max_increase; i > 7 ; i--) {
+                upper_fourth_freq += sequence_info.pitch_histogram_of_first_track[final_in_corr_octave+i];
             }
             result[0] = upper_fourth_freq;
 		}

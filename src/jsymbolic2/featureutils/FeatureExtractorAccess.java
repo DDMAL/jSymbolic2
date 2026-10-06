@@ -679,6 +679,12 @@ public final class FeatureExtractorAccess
 			new FinalisOctaveFeature(),
 			new LowerFourthPrevalenceFeature(),
 			new UpperFourthPrevalenceFeature(),
+			new ModalOctaveLowerBoundFeature(),
+			new ModalOctaveUpperBoundFeature(),
+			new ModalOctaveBoundsPitchClassFeature(),
+			new ModalScaleDegreePitchFeature(),
+			new ModalScaleDegreePitchClassFeature(),
+			new ModalScaleDegreePrevalenceFeature(),
 			new PitchHistogramOfFirstTrackFeature()
 		};
 

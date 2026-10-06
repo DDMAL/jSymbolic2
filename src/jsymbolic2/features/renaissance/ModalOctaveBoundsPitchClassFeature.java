@@ -8,11 +8,12 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * Prevalence of notes in fourth immediatly below the most prevalent modal fifth.
+ * Returns the pitch class of the bounds of the modal octave. These bounds are always the same pitch class, as
+ * they are the bounds of an octave.
  *
  * @author Jasper Teunen
  */
-public class LowerFourthPrevalenceFeature
+public class ModalOctaveBoundsPitchClassFeature
 		extends MIDIFeatureExtractor
 {
 	/* CONSTRUCTOR ******************************************************************************************/
@@ -21,16 +22,16 @@ public class LowerFourthPrevalenceFeature
 	/**
 	 * Basic constructor that sets the values of the fields inherited from this class' superclass.
 	 */
-	public LowerFourthPrevalenceFeature()
+	public ModalOctaveBoundsPitchClassFeature()
 	{
-		String name = "Lower Fourth Prevalence";
-		String code = "Ren-08";
-		String description = "Prevalence of notes in fourth immediatly below the most prevalent modal fifth.";
+		String name = "Pitch Class of Expected Bounds of Modal Octave";
+		String code = "Ren-12";
+		String description = "Returns the pitch class of the bounds of the modal octave. These bounds are always the same pitch class, as they are the bounds of an octave.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
 		dependencies = new String[1];
-		dependencies[0] = "Finalis Octave";
+		dependencies[0] = "Expected Lower Bound of Modal Octave";
 		offsets = null;
 		is_default = true;
 		is_secure = true;
@@ -61,16 +62,7 @@ public class LowerFourthPrevalenceFeature
 	{
 		double[] result = new double[1];
 		Arrays.fill(result, -1);
-		if (sequence_info != null)
-		{
-            int final_in_corr_octave = (int) other_feature_values[0][0];
-            double lower_fourth_freq = 0.0;
-			int max_decrease = Math.max(5,final_in_corr_octave); // Make sure there are no negative pitches
-            for (int i = 1; i < max_decrease + 1; i++) {
-                lower_fourth_freq += sequence_info.pitch_histogram_of_first_track[final_in_corr_octave-i];
-            }
-            result[0] = lower_fourth_freq;
-		}
+        result[0] = other_feature_values[0][0] % 12;
 		return result;
 	}
 }

@@ -9,14 +9,14 @@
     - [Ren-05: Prevalence of Modal Fifths ✓](#ren-05-prevalence-of-modal-fifths-)
     - [Ren-06: Maximum Prevalence of Modal Fifth ✓](#ren-06-maximum-prevalence-of-modal-fifth-)
     - [Ren-07: Finalis Octave ✓](#ren-07-finalis-octave-)
-    - [Ren-08: Prevalence of Notes in Lower Fourth](#ren-08-prevalence-of-notes-in-lower-fourth)
-    - [Ren-09: Prevalence of Notes in Upper Fourth](#ren-09-prevalence-of-notes-in-upper-fourth)
-    - [Ren-10: Expected Lower Bound of Modal Octave](#ren-10-expected-lower-bound-of-modal-octave)
-    - [Ren-11: Expected Upper Bound of Modal Octave](#ren-11-expected-upper-bound-of-modal-octave)
-    - [Ren-12: Most Common Pitch in Modal Octave](#ren-12-most-common-pitch-in-modal-octave)
-    - [Ren-13: Prevalence of Most Common Pitch in Modal Octave](#ren-13-prevalence-of-most-common-pitch-in-modal-octave)
-    - [Ren-14: Second Most Common Pitch in Modal Octave](#ren-14-second-most-common-pitch-in-modal-octave)
-    - [Ren-15: Prevalence of Second Most Common Pitch in Modal Octave](#ren-15-prevalence-of-second-most-common-pitch-in-modal-octave)
+    - [Ren-08: Prevalence of Notes in Lower Fourth ✓](#ren-08-prevalence-of-notes-in-lower-fourth-)
+    - [Ren-09: Prevalence of Notes in Upper Fourth ✓](#ren-09-prevalence-of-notes-in-upper-fourth-)
+    - [Ren-10: Expected Lower Bound of Modal Octave ✓](#ren-10-expected-lower-bound-of-modal-octave-)
+    - [Ren-11: Expected Upper Bound of Modal Octave ✓](#ren-11-expected-upper-bound-of-modal-octave-)
+    - [Ren-12: Pitch Class of Expected Modal Octave Bounds ✓](#ren-12-pitch-class-of-expected-modal-octave-bounds-)
+    - [Ren-13: Pitch of Modal Scale Degrees ✓](#ren-13-pitch-of-modal-scale-degrees-)
+    - [Ren-14: Pitch Class of Modal Scale Degrees ✓](#ren-14-pitch-class-of-modal-scale-degrees-)
+    - [Ren-15: Prevalence of Modal Scale Degrees ✓](#ren-15-prevalence-of-modal-scale-degrees-)
   - [Intermediate Representations](#intermediate-representations)
     - [pitch\_histogram\_of\_first\_track ✓](#pitch_histogram_of_first_track-)
 
@@ -50,25 +50,37 @@ Plagal and authentic variants of modes share a range delineated by the final and
 
 Returns the absolute pitch of the final that yields the most prevalent modal fifth. As such, this value determines the octave of the modal ambitus.
 
-### Ren-08: Prevalence of Notes in Lower Fourth
+### Ren-08: Prevalence of Notes in Lower Fourth ✓
 
 Prevalence of notes in fourth immediatly below the most prevalent modal fifth.
 
-### Ren-09: Prevalence of Notes in Upper Fourth
+### Ren-09: Prevalence of Notes in Upper Fourth ✓
 
 Prevalence of notes in fourth immediatly above the most prevalent modal fifth.
 
-### Ren-10: Expected Lower Bound of Modal Octave
+### Ren-10: Expected Lower Bound of Modal Octave ✓
 
-### Ren-11: Expected Upper Bound of Modal Octave
+Returns lower bound of modal octave based on lower & upper fourth prevalence: if lower fourth prevalence is greater than upper fourth prevalence, a plagal mode is assumed. If this is reversed, authentic mode is assumed. In case of plagal mode, this feature returns the fourth below the finalis, in case of authentic mode it returns the finalis (in the correct octave). In case of a tie, authentic mode is assumed.
 
-### Ren-12: Most Common Pitch in Modal Octave
+### Ren-11: Expected Upper Bound of Modal Octave ✓
 
-### Ren-13: Prevalence of Most Common Pitch in Modal Octave
+Returns upper bound of modal octave based on lower & upper fourth prevalence: if lower fourth prevalence is greater than upper fourth prevalence, a plagal mode is assumed. If this is reversed, authentic mode is assumed. In case of plagal mode, this feature returns the fifth above the finalis, in case of authentic mode it returns the finalis (in the correct octave). In case of a tie, authentic mode is assumed.
 
-### Ren-14: Second Most Common Pitch in Modal Octave
+### Ren-12: Pitch Class of Expected Modal Octave Bounds ✓
 
-### Ren-15: Prevalence of Second Most Common Pitch in Modal Octave
+Returns the pitch class of the bounds of the modal octave. These bounds are always the same pitch class, as they are the bounds of an octave.
+
+### Ren-13: Pitch of Modal Scale Degrees ✓
+
+Returns an array with eight elements. These elements indicate the pitches of the scale degree of the mode. These pitches are attained by comparing all pairs of possible pitches for each of the scale degrees and choosing the most prevalent one. E.g. in a C mode, the fourth degree could be F or F#, this feature will return the one that most commonly occurs between these two as its fourth element.
+
+### Ren-14: Pitch Class of Modal Scale Degrees ✓
+
+Returns an array with eight elements. These elements indicate the pitch class of the scale degree of the mode. These pitches are attained by comparing all pairs of possible pitches for each of the scale degrees and choosing the most prevalent one. E.g. in a C mode, the fourth degree could be F or F#, this feature will return the one that most commonly occurs between these two as its fourth element.
+
+### Ren-15: Prevalence of Modal Scale Degrees ✓
+
+Returns an array with eight elements. These elements indicate the prevalence of the scale degree of the mode.
 
 ## Intermediate Representations
 
