@@ -14,9 +14,9 @@
     - [Ren-10: Expected Lower Bound of Modal Octave ✓](#ren-10-expected-lower-bound-of-modal-octave-)
     - [Ren-11: Expected Upper Bound of Modal Octave ✓](#ren-11-expected-upper-bound-of-modal-octave-)
     - [Ren-12: Pitch Class of Expected Modal Octave Bounds ✓](#ren-12-pitch-class-of-expected-modal-octave-bounds-)
-    - [Ren-13: Pitch of Modal Scale Degrees ✓](#ren-13-pitch-of-modal-scale-degrees-)
-    - [Ren-14: Pitch Class of Modal Scale Degrees ✓](#ren-14-pitch-class-of-modal-scale-degrees-)
-    - [Ren-15: Prevalence of Modal Scale Degrees ✓](#ren-15-prevalence-of-modal-scale-degrees-)
+    - [Ren-13: Pitches of Modal Octave ✓](#ren-13-pitches-of-modal-octave-)
+    - [Ren-14: Pitch Classes of Modal Octave ✓](#ren-14-pitch-classes-of-modal-octave-)
+    - [Ren-15: Prevalence of Pitches in Modal Octave ✓](#ren-15-prevalence-of-pitches-in-modal-octave-)
   - [Intermediate Representations](#intermediate-representations)
     - [pitch\_histogram\_of\_first\_track ✓](#pitch_histogram_of_first_track-)
 
@@ -24,23 +24,23 @@
 
 ### Ren-01: Final Sonority ✓
 
-A feature calculator that finds all pitches sounding immediately after the last attacked note of the piece. An array of 16 values is returned. If more than 16 different notes are present, only the lowest 16 are returned. If less than 16 are present, the redundant values are set to -1. A value of 0 corresponds to C, and pitches increase chromatically by semitone in integer units (e.g. a value of 2 corresponds to D). Enharmonic equivalents are treated as a single pitch class.
+A feature calculator that finds the final pitch in every individual voice. An array of 16 values is returned. If more than 16 different notes are present, only the lowest 16 are returned. If less than 16 are present, the redundant values are set to -1. A value of 0 corresponds to C, and pitches increase chromatically by semitone in integer units (e.g. a value of 2 corresponds to D). Enharmonic equivalents are treated as a single pitch class. By looking at the final note in each track/channel rather than looking at the end of the piece, indeterminate longs are included even if their duration is not explicitly encoded.
 
 ### Ren-02: Final Sonority Classes ✓
 
-A feature calculator that finds all pitche classes sounding immediately after the last attacked note of the piece. An array of 12 values is returned, with each element corresponding to a pitch class. If this element i is zero, that means that pitch class i is not present in the final sonority. If it is 1, it is present. The first element of the array represents pitch class C (or B#), the second C#/Db and so on.
+A feature calculator that that finds the final pitch class in every individual voice. An array of 12 values is returned, with each element corresponding to a pitch class. If an element i is zero, that means that pitch class i is not present in the final sonority. If it is 1, it is present. The first element of the array represents pitch class C (and its enharmonic equivalents), the second C#/Db and so on.
 
 ### Ren-03: Finalis Naive ✓
 
-Naive approach to estimating the finalis. Simply returns the pitch class of the lowest pitch present in the final sonority. A value of 0 corresponds to C, and pitches increase chromatically by semitone in integer units (e.g. a value of 2 corresponds to D). Enharmonic equivalents are treated as a single pitch class. Set to 0 if there are no pitched notes.
+Naive approach to estimating the finalis that assumes all voices are present and that the file is encoded in such a way that its ending is also the piece's ending. This is especially relevant for pieces with repeats, where the piece ending might not correspond to the encodings ending. This feature simply provides the pitch class of the lowest pitch present in the final sonority. A value of 0 corresponds to C, and pitches increase chromatically by semitone in integer units (e.g. a value of 2 corresponds to D). Enharmonic equivalents are treated as a single pitch class. Set to 0 if there are no pitched notes.
 
 ### Ren-04: Finalis Heuristic ✓
 
-A feature calculator that uses a heuristic to approximate the finalis. The pitch class of the expected finalis is returned. This heuristic works as follows: if the lowest pitch class of the final sonority is also the most common pitch class throughout the piece, this is taken as the finalis. If it isn't, switch to the most common pitch class if it is at least 10% more common and precisely a fifth lower than the lowest pitch class of the final sonority.
+A feature calculator that uses a heuristic to approximate the finalis. The pitch class of the expected finalis is returned. This heuristic works as follows: if the lowest pitch class of the final sonority is also the most common pitch class throughout the piece, this is taken as the finalis. If it isn't, switch to the most common pitch class if it is at least 10% more common and precisely a fifth from the lowest pitch class of the final sonority.
 
 ### Ren-05: Prevalence of Modal Fifths ✓
 
-Plagal and authentic variants of modes share a range delineated by the final and an ascending fifth above it. This feature returns the prevalence of notes from the first track within these fifth ranges for all octaves. These values are represented as percentages of the total amount of notes and are returned in an array with 11 elements. The first of these elements represents the prevalence for the fifth starting between pitch values 0 and 11, the second within 12 and 23 and so on. The eleventh element represents an incomplete range: pitches 120 to 127. If the eleventh fifth does not fit within this range, it will return a value of -1.
+Plagal and authentic variants of modes share a range delineated by the final and an ascending fifth above it. This feature returns the prevalence of notes from the first track within these fifth ranges for all octaves, using the final from the "Naive Final" feature. These values are represented as percentages of the total amount of notes and are returned in an array with 11 elements. The first of these elements represents the prevalence for the fifth starting between pitch values 0 and 11, the second within 12 and 23 and so on. The eleventh element represents an incomplete range: pitches 120 to 127. If the eleventh fifth does not fit within this range, it will return a value of -1.
 
 ### Ren-06: Maximum Prevalence of Modal Fifth ✓
 
@@ -70,17 +70,17 @@ Returns upper bound of modal octave based on lower & upper fourth prevalence: if
 
 Returns the pitch class of the bounds of the modal octave. These bounds are always the same pitch class, as they are the bounds of an octave.
 
-### Ren-13: Pitch of Modal Scale Degrees ✓
+### Ren-13: Pitches of Modal Octave ✓
 
-Returns an array with eight elements. These elements indicate the pitches of the scale degree of the mode. These pitches are attained by comparing all pairs of possible pitches for each of the scale degrees and choosing the most prevalent one. E.g. in a C mode, the fourth degree could be F or F#, this feature will return the one that most commonly occurs between these two as its fourth element.
+Returns an array with eight elements. These elements indicate the pitches of the modal octave. These pitches are attained by comparing all pairs of possible pitches for each of positions within the modal octave and choosing the most prevalent one. E.g. in a C mode, the fourth degree could be F or F#, this feature will then return the one that most commonly occurs between these two.
 
-### Ren-14: Pitch Class of Modal Scale Degrees ✓
+### Ren-14: Pitch Classes of Modal Octave ✓
 
-Returns an array with eight elements. These elements indicate the pitch class of the scale degree of the mode. These pitches are attained by comparing all pairs of possible pitches for each of the scale degrees and choosing the most prevalent one. E.g. in a C mode, the fourth degree could be F or F#, this feature will return the one that most commonly occurs between these two as its fourth element.
+Returns an array with eight elements. These elements indicate the pitch class of the modal octave. These pitches are attained by comparing all pairs of possible pitches for each of positions within the modal octave and choosing the most prevalent one. E.g. in a C mode, the fourth degree could be F or F#, this feature will then return the one that most commonly occurs between these two.
 
-### Ren-15: Prevalence of Modal Scale Degrees ✓
+### Ren-15: Prevalence of Pitches in Modal Octave ✓
 
-Returns an array with eight elements. These elements indicate the prevalence of the scale degree of the mode.
+Returns an array with eight elements. These elements indicate the prevalence of pitches in the modal octave.
 
 ## Intermediate Representations
 

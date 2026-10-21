@@ -8,14 +8,14 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * Returns an array with eight elements. These elements indicate the pitches of the scale degree of the mode.
- * These pitches are attained by comparing all pairs of possible pitches for each of the scale degrees and
- * choosing the most prevalent one. E.g. in a C mode, the fourth degree could be F or F#, this feature will
- * return the one that most commonly occurs between these two as its fourth element.
+ * Returns an array with eight elements. These elements indicate the pitches of the modal octave. These pitches
+ * are attained by comparing all pairs of possible pitches for each of positions within the modal octave and
+ * choosing the most prevalent one. E.g. in a C mode, the fourth degree could be F or F#, this feature will then
+ * return the one that most commonly occurs between these two.
  *
  * @author Jasper Teunen
  */
-public class ModalScaleDegreePitchFeature
+public class ModalOctavePitchesFeature
 		extends MIDIFeatureExtractor
 {
 	/* CONSTRUCTOR ******************************************************************************************/
@@ -24,11 +24,11 @@ public class ModalScaleDegreePitchFeature
 	/**
 	 * Basic constructor that sets the values of the fields inherited from this class' superclass.
 	 */
-	public ModalScaleDegreePitchFeature()
+	public ModalOctavePitchesFeature()
 	{
-		String name = "Pitch of Modal Scale Degrees";
+		String name = "Pitches of Modal Octave";
 		String code = "Ren-13";
-		String description = "Returns an array with eight elements. These elements indicate the pitches of the scale degree of the mode. These pitches are attained by comparing all pairs of possible pitches for each of the scale degrees and choosing the most prevalent one. E.g. in a C mode, the fourth degree could be F or F#, this feature will return the one that most commonly occurs between these two as its fourth element.";
+		String description = "Returns an array with eight elements. These elements indicate the pitches of the modal octave. These pitches are attained by comparing all pairs of possible pitches for each of positions within the modal octave and choosing the most prevalent one. E.g. in a C mode, the fourth degree could be F or F#, this feature will then return the one that most commonly occurs between these two.";
 		boolean is_sequential = true;
 		int dimensions = 8;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);

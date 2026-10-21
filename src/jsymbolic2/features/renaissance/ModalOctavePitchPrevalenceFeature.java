@@ -8,11 +8,11 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * Returns an array with eight elements. These elements indicate the prevalence of the scale degree of the mode.
+ * Returns an array with eight elements. These elements indicate the prevalence of pitches in the modal octave.
  *
  * @author Jasper Teunen
  */
-public class ModalScaleDegreePrevalenceFeature
+public class ModalOctavePitchPrevalenceFeature
 		extends MIDIFeatureExtractor
 {
 	/* CONSTRUCTOR ******************************************************************************************/
@@ -21,11 +21,11 @@ public class ModalScaleDegreePrevalenceFeature
 	/**
 	 * Basic constructor that sets the values of the fields inherited from this class' superclass.
 	 */
-	public ModalScaleDegreePrevalenceFeature()
+	public ModalOctavePitchPrevalenceFeature()
 	{
-		String name = "Prevalence of Modal Scale Degrees";
+		String name = "Prevalence of Pitches in Modal Octave";
 		String code = "Ren-15";
-		String description = "Returns an array with eight elements. These elements indicate the prevalence of the scale degree of the mode.";
+		String description = "Returns an array with eight elements. These elements indicate the prevalence of pitches in the modal octave.";
 		boolean is_sequential = true;
 		int dimensions = 8;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);

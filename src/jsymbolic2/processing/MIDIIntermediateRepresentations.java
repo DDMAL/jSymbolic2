@@ -2,10 +2,13 @@ package jsymbolic2.processing;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
 import javax.sound.midi.*;
 import jsymbolic2.featureutils.CollectedNoteInfo;
 import jsymbolic2.ngrams.*;
@@ -882,6 +885,12 @@ public class MIDIIntermediateRepresentations
 	 * the pitch histogram for this track only. To do so, it uses the same logic as basic_pitch_histogram.
 	 */
 	public double[] pitch_histogram_of_first_track;
+
+	/**
+	 * An array with the final sounding note for every track and channel. Iterates through all note onset slices
+	 * to find the final note onset for each track and channel with at least one note.
+	 */
+	public double[] final_sonority;
 	
 
 	/* PRIVATE FIELDS ***************************************************************************************/
@@ -1261,6 +1270,8 @@ public class MIDIIntermediateRepresentations
 				System.out.print(complete_rest_durations[i] + " / ");
 		}
 		System.out.print("\n");*/
+
+		generateFinalSonorityIntermediateRepresentation();
 	}
 
 	
@@ -3728,6 +3739,45 @@ public class MIDIIntermediateRepresentations
 		// Filter out all rests shorter than 0.1 of a quarter note.
 		if (complete_rest_durations != null)
 			complete_rest_durations = ArrayMethods.removeEntriesLessThan(complete_rest_durations, 0.1);
+	}
+
+
+	/**
+	 * Generate final sonority intermediate representation
+	 */
+	private void generateFinalSonorityIntermediateRepresentation()
+	{
+		// Initialize final sonority
+		final_sonority = new double[16];
+		Arrays.fill(final_sonority, -1);
+
+		List<Integer> final_pitch_by_track_and_channel = new LinkedList<>();
+
+		// Get note slices
+		LinkedList<LinkedList<Integer>>[][] slices_by_track_and_channel = note_onset_slice_container.getNoteOnsetSlicesByTrackAndChannelMelodicLinesOnly();
+
+		// Get final pitches
+		for (int n_track = 0; n_track < slices_by_track_and_channel.length; n_track++)
+		{
+			for (int n_channel = 0; n_channel < slices_by_track_and_channel[n_track].length; n_channel++)
+			{
+				List<Integer> final_slice_of_channel = slices_by_track_and_channel[n_track][n_channel].get(slices_by_track_and_channel[n_track][n_channel].size()-1);
+				if (final_slice_of_channel.size() >= 1){
+					for (int n_note = 0; n_note < final_slice_of_channel.size(); n_note++){
+						final_pitch_by_track_and_channel.add(final_slice_of_channel.get(n_note));
+				}
+
+				}
+			}
+		}
+
+		// Sort pitches from low to high
+		Collections.sort(final_pitch_by_track_and_channel);
+
+		// Fill final sonority
+		for (int i=0; i< Math.min(final_pitch_by_track_and_channel.size(), final_sonority.length); i++){
+			final_sonority[i] = final_pitch_by_track_and_channel.get(i);
+		}
 	}
 	
 	

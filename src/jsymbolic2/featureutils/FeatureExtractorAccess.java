@@ -684,8 +684,7 @@ public final class FeatureExtractorAccess
 			new ModalOctaveBoundsPitchClassFeature(),
 			new ModalScaleDegreePitchFeature(),
 			new ModalScaleDegreePitchClassFeature(),
-			new ModalScaleDegreePrevalenceFeature(),
-			new PitchHistogramOfFirstTrackFeature()
+			new ModalScaleDegreePrevalenceFeature()
 		};
 
 		default_features_to_save = new boolean[all_implemented_feature_extractors.length];

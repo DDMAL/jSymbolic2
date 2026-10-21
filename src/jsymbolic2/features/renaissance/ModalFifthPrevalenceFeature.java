@@ -9,11 +9,12 @@ import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
  * Plagal and authentic variants of modes share a range delineated by the final and an ascending fifth above it.
- * This feature returns the prevalence of notes from the first track within these fifth ranges for all octaves.
- * These values are represented as percentages of the total amount of notes and are returned in an array with
- * 11 elements. The first of these elements represents the prevalence for the fifth starting between pitch values
- * 0 and 11, the second within 12 and 23 and so on. The eleventh element represents an incomplete range:
- * pitches 120 to 127. If the eleventh fifth does not fit within this range, it will return a value of -1.
+ * This feature returns the prevalence of notes from the first track within these fifth ranges for all octaves,
+ * using the final from the "Naive Final" feature. These values are represented as percentages of the total amount
+ * of notes and are returned in an array with 11 elements. The first of these elements represents the prevalence
+ * for the fifth starting between pitch values 0 and 11, the second within 12 and 23 and so on. The eleventh
+ * element represents an incomplete range: pitches 120 to 127. If the eleventh fifth does not fit within this
+ * range, it will return a value of -1.
  *
  * @author Jasper Teunen
  */
@@ -30,12 +31,12 @@ public class ModalFifthPrevalenceFeature
 	{
 		String name = "Prevalence of Modal Fifths";
 		String code = "Ren-05";
-		String description = "Plagal and authentic variants of modes share a range delineated by the final and an ascending fifth above it. This feature returns the prevalence of notes from the first track within these fifth ranges for all octaves. These values are represented as percentages of the total amount of notes and are returned in an array with 11 elements. The first of these elements represents the prevalence for the fifth starting between pitch values 0 and 11, the second within 12 and 23 and so on. The eleventh element represents an incomplete range: pitches 120 to 127. If the eleventh fifth does not fit within this range, it will return a value of -1.";
+		String description = "Plagal and authentic variants of modes share a range delineated by the final and an ascending fifth above it. This feature returns the prevalence of notes from the first track within these fifth ranges for all octaves, using the final from the \"Naive Final\" feature. These values are represented as percentages of the total amount of notes and are returned in an array with 11 elements. The first of these elements represents the prevalence for the fifth starting between pitch values 0 and 11, the second within 12 and 23 and so on. The eleventh element represents an incomplete range: pitches 120 to 127. If the eleventh fifth does not fit within this range, it will return a value of -1.";
 		boolean is_sequential = true;
 		int dimensions = 11;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
 		dependencies = new String[1];
-		dependencies[0] = "Finalis Heuristic";
+		dependencies[0] = "Finalis Naive";
 		offsets = null;
 		is_default = true;
 		is_secure = true;

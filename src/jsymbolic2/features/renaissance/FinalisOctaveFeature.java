@@ -32,7 +32,7 @@ public class FinalisOctaveFeature
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
 		dependencies = new String[2];
 		dependencies[0] = "Prevalence of Modal Fifths";
-        dependencies[1] = "Finalis Heuristic";
+        dependencies[1] = "Finalis Naive";
 		offsets = null;
 		is_default = true;
 		is_secure = true;

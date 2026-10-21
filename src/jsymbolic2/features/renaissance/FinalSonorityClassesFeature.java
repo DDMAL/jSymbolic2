@@ -7,10 +7,10 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds all pitche classes sounding immediately after the last attacked note of the
- * piece. An array of 12 values is returned, with each element corresponding to a pitch class. If this element i
- * is zero, that means that pitch class i is not present in the final sonority. If it is 1, it is present. The
- * first element of the array represents pitch class C (or B#), the second C#/Db and so on.
+ * A feature calculator that that finds the final pitch class in every individual voice. An array of 12 values is
+ * returned, with each element corresponding to a pitch class. If an element i is zero, that means that pitch
+ * class i is not present in the final sonority. If it is 1, it is present. The first element of the array
+ * represents pitch class C (and its enharmonic equivalents), the second C#/Db and so on.
  *
  * @author Jasper Teunen
  */
@@ -27,7 +27,7 @@ public class FinalSonorityClassesFeature
 	{
 		String name = "Final Sonority Classes";
 		String code = "Ren-02";
-		String description = "A feature calculator that finds all pitche classes sounding immediately after the last attacked note of the piece. An array of 12 values is returned, with each element corresponding to a pitch class. If this element i is zero, that means that pitch class i is not present in the final sonority. If it is 1, it is present. The first element of the array represents pitch class C (or B#), the second C#/Db and so on.";
+		String description = "A feature calculator that that finds the final pitch class in every individual voice. An array of 12 values is returned, with each element corresponding to a pitch class. If an element i is zero, that means that pitch class i is not present in the final sonority. If it is 1, it is present. The first element of the array represents pitch class C (and its enharmonic equivalents), the second C#/Db and so on.";
 		boolean is_sequential = true;
 		int dimensions = 12;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);

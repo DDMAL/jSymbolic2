@@ -12,8 +12,8 @@ import jsymbolic2.processing.MIDIIntermediateRepresentations;
  * A feature calculator that uses a heuristic to approximate the finalis. The pitch class of the expected finalis
  * is returned. This heuristic works as follows: if the lowest pitch class of the final sonority is also the most
  * common pitch class throughout the piece, this is taken as the finalis. If it isn't, switch to the most common
- * pitch class if it is at least 10% more common and precisely a fifth lower than the lowest pitch class of the
- * final sonority.
+ * pitch class if it is at least 10% more common and precisely a fifth from the lowest pitch class of the final
+ * sonority.
  *
  * @author Jasper Teunen
  */
@@ -64,38 +64,36 @@ public class FinalisHeuristicFeature
 									double[][] other_feature_values )
 	throws Exception
 	{
-		double value;
+		double[] result = new double[1];
 		if (sequence_info != null)
 		{
-            int lowest_last_pitch_class = (7 * (int) other_feature_values[0][0]) % 12;
-			// Check all 7peaks
-            double max_freq = sequence_info.fifths_pitch_histogram[lowest_last_pitch_class];
-        	int finalis = 0;
-			for (int bin = 0; bin < sequence_info.fifths_pitch_histogram.length; bin++)
-			{
-                double bin_freq = sequence_info.fifths_pitch_histogram[bin];
-				if (bin_freq >= max_freq)
-				{
-                    max_freq = bin_freq;
-					int right = (bin + 1) % sequence_info.fifths_pitch_histogram.length;
+			// Get naive estimates
+            int finalis_naive = (7 * (int) other_feature_values[0][0]) % 12;
+			double finalis_naive_freq = sequence_info.fifths_pitch_histogram[finalis_naive];
 
-					// Heuristic: choose most common pitch only if  it is a descending fifth from final pitch,
-					//						otherwise always choose final pitch
-					if (right == lowest_last_pitch_class &&
-						bin_freq/sequence_info.fifths_pitch_histogram[right] >= 1.1){
-							finalis = bin;
-						}
-					else finalis = lowest_last_pitch_class;
+			// Initialize to naive estimates
+            double max_freq = finalis_naive_freq;
+			int max_pitch = finalis_naive;
+
+			// Go through adjacent bins in fifths_pitch_histogram to check adjacent fifths
+			int bins[] = {-1, 1};
+			for (int bin = 0; bin <2; bin++){
+				int curr_pitch = (finalis_naive + 12 + bins[bin]) % 12;
+				double curr_freq = sequence_info.fifths_pitch_histogram[curr_pitch];
+				// If frequency of bin is greater than the highest found so far and at least 10% greater than that
+				// of the naive finalis, switch finalis estimate.
+				if ((curr_freq > max_freq)
+					&& (curr_freq >= 1.1 * finalis_naive_freq)){
+					max_pitch = curr_pitch;
+					max_freq = sequence_info.fifths_pitch_histogram[curr_pitch];
 				}
 			}
 
 			// Calculate the value
-			value = (double) (7 * finalis) % 12;
+			result[0] = (double) (7 * max_pitch) % 12;
 		}
-		else value = -1.0;
+		else result[0] = -1.0;
 
-		double[] result = new double[1];
-		result[0] = value;
 		return result;
 	}
 }

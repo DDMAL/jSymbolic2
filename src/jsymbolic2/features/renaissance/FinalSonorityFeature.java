@@ -8,11 +8,12 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * A feature calculator that finds all pitches sounding immediately after the last attacked note of the piece.
- * An array of 16 values is returned. If more than 16 different notes are present, only the lowest 16 are returned.
- * If less than 16 are present, the redundant values are set to -1. A value of 0 corresponds to C, and pitches
- * increase chromatically by semitone in integer units (e.g. a value of 2 corresponds to D). Enharmonic equivalents
- * are treated as a single pitch class.
+ * A feature calculator that finds the final pitch in every individual voice. An array of 16 values is returned.
+ * If more than 16 different notes are present, only the lowest 16 are returned. If less than 16 are present, the
+ * redundant values are set to -1. A value of 0 corresponds to C, and pitches increase chromatically by semitone
+ * in integer units (e.g. a value of 2 corresponds to D). Enharmonic equivalents are treated as a single pitch
+ * class. By looking at the final note in each track/channel rather than looking at the end of the piece,
+ * indeterminate longs are included even if their duration is not explicitly encoded.
  *
  * @author Jasper Teunen
  */
@@ -29,7 +30,7 @@ public class FinalSonorityFeature
 	{
 		String name = "Final Sonority";
 		String code = "Ren-01";
-		String description = "A feature calculator that finds all pitches sounding immediately after the last attacked note of the piece.An array of 16 values is returned. If more than 16 different notes are present, only the lowest 16 are returned. If less than 16 are present, the redundant values are set to -1. A value of 0 corresponds to C, and pitches increase chromatically by semitone in integer units (e.g. a value of 2 corresponds to D). Enharmonic equivalents are treated as a single pitch class.";
+		String description = "A feature calculator that finds the final pitch in every individual voice. An array of 16 values is returned. If more than 16 different notes are present, only the lowest 16 are returned. If less than 16 are present, the redundant values are set to -1. A value of 0 corresponds to C, and pitches increase chromatically by semitone in integer units (e.g. a value of 2 corresponds to D). Enharmonic equivalents are treated as a single pitch class. By looking at the final note in each track/channel rather than looking at the end of the piece, indeterminate longs are included even if their duration is not explicitly encoded.";
 		boolean is_sequential = true;
 		int dimensions = 16;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
@@ -66,14 +67,8 @@ public class FinalSonorityFeature
 		Arrays.fill(result, -1);
 		if (sequence_info != null)
 		{
-			if (sequence_info.pitches_present_by_tick_excluding_rests.length > 0)
-			{
-				int last_tick_index = sequence_info.pitches_present_by_tick_excluding_rests.length;
-				short[] final_sonority = sequence_info.pitches_present_by_tick_excluding_rests[last_tick_index-1];
-
-				for (int i = 0; i<Math.min(final_sonority.length, 16); i++){
-                    result[i] = (double) final_sonority[i];
-                }
+			for (int i = 0; i < Math.min(16, sequence_info.final_sonority.length); i++){
+				result[i] = (double) sequence_info.final_sonority[i];
 			}
 		} 
 		return result;
