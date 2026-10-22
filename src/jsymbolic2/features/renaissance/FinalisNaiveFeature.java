@@ -7,12 +7,12 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * Naive approach to estimating the finalis that assumes all voices are present and that the file is encoded in
- * such a way that its ending is also the piece's ending. This is especially relevant for pieces with repeats,
- * where the piece ending might not correspond to the encodings ending. This feature simply provides the pitch
- * class of the lowest pitch present in the final sonority. A value of 0 corresponds to C, and pitches increase
- * chromatically by semitone in integer units (e.g. a value of 2 corresponds to D). Enharmonic equivalents are
- * treated as a single pitch class. Set to 0 if there are no pitched notes.
+ * Returns the finalis, assuming all voices are present and that the file is encoded in such a way that its ending
+ * is also the piece's ending. This is especially relevant for pieces with repeats, where the piece ending might
+ * not correspond to the encodings ending. This feature simply provides the pitch class of the lowest pitch
+ * present in the final sonority. A value of 0 corresponds to C, and pitches increase chromatically by semitone
+ * in integer units (e.g. a value of 2 corresponds to D). Enharmonic equivalents are treated as a single pitch
+ * class. Set to 0 if there are no pitched notes.
  *
  * @author Jasper Teunen
  */
