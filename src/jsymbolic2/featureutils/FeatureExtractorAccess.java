@@ -682,9 +682,19 @@ public final class FeatureExtractorAccess
 			new ModalOctaveLowerBoundFeature(),
 			new ModalOctaveUpperBoundFeature(),
 			new ModalOctaveBoundsPitchClassFeature(),
-			new ModalScaleDegreePitchFeature(),
-			new ModalScaleDegreePitchClassFeature(),
-			new ModalScaleDegreePrevalenceFeature()
+			new ModalOctavePitchesFeature(),
+			new ModalOctavePitchClassesFeature(),
+			new ModalOctavePitchPrevalenceFeature(),
+			new ModalOctaveCombinedPrevalenceFeature(),
+			new PlagalityVersion1Feature(),
+			new PlagalityVersion2Feature(),
+			new PlagalityWeightedVersion1Feature(),
+			new PlagalityWeightedVersion2Feature(),
+			new PlagalityWeightedVersion3Feature(),
+			new PlagalityScoresFeature(),
+			new AuthenticityScoresFeature(),
+			new PlagalityScoresWeightedFeature(),
+			new AuthenticityScoresWeightedFeature()
 		};
 
 		default_features_to_save = new boolean[all_implemented_feature_extractors.length];

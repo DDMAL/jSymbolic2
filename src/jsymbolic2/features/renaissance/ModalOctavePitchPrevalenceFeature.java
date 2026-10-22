@@ -30,7 +30,7 @@ public class ModalOctavePitchPrevalenceFeature
 		int dimensions = 8;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
 		dependencies = new String[1];
-		dependencies[0] = "Pitch of Modal Scale Degrees";
+		dependencies[0] = "Pitches of Modal Octave";
 		offsets = null;
 		is_default = true;
 		is_secure = true;

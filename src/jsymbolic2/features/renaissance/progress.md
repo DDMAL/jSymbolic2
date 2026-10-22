@@ -111,23 +111,23 @@ Returns the combined prevalence of all pitches in modal octave.
 
 ### Ren-17: Plagality v1
 
-Proportion of notes below modal fifth to those above
+Proportion of notes outside modal fifth that are below it.
 
 ### Ren-18: Plagality v2
 
-Proportion of notes below plagal range to those above authentic range
+Proportion of notes outside combined plagal and authentic range that are below it
 
 ### Ren-19: Weighted Plagality v1
 
-Weighted for distance outside ambitus
+Plagality v1 weighted for distance outside ambitus
 
 ### Ren-20: Weighted Plagality v2
 
-Weighted for number of consecutive notes outside ambitus
+Plagality v1 weighted for number of consecutive notes outside ambitus
 
 ### Ren-21: Weighted Plagality v3
 
-Weighted for distance and consecutive notes
+Plagality v1 weighted for distance and consecutive notes
 
 ### Ren-22: Plagality Scores
 
