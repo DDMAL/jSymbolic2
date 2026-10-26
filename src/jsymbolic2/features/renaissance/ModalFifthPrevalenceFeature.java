@@ -36,7 +36,7 @@ public class ModalFifthPrevalenceFeature
 		int dimensions = 11;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
 		dependencies = new String[1];
-		dependencies[0] = "Finalis Naive";
+		dependencies[0] = "Finalis of Top Voice";
 		offsets = null;
 		is_default = true;
 		is_secure = true;
@@ -70,10 +70,10 @@ public class ModalFifthPrevalenceFeature
 		if (sequence_info != null)
 		{   
             int final_pitch_class = (int) other_feature_values[0][0];
-			for (int i=final_pitch_class; i<sequence_info.pitch_histogram_of_first_track.length-7; i+=12){
-                double curr_fifth_freq = sequence_info.pitch_histogram_of_first_track[i];
+			for (int i=final_pitch_class; i<sequence_info.pitch_histogram_of_highest_voice.length-7; i+=12){
+                double curr_fifth_freq = sequence_info.pitch_histogram_of_highest_voice[i];
                 for (int j=1; j<8; j++){
-                    curr_fifth_freq += sequence_info.pitch_histogram_of_first_track[i+j];
+                    curr_fifth_freq += sequence_info.pitch_histogram_of_highest_voice[i+j];
                 }
                 result[i / 12] = curr_fifth_freq;
             }

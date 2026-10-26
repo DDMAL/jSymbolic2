@@ -65,7 +65,7 @@ public class ModalOctaveCombinedPrevalenceFeature
 		if (sequence_info != null)
 		{   
 			for (int i=0; i<other_feature_values[0].length; i++){
-				prevalence += sequence_info.pitch_histogram_of_first_track[(int) other_feature_values[0][i]];
+				prevalence += sequence_info.pitch_histogram_of_highest_voice[(int) other_feature_values[0][i]];
 			}
         }
 		result[0] = prevalence;

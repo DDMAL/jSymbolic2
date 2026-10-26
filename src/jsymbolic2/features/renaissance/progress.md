@@ -4,15 +4,15 @@
   - [Modal Features](#modal-features)
     - [Ren-1: Final Sonority ✓](#ren-1-final-sonority-)
     - [Ren-2: Final Sonority Classes ✓](#ren-2-final-sonority-classes-)
-    - [Ren-3: Finalis Naive ✓](#ren-3-finalis-naive-)
-    - [Ren-4: Finalis Heuristic ✓](#ren-4-finalis-heuristic-)
+    - [Ren-3: Finalis of Top Voice](#ren-3-finalis-of-top-voice)
+    - [Ren-4: Finalis Lowest Note](#ren-4-finalis-lowest-note)
     - [Ren-5: Prevalence of Modal Fifths ✓](#ren-5-prevalence-of-modal-fifths-)
     - [Ren-6: Maximum Prevalence of Modal Fifth ✓](#ren-6-maximum-prevalence-of-modal-fifth-)
     - [Ren-7: Finalis Octave ✓](#ren-7-finalis-octave-)
     - [Ren-8: Combined Prevalence in Lower Fourth ✓](#ren-8-combined-prevalence-in-lower-fourth-)
-    - [Ren-9: Combined Prevalence below Modal Fifth ✓](#ren-9-combined-prevalence-below-modal-fifth-)
+    - [Ren-9: Combined Prevalence Below Modal Fifth ✓](#ren-9-combined-prevalence-below-modal-fifth-)
     - [Ren-10: Combined Prevalence in Upper Fourth ✓](#ren-10-combined-prevalence-in-upper-fourth-)
-    - [Ren-11: Combined Prevalence above Modal Fifth ✓](#ren-11-combined-prevalence-above-modal-fifth-)
+    - [Ren-11: Combined Prevalence Above Modal Fifth ✓](#ren-11-combined-prevalence-above-modal-fifth-)
     - [Ren-12: Plagality ✓](#ren-12-plagality-)
     - [Ren-13: Expected Lower Bound of Modal Octave ✓](#ren-13-expected-lower-bound-of-modal-octave-)
     - [Ren-14: Expected Upper Bound of Modal Octave ✓](#ren-14-expected-upper-bound-of-modal-octave-)
@@ -34,8 +34,10 @@
     - [Tenor and Contratenor Overlap](#tenor-and-contratenor-overlap)
     - [Fauxbourdon](#fauxbourdon)
   - [Intermediate Representations](#intermediate-representations)
-    - [pitch\_histogram\_of\_first\_track ✓](#pitch_histogram_of_first_track-)
+    - [pitch\_histogram\_of\_highest\_voice ✓](#pitch_histogram_of_highest_voice-)
     - [final\_sonority ✓](#final_sonority-)
+    - [last\_note\_of\_highest\_voice ✓](#last_note_of_highest_voice-)
+    - [track\_and\_channel\_ordering\_by\_average\_pitch](#track_and_channel_ordering_by_average_pitch)
 
 ## Modal Features
 
@@ -47,13 +49,13 @@ A feature calculator that finds the final pitch in every individual voice. An ar
 
 A feature calculator that that finds the final pitch class in every individual voice. An array of 12 values is returned, with each element corresponding to a pitch class. If an element i is zero, that means that pitch class i is not present in the final sonority. If it is 1, it is present. The first element of the array represents pitch class C (and its enharmonic equivalents), the second C#/Db and so on.
 
-### Ren-3: Finalis Naive ✓
+### Ren-3: Finalis of Top Voice
 
-Returns the finalis, assuming all voices are present and that the file is encoded in such a way that its ending is also the piece's ending. This is especially relevant for pieces with repeats, where the piece ending might not correspond to the encodings ending. This feature simply provides the pitch class of the lowest pitch present in the final sonority. A value of 0 corresponds to C, and pitches increase chromatically by semitone in integer units (e.g. a value of 2 corresponds to D). Enharmonic equivalents are treated as a single pitch class. Set to 0 if there are no pitched notes.
+A feature calculater that returns the pitch class of the last note of the highest voice. A value of 0 corresponds to C, and pitches increase chromatically by semitone in integer units (e.g. a value of 2 corresponds to D). Enharmonic equivalents are treated as a single pitch class.
 
-### Ren-4: Finalis Heuristic ✓
+### Ren-4: Finalis Lowest Note
 
-A feature calculator that uses a heuristic to approximate the finalis. The pitch class of the expected finalis is returned. This heuristic works as follows: if the lowest pitch class of the final sonority is also the most common pitch class throughout the piece, this is taken as the finalis. If it isn't, switch to the most common pitch class if it is at least 10% more common and precisely a fifth from the lowest pitch class of the final sonority.
+A feature calculater that returns the pitch class of the lowest note in the final sonority. A value of 0 corresponds to C, and pitches increase chromatically by semitone in integer units (e.g. a value of 2 corresponds to D). Enharmonic equivalents are treated as a single pitch class.
 
 ### Ren-5: Prevalence of Modal Fifths ✓
 
@@ -71,7 +73,7 @@ Returns the absolute pitch of the final that yields the most prevalent modal fif
 
 Prevalence of notes in fourth immediatly below the most prevalent modal fifth.
 
-### Ren-9: Combined Prevalence below Modal Fifth ✓
+### Ren-9: Combined Prevalence Below Modal Fifth ✓
 
 Returns the combined prevalence of all pitches below shared modal range.
 
@@ -79,7 +81,7 @@ Returns the combined prevalence of all pitches below shared modal range.
 
 Prevalence of notes in fourth immediatly above the most prevalent modal fifth.
 
-### Ren-11: Combined Prevalence above Modal Fifth ✓
+### Ren-11: Combined Prevalence Above Modal Fifth ✓
 
 Returns the combined prevalence of all pitches above shared modal range.
 
@@ -149,10 +151,18 @@ List with 12 elements
 
 ## Intermediate Representations
 
-### pitch_histogram_of_first_track ✓
+### pitch_histogram_of_highest_voice ✓
 
-This intermediate representation finds the first track with at least one note in it and then provides the pitch histogram for this track only. To do so, it uses the same logic as basic_pitch_histogram.
+This intermediate representation finds the track and channel with the highest average pitch through track_and_channel_with_highest_average_pitch and returns its pitch histogram. This can be seen as a subset of the entire pitch histogram that only contains the notes from the highest voice.
 
 ### final_sonority ✓
 
 An array with the final sounding note for every track and channel. Iterates through all note onset slices to find the final note onset for each track and channel with at least one note.
+
+### last_note_of_highest_voice ✓
+
+The last note of the track and channel combination with the highest average pitch.
+
+### track_and_channel_ordering_by_average_pitch
+
+An array that represents the ordering of all of the midi tracks and channels by average pitch, from high to low. Every element has the form [track_number, channel_number]. To get the highest track and channel combination, one can do track_and_channel_ordering_by_average_pitch[0]

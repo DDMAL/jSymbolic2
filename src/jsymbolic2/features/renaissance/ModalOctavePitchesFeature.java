@@ -71,38 +71,38 @@ public class ModalOctavePitchesFeature
             result[7] = other_feature_values[0][0] + 12;
 
             // Second degree: flat or natural
-            if (sequence_info.pitch_histogram_of_first_track[first_degree + 1] >
-                sequence_info.pitch_histogram_of_first_track[first_degree + 2]){
+            if (sequence_info.pitch_histogram_of_highest_voice[first_degree + 1] >
+                sequence_info.pitch_histogram_of_highest_voice[first_degree + 2]){
                     result[1] = (double) first_degree + 1;
                 } else result[1] = (double) first_degree + 2;
 
             // Third degree: flat or natural
-            if (sequence_info.pitch_histogram_of_first_track[first_degree + 3] >
-                sequence_info.pitch_histogram_of_first_track[first_degree + 4]){
+            if (sequence_info.pitch_histogram_of_highest_voice[first_degree + 3] >
+                sequence_info.pitch_histogram_of_highest_voice[first_degree + 4]){
                     result[2] = (double) first_degree + 3;
                 } else result[2] = (double) first_degree + 4;
 
             // Fourth degree: natural or sharp
-            if (sequence_info.pitch_histogram_of_first_track[first_degree + 6] >
-                sequence_info.pitch_histogram_of_first_track[first_degree + 5]){
+            if (sequence_info.pitch_histogram_of_highest_voice[first_degree + 6] >
+                sequence_info.pitch_histogram_of_highest_voice[first_degree + 5]){
                     result[3] = (double) first_degree + 6;
                 } else result[3] = (double) first_degree + 5;
 
             // Fifth degree: flat or natural
-            if (sequence_info.pitch_histogram_of_first_track[first_degree + 6] >
-                sequence_info.pitch_histogram_of_first_track[first_degree + 7]){
+            if (sequence_info.pitch_histogram_of_highest_voice[first_degree + 6] >
+                sequence_info.pitch_histogram_of_highest_voice[first_degree + 7]){
                     result[4] = (double) first_degree + 6;
                 } else result[4] = (double) first_degree + 7;
 
             // Sixth degree: flat or natural
-            if (sequence_info.pitch_histogram_of_first_track[first_degree + 8] >
-                sequence_info.pitch_histogram_of_first_track[first_degree + 9]){
+            if (sequence_info.pitch_histogram_of_highest_voice[first_degree + 8] >
+                sequence_info.pitch_histogram_of_highest_voice[first_degree + 9]){
                     result[5] = (double) first_degree + 8;
                 } else result[5] = (double) first_degree + 9;
 
             // Seventh degree: flat or natural
-            if (sequence_info.pitch_histogram_of_first_track[first_degree + 10] >
-                sequence_info.pitch_histogram_of_first_track[first_degree + 11]){
+            if (sequence_info.pitch_histogram_of_highest_voice[first_degree + 10] >
+                sequence_info.pitch_histogram_of_highest_voice[first_degree + 11]){
                     result[6] = (double) first_degree + 10;
                 } else result[6] = (double) first_degree + 11;
         }

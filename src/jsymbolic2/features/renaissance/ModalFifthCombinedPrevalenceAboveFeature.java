@@ -23,7 +23,7 @@ public class ModalFifthCombinedPrevalenceAboveFeature
 	 */
 	public ModalFifthCombinedPrevalenceAboveFeature()
 	{
-		String name = "Combined Prevalence above Modal Fifth";
+		String name = "Combined Prevalence Above Modal Fifth";
 		String code = "Ren-11";
 		String description = "long desc";
 		boolean is_sequential = true;
@@ -66,8 +66,8 @@ public class ModalFifthCombinedPrevalenceAboveFeature
             double above_prevalence = 0.0;
 
             // above modal fifth
-            for (int i = (int) other_feature_values[0][0] + 8; i<sequence_info.pitch_histogram_of_first_track.length; i++){
-                above_prevalence += sequence_info.pitch_histogram_of_first_track[i];
+            for (int i = (int) other_feature_values[0][0] + 8; i<sequence_info.pitch_histogram_of_highest_voice.length; i++){
+                above_prevalence += sequence_info.pitch_histogram_of_highest_voice[i];
             }
             result[0] = above_prevalence;
         }

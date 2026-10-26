@@ -7,16 +7,13 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * Returns the finalis, assuming all voices are present and that the file is encoded in such a way that its ending
- * is also the piece's ending. This is especially relevant for pieces with repeats, where the piece ending might
- * not correspond to the encodings ending. This feature simply provides the pitch class of the lowest pitch
- * present in the final sonority. A value of 0 corresponds to C, and pitches increase chromatically by semitone
- * in integer units (e.g. a value of 2 corresponds to D). Enharmonic equivalents are treated as a single pitch
- * class. Set to 0 if there are no pitched notes.
+ * A feature calculater that returns the pitch class of the lowest note in the final sonority. A value of 0
+ * corresponds to C, and pitches increase chromatically by semitone in integer units (e.g. a value of 2
+ * corresponds to D). Enharmonic equivalents are treated as a single pitch class.
  *
  * @author Jasper Teunen
  */
-public class FinalisNaiveFeature
+public class FinalisLowestNoteFeature
 		extends MIDIFeatureExtractor
 {
 	/* CONSTRUCTOR ******************************************************************************************/
@@ -25,11 +22,11 @@ public class FinalisNaiveFeature
 	/**
 	 * Basic constructor that sets the values of the fields inherited from this class' superclass.
 	 */
-	public FinalisNaiveFeature()
+	public FinalisLowestNoteFeature()
 	{
-		String name = "Finalis Naive";
-		String code = "Ren-3";
-		String description = "Naive approach to estimating the finalis that assumes all voices are present and that the file is encoded in such a way that its ending is also the piece's ending. This is especially relevant for pieces with repeats, where the piece ending might not correspond to the encodings ending. This feature simply provides the pitch class of the lowest pitch present in the final sonority. A value of 0 corresponds to C, and pitches increase chromatically by semitone in integer units (e.g. a value of 2 corresponds to D). Enharmonic equivalents are treated as a single pitch class. Set to 0 if there are no pitched notes.";
+		String name = "Finalis Lowest Note";
+		String code = "Ren-4";
+		String description = "The pitch class of the lowest note in the final sonority.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);

@@ -672,8 +672,8 @@ public final class FeatureExtractorAccess
 			// Add renaissance features
 			new FinalSonorityFeature(),
 			new FinalSonorityClassesFeature(),
-			new FinalisNaiveFeature(),
-			new FinalisHeuristicFeature(),
+			new FinalisTopVoiceFeature(),
+			new FinalisLowestNoteFeature(),
 			new ModalFifthPrevalenceFeature(),
 			new ModalFifthMaximumPrevalenceFeature(),
 			new FinalisOctaveFeature(),

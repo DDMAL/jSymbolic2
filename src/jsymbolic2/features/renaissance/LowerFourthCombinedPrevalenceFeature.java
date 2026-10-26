@@ -67,7 +67,7 @@ public class LowerFourthCombinedPrevalenceFeature
             double lower_fourth_freq = 0.0;
 			int max_decrease = Math.max(5,final_in_corr_octave); // Make sure there are no negative pitches
             for (int i = 1; i < max_decrease + 1; i++) {
-                lower_fourth_freq += sequence_info.pitch_histogram_of_first_track[final_in_corr_octave-i];
+                lower_fourth_freq += sequence_info.pitch_histogram_of_highest_voice[final_in_corr_octave-i];
             }
             result[0] = lower_fourth_freq;
 		}

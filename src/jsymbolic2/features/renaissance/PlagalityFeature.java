@@ -30,8 +30,8 @@ public class PlagalityFeature
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
 		dependencies = new String[2];
-		dependencies[0] = "Combined Prevalence below Modal Fifth";
-		dependencies[1] = "Combined Prevalence above Modal Fifth";
+		dependencies[0] = "Combined Prevalence Below Modal Fifth";
+		dependencies[1] = "Combined Prevalence Above Modal Fifth";
 		offsets = null;
 		is_default = true;
 		is_secure = true;

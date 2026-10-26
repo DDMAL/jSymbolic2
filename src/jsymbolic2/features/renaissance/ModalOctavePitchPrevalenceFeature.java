@@ -64,7 +64,7 @@ public class ModalOctavePitchPrevalenceFeature
 		if (sequence_info != null)
 		{   
             for (int i=0; i<other_feature_values[0].length; i++){
-                result[i] = sequence_info.pitch_histogram_of_first_track[(short) other_feature_values[0][i]];
+                result[i] = sequence_info.pitch_histogram_of_highest_voice[(short) other_feature_values[0][i]];
             }
         }
 		return result;

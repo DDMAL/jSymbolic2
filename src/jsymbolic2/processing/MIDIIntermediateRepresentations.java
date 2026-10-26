@@ -3,11 +3,13 @@ package jsymbolic2.processing;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import javax.sound.midi.*;
 import jsymbolic2.featureutils.CollectedNoteInfo;
@@ -881,16 +883,30 @@ public class MIDIIntermediateRepresentations
 	public double[] complete_rest_durations;
 
 	/**
-	 * This intermediate representation finds the first track with at least one note in it and then provides
-	 * the pitch histogram for this track only. To do so, it uses the same logic as basic_pitch_histogram.
+	 * This intermediate representation finds the track and channel with the highest average pitch through
+	 * track_and_channel_with_highest_average_pitch and returns its pitch histogram. This can be seen as a
+	 * subset of the entire pitch histogram that only contains the notes from the highest voice.
 	 */
-	public double[] pitch_histogram_of_first_track;
+	public double[] pitch_histogram_of_highest_voice;
+
+	/**
+	 * The last note of the track and channel combination with the highest average pitch.
+	 */
+	public double last_note_of_highest_voice;
 
 	/**
 	 * An array with the final sounding note for every track and channel. Iterates through all note onset slices
-	 * to find the final note onset for each track and channel with at least one note.
+	 * to find the final note onset for each track and channel with at least one note. The result is sorted in
+	 * ascending order.
 	 */
 	public double[] final_sonority;
+
+	/**
+	 * An array that represents the ordering of all of the midi tracks and channels by average pitch, from high
+	 * to low. Every element has the form [track_number, channel_number]. To get the highest track and channel
+	 * combination, one can do track_and_channel_ordering_by_average_pitch[0]
+	 */
+	public int[][] track_and_channel_ordering_by_average_pitch;
 	
 
 	/* PRIVATE FIELDS ***************************************************************************************/
@@ -1271,7 +1287,11 @@ public class MIDIIntermediateRepresentations
 		}
 		System.out.print("\n");*/
 
+		generateHighestVoicePitchHistogram();
+
 		generateFinalSonorityIntermediateRepresentation();
+		
+		generateTrackAndChannelOrdering();
 	}
 
 	
@@ -2195,10 +2215,6 @@ public class MIDIIntermediateRepresentations
 	{
 		// Initialize basic_pitch_histogram
 		basic_pitch_histogram = new double[128];
-		pitch_histogram_of_first_track = new double[128];
-
-		int notes_added_from_first_track = 0;
-		boolean done_with_first_track = false;
 
 		// Fill basic_pitch_histogram
 		for (int n_track = 0; n_track < tracks.length; n_track++)
@@ -2217,18 +2233,13 @@ public class MIDIIntermediateRepresentations
 						if (short_message.getCommand() == 0x90) // note on
 							if (short_message.getData2() != 0){ // not velocity 0
 								basic_pitch_histogram[short_message.getData1()]++;
-								notes_added_from_first_track++;
-								if(!done_with_first_track)
-									pitch_histogram_of_first_track[short_message.getData1()]++;
 							}
 				}
 			}
-			if(notes_added_from_first_track>0) done_with_first_track = true;
 		}
 
 		// Normalize basic_pitch_histogram
 		basic_pitch_histogram = MathAndStatsMethods.normalize(basic_pitch_histogram);
-		pitch_histogram_of_first_track = MathAndStatsMethods.normalize(pitch_histogram_of_first_track);
 
 		// Generate pitch_class_histogram
 		pitch_class_histogram = new double[12];
@@ -3741,9 +3752,41 @@ public class MIDIIntermediateRepresentations
 			complete_rest_durations = ArrayMethods.removeEntriesLessThan(complete_rest_durations, 0.1);
 	}
 
+	/**
+	 * Calculate the values of pitch_histogram_of_highest_voice
+	 */
+	private void generateHighestVoicePitchHistogram()
+	{
+		// Initialize pitch_histogram_of_highest_voice
+		pitch_histogram_of_highest_voice = new double[128];
+
+		// Fill pitch_histogram_of_highest_voice
+		int n_track = track_and_channel_with_highest_average_pitch[0];
+		Track track = tracks[n_track];
+		for (int n_event = 0; n_event < track.size(); n_event++){
+			MidiEvent event = track.get(n_event);
+			MidiMessage message = event.getMessage();
+
+			// Increment pitch of a note on
+			if (message instanceof ShortMessage){
+				ShortMessage short_message = (ShortMessage) message;
+				// Check if channel is that of the highest voice
+				if (short_message.getChannel() == track_and_channel_with_highest_average_pitch[1])
+					if (short_message.getCommand() == 0x90) // note on
+						if (short_message.getData2() != 0){ // not velocity 0
+							pitch_histogram_of_highest_voice[short_message.getData1()]++;
+						}
+			}
+		}
+
+		// Normalize pitch_histogram_of_highest_voice
+		pitch_histogram_of_highest_voice = MathAndStatsMethods.normalize(pitch_histogram_of_highest_voice);
+	}
+
+
 
 	/**
-	 * Generate final sonority intermediate representation
+	 * Generate final_sonority intermediate representation and last_note_of_highest_voice
 	 */
 	private void generateFinalSonorityIntermediateRepresentation()
 	{
@@ -3763,10 +3806,15 @@ public class MIDIIntermediateRepresentations
 			{
 				List<Integer> final_slice_of_channel = slices_by_track_and_channel[n_track][n_channel].get(slices_by_track_and_channel[n_track][n_channel].size()-1);
 				if (final_slice_of_channel.size() >= 1){
+					// If track and channel of highest voice
+					if (n_track == track_and_channel_with_highest_average_pitch[0] &&
+						n_channel == track_and_channel_with_highest_average_pitch[1]){
+						// Set last_note_of_highest_voice
+						last_note_of_highest_voice = Collections.min(final_slice_of_channel);
+					}
 					for (int n_note = 0; n_note < final_slice_of_channel.size(); n_note++){
 						final_pitch_by_track_and_channel.add(final_slice_of_channel.get(n_note));
-				}
-
+					}
 				}
 			}
 		}
@@ -3777,6 +3825,31 @@ public class MIDIIntermediateRepresentations
 		// Fill final sonority
 		for (int i=0; i< Math.min(final_pitch_by_track_and_channel.size(), final_sonority.length); i++){
 			final_sonority[i] = final_pitch_by_track_and_channel.get(i);
+		}
+	}
+
+	
+	/**
+	 * Order tracks and channels from high to low, sets track_and_channel_ordering_by_average_pitch
+	 */
+	private void generateTrackAndChannelOrdering(){
+		ArrayList<double[]> avg_pitches = new ArrayList<>();
+		for (int i=0; i<average_pitch_by_track_and_channel.length; i++){
+			for (int j=0; j<average_pitch_by_track_and_channel[i].length; j++){
+				if (average_pitch_by_track_and_channel[i][j] > 0){
+					avg_pitches.add(new double[]{i,j,average_pitch_by_track_and_channel[i][j]});
+				}
+			}
+		}
+		Collections.sort(avg_pitches, new Comparator<double[]>() {    
+        @Override
+        public int compare(double[] o1, double[] o2) {
+            return Double.compare(o1[2],o2[2]);
+        }});
+		int[][] track_and_channel_ordering_by_average_pitch = new int[avg_pitches.size()][2];
+		for (int i=0; i<avg_pitches.size(); i++){
+			track_and_channel_ordering_by_average_pitch[i][0] = (int) avg_pitches.get(i)[0];
+			track_and_channel_ordering_by_average_pitch[i][1] = (int) avg_pitches.get(i)[1];
 		}
 	}
 	
