@@ -24,7 +24,7 @@ public class ModalOctaveCombinedPrevalenceFeature
 	public ModalOctaveCombinedPrevalenceFeature()
 	{
 		String name = "Combined Prevalence of Modal Octave";
-		String code = "Ren-16";
+		String code = "Ren-19";
 		String description = "";
 		boolean is_sequential = true;
 		int dimensions = 1;

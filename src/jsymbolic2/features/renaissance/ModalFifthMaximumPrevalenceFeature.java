@@ -27,7 +27,7 @@ public class ModalFifthMaximumPrevalenceFeature
 	public ModalFifthMaximumPrevalenceFeature()
 	{
 		String name = "Maximum Prevalence of Modal Fifth";
-		String code = "Ren-06";
+		String code = "Ren-6";
 		String description = "Plagal and authentic variants of modes share a range delineated by the final and an ascending fifth above it. This feature returns prevalence of notes from the first track within these fifth ranges for all octaves. This value is represented as a percentage of the total amount of notes. In case of a tie between two or more fifth ranges, the prevalence of the lowest range is returned.";
 		boolean is_sequential = true;
 		int dimensions = 1;

@@ -25,7 +25,7 @@ public class ModalOctaveBoundsPitchClassFeature
 	public ModalOctaveBoundsPitchClassFeature()
 	{
 		String name = "Pitch Class of Expected Bounds of Modal Octave";
-		String code = "Ren-12";
+		String code = "Ren-15";
 		String description = "Returns the pitch class of the bounds of the modal octave. These bounds are always the same pitch class, as they are the bounds of an octave.";
 		boolean is_sequential = true;
 		int dimensions = 1;

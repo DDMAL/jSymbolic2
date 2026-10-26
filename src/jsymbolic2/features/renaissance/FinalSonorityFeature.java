@@ -29,7 +29,7 @@ public class FinalSonorityFeature
 	public FinalSonorityFeature()
 	{
 		String name = "Final Sonority";
-		String code = "Ren-01";
+		String code = "Ren-1";
 		String description = "A feature calculator that finds the final pitch in every individual voice. An array of 16 values is returned. If more than 16 different notes are present, only the lowest 16 are returned. If less than 16 are present, the redundant values are set to -1. A value of 0 corresponds to C, and pitches increase chromatically by semitone in integer units (e.g. a value of 2 corresponds to D). Enharmonic equivalents are treated as a single pitch class. By looking at the final note in each track/channel rather than looking at the end of the piece, indeterminate longs are included even if their duration is not explicitly encoded.";
 		boolean is_sequential = true;
 		int dimensions = 16;

@@ -29,7 +29,7 @@ public class FinalisHeuristicFeature
 	public FinalisHeuristicFeature()
 	{
 		String name = "Finalis Heuristic";
-		String code = "Ren-04";
+		String code = "Ren-4";
 		String description = "Heuristic estimate of finalis based on fifths pitch histogram";
 		boolean is_sequential = true;
 		int dimensions = 1;

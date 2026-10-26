@@ -8,11 +8,11 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * Documentation of feature
+ * Prevalence of notes in fourth immediatly below the most prevalent modal fifth.
  *
  * @author Jasper Teunen
  */
-public class PlagalityVersion2Feature
+public class LowerFourthCombinedPrevalenceFeature
 		extends MIDIFeatureExtractor
 {
 	/* CONSTRUCTOR ******************************************************************************************/
@@ -21,11 +21,11 @@ public class PlagalityVersion2Feature
 	/**
 	 * Basic constructor that sets the values of the fields inherited from this class' superclass.
 	 */
-	public PlagalityVersion2Feature()
+	public LowerFourthCombinedPrevalenceFeature()
 	{
-		String name = "Plagality v2";
-		String code = "Ren-18";
-		String description = "long desc";
+		String name = "Combined Prevalence in Lower Fourth ";
+		String code = "Ren-8";
+		String description = "Prevalence of notes in fourth immediatly below the most prevalent modal fifth.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
@@ -62,24 +62,15 @@ public class PlagalityVersion2Feature
 		double[] result = new double[1];
 		Arrays.fill(result, -1);
 		if (sequence_info != null)
-		{   
-            double below_prevalence = 0.0;
-            double above_prevalence = 0.0;
-
-			// below modal fifth
-            for (int i = 0; i<other_feature_values[0][0]-5; i++){
-                below_prevalence += sequence_info.pitch_histogram_of_first_track[i];
+		{
+            int final_in_corr_octave = (int) other_feature_values[0][0];
+            double lower_fourth_freq = 0.0;
+			int max_decrease = Math.max(5,final_in_corr_octave); // Make sure there are no negative pitches
+            for (int i = 1; i < max_decrease + 1; i++) {
+                lower_fourth_freq += sequence_info.pitch_histogram_of_first_track[final_in_corr_octave-i];
             }
-
-            // above modal fifth
-            for (int i = (int) other_feature_values[0][0] + 13; i<sequence_info.pitch_histogram_of_first_track.length; i++){
-                above_prevalence += sequence_info.pitch_histogram_of_first_track[i];
-            }
-
-            if (below_prevalence + above_prevalence > 0){
-                result[0] = below_prevalence/(below_prevalence + above_prevalence);
-            }
-        }
+            result[0] = lower_fourth_freq;
+		}
 		return result;
 	}
 }

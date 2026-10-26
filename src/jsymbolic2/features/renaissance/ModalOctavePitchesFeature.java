@@ -27,7 +27,7 @@ public class ModalOctavePitchesFeature
 	public ModalOctavePitchesFeature()
 	{
 		String name = "Pitches of Modal Octave";
-		String code = "Ren-13";
+		String code = "Ren-16";
 		String description = "Returns an array with eight elements. These elements indicate the pitches of the modal octave. These pitches are attained by comparing all pairs of possible pitches for each of positions within the modal octave and choosing the most prevalent one. E.g. in a C mode, the fourth degree could be F or F#, this feature will then return the one that most commonly occurs between these two.";
 		boolean is_sequential = true;
 		int dimensions = 8;

@@ -12,7 +12,7 @@ import jsymbolic2.processing.MIDIIntermediateRepresentations;
  *
  * @author Jasper Teunen
  */
-public class PlagalityScoresFeature
+public class PlagalityFeature
 		extends MIDIFeatureExtractor
 {
 	/* CONSTRUCTOR ******************************************************************************************/
@@ -21,15 +21,17 @@ public class PlagalityScoresFeature
 	/**
 	 * Basic constructor that sets the values of the fields inherited from this class' superclass.
 	 */
-	public PlagalityScoresFeature()
+	public PlagalityFeature()
 	{
-		String name = "Plagality Scores";
-		String code = "Ren-22";
+		String name = "Plagality";
+		String code = "Ren-12";
 		String description = "long desc";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
-		dependencies = null;
+		dependencies = new String[2];
+		dependencies[0] = "Combined Prevalence below Modal Fifth";
+		dependencies[1] = "Combined Prevalence above Modal Fifth";
 		offsets = null;
 		is_default = true;
 		is_secure = true;
@@ -62,7 +64,12 @@ public class PlagalityScoresFeature
 		Arrays.fill(result, -1);
 		if (sequence_info != null)
 		{   
-			;
+            double below_prevalence = other_feature_values[0][0];
+            double above_prevalence = other_feature_values[1][0];
+
+            if (below_prevalence + above_prevalence > 0){
+                result[0] = below_prevalence/(below_prevalence + above_prevalence);
+            }
         }
 		return result;
 	}

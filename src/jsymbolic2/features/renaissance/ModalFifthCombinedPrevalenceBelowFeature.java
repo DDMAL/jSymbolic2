@@ -12,7 +12,7 @@ import jsymbolic2.processing.MIDIIntermediateRepresentations;
  *
  * @author Jasper Teunen
  */
-public class PlagalityWeightedVersion3Feature
+public class ModalFifthCombinedPrevalenceBelowFeature
 		extends MIDIFeatureExtractor
 {
 	/* CONSTRUCTOR ******************************************************************************************/
@@ -21,15 +21,16 @@ public class PlagalityWeightedVersion3Feature
 	/**
 	 * Basic constructor that sets the values of the fields inherited from this class' superclass.
 	 */
-	public PlagalityWeightedVersion3Feature()
+	public ModalFifthCombinedPrevalenceBelowFeature()
 	{
-		String name = "Weighted Plagality v3";
-		String code = "Ren-21";
+		String name = "Combined Prevalence below Modal Fifth";
+		String code = "Ren-9";
 		String description = "long desc";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
-		dependencies = null;
+		dependencies = new String[1];
+		dependencies[0] = "Finalis Octave";
 		offsets = null;
 		is_default = true;
 		is_secure = true;
@@ -62,7 +63,13 @@ public class PlagalityWeightedVersion3Feature
 		Arrays.fill(result, -1);
 		if (sequence_info != null)
 		{   
-			;
+            double below_prevalence = 0.0;
+
+			// below modal fifth
+            for (int i = 0; i<other_feature_values[0][0]; i++){
+                below_prevalence += sequence_info.pitch_histogram_of_first_track[i];
+            }
+            result[0] = below_prevalence;
         }
 		return result;
 	}

@@ -25,7 +25,7 @@ public class FinalisOctaveFeature
 	public FinalisOctaveFeature()
 	{
 		String name = "Finalis Octave";
-		String code = "Ren-07";
+		String code = "Ren-7";
 		String description = "Returns the absolute pitch of the final that yields the most prevalent modal fifth. As such, this value determines the octave of the modal ambitus.";
 		boolean is_sequential = true;
 		int dimensions = 1;

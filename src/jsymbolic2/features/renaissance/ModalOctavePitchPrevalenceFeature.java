@@ -24,7 +24,7 @@ public class ModalOctavePitchPrevalenceFeature
 	public ModalOctavePitchPrevalenceFeature()
 	{
 		String name = "Prevalence of Pitches in Modal Octave";
-		String code = "Ren-15";
+		String code = "Ren-18";
 		String description = "Returns an array with eight elements. These elements indicate the prevalence of pitches in the modal octave.";
 		boolean is_sequential = true;
 		int dimensions = 8;

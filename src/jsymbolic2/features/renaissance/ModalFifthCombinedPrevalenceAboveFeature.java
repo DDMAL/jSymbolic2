@@ -8,11 +8,11 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * Prevalence of notes in fourth immediatly below the most prevalent modal fifth.
+ * Documentation of feature
  *
  * @author Jasper Teunen
  */
-public class LowerFourthPrevalenceFeature
+public class ModalFifthCombinedPrevalenceAboveFeature
 		extends MIDIFeatureExtractor
 {
 	/* CONSTRUCTOR ******************************************************************************************/
@@ -21,11 +21,11 @@ public class LowerFourthPrevalenceFeature
 	/**
 	 * Basic constructor that sets the values of the fields inherited from this class' superclass.
 	 */
-	public LowerFourthPrevalenceFeature()
+	public ModalFifthCombinedPrevalenceAboveFeature()
 	{
-		String name = "Lower Fourth Prevalence";
-		String code = "Ren-08";
-		String description = "Prevalence of notes in fourth immediatly below the most prevalent modal fifth.";
+		String name = "Combined Prevalence above Modal Fifth";
+		String code = "Ren-11";
+		String description = "long desc";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
@@ -62,15 +62,15 @@ public class LowerFourthPrevalenceFeature
 		double[] result = new double[1];
 		Arrays.fill(result, -1);
 		if (sequence_info != null)
-		{
-            int final_in_corr_octave = (int) other_feature_values[0][0];
-            double lower_fourth_freq = 0.0;
-			int max_decrease = Math.max(5,final_in_corr_octave); // Make sure there are no negative pitches
-            for (int i = 1; i < max_decrease + 1; i++) {
-                lower_fourth_freq += sequence_info.pitch_histogram_of_first_track[final_in_corr_octave-i];
+		{   
+            double above_prevalence = 0.0;
+
+            // above modal fifth
+            for (int i = (int) other_feature_values[0][0] + 8; i<sequence_info.pitch_histogram_of_first_track.length; i++){
+                above_prevalence += sequence_info.pitch_histogram_of_first_track[i];
             }
-            result[0] = lower_fourth_freq;
-		}
+            result[0] = above_prevalence;
+        }
 		return result;
 	}
 }

@@ -27,15 +27,15 @@ public class ModalOctaveUpperBoundFeature
 	public ModalOctaveUpperBoundFeature()
 	{
 		String name = "Expected Upper Bound of Modal Octave";
-		String code = "Ren-11";
+		String code = "Ren-14";
 		String description = "Returns upper bound of modal octave based on lower and upper fourth prevalence: if lower fourth prevalence is greater than upper fourth prevalence, a plagal mode is assumed. If this is reversed, authentic mode is assumed. In case of plagal mode, this feature returns the fifth above the finalis, in case of authentic mode it returns the finalis (in the correct octave). In case of a tie, authentic mode is assumed.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
 		dependencies = new String[3];
 		dependencies[0] = "Finalis Octave";
-		dependencies[1] = "Lower Fourth Prevalence";
-		dependencies[2] = "Upper Fourth Prevalence";
+		dependencies[1] = "Combined Prevalence in Lower Fourth ";
+		dependencies[2] = "Combined Prevalence in Upper Fourth";
 		offsets = null;
 		is_default = true;
 		is_secure = true;

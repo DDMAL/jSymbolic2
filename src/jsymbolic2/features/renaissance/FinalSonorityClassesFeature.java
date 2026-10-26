@@ -26,7 +26,7 @@ public class FinalSonorityClassesFeature
 	public FinalSonorityClassesFeature()
 	{
 		String name = "Final Sonority Classes";
-		String code = "Ren-02";
+		String code = "Ren-2";
 		String description = "A feature calculator that that finds the final pitch class in every individual voice. An array of 12 values is returned, with each element corresponding to a pitch class. If an element i is zero, that means that pitch class i is not present in the final sonority. If it is 1, it is present. The first element of the array represents pitch class C (and its enharmonic equivalents), the second C#/Db and so on.";
 		boolean is_sequential = true;
 		int dimensions = 12;
