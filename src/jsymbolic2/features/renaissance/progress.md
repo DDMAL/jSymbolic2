@@ -21,6 +21,19 @@
     - [Ren-17: Pitch Classes of Modal Octave ✓](#ren-17-pitch-classes-of-modal-octave-)
     - [Ren-18: Prevalence of Pitches in Modal Octave ✓](#ren-18-prevalence-of-pitches-in-modal-octave-)
     - [Ren-19: Combined Prevalence of Modal Octave ✓](#ren-19-combined-prevalence-of-modal-octave-)
+  - [Vertical Sonority Features / Harmony Features](#vertical-sonority-features--harmony-features)
+    - [Number of unique sonorities (compound)](#number-of-unique-sonorities-compound)
+    - [Number of unique sonorities (simple)](#number-of-unique-sonorities-simple)
+    - [Prevalence of "full" sonorities (compound)](#prevalence-of-full-sonorities-compound)
+    - [Prevalence of "full" sonorities (simple)](#prevalence-of-full-sonorities-simple)
+    - [Prevalence of "sparse" sonorities (compound)](#prevalence-of-sparse-sonorities-compound)
+    - [Prevalence of "sparse" sonorities (simple)](#prevalence-of-sparse-sonorities-simple)
+    - [Prevalence of sonorities with only perfect consonance (fourth excluded)](#prevalence-of-sonorities-with-only-perfect-consonance-fourth-excluded)
+    - [Prevalence of sonorities with only perfect consonance (fourth included)](#prevalence-of-sonorities-with-only-perfect-consonance-fourth-included)
+    - [Prevalence of sonorities with only imperfect consonance](#prevalence-of-sonorities-with-only-imperfect-consonance)
+    - [Prevalence of dissonant sonorities (fourth included)](#prevalence-of-dissonant-sonorities-fourth-included)
+    - [Prevalence of dissonant sonorities (fourth excluded)](#prevalence-of-dissonant-sonorities-fourth-excluded)
+    - [Further ideas](#further-ideas)
   - [Cadence Features](#cadence-features)
     - [Number of Candidate Cadences ==\> should probably be scaled to something](#number-of-candidate-cadences--should-probably-be-scaled-to-something)
     - [Number of "Confirmed" Cadences ==\> should probably be scaled to something](#number-of-confirmed-cadences--should-probably-be-scaled-to-something)
@@ -37,6 +50,14 @@
     - [pitch\_histogram\_of\_highest\_voice ✓](#pitch_histogram_of_highest_voice-)
     - [final\_sonority ✓](#final_sonority-)
     - [last\_note\_of\_highest\_voice ✓](#last_note_of_highest_voice-)
+    - [vertical\_sonority\_by\_onset\_slice\_chromatic ✓](#vertical_sonority_by_onset_slice_chromatic-)
+    - [vertical\_sonority\_by\_onset\_slice\_diatonic ✓](#vertical_sonority_by_onset_slice_diatonic-)
+    - [unique\_vertical\_sonorities\_chromatic ✓](#unique_vertical_sonorities_chromatic-)
+    - [unique\_vertical\_sonorities\_diatonic ✓](#unique_vertical_sonorities_diatonic-)
+    - [number\_of\_unique\_sonorities\_chromatic ✓](#number_of_unique_sonorities_chromatic-)
+    - [number\_of\_unique\_sonorities\_diatonic ✓](#number_of_unique_sonorities_diatonic-)
+    - [vertical\_sonority\_histogram\_chromatic ✓](#vertical_sonority_histogram_chromatic-)
+    - [vertical\_sonority\_histogram\_diatonic ✓](#vertical_sonority_histogram_diatonic-)
     - [track\_and\_channel\_ordering\_by\_average\_pitch](#track_and_channel_ordering_by_average_pitch)
 
 ## Modal Features
@@ -117,6 +138,103 @@ Returns an array with eight elements. These elements indicate the prevalence of 
 
 Returns the combined prevalence of all pitches in modal octave.
 
+## Vertical Sonority Features / Harmony Features
+
+Separate compound and simple intervals (simple mod 12 operation). Disregards which voice has which note, just looks at sonority. Only tracks 6 voices (5 intervals). Intervals are computed from the lowest note upwards and listed from low to high. Two options:
+
+- include bass note and intervals (6 elements)
+  - as pitch class
+  - as pitch
+- intervals only (5 elements)
+
+Can be implemented chromatically & diatonically.
+
+- diatonically: 1 = unison, 2 = second, etc.
+- chromatically: 0 = unison, 1 = minor second, etc. (this gets into the territory of pitch class set theory)
+
+Track multiples or not? i.e. should midi pitches \[60, 60, 67, 72, 76\] turn into \[1, 5, 8, 10\], or just \[5, 8, 10\] and should the simple version be \[1,3,5,8\], \[1,1,3,5\], \[1,3,5\] or \[3,5\]
+
+Current choices:
+
+| Sonority representation     |                   |
+|-----------------------------|-------------------|
+| ✓ bass included             | intervals only    |
+| ✓ diatonic                  | ✓  chromatic      |
+| ✓ relative to lowest pitch  | relative to final |
+| **Multiples?**              |                   |
+| Yes                         | ✓  No             |
+
+How should prevalence be measured?
+
+- Percentage of sonorities
+- Percentage of time ✓
+
+
+### Number of unique sonorities (compound)
+
+### Number of unique sonorities (simple)
+
+### Prevalence of "full" sonorities (compound)
+
+Proportion of sonorities in which every voice has a different note (if <=6 voices) or where the maximum amount of different notes (6) is reached
+
+### Prevalence of "full" sonorities (simple)
+
+### Prevalence of "sparse" sonorities (compound)
+
+Returns an array where element i contains the proportion of sonorities containing i notes
+
+### Prevalence of "sparse" sonorities (simple)
+
+### Prevalence of sonorities with only perfect consonance (fourth excluded)
+
+From the bass note, not between upper voices
+
+### Prevalence of sonorities with only perfect consonance (fourth included)
+
+From the bass note, not between upper voices
+
+### Prevalence of sonorities with only imperfect consonance
+
+From the bass note, not between upper voices
+
+### Prevalence of dissonant sonorities (fourth included)
+
+From the bass note, not between upper voices. Only one dissonance required.
+
+### Prevalence of dissonant sonorities (fourth excluded)
+
+From the bass note, not between upper voices. Only one dissonance required.
+
+### Further ideas
+
+- Triads
+  - root position
+    - only thirds, fifths and octaves (and their compounds)
+  - first inversion
+    - only thirds, sixths and octaves (and their compounds)
+  - second inversion
+    - only fourths, sixths and octaves (and their compounds)
+- "Tetrads"
+  - root position
+    - only thirds, fifths, sevenths and octaves
+  - first inversion
+    - only thirds, fifths, sixths and octaves
+  - second inversion
+    - only thirds, fourths, sixths and octaves
+  - third inversion
+    - only seconds, fourths, sixths and octaves
+- Prevalence of sonorities with particular intervals
+  - second
+  - third
+  - fourth
+  - fifth
+  - sixth
+  - seventh
+  - octave (careful with compound intervals)
+- Prevalence of combined intervals?
+  - could return a matrix with combinations of intervals. Would fit into array with 42 elements
+
 ## Cadence Features
 
 ### Number of Candidate Cadences ==> should probably be scaled to something
@@ -163,6 +281,38 @@ An array with the final sounding note for every track and channel. Iterates thro
 
 The last note of the track and channel combination with the highest average pitch.
 
+### vertical_sonority_by_onset_slice_chromatic ✓
+
+Provides the vertical sonority of each onset slice. These are given as arrays with 6 elements, the first element holds the bass note, the others hold intervals to that bass note. Every unique pitch in the onset slice is represented as an interval and sorted low to high. Unneeded elements (i.e. for sonorities with fewer than 6 unique pitches) are given as -1 to signify that they are not intervals.
+
+### vertical_sonority_by_onset_slice_diatonic ✓
+
+Does the same thing, but for diatonic intervals. They are treated enharmonically, e.g. a diminished third is counted as a second, whilst an augemented second is counted as a third, due to their enharmonic equivalence. Tritones are counted as fifths and not as fourths.
+
+### unique_vertical_sonorities_chromatic ✓
+
+List all unique (chromatic) sonorities. The bass note is not included anymore, as having a different bass note does not mean that the sonority is unique. The sonorities are sorted on descending amount of present pitches and ascending intervals from bottom to top.
+
+### unique_vertical_sonorities_diatonic ✓
+
+List all unique (diatonic) sonorities. The bass note is not included anymore, as having a different bass note does not mean that the sonority is unique. The sonorities are sorted on descending amount of present pitches and ascending intervals from bottom to top.
+
+### number_of_unique_sonorities_chromatic ✓
+
+The number of unique chromatic sonorities in the file
+
+### number_of_unique_sonorities_diatonic ✓
+
+The number of unique diatonic sonorities in the file
+
+### vertical_sonority_histogram_chromatic ✓
+
+The prevalence of each of the unique chromatic sonorities. Elements given in exact same order as unique_vertical_sonorities_chromatic, which serves also as a list of the bin labels of the histogram.
+
+### vertical_sonority_histogram_diatonic ✓
+
+The prevalence of each of the unique diatonic sonorities. Elements given in exact same order as unique_vertical_sonorities_diatonic, which serves also as a list of the bin labels of the histogram.
+
 ### track_and_channel_ordering_by_average_pitch
 
-An array that represents the ordering of all of the midi tracks and channels by average pitch, from high to low. Every element has the form [track_number, channel_number]. To get the highest track and channel combination, one can do track_and_channel_ordering_by_average_pitch[0]
+An array that represents the ordering of all of the midi tracks and channels by average pitch, from high to low. Every element has the form \[track_number, channel_number\]. To get the highest track and channel combination, one can do track_and_channel_ordering_by_average_pitch\[0\]

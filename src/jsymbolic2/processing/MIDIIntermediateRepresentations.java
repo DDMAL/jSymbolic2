@@ -5,9 +5,11 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -901,6 +903,22 @@ public class MIDIIntermediateRepresentations
 	 */
 	public double[] final_sonority;
 
+	public int[][] vertical_sonority_by_onset_slice_chromatic;
+
+	public int[][] vertical_sonority_by_onset_slice_diatonic;
+
+	public int[][] unique_vertical_sonorities_chromatic;
+
+	public int[][] unique_vertical_sonorities_diatonic;
+
+	public int number_of_unique_sonorities_chromatic;
+
+	public int number_of_unique_sonorities_diatonic;
+
+	public double[] vertical_sonority_histogram_chromatic;
+
+	public double[] vertical_sonority_histogram_diatonic;
+
 	/**
 	 * An array that represents the ordering of all of the midi tracks and channels by average pitch, from high
 	 * to low. Every element has the form [track_number, channel_number]. To get the highest track and channel
@@ -1290,6 +1308,8 @@ public class MIDIIntermediateRepresentations
 		generateHighestVoicePitchHistogram();
 
 		generateFinalSonorityIntermediateRepresentation();
+
+		generateVerticalSonorityHistogram();
 		
 		generateTrackAndChannelOrdering();
 	}
@@ -3828,6 +3848,161 @@ public class MIDIIntermediateRepresentations
 		}
 	}
 
+	// Needed to sort vertical sonorities by note count
+	private static int countMinusOnesInVerticalSonority(int[] son) {
+		for (int i=0; i<son.length; i++){
+			if (son[i] == -1){
+				return son.length - i - 1;
+			}
+		}
+		return son.length;
+	}
+
+	// Needed to sort vertical sonorities with same note count
+	private static int compareVerticalSonority(int[] son_1, int[] son_2) {
+		for (int i = 0; i <= son_1.length; i++) {
+			int result = Integer.compare(son_1[i], son_2[i]);
+			if (result != 0) {return result;}
+		}
+		return 0;
+	}
+
+	/**
+	 * Generate vertical sonority data
+	 */
+	private void generateVerticalSonorityHistogram(){
+		// Vertical sonority size
+		int n_vson = 6;
+
+		// Get note onset slices
+		LinkedList<LinkedList<Integer>> note_onset_slices = note_onset_slice_container.getNoteOnsetSlices();
+
+		// Initialize intermediate representations of sonority by onset slice to correct size
+		vertical_sonority_by_onset_slice_chromatic = new int[note_onset_slice_container.NUMBER_OF_ONSET_SLICES][n_vson];
+		vertical_sonority_by_onset_slice_diatonic = new int[note_onset_slice_container.NUMBER_OF_ONSET_SLICES][n_vson];
+
+		// Translation of chromatic to diatonic intervals, assuming no diminshed/augmented intervals and assuming
+		// tritones are diminshed fifths and not augmented fourths.
+
+		// Translation for simple intervals (smaller than octave)
+		HashMap<Integer, Integer> diatonic_translation_simple = new HashMap<Integer, Integer>();
+		diatonic_translation_simple.put(0, 1);
+		diatonic_translation_simple.put(1, 2);
+		diatonic_translation_simple.put(2, 2);
+		diatonic_translation_simple.put(3, 3);
+		diatonic_translation_simple.put(4, 3);
+		diatonic_translation_simple.put(5, 4);
+		diatonic_translation_simple.put(6, 5);
+		diatonic_translation_simple.put(7, 5);
+		diatonic_translation_simple.put(8, 6);
+		diatonic_translation_simple.put(9, 6);
+		diatonic_translation_simple.put(10, 7);
+		diatonic_translation_simple.put(11, 7);
+
+		// Exanding to compound intervals
+		HashMap<Integer, Integer> diatonic_translation_compound = new HashMap<Integer, Integer>();
+		for (int i=0; i < 128; i++){
+			diatonic_translation_compound.put(i, diatonic_translation_simple.get(i%12) + (i/12) * 7);
+		}
+
+		// Iterate through note onset slices
+		for (int slice = 0; slice < note_onset_slice_container.NUMBER_OF_ONSET_SLICES; slice++){
+			// initialize current vertical sonority
+			int[] current_vertical_sonority_chromatic = new int[n_vson];
+			Arrays.fill(current_vertical_sonority_chromatic, -1);
+			int[] current_vertical_sonority_diatonic = new int[n_vson];
+			Arrays.fill(current_vertical_sonority_diatonic, -1);
+
+			// Get slice, slices are already sorted low to high
+			LinkedList<Integer> current_slice = note_onset_slices.get(slice);
+
+			// Set first element of vertical sonority to bass pitch
+			current_vertical_sonority_chromatic[0] = current_slice.get(0);
+			current_vertical_sonority_diatonic[0] = current_slice.get(0);
+
+			// Set other elements to chromatic intervals
+			if (current_slice.size() > 1){
+				for (int i = 1; i < current_slice.size(); i++){
+					int interval_chromatic = current_slice.get(i) - current_slice.get(0);
+					current_vertical_sonority_chromatic[i] = interval_chromatic;
+					current_vertical_sonority_diatonic[i] = diatonic_translation_compound.get(interval_chromatic);
+				}
+			}
+
+			// Add to vertical sonority list
+			vertical_sonority_by_onset_slice_chromatic[slice] = current_vertical_sonority_chromatic;
+			vertical_sonority_by_onset_slice_diatonic[slice] = current_vertical_sonority_diatonic;
+		}
+
+		// Get all unique chromatic sonorities and put them in unique_vertical_sonorities_chromatic
+		// Bass notes are removed as they don't define sonority
+		Set<String> seen = new HashSet<>();
+		unique_vertical_sonorities_chromatic = Arrays.stream(vertical_sonority_by_onset_slice_chromatic)
+			.map(arr -> Arrays.copyOfRange(arr, 1, arr.length)) // removes bass notes
+			.filter(arr -> seen.add(Arrays.toString(arr))) // removes duplicates
+			.toArray(int[][]::new);	// converts back to array
+
+		// Clear the used hashset
+		seen.clear();
+
+		// Get all unique diatonic sonorities and put them in unique_vertical_sonorities_diatonic
+		unique_vertical_sonorities_diatonic = Arrays.stream(vertical_sonority_by_onset_slice_diatonic)
+			.map(arr -> Arrays.copyOfRange(arr, 1, arr.length)) // removes bass notes
+			.filter(arr -> seen.add(Arrays.toString(arr))) // removes duplicates
+			.toArray(int[][]::new);	// converts back to array
+
+		number_of_unique_sonorities_chromatic = unique_vertical_sonorities_chromatic.length;
+		number_of_unique_sonorities_diatonic = unique_vertical_sonorities_diatonic.length;
+
+		// Sort unique sonority arrays based on number of notes, their intervals and bass note in that order
+		Arrays.sort(unique_vertical_sonorities_chromatic, Comparator
+			.comparingInt(MIDIIntermediateRepresentations::countMinusOnesInVerticalSonority)
+			.thenComparing(MIDIIntermediateRepresentations::compareVerticalSonority));
+		Arrays.sort(unique_vertical_sonorities_diatonic, Comparator
+			.comparingInt(MIDIIntermediateRepresentations::countMinusOnesInVerticalSonority)
+			.thenComparing(MIDIIntermediateRepresentations::compareVerticalSonority));
+
+		// Initialize histograms
+		vertical_sonority_histogram_chromatic = new double[number_of_unique_sonorities_chromatic];
+		vertical_sonority_histogram_diatonic = new double[number_of_unique_sonorities_diatonic];
+
+		// Make histograms
+
+		// chromatic
+		for (int i = 0; i < number_of_unique_sonorities_chromatic; i++){
+			for (int j= 0; j < vertical_sonority_by_onset_slice_chromatic.length; j++){
+				// Checks if the intervals from unique_vertical_sonorities_chromatic match those from 
+				// vertical_sonority_by_onset_slice_chromatic, this requires comparing to els 1 through n_vson
+				if (Arrays.equals(unique_vertical_sonorities_chromatic[i],
+					Arrays.copyOfRange(vertical_sonority_by_onset_slice_chromatic[j], 1, n_vson))){
+					vertical_sonority_histogram_chromatic[i]++;
+				}
+			}
+		}
+
+		// diatonic
+		for (int i = 0; i < number_of_unique_sonorities_diatonic; i++){
+			for (int j= 0; j < vertical_sonority_by_onset_slice_diatonic.length; j++){
+				if (Arrays.equals(unique_vertical_sonorities_diatonic[i],
+					Arrays.copyOfRange(vertical_sonority_by_onset_slice_diatonic[j], 1, n_vson))){
+					vertical_sonority_histogram_diatonic[i]++;
+				}
+			}
+		}
+
+		// Normalize histograms
+		vertical_sonority_histogram_chromatic = MathAndStatsMethods.normalize(vertical_sonority_histogram_chromatic);
+		vertical_sonority_histogram_diatonic = MathAndStatsMethods.normalize(vertical_sonority_histogram_diatonic);
+
+		System.out.println(number_of_unique_sonorities_chromatic);
+		System.out.println(number_of_unique_sonorities_diatonic);
+		for (int i = 0; i < unique_vertical_sonorities_diatonic.length; i++){
+			System.out.println(Arrays.toString(unique_vertical_sonorities_diatonic[i]));
+			System.out.println(vertical_sonority_histogram_diatonic[i]);
+			
+		}
+		System.out.println(vertical_sonority_by_onset_slice_diatonic.length);
+	}
 	
 	/**
 	 * Order tracks and channels from high to low, sets track_and_channel_ordering_by_average_pitch
