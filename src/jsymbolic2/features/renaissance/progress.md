@@ -22,8 +22,10 @@
     - [Ren-18: Prevalence of Pitches in Modal Octave ✓](#ren-18-prevalence-of-pitches-in-modal-octave-)
     - [Ren-19: Combined Prevalence of Modal Octave ✓](#ren-19-combined-prevalence-of-modal-octave-)
   - [Vertical Sonority Features / Harmony Features](#vertical-sonority-features--harmony-features)
-    - [Number of unique sonorities (compound)](#number-of-unique-sonorities-compound)
-    - [Number of unique sonorities (simple)](#number-of-unique-sonorities-simple)
+    - [Son-1: Unique Chromatic Sonorities (Compound)](#son-1-unique-chromatic-sonorities-compound)
+    - [Son-2: Unique Chromatic Sonorities (Simple)](#son-2-unique-chromatic-sonorities-simple)
+    - [Son-3: Unique Diatonic Sonorities (Compound)](#son-3-unique-diatonic-sonorities-compound)
+    - [Son-4: Unique Diatonic Sonorities (Simple)](#son-4-unique-diatonic-sonorities-simple)
     - [Prevalence of "full" sonorities (compound)](#prevalence-of-full-sonorities-compound)
     - [Prevalence of "full" sonorities (simple)](#prevalence-of-full-sonorities-simple)
     - [Prevalence of "sparse" sonorities (compound)](#prevalence-of-sparse-sonorities-compound)
@@ -50,14 +52,11 @@
     - [pitch\_histogram\_of\_highest\_voice ✓](#pitch_histogram_of_highest_voice-)
     - [final\_sonority ✓](#final_sonority-)
     - [last\_note\_of\_highest\_voice ✓](#last_note_of_highest_voice-)
-    - [vertical\_sonority\_by\_onset\_slice\_chromatic ✓](#vertical_sonority_by_onset_slice_chromatic-)
-    - [vertical\_sonority\_by\_onset\_slice\_diatonic ✓](#vertical_sonority_by_onset_slice_diatonic-)
-    - [unique\_vertical\_sonorities\_chromatic ✓](#unique_vertical_sonorities_chromatic-)
-    - [unique\_vertical\_sonorities\_diatonic ✓](#unique_vertical_sonorities_diatonic-)
-    - [number\_of\_unique\_sonorities\_chromatic ✓](#number_of_unique_sonorities_chromatic-)
-    - [number\_of\_unique\_sonorities\_diatonic ✓](#number_of_unique_sonorities_diatonic-)
-    - [vertical\_sonority\_histogram\_chromatic ✓](#vertical_sonority_histogram_chromatic-)
-    - [vertical\_sonority\_histogram\_diatonic ✓](#vertical_sonority_histogram_diatonic-)
+    - [vertical\_sonority\_by\_onset\_slice ✓](#vertical_sonority_by_onset_slice-)
+    - [vertical\_sonorities\_duplicates\_removed ✓](#vertical_sonorities_duplicates_removed-)
+    - [unique\_vertical\_sonorities ✓](#unique_vertical_sonorities-)
+    - [number\_of\_unique\_sonorities ✓](#number_of_unique_sonorities-)
+    - [vertical\_sonority\_histogram ✓](#vertical_sonority_histogram-)
     - [track\_and\_channel\_ordering\_by\_average\_pitch](#track_and_channel_ordering_by_average_pitch)
 
 ## Modal Features
@@ -169,10 +168,13 @@ How should prevalence be measured?
 - Percentage of sonorities
 - Percentage of time ✓
 
+### Son-1: Unique Chromatic Sonorities (Compound)
 
-### Number of unique sonorities (compound)
+### Son-2: Unique Chromatic Sonorities (Simple)
 
-### Number of unique sonorities (simple)
+### Son-3: Unique Diatonic Sonorities (Compound)
+
+### Son-4: Unique Diatonic Sonorities (Simple)
 
 ### Prevalence of "full" sonorities (compound)
 
@@ -281,37 +283,25 @@ An array with the final sounding note for every track and channel. Iterates thro
 
 The last note of the track and channel combination with the highest average pitch.
 
-### vertical_sonority_by_onset_slice_chromatic ✓
+### vertical_sonority_by_onset_slice ✓
 
-Provides the vertical sonority of each onset slice. These are given as arrays with 6 elements, the first element holds the bass note, the others hold intervals to that bass note. Every unique pitch in the onset slice is represented as an interval and sorted low to high. Unneeded elements (i.e. for sonorities with fewer than 6 unique pitches) are given as -1 to signify that they are not intervals.
+Provides the vertical sonority of each onset slice. These are given as arrays with varying elements, the first element holds the lowest note, the others hold intervals to that lowest note. Every note in the onset slice is represented as an interval and sorted low to high.
 
-### vertical_sonority_by_onset_slice_diatonic ✓
+### vertical_sonorities_duplicates_removed ✓
 
-Does the same thing, but for diatonic intervals. They are treated enharmonically, e.g. a diminished third is counted as a second, whilst an augemented second is counted as a third, due to their enharmonic equivalence. Tritones are counted as fifths and not as fourths.
+Provides the vertical sonority of each onset slice, with duplicates removed. They are represented as arrays with 6 elements where the first element is the lowest note and the others hold the intervals from every unique pitch to that note, sorted low to high. If there are fewer than 6 unique pitches, superfluous elements get set to -1.If there are more than 6, the 6 lowest are included.
 
-### unique_vertical_sonorities_chromatic ✓
+### unique_vertical_sonorities ✓
 
 List all unique (chromatic) sonorities. The bass note is not included anymore, as having a different bass note does not mean that the sonority is unique. The sonorities are sorted on descending amount of present pitches and ascending intervals from bottom to top.
 
-### unique_vertical_sonorities_diatonic ✓
-
-List all unique (diatonic) sonorities. The bass note is not included anymore, as having a different bass note does not mean that the sonority is unique. The sonorities are sorted on descending amount of present pitches and ascending intervals from bottom to top.
-
-### number_of_unique_sonorities_chromatic ✓
+### number_of_unique_sonorities ✓
 
 The number of unique chromatic sonorities in the file
 
-### number_of_unique_sonorities_diatonic ✓
-
-The number of unique diatonic sonorities in the file
-
-### vertical_sonority_histogram_chromatic ✓
+### vertical_sonority_histogram ✓
 
 The prevalence of each of the unique chromatic sonorities. Elements given in exact same order as unique_vertical_sonorities_chromatic, which serves also as a list of the bin labels of the histogram.
-
-### vertical_sonority_histogram_diatonic ✓
-
-The prevalence of each of the unique diatonic sonorities. Elements given in exact same order as unique_vertical_sonorities_diatonic, which serves also as a list of the bin labels of the histogram.
 
 ### track_and_channel_ordering_by_average_pitch
 

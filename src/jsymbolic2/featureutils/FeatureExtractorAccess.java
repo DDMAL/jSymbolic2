@@ -6,6 +6,7 @@ import jsymbolic2.features.meispecific.*;
 import jsymbolic2.features.melodicintervals.*;
 import jsymbolic2.features.pitchstatistics.*;
 import jsymbolic2.features.rhythm.*;
+import jsymbolic2.features.sonority.*;
 import jsymbolic2.features.texture.*;
 import jsymbolic2.features.verticalintervals.*;
 import jsymbolic2.features.ngrams.*;
@@ -688,7 +689,13 @@ public final class FeatureExtractorAccess
 			new ModalOctavePitchesFeature(),
 			new ModalOctavePitchClassesFeature(),
 			new ModalOctavePitchPrevalenceFeature(),
-			new ModalOctaveCombinedPrevalenceFeature()
+			new ModalOctaveCombinedPrevalenceFeature(),
+
+			// Add sonority features
+			new UniqueChromaticSonoritiesCompoundFeature(),
+			new UniqueChromaticSonoritiesSimpleFeature(),
+			new UniqueDiatonicSonoritiesCompoundFeature(),
+			new UniqueDiatonicSonoritiesSimpleFeature()
 		};
 
 		default_features_to_save = new boolean[all_implemented_feature_extractors.length];
