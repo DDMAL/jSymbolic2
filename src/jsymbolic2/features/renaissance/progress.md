@@ -26,7 +26,10 @@
     - [Son-2: Unique Chromatic Sonorities (Simple)](#son-2-unique-chromatic-sonorities-simple)
     - [Son-3: Unique Diatonic Sonorities (Compound)](#son-3-unique-diatonic-sonorities-compound)
     - [Son-4: Unique Diatonic Sonorities (Simple)](#son-4-unique-diatonic-sonorities-simple)
-    - [Prevalence of "full" sonorities (compound)](#prevalence-of-full-sonorities-compound)
+    - [Son-5: Prevalence of Full Chromatic Sonority (Compound)](#son-5-prevalence-of-full-chromatic-sonority-compound)
+    - [Son-6: Prevalence of Full Chromatic Sonority (Simple)](#son-6-prevalence-of-full-chromatic-sonority-simple)
+    - [Son-7: Prevalence of Full Diatonic Sonority (Compound)](#son-7-prevalence-of-full-diatonic-sonority-compound)
+    - [Son-8: Prevalence of Full Chromatic Sonority (Simple)](#son-8-prevalence-of-full-chromatic-sonority-simple)
     - [Prevalence of "full" sonorities (simple)](#prevalence-of-full-sonorities-simple)
     - [Prevalence of "sparse" sonorities (compound)](#prevalence-of-sparse-sonorities-compound)
     - [Prevalence of "sparse" sonorities (simple)](#prevalence-of-sparse-sonorities-simple)
@@ -176,9 +179,21 @@ How should prevalence be measured?
 
 ### Son-4: Unique Diatonic Sonorities (Simple)
 
-### Prevalence of "full" sonorities (compound)
+### Son-5: Prevalence of Full Chromatic Sonority (Compound)
 
-Proportion of sonorities in which every voice has a different note (if <=6 voices) or where the maximum amount of different notes (6) is reached
+Proportion of chromatic sonorities made up of compound intervals in which every voice has a different note (if <=6 voices) or where the maximum amount of different notes (6) is reached.
+
+### Son-6: Prevalence of Full Chromatic Sonority (Simple)
+
+Proportion of chromatic sonorities made up of simple intervals in which every voice has a different note (if <=6 voices) or where the maximum amount of different notes (6) is reached.
+
+### Son-7: Prevalence of Full Diatonic Sonority (Compound)
+
+Proportion of diatonic sonorities made up of compound intervals in which every voice has a different note (if <=6 voices) or where the maximum amount of different notes (6) is reached.
+
+### Son-8: Prevalence of Full Chromatic Sonority (Simple)
+
+Proportion of diatonic sonorities made up of simple intervals in which every voice has a different note (if <=6 voices) or where the maximum amount of different notes (6) is reached.
 
 ### Prevalence of "full" sonorities (simple)
 

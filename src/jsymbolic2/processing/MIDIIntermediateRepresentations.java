@@ -3894,7 +3894,7 @@ public class MIDIIntermediateRepresentations
 		int n_vson = 6;
 
 		// Get note onset slices
-		LinkedList<LinkedList<Integer>> note_onset_slices = note_onset_slice_container.getNoteOnsetSlices();
+		LinkedList<LinkedList<Integer>> note_onset_slices = note_onset_slice_container.getNoteOnsetSlicesDuplicatePitchesIncluded();
 
 		// Initialize intermediate representations of sonority by onset slice to correct size
 		vertical_sonority_by_onset_slice = new int[note_onset_slice_container.NUMBER_OF_ONSET_SLICES][];
@@ -3966,9 +3966,9 @@ public class MIDIIntermediateRepresentations
 			// Translate to diatonic
 			int[] current_sonority_diatonic = new int[n_vson];
 			Arrays.fill(current_sonority_diatonic, -1);
-			current_sonority_diatonic[0] = current_vertical_sonority[0];
-			for (int j=1; j < Math.min(n_vson -1, current_vertical_sonority.length); j++){
-				current_sonority_diatonic[j] = diatonic_translation_compound.get(current_vertical_sonority[j]);
+			current_sonority_diatonic[0] = current_vertical_sonority_no_dupes.get(0);
+			for (int j=1; j < Math.min(n_vson -1, current_vertical_sonority_no_dupes.size()); j++){
+				current_sonority_diatonic[j] = diatonic_translation_compound.get(current_vertical_sonority_no_dupes.get(j));
 			}
 
 			// Get unique simple intervals
@@ -3984,9 +3984,9 @@ public class MIDIIntermediateRepresentations
 			TreeSet<Integer> current_sonority_simple_set_diatonic = new TreeSet<>();
 			for (int j=1; j<current_sonority_diatonic.length; j++){
 				// Map to simple intervals 2-8
-				if (current_sonority_diatonic[j] != 0 && current_sonority_diatonic[j] != -1){
+				if (current_sonority_diatonic[j] != 1 && current_sonority_diatonic[j] != -1){
 					current_sonority_simple_set_diatonic.add(
-						Math.floorMod(diatonic_translation_compound.get(current_vertical_sonority[j])-2, 7)+2);
+						Math.floorMod(current_sonority_diatonic[j]-2, 7)+2);
 				}
 			}
 
@@ -4082,6 +4082,7 @@ public class MIDIIntermediateRepresentations
 		simple_vertical_sonority_diatonic_histogram = new double[number_of_unique_sonorities_diatonic_simple];
 
 		// Make histograms
+		LinkedList<Double> onset_slice_rhythms = note_onset_slice_container.getSmallestRhythmicValueByOnsetSlice();
 
 		// compound
 		for (int i = 0; i < number_of_unique_sonorities_compound; i++){
@@ -4090,7 +4091,8 @@ public class MIDIIntermediateRepresentations
 				// vertical_sonority_by_onset_slice_chromatic, this requires comparing to els 1 through n_vson
 				if (Arrays.equals(unique_vertical_sonorities_compound[i],
 					Arrays.copyOfRange(vertical_sonorities_duplicates_removed_compound[j], 1, n_vson))){
-					compound_vertical_sonority_histogram[i]++;
+					// Scale by duration
+					compound_vertical_sonority_histogram[i] += onset_slice_rhythms.get(j);
 				}
 			}
 		}
@@ -4100,7 +4102,7 @@ public class MIDIIntermediateRepresentations
 			for (int j= 0; j < vertical_sonorities_duplicates_removed_simple.length; j++){
 				if (Arrays.equals(unique_vertical_sonorities_simple[i],
 					Arrays.copyOfRange(vertical_sonorities_duplicates_removed_simple[j], 1, n_vson))){
-					simple_vertical_sonority_histogram[i]++;
+					simple_vertical_sonority_histogram[i] += onset_slice_rhythms.get(j);
 				}
 			}
 		}
@@ -4110,7 +4112,7 @@ public class MIDIIntermediateRepresentations
 			for (int j= 0; j < vertical_sonorities_diatonic_compound.length; j++){
 				if (Arrays.equals(unique_vertical_sonorities_diatonic_compound[i],
 					Arrays.copyOfRange(vertical_sonorities_diatonic_compound[j], 1, n_vson))){
-					compound_vertical_sonority_diatonic_histogram[i]++;
+					compound_vertical_sonority_diatonic_histogram[i] += onset_slice_rhythms.get(j);
 				}
 			}
 		}
@@ -4120,26 +4122,21 @@ public class MIDIIntermediateRepresentations
 			for (int j= 0; j < vertical_sonorities_diatonic_simple.length; j++){
 				if (Arrays.equals(unique_vertical_sonorities_diatonic_simple[i],
 					Arrays.copyOfRange(vertical_sonorities_diatonic_simple[j], 1, n_vson))){
-					simple_vertical_sonority_diatonic_histogram[i]++;
+					simple_vertical_sonority_diatonic_histogram[i] += onset_slice_rhythms.get(j);
 				}
 			}
 		}
 
 		// Normalize histograms
 		compound_vertical_sonority_histogram = MathAndStatsMethods.normalize(compound_vertical_sonority_histogram);
-		simple_vertical_sonority_histogram = MathAndStatsMethods.normalize(compound_vertical_sonority_histogram);
-		compound_vertical_sonority_diatonic_histogram = MathAndStatsMethods.normalize(compound_vertical_sonority_histogram);
-		simple_vertical_sonority_diatonic_histogram = MathAndStatsMethods.normalize(compound_vertical_sonority_histogram);
-			
-		System.out.println(number_of_unique_sonorities_compound);
-		System.out.println(number_of_unique_sonorities_diatonic_compound);
+		simple_vertical_sonority_histogram = MathAndStatsMethods.normalize(simple_vertical_sonority_histogram);
+		compound_vertical_sonority_diatonic_histogram = MathAndStatsMethods.normalize(compound_vertical_sonority_diatonic_histogram);
+		simple_vertical_sonority_diatonic_histogram = MathAndStatsMethods.normalize(simple_vertical_sonority_diatonic_histogram);
 
-		for (int i=0; i<number_of_unique_sonorities_simple; i++){
-			System.out.println(Arrays.toString(unique_vertical_sonorities_simple[i]));
-		}
 
-		for (int i=0; i<number_of_unique_sonorities_diatonic_simple; i++){
-			System.out.println(Arrays.toString(unique_vertical_sonorities_diatonic_simple[i]));
+		for (int j = 0; j < unique_vertical_sonorities_diatonic_simple.length; j++){
+			System.out.println(Arrays.toString(unique_vertical_sonorities_diatonic_simple[j]) + "; " +
+			simple_vertical_sonority_diatonic_histogram[j]);
 		}
 	}
 	

@@ -695,7 +695,11 @@ public final class FeatureExtractorAccess
 			new UniqueChromaticSonoritiesCompoundFeature(),
 			new UniqueChromaticSonoritiesSimpleFeature(),
 			new UniqueDiatonicSonoritiesCompoundFeature(),
-			new UniqueDiatonicSonoritiesSimpleFeature()
+			new UniqueDiatonicSonoritiesSimpleFeature(),
+			new FullChromaticSonorityCompoundFeature(),
+			new FullChromaticSonoritySimpleFeature(),
+			new FullDiatonicSonorityCompoundFeature(),
+			new FullDiatonicSonoritySimpleFeature()
 		};
 
 		default_features_to_save = new boolean[all_implemented_feature_extractors.length];
