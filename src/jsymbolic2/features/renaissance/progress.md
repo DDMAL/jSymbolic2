@@ -30,7 +30,6 @@
     - [Son-6: Prevalence of Full Chromatic Sonority (Simple)](#son-6-prevalence-of-full-chromatic-sonority-simple)
     - [Son-7: Prevalence of Full Diatonic Sonority (Compound)](#son-7-prevalence-of-full-diatonic-sonority-compound)
     - [Son-8: Prevalence of Full Chromatic Sonority (Simple)](#son-8-prevalence-of-full-chromatic-sonority-simple)
-    - [Prevalence of "full" sonorities (simple)](#prevalence-of-full-sonorities-simple)
     - [Prevalence of "sparse" sonorities (compound)](#prevalence-of-sparse-sonorities-compound)
     - [Prevalence of "sparse" sonorities (simple)](#prevalence-of-sparse-sonorities-simple)
     - [Prevalence of sonorities with only perfect consonance (fourth excluded)](#prevalence-of-sonorities-with-only-perfect-consonance-fourth-excluded)
@@ -195,8 +194,6 @@ Proportion of diatonic sonorities made up of compound intervals in which every v
 
 Proportion of diatonic sonorities made up of simple intervals in which every voice has a different note (if <=6 voices) or where the maximum amount of different notes (6) is reached.
 
-### Prevalence of "full" sonorities (simple)
-
 ### Prevalence of "sparse" sonorities (compound)
 
 Returns an array where element i contains the proportion of sonorities containing i notes
@@ -251,6 +248,7 @@ From the bass note, not between upper voices. Only one dissonance required.
   - octave (careful with compound intervals)
 - Prevalence of combined intervals?
   - could return a matrix with combinations of intervals. Would fit into array with 42 elements
+- Transitions between sonorities
 
 ## Cadence Features
 

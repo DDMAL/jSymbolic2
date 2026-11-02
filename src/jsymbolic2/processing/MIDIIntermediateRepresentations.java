@@ -19,6 +19,7 @@ import jsymbolic2.featureutils.CollectedNoteInfo;
 import jsymbolic2.ngrams.*;
 import jsymbolic2.featureutils.NoteInfo;
 import jsymbolic2.featureutils.NoteOnsetSliceContainer;
+import jsymbolic2.featureutils.VerticalSonorityContainer;
 import mckay.utilities.staticlibraries.ArrayMethods;
 import mckay.utilities.staticlibraries.MathAndStatsMethods;
 
@@ -906,37 +907,37 @@ public class MIDIIntermediateRepresentations
 
 	public int[][] vertical_sonority_by_onset_slice;
 
-	public int[][] vertical_sonorities_duplicates_removed_compound;
+	public int[][] vertical_sonorities_chromatic_compound;
 
-	public int[][] vertical_sonorities_duplicates_removed_simple;
+	public int[][] vertical_sonorities_chromatic_simple;
 
 	public int[][] vertical_sonorities_diatonic_compound;
 
 	public int[][] vertical_sonorities_diatonic_simple;
 
-	public int[][] unique_vertical_sonorities_compound;
+	public int[][] unique_vertical_sonorities_chromatic_compound;
 
-	public int[][] unique_vertical_sonorities_simple;
+	public int[][] unique_vertical_sonorities_chromatic_simple;
 
 	public int[][] unique_vertical_sonorities_diatonic_compound;
 
 	public int[][] unique_vertical_sonorities_diatonic_simple;
 
-	public int number_of_unique_sonorities_compound;
+	public int number_of_unique_sonorities_chromatic_compound;
 
-	public int number_of_unique_sonorities_simple;
+	public int number_of_unique_sonorities_chromatic_simple;
 
 	public int number_of_unique_sonorities_diatonic_compound;
 
 	public int number_of_unique_sonorities_diatonic_simple;
 
-	public double[] compound_vertical_sonority_histogram;
+	public double[] vertical_sonority_histogram_chromatic_compound;
 
-	public double[] simple_vertical_sonority_histogram;
+	public double[] vertical_sonority_histogram_chromatic_simple;
 
-	public double[] compound_vertical_sonority_diatonic_histogram;
+	public double[] vertical_sonority_histogram_diatonic_compound;
 
-	public double[] simple_vertical_sonority_diatonic_histogram;
+	public double[] vertical_sonority_histogram_diatonic_simple;
 
 	/**
 	 * An array that represents the ordering of all of the midi tracks and channels by average pitch, from high
@@ -3867,25 +3868,6 @@ public class MIDIIntermediateRepresentations
 		}
 	}
 
-	// Needed to sort vertical sonorities by note count
-	private static int countMinusOnesInVerticalSonority(int[] son) {
-		for (int i=0; i<son.length; i++){
-			if (son[i] == -1){
-				return son.length - i - 1;
-			}
-		}
-		return son.length;
-	}
-
-	// Needed to sort vertical sonorities with same note count
-	private static int compareVerticalSonority(int[] son_1, int[] son_2) {
-		for (int i = 0; i <= son_1.length; i++) {
-			int result = Integer.compare(son_1[i], son_2[i]);
-			if (result != 0) {return result;}
-		}
-		return 0;
-	}
-
 	/**
 	 * Generate vertical sonority data
 	 */
@@ -3893,250 +3875,39 @@ public class MIDIIntermediateRepresentations
 		// Vertical sonority size
 		int n_vson = 6;
 
-		// Get note onset slices
-		LinkedList<LinkedList<Integer>> note_onset_slices = note_onset_slice_container.getNoteOnsetSlicesDuplicatePitchesIncluded();
+		// Count tritones as fifths or forths
+		boolean count_tritones_as_fifths = true;
 
-		// Initialize intermediate representations of sonority by onset slice to correct size
-		vertical_sonority_by_onset_slice = new int[note_onset_slice_container.NUMBER_OF_ONSET_SLICES][];
-		vertical_sonorities_duplicates_removed_compound = new int[note_onset_slice_container.NUMBER_OF_ONSET_SLICES][n_vson];
-		vertical_sonorities_duplicates_removed_simple = new int[note_onset_slice_container.NUMBER_OF_ONSET_SLICES][n_vson];
-		vertical_sonorities_diatonic_compound = new int[note_onset_slice_container.NUMBER_OF_ONSET_SLICES][n_vson];
-		vertical_sonorities_diatonic_simple = new int[note_onset_slice_container.NUMBER_OF_ONSET_SLICES][n_vson];
+		VerticalSonorityContainer vertical_sonority_container = new VerticalSonorityContainer(note_onset_slice_container, n_vson, count_tritones_as_fifths);
 
-		// Translation of chromatic to diatonic intervals, assuming no diminshed/augmented intervals and assuming
-		// tritones are diminshed fifths and not augmented fourths.
+		// Initialize vertical sonority by onset slice arrays
+		vertical_sonorities_chromatic_compound = vertical_sonority_container.getChromaticCompoundSonorities();
+		vertical_sonorities_chromatic_simple = vertical_sonority_container.getChromaticSimpleSonorities();
+		vertical_sonorities_diatonic_compound = vertical_sonority_container.getDiatonicCompoundSonorities();
+		vertical_sonorities_diatonic_simple = vertical_sonority_container.getDiatonicSimpleSonorities();
 
-		// Translation for simple intervals (smaller than octave)
-		HashMap<Integer, Integer> diatonic_translation_simple = new HashMap<Integer, Integer>();
-		diatonic_translation_simple.put(0, 1);
-		diatonic_translation_simple.put(1, 2);
-		diatonic_translation_simple.put(2, 2);
-		diatonic_translation_simple.put(3, 3);
-		diatonic_translation_simple.put(4, 3);
-		diatonic_translation_simple.put(5, 4);
-		diatonic_translation_simple.put(6, 5);
-		diatonic_translation_simple.put(7, 5);
-		diatonic_translation_simple.put(8, 6);
-		diatonic_translation_simple.put(9, 6);
-		diatonic_translation_simple.put(10, 7);
-		diatonic_translation_simple.put(11, 7);
+		// Initialize unique vertical sonority arrays
+		unique_vertical_sonorities_chromatic_compound = vertical_sonority_container.getUniqueChromaticCompoundSonorities();
+		unique_vertical_sonorities_chromatic_simple = vertical_sonority_container.getUniqueChromaticSimpleSonorities();
+		unique_vertical_sonorities_diatonic_compound = vertical_sonority_container.getUniqueDiatonicCompoundSonorities();
+		unique_vertical_sonorities_diatonic_simple = vertical_sonority_container.getUniqueDiatonicSimpleSonorities();
 
-		// Exanding to compound intervals
-		HashMap<Integer, Integer> diatonic_translation_compound = new HashMap<Integer, Integer>();
-		for (int i=0; i < 128; i++){
-			diatonic_translation_compound.put(i, diatonic_translation_simple.get(i%12) + (i/12) * 7);
-		}
-
-		// Iterate through note onset slices
-		for (int slice = 0; slice < note_onset_slice_container.NUMBER_OF_ONSET_SLICES; slice++){
-			// Get slice, slices are already sorted low to high
-			LinkedList<Integer> current_slice = note_onset_slices.get(slice);
-			
-			// Initialize current vertical sonority ans vertical sonority without duplicates
-			int[] current_vertical_sonority = new int[current_slice.size()];
-			ArrayList<Integer> current_vertical_sonority_no_dupes = new ArrayList<>();
-
-			// Set first element of vertical sonority to bass pitch
-			current_vertical_sonority[0] = current_slice.get(0);
-			current_vertical_sonority_no_dupes.add(current_slice.get(0));
-
-			// Set other elements to chromatic intervals
-			if (current_slice.size() > 1){
-				for (int i = 1; i < current_slice.size(); i++){
-					int interval_chromatic = current_slice.get(i) - current_slice.get(0);
-					current_vertical_sonority[i] = interval_chromatic;
-					if(interval_chromatic != 0 && interval_chromatic != current_vertical_sonority[i-1]){
-						current_vertical_sonority_no_dupes.add(interval_chromatic);
-					}
-				}
-			}
-
-
-			// Add to vertical sonority list
-			vertical_sonority_by_onset_slice[slice] = current_vertical_sonority;
-
-			for (int j=0; j < n_vson; j++){
-				if (j < current_vertical_sonority_no_dupes.size()){
-					vertical_sonorities_duplicates_removed_compound[slice][j] = current_vertical_sonority_no_dupes.get(j);
-				} else {
-					vertical_sonorities_duplicates_removed_compound[slice][j] = -1;
-				}
-			}
-
-			// Translate to diatonic
-			int[] current_sonority_diatonic = new int[n_vson];
-			Arrays.fill(current_sonority_diatonic, -1);
-			current_sonority_diatonic[0] = current_vertical_sonority_no_dupes.get(0);
-			for (int j=1; j < Math.min(n_vson -1, current_vertical_sonority_no_dupes.size()); j++){
-				current_sonority_diatonic[j] = diatonic_translation_compound.get(current_vertical_sonority_no_dupes.get(j));
-			}
-
-			// Get unique simple intervals
-			TreeSet<Integer> current_sonority_simple_set = new TreeSet<>();
-			for (int j=1; j<current_vertical_sonority.length; j++){
-				// Map to simple intervals 1-12 
-				if (current_vertical_sonority[j] != 0 && current_vertical_sonority[j] != -1){
-					current_sonority_simple_set.add(Math.floorMod(current_vertical_sonority[j]-1, 12)+1);
-				}
-			}
-
-			// Get unique simple diatonic intervals
-			TreeSet<Integer> current_sonority_simple_set_diatonic = new TreeSet<>();
-			for (int j=1; j<current_sonority_diatonic.length; j++){
-				// Map to simple intervals 2-8
-				if (current_sonority_diatonic[j] != 1 && current_sonority_diatonic[j] != -1){
-					current_sonority_simple_set_diatonic.add(
-						Math.floorMod(current_sonority_diatonic[j]-2, 7)+2);
-				}
-			}
-
-			// Initialize simple interval sonorities
-			int[] current_sonority_simple = new int[n_vson];
-			Arrays.fill(current_sonority_simple, -1);
-			int[] current_sonority_simple_diatonic = new int[n_vson];
-			Arrays.fill(current_sonority_simple_diatonic, -1);
-
-			// Get n_vson-1 smallest simple intervals
-			current_sonority_simple[0] = current_vertical_sonority[0];
-			int j = 1;
-			for (int value : current_sonority_simple_set){
-    			if (j >= n_vson) break;
-				current_sonority_simple[j++] = value;
-			}
-
-			// Now for diatonic intervals
-			current_sonority_simple_diatonic[0] = current_sonority_diatonic[0];
-			j = 1;
-			for (int value : current_sonority_simple_set_diatonic){
-    			if (j >= n_vson) break;
-				current_sonority_simple_diatonic[j++] = value;
-			}
-
-			// Add simple sonority to vertical_sonorities_duplicates_removed_simple
-			vertical_sonorities_duplicates_removed_simple[slice] = current_sonority_simple;
-			vertical_sonorities_diatonic_simple[slice] = current_sonority_simple_diatonic;
-			vertical_sonorities_diatonic_compound[slice] = current_sonority_diatonic;
-		}
-
-		// Get all unique chromatic sonorities and put them in unique_vertical_sonorities_chromatic
-		// Bass notes are removed as they don't define sonority
-		Set<String> seen = new HashSet<>();
-		unique_vertical_sonorities_compound = Arrays.stream(vertical_sonorities_duplicates_removed_compound)
-			.map(arr -> Arrays.copyOfRange(arr, 1, arr.length)) // removes bass note
-			.filter(arr -> seen.add(Arrays.toString(arr))) // removes duplicates
-			.toArray(int[][]::new);	// converts back to array
-
-		number_of_unique_sonorities_compound = unique_vertical_sonorities_compound.length;
-		
-		seen.clear();
-
-		// Get unique simple chromatic sonorities
-		unique_vertical_sonorities_simple = Arrays.stream(vertical_sonorities_duplicates_removed_simple)
-			.map(arr -> Arrays.copyOfRange(arr, 1, arr.length)) // removes bass note
-			.filter(arr -> seen.add(Arrays.toString(arr))) // removes duplicates
-			.toArray(int[][]::new);	// converts back to array
-			
-		number_of_unique_sonorities_simple = unique_vertical_sonorities_simple.length;
-		
-		seen.clear();
-
-		// Get unique compound diatonic sonorities
-		unique_vertical_sonorities_diatonic_compound = Arrays.stream(vertical_sonorities_diatonic_compound)
-			.map(arr -> Arrays.copyOfRange(arr, 1, arr.length)) // removes bass note
-			.filter(arr -> seen.add(Arrays.toString(arr))) // removes duplicates
-			.toArray(int[][]::new);	// converts back to array
-			
-		number_of_unique_sonorities_diatonic_compound = unique_vertical_sonorities_diatonic_compound.length;
-		
-		seen.clear();
-
-		// Get unique simple diatonic sonorities
-		unique_vertical_sonorities_diatonic_simple = Arrays.stream(vertical_sonorities_diatonic_simple)
-			.map(arr -> Arrays.copyOfRange(arr, 1, arr.length)) // removes bass note
-			.filter(arr -> seen.add(Arrays.toString(arr))) // removes duplicates
-			.toArray(int[][]::new);	// converts back to array
-			
-		number_of_unique_sonorities_diatonic_simple = unique_vertical_sonorities_diatonic_simple.length;
-
-		// Sort unique sonority arrays based on number of notes and intervals
-		Arrays.sort(unique_vertical_sonorities_compound, Comparator
-			.comparingInt(MIDIIntermediateRepresentations::countMinusOnesInVerticalSonority)
-			.thenComparing(MIDIIntermediateRepresentations::compareVerticalSonority));
-			
-		Arrays.sort(unique_vertical_sonorities_simple, Comparator
-			.comparingInt(MIDIIntermediateRepresentations::countMinusOnesInVerticalSonority)
-			.thenComparing(MIDIIntermediateRepresentations::compareVerticalSonority));
-
-		Arrays.sort(unique_vertical_sonorities_diatonic_compound, Comparator
-			.comparingInt(MIDIIntermediateRepresentations::countMinusOnesInVerticalSonority)
-			.thenComparing(MIDIIntermediateRepresentations::compareVerticalSonority));
-			
-		Arrays.sort(unique_vertical_sonorities_diatonic_simple, Comparator
-			.comparingInt(MIDIIntermediateRepresentations::countMinusOnesInVerticalSonority)
-			.thenComparing(MIDIIntermediateRepresentations::compareVerticalSonority));
+		// Get numbers of unique sonorities
+		number_of_unique_sonorities_chromatic_compound = vertical_sonority_container.NUMBER_OF_COMPOUND_CHROMATIC_SONORITIES;
+		number_of_unique_sonorities_chromatic_simple = vertical_sonority_container.NUMBER_OF_SIMPLE_CHROMATIC_SONORITIES;
+		number_of_unique_sonorities_diatonic_compound = vertical_sonority_container.NUMBER_OF_COMPOUND_DIATONIC_SONORITIES;
+		number_of_unique_sonorities_diatonic_simple = vertical_sonority_container.NUMBER_OF_SIMPLE_DIATONIC_SONORITIES;
 
 		// Initialize histograms
-		compound_vertical_sonority_histogram = new double[number_of_unique_sonorities_compound];
-		simple_vertical_sonority_histogram = new double[number_of_unique_sonorities_simple];
-		compound_vertical_sonority_diatonic_histogram = new double[number_of_unique_sonorities_diatonic_compound];
-		simple_vertical_sonority_diatonic_histogram = new double[number_of_unique_sonorities_diatonic_simple];
-
-		// Make histograms
-		LinkedList<Double> onset_slice_rhythms = note_onset_slice_container.getSmallestRhythmicValueByOnsetSlice();
-
-		// compound
-		for (int i = 0; i < number_of_unique_sonorities_compound; i++){
-			for (int j= 0; j < vertical_sonorities_duplicates_removed_compound.length; j++){
-				// Checks if the intervals from unique_vertical_sonorities_chromatic match those from 
-				// vertical_sonority_by_onset_slice_chromatic, this requires comparing to els 1 through n_vson
-				if (Arrays.equals(unique_vertical_sonorities_compound[i],
-					Arrays.copyOfRange(vertical_sonorities_duplicates_removed_compound[j], 1, n_vson))){
-					// Scale by duration
-					compound_vertical_sonority_histogram[i] += onset_slice_rhythms.get(j);
-				}
-			}
-		}
-
-		// simple
-		for (int i = 0; i < number_of_unique_sonorities_simple; i++){
-			for (int j= 0; j < vertical_sonorities_duplicates_removed_simple.length; j++){
-				if (Arrays.equals(unique_vertical_sonorities_simple[i],
-					Arrays.copyOfRange(vertical_sonorities_duplicates_removed_simple[j], 1, n_vson))){
-					simple_vertical_sonority_histogram[i] += onset_slice_rhythms.get(j);
-				}
-			}
-		}
-
-		// diatonic compound
-		for (int i = 0; i < number_of_unique_sonorities_diatonic_compound; i++){
-			for (int j= 0; j < vertical_sonorities_diatonic_compound.length; j++){
-				if (Arrays.equals(unique_vertical_sonorities_diatonic_compound[i],
-					Arrays.copyOfRange(vertical_sonorities_diatonic_compound[j], 1, n_vson))){
-					compound_vertical_sonority_diatonic_histogram[i] += onset_slice_rhythms.get(j);
-				}
-			}
-		}
-
-		// diatonic simple
-		for (int i = 0; i < number_of_unique_sonorities_diatonic_simple; i++){
-			for (int j= 0; j < vertical_sonorities_diatonic_simple.length; j++){
-				if (Arrays.equals(unique_vertical_sonorities_diatonic_simple[i],
-					Arrays.copyOfRange(vertical_sonorities_diatonic_simple[j], 1, n_vson))){
-					simple_vertical_sonority_diatonic_histogram[i] += onset_slice_rhythms.get(j);
-				}
-			}
-		}
-
-		// Normalize histograms
-		compound_vertical_sonority_histogram = MathAndStatsMethods.normalize(compound_vertical_sonority_histogram);
-		simple_vertical_sonority_histogram = MathAndStatsMethods.normalize(simple_vertical_sonority_histogram);
-		compound_vertical_sonority_diatonic_histogram = MathAndStatsMethods.normalize(compound_vertical_sonority_diatonic_histogram);
-		simple_vertical_sonority_diatonic_histogram = MathAndStatsMethods.normalize(simple_vertical_sonority_diatonic_histogram);
+		vertical_sonority_histogram_chromatic_compound = vertical_sonority_container.getChromaticCompoundSonorityHistogram();
+		vertical_sonority_histogram_chromatic_simple = vertical_sonority_container.getChromaticSimpleSonorityHistogram();
+		vertical_sonority_histogram_diatonic_compound = vertical_sonority_container.getDiatonicCompoundSonorityHistogram();
+		vertical_sonority_histogram_diatonic_simple = vertical_sonority_container.getDiatonicSimpleSonorityHistogram();
 
 
 		for (int j = 0; j < unique_vertical_sonorities_diatonic_simple.length; j++){
 			System.out.println(Arrays.toString(unique_vertical_sonorities_diatonic_simple[j]) + "; " +
-			simple_vertical_sonority_diatonic_histogram[j]);
+			vertical_sonority_histogram_diatonic_simple[j]);
 		}
 	}
 	

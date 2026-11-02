@@ -64,7 +64,7 @@ public class FullDiatonicSonorityCompoundFeature
 		if (sequence_info != null)
 		{   
             int[][] unique_sonorities = sequence_info.unique_vertical_sonorities_diatonic_compound;
-            double[] sonority_prevalence = sequence_info.compound_vertical_sonority_diatonic_histogram;
+            double[] sonority_prevalence = sequence_info.vertical_sonority_histogram_diatonic_compound;
             double full_prevalence = 0.0;
 
             // Get number of notes in sonority with most notes

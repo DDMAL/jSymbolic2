@@ -63,8 +63,8 @@ public class FullChromaticSonoritySimpleFeature
 		Arrays.fill(result, -1);
 		if (sequence_info != null)
 		{   
-            int[][] unique_sonorities = sequence_info.unique_vertical_sonorities_simple;
-            double[] sonority_prevalence = sequence_info.simple_vertical_sonority_histogram;
+            int[][] unique_sonorities = sequence_info.unique_vertical_sonorities_chromatic_simple;
+            double[] sonority_prevalence = sequence_info.vertical_sonority_histogram_chromatic_simple;
             double full_prevalence = 0.0;
 
             // Get number of notes in sonority with most notes

@@ -62,7 +62,7 @@ public class UniqueChromaticSonoritiesCompoundFeature
 		Arrays.fill(result, -1);
 		if (sequence_info != null)
 		{   
-            result[0] = sequence_info.number_of_unique_sonorities_compound;
+            result[0] = sequence_info.number_of_unique_sonorities_chromatic_compound;
         }
 		return result;
 	}
