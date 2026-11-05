@@ -699,7 +699,23 @@ public final class FeatureExtractorAccess
 			new FullChromaticSonorityCompoundFeature(),
 			new FullChromaticSonoritySimpleFeature(),
 			new FullDiatonicSonorityCompoundFeature(),
-			new FullDiatonicSonoritySimpleFeature()
+			new FullDiatonicSonoritySimpleFeature(),
+			new SparseChromaticSonorityCompoundFeature(),
+			new SparseChromaticSonoritySimpleFeature(),
+			new SparseDiatonicSonorityCompoundFeature(),
+			new SparseDiatonicSonoritySimpleFeature(),
+			new PerfectConsonanceOnlyChromaticFeature(),
+			new PerfectConsonanceOnlyDiatonicFeature(),
+			new PerfectConsonanceOnlyChromaticNoFourthsFeature(),
+			new PerfectConsonanceOnlyDiatonicNoFourthsFeature(),
+			new ImperfectConsonanceOnlyChromaticFeature(),
+			new ImperfectConsonanceOnlyDiatonicFeature(),
+			new ImperfectConsonanceOnlyChromaticWithOctavesFeature(),
+			new ImperfectConsonanceOnlyDiatonicWithOctavesFeature(),
+			new DissonantChromaticSonoritiesFeature(),
+			new DissonantDiatonicSonoritiesFeature(),
+			new DissonantChromaticSonoritiesFourthsIncludedFeature(),
+			new DissonantDiatonicSonoritiesFourthsIncludedFeature()
 		};
 
 		default_features_to_save = new boolean[all_implemented_feature_extractors.length];

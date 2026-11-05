@@ -316,7 +316,7 @@ public class VerticalSonorityContainer {
                  * 12 and not as 0 to clearly differentiate them from unisons
                  */ 
                 simple_interval_set.add(Math.floorMod(compound_sonority[j]-1, 12)+1);
-            } else if (compound_sonority[j] != 1 && compound_sonority[j] != -1){
+            } else if (!is_chromatic && compound_sonority[j] != 1 && compound_sonority[j] != -1){
                 /**
                  * For similar reasons, diatonic intervals range from 2 - 8. 1, the unison, is again not included
                  * and octaves, 8, are represented as such to differentiate them from unisons.
