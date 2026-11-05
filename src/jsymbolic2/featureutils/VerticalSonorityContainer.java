@@ -436,4 +436,114 @@ public class VerticalSonorityContainer {
         }
         return histogram;
     }
+
+
+    /******** Functions required for vertical sonority features ********/
+
+    public static boolean containsAllOf(int[] sonority, int[] required_intervals) {
+        // Ids for sonority and required intervals arrays
+        int son_id = 0;
+        int req_id = 0;
+
+        // Loop through sonority & required_intervals to see if all required intervals
+        // are in the sonority. Can be done in one loop, because both are required to be sorted.
+        while (son_id < sonority.length) {
+            int current = sonority[son_id];
+            int required = required_intervals[req_id];
+
+            // If current is -1, every interval in the sonority has been checked
+            if (current == -1) return false;
+
+            // If required interval is present, start checking for the next one
+            if (current == required) {
+                req_id++;
+            }
+
+            // If current is larger than the required interval, this means that the required
+            // interval was not present and therefore containsAllOf is false.
+            else if (current > required) return false;
+
+            // If all required intervals were found, return true
+            if (req_id == required_intervals.length){
+                return true;
+            }
+            
+            son_id++;
+        }
+
+        // If loop is exited without all required intervals being found, return false.
+        return false;
+    }
+
+    public static boolean containsAnyOf(int[] sonority, int[] desired_intervals) {
+        // Ids for sonority and required intervals arrays
+        int son_id = 0;
+        int des_id = 0;
+
+        // Loop through sonority & desired_intervals to see if any of the desired intervals
+        // are in the sonority. Can be done in one loop, because both are required to be sorted.
+        while (son_id < sonority.length && des_id < desired_intervals.length) {
+            int current = sonority[son_id];
+            int desired = desired_intervals[des_id];
+
+            // If current is -1, everything has been checked
+            if (current == -1) return false;
+
+            // If desired interval is present, return true
+            if (current == desired) return true;
+
+            // If current is larger than the desired interval, this means that the desired
+            // interval was not present and the next one should be checked instead
+            if (current > desired) {
+                des_id++;
+            }
+            // If it isn't, check the next interval in the sonority
+            else son_id++;
+        }
+
+        // If loop is exited without all required intervals being found, return false.
+        return false;
+    }
+
+    public static boolean containsOnly(int[] sonority, int[] allowed_intervals) {
+        // Ids for sonority and required intervals arrays
+        int son_id = 0;
+        int alwd_id = 0;
+
+        // Loop through sonority & required_intervals to see if all required intervals
+        // are in the sonority. Can be done in one loop, because both are required to be sorted.
+        while (son_id < sonority.length) {
+            int current = sonority[son_id];
+            int allowed = allowed_intervals[alwd_id];
+
+            // If current is -1, every interval in the sonority has been checked
+            if (current == -1) return true;
+
+            // If current is allowed, check next one
+            if (current == allowed) {
+                son_id++;
+                // No duplicates, so no reason to recheck the same allowed interval
+                alwd_id++;
+            }
+
+            // If current is larger than the allowed interval, this means that the allowed
+            // interval was not present and the next one should be checked instead.
+            else if (current > allowed) {
+                alwd_id++;
+            }
+
+            // If allowed is larger than current, current was not in the allowed intervals
+            else if (allowed > current) {
+                return false;
+            }
+
+            // If all allowed intervals were checked, but not all intervals in the sonority
+            if (alwd_id == allowed_intervals.length) {
+                return false;
+            }
+        }
+
+        // If loop is exited because all intervals were allowed, return true
+        return true;
+    }
 }

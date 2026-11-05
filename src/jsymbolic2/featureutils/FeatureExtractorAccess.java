@@ -715,7 +715,26 @@ public final class FeatureExtractorAccess
 			new DissonantChromaticSonoritiesFeature(),
 			new DissonantDiatonicSonoritiesFeature(),
 			new DissonantChromaticSonoritiesFourthsIncludedFeature(),
-			new DissonantDiatonicSonoritiesFourthsIncludedFeature()
+			new DissonantDiatonicSonoritiesFourthsIncludedFeature(),
+			new TriadRootPositionChromaticFeature(),
+			new TriadRootPositionDiatonicFeature(),
+			new TriadFirstInversionChromaticFeature(),
+			new TriadFirstInversionDiatonicFeature(),
+			new TriadSecondInversionChromaticFeature(),
+			new TriadSecondInversionDiatonicFeature(),
+			new TriadAllChromaticFeature(),
+			new TriadAllDiatonicFeature(),
+			new TetradRootPositionChromaticFeature(),
+			new TetradRootPositionDiatonicFeature(),
+			new TetradFirstInversionChromaticFeature(),
+			new TetradFirstInversionDiatonicFeature(),
+			new TetradSecondInversionChromaticFeature(),
+			new TetradSecondInversionDiatonicFeature(),
+			new TetradThirdInversionChromaticFeature(),
+			new TetradThirdInversionDiatonicFeature(),
+			new TetradAllChromaticFeature(),
+			new TetradAllDiatonicFeature(),
+
 		};
 
 		default_features_to_save = new boolean[all_implemented_feature_extractors.length];
@@ -1126,7 +1145,7 @@ public final class FeatureExtractorAccess
 		
 		// Verify that no feature names have commas in them (since this can cause problems when saved CSV
 		// or ARFF files are parsed).
-		ArrayList<String> names_of_features_with_commas = new ArrayList();
+		ArrayList<String> names_of_features_with_commas = new ArrayList<>();
 		for (String name : names_of_all_features_added)
 			if (name.contains(",")) names_of_features_with_commas.add(name);
 		if (!names_of_features_with_commas.isEmpty())
@@ -1135,7 +1154,7 @@ public final class FeatureExtractorAccess
 		
 		// Verify that no feature names have underscores in them (since this can cause problems when saved CSV
 		// or ARFF files are parsed).
-		ArrayList<String> names_of_features_with_underscores = new ArrayList();
+		ArrayList<String> names_of_features_with_underscores = new ArrayList<>();
 		for (String name : names_of_all_features_added)
 			if (name.contains("_")) names_of_features_with_underscores.add(name);
 		if (!names_of_features_with_underscores.isEmpty())

@@ -5,6 +5,7 @@ import ace.datatypes.FeatureDefinition;
 import java.util.Arrays;
 
 import jsymbolic2.featureutils.MIDIFeatureExtractor;
+import jsymbolic2.featureutils.VerticalSonorityContainer;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
@@ -59,53 +60,22 @@ public class DissonantChromaticSonoritiesFeature
 	throws Exception
 	{
 		double[] result = new double[1];
-		Arrays.fill(result, -1);
+		Arrays.fill(result, 0.0);
 		if (sequence_info != null)
 		{   
             // Only looks at simple intervals, this will get accurate results for large sonorities
             int[][] unique_sonorities = sequence_info.unique_vertical_sonorities_chromatic_simple;
             double[] sonority_prevalence = sequence_info.vertical_sonority_histogram_chromatic_simple;
 
-            double dissonance_prevalence = 0.0;
-
-            int[] dissonances = {1, 2, 6, 10, 11};
-
-            // Find desired dissonances and add their prevalence
+            // Find dissonances and add the prevalence
             for (int i = 0; i<unique_sonorities.length; i++){
-                // Boolean that determines whether or not to add the current sonority
-                boolean count = false;
 
-                // Ids for dissonance and interval
-                int diss_id = 0;
-                int itv_id = 0;
-
-                // Break if all intervals checked
-                while (itv_id < unique_sonorities[i].length && diss_id < dissonances.length) {
-                    int itv = unique_sonorities[i][itv_id];
-                    int diss = dissonances[diss_id];
-
-                    // If the current interval is larger than the current dissonance, take the next dissonance
-                    if (itv > diss){
-                        diss_id++;
-
-                    // If it is smaller, this means the interval is consonant, so take the next interval
-                    // not counted
-                    } else if (itv < diss) {
-						itv_id++;
-
-                    // If neither of the previous were true, the interval must be dissonant, so the sonority must
-                    // be counted
-                    } else {
-                        count = true;
-						break;
-                    }
-                }
-                // If the loop was exited with count set to true, there was a dissonance
+                // Boolean that determines whether or not the current sonority contains a dissonance
+				boolean count = VerticalSonorityContainer.containsAnyOf(unique_sonorities[i], new int[] {1, 2, 6, 10, 11});
                 if (count) {
-                    dissonance_prevalence += sonority_prevalence[i];
+                    result[0] += sonority_prevalence[i];
                 }
             }
-            result[0] = dissonance_prevalence;
         }
 		return result;
 	}

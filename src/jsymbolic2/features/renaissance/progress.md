@@ -341,11 +341,11 @@ All simple diatonic sonorities whose intervals consist of a third, a fourth, a s
 
 ### Son-39: Prevalence of Third Inversion Tetrads (Chromatic)
 
-All simple chromatic sonorities whose intervals consist of a second, afourth, a sixth and (optionally) an octave
+All simple chromatic sonorities whose intervals consist of a second, a fourth, a sixth and (optionally) an octave
 
 ### Son-40: Prevalence of Third Inversion Tetrads (Diatonic)
 
-All simple diatonic sonorities whose intervals consist of a second, afourth, a sixth and (optionally) an octave
+All simple diatonic sonorities whose intervals consist of a second, a fourth, a sixth and (optionally) an octave
 
 ### Son-41: Prevalence of All Tetrads (Chromatic)
 
@@ -381,12 +381,11 @@ Returns a list with 28 elements, where element i indicates the prevalence of all
 
 ### Further ideas
 
-- Triads: separate major v minor? (only for chromatic intervals)
-- Tetrads: same
-- Prevalence of combined intervals?
-  - could return a matrix with combinations of intervals. Would fit into array with 42 elements
+- Triads: add augm and dim
+- Tetrads: inversions of dim7 don't make sense, but current logic sort of requires it to be taken into account. Maybe completely separate it out
 - Transitions between sonorities
 - Need to fix note onset slices to make sure that all sonorities are present, not only those where a note is being attacked (this might already be working, but just need to double check and fix if not)
+- look at prevalence of sonorities for specific bass notes / scale degrees
 
 ## Cadence Features
 

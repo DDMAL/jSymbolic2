@@ -5,6 +5,7 @@ import ace.datatypes.FeatureDefinition;
 import java.util.Arrays;
 
 import jsymbolic2.featureutils.MIDIFeatureExtractor;
+import jsymbolic2.featureutils.VerticalSonorityContainer;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
@@ -59,52 +60,22 @@ public class PerfectConsonanceOnlyChromaticFeature
 	throws Exception
 	{
 		double[] result = new double[1];
-		Arrays.fill(result, -1);
+		Arrays.fill(result, 0.0);
 		if (sequence_info != null)
 		{   
             // Only looks at simple intervals, this will get accurate results for large sonorities
             int[][] unique_sonorities = sequence_info.unique_vertical_sonorities_chromatic_simple;
             double[] sonority_prevalence = sequence_info.vertical_sonority_histogram_chromatic_simple;
 
-            double desired_prevalence = 0.0;
-
-            // Desired consonances
-            int[] desired_consonances = {0, 5, 7, 12, -1};
-
             // Find desired consonances and add their prevalence
             for (int i = 0; i<unique_sonorities.length; i++){
-                // Boolean that determines whether or not to add the current sonority
-                boolean count = true;
 
-                // Ids for consonance and interval
-                int cons_id = 0;
-                int itv_id = 0;
-
-                // Break if all intervals checked
-                while (itv_id < unique_sonorities[i].length && cons_id < desired_consonances.length) {
-                    int itv = unique_sonorities[i][itv_id];
-                    int cons = desired_consonances[cons_id];
-					// If the current interval is the current consonance, check the next interval
-                    if (itv == cons) {
-                        itv_id++;
-
-                    // If it isn't, check the next consonance
-                    } else {
-                        cons_id++;
-						// If this was already the last consonance, the interval was not a match and the sonority
-						// is not counted
-						if (cons_id >= desired_consonances.length){
-							count = false;
-						}
-					}
-                }
-                // If the loop was exited with count remaining true, all intervals were desired consonances, so the
-                // prevalence will be counted
+                // Boolean that determines whether or not the current sonority contains only perfect consonances
+				boolean count = VerticalSonorityContainer.containsOnly(unique_sonorities[i], new int[] {5, 7, 12});
                 if (count) {
-                    desired_prevalence += sonority_prevalence[i];
+                    result[0] += sonority_prevalence[i];
                 }
             }
-            result[0] = desired_prevalence;
         }
 		return result;
 	}
