@@ -8,7 +8,14 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * todo
+ * Combined prevalence of simple chromatic sonorities that represent triads in root position, first inversion
+ * and second inversion. Returns an array with three elements: the first element represents the prevalence of
+ * minor triads in all inversions, the second represents the prevalence of major triads in all inversions and
+ * the third element gives their combined prevalence. Prevalence of sonorities is calculated in relation to the
+ * piece duration. Values returned by this function should therefore be interpreted as percentages of the total
+ * duration of the piece for which the sonority represents a triad in the desired inversion. Note that
+ * sonorities consisting of 0 pitches (i.e. where all voices are resting) are not considered, not for this
+ * feature, nor for the total duration of the piece.
  *
  * @author Jasper Teunen
  */

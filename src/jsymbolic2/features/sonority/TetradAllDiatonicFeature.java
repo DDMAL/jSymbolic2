@@ -8,7 +8,13 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * todo
+ * Sum of the prevalences of simple diatonic sonorities that represent tetrads in root position, first
+ * inversion, second inversion and third inversion Returns an array with only one element, as diatonic
+ * intervals don't distinguish between minor/major variants. Prevalence of sonorities is calculated in relation
+ * to the piece duration. Values returned by this function should therefore be interpreted as percentages of
+ * the total duration of the piece for which the sonority represents a tetrad. Note that sonorities consisting
+ * of 0 pitches (i.e. where all voices are resting) are not considered, not for this feature, nor for the total
+ * duration of the piece.
  *
  * @author Jasper Teunen
  */

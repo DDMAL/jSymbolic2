@@ -9,7 +9,17 @@ import jsymbolic2.featureutils.VerticalSonorityContainer;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * todo
+ * Proportion of simple chromatic sonorities whose intervals consist of a third, a fifth and (optionally) an
+ * octave. Returns an array with three elements: the first element represents the prevalence of minor triads
+ * in root position, the second represents the prevalence of major triads in root position and the third
+ * element gives their combined prevalence. Minor triads are defined as vertical sonorities that must contain
+ * chromatic intervals 3 and 7 and that may contain chromatic interval 12 as well, but no others. Major triads
+ * are defined as vertical sonorities that must contain chromatic intervals 4 and 7 and that may contain
+ * chromatic interval 12 as well, but no others. Prevalence of sonorities is calculated in relation to the
+ * piece duration. Values returned by this function should therefore be interpreted as percentages of the total
+ * duration of the piece for which the sonority represents a triad in the desired inversion. Note that
+ * sonorities consisting of 0 pitches (i.e. where all voices are resting) are not considered, not for this
+ * feature, nor for the total duration of the piece.
  *
  * @author Jasper Teunen
  */

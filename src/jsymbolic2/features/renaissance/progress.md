@@ -46,24 +46,24 @@
     - [Son-22: Prevalence of Dissonant Diatonic Sonorities ✓](#son-22-prevalence-of-dissonant-diatonic-sonorities-)
     - [Son-23: Prevalence of Dissonant Chromatic Sonorities (Fourths Included) ✓](#son-23-prevalence-of-dissonant-chromatic-sonorities-fourths-included-)
     - [Son-24: Prevalence of Dissonant Diatonic Sonorities (Fourths Included) ✓](#son-24-prevalence-of-dissonant-diatonic-sonorities-fourths-included-)
-    - [Son-25: Prevalence of Root Position Triads (Chromatic)](#son-25-prevalence-of-root-position-triads-chromatic)
-    - [Son-26: Prevalence of Root Position Triads (Diatonic)](#son-26-prevalence-of-root-position-triads-diatonic)
-    - [Son-27: Prevalence of First Inversion Triads (Chromatic)](#son-27-prevalence-of-first-inversion-triads-chromatic)
-    - [Son-28: Prevalence of First Inversion Triads (Diatonic)](#son-28-prevalence-of-first-inversion-triads-diatonic)
-    - [Son-29: Prevalence of Second Inversion Triads (Chromatic)](#son-29-prevalence-of-second-inversion-triads-chromatic)
-    - [Son-30: Prevalence of Second Inversion Triads (Diatonic)](#son-30-prevalence-of-second-inversion-triads-diatonic)
-    - [Son-31: Prevalence of All Triads (Chromatic)](#son-31-prevalence-of-all-triads-chromatic)
-    - [Son-32: Prevalence of All Triads (Diatonic)](#son-32-prevalence-of-all-triads-diatonic)
-    - [Son-33: Prevalence of Root Position Tetrads (Chromatic)](#son-33-prevalence-of-root-position-tetrads-chromatic)
-    - [Son-34: Prevalence of Root Position Tetrads (Diatonic)](#son-34-prevalence-of-root-position-tetrads-diatonic)
-    - [Son-35: Prevalence of First Inversion Tetrads (Chromatic)](#son-35-prevalence-of-first-inversion-tetrads-chromatic)
-    - [Son-36: Prevalence of First Inversion Tetrads (Diatonic)](#son-36-prevalence-of-first-inversion-tetrads-diatonic)
-    - [Son-37: Prevalence of Second Inversion Tetrads (Chromatic)](#son-37-prevalence-of-second-inversion-tetrads-chromatic)
-    - [Son-38: Prevalence of Second Inversion Tetrads (Diatonic)](#son-38-prevalence-of-second-inversion-tetrads-diatonic)
-    - [Son-39: Prevalence of Third Inversion Tetrads (Chromatic)](#son-39-prevalence-of-third-inversion-tetrads-chromatic)
-    - [Son-40: Prevalence of Third Inversion Tetrads (Diatonic)](#son-40-prevalence-of-third-inversion-tetrads-diatonic)
-    - [Son-41: Prevalence of All Tetrads (Chromatic)](#son-41-prevalence-of-all-tetrads-chromatic)
-    - [Son-42: Prevalence of All Tetrads (Diatonic)](#son-42-prevalence-of-all-tetrads-diatonic)
+    - [Son-25: Prevalence of Root Position Triads (Chromatic) ✓](#son-25-prevalence-of-root-position-triads-chromatic-)
+    - [Son-26: Prevalence of Root Position Triads (Diatonic) ✓](#son-26-prevalence-of-root-position-triads-diatonic-)
+    - [Son-27: Prevalence of First Inversion Triads (Chromatic) ✓](#son-27-prevalence-of-first-inversion-triads-chromatic-)
+    - [Son-28: Prevalence of First Inversion Triads (Diatonic) ✓](#son-28-prevalence-of-first-inversion-triads-diatonic-)
+    - [Son-29: Prevalence of Second Inversion Triads (Chromatic) ✓](#son-29-prevalence-of-second-inversion-triads-chromatic-)
+    - [Son-30: Prevalence of Second Inversion Triads (Diatonic) ✓](#son-30-prevalence-of-second-inversion-triads-diatonic-)
+    - [Son-31: Prevalence of All Triads (Chromatic) ✓](#son-31-prevalence-of-all-triads-chromatic-)
+    - [Son-32: Prevalence of All Triads (Diatonic) ✓](#son-32-prevalence-of-all-triads-diatonic-)
+    - [Son-33: Prevalence of Root Position Tetrads (Chromatic) ✓](#son-33-prevalence-of-root-position-tetrads-chromatic-)
+    - [Son-34: Prevalence of Root Position Tetrads (Diatonic) ✓](#son-34-prevalence-of-root-position-tetrads-diatonic-)
+    - [Son-35: Prevalence of First Inversion Tetrads (Chromatic) ✓](#son-35-prevalence-of-first-inversion-tetrads-chromatic-)
+    - [Son-36: Prevalence of First Inversion Tetrads (Diatonic) ✓](#son-36-prevalence-of-first-inversion-tetrads-diatonic-)
+    - [Son-37: Prevalence of Second Inversion Tetrads (Chromatic) ✓](#son-37-prevalence-of-second-inversion-tetrads-chromatic-)
+    - [Son-38: Prevalence of Second Inversion Tetrads (Diatonic) ✓](#son-38-prevalence-of-second-inversion-tetrads-diatonic-)
+    - [Son-39: Prevalence of Third Inversion Tetrads (Chromatic) ✓](#son-39-prevalence-of-third-inversion-tetrads-chromatic-)
+    - [Son-40: Prevalence of Third Inversion Tetrads (Diatonic) ✓](#son-40-prevalence-of-third-inversion-tetrads-diatonic-)
+    - [Son-41: Prevalence of All Tetrads (Chromatic) ✓](#son-41-prevalence-of-all-tetrads-chromatic-)
+    - [Son-42: Prevalence of All Tetrads (Diatonic) ✓](#son-42-prevalence-of-all-tetrads-diatonic-)
     - [Son-43: Prevalence of Sonorities With Specific Chromatic Intervals (Compound)](#son-43-prevalence-of-sonorities-with-specific-chromatic-intervals-compound)
     - [Son-44: Prevalence of Sonorities With Specific Chromatic Intervals (Simple)](#son-44-prevalence-of-sonorities-with-specific-chromatic-intervals-simple)
     - [Son-45: Prevalence of Sonorities With Specific Diatonic Intervals (Compound)](#son-45-prevalence-of-sonorities-with-specific-diatonic-intervals-compound)
@@ -174,186 +174,264 @@ Returns the combined prevalence of all pitches in modal octave.
 
 ## Vertical Sonority Features / Harmony Features
 
-Separate compound and simple intervals (simple mod 12 operation). Disregards which voice has which note, just looks at sonority. Only tracks 6 voices (5 intervals). Intervals are computed from the lowest note upwards and listed from low to high. Two options:
-
-- include bass note and intervals (6 elements)
-  - as pitch class
-  - as pitch
-- intervals only (5 elements)
-
-Can be implemented chromatically & diatonically.
-
-- diatonically: 1 = unison, 2 = second, etc.
-- chromatically: 0 = unison, 1 = minor second, etc. (this gets into the territory of pitch class set theory)
-
-Track multiples or not? i.e. should midi pitches \[60, 60, 67, 72, 76\] turn into \[1, 5, 8, 10\], or just \[5, 8, 10\] and should the simple version be \[1,3,5,8\], \[1,1,3,5\], \[1,3,5\] or \[3,5\]
-
-Current choices:
-
-| Sonority representation     |                   |
-|-----------------------------|-------------------|
-| ✓ bass included             | intervals only    |
-| ✓ diatonic                  | ✓  chromatic      |
-| ✓ relative to lowest pitch  | relative to final |
-| **Multiples?**              |                   |
-| Yes                         | ✓  No             |
-
-How should prevalence be measured?
-
-- Percentage of sonorities
-- Percentage of time ✓
-
 ### Son-1: Unique Chromatic Sonorities (Compound) ✓
+
+Returns the number of unique compound interval combinations in all chromatic vertical sonorities of the analysed piece. They are stored as arrays containing their lowest note and ascending intervals from that lowest note, with each interval represented chromatically. This means that 1 represents a minor second (or enharmonic equivalent), 2 a major second (or enharmonic equivalent), 3 a minor third (or enharmonic equivalent) and so on. These arrays are always of length 6 and any unused array elements are set to -1, i.e. in a sonority with only 2 intervals, only three elements are needed (for the lowest note + two intervals), meaning that the three other elements would be "-1". A C-major chord in root position built on C4 would be [60, 4, 7, -1, -1, -1], with C4, the lowest note, being midi pitch 60 and the intervals in a major chord in root position being 4 for the major third above the lowest note and 7 for the perfect fifth above the lowest note. This feature only looks at the intervals and not at the lowest note of the sonorities to count the number of unique sonorities.
 
 ### Son-2: Unique Chromatic Sonorities (Simple) ✓
 
+Returns the number of unique simple interval combinations in all chromatic vertical sonorities of the analysed piece. They are stored as arrays containing their lowest note and ascending intervals from that lowest note, with each interval represented chromatically. This means that 1 represents a minor second (or enharmonic equivalent), 2 a major second (or enharmonic equivalent), 3 a minor third (or enharmonic equivalent) and so on. Because these are simple intervals, no intervals larger than 12 can be obtained, with 12 itself used to distinguish between unisons and octaves. These arrays are always of length 6 and any unused array elements are set to -1, i.e. in a sonority with only 2 intervals, only three elements are needed (for the lowest note + two intervals), meaning that the three other elements would be "-1". A C-major chord in root position built on C4 would be [60, 4, 7, -1, -1, -1], with C4, the lowest note, being midi pitch 60 and the intervals in a major chord in root position being 4 for the major third above the lowest note and 7 for the perfect fifth above the lowest note. This feature only looks at the intervals and not at the lowest note of the sonorities to count the number of unique sonorities.
+
 ### Son-3: Unique Diatonic Sonorities (Compound) ✓
+
+Returns the number of unique compound interval combinations in all diatonic vertical sonorities of the analysed piece. Diatonic intervals are converted from chromatic intervals in the following manner:
+
+1, 2   -> 2  (second)  
+3, 4   -> 3  (third)  
+5      -> 4  (fourth)  
+6, 7   -> 5  (fifth)  
+8, 9   -> 6  (sixth)  
+10, 11 -> 7  (seventh)  
+12     -> 8  (eighth/octave)  
+13, 14 -> 9  (ninth)  
+15, 16 -> 10 (tenth)  
+etc.
+
+This means that no distinction is made between minor and major version of intervals and that augmented/diminished intervals are treated as their enharmonic equivalent. One uncomfortable assumption has to be made: the tritone is treated as a diminished fifth and not as an augmented fourth. Due to the prevalence of diminished fifths in seventh chords for tonal music and the aversion of augmented fourths in renaissance theory, this assumption is deemed preferable over the inverse assumption.
+
+Diatonic vertical sonorities are representations of each vertical pitch collection in the analysed file. They are stored as arrays containing their lowest note and ascending intervals from that lowest note, with each interval represented diatonically. This means that 2 represents a second, 3 a third and so on. These arrays are always of length 6 and any unused array elements are set to -1, i.e. in a sonority with only 2 intervals, only three elements are needed (for the lowest note + two intervals), meaning that the three other elements would be "-1". A C-major chord in root position built on C4 would be [60, 3, 5, -1, -1, -1], with C4, the lowest note, being midi pitch 60 and the intervals in a major chord in root position being 3 for the third above the lowest note and 5 for the fifth above the lowest note. Note that this is the same representation as that of a C-minor chord, or even a C-diminished chord. The diatonic representation distinguishes between inversions and intervallic makeup of chords, but doesn't distinguish between different types of chords consisting of the same interval types. This feature only looks at the intervals and not at the lowest note of the sonorities to count the number of unique sonorities.
 
 ### Son-4: Unique Diatonic Sonorities (Simple) ✓
 
+Returns the number of unique simple interval combinations in all diatonic vertical sonorities of the analysed piece. Diatonic intervals are converted from chromatic intervals in the following manner:
+
+1, 2   -> 2 (second)  
+3, 4   -> 3 (third)  
+5      -> 4 (fourth)  
+6, 7   -> 5 (fifth)  
+8, 9   -> 6 (sixth)  
+10, 11 -> 7 (seventh)  
+12     -> 8 (eighth/octave)  
+13, 14 -> 2 (second)  
+15, 16 -> 3 (third)  
+etc.
+
+This means that no distinction is made between minor and major version of intervals and that augmented/diminished intervals are treated as their enharmonic equivalent. One uncomfortable assumption has to be made: the tritone is treated as a diminished fifth and not as an augmented fourth. Due to the prevalence of diminished fifths in seventh chords for tonal music and the aversion of augmented fourths in renaissance theory, this assumption is deemed preferable over the inverse assumption.
+
+Diatonic vertical sonorities are representations of each vertical pitch collection in the analysed file. They are stored as arrays containing their lowest note and ascending intervals from that lowest note, with each interval represented diatonically. This means that 2 represents a second, 3 a third and so on. Because these are simple intervals, no intervals larger than 8 can be obtained, with 8 itself used to distinguish between unisons and octaves. These arrays are always of length 6 and any unused array elements are set to -1, i.e. in a sonority with only 2 intervals, only three elements are needed (for the lowest note + two intervals), meaning that the three other elements would be "-1". A C-major chord in root position built on C4 would be [60, 3, 5, -1, -1, -1], with C4, the lowest note, being midi pitch 60 and the intervals in a major chord in root position being 3 for the third above the lowest note and 5 for the fifth above the lowest note. Note that this is the same representation as that of a C-minor chord, or even a C-diminished chord. The diatonic representation distinguishes between inversions and intervallic makeup of chords, but doesn't distinguish between different types of chords consisting of the same interval types. This feature only looks at the intervals and not at the lowest note of the sonorities to count the number of unique sonorities.
+
 ### Son-5: Prevalence of Full Chromatic Sonority (Compound) ✓
 
-Proportion of chromatic sonorities made up of compound intervals in which every voice has a different note (if <=6 voices) or where the maximum amount of different notes (6) is reached.
+Proportion of chromatic sonorities made up of compound intervals where the maximum number of unique pitches occuring simultaneously are present. Because sonorities are represented as arrays of six elements, the maximum number of unique pitches is capped to six. Prevalence of sonorities is calculated in relation to the piece duration. Values returned by this function should therefore be interpreted as a percentage of the total duration of the piece for which the sonority is "full".
+
+Chromatic compound sonorities are representations of each vertical pitch collection in the analysed file. They are stored as arrays containing their lowest note and ascending intervals from that lowest note, with each interval represented chromatically. This means that 1 represents a minor second (or enharmonic equivalent), 2 a major second (or enharmonic equivalent), 3 a minor third (or enharmonic equivalent) and so on. These arrays are always of length 6 and any unused array elements are set to -1, i.e. in a sonority with only 2 intervals, only three elements are needed (for the lowest note + two intervals), meaning that the three other elements would be "-1". A C-major chord in root position built on C4 would be [60, 4, 7, -1, -1, -1], with C4, the lowest note, being midi pitch 60 and the intervals in a major chord in root position being 4 for the major third above the lowest note and 7 for the perfect fifth above the lowest note.
 
 ### Son-6: Prevalence of Full Chromatic Sonority (Simple) ✓
 
-Proportion of chromatic sonorities made up of simple intervals in which every voice has a different note (if <=6 voices) or where the maximum amount of different notes (6) is reached.
+Proportion of chromatic sonorities made up of simple intervals where the maximum number of unique pitch classes occuring simultaneously are present. Because sonorities are represented as arrays of six elements, the maximum number of unique pitch classes is capped to six. Prevalence of sonorities is calculated in relation to the piece duration. Values returned by this function should therefore be interpreted as a percentage of the total duration of the piece for which the sonority is "full".
+
+Chromatic simple sonorities are representations of each vertical pitch collection in the analysed file. They are stored as arrays containing their lowest note and ascending intervals from that lowest note, with each interval represented chromatically. This means that 1 represents a minor second (or enharmonic equivalent), 2 a major second (or enharmonic equivalent), 3 a minor third (or enharmonic equivalent) and so on. Because these are simple intervals, no intervals larger than 12 can be obtained, with 12 itself used to distinguish between unisons and octaves. These arrays are always of length 6 and any unused array elements are set to -1, i.e. in a sonority with only 2 intervals, only three elements are needed (for the lowest note + two intervals), meaning that the three other elements would be "-1". A C-major chord in root position built on C4 would be [60, 4, 7, -1, -1, -1], with C4, the lowest note, being midi pitch 60 and the intervals in a major chord in root position being 4 for the major third above the lowest note and 7 for the perfect fifth above the lowest note.
 
 ### Son-7: Prevalence of Full Diatonic Sonority (Compound) ✓
 
-Proportion of diatonic sonorities made up of compound intervals in which every voice has a different note (if <=6 voices) or where the maximum amount of different notes (6) is reached.
+Proportion of diatonic sonorities made up of compound intervals where the maximum number of unique pitches occuring simultaneously are present. Because sonorities are represented as arrays of six elements, the maximum number of unique pitches is capped to six. Prevalence of sonorities is calculated in relation to the piece duration. Values returned by this function should therefore be interpreted as a percentage of the total duration of the piece for which the sonority is "full".
+
+Diatonic compound sonorities are representations of each vertical pitch collection in the analysed file. They are stored as arrays containing their lowest note and ascending intervals from that lowest note, with each interval represented diatonically. This means that 2 represents a second, 3 a third and so on. These arrays are always of length 6 and any unused array elements are set to -1, i.e. in a sonority with only 2 intervals, only three elements are needed (for the lowest note + two intervals), meaning that the three other elements would be "-1". A C-major chord in root position built on C4 would be [60, 3, 5, -1, -1, -1], with C4, the lowest note, being midi pitch 60 and the intervals in a major chord in root position being 3 for the third above the lowest note and 5 for the fifth above the lowest note. Note that this is the same representation as that of a C-minor chord, or even a C-diminished chord. The diatonic representation distinguishes between inversions and intervallic makeup of chords, but doesn't distinguish between different types of chords consisting of the same interval types.
 
 ### Son-8: Prevalence of Full Chromatic Sonority (Simple) ✓
 
-Proportion of diatonic sonorities made up of simple intervals in which every voice has a different note (if <=6 voices) or where the maximum amount of different notes (6) is reached.
+Proportion of chromatic sonorities made up of simple intervals where the maximum number of unique pitch classes occuring simultaneously are present. Because sonorities are represented as arrays of six elements, the maximum number of unique pitch classes is capped to six. Prevalence of sonorities is calculated in relation to the piece duration. Values returned by this function should therefore be interpreted as a percentage of the total duration of the piece for which the sonority is "full".
+
+Diatonic simple sonorities are representations of each vertical pitch collection in the analysed file. They are stored as arrays containing their lowest note and ascending intervals from that lowest note, with each interval represented diatonically. This means that 2 represents a second, 3 a third and so on. Because these are simple intervals, no intervals larger than 8 can be obtained, with 8 itself used to distinguish between unisons and octaves. These arrays are always of length 6 and any unused array elements are set to -1, i.e. in a sonority with only 2 intervals, only three elements are needed (for the lowest note + two intervals), meaning that the three other elements would be "-1". A C-major chord in root position built on C4 would be [60, 3, 5, -1, -1, -1], with C4, the lowest note, being midi pitch 60 and the intervals in a major chord in root position being 3 for the third above the lowest note and 5 for the fifth above the lowest note. Note that this is the same representation as that of a C-minor chord, or even a C-diminished chord. The diatonic representation distinguishes between inversions and intervallic makeup of chords, but doesn't distinguish between different types of chords consisting of the same interval types.
 
 ### Son-9: Prevalence of Sparse Chromatic sonorities (Compound) ✓
 
-Returns an array where element i contains the proportion of chromatic compund sonorities containing i notes
+Proportion of chromatic sonorities made up of compound intervals where fewer than the maximum number of unique pitches occuring simultaneously are present. Returns an array of length 6 where element i contains the proportion of chromatic compound sonorities representing i+1 unique pitches. This means that the first element of the array (element 0) contains the proportion of sonorities consisting of only one unique pitch, whilst the second element (element 1) contains the proportion of sonorities consisting of exactly two unique pitches and so on. Prevalence of sonorities is calculated in relation to the piece duration. Values returned by this function should therefore be interpreted as percentages of the total duration of the piece for which the sonority consists of the specified number of unique pitches. Note that sonorities consisting of 0 pitches (i.e. where all voices are resting) are not considered, not for this feature, nor for the total duration of the piece.
+
+Chromatic compound sonorities are representations of each vertical pitch collection in the analysed file. They are stored as arrays containing their lowest note and ascending intervals from that lowest note, with each interval represented chromatically. This means that 1 represents a minor second (or enharmonic equivalent), 2 a major second (or enharmonic equivalent), 3 a minor third (or enharmonic equivalent) and so on. These arrays are always of length 6 and any unused array elements are set to -1, i.e. in a sonority with only 2 intervals, only three elements are needed (for the lowest note + two intervals), meaning that the three other elements would be "-1". A C-major chord in root position built on C4 would be [60, 4, 7, -1, -1, -1], with C4, the lowest note, being midi pitch 60 and the intervals in a major chord in root position being 4 for the major third above the lowest note and 7 for the perfect fifth above the lowest note.
 
 ### Son-10: Prevalence of Sparse Chromatic sonorities (Simple) ✓
 
-Returns an array where element i contains the proportion of chromatic simple sonorities containing i notes
+Proportion of chromatic sonorities made up of simple intervals where fewer than the maximum number of unique pitch classes occuring simultaneously are present. Returns an array of length 6 where element i contains the proportion of chromatic simple sonorities containing i+1 unique pitch classes. This means that the first element of the array (element 0) contains the proportion of sonorities consisting of only one unique pitch class, whilst the second element (element 1) contains the proportion of sonorities consisting of exactly two unique pitch classes and so on. Prevalence of sonorities is calculated in relation to the piece duration. Values returned by this function should therefore be interpreted as percentages of the total duration of the piece for which the sonority consists of the specified number of unique pitch classes. Note that sonorities consisting of 0 pitches (i.e. where all voices are resting) are not considered, not for this feature, nor for the total duration of the piece.
+
+Chromatic simple sonorities are representations of each vertical pitch collection in the analysed file. They are stored as arrays containing their lowest note and ascending intervals from that lowest note, with each interval represented chromatically. This means that 1 represents a minor second (or enharmonic equivalent), 2 a major second (or enharmonic equivalent), 3 a minor third (or enharmonic equivalent) and so on. Because these are simple intervals, no intervals larger than 12 can be obtained, with 12 itself used to distinguish between unisons and octaves. These arrays are always of length 6 and any unused array elements are set to -1, i.e. in a sonority with only 2 intervals, only three elements are needed (for the lowest note + two intervals), meaning that the three other elements would be "-1". A C-major chord in root position built on C4 would be [60, 4, 7, -1, -1, -1], with C4, the lowest note, being midi pitch 60 and the intervals in a major chord in root position being 4 for the major third above the lowest note and 7 for the perfect fifth above the lowest note.
 
 ### Son-11: Prevalence of Sparse Diatonic sonorities (Compound) ✓
 
-Returns an array where element i contains the proportion of diatonic compound sonorities containing i notes
+Proportion of diatonic sonorities made up of compound intervals where fewer than the maximum number of unique compound intervals are present. Returns an array of length 6 where element i contains the proportion of diatonic compound sonorities containing i+1 values. This means that the first element of the array (element 0) contains the proportion of sonorities consisting of only one value, whilst the second element (element 1) contains the proportion of sonorities consisting of two values and so on. Prevalence of sonorities is calculated in relation to the piece duration. Values returned by this function should therefore be interpreted as percentages of the total duration of the piece for which the sonority consists of the specified number of values. Note that sonorities consisting of 0 pitches (i.e. where all voices are resting) are not considered, not for this feature, nor for the total duration of the piece.
+
+Diatonic compound sonorities are representations of each vertical pitch collection in the analysed file. They are stored as arrays containing their lowest note and ascending intervals from that lowest note, with each interval represented diatonically. This means that 2 represents a second, 3 a third and so on. These arrays are always of length 6 and any unused array elements are set to -1, i.e. in a sonority with only 2 intervals, only three elements are needed (for the lowest note + two intervals), meaning that the three other elements would be "-1". A C-major chord in root position built on C4 would be [60, 3, 5, -1, -1, -1], with C4, the lowest note, being midi pitch 60 and the intervals in a major chord in root position being 3 for the third above the lowest note and 5 for the fifth above the lowest note. Note that this is the same representation as that of a C-minor chord, or even a C-diminished chord. The diatonic representation distinguishes between inversions and intervallic makeup of chords, but doesn't distinguish between different types of chords consisting of the same interval types.
 
 ### Son-12: Prevalence of Sparse Diatonic sonorities (Simple) ✓
 
-Returns an array where element i contains the proportion of diatonic simple sonorities containing i notes
+Proportion of diatonic sonorities made up of simple intervals where fewer than the maximum number of unique simple intervals are present. Returns an array of length 6 where element i contains the proportion of diatonic simple sonorities containing i+1 values. This means that the first element of the array (element 0) contains the proportion of sonorities consisting of only one value, whilst the second element (element 1) contains the proportion of sonorities consisting of two values and so on. Prevalence of sonorities is calculated in relation to the piece duration. Values returned by this function should therefore be interpreted as percentages of the total duration of the piece for which the sonority consists of the specified number of values. Note that sonorities consisting of 0 pitches (i.e. where all voices are resting) are not considered, not for this feature, nor for the total duration of the piece.
+
+Diatonic simple sonorities are representations of each vertical pitch collection in the analysed file. They are stored as arrays containing their lowest note and ascending intervals from that lowest note, with each interval represented diatonically. This means that 2 represents a second, 3 a third and so on. Because these are simple intervals, no intervals larger than 8 can be obtained, with 8 itself used to distinguish between unisons and octaves. These arrays are always of length 6 and any unused array elements are set to -1, i.e. in a sonority with only 2 intervals, only three elements are needed (for the lowest note + two intervals), meaning that the three other elements would be "-1". A C-major chord in root position built on C4 would be [60, 3, 5, -1, -1, -1], with C4, the lowest note, being midi pitch 60 and the intervals in a major chord in root position being 3 for the third above the lowest note and 5 for the fifth above the lowest note. Note that this is the same representation as that of a C-minor chord, or even a C-diminished chord. The diatonic representation distinguishes between inversions and intervallic makeup of chords, but doesn't distinguish between different types of chords consisting of the same interval types.
 
 ### Son-13: Prevalence of Sonorities With Only Perfect Chromatic Consonance ✓
 
-Prevalence of chromatic sonorities that consist of only perfect consonance. Only consonance to the lowest note in the sonority is considered, not between higher notes.
+Proportion of chromatic sonorities in which all listed intervals are perfect chromatic consonances. These are the simple chromatic intervals 5, 7 and 12. This feature uses simple chromatic intervals and not their compound variants, because simple chromatic intervals yield accurate results for sonorities consisting of any number of unique chromatic pitches. This is because there are only 3 perfectly consonant simple chromatic intervals, which means that they can always be represented in an array of length 6. Prevalence of sonorities is calculated in relation to the piece duration. Values returned by this function should therefore be interpreted as percentages of the total duration of the piece for which the sonority consists of only perfectly consonant chromatic intervals. Note that sonorities consisting of 0 pitches (i.e. where all voices are resting) are not considered, not for this feature, nor for the total duration of the piece.
+
 
 ### Son-14: Prevalence of Sonorities With Only Perfect Diatonic Consonance ✓
 
-Prevalence of diatonic sonorities that consist of only perfect consonance. Only consonance to the lowest note in the sonority is considered, not between higher notes.
+Proportion of diatonic sonorities in which all listed intervals are perfect diatonic consonances. These are the simple diatonic intervals 4, 5 and 8. This feature uses simple diatonic intervals and not their compound variants, because simple diatonic intervals yield accurate results for sonorities consisting of any number of unique diatonic pitches. This is because there are only 3 perfectly consonant simple diatonic intervals, which means that they can always be represented in an array of length 6. Prevalence of sonorities is calculated in relation to the piece duration. Values returned by this function should therefore be interpreted as percentages of the total duration of the piece for which the sonority consists of only perfectly consonant diatonic intervals. Note that sonorities consisting of 0 pitches (i.e. where all voices are resting) are not considered, not for this feature, nor for the total duration of the piece.
 
 ### Son-15: Prevalence of Sonorities With Only Perfect Chromatic Consonance (No Fourths) ✓
 
-Prevalence of chromatic sonorities that consist of only perfect consonance, with fourths excluded. Only consonance to the lowest note in the sonority is considered, not between higher notes.
+Proportion of chromatic sonorities in which all listed intervals are perfect chromatic consonances, excluding fourths. These are the simple chromatic intervals 7 and 12. This feature uses simple chromatic intervals and not their compound variants, because simple chromatic intervals yield accurate results for sonorities consisting of any number of unique chromatic pitches. This is because there are only 2 perfectly consonant simple chromatic intervals, if fourths are excluded, which means that they can always be represented in an array of length 6. Prevalence of sonorities is calculated in relation to the piece duration. Values returned by this function should therefore be interpreted as percentages of the total duration of the piece for which the sonority consists of only perfectly consonant chromatic intervals. Note that sonorities consisting of 0 pitches (i.e. where all voices are resting) are not considered, not for this feature, nor for the total duration of the piece.
 
 ### Son-16: Prevalence of Sonorities With Only Perfect Diatonic Consonance (No Fourths) ✓
 
-Prevalence of diatonic sonorities that consist of only perfect consonance, with fourths excluded. Only consonance to the lowest note in the sonority is considered, not between higher notes.
+Proportion of diatonic sonorities in which all listed intervals are perfect diatonic consonances, excluding fourths. These are the simple diatonic intervals 5 and 8. This feature uses simple diatonic intervals and not their compound variants, because simple diatonic intervals yield accurate results for sonorities consisting of any number of unique diatonic pitches. This is because there are only 2 perfectly consonant simple diatonic intervals, if fourths are excluded, which means that they can always be represented in an array of length 6. Prevalence of sonorities is calculated in relation to the piece duration. Values returned by this function should therefore be interpreted as percentages of the total duration of the piece for which the sonority consists of only perfectly consonant diatonic intervals. Note that sonorities consisting of 0 pitches (i.e. where all voices are resting) are not considered, not for this feature, nor for the total duration of the piece.
 
 ### Son-17: Prevalence of Sonorities With Only Imperfect Chromatic Consonance ✓
 
-Prevalence of chromatic sonorities that consist of only imperfect consonance. Only consonance to the lowest note in the sonority is considered, not between higher notes.
+Proportion of chromatic sonorities in which all listed intervals are imperfect chromatic consonances. These are the simple chromatic intervals 3, 4, 8 and 9. This feature uses simple chromatic intervals and not their compound variants, because simple chromatic intervals yield accurate results for sonorities consisting of any number of unique chromatic pitches. This is because there are only 4 imperfectly consonant simple chromatic intervals, which means that they can always be represented in an array of length 6. Prevalence of sonorities is calculated in relation to the piece duration. Values returned by this function should therefore be interpreted as percentages of the total duration of the piece for which the sonority consists of only imperfectly consonant chromatic intervals. Note that sonorities consisting of 0 pitches (i.e. where all voices are resting) are not considered, not for this feature, nor for the total duration of the piece.
 
 ### Son-18: Prevalence of Sonorities With Only Imperfect Diatonic Consonance ✓
 
-Prevalence of diatonic sonorities that consist of only imperfect consonance. Only consonance to the lowest note in the sonority is considered, not between higher notes.
+Proportion of diatonic sonorities in which all listed intervals are imperfect diatonic consonances. These are the simple diatonic intervals 3 and 6. This feature uses simple diatonic intervals and not their compound variants, because simple diatonic intervals yield accurate results for sonorities consisting of any number of unique diatonic pitches. This is because there are only 2 imperfectly consonant simple diatonic intervals, which means that they can always be represented in an array of length 6. Prevalence of sonorities is calculated in relation to the piece duration. Values returned by this function should therefore be interpreted as percentages of the total duration of the piece for which the sonority consists of only imperfectly consonant diatonic intervals. Note that sonorities consisting of 0 pitches (i.e. where all voices are resting) are not considered, not for this feature, nor for the total duration of the piece.
 
 ### Son-19: Prevalence of Sonorities With Only Imperfect Chromatic Consonance (With Octaves) ✓
 
-Prevalence of chromatic sonorities that consist of only imperfect consonance, with octaves included. Only consonance to the lowest note in the sonority is considered, not between higher notes.
+Proportion of chromatic sonorities in which all listed intervals are imperfect chromatic consonances or octaves. The allowed intervals are the simple chromatic intervals 3, 4, 8, 9 and 12. This feature uses simple chromatic intervals and not their compound variants, because simple chromatic intervals yield accurate results for sonorities consisting of any number of unique chromatic pitches. This is because there are only 5 allowed simple chromatic intervals, which means that they can always be represented in an array of length 6. Prevalence of sonorities is calculated in relation to the piece duration. Values returned by this function should therefore be interpreted as percentages of the total duration of the piece for which the sonority consists of only imperfectly consonant chromatic intervals. Note that sonorities consisting of 0 pitches (i.e. where all voices are resting) are not considered, not for this feature, nor for the total duration of the piece.
 
 ### Son-20: Prevalence of Sonorities With Only Imperfect Diatonic Consonance (With Octaves) ✓
 
-Prevalence of diatonic sonorities that consist of only imperfect consonance, with octaves included. Only consonance to the lowest note in the sonority is considered, not between higher notes.
+Proportion of diatonic sonorities in which all listed intervals are imperfect diatonic consonances. The allowed intervals are the simple diatonic intervals 3, 6 and 8. This feature uses simple diatonic intervals and not their compound variants, because simple diatonic intervals yield accurate results for sonorities consisting of any number of unique diatonic pitches. This is because there are only 3 allowed simple diatonic intervals, which means that they can always be represented in an array of length 6. Prevalence of sonorities is calculated in relation to the piece duration. Values returned by this function should therefore be interpreted as percentages of the total duration of the piece for which the sonority consists of only imperfectly consonant diatonic intervals. Note that sonorities consisting of 0 pitches (i.e. where all voices are resting) are not considered, not for this feature, nor for the total duration of the piece.
 
 ### Son-21: Prevalence of Dissonant Chromatic Sonorities ✓
 
+Proportion of chromatic sonorities that contain at least one dissonant interval. These are the simple chromatic intervals 1, 2, 6, 10 and 11. This feature uses simple chromatic intervals and not their compound variants, because simple chromatic intervals yield more accurate results for sonorities consisting of more than 6 unique pitch classes. Prevalence of sonorities is calculated in relation to the piece duration. Values returned by this function should therefore be interpreted as percentages of the total duration of the piece for which the sonority contains at least one dissonant chromatic interval. Note that sonorities consisting of 0 pitches (i.e. where all voices are resting) are not considered, not for this feature, nor for the total duration of the piece.
+
 ### Son-22: Prevalence of Dissonant Diatonic Sonorities ✓
+
+Proportion of diatonic sonorities that contain at least one dissonant interval. These are the simple diatonic intervals 2 and 7. This feature uses simple diatonic intervals and not their compound variants, because simple diatonic intervals yield more accurate results for sonorities consisting of more than 6 unique pitch classes. Prevalence of sonorities is calculated in relation to the piece duration. Values returned by this function should therefore be interpreted as percentages of the total duration of the piece for which the sonority contains at least one dissonant diatonic interval. Note that sonorities consisting of 0 pitches (i.e. where all voices are resting) are not considered, not for this feature, nor for the total duration of the piece.
 
 ### Son-23: Prevalence of Dissonant Chromatic Sonorities (Fourths Included) ✓
 
+Proportion of chromatic sonorities that contain at least one dissonant interval, with fourths considered dissonant. These are the simple chromatic intervals 1, 2, 5, 6, 10 and 11. This feature uses simple chromatic intervals and not their compound variants, because simple chromatic intervals yield more accurate results for sonorities consisting of more than 6 unique pitch classes. Prevalence of sonorities is calculated in relation to the piece duration. Values returned by this function should therefore be interpreted as percentages of the total duration of the piece for which the sonority contains at least one dissonant chromatic interval, if fourths are considered dissonant. Note that sonorities consisting of 0 pitches (i.e. where all voices are resting) are not considered, not for this feature, nor for the total duration of the piece.
+
 ### Son-24: Prevalence of Dissonant Diatonic Sonorities (Fourths Included) ✓
 
-### Son-25: Prevalence of Root Position Triads (Chromatic)
+Proportion of diatonic sonorities that contain at least one dissonant interval, with fourths considered dissonant. These are the simple diatonic intervals 2, 4 and 7. This feature uses simple diatonic intervals and not their compound variants, because simple diatonic intervals yield more accurate results for sonorities consisting of more than 6 unique pitch classes. Prevalence of sonorities is calculated in relation to the piece duration. Values returned by this function should therefore be interpreted as percentages of the total duration of the piece for which the sonority contains at least one dissonant diatonic interval, if fourths are considered dissonant. Note that sonorities consisting of 0 pitches (i.e. where all voices are resting) are not considered, not for this feature, nor for the total duration of the piece.
 
-All simple chromatic sonorities whose intervals consist of a third, a fifth and (optionally) an octave
+### Son-25: Prevalence of Root Position Triads (Chromatic) ✓
 
-### Son-26: Prevalence of Root Position Triads (Diatonic)
+Proportion of simple chromatic sonorities whose intervals consist of a third, a fifth and (optionally) an octave. Returns an array with three elements: the first element represents the prevalence of minor triads in root position, the second represents the prevalence of major triads in root position and the third element gives their combined prevalence. Minor triads are defined as vertical sonorities that must contain chromatic intervals 3 and 7 and that may contain chromatic interval 12 as well, but no others. Major triads are defined as vertical sonorities that must contain chromatic intervals 4 and 7 and that may contain chromatic interval 12 as well, but no others. Prevalence of sonorities is calculated in relation to the piece duration. Values returned by this function should therefore be interpreted as percentages of the total duration of the piece for which the sonority represents a triad in the desired inversion. Note that sonorities consisting of 0 pitches (i.e. where all voices are resting) are not considered, not for this feature, nor for the total duration of the piece.
 
-All simple diatonic sonorities whose intervals consist of a third, a fifth and (optionally) an octave
+### Son-26: Prevalence of Root Position Triads (Diatonic) ✓
 
-### Son-27: Prevalence of First Inversion Triads (Chromatic)
+Proportion of simple diatonic sonorities whose intervals consist of a third, a fifth and (optionally) an octave. Returns an array with only one element, as diatonic intervals don't distinguish between minor/major variants. Root position triads are defined as vertical sonorities that must contain diatonic intervals 3 and 5 and that may contain diatonic interval 8 as well, but no others. Prevalence of sonorities is calculated in relation to the piece duration. Values returned by this function should therefore be interpreted as percentages of the total duration of the piece for which the sonority represents is a triad in the desired inversion. Note that sonorities consisting of 0 pitches (i.e. where all voices are resting) are not considered, not for this feature, nor for the total duration of the piece.
 
-All simple chromatic sonorities whose intervals consist of a third, a sixth and (optionally) an octave
+### Son-27: Prevalence of First Inversion Triads (Chromatic) ✓
 
-### Son-28: Prevalence of First Inversion Triads (Diatonic)
+Proportion of simple chromatic sonorities whose intervals consist of a third, a sixth and (optionally) an octave. Returns an array with three elements: the first element represents the prevalence of minor triads in first inversion, the second represents the prevalence of major triads in first inversion and the third element gives their combined prevalence. Minor triads in first inversion are defined as vertical sonorities that must contain chromatic intervals 4 and 9 and that may contain chromatic interval 12 as well, but no others. Major triads in first inversion are defined as vertical sonorities that must contain chromatic intervals 3 and 8 and that may contain chromatic interval 12 as well, but no others. Prevalence of sonorities is calculated in relation to the piece duration. Values returned by this function should therefore be interpreted as percentages of the total duration of the piece for which the sonority represents a triad in the desired inversion. Note that sonorities consisting of 0 pitches (i.e. where all voices are resting) are not considered, not for this feature, nor for the total duration of the piece.
 
-All simple diatonic sonorities whose intervals consist of a third, a sixth and (optionally) an octave
+### Son-28: Prevalence of First Inversion Triads (Diatonic) ✓
 
-### Son-29: Prevalence of Second Inversion Triads (Chromatic)
+Proportion of simple diatonic sonorities whose intervals consist of a third, a sixth and (optionally) an octave. Returns an array with only one elements, as diatonic intervals don't distinguish between minor/major variants. Diatonic triads in first inversion are defined as vertical sonorities that must contain diatonic intervals 3 and 6 and that may contain diatonic interval 8 as well, but no others. Values returned by this function should therefore be interpreted as percentages of the total duration of the piece for which the sonority represents a triad in the desired inversion. Note that sonorities consisting of 0 pitches (i.e. where all voices are resting) are not considered, not for this feature, nor for the total duration of the piece.
 
-All simple chromatic sonorities whose intervals consist of a fourth, a sixth and (optionally) an octave
+### Son-29: Prevalence of Second Inversion Triads (Chromatic) ✓
 
-### Son-30: Prevalence of Second Inversion Triads (Diatonic)
+Proportion of simple chromatic sonorities whose intervals consist of a fourth, a sixth and (optionally) an octave. Returns an array with three elements: the first element represents the prevalence of minor triads in second inversion, the second represents the prevalence of major triads in second inversion and the third element gives their combined prevalence. Minor triads in second inversion are defined as vertical sonorities that must contain chromatic intervals 5 and 9 and that may contain chromatic interval 12 as well, but no others. Major triads in second inversion are defined as vertical sonorities that must contain chromatic intervals 5 and 8 and that may contain chromatic interval 12 as well, but no others. Prevalence of sonorities is calculated in relation to the piece duration. Values returned by this function should therefore be interpreted as percentages of the total duration of the piece for which the sonority represents a triad in the desired inversion. Note that sonorities consisting of 0 pitches (i.e. where all voices are resting) are not considered, not for this feature, nor for the total duration of the piece.
 
-All simple diatonic sonorities whose intervals consist of a fourth, a sixth and (optionally) an octave
+### Son-30: Prevalence of Second Inversion Triads (Diatonic) ✓
 
-### Son-31: Prevalence of All Triads (Chromatic)
+Proportion of simple diatonic sonorities whose intervals consist of a fourth, a sixth and (optionally) an octave. Returns an array with only one element, as diatonic intervals don't distinguish between minor/major variants. Diatonic triads in second inversion are defined as vertical sonorities that must contain diatonic intervals 4 and 6 and that may contain diatonic interval 8 as well, but no others. Values returned by this function should therefore be interpreted as percentages of the total duration of the piece for which the sonority represents a triad in the desired inversion. Note that sonorities consisting of 0 pitches (i.e. where all voices are resting) are not considered, not for this feature, nor for the total duration of the piece.
 
-Sum of the prevalences of simple chromatic sonorities that represent triads in root position, first inversion and second inversion
+### Son-31: Prevalence of All Triads (Chromatic) ✓
 
-### Son-32: Prevalence of All Triads (Diatonic)
+Combined prevalence of simple chromatic sonorities that represent triads in root position, first inversion and second inversion. Returns an array with three elements: the first element represents the prevalence of minor triads in all inversions, the second represents the prevalence of major triads in all inversions and the third element gives their combined prevalence. Prevalence of sonorities is calculated in relation to the piece duration. Values returned by this function should therefore be interpreted as percentages of the total duration of the piece for which the sonority represents a triad in the desired inversion. Note that sonorities consisting of 0 pitches (i.e. where all voices are resting) are not considered, not for this feature, nor for the total duration of the piece.
 
-Sum of the prevalences of simple diatonic sonorities that represent triads in root position, first inversion and second inversion
+### Son-32: Prevalence of All Triads (Diatonic) ✓
 
-### Son-33: Prevalence of Root Position Tetrads (Chromatic)
+Combined prevalence of simple diatonic sonorities that represent triads in root position, first inversion and second inversion. Returns an array with only one element, as diatonic intervals don't distinguish between minor/major variants. Prevalence of sonorities is calculated in relation to the piece duration. Values returned by this function should therefore be interpreted as percentages of the total duration of the piece for which the sonority represents a triad in the desired inversion. Note that sonorities consisting of 0 pitches (i.e. where all voices are resting) are not considered, not for this feature, nor for the total duration of the piece.
 
-All simple chromatic sonorities whose intervals consist of a third, a fifth, a seventh and (optionally) an octave
+### Son-33: Prevalence of Root Position Tetrads (Chromatic) ✓
 
-### Son-34: Prevalence of Root Position Tetrads (Diatonic)
+Proportion of simple chromatic sonorities whose intervals consist of a third, a fifth, a seventh and (optionally) an octave. Returns an array with eight elements: the first seven represent the prevalences of specific types of tetrads in root position, whilst the eighth element corresponds to their combined prevalence. The array can be represented as follows:
 
-All simple diatonic sonorities whose intervals consist of a third, a fifth, a seventh and (optionally) an octave
+0: "Dominanth seventh"       -> 4, 7, 10, (12)  
+1: "Minor seventh"           -> 3, 7, 10, (12)  
+2: "Half-diminished seventh" -> 3, 6, 10, (12)  
+3: "Major seventh"           -> 4, 7, 11, (12)  
+4: "Diminished seventh"      -> 3, 6, 9,  (12)  
+5: "Minor-major seventh"     -> 3, 7, 11, (12)  
+6: "Augmented major seventh" -> 4, 8, 11, (12)  
+7: Combined
 
-### Son-35: Prevalence of First Inversion Tetrads (Chromatic)
+Where the index in the feature array is listed first, followed by the type of tetrad and the required intervals. The chromatic interval of 12, i.e. the octave, is always included in brackets because it is allowed, but not required. Prevalence of sonorities is calculated in relation to the piece duration. Values returned by this function should therefore be interpreted as percentages of the total duration of the piece for which the sonority represents a tetrad in the desired inversion. Note that sonorities consisting of 0 pitches (i.e. where all voices are resting) are not considered, not for this feature, nor for the total duration of the piece.
 
-All simple chromatic sonorities whose intervals consist of a third, a fifth, a sixth and (optionally) an octave
+### Son-34: Prevalence of Root Position Tetrads (Diatonic) ✓
 
-### Son-36: Prevalence of First Inversion Tetrads (Diatonic)
+Proportion of simple diatonic sonorities whose intervals consist of a third, a fifth, a seventh and (optionally) an octave. Returns an array with only one element, as diatonic intervals don't distinguish between minor/major variants. Root position tetrads are defined as vertical sonorities that must contain diatonic intervals 3, 5 and 7 and that may contain diatonic interval 8 as well, but no others. Prevalence of sonorities is calculated in relation to the piece duration. Values returned by this function should therefore be interpreted as percentages of the total duration of the piece for which the sonority represents a tetrad in the desired inversion. Note that sonorities consisting of 0 pitches (i.e. where all voices are resting) are not considered, not for this feature, nor for the total duration of the piece.
 
-All simple diatonic sonorities whose intervals consist of a third, a fifth, a sixth and (optionally) an octave
+### Son-35: Prevalence of First Inversion Tetrads (Chromatic) ✓
 
-### Son-37: Prevalence of Second Inversion Tetrads (Chromatic)
+Proportion of simple chromatic sonorities whose intervals consist of a third, a fifth, a sixth and (optionally) an octave. Returns an array with eight elements: the first seven represent the prevalences of specific types of tetrads in first inversion, whilst the eighth element corresponds to their combined prevalence. The array can be represented as follows:
 
-All simple chromatic sonorities whose intervals consist of a third, a fourth, a sixth and (optionally) an octave
+0: "Dominanth seventh"       -> 3, 6, 8, (12)  
+1: "Minor seventh"           -> 4, 7, 9, (12)  
+2: "Half-diminished seventh" -> 3, 7, 9, (12)  
+3: "Major seventh"           -> 3, 7, 8, (12)  
+4: "Diminished seventh"      -> 3, 6, 9, (12)  
+5: "Minor-major seventh"     -> 4, 8, 9, (12)  
+6: "Augmented major seventh" -> 4, 7, 8, (12)  
+7: Combined
 
-### Son-38: Prevalence of Second Inversion Tetrads (Diatonic)
+Where the index in the feature array is listed first, followed by the type of tetrad and the required intervals. The chromatic interval of 12, i.e. the octave, is always included in brackets because it is allowed, but not required. Prevalence of sonorities is calculated in relation to the piece duration. Values returned by this function should therefore be interpreted as percentages of the total duration of the piece for which the sonority represents a tetrad in the desired inversion. Note that sonorities consisting of 0 pitches (i.e. where all voices are resting) are not considered, not for this feature, nor for the total duration of the piece.
 
-All simple diatonic sonorities whose intervals consist of a third, a fourth, a sixth and (optionally) an octave
+### Son-36: Prevalence of First Inversion Tetrads (Diatonic) ✓
 
-### Son-39: Prevalence of Third Inversion Tetrads (Chromatic)
+Proportion of simple diatonic sonorities whose intervals consist of a third, a fifth, a sixth and (optionally) an octave. Returns an array with only one element, as diatonic intervals don't distinguish between minor/major variants. First inversion tetrads are defined as vertical sonorities that must contain diatonic intervals 3, 5 and 6 and that may contain diatonic interval 8 as well, but no others. Prevalence of sonorities is calculated in relation to the piece duration. Values returned by this function should therefore be interpreted as percentages of the total duration of the piece for which the sonority represents a tetrad in the desired inversion. Note that sonorities consisting of 0 pitches (i.e. where all voices are resting) are not considered, not for this feature, nor for the total duration of the piece.
 
-All simple chromatic sonorities whose intervals consist of a second, a fourth, a sixth and (optionally) an octave
+### Son-37: Prevalence of Second Inversion Tetrads (Chromatic) ✓
 
-### Son-40: Prevalence of Third Inversion Tetrads (Diatonic)
+Proportion of simple chromatic sonorities whose intervals consist of a third, a fourth, a sixth and (optionally) an octave. Returns an array with eight elements: the first seven represent the prevalences of specific types of tetrads in second inversion, whilst the eighth element corresponds to their combined prevalence. The array can be represented as follows:
 
-All simple diatonic sonorities whose intervals consist of a second, a fourth, a sixth and (optionally) an octave
+0: "Dominanth seventh"       -> 3, 5, 9, (12)  
+1: "Minor seventh"           -> 3, 5, 8, (12)  
+2: "Half-diminished seventh" -> 4, 6, 9, (12)  
+3: "Major seventh"           -> 4, 5, 9, (12)  
+4: "Diminished seventh"      -> 3, 6, 9, (12)  
+5: "Minor-major seventh"     -> 4, 5, 8, (12)  
+6: "Augmented major seventh" -> 3, 4, 8, (12)  
+7: Combined
 
-### Son-41: Prevalence of All Tetrads (Chromatic)
+Where the index in the feature array is listed first, followed by the type of tetrad and the required intervals. The chromatic interval of 12, i.e. the octave, is always included in brackets because it is allowed, but not required. Prevalence of sonorities is calculated in relation to the piece duration. Values returned by this function should therefore be interpreted as percentages of the total duration of the piece for which the sonority represents a tetrad in the desired inversion. Note that sonorities consisting of 0 pitches (i.e. where all voices are resting) are not considered, not for this feature, nor for the total duration of the piece.
 
-Sum of the prevalences of simple chromatic sonorities that represent tetrads in root position, first inversion, second inversion and third inversion
+### Son-38: Prevalence of Second Inversion Tetrads (Diatonic) ✓
 
-### Son-42: Prevalence of All Tetrads (Diatonic)
+Proportion of simple diatonic sonorities whose intervals consist of a third, a fourth, a sixth and (optionally) an octave. Returns an array with only one element, as diatonic intervals don't distinguish between minor/major variants. Second inversion tetrads are defined as vertical sonorities that must contain diatonic intervals 3, 4 and 6 and that may contain diatonic interval 8 as well, but no others. Prevalence of sonorities is calculated in relation to the piece duration. Values returned by this function should therefore be interpreted as percentages of the total duration of the piece for which the sonority represents a tetrad in the desired inversion. Note that sonorities consisting of 0 pitches (i.e. where all voices are resting) are not considered, not for this feature, nor for the total duration of the piece.
 
-Sum of the prevalences of simple diatonic sonorities that represent tetrads in root position, first inversion, second inversion and third inversion
+### Son-39: Prevalence of Third Inversion Tetrads (Chromatic) ✓
+
+Proportion of simple chromatic sonorities whose intervals consist of a second, a fourth, a sixth and (optionally) an octave. Returns an array with eight elements: the first seven represent the prevalences of specific types of tetrads in third inversion, whilst the eighth element corresponds to their combined prevalence. The array can be represented as follows:
+
+0: "Dominanth seventh"       -> 2, 6, 9, (12)  
+1: "Minor seventh"           -> 2, 5, 9, (12)  
+2: "Half-diminished seventh" -> 2, 5, 8, (12)  
+3: "Major seventh"           -> 1, 5, 8, (12)  
+4: "Diminished seventh"      -> 3, 6, 9, (12)  
+5: "Minor-major seventh"     -> 1, 4, 8, (12)  
+6: "Augmented major seventh" -> 1, 5, 9, (12)  
+7: Combined
+
+Where the index in the feature array is listed first, followed by the type of tetrad and the required intervals. The chromatic interval of 12, i.e. the octave, is always included in brackets because it is allowed, but not required. Prevalence of sonorities is calculated in relation to the piece duration. Values returned by this function should therefore be interpreted as percentages of the total duration of the piece for which the sonority represents a tetrad in the desired inversion. Note that sonorities consisting of 0 pitches (i.e. where all voices are resting) are not considered, not for this feature, nor for the total duration of the piece.
+
+### Son-40: Prevalence of Third Inversion Tetrads (Diatonic) ✓
+
+Proportion of simple diatonic sonorities whose intervals consist of a second, a fourth, a sixth and (optionally) an octave. Returns an array with only one element, as diatonic intervals don't distinguish between minor/major variants. Thirds inversion tetrads are defined as vertical sonorities that must contain diatonic intervals 2, 4 and 6 and that may contain diatonic interval 8 as well, but no others. Prevalence of sonorities is calculated in relation to the piece duration. Values returned by this function should therefore be interpreted as percentages of the total duration of the piece for which the sonority represents a tetrad in the desired inversion. Note that sonorities consisting of 0 pitches (i.e. where all voices are resting) are not considered, not for this feature, nor for the total duration of the piece.
+
+### Son-41: Prevalence of All Tetrads (Chromatic) ✓
+
+Sum of the prevalences of simple chromatic sonorities that represent tetrads in root position, first inversion, second inversion and third inversion. Returns an array with eight elements: the first seven represent the prevalences of specific types of tetrads in third inversion, whilst the eighth element corresponds to their combined prevalence. The seven types of tetrads are, respectively, dominanth seventh, minor seventh, half-diminished seventh, major seventh, diminshed seventh, minor-major seventh and augmented major seventh. Prevalence of sonorities is calculated in relation to the piece duration. Values returned by this function should therefore be interpreted as percentages of the total duration of the piece for which the sonority represents a tetrad of the desired type. Note that sonorities consisting of 0 pitches (i.e. where all voices are resting) are not considered, not for this feature, nor for the total duration of the piece.
+
+### Son-42: Prevalence of All Tetrads (Diatonic) ✓
+
+Sum of the prevalences of simple diatonic sonorities that represent tetrads in root position, first inversion, second inversion and third inversion Returns an array with only one element, as diatonic intervals don't distinguish between minor/major variants. Prevalence of sonorities is calculated in relation to the piece duration. Values returned by this function should therefore be interpreted as percentages of the total duration of the piece for which the sonority represents a tetrad. Note that sonorities consisting of 0 pitches (i.e. where all voices are resting) are not considered, not for this feature, nor for the total duration of the piece.
 
 ### Son-43: Prevalence of Sonorities With Specific Chromatic Intervals (Compound)
 

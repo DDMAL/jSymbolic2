@@ -8,8 +8,23 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * Proportion of chromatic sonorities made up of simple intervals in which every voice has a different note
- * (if <=6 voices) or where the maximum amount of different notes (6) is reached.
+ * Proportion of chromatic sonorities made up of simple intervals where the maximum number of unique pitch
+ * classes occuring simultaneously are present. Because sonorities are represented as arrays of six elements,
+ * the maximum number of unique pitch classes is capped to six. Prevalence of sonorities is calculated in
+ * relation to the piece duration. Values returned by this function should therefore be interpreted as a
+ * percentage of the total duration of the piece for which the sonority is "full".
+ * 
+ * Chromatic simple sonorities are representations of each vertical pitch collection in the analysed file. They
+ * are stored as arrays containing their lowest note and ascending intervals from that lowest note, with each
+ * interval represented chromatically. This means that 1 represents a minor second (or enharmonic equivalent),
+ * 2 a major second (or enharmonic equivalent), 3 a minor third (or enharmonic equivalent) and so on. Because
+ * these are simple intervals, no intervals larger than 12 can be obtained, with 12 itself used to distinguish
+ * between unisons and octaves. These arrays are always of length 6 and any unused array elements are set to
+ * -1, i.e. in a sonority with only 2 intervals, only three elements are needed (for the lowest note + two
+ * intervals), meaning that the three other elements would be "-1". A C-major chord in root position built on
+ * C4 would be [60, 4, 7, -1, -1, -1], with C4, the lowest note, being midi pitch 60 and the intervals in a
+ * major chord in root position being 4 for the major third above the lowest note and 7 for the perfect fifth
+ * above the lowest note.
  *
  * @author Jasper Teunen
  */

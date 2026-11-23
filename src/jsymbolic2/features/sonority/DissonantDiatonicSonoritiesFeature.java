@@ -9,7 +9,14 @@ import jsymbolic2.featureutils.VerticalSonorityContainer;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * todo
+ * Proportion of diatonic sonorities that contain at least one dissonant interval. These are the simple
+ * diatonic intervals 2 and 7. This feature uses simple diatonic intervals and not their compound variants,
+ * because simple diatonic intervals yield more accurate results for sonorities consisting of more than 6
+ * unique pitch classes. Prevalence of sonorities is calculated in relation to the piece duration. Values
+ * returned by this function should therefore be interpreted as percentages of the total duration of the piece
+ * for which the sonority contains at least one dissonant diatonic interval. Note that sonorities consisting of
+ * 0 pitches (i.e. where all voices are resting) are not considered, not for this feature, nor for the total
+ * duration of the piece.
  *
  * @author Jasper Teunen
  */

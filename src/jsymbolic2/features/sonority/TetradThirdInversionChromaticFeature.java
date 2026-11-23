@@ -9,7 +9,27 @@ import jsymbolic2.featureutils.VerticalSonorityContainer;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * todo
+ * Proportion of simple chromatic sonorities whose intervals consist of a second, a fourth, a sixth and
+ * (optionally) an octave. Returns an array with eight elements: the first seven represent the prevalences of
+ * specific types of tetrads in third inversion, whilst the eighth element corresponds to their combined
+ * prevalence. The array can be represented as follows:
+ * 
+ * 0: "Dominanth seventh" -> 2, 6, 9, (12)
+ * 1: "Minor seventh" -> 2, 5, 9, (12)
+ * 2: "Half-diminished seventh" -> 2, 5, 8, (12)
+ * 3: "Major seventh" -> 1, 5, 8, (12)
+ * 4: "Diminished seventh" -> 3, 6, 9, (12)
+ * 5: "Minor-major seventh" -> 1, 4, 8, (12)
+ * 6: "Augmented major seventh" -> 1, 5, 9, (12)
+ * 7: Combined
+ * 
+ * Where the index in the feature array is listed first, followed by the type of tetrad and the required
+ * intervals. The chromatic interval of 12, i.e. the octave, is always included in brackets because it is
+ * allowed, but not required. Prevalence of sonorities is calculated in relation to the piece duration. Values
+ * returned by this function should therefore be interpreted as percentages of the total duration of the piece
+ * for which the sonority represents a tetrad in the desired inversion. Note that sonorities consisting of 0
+ * pitches (i.e. where all voices are resting) are not considered, not for this feature, nor for the total
+ * duration of the piece.
  *
  * @author Jasper Teunen
  */

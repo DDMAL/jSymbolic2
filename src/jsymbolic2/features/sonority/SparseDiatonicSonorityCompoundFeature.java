@@ -8,7 +8,27 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * todo
+ * Proportion of diatonic sonorities made up of compound intervals where fewer than the maximum number of
+ * unique compound intervals are present. Returns an array of length 6 where element i contains the proportion
+ * of diatonic compound sonorities containing i+1 values. This means that the first element of the array
+ * (element 0) contains the proportion of sonorities consisting of only one value, whilst the second element
+ * (element 1) contains the proportion of sonorities consisting of two values and so on. Prevalence of
+ * sonorities is calculated in relation to the piece duration. Values returned by this function should
+ * therefore be interpreted as percentages of the total duration of the piece for which the sonority consists
+ * of the specified number of values. Note that sonorities consisting of 0 pitches (i.e. where all voices are
+ * resting) are not considered, not for this feature, nor for the total duration of the piece.
+ * 
+ * Diatonic compound sonorities are representations of each vertical pitch collection in the analysed file.
+ * They are stored as arrays containing their lowest note and ascending intervals from that lowest note, with
+ * each interval represented diatonically. This means that 2 represents a second, 3 a third and so on. These
+ * arrays are always of length 6 and any unused array elements are set to -1, i.e. in a sonority with only 2
+ * intervals, only three elements are needed (for the lowest note + two intervals), meaning that the three
+ * other elements would be "-1". A C-major chord in root position built on C4 would be [60, 3, 5, -1, -1, -1],
+ * with C4, the lowest note, being midi pitch 60 and the intervals in a major chord in root position being 3
+ * for the third above the lowest note and 5 for the fifth above the lowest note. Note that this is the same
+ * representation as that of a C-minor chord, or even a C-diminished chord. The diatonic representation
+ * distinguishes between inversions and intervallic makeup of chords, but doesn't distinguish between different
+ * types of chords consisting of the same interval types.
  *
  * @author Jasper Teunen
  */

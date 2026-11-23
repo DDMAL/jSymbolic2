@@ -8,7 +8,16 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * todo
+ * Sum of the prevalences of simple chromatic sonorities that represent tetrads in root position, first
+ * inversion, second inversion and third inversion. Returns an array with eight elements: the first seven
+ * represent the prevalences of specific types of tetrads in third inversion, whilst the eighth element
+ * corresponds to their combined prevalence. The seven types of tetrads are, respectively, dominanth seventh,
+ * minor seventh, half-diminished seventh, major seventh, diminshed seventh, minor-major seventh and augmented
+ * major seventh. Prevalence of sonorities is calculated in relation to the piece duration. Values returned by
+ * this function should therefore be interpreted as percentages of the total duration of the piece for which
+ * the sonority represents a tetrad of the desired type. Note that sonorities consisting of 0 pitches (i.e.
+ * where all voices are resting) are not considered, not for this feature, nor for the total duration of the
+ * piece.
  *
  * @author Jasper Teunen
  */

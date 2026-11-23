@@ -9,7 +9,16 @@ import jsymbolic2.featureutils.VerticalSonorityContainer;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * todo
+ * Proportion of diatonic sonorities in which all listed intervals are perfect diatonic consonances, excluding
+ * fourths. These are the simple diatonic intervals 5 and 8. This feature uses simple diatonic intervals and
+ * not their compound variants, because simple diatonic intervals yield accurate results for sonorities
+ * consisting of any number of unique diatonic pitches. This is because there are only 2 perfectly consonant
+ * simple diatonic intervals, if fourths are excluded, which means that they can always be represented in an
+ * array of length 6. Prevalence of sonorities is calculated in relation to the piece duration. Values returned
+ * by this function should therefore be interpreted as percentages of the total duration of the piece for
+ * which the sonority consists of only perfectly consonant diatonic intervals. Note that sonorities consisting
+ * of 0 pitches (i.e. where all voices are resting) are not considered, not for this feature, nor for the
+ * total duration of the piece.
  *
  * @author Jasper Teunen
  */

@@ -9,7 +9,15 @@ import jsymbolic2.featureutils.VerticalSonorityContainer;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * todo
+ * Proportion of chromatic sonorities that contain at least one dissonant interval, with fourths considered
+ * dissonant. These are the simple chromatic intervals 1, 2, 5, 6, 10 and 11. This feature uses simple
+ * chromatic intervals and not their compound variants, because simple chromatic intervals yield more accurate
+ * results for sonorities consisting of more than 6 unique pitch classes. Prevalence of sonorities is
+ * calculated in relation to the piece duration. Values returned by this function should therefore be
+ * interpreted as percentages of the total duration of the piece for which the sonority contains at least one
+ * dissonant chromatic interval, if fourths are considered dissonant. Note that sonorities consisting of 0
+ * pitches (i.e. where all voices are resting) are not considered, not for this feature, nor for the total
+ * duration of the piece.
  *
  * @author Jasper Teunen
  */

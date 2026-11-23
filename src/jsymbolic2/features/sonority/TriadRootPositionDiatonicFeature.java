@@ -9,7 +9,14 @@ import jsymbolic2.featureutils.VerticalSonorityContainer;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * todo
+ * Proportion of simple diatonic sonorities whose intervals consist of a third, a fifth and (optionally) an
+ * octave. Returns an array with only one element, as diatonic intervals don't distinguish between minor/major
+ * variants. Root position triads are defined as vertical sonorities that must contain diatonic intervals
+ * 3 and 5 and that may contain diatonic interval 8 as well, but no others. Prevalence of sonorities is
+ * calculated in relation to the piece duration. Values returned by this function should therefore be
+ * interpreted as percentages of the total duration of the piece for which the sonority represents is a triad
+ * in the desired inversion. Note that sonorities consisting of 0 pitches (i.e. where all voices are resting)
+ * are not considered, not for this feature, nor for the total duration of the piece.
  *
  * @author Jasper Teunen
  */
