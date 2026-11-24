@@ -64,12 +64,12 @@
     - [Son-40: Prevalence of Third Inversion Tetrads (Diatonic) ✓](#son-40-prevalence-of-third-inversion-tetrads-diatonic-)
     - [Son-41: Prevalence of All Tetrads (Chromatic) ✓](#son-41-prevalence-of-all-tetrads-chromatic-)
     - [Son-42: Prevalence of All Tetrads (Diatonic) ✓](#son-42-prevalence-of-all-tetrads-diatonic-)
-    - [Son-43: Prevalence of Sonorities With Specific Chromatic Intervals (Compound)](#son-43-prevalence-of-sonorities-with-specific-chromatic-intervals-compound)
-    - [Son-44: Prevalence of Sonorities With Specific Chromatic Intervals (Simple)](#son-44-prevalence-of-sonorities-with-specific-chromatic-intervals-simple)
-    - [Son-45: Prevalence of Sonorities With Specific Diatonic Intervals (Compound)](#son-45-prevalence-of-sonorities-with-specific-diatonic-intervals-compound)
-    - [Son-46: Prevalence of Sonorities With Specific Diatonic Intervals (Simple)](#son-46-prevalence-of-sonorities-with-specific-diatonic-intervals-simple)
-    - [Son-47: Prevalence of Sonorities With Two Specific Chromatic Intervals (Simple)](#son-47-prevalence-of-sonorities-with-two-specific-chromatic-intervals-simple)
-    - [Son-48: Prevalence of Sonorities With Two Specific Diatonic Intervals (Simple)](#son-48-prevalence-of-sonorities-with-two-specific-diatonic-intervals-simple)
+    - [Son-43: Prevalence of Sonorities With Specific Chromatic Intervals (Compound) ✓](#son-43-prevalence-of-sonorities-with-specific-chromatic-intervals-compound-)
+    - [Son-44: Prevalence of Sonorities With Specific Chromatic Intervals (Simple) ✓](#son-44-prevalence-of-sonorities-with-specific-chromatic-intervals-simple-)
+    - [Son-45: Prevalence of Sonorities With Specific Diatonic Intervals (Compound) ✓](#son-45-prevalence-of-sonorities-with-specific-diatonic-intervals-compound-)
+    - [Son-46: Prevalence of Sonorities With Specific Diatonic Intervals (Simple) ✓](#son-46-prevalence-of-sonorities-with-specific-diatonic-intervals-simple-)
+    - [Son-47: Prevalence of Sonorities With Two Specific Chromatic Intervals (Simple) ✓](#son-47-prevalence-of-sonorities-with-two-specific-chromatic-intervals-simple-)
+    - [Son-48: Prevalence of Sonorities With Two Specific Diatonic Intervals (Simple) ✓](#son-48-prevalence-of-sonorities-with-two-specific-diatonic-intervals-simple-)
     - [Further ideas](#further-ideas)
   - [Cadence Features](#cadence-features)
     - [Number of Candidate Cadences ==\> should probably be scaled to something](#number-of-candidate-cadences--should-probably-be-scaled-to-something)
@@ -433,27 +433,27 @@ Sum of the prevalences of simple chromatic sonorities that represent tetrads in 
 
 Sum of the prevalences of simple diatonic sonorities that represent tetrads in root position, first inversion, second inversion and third inversion Returns an array with only one element, as diatonic intervals don't distinguish between minor/major variants. Prevalence of sonorities is calculated in relation to the piece duration. Values returned by this function should therefore be interpreted as percentages of the total duration of the piece for which the sonority represents a tetrad. Note that sonorities consisting of 0 pitches (i.e. where all voices are resting) are not considered, not for this feature, nor for the total duration of the piece.
 
-### Son-43: Prevalence of Sonorities With Specific Chromatic Intervals (Compound)
+### Son-43: Prevalence of Sonorities With Specific Chromatic Intervals (Compound) ✓
 
 Returns an array with 120 elements where element i indicates the prevalence of all sonorities containing chromatic compound interval i+1. Intervals larger than 120 (10 octaves) are ignored. Prevalence of sonorities is calculated in relation to the piece duration. Values returned by this function should therefore be interpreted as percentages of the total duration of the piece for which the sonority contains chromatic compound interval i+1. Note that sonorities consisting of 0 pitches (i.e. where all voices are resting) are not considered, not for this feature, nor for the total duration of the piece.
 
-### Son-44: Prevalence of Sonorities With Specific Chromatic Intervals (Simple)
+### Son-44: Prevalence of Sonorities With Specific Chromatic Intervals (Simple) ✓
 
 Returns an array with 12 elements where element i indicates the prevalence of all sonorities containing chromatic simple interval i+1. Unisons are not included, as the vertical sonority representations exclude duplicate pitch classes, but octaves are included, so that chromatic simple intervals 1 through 12 are represented. Prevalence of sonorities is calculated in relation to the piece duration. Values returned by this function should therefore be interpreted as percentages of the total duration of the piece for which the sonority contains chromatic simple interval i+1. Note that sonorities consisting of 0 pitches (i.e. where all voices are resting) are not considered, not for this feature, nor for the total duration of the piece.
 
-### Son-45: Prevalence of Sonorities With Specific Diatonic Intervals (Compound)
+### Son-45: Prevalence of Sonorities With Specific Diatonic Intervals (Compound) ✓
 
 Returns an array with 70 elements where element i indicates the prevalence of all sonorities containing diatonic compound interval i+2. Intervals larger than 71 (10 octaves) are ignored. Prevalence of sonorities is calculated in relation to the piece duration. Values returned by this function should therefore be interpreted as percentages of the total duration of the piece for which the sonority contains diatonic compound interval i+1. Note that sonorities consisting of 0 pitches (i.e. where all voices are resting) are not considered, not for this feature, nor for the total duration of the piece.
 
-### Son-46: Prevalence of Sonorities With Specific Diatonic Intervals (Simple)
+### Son-46: Prevalence of Sonorities With Specific Diatonic Intervals (Simple) ✓
 
 Returns an array with 7 elements where element i indicates the prevalence of all sonorities containing diatonic simple interval i+2. Unisons are not included, as the vertical sonority representations exclude duplicate pitch classes, but octaves are included, so that diatonic simple intervals 2 through 8 are represented. Prevalence of sonorities is calculated in relation to the piece duration. Values returned by this function should therefore be interpreted as percentages of the total duration of the piece for which the sonority contains diatonic simple interval i+2. Note that sonorities consisting of 0 pitches (i.e. where all voices are resting) are not considered, not for this feature, nor for the total duration of the piece.
 
-### Son-47: Prevalence of Sonorities With Two Specific Chromatic Intervals (Simple)
+### Son-47: Prevalence of Sonorities With Two Specific Chromatic Intervals (Simple) ✓
 
 Returns a list with 66 elements, that each represent the prevalence of a combination of two specific simple chromatic intervals. This can be seen as constructing a strictly upper-triangular 12x12 matrix of all possible combinations of two different simple chromatic intervals (1-12). This matrix is then converted to a list in a row-wise manner. In the resulting array, each element i corresponds to the prevalence of a sonority that contains interval x = 11 - (sqrt(521 - 8i)-1) // 2, and a second interval y = x(x-23)/2+13+i. Or, more simply: the first element represents matrix coordinate (0,1), and the following elements are found by traversing the strictly upper triangular matrix row-wise, this means that elements 0 -> 10 (the first 11 elements) contain interval combinations (1,2) through (1,12), elements 11 -> 20 (the next 10 elements) contain interval combinations (2, 3) through (2,12), elements 21 -> 29 (the next 9 elements) contain interval combinations (3,4) through (3,12) and so on.
 
-### Son-48: Prevalence of Sonorities With Two Specific Diatonic Intervals (Simple)
+### Son-48: Prevalence of Sonorities With Two Specific Diatonic Intervals (Simple) ✓
 
 Returns a list with 21 elements, where element i indicates the prevalence of all sonorities containing two specific simple chromatic intervals. This can be seen as constructing a strictly upper-triangular 7x7 matrix of all possible combinations of two different simple diatonic intervals (2-8). This matrix is then converted to a list in a row-wise manner. In the resulting array, each element i corresponds to the prevalence of a sonority with interval x = 7 - (sqrt(161 - 8i)-1) // 2, and a second interval y = x(x-15)/2+16+i. Or, more simply: the first element represents matrix coordinate (0,1), and the following elements are found by traversing the strictly upper triangular matrix row-wise, this means that elements 0 -> 5 (the first 6 elements) contain interval combinations (2,3) through (2,8), elements 5 -> 10 (the next 5 elements) contain interval combinations (3, 4) through (3,8), elements 11 -> 14 (the next 4 elements) hold interval combinations (4,5) through (4,8) and so on.
 
