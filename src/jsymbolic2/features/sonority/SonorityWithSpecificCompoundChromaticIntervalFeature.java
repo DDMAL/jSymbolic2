@@ -8,8 +8,8 @@ import jsymbolic2.featureutils.MIDIFeatureExtractor;
 import jsymbolic2.processing.MIDIIntermediateRepresentations;
 
 /**
- * Returns an array with 120 elements where element i indicates the prevalence of all sonorities containing
- * chromatic compound interval i+1. Intervals larger than 120 (10 octaves) are ignored. Prevalence of
+ * Returns an array with 111 elements where element i indicates the prevalence of all sonorities containing
+ * chromatic compound interval i+1. Intervals larger than 111 (10 octaves) are ignored. Prevalence of
  * sonorities is calculated in relation to the piece duration. Values returned by this function should
  * therefore be interpreted as percentages of the total duration of the piece for which the sonority contains
  * chromatic compound interval i+1. Note that sonorities consisting of 0 pitches (i.e. where all voices are
@@ -30,9 +30,9 @@ public class SonorityWithSpecificCompoundChromaticIntervalFeature
 	{
 		String name = "Prevalence of Sonorities With Specific Chromatic Intervals (Compound)";
 		String code = "Son-43";
-		String description = "Returns an array with 120 elements where element i indicates the prevalence of all sonorities containing chromatic compound interval i+1. ";
+		String description = "Returns an array with 111 elements where element i indicates the prevalence of all sonorities containing chromatic compound interval i+1. ";
 		boolean is_sequential = true;
-		int dimensions = 120;
+		int dimensions = 111;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
 		dependencies = null;
 		offsets = null;
@@ -63,7 +63,7 @@ public class SonorityWithSpecificCompoundChromaticIntervalFeature
 									double[][] other_feature_values )
 	throws Exception
 	{
-		double[] result = new double[120];
+		double[] result = new double[111];
 		Arrays.fill(result, 0.0);
 		if (sequence_info != null)
 		{   
@@ -76,7 +76,7 @@ public class SonorityWithSpecificCompoundChromaticIntervalFeature
 
                 // Add prevalence for every interval in the sonority
 				for (int j = 0; j<unique_sonorities[i].length; j++){
-                    if (unique_sonorities[i][j] != -1 && unique_sonorities[i][j] <= 120)
+                    if (unique_sonorities[i][j] != -1 && unique_sonorities[i][j] <= 111)
                         result[unique_sonorities[i][j]-1] += sonority_prevalence[i];
                 }
             }

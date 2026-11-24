@@ -435,7 +435,7 @@ Sum of the prevalences of simple diatonic sonorities that represent tetrads in r
 
 ### Son-43: Prevalence of Sonorities With Specific Chromatic Intervals (Compound) ✓
 
-Returns an array with 120 elements where element i indicates the prevalence of all sonorities containing chromatic compound interval i+1. Intervals larger than 120 (10 octaves) are ignored. Prevalence of sonorities is calculated in relation to the piece duration. Values returned by this function should therefore be interpreted as percentages of the total duration of the piece for which the sonority contains chromatic compound interval i+1. Note that sonorities consisting of 0 pitches (i.e. where all voices are resting) are not considered, not for this feature, nor for the total duration of the piece.
+Returns an array with 111 elements where element i indicates the prevalence of all sonorities containing chromatic compound interval i+1. Intervals larger than 111 (10 octaves) are ignored. Prevalence of sonorities is calculated in relation to the piece duration. Values returned by this function should therefore be interpreted as percentages of the total duration of the piece for which the sonority contains chromatic compound interval i+1. Note that sonorities consisting of 0 pitches (i.e. where all voices are resting) are not considered, not for this feature, nor for the total duration of the piece.
 
 ### Son-44: Prevalence of Sonorities With Specific Chromatic Intervals (Simple) ✓
 
@@ -459,11 +459,29 @@ Returns a list with 21 elements, where element i indicates the prevalence of all
 
 ### Further ideas
 
-- Triads: add augm and dim
+- Triads: add augm and dim?
 - Tetrads: inversions of dim7 don't make sense, but current logic sort of requires it to be taken into account. Maybe completely separate it out
 - Transitions between sonorities
 - Need to fix note onset slices to make sure that all sonorities are present, not only those where a note is being attacked (this might already be working, but just need to double check and fix if not)
 - look at prevalence of sonorities for specific bass notes / scale degrees
+  - Matrix with pitch classes x triad inversions
+    - chromatic: 12 x 3 (or 4 with sum)
+      - size 36 or 48
+    - chromatic: 12 x 9 (if keeping track of major-minor, 10 with sum)
+      - size 108 or 120
+    - diatonic: harder to pull off, maybe need to look at modal features or use a combined form where bass notes are considered chromatic but the intervals are analysed diatonically
+  - Matrix with pitch classes x tetrad inversions
+    - chromatic: 12 x 4 (or 5 with sum)
+      - size 48 or 60
+    - chromatic: 12 x 32 (if keeping track of tetrad types, 33 with sum)
+      - size 384 or 396
+    - diatonic: see triad inversions
+  - Matrix with pitch classes x sonorities with specific interval
+    - chromatic: 12 x 120 (compound)
+      - size 1440
+    - chromatic: 12 x 12 (simple)
+      - size 144
+    - diatonic: see others
 
 ## Cadence Features
 
