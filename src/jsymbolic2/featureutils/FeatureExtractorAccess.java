@@ -734,6 +734,12 @@ public final class FeatureExtractorAccess
 			new TetradThirdInversionDiatonicFeature(),
 			new TetradAllChromaticFeature(),
 			new TetradAllDiatonicFeature(),
+			new SonorityWithSpecificCompoundChromaticIntervalFeature(),
+			new SonorityWithSpecificSimpleChromaticIntervalFeature(),
+			new SonorityWithSpecificCompoundDiatonicIntervalFeature(),
+			new SonorityWithSpecificSimpleDiatonicIntervalFeature(),
+			new SonorityWithTwoSpecificChromaticIntervalsFeature(),
+			new SonorityWithTwoSpecificDiatonicIntervalsFeature()
 
 		};
 

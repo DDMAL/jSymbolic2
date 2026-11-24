@@ -34,7 +34,7 @@ public class ImperfectConsonanceOnlyChromaticFeature
 	{
 		String name = "Prevalence of Sonorities With Only Imperfect Chromatic Consonance";
 		String code = "Son-17";
-		String description = "to do";
+		String description = "Proportion of chromatic sonorities in which all listed intervals are imperfect chromatic consonances.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);

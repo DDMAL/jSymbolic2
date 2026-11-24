@@ -36,7 +36,7 @@ public class TriadSecondInversionChromaticFeature
 	{
 		String name = "Prevalence of Second Inversion Triads (Chromatic)";
 		String code = "Son-29";
-		String description = "to do";
+		String description = "Proportion of simple chromatic sonorities whose intervals consist of a fourth, a sixth and (optionally) an octave.";
 		boolean is_sequential = true;
 		int dimensions = 3;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);

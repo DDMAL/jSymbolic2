@@ -31,7 +31,7 @@ public class TriadAllDiatonicFeature
 	{
 		String name = "Prevalence of All Triads (Diatonic)";
 		String code = "Son-32";
-		String description = "to do";
+		String description = "Combined prevalence of simple diatonic sonorities that represent triads in root position, first inversion and second inversion.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);

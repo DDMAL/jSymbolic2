@@ -33,7 +33,7 @@ public class DissonantChromaticSonoritiesFeature
 	{
 		String name = "Prevalence of Dissonant Chromatic Sonorities";
 		String code = "Son-21";
-		String description = "to do";
+		String description = "Proportion of chromatic sonorities that contain at least one dissonant interval.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);

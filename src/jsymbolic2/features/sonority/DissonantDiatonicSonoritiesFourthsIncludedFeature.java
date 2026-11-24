@@ -34,7 +34,7 @@ public class DissonantDiatonicSonoritiesFourthsIncludedFeature
 	{
 		String name = "Prevalence of Dissonant Diatonic Sonorities (Fourths Included)";
 		String code = "Son-24";
-		String description = "to do";
+		String description = "Proportion of diatonic sonorities that contain at least one dissonant interval, with fourths considered dissonant.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);

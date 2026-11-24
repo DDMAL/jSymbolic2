@@ -25,7 +25,7 @@ public class ModalOctaveCombinedPrevalenceFeature
 	{
 		String name = "Combined Prevalence of Modal Octave";
 		String code = "Ren-19";
-		String description = "";
+		String description = "Returns the combined prevalence of all pitches in modal octave.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);

@@ -31,7 +31,7 @@ public class TetradAllDiatonicFeature
 	{
 		String name = "Prevalence of All Tetrads (Diatonic)";
 		String code = "Son-42";
-		String description = "to do";
+		String description = "Sum of the prevalences of simple diatonic sonorities that represent tetrads in root position, first inversion, second inversion and third inversion Returns an array with only one element, as diatonic intervals don't distinguish between minor/major variants.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);

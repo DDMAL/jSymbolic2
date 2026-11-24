@@ -32,7 +32,7 @@ public class TriadAllChromaticFeature
 	{
 		String name = "Prevalence of All Triads (Chromatic)";
 		String code = "Son-31";
-		String description = "to do";
+		String description = "Combined prevalence of simple chromatic sonorities that represent triads in root position, first inversion and second inversion.";
 		boolean is_sequential = true;
 		int dimensions = 3;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);

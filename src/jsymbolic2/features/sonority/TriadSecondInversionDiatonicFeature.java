@@ -33,7 +33,7 @@ public class TriadSecondInversionDiatonicFeature
 	{
 		String name = "Prevalence of Second Inversion Triads (Diatonic)";
 		String code = "Son-30";
-		String description = "to do";
+		String description = "Proportion of simple diatonic sonorities whose intervals consist of a fourth, a sixth and (optionally) an octave.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);

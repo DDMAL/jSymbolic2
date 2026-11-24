@@ -35,7 +35,7 @@ public class PerfectConsonanceOnlyChromaticNoFourthsFeature
 	{
 		String name = "Prevalence of Sonorities With Only Perfect Chromatic Consonance (No Fourths)";
 		String code = "Son-15";
-		String description = "to do";
+		String description = "Proportion of chromatic sonorities in which all listed intervals are perfect chromatic consonances, excluding fourths.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);

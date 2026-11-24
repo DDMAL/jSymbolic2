@@ -45,7 +45,7 @@ public class SparseChromaticSonorityCompoundFeature
 	{
 		String name = "Prevalence of Sparse Chromatic Sonorities (Compound)";
 		String code = "Son-9";
-		String description = "to do";
+		String description = "Proportion of chromatic sonorities made up of compound intervals where fewer than the maximum number of unique pitches occuring simultaneously are present.";
 		boolean is_sequential = true;
 		int dimensions = 6;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);

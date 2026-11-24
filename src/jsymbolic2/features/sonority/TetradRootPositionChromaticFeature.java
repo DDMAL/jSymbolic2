@@ -46,7 +46,7 @@ public class TetradRootPositionChromaticFeature
 	{
 		String name = "Prevalence of Root Position Tetrads (Chromatic)";
 		String code = "Son-33";
-		String description = "to do";
+		String description = "Proportion of simple chromatic sonorities whose intervals consist of a third, a fifth, a seventh and (optionally) an octave.";
 		boolean is_sequential = true;
 		int dimensions = 8;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);

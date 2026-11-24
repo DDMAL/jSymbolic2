@@ -35,7 +35,7 @@ public class ImperfectConsonanceOnlyChromaticWithOctavesFeature
 	{
 		String name = "Prevalence of Sonorities With Only Imperfect Chromatic Consonance (With Octaves)";
 		String code = "Son-19";
-		String description = "to do";
+		String description = "Proportion of chromatic sonorities in which all listed intervals are imperfect chromatic consonances or octaves.";
 		boolean is_sequential = true;
 		int dimensions = 1;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);

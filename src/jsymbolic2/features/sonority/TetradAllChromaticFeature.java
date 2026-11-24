@@ -34,7 +34,7 @@ public class TetradAllChromaticFeature
 	{
 		String name = "Prevalence of All Tetrads (Chromatic)";
 		String code = "Son-41";
-		String description = "to do";
+		String description = "Sum of the prevalences of simple chromatic sonorities that represent tetrads in root position, first inversion, second inversion and third inversion.";
 		boolean is_sequential = true;
 		int dimensions = 8;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);

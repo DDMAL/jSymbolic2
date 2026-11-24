@@ -46,7 +46,7 @@ public class SparseDiatonicSonoritySimpleFeature
 	{
 		String name = "Prevalence of Sparse Diatonic Sonorities (Simple)";
 		String code = "Son-12";
-		String description = "to do";
+		String description = "Proportion of diatonic sonorities made up of simple intervals where fewer than the maximum number of unique simple intervals are present.";
 		boolean is_sequential = true;
 		int dimensions = 6;
 		definition = new FeatureDefinition(name, code, description, is_sequential, dimensions, jsymbolic2.Main.SOFTWARE_NAME_AND_VERSION);
