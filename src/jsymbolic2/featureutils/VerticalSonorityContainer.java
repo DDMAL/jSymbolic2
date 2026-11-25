@@ -71,6 +71,22 @@ public class VerticalSonorityContainer {
 
 	private double[] sonority_histogram_diatonic_simple;
 
+    private int[][][] unique_sonorities_by_lowest_note_chromatic_compound;
+
+    private int[][][] unique_sonorities_by_lowest_note_chromatic_simple;
+
+    private int[][][] unique_sonorities_by_lowest_note_diatonic_compound;
+
+    private int[][][] unique_sonorities_by_lowest_note_diatonic_simple;
+
+	private double[][] sonority_histogram_by_lowest_note_chromatic_compound;
+
+	private double[][] sonority_histogram_by_lowest_note_chromatic_simple;
+
+	private double[][] sonority_histogram_by_lowest_note_diatonic_compound;
+
+	private double[][] sonority_histogram_by_lowest_note_diatonic_simple;
+
     private LinkedList<Double> sonority_durations;
 
     private int n_vson;
@@ -199,7 +215,36 @@ public class VerticalSonorityContainer {
 		sonority_histogram_chromatic_simple = MathAndStatsMethods.normalize(sonority_histogram_chromatic_simple);
 		sonority_histogram_diatonic_compound = MathAndStatsMethods.normalize(sonority_histogram_diatonic_compound);
 		sonority_histogram_diatonic_simple = MathAndStatsMethods.normalize(sonority_histogram_diatonic_simple);
+        
+        // Get array with unique sonorities for each lowest note pitch class
+        unique_sonorities_by_lowest_note_chromatic_compound = this.initializeSonoritiesByLowestNote(sonorities_chromatic_compound);
+        unique_sonorities_by_lowest_note_chromatic_simple = this.initializeSonoritiesByLowestNote(sonorities_chromatic_simple);
+        unique_sonorities_by_lowest_note_diatonic_compound = this.initializeSonoritiesByLowestNote(sonorities_diatonic_compound);
+        unique_sonorities_by_lowest_note_diatonic_simple = this.initializeSonoritiesByLowestNote(sonorities_diatonic_simple);
 
+        // Get their histograms
+        sonority_histogram_by_lowest_note_chromatic_compound = this.initializeHistogramByLowestNote(
+            sonorities_chromatic_compound,
+            unique_sonorities_by_lowest_note_chromatic_compound);
+        sonority_histogram_by_lowest_note_chromatic_simple = this.initializeHistogramByLowestNote(
+            sonorities_chromatic_simple,
+            unique_sonorities_by_lowest_note_chromatic_simple);
+        sonority_histogram_by_lowest_note_diatonic_compound = this.initializeHistogramByLowestNote(
+            sonorities_diatonic_compound,
+            unique_sonorities_by_lowest_note_diatonic_compound);
+        sonority_histogram_by_lowest_note_diatonic_simple = this.initializeHistogramByLowestNote(
+            sonorities_diatonic_simple,
+            unique_sonorities_by_lowest_note_diatonic_simple);
+
+        // Normalize histograms
+		sonority_histogram_by_lowest_note_chromatic_compound =
+        MathAndStatsMethods.normalizeEntirely(sonority_histogram_by_lowest_note_chromatic_compound);
+		sonority_histogram_by_lowest_note_chromatic_simple =
+        MathAndStatsMethods.normalizeEntirely(sonority_histogram_by_lowest_note_chromatic_simple);
+		sonority_histogram_by_lowest_note_diatonic_compound =
+        MathAndStatsMethods.normalizeEntirely(sonority_histogram_by_lowest_note_diatonic_compound);
+		sonority_histogram_by_lowest_note_diatonic_simple =
+        MathAndStatsMethods.normalizeEntirely(sonority_histogram_by_lowest_note_diatonic_simple);
 	}
 
 	/* PUBLIC METHODS **************************************************************************************/
@@ -250,6 +295,38 @@ public class VerticalSonorityContainer {
 
 	public double[] getDiatonicSimpleSonorityHistogram(){
         return this.sonority_histogram_diatonic_simple;
+    }
+
+    public int[][][] getUniqueChromaticCompoundSonoritiesByLowestNote(){
+        return this.unique_sonorities_by_lowest_note_chromatic_compound;
+    }
+
+	public int[][][] getUniqueChromaticSimpleSonoritiesByLowestNote(){
+        return this.unique_sonorities_by_lowest_note_chromatic_simple;
+    }
+
+	public int[][][] getUniqueDiatonicCompoundSonoritiesByLowestNote(){
+        return this.unique_sonorities_by_lowest_note_diatonic_compound;
+    }
+
+	public int[][][] getUniqueDiatonicSimpleSonoritiesByLowestNote(){
+        return this.unique_sonorities_by_lowest_note_diatonic_simple;
+    }
+
+	public double[][] getChromaticCompoundSonorityHistogramByLowestNote(){
+        return this.sonority_histogram_by_lowest_note_chromatic_compound;
+    }
+
+	public double[][] getChromaticSimpleSonorityHistogramByLowestNote(){
+        return this.sonority_histogram_by_lowest_note_chromatic_simple;
+    }
+
+	public double[][] getDiatonicCompoundSonorityHistogramByLowestNote(){
+        return this.sonority_histogram_by_lowest_note_diatonic_compound;
+    }
+
+	public double[][] getDiatonicSimpleSonorityHistogramByLowestNote(){
+        return this.sonority_histogram_by_lowest_note_diatonic_simple;
     }
 
     /**
@@ -431,6 +508,77 @@ public class VerticalSonorityContainer {
                     Arrays.copyOfRange(all_sonorities[j], 1, n_vson))){
                     // Scale by duration
                     histogram[i] += sonority_durations.get(j);
+                }
+            }
+        }
+        return histogram;
+    }
+
+    /**
+     * Creates an arraylist with twelve elements where each element with index i contains a set that contains
+     * all the unique vertical sonorities that have i as their lowest note pitch class
+     * 
+     * @param all_sons  All sonorities
+     * @return          Arraylist with all unique sonorities sorted by their lowest note pitch class
+     */
+    private int[][][] initializeSonoritiesByLowestNote(
+        int[][] all_sons
+    ) {
+        ArrayList<TreeSet<int[]>> unique_sons_by_lowest_pitch = new ArrayList<>();
+
+        // Ensures that the set will compare the contents of the array to determine unique arrays
+        Comparator<int[]> comparator = Arrays::compare;
+
+        // Initialize 12 treesets: one for each lowest note pitch class
+        for (int i = 0; i < 12; i++) {
+            unique_sons_by_lowest_pitch.add(new TreeSet<>(comparator));
+}           
+        // Populate the sets with the interval contents of the vertical sonorities
+        for (int i = 0; i < all_sons.length; i++) {
+            unique_sons_by_lowest_pitch.get(all_sons[i][0] % 12).add(
+                Arrays.copyOfRange(all_sons[i], 1, all_sons[i].length));
+        }
+
+        // Copy to integer array
+        int[][][] result = new int[12][][];
+
+        for (int i = 0; i < result.length; i++){
+            result[i] = unique_sons_by_lowest_pitch.get(i).toArray(new int[0][]);
+        }
+
+        return result;
+    }
+
+    /**
+     * Create a histogram for the prevalence of each unique sonority separated by lowest note.
+     * The histogram is weighted by the duration of each sonority.
+     * 
+     * @param all_sonorities                All sonorities
+     * @param unique_sonorities             All unique interval combinations in all_sonorities
+     * @param NUMBER_OF_UNIQUE_SONORITIES   The number of unique interval combinations
+     * @return                              A weighted histogram of the prevalence of the unique sonorities
+     */
+    private double[][] initializeHistogramByLowestNote(
+        int[][] all_sonorities,
+        int[][][] unique_sons_by_lowest_note) {
+        
+        int NUMBER_OF_PITCH_CLASSES = unique_sons_by_lowest_note.length;
+
+        double[][] histogram = new double[NUMBER_OF_PITCH_CLASSES][];
+        
+        // Iterate through lowest note pitch classes
+        for (int k = 0; k < NUMBER_OF_PITCH_CLASSES; k++){
+            histogram[k] = new double[unique_sons_by_lowest_note[k].length];
+            // Iterate through unique sonorities with the current lowest note pitch class
+            for (int i = 0; i < unique_sons_by_lowest_note[k].length; i++){
+                // Iterate through all sonorities
+                for (int j= 0; j < all_sonorities.length; j++){
+                    // Check if the intervals in unique_sonorities match those from sonorities
+                    if (Arrays.equals(unique_sons_by_lowest_note[k][i],
+                        Arrays.copyOfRange(all_sonorities[j], 1, n_vson))){
+                        // Scale by duration
+                        histogram[k][i] += sonority_durations.get(j);
+                    }
                 }
             }
         }

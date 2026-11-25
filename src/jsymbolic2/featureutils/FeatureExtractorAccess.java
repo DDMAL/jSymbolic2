@@ -739,7 +739,17 @@ public final class FeatureExtractorAccess
 			new SonorityWithSpecificCompoundDiatonicIntervalFeature(),
 			new SonorityWithSpecificSimpleDiatonicIntervalFeature(),
 			new SonorityWithTwoSpecificChromaticIntervalsFeature(),
-			new SonorityWithTwoSpecificDiatonicIntervalsFeature()
+			new SonorityWithTwoSpecificDiatonicIntervalsFeature(),
+			new UniqueChromaticSonoritiesByLowestNoteCompoundFeature(),
+			new UniqueChromaticSonoritiesByLowestNoteSimpleFeature(),
+			new UniqueDiatonicSonoritiesByLowestNoteCompoundFeature(),
+			new UniqueDiatonicSonoritiesByLowestNoteSimpleFeature(),
+			new SparseChromaticSonorityByLowestNoteCompoundFeature(),
+			new SparseChromaticSonorityByLowestNoteSimpleFeature(),
+			new SparseDiatonicSonorityByLowestNoteCompoundFeature(),
+			new SparseDiatonicSonorityByLowestNoteSimpleFeature(),
+			new SpecificChromaticIntervalByLowestNoteFeature(),
+			new SpecificDiatonicIntervalByLowestNoteFeature()
 
 		};
 

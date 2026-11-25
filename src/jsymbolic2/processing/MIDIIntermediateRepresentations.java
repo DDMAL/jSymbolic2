@@ -939,6 +939,22 @@ public class MIDIIntermediateRepresentations
 
 	public double[] vertical_sonority_histogram_diatonic_simple;
 
+	public int[][][] unique_vertical_sonorities_by_lowest_note_chromatic_compound;
+
+	public int[][][] unique_vertical_sonorities_by_lowest_note_chromatic_simple;
+
+	public int[][][] unique_vertical_sonorities_by_lowest_note_diatonic_compound;
+
+	public int[][][] unique_vertical_sonorities_by_lowest_note_diatonic_simple;
+
+	public double[][] vertical_sonority_histogram_by_lowest_note_chromatic_compound;
+
+	public double[][] vertical_sonority_histogram_by_lowest_note_chromatic_simple;
+
+	public double[][] vertical_sonority_histogram_by_lowest_note_diatonic_compound;
+
+	public double[][] vertical_sonority_histogram_by_lowest_note_diatonic_simple;
+
 	/**
 	 * An array that represents the ordering of all of the midi tracks and channels by average pitch, from high
 	 * to low. Every element has the form [track_number, channel_number]. To get the highest track and channel
@@ -3904,11 +3920,18 @@ public class MIDIIntermediateRepresentations
 		vertical_sonority_histogram_diatonic_compound = vertical_sonority_container.getDiatonicCompoundSonorityHistogram();
 		vertical_sonority_histogram_diatonic_simple = vertical_sonority_container.getDiatonicSimpleSonorityHistogram();
 
+		// Initialize unique vertical sonority by lowest note pitch class arrays
+		unique_vertical_sonorities_by_lowest_note_chromatic_compound = vertical_sonority_container.getUniqueChromaticCompoundSonoritiesByLowestNote();
+		unique_vertical_sonorities_by_lowest_note_chromatic_simple = vertical_sonority_container.getUniqueChromaticSimpleSonoritiesByLowestNote();
+		unique_vertical_sonorities_by_lowest_note_diatonic_compound = vertical_sonority_container.getUniqueDiatonicCompoundSonoritiesByLowestNote();
+		unique_vertical_sonorities_by_lowest_note_diatonic_simple = vertical_sonority_container.getUniqueDiatonicSimpleSonoritiesByLowestNote();
 
-		for (int j = 0; j < unique_vertical_sonorities_diatonic_simple.length; j++){
-			System.out.println(Arrays.toString(unique_vertical_sonorities_diatonic_simple[j]) + "; " +
-			vertical_sonority_histogram_diatonic_simple[j]);
-		}
+		// Initialize histograms
+		vertical_sonority_histogram_by_lowest_note_chromatic_compound = vertical_sonority_container.getChromaticCompoundSonorityHistogramByLowestNote();
+		vertical_sonority_histogram_by_lowest_note_chromatic_simple = vertical_sonority_container.getChromaticSimpleSonorityHistogramByLowestNote();
+		vertical_sonority_histogram_by_lowest_note_diatonic_compound = vertical_sonority_container.getDiatonicCompoundSonorityHistogramByLowestNote();
+		vertical_sonority_histogram_by_lowest_note_diatonic_simple = vertical_sonority_container.getDiatonicSimpleSonorityHistogramByLowestNote();
+
 	}
 	
 	/**
