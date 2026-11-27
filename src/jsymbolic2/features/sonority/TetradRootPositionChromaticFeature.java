@@ -108,7 +108,7 @@ public class TetradRootPositionChromaticFeature
 					for (int j = 0; j<tetrads.length; j++) {
 						// Allowed intervals is the notes in the tetrad and octaves
 						int[] allowed_intervals = new int[tetrads[j].length + 1];
-						for (int k = 0; k< allowed_intervals.length; k++) {
+						for (int k = 0; k< tetrads[j].length; k++) {
 							allowed_intervals[k] = tetrads[j][k];
 						}
 						allowed_intervals[tetrads[j].length] = 12;

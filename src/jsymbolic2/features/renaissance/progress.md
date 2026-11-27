@@ -70,14 +70,14 @@
     - [Son-46: Prevalence of Sonorities With Specific Diatonic Intervals (Simple) ✓](#son-46-prevalence-of-sonorities-with-specific-diatonic-intervals-simple-)
     - [Son-47: Prevalence of Sonorities With Two Specific Chromatic Intervals (Simple) ✓](#son-47-prevalence-of-sonorities-with-two-specific-chromatic-intervals-simple-)
     - [Son-48: Prevalence of Sonorities With Two Specific Diatonic Intervals (Simple) ✓](#son-48-prevalence-of-sonorities-with-two-specific-diatonic-intervals-simple-)
-    - [Son-49: Unique Chromatic Sonorities by Lowest Note Pitch Class (Compound)](#son-49-unique-chromatic-sonorities-by-lowest-note-pitch-class-compound)
-    - [Son-50: Unique Chromatic Sonorities by Lowest Note Pitch Class (Simple)](#son-50-unique-chromatic-sonorities-by-lowest-note-pitch-class-simple)
-    - [Son-51: Unique Diatonic Sonorities by Lowest Note Pitch Class (Compound)](#son-51-unique-diatonic-sonorities-by-lowest-note-pitch-class-compound)
-    - [Son-52: Unique Diatonic Sonorities by Lowest Note Pitch Class (Simple)](#son-52-unique-diatonic-sonorities-by-lowest-note-pitch-class-simple)
-    - [Son-53: Sparsity of Chromatic Sonorities by Lowest Note Pitch Class (Compound)](#son-53-sparsity-of-chromatic-sonorities-by-lowest-note-pitch-class-compound)
-    - [Son-54: Sparsity of Chromatic Sonorities by Lowest Note Pitch Class (Simple)](#son-54-sparsity-of-chromatic-sonorities-by-lowest-note-pitch-class-simple)
-    - [Son-55: Sparsity of Diatonic Sonorities by Lowest Note Pitch Class (Compound)](#son-55-sparsity-of-diatonic-sonorities-by-lowest-note-pitch-class-compound)
-    - [Son-56: Sparsity of Diatonic Sonorities by Lowest Note Pitch Class (Simple)](#son-56-sparsity-of-diatonic-sonorities-by-lowest-note-pitch-class-simple)
+    - [Son-49: Unique Chromatic Sonorities by Lowest Note Pitch Class (Compound) ✓](#son-49-unique-chromatic-sonorities-by-lowest-note-pitch-class-compound-)
+    - [Son-50: Unique Chromatic Sonorities by Lowest Note Pitch Class (Simple) ✓](#son-50-unique-chromatic-sonorities-by-lowest-note-pitch-class-simple-)
+    - [Son-51: Unique Diatonic Sonorities by Lowest Note Pitch Class (Compound) ✓](#son-51-unique-diatonic-sonorities-by-lowest-note-pitch-class-compound-)
+    - [Son-52: Unique Diatonic Sonorities by Lowest Note Pitch Class (Simple) ✓](#son-52-unique-diatonic-sonorities-by-lowest-note-pitch-class-simple-)
+    - [Son-53: Sparsity of Chromatic Sonorities by Lowest Note Pitch Class (Compound) ✓](#son-53-sparsity-of-chromatic-sonorities-by-lowest-note-pitch-class-compound-)
+    - [Son-54: Sparsity of Chromatic Sonorities by Lowest Note Pitch Class (Simple) ✓](#son-54-sparsity-of-chromatic-sonorities-by-lowest-note-pitch-class-simple-)
+    - [Son-55: Sparsity of Diatonic Sonorities by Lowest Note Pitch Class (Compound) ✓](#son-55-sparsity-of-diatonic-sonorities-by-lowest-note-pitch-class-compound-)
+    - [Son-56: Sparsity of Diatonic Sonorities by Lowest Note Pitch Class (Simple) ✓](#son-56-sparsity-of-diatonic-sonorities-by-lowest-note-pitch-class-simple-)
     - [Son-57: Prevalence of Chromatic Intervals by Lowest Note Pitch Class](#son-57-prevalence-of-chromatic-intervals-by-lowest-note-pitch-class)
     - [Son-58: Prevalence of Diatonic Intervals by Lowest Note Pitch Class](#son-58-prevalence-of-diatonic-intervals-by-lowest-note-pitch-class)
     - [Son-59: Prevalence of Chromatic Triad Inversions by Lowest Note Pitch Class](#son-59-prevalence-of-chromatic-triad-inversions-by-lowest-note-pitch-class)
@@ -470,35 +470,35 @@ Returns a list with 66 elements, that each represent the prevalence of a combina
 
 Returns a list with 21 elements, where element i indicates the prevalence of all sonorities containing two specific simple chromatic intervals. This can be seen as constructing a strictly upper-triangular 7x7 matrix of all possible combinations of two different simple diatonic intervals (2-8). This matrix is then converted to a list in a row-wise manner. In the resulting array, each element i corresponds to the prevalence of a sonority with interval x = 7 - (sqrt(161 - 8i)-1) // 2, and a second interval y = x(x-15)/2+16+i. Or, more simply: the first element represents matrix coordinate (0,1), and the following elements are found by traversing the strictly upper triangular matrix row-wise, this means that elements 0 -> 5 (the first 6 elements) contain interval combinations (2,3) through (2,8), elements 5 -> 10 (the next 5 elements) contain interval combinations (3, 4) through (3,8), elements 11 -> 14 (the next 4 elements) hold interval combinations (4,5) through (4,8) and so on.
 
-### Son-49: Unique Chromatic Sonorities by Lowest Note Pitch Class (Compound)
+### Son-49: Unique Chromatic Sonorities by Lowest Note Pitch Class (Compound) ✓
 
 Length 12, element i represents total number of unique chromatic sonorities consisting of compound intervals that have a lowest note of pitch class i.
 
-### Son-50: Unique Chromatic Sonorities by Lowest Note Pitch Class (Simple)
+### Son-50: Unique Chromatic Sonorities by Lowest Note Pitch Class (Simple) ✓
 
 Length 12, element i represents total number of unique chromatic sonorities consisting of simple intervals that have a lowest note of pitch class i.
 
-### Son-51: Unique Diatonic Sonorities by Lowest Note Pitch Class (Compound)
+### Son-51: Unique Diatonic Sonorities by Lowest Note Pitch Class (Compound) ✓
 
 Length 12, element i represents total number of unique diatonic sonorities consisting of compound intervals that have a lowest note of pitch class i.
 
-### Son-52: Unique Diatonic Sonorities by Lowest Note Pitch Class (Simple)
+### Son-52: Unique Diatonic Sonorities by Lowest Note Pitch Class (Simple) ✓
 
 Length 12, element i represents total number of unique diatonic sonorities consisting of simple intervals that have a lowest note of pitch class i.
 
-### Son-53: Sparsity of Chromatic Sonorities by Lowest Note Pitch Class (Compound)
+### Son-53: Sparsity of Chromatic Sonorities by Lowest Note Pitch Class (Compound) ✓
 
 Length 12 * 6 = 72. Elements 0-5 represent the prevalence of sonorities with 1-6 unique compound chromatic intervals that have a lowest note with pitch class 0. Elements 6-11 represent the prevalence of sonorities with 1-6 unique compound chromatic intervals that have a lowest note with pitch class 1 and so on. Essentially, the feature value is a 12 x 6 matrix where the row index represents the lowest note pitch class, whilst the column index represents the number of unique intervals. This matrix is flattened row-wise to obtain the feature values.
 
-### Son-54: Sparsity of Chromatic Sonorities by Lowest Note Pitch Class (Simple)
+### Son-54: Sparsity of Chromatic Sonorities by Lowest Note Pitch Class (Simple) ✓
 
 Length 12 * 6 = 72. Elements 0-5 represent the prevalence of sonorities with 1-6 unique simple chromatic intervals that have a lowest note with pitch class 0. Elements 6-11 represent the prevalence of sonorities with 1-6 unique simple chromatic intervals that have a lowest note with pitch class 1 and so on. Essentially, the feature value is a 12 x 6 matrix where the row index represents the lowest note pitch class, whilst the column index represents the number of unique intervals. This matrix is flattened row-wise to obtain the feature values.
 
-### Son-55: Sparsity of Diatonic Sonorities by Lowest Note Pitch Class (Compound)
+### Son-55: Sparsity of Diatonic Sonorities by Lowest Note Pitch Class (Compound) ✓
 
 Length 12 * 6 = 72. Elements 0-5 represent the prevalence of sonorities with 1-6 unique compound diatonic intervals that have a lowest note with pitch class 0. Elements 6-11 represent the prevalence of sonorities with 1-6 unique compound diatonic intervals that have a lowest note with pitch class 1 and so on. Essentially, the feature value is a 12 x 6 matrix where the row index represents the lowest note pitch class, whilst the column index represents the number of unique intervals. This matrix is flattened row-wise to obtain the feature values.
 
-### Son-56: Sparsity of Diatonic Sonorities by Lowest Note Pitch Class (Simple)
+### Son-56: Sparsity of Diatonic Sonorities by Lowest Note Pitch Class (Simple) ✓
 
 Length 12 * 6 = 72. Elements 0-5 represent the prevalence of sonorities with 1-6 unique simple diatonic intervals that have a lowest note with pitch class 0. Elements 6-11 represent the prevalence of sonorities with 1-6 unique simple diatonic intervals that have a lowest note with pitch class 1 and so on. Essentially, the feature represebts a 12 x 6 matrix where the row index represents the lowest note pitch class, whilst the column index represents the number of unique intervals. This matrix is flattened row-wise to obtain the feature values.
 
@@ -532,6 +532,7 @@ Length 12 * 5 = 60. This feature represents a 12x5 matrix that is flattened row-
 - Tetrads: inversions of dim7 don't make sense, but current logic sort of requires it to be taken into account. Maybe completely separate it out
 - Transitions between sonorities
 - Need to fix note onset slices to make sure that all sonorities are present, not only those where a note is being attacked (this might already be working, but just need to double check and fix if not)
+- Results for triads by lowest note don't correspond to results for triad inversions -> fix
 
 ## Cadence Features
 

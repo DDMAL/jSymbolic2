@@ -71,9 +71,7 @@ public class SparseChromaticSonorityByLowestNoteCompoundFeature
                     for (int i = 0; i<sons[lowest_note].length; i++){
                         // Get number of notes in current sonority
                         int current_son_size = (int) Arrays.stream(sons[lowest_note][i]).filter(num -> num != -1).count();
-
                         int sparse_index = current_son_size + lowest_note * 6;
-
                         result[sparse_index] += hists[lowest_note][i];
                     }
                 }

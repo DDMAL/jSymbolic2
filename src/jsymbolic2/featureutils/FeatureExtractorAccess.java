@@ -749,7 +749,11 @@ public final class FeatureExtractorAccess
 			new SparseDiatonicSonorityByLowestNoteCompoundFeature(),
 			new SparseDiatonicSonorityByLowestNoteSimpleFeature(),
 			new SpecificChromaticIntervalByLowestNoteFeature(),
-			new SpecificDiatonicIntervalByLowestNoteFeature()
+			new SpecificDiatonicIntervalByLowestNoteFeature(),
+			new TriadInversionsByLowestNoteChromaticFeature(),
+			new TriadInversionsByLowestNoteDiatonicFeature(),
+			new TetradInversionsByLowestNoteChromaticFeature(),
+			new TetradInversionsByLowestNoteDiatonicFeature()
 
 		};
 
